@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Games;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = auth()->user();
+        if($user->hasRole('admin')){
+            $games = Games::all();
+            return view('admin.index', ['games' => $games]);
+        }
+        return view('regular.index');
     }
 }
