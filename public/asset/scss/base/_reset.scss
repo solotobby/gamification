@@ -1,0 +1,170 @@
+@import '../utils/_mixins';
+@import '../utils/_variables';
+@import '_sprite';
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: $base-font-family;
+	background: $bg-color;
+	height: 100%;
+	font-size: $base-font-size !important;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: $text-color;
+	line-height:$base-line-height;
+	background: $bg-color;
+	
+}
+html {
+	font-size: 10px !important;
+}
+
+
+
+/*MAIN*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, 
+form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer,
+header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0; padding: 0; border: 0; font-size: 100%; 
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+	display: block;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-width: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+html {
+	height: 100%;
+	-webkit-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+}
+
+input, textarea, select, button {
+	font-family: $base-font-family
+}
+input,
+textarea {
+	color: $text-color;
+	font-family: $base-font-family;
+	outline: none;
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-webkit-appearance: none;
+}
+textarea {
+	overflow: auto;
+	resize: none;
+}
+input[type="button"],
+input[type="submit"],
+button {
+	cursor: pointer
+}
+td {
+	margin: 0px;
+	padding: 0px;
+}
+
+form {
+	padding: 0px;
+	margin: 0px;
+}
+
+a {
+	color: $link-color;
+	@include transition($default-transition);
+	text-decoration: none;
+	outline: none;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	&:hover {
+		color: $link-color-hover
+	}
+}
+
+a,
+span,
+div,
+button {
+	outline: none!important
+}
+
+input[type=submit],
+input[type=button],
+button {
+	-webkit-appearance: none;
+	outline: none;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	outline: none
+}
+
+*:before,
+*:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+strong {
+	font-weight: 700
+}
+.clearfix:after,
+.wrapper:after,
+.row:after{
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+img {
+	max-width: 100%
+}
+
+
+
+@media screen and (max-width: 1366px)  and (min-width: 768px){
+html {
+	font-size: 9px !important;
+}
+}
+
+
+@media screen and (max-width: 1023px) {
+body {
+	font-size: 1.5rem !important;
+}
+}
+@media screen and (max-width: 767px) {
+body {
+	font-size: 1.4rem !important;
+}
+}
+@media screen and (max-width: 359px) {
+html {
+	font-size: 9px !important;
+}
+}

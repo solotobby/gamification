@@ -1,0 +1,130 @@
+
+
+.popup {
+    background: linear-gradient(90deg, #fcfdfe 0%, #e0e3f5 100%);
+    width: 60rem;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 20px 0px 0px 20px;
+}
+
+
+.popup-title {
+font-weight: bold;
+font-size: 5.4rem;
+line-height: 100%;
+    margin-bottom: 2.4rem;
+    font-family: $custom-font-family;
+    color: $color1;
+    line-height: 100%;
+    text-transform: capitalize;
+    position: relative;z-index: 1
+}
+.popup-text {
+	font-size: 1.6rem;
+line-height: 170%;
+max-width: 46rem
+}
+
+.block-popup {
+    padding: 8rem 7rem 9rem;
+    position: relative;
+    z-index: 1
+}
+.popup-succsess {
+    width: 45rem;
+    text-align: center;
+    .popup-content {
+        padding: 50px 25px;
+    }
+}
+
+.popup-button_succsees {
+    margin-top: 39px
+}
+
+.box-fileds_2 {
+	.box-filed_btn {
+	    width: 13rem;
+	}
+	.box-fileds .box-field__accept {
+	    width: calc(100% - 19rem);
+	}
+}
+.popup-decor {
+	left: 50%;
+	bottom: 0;
+	width: 35rem;
+	height: 12rem;
+	overflow: hidden;
+	transform: translateX(-50%);
+	position: absolute;
+	z-index: 0;
+	&:before {
+		content: '';
+		display: block;
+		height: 35rem;
+		border: 80px solid rgba(#DBDFF3,.3);
+		border-radius: 50%
+	}
+}
+.popup-title-wrap {
+	position: relative;
+}
+.popup-decor-top {
+	position: absolute;
+left: -5.2rem;
+    top: -5rem;
+	width: 100%;
+	height: 13.7rem;
+	z-index: 0
+}
+.popup-form {
+	margin-top: 4rem;
+
+	.box-field {
+		margin-bottom: 2rem
+	}
+	textarea {
+height: 15rem;
+	}
+}
+body:not(.loaded) .popup-decor-top {
+	background: url(../img/bg/popup_decor-top.svg) 0 0 no-repeat;
+
+}
+.btn-popup {
+	min-width: 13rem
+}
+@media screen and (max-width: 767px) {
+.block-popup {
+    padding: 5rem 2em 3.5rem;
+}
+.popup-title {
+    font-size: 3.4rem;
+}
+.popup-decor-top {
+	display: none;
+}
+}
+@media screen and (max-width: 559px) {
+.popup-form {
+	.box-fileds {
+		display: flex;
+	flex-direction: column-reverse;
+}
+.box-fileds .box-field__accept {
+	padding-top: 0;
+	width: 100%;
+
+}
+}
+.box-fileds_2 .box-filed_btn {
+	text-align: center;
+	width: 100%;
+	.btn {
+		width: 100%;
+		max-width: 35rem
+	}
+}
+}

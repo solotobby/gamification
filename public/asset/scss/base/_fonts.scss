@@ -1,0 +1,85 @@
+
+@font-face {
+    font-family: 'Aleo';
+    src: url('../fonts/AleoBold.eot');
+    src: url('../fonts/AleoBold.eot') format('embedded-opentype'),
+         url('../fonts/AleoBold.woff2') format('woff2'),
+         url('../fonts/AleoBold.woff') format('woff'),
+         url('../fonts/AleoBold.ttf') format('truetype'),
+         url('../fonts/AleoBold.svg#AleoBold') format('svg');
+             font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato/LatoRegular.eot');
+    src: url('../fonts/Lato/LatoRegular.eot') format('embedded-opentype'),
+         url('../fonts/Lato/LatoRegular.woff2') format('woff2'),
+         url('../fonts/Lato/LatoRegular.woff') format('woff'),
+         url('../fonts/Lato/LatoRegular.ttf') format('truetype'),
+         url('../fonts/Lato/LatoRegular.svg#LatoRegular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato/LatoBold.eot');
+    src: url('../fonts/Lato/LatoBold.eot') format('embedded-opentype'),
+         url('../fonts/Lato/LatoBold.woff2') format('woff2'),
+         url('../fonts/Lato/LatoBold.woff') format('woff'),
+         url('../fonts/Lato/LatoBold.ttf') format('truetype'),
+         url('../fonts/Lato/LatoBold.svg#LatoBold') format('svg');
+             font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato/LatoBlack.eot');
+    src: url('../fonts/Lato/LatoBlack.eot') format('embedded-opentype'),
+         url('../fonts/Lato/LatoBlack.woff2') format('woff2'),
+         url('../fonts/Lato/LatoBlack.woff') format('woff'),
+         url('../fonts/Lato/LatoBlack.ttf') format('truetype'),
+         url('../fonts/Lato/LatoBlack.svg#LatoBlack') format('svg');
+             font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+@font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/icomoon/fonts/icomoon.eot');
+    src: url('../fonts/icomoon/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon/fonts/icomoon.woff') format('woff'),
+        url('../fonts/icomoon/fonts/icomoon.svg#icomoon') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+
+
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

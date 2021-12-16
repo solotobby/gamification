@@ -1,0 +1,167 @@
+// SCSS variables are information about icon's compiled state, stored under its original file name
+//
+// .icon-home {
+//   width: $icon-home-width;
+// }
+//
+// The large array-like variables contain all information about a single icon
+// $icon-home: x y offset_x offset_y width height total_width total_height image_path;
+//
+// At the bottom of this section, we provide information about the spritesheet itself
+// $spritesheet: width height image $spritesheet-sprites;
+$mail-icon-name: 'mail-icon';
+$mail-icon-x: 192px;
+$mail-icon-y: 173px;
+$mail-icon-offset-x: -192px;
+$mail-icon-offset-y: -173px;
+$mail-icon-width: 25px;
+$mail-icon-height: 18px;
+$mail-icon-total-width: 351px;
+$mail-icon-total-height: 237px;
+$mail-icon-image: '../img/sprite.png';
+$mail-icon: (192px, 173px, -192px, -173px, 25px, 18px, 351px, 237px, '../img/sprite.png', 'mail-icon', );
+$payments-icon-name: 'payments-icon';
+$payments-icon-x: 0px;
+$payments-icon-y: 173px;
+$payments-icon-offset-x: 0px;
+$payments-icon-offset-y: -173px;
+$payments-icon-width: 129px;
+$payments-icon-height: 29px;
+$payments-icon-total-width: 351px;
+$payments-icon-total-height: 237px;
+$payments-icon-image: '../img/sprite.png';
+$payments-icon: (0px, 173px, 0px, -173px, 129px, 29px, 351px, 237px, '../img/sprite.png', 'payments-icon', );
+$paypal-icon-name: 'paypal-icon';
+$paypal-icon-x: 121px;
+$paypal-icon-y: 207px;
+$paypal-icon-offset-x: -121px;
+$paypal-icon-offset-y: -207px;
+$paypal-icon-width: 105px;
+$paypal-icon-height: 30px;
+$paypal-icon-total-width: 351px;
+$paypal-icon-total-height: 237px;
+$paypal-icon-image: '../img/sprite.png';
+$paypal-icon: (121px, 207px, -121px, -207px, 105px, 30px, 351px, 237px, '../img/sprite.png', 'paypal-icon', );
+$rabbit-1-name: 'rabbit_1';
+$rabbit-1-x: 208px;
+$rabbit-1-y: 0px;
+$rabbit-1-offset-x: -208px;
+$rabbit-1-offset-y: 0px;
+$rabbit-1-width: 143px;
+$rabbit-1-height: 159px;
+$rabbit-1-total-width: 351px;
+$rabbit-1-total-height: 237px;
+$rabbit-1-image: '../img/sprite.png';
+$rabbit-1: (208px, 0px, -208px, 0px, 143px, 159px, 351px, 237px, '../img/sprite.png', 'rabbit_1', );
+$rabbit-2-name: 'rabbit_2';
+$rabbit-2-x: 0px;
+$rabbit-2-y: 0px;
+$rabbit-2-offset-x: 0px;
+$rabbit-2-offset-y: 0px;
+$rabbit-2-width: 203px;
+$rabbit-2-height: 168px;
+$rabbit-2-total-width: 351px;
+$rabbit-2-total-height: 237px;
+$rabbit-2-image: '../img/sprite.png';
+$rabbit-2: (0px, 0px, 0px, 0px, 203px, 168px, 351px, 237px, '../img/sprite.png', 'rabbit_2', );
+$skype-icon-name: 'skype-icon';
+$skype-icon-x: 134px;
+$skype-icon-y: 173px;
+$skype-icon-offset-x: -134px;
+$skype-icon-offset-y: -173px;
+$skype-icon-width: 24px;
+$skype-icon-height: 24px;
+$skype-icon-total-width: 351px;
+$skype-icon-total-height: 237px;
+$skype-icon-image: '../img/sprite.png';
+$skype-icon: (134px, 173px, -134px, -173px, 24px, 24px, 351px, 237px, '../img/sprite.png', 'skype-icon', );
+$twitter-icon-name: 'twitter-icon';
+$twitter-icon-x: 163px;
+$twitter-icon-y: 173px;
+$twitter-icon-offset-x: -163px;
+$twitter-icon-offset-y: -173px;
+$twitter-icon-width: 24px;
+$twitter-icon-height: 20px;
+$twitter-icon-total-width: 351px;
+$twitter-icon-total-height: 237px;
+$twitter-icon-image: '../img/sprite.png';
+$twitter-icon: (163px, 173px, -163px, -173px, 24px, 20px, 351px, 237px, '../img/sprite.png', 'twitter-icon', );
+$webmoney-icon-name: 'webmoney-icon';
+$webmoney-icon-x: 0px;
+$webmoney-icon-y: 207px;
+$webmoney-icon-offset-x: 0px;
+$webmoney-icon-offset-y: -207px;
+$webmoney-icon-width: 116px;
+$webmoney-icon-height: 30px;
+$webmoney-icon-total-width: 351px;
+$webmoney-icon-total-height: 237px;
+$webmoney-icon-image: '../img/sprite.png';
+$webmoney-icon: (0px, 207px, 0px, -207px, 116px, 30px, 351px, 237px, '../img/sprite.png', 'webmoney-icon', );
+$spritesheet-width: 351px;
+$spritesheet-height: 237px;
+$spritesheet-image: '../img/sprite.png';
+$spritesheet-sprites: ($mail-icon, $payments-icon, $paypal-icon, $rabbit-1, $rabbit-2, $skype-icon, $twitter-icon, $webmoney-icon, );
+$spritesheet: (351px, 237px, '../img/sprite.png', $spritesheet-sprites, );
+
+// The provided mixins are intended to be used with the array-like variables
+//
+// .icon-home {
+//   @include sprite-width($icon-home);
+// }
+//
+// .icon-email {
+//   @include sprite($icon-email);
+// }
+//
+// Example usage in HTML:
+//
+// `display: block` sprite:
+// <div class="icon-home"></div>
+//
+// To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+//
+// // CSS
+// .icon {
+//   display: inline-block;
+// }
+//
+// // HTML
+// <i class="icon icon-home"></i>
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+// The `sprites` mixin generates identical output to the CSS template
+//   but can be overridden inside of SCSS
+//
+// @include sprites($spritesheet-sprites);
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}

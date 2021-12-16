@@ -1,0 +1,32 @@
+/* reset */
+$min-width: 320px; 
+$max-width: 1220px; 
+$base-font-size: 1.8rem; 
+$base-line-height: 1.7; 
+$base-font-family: Lato, arial, sans-serif; 
+$custom-font-family: Aleo, arial, sans-serif; 
+$default-transition:all .4s ease;
+/* main variables */
+
+//text, titles
+$text-color: #646A89;
+$title-color: $text-color;
+$title-font-family: $base-font-family;
+$color-active: #FB5472;
+$color-active-2:#EA3377;
+$bg-color:#fff;
+
+$color1: #1B2B7C;
+$color2: #7D74E4;
+$color3: #004A9E;
+$link-color: $color-active;
+$link-color-hover: $color-active;
+$base-bg: #fafafa; 
+$placeholder: rgba($text-color,.7);
+
+$font-size-h1: 36px;
+$line-height-h1: 42px;
+$font-size-h2: 32px;
+$line-height-h2: 37px;
+$font-size-h3: 28px;
+$line-height-h3: 32px;
