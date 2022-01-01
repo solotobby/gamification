@@ -21,6 +21,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Type</th>
                             <th scope="col">Winners</th>
+                            <th scope="col">Status</th>
                             <th scope="col"></th>
                             </tr>
                         </thead>
@@ -32,7 +33,8 @@
                                     <td>{{ $game->name }}</td>
                                     <td>{{ $game->type }}</td>
                                     <td>{{ $game->number_of_winners }}</td>
-                                    <td><a href="{{ url('games/create/'.$game->id) }}" class="btn btn-sm btn-primary"> Create Game</a></td>
+                                    <td>{{ $game->status == "1" ? 'Active' : 'Not Active' }}</td>
+                                    <td><a href="{{ route('game.status', $game->id) }}" class="btn btn-info btn-sm">Change Status</a></td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -31,4 +31,9 @@ class HomeController extends Controller
         }
         return view('regular.index');
     }
+
+    public function takeQuiz()
+    {
+        return $games = Games::where('status', '1')->first();
+    }
 }

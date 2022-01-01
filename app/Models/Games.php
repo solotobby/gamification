@@ -11,5 +11,5 @@ class Games extends Model
 
     protected $table = "games";
 
-    protected $fillable = ['name', 'category_id', 'number_of_winners'];
+    protected $fillable = ['name', 'type', 'slug', 'category_id', 'number_of_winners'];
 }

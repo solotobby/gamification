@@ -25,50 +25,17 @@
                     <div class="wrapper">
                         <div class="screen-main">
                             <div class="section-heading"><span>Be sure</span></div>
-                            <h1 class="h1 h1-main">your success is in&nbsp;your&nbsp;hands</h1>
+                            <h1 class="h1 h1-main">play and win in&nbsp;your&nbsp; prizes</h1>
                             <div class="screen-main__text">Agency with 12&nbsp;years of history, 15&nbsp;employees, Fortune 5000&nbsp;clients and proven results.</div>
+                            @if(Auth::user())
+                            <a href="#game" class="btn btn_learn">Play Game</a>
+                            @else
                             <a href="{{ url('auth/google') }}" class="btn btn_learn">Get Started</a>
+                            @endif
                         </div>
                     </div>
                 </div>
-                <div class="section-services-main" id="services">
-                    <div class="wrapper">
-                        <div class="services">
-                            <div class="services__item">
-                                <div class="services__decor"></div>
-                                <div class="services__icon">
-                                    <img src="{{ asset('asset/img/icons-svg/exellence-1.svg') }}"  alt="" loading="lazy">
-                                </div>
-                                <div class="services__title">SEO Consultancy</div>
-                                <div class="services__text">Dolor enim dolor labore velit nulla sit exercitation proident esse culpa commodo n irure esse velit commodo.</div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__decor"></div>
-                                <div class="services__icon">
-                                    <img src="{{ asset('asset/img/icons-svg/exellence-2.svg') }}"  alt="" loading="lazy">
-                                </div>
-                                <div class="services__title">Site Optimization</div>
-                                <div class="services__text">Voluptate in sunt commodo aute do. Dolor enim dolor labore velit nulla sit exetion irure esse proid.</div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__decor"></div>
-                                <div class="services__icon">
-                                    <img src="{{ asset('asset/img/icons-svg/exellence-3.svg') }}"  alt="" loading="lazy">
-                                </div>
-                                <div class="services__title">Page Rankings</div>
-                                <div class="services__text">Dolor enim dolor labore velit nulla sit exercitation proident esse culpa commodo n irure esse velit commodo.</div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__decor"></div>
-                                <div class="services__icon">
-                                    <img src="{{ asset('asset/img/icons-svg/exellence-4.svg') }}"  alt="" loading="lazy">
-                                </div>
-                                <div class="services__title">User Retention</div>
-                                <div class="services__text">Voluptate in sunt commodo aute do. Dolor enim dolor labore velit nulla sit exetion irure esse proid.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="section-about" id="about">
                     <div class="wrapper">
                         <div class="about">
@@ -122,12 +89,12 @@
                     <div class="about-decor about-decor_2"></div>
                     <div class="about-decor about-decor_3"></div>
                 </div>
-                <div class="section-get">
+                <div class="section-get" id="winnings">
                     <div class="wrapper">
-                        <div class="section-heading h-center"><span>what we do</span></div>
+                        <div class="section-heading h-center"><span>Potential Winnings</span></div>
                         <div class="h-decor-1">
                             <h2 class="h2 h-center"><span>what you will get with us</span></h2>
-                            <div class="section-subtitle h-center">Dolor duis voluptate enim exercitation consequat ex. </div>
+                            <div class="section-subtitle h-center">Play some trivia games and win prizes </div>
                         </div>
                         <div class="get-list">
                             <div class="get-list__item">
@@ -135,7 +102,7 @@
                                     <div class="get-list__icon">
                                         <img src="{{ asset('asset/img/icons-svg/get-1.svg') }}"  alt="" loading="lazy">
                                     </div>
-                                    <div class="get-list__title">Research & analysis</div>
+                                    <div class="get-list__title">Cash</div>
                                 </div>
                                 <div class="get-list__text">Dolor duis voluptate enim exercitation consequat ex. Voluptate in sunt commodo aute do. Dolor enim dolor labore velit nulla sit exercitation irure esse proid.</div>
                             </div>
@@ -144,7 +111,7 @@
                                     <div class="get-list__icon">
                                         <img src="{{ asset('asset/img/icons-svg/get-2.svg') }}"  alt="" loading="lazy">
                                     </div>
-                                    <div class="get-list__title">Unique content</div>
+                                    <div class="get-list__title">Recharge Cards</div>
                                 </div>
                                 <div class="get-list__text">Voluptate in sim dolor labore velit nuunt commodo aute do. Dolor enim dolor labore im dolor labore velit te dolor enim dolor labore velit nul.</div>
                             </div>
@@ -153,41 +120,15 @@
                                     <div class="get-list__icon">
                                         <img src="{{ asset('asset/img/icons-svg/get-3.svg') }}"  alt="" loading="lazy">
                                     </div>
-                                    <div class="get-list__title">Thematic links</div>
+                                    <div class="get-list__title">Data Bundles</div>
                                 </div>
                                 <div class="get-list__text">Pariatur magna cupidatat magna sit incididunt non pariatur. Sint nulla commodo qui magna eiusmod quis aliqua laboris officia excepteur non eu in.</div>
                             </div>
-                            <div class="get-list__item">
-                                <div class="get-list__heading">
-                                    <div class="get-list__icon">
-                                        <img src="{{ asset('asset/img/icons-svg/get-4.svg') }}"  alt="" loading="lazy">
-                                    </div>
-                                    <div class="get-list__title">Effective UX/UI design</div>
-                                </div>
-                                <div class="get-list__text">Pariatur magna cupidatat magna sit incididunt non pariatur. Sint nulla commodo qui magna eiusmod quis aliqua laboris officia excepteur non eu in.</div>
-                            </div>
-                            <div class="get-list__item">
-                                <div class="get-list__heading">
-                                    <div class="get-list__icon">
-                                        <img src="{{ asset('asset/img/icons-svg/get-5.svg') }}"  alt="" loading="lazy">
-                                    </div>
-                                    <div class="get-list__title">Responsive & high speed</div>
-                                </div>
-                                <div class="get-list__text">Dolor duis voluptate enim exercitation consequat ex. Voluptate in sunt commodo aute do. Dolor enim dolor labore velit nulla sit exercitation irure esse proid.</div>
-                            </div>
-                            <div class="get-list__item">
-                                <div class="get-list__heading">
-                                    <div class="get-list__icon">
-                                        <img src="{{ asset('asset/img/icons-svg/get-6.svg') }}"  alt="" loading="lazy">
-                                    </div>
-                                    <div class="get-list__title">Quality & valid code</div>
-                                </div>
-                                <div class="get-list__text">Voluptate in sim dolor labore velit nuunt commodo aute do. Dolor enim dolor labore im dolor labore velit te dolor enim dolor labore velit nul.</div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="section-consultation">
+                <div class="section-consultation" id="contact">
                     <div class="section-consultation__bg js-lazy" data-src="{{ asset('asset/img/bg/bg-2.svg') }}"></div>
                     <div class="wrapper">
                         <div class="consultation-form-wrap">
@@ -195,8 +136,7 @@
                                 <div class="section-heading"><span>get started</span></div>
                                 <h2 class="h2">get in touch with us</h2>
                                 <div class="content-block__text">
-                                    <p>Dolor duis voluptate enim exercitation consequat ex. Voluptate in sunt
-                                         commodo aute dolor enim dolor labore velit nul.</p>
+                                    <p>You have any concern or suggesion, reach out to us here</p>
                                 </div>
                                 <div class="consultation-form__form">
                                     <form onsubmit="successSubmit();return false;">
@@ -204,21 +144,21 @@
                                             <div class="box-filed">
                                                 <input type="text" placeholder="First name">
                                             </div>
-                                            <div class="box-filed">
-                                                <input type="text" placeholder="Second name">
-                                            </div>
+                                            
                                             <div class="box-filed">
                                                 <input type="email" placeholder="Enter your email">
+                                            </div>
+                                            <div class="box-filed">
+                                                <textarea name="message" placeholder="We would love to have a feel"> </textarea>
+                                                {{--  <input type="text" placeholder="Second name">  --}}
+                                            </div>
+                                            <div class="box-filed">
+                                                {{--  <input type="text" placeholder="Second name">  --}}
                                             </div>
                                             <div class="box-filed box-filed_btn">
                                                 <input type="submit" class="btn" value="Submit">
                                             </div>
-                                            <div class="box-filed box-field__accept">
-                                                <label class="checkbox-element">
-                                                <input type="checkbox" >
-                                                <span class="checkbox-text">I accept the <a href="#" target="_blank">Terms and Conditions.</a></span>
-                                                </label>
-                                            </div>
+                                        
                                         </div>
                                     </form>
                                 </div>
@@ -230,45 +170,7 @@
                     </div>
                 </div>
                 
-                <div class="section-steps" id="steps">
-                    <div class="wrapper">
-                        <div class="section-heading h-center"><span>steps</span></div>
-                        <div class="h-decor-3">
-                            <h2 class="h2 h-center"><span>main milestones</span></h2>
-                        </div>
-                        <div class="steps">
-                            <div class="steps__item">
-                                <span class="steps__count">01</span>
-                                <div class="steps__icon">
-                                    <img data-src="{{ asset('asset/img/icons-svg/step-1.svg') }}"  alt="" loading="lazy" class="js-lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-                                </div>
-                                <div class="steps__title">Planning</div>
-                            </div>
-                            <div class="steps__item">
-                                <span class="steps__count">02</span>
-                                <div class="steps__icon">
-                                    <img data-src="{{ asset('asset/img/icons-svg/step-2.svg') }}"  alt="" loading="lazy" class="js-lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-                                </div>
-                                <div class="steps__title">Research</div>
-                            </div>
-                            <div class="steps__item">
-                                <span class="steps__count">03</span>
-                                <div class="steps__icon">
-                                    <img data-src="{{ asset('asset/img/icons-svg/step-3.svg') }}"  alt="" loading="lazy" class="js-lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-                                </div>
-                                <div class="steps__title">Optimization</div>
-                            </div>
-                            <div class="steps__item">
-                                <span class="steps__count">04</span>
-                                <div class="steps__icon">
-                                    <img data-src="{{ asset('asset/img/icons-svg/step-4.svg') }}"  alt="" loading="lazy" class="js-lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-                                </div>
-                                <div class="steps__title">Results</div>
-                            </div>
-                        </div>
-                        <div class="steps-text">Pariatur magna cupidatat magna sit incididunt non pariatur. Sint nulla commodo qui magna eiusmod quis aliqua laboris officia excepteur non eu in. Consequat esse in dolore laborum dolore ut duis elit deserunt minim.</div>
-                    </div>
-                </div>
+                {{--    --}}
                 
                 <div class="section-newsletter">
                     <div class="section-newsletter__bg js-lazy" data-src="{{ asset('asset/img/bg/bg-3.svg') }}"></div>
@@ -373,24 +275,56 @@
                     </div>
                     <div class="header-right">
                         <div id="mainNav" class="menu-box">
+                            @if(Auth::user())
                             <nav class="nav-inner">
                                 <ul class="main-menu js-menu" id="mainMenu">
                                     <li>
-                                        <a href="#services">Services</a>
+                                        <a href="#about">About Us</a>
                                     </li>
                                     <li>
-                                        <a href="#about">About</a>
+                                        <a href="#contact">Contact Us</a>
                                     </li>
                                     <li>
-                                        <a href="#steps">Steps</a>
+                                        <a href="#winnings">What You Get</a>
                                     </li>
                                     
                                     <li>
                                         <a href="#testimonials">Testimonials</a>
                                     </li>
+
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                    </li>
                                     
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                            
                                 </ul>
                             </nav>
+                            @else
+                            <nav class="nav-inner">
+                                <ul class="main-menu js-menu" id="mainMenu">
+                                    <li>
+                                        <a href="#about">About Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="#contact">Contact Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="#winnings">What You Get</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="#testimonials">Testimonials</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            @endif
                             <div class="socials-item">
                                 <div class="footer-title">Find us here:</div>
                                 <div class="socials">
@@ -409,7 +343,11 @@
                                 </div>
                             </div>  --}}
                         </div>
+                        @if(Auth::user())
+                        <a href="{{ route('take.quiz') }}" class="btn-2 btn_started-header">Play Games</a>
+                        @else
                         <a href="{{ url('auth/google') }}" class="btn-2 btn_started-header">get started</a>
+                        @endif
                     </div>
                     <div class="bars-mob js-button-nav">
                         <div class="hamburger">
