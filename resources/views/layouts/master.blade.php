@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{--  <!DOCTYPE html>
 <html lang="zxx">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,7 +22,7 @@
             
             @yield('content')
 
-            {{--  Other body component  --}}
+            
             @include('layouts.header')
             @include('layouts.footer')
             
@@ -37,7 +37,7 @@
                     </div>
                     <div class="popup-text">Culpa non ex tempor qui nulla laborum. Laboris culpa ea incididunt dolore ipsum tempor duis do ullamc.</div>
                     
-                    {{--  <form onsubmit="successSubmit();return false;">
+                     <form onsubmit="successSubmit();return false;">
                         <div class="popup-form">
                             <div class="box-field">
                                 <input type="text" placeholder="Name">
@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>  --}}
+                    </form>  
                 </div>
                 <div class="popup-decor"></div>
             </div>
@@ -99,5 +99,64 @@
         <script src="{{ asset('asset/js/components/jquery.singlePageNav.min.js') }}" defer></script>
         <script src="{{ asset('asset/js/components/swiper.js') }}" defer></script>
         <script src="{{ asset('asset/js/custom.js') }}" defer></script>
+    </body>
+</html>  --}}
+
+
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@yield('title')</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- favicon icon -->
+        <link rel="icon" href="{{ asset('asset/img/favicon.png') }}">
+
+		<!-- All CSS Files Here -->
+        <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/et-line-fonts.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/ionicons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/magnific-popup.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/meanmenu.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/global.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
+        <script src="{{ asset('asset/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+ 		<!-- PRELOADER -->
+		<div class="page-loader">
+			<div class="loader">Loading...</div>
+		</div>
+		<!-- /PRELOADER -->
+		<!-- header start -->
+		@include('layouts.header')
+		<!-- header end -->
+		<!-- basic-slider start -->
+
+        @yield('content')
+		
+		<!-- footer start -->
+		@include('layouts.footer')
+		<!-- footer end -->
+
+
+		<!-- All js plugins here -->
+        <script src="{{ asset('asset/js/vendor/jquery-1.12.0.min.js') }}"></script>
+        <script src="{{ asset('asset/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('asset/js/isotope.pkgd.min.js') }}"></script>
+        <script src="{{ asset('asset/js/imagesloaded.pkgd.min.js') }}"></script>
+        <script src="{{ asset('asset/js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ asset('asset/js/jquery.meanmenu.js') }}"></script>
+        <script src="{{ asset('asset/js/plugins.js') }}"></script>
+        <script src="{{ asset('asset/js/main.js') }}"></script>
     </body>
 </html>
