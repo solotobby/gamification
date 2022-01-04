@@ -35,7 +35,6 @@ class HomeController extends Controller
     public function takeQuiz()
     {
         $games = Games::where('status', '1')->first();
-
         return view('play');
     }
 }

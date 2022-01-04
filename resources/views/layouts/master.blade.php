@@ -18,8 +18,7 @@
         <link rel="preload"  href="{{ asset('asset/css/style.css') }}" as="style">
     </head>
     <body class="home loaded">
-        @yield('content')
-        <div class="main-wrapper">
+         <div class="main-wrapper">
             
             @yield('content')
 
