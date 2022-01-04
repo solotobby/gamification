@@ -16,7 +16,7 @@
 								to
 								ensue; and equal blame belongs to those.</p>
                                 @if(Auth::user())
-                                    <a class="btn" href="{{ route('take.quiz') }}" style="color: azure">Play Game</a>
+                                    <a class="btn" href="{{ route('instruction') }}" style="color: azure">Play Game</a>
                                 @else
                                     <a class="btn" href="{{ url('auth/google') }}" style="color: azure">Get Started</a>
                                 @endif
@@ -118,9 +118,9 @@
 					<div class="col-md-3 col-sm-3 col-xs-12 text-right">
 						<div class="call-to-action">
                             @if(Auth::user())
-                                    <a class="btn btn-large" href="{{ route('take.quiz') }}" style="color: azure">Play Game</a>
+                                    <a class="btn btn-large" href="{{ route('instruction') }}">Play Game</a>
                                 @else
-                                    <a class="btn btn-large" href="{{ url('auth/google') }}" style="color: azure">Get Started</a>
+                                    <a class="btn btn-large" href="{{ url('auth/google') }}">Get Started</a>
                             @endif
 						</div>
 					</div>

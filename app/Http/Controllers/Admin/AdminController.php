@@ -29,7 +29,8 @@ class AdminController extends Controller
 
     public function createQuestion()
     {
-        return view('admin.add_question');
+        $questions = Question::all();
+        return view('admin.add_question', ['question' => $questions]);
     }
 
     publiC function storeQuestion(Request $request)
@@ -71,7 +72,14 @@ class AdminController extends Controller
     {
 
         $slug = Str::slug($request->name);
-        $game = Games::create(['name' => $request->name, 'type' => $request->type, 'number_of_winners' => $request->number_of_winners, 'slug' => $slug]);
+        $game = Games::create([
+            'name' => $request->name, 
+            'type' => $request->type, 
+            'number_of_winners' => $request->number_of_winners, 
+            'slug' => $slug, 
+            'time_allowed' => $request->time_allowed, 
+            'number_of_questions'=>$request->number_of_questions
+        ]);
         // $game->save();
 
         return back()->with('status', 'Game Created Successfully');

@@ -19,6 +19,8 @@ class CreateGamesTable extends Migration
             $table->string('type')->nullable();
             $table->string('slug')->nullable();
             $table->integer('number_of_winners');
+            $table->string('time_allowed');
+            $table->integer('number_of_questions');
             $table->boolean('status')->default(false);
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class GamesSeeder extends Seeder
     public function run()
     {
         $games = [
-            ['id' => '1', 'name' => 'Banking ', 'type' => 'INTEL', 'number_of_winners' => '3', 'status'=>'1']
+            ['id' => '1', 'name' => 'Trivia', 'type' => 'INTEL', 'number_of_winners' => '3', 'status'=>'1', 'time_allowed' => '2', 'number_of_questions' => '10']
         ];
 
         foreach($games as $game)

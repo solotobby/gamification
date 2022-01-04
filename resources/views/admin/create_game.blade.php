@@ -26,6 +26,16 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Number of Questions</label>
+                            <input type="number" class="form-control" name="number_of_questions" placeholder="Enter Number of Questions" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Time Allowed</label>
+                            <input type="number" class="form-control" name="time_allowed" placeholder="Enter Time Allowed e.g 40" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Type</label>
                             <select name="type" class="form-control" required>
                                 <option value="">Select One</option>

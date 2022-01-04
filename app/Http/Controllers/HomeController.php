@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Games;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -32,9 +33,18 @@ class HomeController extends Controller
         return view('regular.index');
     }
 
+    public function instruction()
+    {
+        return view('instruction');
+    }
+
     public function takeQuiz()
     {
         $games = Games::where('status', '1')->first();
+
+        $questions = Question::all()->random($games->number_of_questions);
+        //return response()->json($questions);
+
         return view('play');
     }
 }

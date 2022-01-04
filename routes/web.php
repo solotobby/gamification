@@ -23,6 +23,7 @@ Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'r
 Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 //Take Quiz
+Route::get('instruction', [App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
 Route::get('take/quiz', [App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
 
 
