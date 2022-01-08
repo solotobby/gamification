@@ -984,6 +984,7 @@ nav.nav-menu-show {
 }
 .service-content p {
   margin: 0;
+  height: 800px;
 }
 .service-content h3::before {
 	background: #444;

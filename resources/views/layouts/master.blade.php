@@ -125,6 +125,8 @@
         <link rel="stylesheet" href="{{ asset('asset/style.css') }}">
         <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
         <script src="{{ asset('asset/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+
+        @yield('script')
     </head>
     <body>
         <!--[if lt IE 8]>

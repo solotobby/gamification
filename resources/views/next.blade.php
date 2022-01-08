@@ -58,7 +58,7 @@
 						<div class="col-xl-8 col-lg-8 col-md-8">
 							<div class="row">
 								<div class="col-md-6 col-sm-6">
-									1 of {{ $game->number_of_questions }}
+									{{ $index }} of {{ $game->number_of_questions }}
 								</div>
 								<div class="col-md-6 col-sm-6">
 									<h5 class="text-center text-danger"><span id="time"></span> seconds!</h5>

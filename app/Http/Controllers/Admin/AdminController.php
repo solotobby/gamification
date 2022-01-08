@@ -8,6 +8,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
+use DB;
 
 class AdminController extends Controller
 {
@@ -37,6 +38,12 @@ class AdminController extends Controller
     {   
         $question = Question::create($request->all());
         $question->save();
+
+        $get_answer = DB::table('questions')->select($request->correct_answer)->latest()->first();
+        $collect = collect($get_answer);
+        $value = $collect->shift();
+        $question->update(['correct_answer' => $value]);
+
         return back()->with('status', 'Question Created Successfully');
     }
 

@@ -25,6 +25,9 @@ Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::
 //Take Quiz
 Route::get('instruction', [App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
 Route::get('take/quiz', [App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
+Route::get('next/question', [App\Http\Controllers\HomeController::class, 'nextQuestion']);
+Route::get('submit/answers', [App\Http\Controllers\HomeController::class, 'submitAnswers']);
+Route::post('store/asnwer', [App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
 
 
 
