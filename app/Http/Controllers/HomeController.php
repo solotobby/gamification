@@ -110,7 +110,7 @@ class HomeController extends Controller
 
         $answered = Answer::where('user_id', auth()->user()->id)->where('game_id', $games->id)->count();
         $index = $answered + 1;
-        if($answered >= $games->number_of_questions)
+        if($answered == $games->number_of_questions)
         {
             return redirect('submit/answers');
         }
@@ -146,14 +146,45 @@ class HomeController extends Controller
 
     public function redeemReward($id)
     {
-        $reward_type = UserScore::findOrFail($id);
-        if($reward_type->reward_type == 'CASH')
+        $reward_type = UserScore::where('id', $id)->first();
+        if($reward_type->reward_type == 'CASH' && $reward_type->is_redeem == '0')
         {
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             if($bankInformation == null){
                 $bankList = PaystackHelpers::bankList();
                 return view('bank_information', ['bankList' => $bankList, 'id' => $id]);
-            }   
+            }  
+                $amount = 100 * 100;
+                //transfer the fund
+                $transfer = $this->transferFund($amount, $bankInformation->recipient_code);
+                
+
+               if($transfer['status'] == 'false'){
+                if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
+                {
+                    $userScore = UserScore::where('id', $id)->first();
+                    $userScore->is_redeem = true;
+                    $userScore->save();
+
+                    Transaction::create([
+                        'user_id' => auth()->user()->id,
+                        'game_id' => $userScore->game_id,
+                        'amount' => $transfer['data']['amount'],
+                        'reward_type' => 'CASH',
+                        'reference' => $transfer['data']['reference'],
+                        'transfer_code' => $transfer['data']['transfer_code'],
+                        'recipient' => $transfer['data']['recipient'],
+                        'status' => $transfer['data']['status'],
+                        'currency' => $transfer['data']['currency']
+                    ]);
+                    return redirect('score/list')->with('status', 'Money successfully send to your account');
+                }else{
+                    return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later');
+                }
+
+            }else{
+                return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later!!!');
+            }
         }
 
     }
@@ -178,30 +209,33 @@ class HomeController extends Controller
                     'recipient_code' => $recipientCode['data']['recipient_code'],
                     'currency' => 'NGN'
                 ]);
-                $amount = 500;
+                $amount = 100*100;
                 //transfer the fund
                 $transfer = $this->transferFund($amount, $recipientCode['data']['recipient_code']);
-                if($transfer['status'] == 'success')
-                {
-                    $userScore = UserScore::where('id', $request->user_score_id)->first();
-                    $userScore->is_redeem = true;
-                    $userScore->save();
+                if($transfer['status'] == 'false'){
+               
+                    if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
+                    {
+                        $userScore = UserScore::where('id', $request->user_score_id)->first();
+                        $userScore->is_redeem = true;
+                        $userScore->save();
 
-                    Transaction::create([
-                        'user_id' => auth()->user()->id,
-                        'game_id' => $userScore->game_id,
-                        'amount' => $transfer['amount'],
-                        'reward_type' => 'CASH',
-                        'reference' => $transfer['reference'],
-                        'transfer_code' => $transfer['transfer_code'],
-                        'recipient' => $transfer['recipient'],
-                        'status' => $transfer['status'],
-                        'currency' => $transfer['currency']
-                    ]);
-                    return redirect('score/list')->with('status', 'Account Information saved successfully and money successfully send');
+                        Transaction::create([
+                            'user_id' => auth()->user()->id,
+                            'game_id' => $userScore->game_id,
+                            'amount' => $transfer['data']['amount'],
+                            'reward_type' => 'CASH',
+                            'reference' => $transfer['data']['reference'],
+                            'transfer_code' => $transfer['data']['transfer_code'],
+                            'recipient' => $transfer['data']['recipient'],
+                            'status' => $transfer['data']['status'],
+                            'currency' => $transfer['data']['currency']
+                        ]);
+                        return redirect('score/list')->with('status', 'Account Information saved successfully and money successfully send');
+                    }
+                }else{
+                    return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later!!!');
                 }
-                
-
         }else{
             return back()->with('error', 'Sorry We could not save your bank information');
         }

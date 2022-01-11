@@ -22,6 +22,18 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2">
+                         @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
 						<div class="table-responsive">
                             <table class="table caption-top">
                                 <caption>Scores</caption>
@@ -47,10 +59,9 @@
                                                 @if($score->is_redeem == '0')
                                                     <a href="{{ route('redeem.reward', $score->id) }}" class="btn btn-primary btn-sm">Redeem</a>
                                                 @else
-                                                    <a href="#" class="btn btn-promary btn-sm">Reward Claimed</a>
+                                                    <a href="#" class="btn btn-primary btn-sm">Reward Claimed</a>
                                                 @endif
                                             @endif
-                                        
                                         </td>
                                     </tr>
                                     @endforeach

@@ -58,7 +58,7 @@ class PaystackHelpers{
             "reason"=> "Cash Reward" 
         ]);
 
-         return json_decode($res->getBody()->getContents(), true)['data'];
+         return json_decode($res->getBody()->getContents(), true);
 
     }
 }
