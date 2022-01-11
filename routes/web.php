@@ -28,7 +28,9 @@ Route::get('take/quiz', [App\Http\Controllers\HomeController::class, 'takeQuiz']
 Route::get('next/question', [App\Http\Controllers\HomeController::class, 'nextQuestion']);
 Route::get('submit/answers', [App\Http\Controllers\HomeController::class, 'submitAnswers']);
 Route::post('store/asnwer', [App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
-
+Route::get('score/list', [App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
+Route::get('redeem/reward/{id}', [App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
+Route::post('save/bank/information', [App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

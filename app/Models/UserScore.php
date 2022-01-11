@@ -12,4 +12,9 @@ class UserScore extends Model
     protected $table = "user_scores";
 
     protected $fillable = ['game_id', 'user_id', 'score', 'reward_type', 'is_redeem'];
+
+    public function game()
+    {
+        return $this->belongsTo(Games::class, 'game_id');
+    }
 }

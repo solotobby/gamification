@@ -17,6 +17,7 @@
                                 <li><a href="about.html">about</a></li>
                                 <li><a href="service.html">Service</a></li>
                                 <li><a href="contact.html">Contact</a></li>
+                                <li><a href="{{ route('score.list') }}">Score List</a></li>
                                 <li><a href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
