@@ -110,4 +110,10 @@ class AdminController extends Controller
         return view('admin.update_amount', ['rewards' => $reward]);
     }
 
+    public function listQuestion()
+    {
+        $questions = Question::orderBy('created_at', 'desc')->paginate('20');
+        return view('admin.question_list', ['questions' => $questions]);
+    }
+
 }
