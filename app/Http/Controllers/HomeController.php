@@ -250,7 +250,9 @@ class HomeController extends Controller
                     'recipient_code' => $recipientCode['data']['recipient_code'],
                     'currency' => 'NGN'
                 ]);
-                $amount = 100*100;
+                $parameters = Reward::where('name', 'CASH')->first();
+                $amount = $parameters->amount * 100;
+                
                 //transfer the fund
                 $transfer = $this->transferFund($amount, $recipientCode['data']['recipient_code']);
                 if($transfer['status'] == 'false'){
@@ -291,7 +293,7 @@ class HomeController extends Controller
     {
 
         $username = "sandbox";
-         $apiKey = env('AFRICA_TALKING_SANDBOX');
+         $apiKey = env('AFRICA_TALKING_LIVE');
 
          $AT = new AfricasTalking($username, $apiKey);
 

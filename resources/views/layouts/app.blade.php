@@ -53,6 +53,9 @@
                             @endif
                         @else
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('view.amount') }}">{{ _('View Account') }}</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('game.create') }}">{{ __('Create Game') }}</a>
                             </li>
                             <li class="nav-item">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Games;
 use App\Models\Question;
+use App\Models\Reward;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
@@ -91,6 +92,22 @@ class AdminController extends Controller
 
         return back()->with('status', 'Game Created Successfully');
 
+    }
+
+    public function updateAmount(Request $request)
+    {
+        $reward = Reward::where('id', $request->id)->first();
+        $reward->name = $request->name;
+        $reward->amount = $request->amount;
+        $reward->save();
+        return back()->with('status', 'Amount updated Successfully');
+
+    }
+
+    public function viewAmount()
+    {
+        $reward = Reward::all();
+        return view('admin.update_amount', ['rewards' => $reward]);
     }
 
 }
