@@ -28,7 +28,12 @@ class GoogleController extends Controller
             if($finduser){
      
                 Auth::login($finduser);
-    
+
+                $get = User::where('id', auth()->user()->id)->first();
+                if($get->phone == '')
+                {
+                    return view('phone');
+                }
                 return redirect('/');
      
             }else{
@@ -40,6 +45,11 @@ class GoogleController extends Controller
                 ]);
     
                 Auth::login($newUser);
+                $get = User::where('id', auth()->user()->id)->first();
+                if($get->phone == '')
+                {
+                    return view('phone');
+                }
      
                 return redirect('/');
             }

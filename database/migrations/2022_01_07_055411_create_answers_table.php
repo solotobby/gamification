@@ -18,8 +18,8 @@ class CreateAnswersTable extends Migration
             $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('selected_option');
-            $table->string('correct_option');
+            $table->string('selected_option')->nullable();
+            $table->string('correct_option')->nullable();
             $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });

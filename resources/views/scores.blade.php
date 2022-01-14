@@ -41,6 +41,7 @@
                                     <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Game</th>
+                                    <th scope="col">Reward</th>
                                     <th scope="col">Score</th>
                                     <th scope="col">Action</th>
                                     </tr>
@@ -51,6 +52,13 @@
                                     <tr>
                                         <th scope="row">{{ $i++ }}</th>
                                         <td>{{ $score->game->name }}</td>
+                                        <td>
+                                            @if($score->reward_type == '')
+                                                No Reward Available
+                                            @else
+                                                {{ $score->reward_type }}
+                                            @endif
+                                        </td>
                                         <td>{{ $score->score }} %</td>
                                         <td>
                                             @if($score->reward_type == null)

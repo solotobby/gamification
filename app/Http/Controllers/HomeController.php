@@ -11,6 +11,10 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
+use AfricasTalking\SDK\AfricasTalking;
+use AfricasTalking\SDK\Airtime;
+use App\Models\Reward;
+use Nette\Utils\Random;
 
 class HomeController extends Controller
 {
@@ -33,35 +37,40 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         if($user->hasRole('admin')){
-            $games = Games::all();
+            $games = Games::orderBy('id', 'desc')->get();
             return view('admin.index', ['games' => $games]);
         }
-        return view('regular.index');
+        return redirect('/');
+    }
+
+    public function savePhoneInformation(Request $request)
+    {
+        $this->validate($request, [
+            'phone' => 'numeric|required|digits:11|unique:users'
+        ]);
+
+        $user = User::where('id', auth()->user()->id)->first();
+        $user->phone = $request->phone;
+        $user->save();
+        return redirect('/');
     }
 
     public function instruction()
     {
         $games = Games::where('status', '1')->first();
-
         return view('instruction', ['games' => $games]);
     }
 
     public function takeQuiz()
     {
-
-
         $games = Games::where('status', '1')->first();
 
         $userScore = UserScore::where('user_id', auth()->user()->id)->where('game_id', $games->id)->get();
 
         if(count($userScore) > 0)
         {
-
-            return 'you have played this game before';
-            // return '<script type="text/javascript">alert("You have played this game before. Games can only be played once.");</script>';
-            //return redirect()->back()->with('alert','You have played this game before. Games can only be played once.'); //return 'you have played this game before';
+            return view('error');
         }
-
         $questions = Question::inRandomOrder()->limit(1)->first();
         return view('play', ['question' => $questions, 'game' => $games]);
     }
@@ -102,8 +111,7 @@ class HomeController extends Controller
 
         if(count($userScore) > 0)
         {
-            return 'you have played this game before';
-            // return back()->('<script type="text/javascript">alert("You have played this game before. Games can only be played once.");</script>');
+            return view('error');
         }
 
         $questions = Question::inRandomOrder()->limit(1)->first();
@@ -153,11 +161,13 @@ class HomeController extends Controller
             if($bankInformation == null){
                 $bankList = PaystackHelpers::bankList();
                 return view('bank_information', ['bankList' => $bankList, 'id' => $id]);
-            }  
-                $amount = 100 * 100;
+            }
+
+                $parameters = Reward::where('name', 'CASH')->first();
+                $amount = $parameters->amount * 100;
                 //transfer the fund
                 $transfer = $this->transferFund($amount, $bankInformation->recipient_code);
-                
+
 
                if($transfer['status'] == 'false'){
                 if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
@@ -185,6 +195,37 @@ class HomeController extends Controller
             }else{
                 return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later!!!');
             }
+        }elseif($reward_type->reward_type == 'AIRTIME' && $reward_type->is_redeem == '0')
+        {
+            $parameters = Reward::where('name', 'AIRTIME')->first();
+            $phone = $phone = '+234'.substr('08137331282', 1);
+            $amount = $parameters->amount;
+
+            $airtime = $this->sendAirtime($phone, $amount)['data'];              
+            if($airtime->errorMessage == "None")
+            {
+                $userScore = UserScore::where('id', $id)->first();
+                    $userScore->is_redeem = true;
+                    $userScore->save();
+
+                    Transaction::create([
+                        'user_id' => auth()->user()->id,
+                        'game_id' => $userScore->game_id,
+                        'amount' =>  $airtime->totalAmount,//$transfer['data']['amount'],
+                        'reward_type' => 'AIRTIME',
+                        'reference' => time(), //$transfer['data']['reference'],
+                        'transfer_code' => time(),//$transfer['data']['transfer_code'],
+                        'recipient' => time(), //$airtime->responses['phoneNumber']
+                        'status' => 'success', //$airtime->responses['status'], 
+                        'currency' => "NGN"
+                    ]);
+                    return redirect('score/list')->with('status', 'Money successfully send to your account');
+            }else{
+               return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later'); 
+            }
+
+        }else{
+            return 'nothing dey happen';
         }
 
     }
@@ -199,7 +240,7 @@ class HomeController extends Controller
         if($accountInformation['status'] == 'true')
         {
              $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
-                
+
                 BankInformation::create([
                     'user_id' => auth()->user()->id,
                     'name' => $accountInformation['data']['account_name'],
@@ -213,7 +254,7 @@ class HomeController extends Controller
                 //transfer the fund
                 $transfer = $this->transferFund($amount, $recipientCode['data']['recipient_code']);
                 if($transfer['status'] == 'false'){
-               
+
                     if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
                     {
                         $userScore = UserScore::where('id', $request->user_score_id)->first();
@@ -243,6 +284,36 @@ class HomeController extends Controller
 
     public function transferFund($amount, $recipient)
     {
-           return $fundTransfer = PaystackHelpers::transferFund($amount, $recipient); 
+           return $fundTransfer = PaystackHelpers::transferFund($amount, $recipient);
+    }
+
+    public function sendAirtime($phone, $amount)
+    {
+
+        $username = "sandbox";
+         $apiKey = env('AFRICA_TALKING_SANDBOX');
+
+         $AT = new AfricasTalking($username, $apiKey);
+
+         $airtime = $AT->airtime();
+
+         // Use the service
+         $recipients = [[
+             "phoneNumber"  => $phone,
+             "currencyCode" => "NGN",
+             "amount"       => $amount
+         ]];
+
+         try {
+             // That's it, hit send and we'll take care of the rest
+             $results = $airtime->send([
+                 "recipients" => $recipients
+             ]);
+
+
+         } catch(\Exception $e) {
+             echo "Error: ".$e->getMessage();
+         }
+         return $results;//response()->json($results);  //json_decode($results->getBody()->getContents(), true);
     }
 }

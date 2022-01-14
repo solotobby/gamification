@@ -230,8 +230,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'PasytackHelper' => App\Helpers\PaystackHelper::class,
-
+        'PaystackHelper' => App\Helpers\PaystackHelper::class,
+        'AfricaTalkingHandlers' => App\Helpers\AfricaTalkingHandlers::class,
     ],
 
 ];

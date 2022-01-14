@@ -84,7 +84,7 @@ class AdminController extends Controller
             'type' => $request->type, 
             'number_of_winners' => $request->number_of_winners, 
             'slug' => $slug, 
-            'time_allowed' => $request->time_allowed, 
+            'time_allowed' => 0.25,//$request->time_allowed, 
             'number_of_questions'=>$request->number_of_questions
         ]);
         // $game->save();

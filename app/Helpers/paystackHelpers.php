@@ -59,6 +59,8 @@ class PaystackHelpers{
         ]);
 
          return json_decode($res->getBody()->getContents(), true);
-
     }
+
+    
+
 }

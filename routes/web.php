@@ -13,9 +13,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('landingPage');
-});
+
+Route::get('/', [App\Http\Controllers\GeneralController::class, 'landingPage']);
+Route::get('contact', [App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
+Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
 
 Auth::routes();
 
@@ -31,6 +32,7 @@ Route::post('store/asnwer', [App\Http\Controllers\HomeController::class, 'storeA
 Route::get('score/list', [App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
 Route::get('redeem/reward/{id}', [App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
 Route::post('save/bank/information', [App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
+Route::post('save/phone/information', [App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
