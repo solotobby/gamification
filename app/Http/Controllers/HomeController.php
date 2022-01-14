@@ -197,13 +197,15 @@ class HomeController extends Controller
             }
         }elseif($reward_type->reward_type == 'AIRTIME' && $reward_type->is_redeem == '0')
         {
+            
             $parameters = Reward::where('name', 'AIRTIME')->first();
-            $phone = $phone = '+234'.substr('08137331282', 1);
+            $phone = $phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
 
-            $airtime = $this->sendAirtime($phone, $amount)['data'];              
+           $airtime = $this->sendAirtime($phone, $amount)['data'];              
             if($airtime->errorMessage == "None")
             {
+
                 $userScore = UserScore::where('id', $id)->first();
                     $userScore->is_redeem = true;
                     $userScore->save();
@@ -292,7 +294,7 @@ class HomeController extends Controller
     public function sendAirtime($phone, $amount)
     {
 
-        $username = "sandbox";
+        $username = "solotob";
          $apiKey = env('AFRICA_TALKING_LIVE');
 
          $AT = new AfricasTalking($username, $apiKey);
