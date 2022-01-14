@@ -2,7 +2,7 @@
 			<div class="basic-footer text-center ptb-90">
 				<div class="container">
 					<div class="footer-logo mb-30">
-						<h3><a href="{{ url('/') }}">Freebyz</a></h3>
+						<h3><a href="{{ url('/') }}"> <span class="icon-happy"></span> Freebyz</a></h3>
 					</div>
 					<div class="social-icon">
 						<a href="#"><i class="ion-social-facebook"></i></a>
@@ -20,7 +20,7 @@
 						</nav>
 					</div>
 					<div class="copyright mt-20">
-						<p>All copyright © reserved by <a href="{{ url('/') }}">Freebyz</a> <?php echo date('Y') ?></p>
+						<p>All copyright © reserved by <a href="{{ url('/') }}"><span class="icon-happy"></span> Freebyz</a> <?php echo date('Y') ?></p>
 					</div>
 				</div>
 			</div>

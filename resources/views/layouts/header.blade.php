@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-3 col-sm-2">
                     <div class="logo text-upper">
-                        <h4><a href="{{ url('/') }}">Freebyz</a></h4>
+                        <h4><a href="{{ url('/') }}"><span class="icon-happy"></span> Freebyz</a></h4>
                     </div>
                 </div>
                 @if(Auth::user())
