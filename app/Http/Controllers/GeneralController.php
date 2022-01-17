@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Games;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
@@ -31,7 +32,8 @@ class GeneralController extends Controller
 
     public function winnerlist()
     {
-        return view('winner');
+        $winners = UserScore::where('reward_type', '!=', '')->orderBy('created_at', 'desc')->get();
+        return view('winner', ['winners' => $winners]);
     }
 
     public function gamelist()

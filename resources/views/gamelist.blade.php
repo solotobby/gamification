@@ -46,9 +46,6 @@
                                         @else
                                             <a class="btn btn-round btn-dark" href="{{ url('auth/google') }}">Get Started</a>
                                     @endif
-                                    {{--  <button type="s~ubmit" class="btn btn-round btn-dark">Start Game</button>  --}}
-
-                                    {{--  <button type="submit" class="btn btn-round btn-dark">View Winners</button>  --}}
 								
                                 </div>
 

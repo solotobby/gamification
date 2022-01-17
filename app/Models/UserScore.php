@@ -17,4 +17,9 @@ class UserScore extends Model
     {
         return $this->belongsTo(Games::class, 'game_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -26,16 +26,24 @@
 					<p></p>
 				</div>
 				<div class="row">
-
-					<div class="col-sm-6 col-md-3">
+                    @foreach ($winners as $winner)
+                    <div class="col-sm-6 col-md-3">
 						<div class="team-item">
 							<div class="team-item-image">
-								<img src="img/team/team01.jpg" alt="team member">
+                                <img src="https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png" alt="{{ $winner->user->name }}">
+                                
+                                {{--  @if($winner->user->avatar == '')
+                                <img src="https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png" alt="{{ $winner->user->name }}">
+                                @else
+								<img src="{{ $winner->user->avatar }}" alt="{{ $winner->user->name }}">
+                                @endif  --}}
 							</div>
 							<div class="team-item-detail">
-								<h4 class="team-item-name">Rchard Pol</h4>
-								<span class="team-item-role">Designer</span>
-								<div class="team-social-icon">
+								<h4 class="team-item-name">{{ $winner->user->name }}</h4>
+								<span class="team-item-role">{{ $winner->reward_type }} | {{ $winner->score }}%</span>
+                                <hr>
+								<h3 class="team-item-name">{{ $winner->game->name }}</h3>
+								{{--  <div class="team-social-icon">
 									<a href="#">
 										<i class="ion-social-facebook"></i>
 									</a>
@@ -48,10 +56,12 @@
 									<a href="#">
 										<i class="ion-social-dribbble"></i>
 									</a>
-								</div>
+								</div>  --}}
 							</div>
 						</div>
 					</div>
+                        
+                    @endforeach
 
 				</div>
 			</div>
