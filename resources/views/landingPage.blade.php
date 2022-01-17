@@ -27,6 +27,23 @@
 		</div>
 		<!-- basic-slider end -->
 
+
+        <div class="basic-service-area white-bg pt-90 pb-50">
+			<div class="container">
+				<div class="area-title text-center">
+					<h2>Welcome to Freebyz</h2>
+					 <p>Freebyz is an unsual platform where you play games everyweek and win rewards. Basically, Freebyz awards people for being smart!!
+						The platform is created to put smile on peoples face, no matter how small it is. We reward you for playing our weekly games by giving 
+						out cash, airtime and databundle. 
+						<br>
+						This might look off or funny, but it is what it is...just play games that are available, perform exceptionally well and you'll get rewarded. 
+						We hope we to do more in the nearest future :) 
+					</p> 
+				</div>
+
+			</div>
+		</div>
+
         <div class="basic-service-area gray-bg pt-90 pb-50">
 			<div class="container">
 				<div class="area-title text-center">
@@ -42,7 +59,10 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Cash Reward</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem semsila eaque, rem!.</p>
+								<p>Candidate that perform exceptionally good in the games will be eligible for cash award. The cash will be 
+									transferred directly to the candidate's account number. The amount the would be sent will be solely determined by the 
+									Freebyz administrator.
+								</p>
 							</div>
 						</div>
 					</div>
@@ -53,7 +73,8 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Airtime Reward</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem semsila eaque, rem!.</p>
+								<p>Airtime recharge will be sent the candidate with excellent performance. This will be sent to their respctive phone 
+									number. These will be redeemed by the candidates eletronically. The value will also be reviewed by the Freebyz administrator.</p>
 							</div>
 						</div>
 					</div>
@@ -64,7 +85,8 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Data Bundle Reward</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem semsila eaque, rem!.</p>
+								<p>Data bundle is also part of our reward. Thsi will be processed the same way airtime is processed. A minimum of 1 Gig data 
+									will be sent to candidates with good score. This reward is still unhold...</p>
 							</div>
 						</div>
 					</div>
@@ -78,8 +100,8 @@
 				<div class="row">
 					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="call-to-action">
-							<h3>best solution for your business</h3>
-							<p>It can be used on larger scale projects as well as small scale projects</p>
+							<h3>wonna start winning...</h3>
+							<p>Click on the <b>Get Started</b> button to start on the available game.</p>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-12 text-right">

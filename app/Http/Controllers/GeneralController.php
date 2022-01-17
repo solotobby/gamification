@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Games;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,5 +27,16 @@ class GeneralController extends Controller
     public function goal()
     {
         return view('goal');
+    }
+
+    public function winnerlist()
+    {
+        return view('winner');
+    }
+
+    public function gamelist()
+    {
+        $games = Games::orderBy('created_at', 'desc')->get();
+        return view('gamelist', ['games' => $games]);
     }
 }

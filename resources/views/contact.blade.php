@@ -22,29 +22,18 @@
 		<div class="basic-contact-area pt-90 pb-50">
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-4 col-md-4 col-lg-4 mb-40">
+
+					<div class="col-sm-12 col-md-12 col-lg-12 mb-40">
 						<div class="contact-person">
 							<h4>Chief Editor</h4>
-							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna posuere.</p>
+							<p>We are always ready to hear from you.... We would love to attend to your needs and concern. Just send us a mail 
+								and that would solve it....  
+
+							</p>
 							<a href="mailto:freebyzcom@gmail.com">Send Us A Mail Here</a>
 						</div>
 					</div>
-
-					<div class="col-sm-4 col-md-4 col-lg-4 mb-40">
-						<div class="contact-person">
-							<h4>Technical Director</h4>
-							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna posuere.</p>
-                            <a href="mailto:freebyzcom@gmail.com">Send Us A Mail Here</a>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-md-4 col-lg-4 mb-40">
-						<div class="contact-person">
-							<h4>Lead Designer</h4>
-							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna posuere.</p>
-                            <a href="mailto:freebyzcom@gmail.com">Send Us A Mail Here</a>
-						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
