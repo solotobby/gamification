@@ -43,7 +43,11 @@ Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class
 Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
 Route::get('question/list', [App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
 //Game Routes
-Route::get('game/status/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
+Route::get('game/status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
+Route::get('view/activities/{id}', [App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
+Route::post('assign/reward', [App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
+
+
 
 Route::get('game/create', [App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
 Route::post('game/store', [App\Http\Controllers\Admin\AdminController::class, 'gameStore'])->name('game.store');

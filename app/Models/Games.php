@@ -11,5 +11,12 @@ class Games extends Model
 
     protected $table = "games";
 
-    protected $fillable = ['name', 'type', 'slug', 'time_allowed', 'number_of_winners', 'number_of_questions'];
+    protected $fillable = ['name', 'type', 'slug', 'time_allowed', 'number_of_winners', 'number_of_questions', 'status'];
+
+    public function games()
+    {
+        return $this->hasMany(UserScore::class, 'game_id');
+    }
+
+
 }

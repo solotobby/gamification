@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Games;
 use App\Models\Question;
 use App\Models\Reward;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
@@ -86,7 +87,8 @@ class AdminController extends Controller
             'number_of_winners' => $request->number_of_winners, 
             'slug' => $slug, 
             'time_allowed' => 0.25,//$request->time_allowed, 
-            'number_of_questions'=>$request->number_of_questions
+            'number_of_questions'=>$request->number_of_questions,
+            'status' => 1
         ]);
         // $game->save();
 
@@ -114,6 +116,32 @@ class AdminController extends Controller
     {
         $questions = Question::orderBy('created_at', 'desc')->paginate('20');
         return view('admin.question_list', ['questions' => $questions]);
+    }
+
+    public function viewActivities($id)
+    {
+        $game = Games::where('id', $id)->first();
+
+        $activities = $game->games()->orderBy('score', 'desc')->get();
+
+        return view('admin.game_activities', ['activities' => $activities]);
+    }
+
+    public function assignReward(Request $request)
+    {
+        if(empty($request->id))
+        {
+             return back()->with('error', 'Please Select A Score');
+        }
+        foreach($request->id as $id)
+        {
+            $score = UserScore::where('id', $request->score_id)->first();
+            $score->reward_type = $request->name;
+            $score->save();
+        }
+
+        return back()->with('status', 'Reward Assigned Successfully');
+
     }
 
 }
