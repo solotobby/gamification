@@ -32,12 +32,11 @@
 			<div class="container">
 				<div class="area-title text-center">
 					<h2>Welcome to Freebyz</h2>
-					 <p>Freebyz is an unsual platform where you play games everyweek and win rewards. Basically, Freebyz awards people for being smart!!
-						The platform is created to put smile on peoples face, no matter how small it is. We reward you for playing our weekly games by giving 
-						out cash, airtime and databundle. 
-						<br>
-						This might look off or funny, but it is what it is...just play games that are available, perform exceptionally well and you'll get rewarded. 
-						We hope we to do more in the nearest future :) 
+					 <p>The platform is created to help build your mind, educate you and then sprinkle a bit of love 
+						 and smile on your faces. No matter how small it is, you are rewarded with airtime, data bundles 
+						 and cash for playing our weekly games. <br>This might look a bit off, but it is what it is! Just play
+						  games that are available, perform exceptionally well and earn a little more. We hope to do more, 
+						  change the world and spread a little kindness across! :) 
 					</p> 
 				</div>
 
@@ -59,9 +58,10 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Cash Reward</h3>
-								<p>Candidate that perform exceptionally good in the games will be eligible for cash award. The cash will be 
-									transferred directly to the candidate's account number. The amount the would be sent will be solely determined by the 
-									Freebyz administrator.
+								<p>Candidates or users that perform excellently will be eligible for our
+									 cash rewards. The cash will be paid directly into the candidates account. 
+									 The amount to be paid to our best performing candidates would be determined by the
+									  Freebys administrator. We hope to see you do well!
 								</p>
 							</div>
 						</div>
@@ -73,8 +73,11 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Airtime Reward</h3>
-								<p>Airtime recharge will be sent the candidate with excellent performance. This will be sent to their respctive phone 
-									number. These will be redeemed by the candidates eletronically. The value will also be reviewed by the Freebyz administrator.</p>
+								<p>
+									Airtime rewards will be sent to candidates that perform well. 
+									This would be sent to their desired phone numbers. The candidates can redeem 
+									their rewards electronically. Our Airtime reward value is also determined by the Freebys Administrator
+								</p>
 							</div>
 						</div>
 					</div>
@@ -85,8 +88,10 @@
 							</div> --}}
 							<div class="service-content">
 								<h3>Data Bundle Reward</h3>
-								<p>Data bundle is also part of our reward. Thsi will be processed the same way airtime is processed. A minimum of 1 Gig data 
-									will be sent to candidates with good score. This reward is still unhold...</p>
+								<p>We also give Data Bundles to encourage you to study more and make 
+									good researches. This will be processed the same way the Airtime rewards are shared. 
+									A minimum of 1gig data will be sent to candidates with good scores. This reward is still being 
+									processed at the moment!</p>
 							</div>
 						</div>
 					</div>

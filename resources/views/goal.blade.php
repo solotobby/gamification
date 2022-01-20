@@ -27,9 +27,14 @@
 							<h4></h4>
 							<p>
 
-                                Our goal is to put smile on people's face...come on our platform, play a game and win cash, airtime and databundle. 
-                                All you need to do is win very high and the system select you for the reward.
-
+                                Asides putting a smile on many faces, we aim at achieving a community of brilliant
+                                 people who are ready to take up challenges and answer the questions of life! Although 
+                                 our platform allows you play a game and win cash, airtime and data rewards, it also a platform built 
+                                 to inspire you to get knowledge, be kind to the world and extend a helping hand. The goal is a build a 
+                                 community that is ready to give value and earn from it. <br> On this platform; all you need to be or do, is to win. 
+                                 We create winners and we pay for your unique abilities and support your journey in life. The goal is to see you 
+                                 navigate life easily, we hope this questions remind you of your purpose and how to achieve them. Welcome to Freebys: 
+                                 a community of brilliant minds!
                             </p>
 							
 						</div>

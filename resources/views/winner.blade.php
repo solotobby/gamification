@@ -28,7 +28,7 @@
                     <div class="col-sm-6 col-md-3">
 						<div class="team-item">
 							<div class="team-item-image">
-                                <img src="https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png" alt="{{ $winner->user->name }}">
+                                <img src="https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png" alt="{{ @$winner->user->name }}">
                                 
                                 {{--  @if($winner->user->avatar == '')
                                 <img src="https://www.pngitem.com/pimgs/m/111-1114839_circle-people-icon-flat-png-avatar-icon-transparent.png" alt="{{ $winner->user->name }}">
@@ -37,10 +37,10 @@
                                 @endif  --}}
 							</div>
 							<div class="team-item-detail">
-								<h4 class="team-item-name">{{ $winner->user->name }}</h4>
-								<span class="team-item-role">{{ $winner->reward_type }} | {{ $winner->score }}%</span>
+								<h4 class="team-item-name">{{ @$winner->user->name }}</h4>
+								<span class="team-item-role">{{ @$winner->reward_type }} | {{ $winner->score }}%</span>
                                 <hr>
-								<h3 class="team-item-name">{{ $winner->game->name }}</h3>
+								<h3 class="team-item-name">{{ @$winner->game->name }}</h3>
 								{{--  <div class="team-social-icon">
 									<a href="#">
 										<i class="ion-social-facebook"></i>
