@@ -23,8 +23,6 @@ class GoogleController extends Controller
     
             $user = Socialite::driver('google')->user();
 
-        
-     
             $finduser = User::where('google_id', $user->id)->first();
      
             if($finduser){
@@ -36,7 +34,7 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
-                return redirect('/');
+                return redirect('/games');
      
             }else{
                 $newUser = User::create([
@@ -54,7 +52,7 @@ class GoogleController extends Controller
                     return view('phone');
                 }
      
-                return redirect('/');
+                return redirect('/games');
             }
     
         } catch (Exception $e) {

@@ -4,6 +4,20 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>{{  $userCount }}</h2>
+                    <h5>Users</h5>
+                </div>
+                <div class="col-md-4">
+                    <h2>{{  $questionCount }}</h2>
+                    <h5>Questions</h5>
+                </div>
+                <div class="col-md-4">
+                    <h2>{{  $gamesPlayed }}</h2>
+                    <h5>Games Played</h5>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">{{ __('List of Games') }}</div>
 

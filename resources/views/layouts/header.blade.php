@@ -18,7 +18,12 @@
                                 <li><a href="{{  route('game.list') }}">Game List</a></li>
                                 <li><a href="{{  route('winner.list') }}">Winners List</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
-
+                                @if(Auth::user())
+                                    <li><a href="{{ route('instruction') }}">Play Game</a></li>
+                                @else
+                                    <li><a href="{{ url('auth/google') }}">Get Started</a></li>
+                                @endif
+                            
                                 @if(Auth::user())
                                     <li><a href="{{ route('score.list') }}">Score List</a></li>
                                     <li><a href="{{ route('logout') }}"
@@ -43,6 +48,11 @@
                                 <li><a href="{{  route('game.list') }}">Game List</a></li>
                                 <li><a href="{{  route('winner.list') }}">Winners List</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
+                                @if(Auth::user())
+                                    <li><a href="{{ route('instruction') }}">Play Game</a></li>
+                                @else
+                                    <li><a href="{{ url('auth/google') }}">Get Started</a></li>
+                                @endif
 
                                 @if(Auth::user())
                                     <li><a href="{{ route('score.list') }}">Score List</a></li>

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-
+@section('title', 'Admin Login')
 @section('content')
 
     <!-- basic-breadcrumb start -->
@@ -32,7 +32,7 @@
 								<div class="col-md-12 form-group">
 
 									<label class="sr-only">Email</label>
-									<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+									<input id="email" type="email" class="form-control intput-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Email Address" >
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -42,7 +42,7 @@
 
 								<div class="col-md-12 form-group">
 									<label class="sr-only">Password</label>
-                                    <input id="password" type="password" class="form-control input-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                    <input id="password" type="password" class="form-control input-lg @error('password') is-invalid @enderror" name="password" required placeholder="Password">
 
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">

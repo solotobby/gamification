@@ -49,6 +49,24 @@ class AdminController extends Controller
         return back()->with('status', 'Question Created Successfully');
     }
 
+    public function updateQuestion(Request $request)
+    {
+        $question = Question::where('id', $request->id)->first();
+        $question->content = $request->content;
+        $question->option_A = $request->option_A;
+        $question->option_B = $request->option_B;
+        $question->option_C = $request->option_C;
+        $question->option_D = $request->option_D;
+        $question->correct_answer = $request->correct_answer;
+        $collect = collect($question);
+        $value = $collect->shift();
+        $question->correct_answer = $value;
+        $question->save();
+
+        return back()->with('status', 'Question Updated Successfully');
+        
+    }
+
     public function gameStatus($id)
     {
 
@@ -114,8 +132,9 @@ class AdminController extends Controller
 
     public function listQuestion()
     {
-        $questions = Question::orderBy('created_at', 'desc')->paginate('20');
-        return view('admin.question_list', ['questions' => $questions]);
+        $questions = Question::orderBy('created_at', 'desc')->paginate('200');
+        $question_count = Question::all()->count();
+        return view('admin.question_list', ['questions' => $questions, 'question_count' => $question_count]);
     }
 
     public function viewActivities($id)

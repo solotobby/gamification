@@ -38,7 +38,10 @@ class HomeController extends Controller
         $user = auth()->user();
         if($user->hasRole('admin')){
             $games = Games::orderBy('id', 'desc')->get();
-            return view('admin.index', ['games' => $games]);
+            $questions = Question::all()->count();
+            $gameplayed = Answer::select('id')->count();
+            $user = User::where('role', 'regular')->count();
+            return view('admin.index', ['games' => $games, 'questionCount' => $questions, 'gamesPlayed' => $gameplayed, 'userCount' => $user]);
         }
         return redirect('/');
     }

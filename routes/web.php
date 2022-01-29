@@ -41,6 +41,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
+Route::post('question/update', [App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('questions.update');
 Route::get('question/list', [App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
 //Game Routes
 Route::get('game/status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
