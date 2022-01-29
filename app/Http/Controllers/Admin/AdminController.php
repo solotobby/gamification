@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Games;
 use App\Models\Question;
 use App\Models\Reward;
+use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
 
@@ -140,10 +141,9 @@ class AdminController extends Controller
     public function viewActivities($id)
     {
         $game = Games::where('id', $id)->first();
+        $activities = UserScore::where('game_id', $id)->orderBy('score', 'desc')->get();
 
-        $activities = $game->games()->orderBy('score', 'desc')->get();
-
-        return view('admin.game_activities', ['activities' => $activities]);
+        return view('admin.game_activities', ['activities' => $activities, 'game' => $game]);
     }
 
     public function assignReward(Request $request)

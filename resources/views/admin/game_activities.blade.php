@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Activites') }}</div>
+                <div class="card-header"> {{ $game->name }} {{ __('players') }} - {{ $activities->count() }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -15,7 +15,6 @@
                     @endif
                     <form action="{{ route('assign.reward') }}" method="POST">
                         @csrf
-                    
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -34,7 +33,7 @@
                                         @else
                                           <th scope="row"><input type="checkbox" name="id[]" value="{{ $act->id }}" checked disabled></th>  
                                         @endif
-                                        <td>Name</td>
+                                        <td>{{ $act->user->name }}</td>
                                         <td>{{ $act->reward_type }}</td>
                                         <td>{{ $act->score }}</td>
                                     </tr>
