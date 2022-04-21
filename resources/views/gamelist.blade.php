@@ -42,9 +42,17 @@
 
                                 <div class="row">
                                      @if(Auth::user())
-                                            <a class="btn btn-round btn-dark" href="{{ route('instruction') }}">Play Game</a>
+                                            @if($game->status == '1')
+                                                <a class="btn btn-round btn-dark" href="{{ route('instruction') }}">Play Game</a>
+                                            @else
+                                                <a class="btn btn-round btn-dark" href="" disabled>Game Play Exipred</a>
+                                            @endif
                                         @else
-                                            <a class="btn btn-round btn-dark" href="{{ url('auth/google') }}">Get Started</a>
+                                            @if($game->status == '1')
+                                                <a class="btn btn-round btn-dark" href="{{ url('auth/google') }}">Get Started</a>
+                                            @else
+                                                <a class="btn btn-round btn-dark" href="" disabled>Game Play Exipred</a>
+                                            @endif
                                     @endif
 								
                                 </div>
