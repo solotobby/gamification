@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\Games;
 use App\Models\Question;
@@ -148,19 +149,32 @@ class AdminController extends Controller
 
     public function assignReward(Request $request)
     {
+        
         if(empty($request->id))
         {
              return back()->with('error', 'Please Select A Score');
         }
+        $reward = Reward::where('name', $request->name)->first()->amount;
+        $formattedReward = number_format($reward,2);
         foreach($request->id as $id)
         {
-            $score = UserScore::where('id', $request->score_id)->first();
+            $score = UserScore::where('id', $id)->first();
             $score->reward_type = $request->name;
             $score->save();
+
+            $phone = '234'.substr($score->user->phone, 1);
+            $message = "Hello ".$score->user->name. " you have a ".$request->name." reward of ".$formattedReward." from Freebyz.com. Please login to cliam it. Thanks";
+            PaystackHelpers::sendNotificaion($phone, $message);
         }
 
         return back()->with('status', 'Reward Assigned Successfully');
 
     }
 
+    public function sendAirtime()
+    {
+        return PaystackHelpers::reloadlyAuth0Token();
+    }
+
+   
 }

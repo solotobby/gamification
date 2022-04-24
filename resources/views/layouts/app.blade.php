@@ -53,8 +53,17 @@
                             @endif
                         @else
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ url('home') }}">{{ _('Home') }}</a>
+                            </li>
+                            
+                            {{-- <li class="nav-item">
+                                <a class="nav-link" href="{{ route('airtime') }}">{{ _('Send Airtime') }}</a>
+                            </li> --}}
+
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('question.list') }}">{{ _('View Questions') }}</a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('view.amount') }}">{{ _('View Account') }}</a>
                             </li>

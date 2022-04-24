@@ -2,8 +2,6 @@
 @section('title', 'Score List')
 
 @section('content')
-
-
     <!-- basic-breadcrumb start -->
     <div class="basic-breadcrumb-area gray-bg ptb-70">
         <div class="container">
@@ -49,29 +47,53 @@
                                 <tbody>
                                     <?php $i = 1; ?>
                                     @foreach ($scores as $score)
-                                    <tr>
-                                        <th scope="row">{{ $i++ }}</th>
-                                        <td>{{ $score->game->name }}</td>
-                                        <td>
-                                            @if($score->reward_type == '')
-                                                No Reward Available
-                                            @else
-                                                {{ $score->reward_type }}
-                                            @endif
-                                        </td>
-                                        <td>{{ $score->score }} %</td>
-                                        <td>
-                                            @if($score->reward_type == null)
-                                            <a href="" class="btn btn-primary btn-sm disabled">No Reward Available</a>
-                                            @else
-                                                @if($score->is_redeem == '0')
-                                                    <a href="{{ route('redeem.reward', $score->id) }}" class="btn btn-primary btn-sm">Redeem</a>
+                                        <tr>
+                                            <th scope="row">{{ $i++ }}</th>
+                                            <td>{{ $score->game->name }}</td>
+                                            <td>
+                                                @if($score->reward_type == '')
+                                                    No Reward Available
                                                 @else
-                                                    <a href="#" class="btn btn-primary btn-sm">Reward Claimed</a>
+                                                    {{ $score->reward_type }}
                                                 @endif
-                                            @endif
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>{{ $score->score }} %</td>
+                                            <td>
+                                                @if($score->reward_type == null || $score->reward_type == "")
+                                                <a href="#" class="btn btn-primary btn-sm disabled">No Reward Available</a>
+                                                @else
+                                                    @if($score->is_redeem == '0')
+                                                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-{{$score->id}}">
+                                                        Redeem
+                                                    </button> --}}
+                                                        <a href="{{ route('redeem.reward', $score->id) }}" class="btn btn-primary btn-sm">Redeem</a>
+                                                    @else
+                                                        <a href="#" class="btn btn-primary btn-sm" disabled>Reward Claimed</a>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+
+                                        <div class="modal fade" id="exampleModal-{{ $score->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <h5 class="modal-title" id="exampleModalLabel">Simple Testimonial</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                  {{ $score->game->name }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
                                     @endforeach
                                     
                                 </tbody>

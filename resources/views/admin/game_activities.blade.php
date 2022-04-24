@@ -42,8 +42,8 @@
                         </table>
                         <select class="form-control" name="name">
                             <option name="CASH">CASH</option>
-                            <option name="AIRTIME">AIRTIME</option>
-                            <option name="DATA">DATA</option>
+                            {{-- <option name="AIRTIME">AIRTIME</option>
+                            <option name="DATA">DATA</option> --}}
                         </select>
                         <br>
                         <input type="hidden" name="score_id" value="{{ $act->id }}">

@@ -190,7 +190,7 @@ class HomeController extends Controller
                         'status' => $transfer['data']['status'],
                         'currency' => $transfer['data']['currency']
                     ]);
-                    return redirect('score/list')->with('status', 'Money successfully send to your account');
+                    return redirect('score/list')->with('status', 'Money successfully sent to your account');
                 }else{
                     return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later');
                 }
@@ -202,32 +202,34 @@ class HomeController extends Controller
         {
             
             $parameters = Reward::where('name', 'AIRTIME')->first();
-            $phone = $phone = '+234'.substr(auth()->user()->phone, 1);
+            //$phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
+            $phone = auth()->user()->phone;
 
-           $airtime = $this->sendAirtime($phone, $amount)['data'];              
-            if($airtime->errorMessage == "None")
-            {
+            
+            return $airtime = $this->sendAirtime($phone, $amount);//['data'];              
+            // if($airtime->errorMessage == "None")
+            // {
 
-                $userScore = UserScore::where('id', $id)->first();
-                    $userScore->is_redeem = true;
-                    $userScore->save();
+            //     $userScore = UserScore::where('id', $id)->first();
+            //         $userScore->is_redeem = true;
+            //         $userScore->save();
 
-                    Transaction::create([
-                        'user_id' => auth()->user()->id,
-                        'game_id' => $userScore->game_id,
-                        'amount' =>  $airtime->totalAmount,//$transfer['data']['amount'],
-                        'reward_type' => 'AIRTIME',
-                        'reference' => time(), //$transfer['data']['reference'],
-                        'transfer_code' => time(),//$transfer['data']['transfer_code'],
-                        'recipient' => time(), //$airtime->responses['phoneNumber']
-                        'status' => 'success', //$airtime->responses['status'], 
-                        'currency' => "NGN"
-                    ]);
-                    return redirect('score/list')->with('status', 'Money successfully send to your account');
-            }else{
-               return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later'); 
-            }
+            //         Transaction::create([
+            //             'user_id' => auth()->user()->id,
+            //             'game_id' => $userScore->game_id,
+            //             'amount' =>  $airtime->totalAmount,//$transfer['data']['amount'],
+            //             'reward_type' => 'AIRTIME',
+            //             'reference' => time(), //$transfer['data']['reference'],
+            //             'transfer_code' => time(),//$transfer['data']['transfer_code'],
+            //             'recipient' => time(), //$airtime->responses['phoneNumber']
+            //             'status' => 'success', //$airtime->responses['status'], 
+            //             'currency' => "NGN"
+            //         ]);
+            //         return redirect('score/list')->with('status', 'Airtime Successfully Sent to your Number');
+            // }else{
+            //    return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later'); 
+            // }
 
         }else{
             return 'nothing dey happen';
@@ -296,31 +298,40 @@ class HomeController extends Controller
 
     public function sendAirtime($phone, $amount)
     {
+        $bearerToken = PaystackHelpers::reloadlyAuth0Token();
+        $bearerToken['access_token'];
 
-        $username = "solotob";
-         $apiKey = env('AFRICA_TALKING_LIVE');
+        $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
+        $operatorId = $operator['operatorId'];
 
-         $AT = new AfricasTalking($username, $apiKey);
+        return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
 
-         $airtime = $AT->airtime();
+        //return PaystackHelpers::reloadlyAuth0Token();
 
-         // Use the service
-         $recipients = [[
-             "phoneNumber"  => $phone,
-             "currencyCode" => "NGN",
-             "amount"       => $amount
-         ]];
+        // $username = "solotob";
+        //  $apiKey = env('AFRICA_TALKING_LIVE');
 
-         try {
-             // That's it, hit send and we'll take care of the rest
-             $results = $airtime->send([
-                 "recipients" => $recipients
-             ]);
+        //  $AT = new AfricasTalking($username, $apiKey);
+
+        //  $airtime = $AT->airtime();
+
+        //  // Use the service
+        //  $recipients = [[
+        //      "phoneNumber"  => $phone,
+        //      "currencyCode" => "NGN",
+        //      "amount"       => $amount
+        //  ]];
+
+        //  try {
+        //      // That's it, hit send and we'll take care of the rest
+        //      $results = $airtime->send([
+        //          "recipients" => $recipients
+        //      ]);
 
 
-         } catch(\Exception $e) {
-             echo "Error: ".$e->getMessage();
-         }
-         return $results;//response()->json($results);  //json_decode($results->getBody()->getContents(), true);
+        //  } catch(\Exception $e) {
+        //      echo "Error: ".$e->getMessage();
+        //  }
+        //  return $results;//response()->json($results);  //json_decode($results->getBody()->getContents(), true);
     }
 }
