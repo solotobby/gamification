@@ -20,6 +20,7 @@
                                 <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Phone Number</th>
                                 <th scope="col">Score</th>
                                 <th scope="col">Reward Type</th>
                                 </tr>
@@ -34,6 +35,7 @@
                                           <th scope="row"><input type="checkbox" name="id[]" value="{{ $act->id }}" checked disabled></th>  
                                         @endif
                                         <td>{{ $act->user->name }}</td>
+                                        <td>{{ @$act->user->phone }}</td>
                                         <td>{{ $act->reward_type }}</td>
                                         <td>{{ $act->score }}</td>
                                     </tr>

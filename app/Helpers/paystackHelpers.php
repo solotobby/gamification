@@ -56,7 +56,7 @@ class PaystackHelpers{
             "source"=> "balance", 
             "amount"=> $amount, 
             "recipient"=> $recipient, 
-            "reason"=> "Cash Reward" 
+            "reason"=> "Freebyz Cash Reward" 
         ]);
 
          return json_decode($res->getBody()->getContents(), true);
