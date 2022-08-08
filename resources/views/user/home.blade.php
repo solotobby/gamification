@@ -67,73 +67,83 @@
    
         <!-- Page Content -->
         <div class="content content-boxed content-full">
-            <!-- Categories -->
-            {{-- <div class="row items-push">
-              <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-shadow d-flex justify-content-center align-items-start text-center bg-xpro h-100 mb-0" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-body-extra-light mt-1 align-self-stretch">
-                    <div class="py-4">
-                      <i class="fa fa-2x fa-brush text-xpro"></i>
-                      <p class="fs-lg fw-semibold mt-3 mb-1">
-                        Design
-                      </p>
-                      <p class="text-muted mb-0">
-                        Graphic, Web, Brand, Product, Packaging etc
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-shadow d-flex justify-content-center align-items-start text-center bg-xinspire h-100 mb-0" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-body-extra-light mt-1 align-self-stretch">
-                    <div class="py-4">
-                      <i class="fa fa-2x fa-code text-xinspire"></i>
-                      <p class="fs-lg fw-semibold mt-3 mb-1">
-                        Development
-                      </p>
-                      <p class="text-muted mb-0">
-                        Desktop, Web, Cloud, Mobile, Gaming etc
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-shadow d-flex justify-content-center align-items-start text-center bg-xsmooth h-100 mb-0" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-body-extra-light mt-1 align-self-stretch">
-                    <div class="py-4">
-                      <i class="fa fa-2x fa-boxes text-xsmooth"></i>
-                      <p class="fs-lg fw-semibold mt-3 mb-1">
-                        Marketing
-                      </p>
-                      <p class="text-muted mb-0">
-                        Internet, Mobile, B2B, B2C, Transactional etc
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-shadow d-flex justify-content-center align-items-start text-center bg-xplay h-100 mb-0" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-body-extra-light mt-1 align-self-stretchv">
-                    <div class="py-4">
-                      <i class="fa fa-2x fa-pencil-alt text-xplay"></i>
-                      <p class="fs-lg fw-semibold mt-3 mb-1">
-                        Writing
-                      </p>
-                      <p class="text-muted mb-0">
-                        Graphic, Web, Brand, Product, Packaging etc
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div> --}}
-            <!-- END Categories -->
+            <h2 class="content-heading">
+                <i class="fa fa-briefcase text-muted me-1"></i> Available jobs
+              </h2>
   
             <!-- Jobs -->
-            <div class="bg-body-extra-light">
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                  <div class="d-sm-flex">
+                    <div class="ms-sm-2 me-sm-4 py-2 text-center">
+                      <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
+                        <i class="fab fa-fw fa-cloudsmith"></i>
+                      </a>
+                      <div class="btn-group btn-group-sm">
+                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
+                          <i class="fa fa-pencil-alt text-info"></i>
+                        </a>
+                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
+                          <i class="fa fa-times text-danger"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="py-2">
+                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
+                        React Developer
+                      </a>
+                      <div class="fs-sm fw-semibold text-muted mb-2">
+                        Development - 3 hours ago
+                      </div>
+                      <p class="text-muted mb-2">
+                        Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
+                      </p>
+                      <div>
+                        <span class="badge bg-primary">Web</span>
+                        <span class="badge bg-primary">React</span>
+                        <span class="badge bg-primary">Social</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                  <div class="d-sm-flex">
+                    <div class="ms-sm-2 me-sm-4 py-2 text-center">
+                      <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
+                        <i class="fab fa-fw fa-cloudsmith"></i>
+                      </a>
+                      <div class="btn-group btn-group-sm">
+                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
+                          <i class="fa fa-pencil-alt text-info"></i>
+                        </a>
+                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
+                          <i class="fa fa-times text-danger"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="py-2">
+                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
+                        SEO Ninja
+                      </a>
+                      <div class="fs-sm fw-semibold text-muted mb-2">
+                        Marketing - 10 hours ago
+                      </div>
+                      <p class="text-muted mb-2">
+                        Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
+                      </p>
+                      <div>
+                        <span class="badge bg-primary">Web</span>
+                        <span class="badge bg-primary">SEO</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            {{-- <div class="bg-body-extra-light">
               <table class="table table-striped table-hover table-borderless table-vcenter">
                 <tbody>
                   <tr>
@@ -201,7 +211,7 @@
                 
                 </tbody>
               </table>
-            </div>
+            </div> --}}
             <!-- END Jobs -->
           </div>
           <!-- END Page Content -->

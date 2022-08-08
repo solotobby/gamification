@@ -197,5 +197,7 @@
       webpack is putting everything together at assets/_js/main/app.js
     -->
     <script src="{{ asset('src/assets/js/dashmix.app.min.js') }}"></script>
+
+    @yield('script')
   </body>
 </html>

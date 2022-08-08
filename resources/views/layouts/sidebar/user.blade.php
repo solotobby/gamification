@@ -12,7 +12,7 @@
       </li>
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <i class="nav-main-link-icon fa fa-list"></i>
           <span class="nav-main-link-name">Jobs</span>
         </a>
         <ul class="nav-main-submenu">
@@ -35,12 +35,12 @@
       </li>
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-border-all"></i>
-          <span class="nav-main-link-name">Campaign</span>
+          <i class="nav-main-link-icon fa fa-briefcase"></i>
+          <span class="nav-main-link-name">Post Campaign</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_styles.html">
+            <a class="nav-main-link" href="{{ route('campaign.create') }}">
               <span class="nav-main-link-name">Create Campaign</span>
             </a>
           </li>
@@ -64,7 +64,7 @@
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <i class="nav-main-link-icon fa fa-wallet"></i>
           <span class="nav-main-link-name">Wallet</span>
            <span class="nav-main-link-badge badge rounded-pill bg-default">{{ number_format(auth()->user()->wallet->balance) }}</span>
         </a>
@@ -84,7 +84,7 @@
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <i class="nav-main-link-icon fa fa-users"></i>
           <span class="nav-main-link-name">Referral</span>
            <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->referees()->count(); }}</span>
         </a>

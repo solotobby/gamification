@@ -41,6 +41,12 @@ Route::post('save/phone/information', [App\Http\Controllers\HomeController::clas
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');
+////Campaign
+Route::get('campaign/create', [\App\Http\Controllers\CampaignController::class, 'create'])->name('campaign.create');
+Route::get('api/get/categories', [\App\Http\Controllers\CampaignController::class, 'getCategories']);
+Route::get('api/get/sub/categories/{id}', [\App\Http\Controllers\CampaignController::class, 'getSubCategories']);
+Route::get('api/get/sub/categories/info/{id}', [\App\Http\Controllers\CampaignController::class, 'getSubcategoriesInfo']);
+Route::post('post/campaign', [\App\Http\Controllers\CampaignController::class, 'postCampaign'])->name('post.campaign');
 
 
 
