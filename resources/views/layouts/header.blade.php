@@ -21,7 +21,9 @@
                                 @if(Auth::user())
                                     <li><a href="{{ route('instruction') }}">Play Game</a></li>
                                 @else
-                                    <li><a href="{{ url('auth/google') }}">Get Started</a></li>
+                                    <li><a href="{{ url('login') }}">Login</a></li>
+                                    <li><a href="{{ url('register') }}">Register</a></li>
+                                    {{-- <li><a href="{{ url('auth/google') }}">Get Started</a></li> --}}
                                 @endif
                             
                                 @if(Auth::user())
@@ -51,7 +53,9 @@
                                 @if(Auth::user())
                                     <li><a href="{{ route('instruction') }}">Play Game</a></li>
                                 @else
-                                    <li><a href="{{ url('auth/google') }}">Get Started</a></li>
+                                    <li><a href="{{ url('login') }}">Login</a></li>
+                                    <li><a href="{{ url('register') }}">Register</a></li>
+                                    {{-- <li><a href="{{ url('auth/google') }}">Get Started</a></li> --}}
                                 @endif
 
                                 @if(Auth::user())

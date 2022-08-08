@@ -127,7 +127,7 @@ class PaystackHelpers{
             'Content-Type' => 'application/json',
         ])->post('https://api.ng.termii.com/api/sms/send', [
             "to"=> $number,
-            "from"=> "HOD",
+            "from"=> "FREEBYZ",
             "sms"=> $message,
             "type"=> "plain",
             "channel"=> "generic",

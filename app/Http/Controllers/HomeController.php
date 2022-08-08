@@ -43,7 +43,12 @@ class HomeController extends Controller
             $user = User::where('role', 'regular')->count();
             return view('admin.index', ['games' => $games, 'questionCount' => $questions, 'gamesPlayed' => $gameplayed, 'userCount' => $user]);
         }
-        return redirect('/');
+        return redirect('/home');
+    }
+
+    public function home()
+    {
+        return view('user.home');
     }
 
     public function savePhoneInformation(Request $request)

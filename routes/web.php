@@ -37,7 +37,7 @@ Route::post('save/bank/information', [App\Http\Controllers\HomeController::class
 Route::post('save/phone/information', [App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 //Admin Routes
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);//->name('home');
 Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
