@@ -19,6 +19,8 @@ Route::get('contact', [App\Http\Controllers\GeneralController::class, 'contact']
 Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
 Route::get('games', [App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 Route::get('winner/list', [App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
+Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
+
 
 Auth::routes();
 
@@ -35,6 +37,13 @@ Route::get('score/list', [App\Http\Controllers\HomeController::class, 'scores'])
 Route::get('redeem/reward/{id}', [App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
 Route::post('save/bank/information', [App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
 Route::post('save/phone/information', [App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
+
+
+////Referral Routes
+Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');
+
+
+
 
 //Admin Routes
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);//->name('home');

@@ -16,7 +16,7 @@
 								to
 								ensue; and equal blame belongs to those.</p> --}}
                                 @if(Auth::user())
-                                    <a class="btn" href="{{ route('instruction') }}" style="color: azure">Play Game</a>
+                                    {{-- <a class="btn" href="{{ route('instruction') }}" style="color: azure">Play Game</a> --}}
                                 @else
                                     <a class="btn" href="{{ url('auth/google') }}" style="color: azure">Get Started</a>
                                 @endif

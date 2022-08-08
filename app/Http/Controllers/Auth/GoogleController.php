@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Socialite;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class GoogleController extends Controller
 {
@@ -30,11 +32,22 @@ class GoogleController extends Controller
                 Auth::login($finduser);
 
                 $get = User::where('id', auth()->user()->id)->first();
+                $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+                if(!$wallet)
+                {
+                    //create the wallet
+                    Wallet::create(['user_id'=> $get->id, 'balance' => '0.00']);
+                }
+                if($get->referral_code == '')
+                {
+                    $get->referral_code = Str::random(7);
+                    $get->save();
+                }
                 if($get->phone == '')
                 {
                     return view('phone');
                 }
-                return redirect('/games');
+                return redirect('/home');
      
             }else{
                 $newUser = User::create([
@@ -44,6 +57,9 @@ class GoogleController extends Controller
                     'password' => encrypt('123456dummy'), 
                     'avatar' => $user->avatar
                 ]);
+                $newUser->referral_code = Str::random(7);
+                $newUser->save();
+                Wallet::create(['user_id'=> $newUser->id, 'balance' => '0.00']);
     
                 Auth::login($newUser);
                 $get = User::where('id', auth()->user()->id)->first();
@@ -51,8 +67,7 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
-     
-                return redirect('/games');
+                return redirect('/home');
             }
     
         } catch (Exception $e) {

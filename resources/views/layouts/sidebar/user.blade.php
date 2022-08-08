@@ -10,38 +10,97 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
-      {{-- <li class="nav-main-item">
+      <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-border-all"></i>
-          <span class="nav-main-link-name">Blocks</span>
+          <span class="nav-main-link-name">Jobs</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
             <a class="nav-main-link" href="be_blocks_styles.html">
-              <span class="nav-main-link-name">Styles</span>
+              <span class="nav-main-link-name">Available Jobs</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="be_blocks_options.html">
-              <span class="nav-main-link-name">Options</span>
+              <span class="nav-main-link-name">Completed Jobs</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="be_blocks_forms.html">
-              <span class="nav-main-link-name">Forms</span>
-            </a>
-          </li>
-          <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_themed.html">
-              <span class="nav-main-link-name">Themed</span>
-            </a>
-          </li>
-          <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_api.html">
-              <span class="nav-main-link-name">API</span>
+              <span class="nav-main-link-name">Send Job Proof</span>
             </a>
           </li>
         </ul>
-      </li> --}}
+      </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <span class="nav-main-link-name">Campaign</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_styles.html">
+              <span class="nav-main-link-name">Create Campaign</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_options.html">
+              <span class="nav-main-link-name">View Campaigns</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_options.html">
+              <span class="nav-main-link-name">Approved Campaigns</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_options.html">
+              <span class="nav-main-link-name">Denied Campaigns</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <span class="nav-main-link-name">Wallet</span>
+           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ number_format(auth()->user()->wallet->balance) }}</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_styles.html">
+              <span class="nav-main-link-name">Fund Wallet</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_options.html">
+              <span class="nav-main-link-name">Withdraw</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-border-all"></i>
+          <span class="nav-main-link-name">Referral</span>
+           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->referees()->count(); }}</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{route('ref.all')}}">
+              <span class="nav-main-link-name">View All</span>
+            </a>
+          </li>
+          {{-- <li class="nav-main-item">
+            <a class="nav-main-link" href="be_blocks_options.html">
+              <span class="nav-main-link-name">Withdraw</span>
+            </a>
+          </li> --}}
+        </ul>
+      </li>
+
     </ul>
   </div>

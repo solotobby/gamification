@@ -26,6 +26,7 @@ class User extends Authenticatable
         'twitter_id',
         'avatar',
         'role',
+        'referral_code'
     ];
 
     /**
@@ -53,5 +54,15 @@ class User extends Authenticatable
             return in_array($this->role, $role);
         }
         return $this->role == $role;
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function referees()
+    {
+        return $this->belongsToMany(User::class, 'referral', 'referee_id');
     }
 }

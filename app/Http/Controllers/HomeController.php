@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use AfricasTalking\SDK\AfricasTalking;
 use AfricasTalking\SDK\Airtime;
 use App\Models\Reward;
+use App\Models\Wallet;
 use Nette\Utils\Random;
 
 class HomeController extends Controller
@@ -48,7 +49,8 @@ class HomeController extends Controller
 
     public function home()
     {
-        return view('user.home');
+        $ref_count = \DB::table('referral')->where('referee_id', auth()->user()->id)->count();
+        return view('user.home', ['ref_count' => $ref_count]);
     }
 
     public function savePhoneInformation(Request $request)

@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -51,10 +54,12 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'numeric', 'digits:11'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -64,10 +69,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $ref_id = $data['ref_id'];
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
+        $user->referral_code = Str::random(7);
+        $user->save();
+        Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
+        \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+        return $user;
+    }
+
+    public function referral_register($referral_code)
+    {
+        $name = User::where('referral_code', $referral_code)->first();
+        if(!$name){
+            return view('auth.error', ['error' => 'Invalid referral code']);
+        }
+        return view('auth.ref_register', ['name' => $name]);
     }
 }

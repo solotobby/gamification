@@ -108,14 +108,12 @@
       -->
       <nav id="sidebar" aria-label="Main Navigation">
         <!-- Side Header -->
-        <div class="bg-header" style="background-color: black">
+        <div class="bg-header-dark">
           <div class="content-header bg-white-5">
             <!-- Logo -->
             <a class="fw-semibold text-white tracking-wide" href="{{ url('home') }}">
               <span class="smini-visible">
-                
                     <span class="opacity-75">b</span>
-                
               </span>
               <span class="smini-hidden">
                

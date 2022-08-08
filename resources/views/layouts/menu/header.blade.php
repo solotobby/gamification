@@ -3,9 +3,9 @@
     <div class="space-x-1">
       <!-- Toggle Sidebar -->
       <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
-      <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="sidebar_toggle">
+      {{-- <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="sidebar_toggle">
         <i class="fa fa-fw fa-bars"></i>
-      </button>
+      </button> --}}
       <!-- END Toggle Sidebar -->
 
       <!-- Open Search Section -->
@@ -72,13 +72,13 @@
 
       <!-- Notifications Dropdown -->
       <div class="dropdown d-inline-block">
-        <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{-- <button type="button" class="btn btn-alt-secondary" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-fw fa-bell"></i>
-        </button>
+        </button> --}}
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
-          <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
+          {{-- <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
             Notifications
-          </div>
+          </div> --}}
           <ul class="nav-items my-2">
             <li>
               <a class="d-flex text-dark py-2" href="javascript:void(0)">
@@ -147,9 +147,9 @@
 
       <!-- Toggle Side Overlay -->
       <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-      <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="side_overlay_toggle">
+      {{-- <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="side_overlay_toggle">
         <i class="far fa-fw fa-list-alt"></i>
-      </button>
+      </button> --}}
       <!-- END Toggle Side Overlay -->
     </div>
     <!-- END Right Section -->
