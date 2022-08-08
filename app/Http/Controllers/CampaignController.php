@@ -100,6 +100,13 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
-        return $request;
+        $est_amount = $request->number_of_staff * $request->campaign_amount;
+        $percent = (50 / 100) * $est_amount;
+        $total = $est_amount + $percent;
+        [$est_amount, $percent, $total ];
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total]);
+        $campaign = Campaign::create($request->all());
+        $campaign->save();
+
     }
 }

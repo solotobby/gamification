@@ -43,13 +43,13 @@
             <div class="col-lg-6 offset-lg-1">
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Title</label>
-                    <input type="text" class="form-control" id="post-title" name="post-title" required>
+                    <input type="text" class="form-control" id="post-title" name="post_title" required>
                     <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">External Link</label>
-                    <input type="url" class="form-control" id="post-title" name="post-link" required>
+                    <input type="url" class="form-control" id="post-title" name="post_link" required>
                     <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
                 </div>
                   
@@ -57,14 +57,14 @@
 
               <div class="mb-4">
                 <label class="form-label" for="post-type">Type</label>
-                <select class="js-select2 form-select" id="post-type" name="campaign-type" style="width: 100%;" data-placeholder="Choose type.." required>
+                <select class="js-select2 form-select" id="post-type" name="campaign_type" style="width: 100%;" data-placeholder="Choose type.." required>
                     <option value="">Select Type</option>
                 </select>
               </div>
 
               <div class="mb-4">
                 <label class="form-label" for="post-category">Category</label>
-                <select class="js-select2 form-select" id="post-category" name="campaign-subcategory" style="width: 100%;" data-placeholder="Choose category.." required>
+                <select class="js-select2 form-select" id="post-category" name="campaign_subcategory" style="width: 100%;" data-placeholder="Choose category.." required>
                     <option value="">Select Category</option>
                 </select>
               </div>
@@ -72,11 +72,11 @@
               <div class="row mb-4">
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Number of Workers</label>
-                  <input type="number" class="form-control" id="number-of-staff" name="number-of-staff" min="10" value="10" required>
+                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="10" value="10" required>
                 </div>
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
-                  <input type="text" class="form-control" id="amount_per_campaign" name="campaign-amount" value="" readonly>
+                  <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
                   
                 </div>
               </div>
@@ -106,7 +106,7 @@
               <div class="mb-4">
                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request for social 
                     media handle, email or other mean of identifying the worker)</small></label>
-                        <textarea class="form-control" name="" id="js-ckeditor5-classic"></textarea>
+                        <textarea class="form-control" name="proof" id="js-ckeditor5-classic"></textarea>
               </div>
               <div class="mb-4">
                       <input type="checkbox" name="validate" required class="">
