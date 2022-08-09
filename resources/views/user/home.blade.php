@@ -72,146 +72,50 @@
               </h2>
   
             <!-- Jobs -->
+            @foreach ($available_jobs as $job)
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                   <div class="d-sm-flex">
                     <div class="ms-sm-2 me-sm-4 py-2 text-center">
-                      <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
-                        <i class="fab fa-fw fa-cloudsmith"></i>
+                      <a class="item item-rounded bg-body-dark text-dark fs-5 mb-2 mx-auto" href="{{ url('campaign/'.$job->job_id) }}">
+                        {{-- <i class="fab fa-fw fa-cloudsmith"></i> --}}
+                        &#8358;{{ $job->campaign_amount}}
                       </a>
                       <div class="btn-group btn-group-sm">
-                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
-                          <i class="fa fa-pencil-alt text-info"></i>
-                        </a>
-                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
-                          <i class="fa fa-times text-danger"></i>
+                        <a class="btn btn-primary" href="{{ url('campaign/'.$job->job_id) }}">
+                         Apply
                         </a>
                       </div>
                     </div>
                     <div class="py-2">
-                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
-                        React Developer
+                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="{{ url('campaign/'.$job->job_id) }}">
+                        {!! $job->post_title !!}
                       </a>
+                      {{-- <span class="pull-left">1700</span> --}}
                       <div class="fs-sm fw-semibold text-muted mb-2">
-                        Development - 3 hours ago
+                        Number of Worker - 0 / {{ $job->number_of_staff }}
                       </div>
                       <p class="text-muted mb-2">
-                        Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
+                        {{-- {!! substr($job->description, 0,  350) !!} --}}
+                        {!! \Illuminate\Support\Str::words($job->description, 50) !!}
                       </p>
                       <div>
-                        <span class="badge bg-primary">Web</span>
-                        <span class="badge bg-primary">React</span>
-                        <span class="badge bg-primary">Social</span>
+                        <span class="badge bg-primary">{{  $job->campaignType->name }}</span>
+                        <span class="badge bg-primary">{{ $job->campaignCategory->name }}</span>
+                        {{-- <span class="badge bg-primary">Social</span> --}}
                       </div>
                     </div>
                   </div>
                 </div>
             </div>
-            <div class="block block-rounded">
-                <div class="block-content block-content-full">
-                  <div class="d-sm-flex">
-                    <div class="ms-sm-2 me-sm-4 py-2 text-center">
-                      <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
-                        <i class="fab fa-fw fa-cloudsmith"></i>
-                      </a>
-                      <div class="btn-group btn-group-sm">
-                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
-                          <i class="fa fa-pencil-alt text-info"></i>
-                        </a>
-                        <a class="btn btn-alt-secondary" href="be_pages_jobs_apply.html">
-                          <i class="fa fa-times text-danger"></i>
-                        </a>
-                      </div>
-                    </div>
-                    <div class="py-2">
-                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
-                        SEO Ninja
-                      </a>
-                      <div class="fs-sm fw-semibold text-muted mb-2">
-                        Marketing - 10 hours ago
-                      </div>
-                      <p class="text-muted mb-2">
-                        Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
-                      </p>
-                      <div>
-                        <span class="badge bg-primary">Web</span>
-                        <span class="badge bg-primary">SEO</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            @endforeach
+            
+           
+               
+        </div>
 
 
-            {{-- <div class="bg-body-extra-light">
-              <table class="table table-striped table-hover table-borderless table-vcenter">
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="d-sm-flex">
-                        <div class="ms-sm-2 me-sm-4 py-3">
-                          <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
-                            <i class="fab fa-fw fa-facebook"></i>
-                          </a>
-                          <a class="btn btn-sm btn-primary w-100" href="be_pages_jobs_apply.html">
-                            Apply
-                          </a>
-                        </div>
-                        <div class="py-3">
-                          <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
-                            React Developer
-                          </a>
-                          <div class="fs-sm fw-semibold text-muted mb-2">
-                            Development - 3 hours ago
-                          </div>
-                          <p class="text-muted mb-2">
-                            Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
-                          </p>
-                          <div>
-                            <span class="badge bg-secondary">Web</span>
-                            <span class="badge bg-secondary">React</span>
-                            <span class="badge bg-secondary">Social</span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-sm-flex">
-                        <div class="ms-sm-2 me-sm-4 py-3">
-                          <a class="item item-rounded bg-body-dark text-dark fs-2 mb-2 mx-auto" href="javascript:void(0)">
-                            <i class="fab fa-fw fa-codepen"></i>
-                          </a>
-                          <a class="btn btn-sm btn-primary w-100" href="be_pages_jobs_apply.html">
-                            Apply
-                          </a>
-                        </div>
-                        <div class="py-3">
-                          <a class="link-fx h4 mb-1 d-inline-block text-dark" href="be_pages_jobs_listing.html">
-                            Web Designer
-                          </a>
-                          <div class="fs-sm fw-semibold text-muted mb-2">
-                            Design - 5 hours ago
-                          </div>
-                          <p class="text-muted mb-2">
-                            Ac cursus nibh sapien in purus. Mauris tincidunt tincidunt turpis in porta. Integer fermentum tincidunt auctor. Vestibulum ullamcorper, odio sed rhoncus imperdiet, enim elit sollicitudin orci, ege.
-                          </p>
-                          <div>
-                            <span class="badge bg-secondary">Web</span>
-                            <span class="badge bg-secondary">Photoshop</span>
-                            <span class="badge bg-secondary">Sketch</span>
-                            <span class="badge bg-secondary">HTML</span>
-                            <span class="badge bg-secondary">CSS</span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                
-                </tbody>
-              </table>
-            </div> --}}
+           
             <!-- END Jobs -->
           </div>
           <!-- END Page Content -->

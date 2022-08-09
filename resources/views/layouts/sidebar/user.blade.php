@@ -17,18 +17,18 @@
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_styles.html">
+            <a class="nav-main-link" href="{{ url('home') }}">
               <span class="nav-main-link-name">Available Jobs</span>
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_options.html">
-              <span class="nav-main-link-name">Completed Jobs</span>
+            <a class="nav-main-link" href="{{route('my.jobs')}}">
+              <span class="nav-main-link-name">My Jobs</span>
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_forms.html">
-              <span class="nav-main-link-name">Send Job Proof</span>
+            <a class="nav-main-link" href="">
+              <span class="nav-main-link-name">Completed Job</span>
             </a>
           </li>
         </ul>
@@ -45,7 +45,7 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_options.html">
+            <a class="nav-main-link" href="{{ route('my.campaigns') }}">
               <span class="nav-main-link-name">View Campaigns</span>
             </a>
           </li>

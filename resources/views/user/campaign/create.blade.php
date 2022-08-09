@@ -1,6 +1,14 @@
 @extends('layouts.main.master')
 
 @section('title', 'Winner List')
+@section('style')
+<script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
+@endsection
 
 @section('content')
 
@@ -25,6 +33,12 @@
     <h2 class="content-heading">
       <i class="fa fa-plus text-success me-1"></i> Create Campaign
     </h2>
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form action="{{ route('post.campaign') }}" method="POST" >
         @csrf
       <div class="block block-rounded">
@@ -101,17 +115,23 @@
             <div class="col-lg-6 offset-lg-1">
               <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description <small>(Ensure you provide simple and clear instruction on task to be done)</small></label>
-                        <textarea class="form-control" name="description" id="js-ckeditor5-classic"></textarea>
-              </div>
+                        <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
+                    </div>
               <div class="mb-4">
                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request for social 
                     media handle, email or other mean of identifying the worker)</small></label>
-                        <textarea class="form-control" name="proof" id="js-ckeditor5-classic"></textarea>
+                    <iframe name="server_answer" style="display:none"></iframe>
+                    <textarea id="mytextareas" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
               </div>
+
+              
               <div class="mb-4">
                       <input type="checkbox" name="validate" required class="">
                       <span><small> I agree that this campaign will be automatically approve after five if i fail to approve it within five (5) days </small></span>
               </div>
+
+              
+
             </div>
           </div>
         </div>
@@ -140,9 +160,11 @@
 
  <!-- Page JS Plugins -->
  <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+ {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
+ {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <!-- Page JS Helpers (CKEditor 5 plugins) -->
- <script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script>
+ <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
 
  <script>
     $(document).ready(function(){

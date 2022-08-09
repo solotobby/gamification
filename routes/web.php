@@ -47,10 +47,10 @@ Route::get('api/get/categories', [\App\Http\Controllers\CampaignController::clas
 Route::get('api/get/sub/categories/{id}', [\App\Http\Controllers\CampaignController::class, 'getSubCategories']);
 Route::get('api/get/sub/categories/info/{id}', [\App\Http\Controllers\CampaignController::class, 'getSubcategoriesInfo']);
 Route::post('post/campaign', [\App\Http\Controllers\CampaignController::class, 'postCampaign'])->name('post.campaign');
-
-
-
-
+Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign']);
+Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'postCampaignWork'])->name('post.campaign.work');
+Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');
+Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
 //Admin Routes
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);//->name('home');
 Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);

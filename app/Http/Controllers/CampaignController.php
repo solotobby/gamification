@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,8 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        //
+        $campaignList = Campaign::where('user_id', auth()->user()->id)->get();
+        return view('user.campaign.index', ['lists' => $campaignList]);
     }
 
     /**
@@ -103,10 +110,27 @@ class CampaignController extends Controller
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (50 / 100) * $est_amount;
         $total = $est_amount + $percent;
-        [$est_amount, $percent, $total ];
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total]);
+        [$est_amount, $percent, $total];
+        $job_id = rand(10000,10000000);
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
         $campaign->save();
 
+        return back()->with('success', 'Campaign Posted Successfully');
     }
+
+    public function viewCampaign($job_id)
+    {
+        $getCampaign = Campaign::where('job_id', $job_id)->first();
+        return view('user.campaign.view', ['campaign' => $getCampaign]);
+    }
+
+    public function postCampaignWork(Request $request)
+    {
+        $campaignWorker = CampaignWorker::create($request->all());
+        $campaignWorker->save();
+        return back()->with('success', 'Campaign Submitted Successfully');
+    }
+
+    
 }

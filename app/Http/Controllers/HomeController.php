@@ -13,6 +13,7 @@ use App\Models\UserScore;
 use Illuminate\Http\Request;
 use AfricasTalking\SDK\AfricasTalking;
 use AfricasTalking\SDK\Airtime;
+use App\Models\Campaign;
 use App\Models\Reward;
 use App\Models\Wallet;
 use Nette\Utils\Random;
@@ -49,8 +50,8 @@ class HomeController extends Controller
 
     public function home()
     {
-        $ref_count = \DB::table('referral')->where('referee_id', auth()->user()->id)->count();
-        return view('user.home', ['ref_count' => $ref_count]);
+        $available_jobs = Campaign::all();
+        return view('user.home', ['available_jobs' => $available_jobs]);
     }
 
     public function savePhoneInformation(Request $request)
