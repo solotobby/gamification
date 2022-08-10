@@ -82,3 +82,8 @@ Route::post('update/amount', [App\Http\Controllers\Admin\AdminController::class,
 
 //airtime mgt
 //Route::get('airime', [App\Http\Controllers\Admin\AdminController::class, 'sendAirtime'])->name('airtime');
+
+//category routes
+Route::get('create/category', [\App\Http\Controllers\CategoryController::class, 'create'])->name('create.category');
+Route::post('post/category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('store');
+Route::post('post/subcategory', [\App\Http\Controllers\CategoryController::class, 'storeSubcategory'])->name('store.subcategory');

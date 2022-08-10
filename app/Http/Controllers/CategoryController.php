@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -24,7 +25,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $category = Category::all();
+        $sub = SubCategory::all();
+        return view('admin.category.create', ['category' => $category, 'sub' => $sub]);
     }
 
     /**
@@ -35,7 +38,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = Category::create($request->all());
+        $category->save();
+        return back()->with('success', 'Category created successfully');
     }
 
     /**
@@ -81,5 +86,12 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
+    }
+
+    public function storeSubcategory(Request $request)
+    {
+        $subcate = SubCategory::create($request->all());
+        $subcate->save();
+        return back()->with('success', 'SubCategory created successfully');
     }
 }
