@@ -39,19 +39,25 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         if($user->hasRole('admin')){
-            $games = Games::orderBy('id', 'desc')->get();
-            $questions = Question::all()->count();
-            $gameplayed = Answer::select('id')->count();
-            $user = User::where('role', 'regular')->count();
-            return view('admin.index', ['games' => $games, 'questionCount' => $questions, 'gamesPlayed' => $gameplayed, 'userCount' => $user]);
+            return redirect()->route('admin.home');
         }
-        return redirect('/home');
+        return redirect()->route('user.home');
     }
 
-    public function home()
+    public function userHome()
     {
-        $available_jobs = Campaign::all();
+        $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'ASC')->get();
         return view('user.home', ['available_jobs' => $available_jobs]);
+    }
+
+    public function adminHome()
+    {
+        $games = Games::orderBy('id', 'desc')->get();
+        $questions = Question::all()->count();
+        $gameplayed = Answer::select('id')->count();
+        $user = User::where('role', 'regular')->count();
+        return view('admin.index', ['games' => $games, 'questionCount' => $questions, 'gamesPlayed' => $gameplayed, 'userCount' => $user]);
+
     }
 
     public function savePhoneInformation(Request $request)

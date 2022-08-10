@@ -132,5 +132,11 @@ class CampaignController extends Controller
         return back()->with('success', 'Campaign Submitted Successfully');
     }
 
+    public function mySubmittedCampaign($id)
+    {
+        $work = CampaignWorker::where('id', $id)->first();
+        return view('user.campaign.my_submitted_campaign', ['work' => $work]);
+    }
+
     
 }

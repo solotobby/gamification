@@ -51,8 +51,18 @@ Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class
 Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'postCampaignWork'])->name('post.campaign.work');
 Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
+Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
+
+
+
+
+
 //Admin Routes
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);//->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
+
+Route::get('user/home', [App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
+Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+
 Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');

@@ -66,7 +66,11 @@
                    
                     <td>{{ $list->status }}</td>
                     <td>
-
+                      @if($list->status == "Offline")
+                        <a href="" class="btn btn-primary btn-sm"> Go Live </a>
+                      @else
+                      <a href="" class="btn btn-success btn-sm"> View Activities </a>
+                      @endif
                     </td>
                   </tr>
                 @endforeach

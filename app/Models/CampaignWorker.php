@@ -22,5 +22,6 @@ class CampaignWorker extends Model
     {
         return $this->belongsTo(Campaign::class, 'campaign_id');
     }
+   
 
 }

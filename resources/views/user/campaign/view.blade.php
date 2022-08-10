@@ -137,6 +137,26 @@
                 </div>
                 </div>
                 @else
+
+                    @if($campaign->myCompleted)
+                        
+                    <div class="block-content">
+                        <div class="row">
+                        <div class="col-md-12">
+                            
+                            <h4 class="fw-normal text-muted text-center">
+                                Opps!! You have completed this campaign
+                            </h4>
+                            <center>
+                                <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
+                                View Work
+                              </a>
+                            </center>
+                        </div>
+                    </div>
+                    </div>
+
+                    @else
                         <div class="block-content">
                             <div class="row">
                             <form action="{{ route('post.campaign.work') }}" method="POST">
@@ -160,6 +180,8 @@
                             
 
                         </div>
+                        @endif
+
                 @endif
             </div>
         

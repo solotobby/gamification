@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'referral', 'referee_id');
     }
+
+    public function myWorks()
+    {
+        return $this->hasMany(CampaignWorker::class, 'campaign_id');
+    }
 }

@@ -42,6 +42,7 @@
                 <th>Name</th>
                 <th>&#8358; Amount</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -50,11 +51,12 @@
                     <td class="fw-semibold">
                       {{ $list->campaign->post_title }}
                     </td>
-                    <td class="fw-semibold">
+                    <td>
                         {{ $list->campaign->campaign_amount }}
                       </td>
-                    {{-- <td>{{$list->email}}</td> --}}
                     <td>{{ $list->status }}</td>
+                    <td><a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-eye opacity-20 me-1"> View</i></a></td>
                   </tr>
                 @endforeach
               

@@ -30,4 +30,11 @@ class Campaign extends Model
         {
             return $this->hasMany(CampaignWorker::class, 'campaign_id');
         }
+        public function myCompleted()
+        {
+            return $this->hasOne(CampaignWorker::class, 'campaign_id');
+        }
+        
+
+       
 }
