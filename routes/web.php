@@ -52,8 +52,30 @@ Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::cla
 Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
 Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
+Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'activities']);
+
+///paystack payment 
+Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+
+///payment routes
+Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::class, 'goLive']);
+Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 'paystackCallback']);
+
+Route::get('upgrade', [\App\Http\Controllers\UserController::class, 'upgrade'])->name('upgrade');
+Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePayment'])->name('make.payment');
+Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
+
+Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
+Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
+
+Route::get('approved/campaigns', [\App\Http\Controllers\CampaignController::class, 'approvedCampaigns']);
+Route::get('denied/campaigns', [\App\Http\Controllers\CampaignController::class, 'deniedCampaigns']);
+Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, 'completedJobs']);
 
 
+Route::get('campaign/approve/{id}', [\App\Http\Controllers\CampaignController::class, 'approveCampaign']);
+Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::class, 'denyCampaign']);
 
 
 

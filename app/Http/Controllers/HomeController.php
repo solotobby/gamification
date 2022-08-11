@@ -69,7 +69,7 @@ class HomeController extends Controller
         $user = User::where('id', auth()->user()->id)->first();
         $user->phone = $request->phone;
         $user->save();
-        return redirect('/');
+        return redirect('/home');
     }
 
     public function instruction()

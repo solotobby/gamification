@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="">
+            <a class="nav-main-link" href="{{ url('completed/jobs') }}">
               <span class="nav-main-link-name">Completed Job</span>
             </a>
           </li>
@@ -50,12 +50,12 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_options.html">
+            <a class="nav-main-link" href="{{ url('approved/campaigns') }}">
               <span class="nav-main-link-name">Approved Campaigns</span>
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_options.html">
+            <a class="nav-main-link" href="{{ url('denied/campaigns') }}"">
               <span class="nav-main-link-name">Denied Campaigns</span>
             </a>
           </li>

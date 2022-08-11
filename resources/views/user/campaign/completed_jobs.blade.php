@@ -12,7 +12,7 @@
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Campaign</li>
-            <li class="breadcrumb-item active" aria-current="page">View Campaign</li>
+            <li class="breadcrumb-item active" aria-current="page">Completed Campaign</li>
           </ol>
         </nav>
       </div>
@@ -25,7 +25,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Job List</h3>
+        <h3 class="block-title">Completed Campaign</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -49,38 +49,30 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Progress</th>
-                <th>Unit Price</th>
-                <th>Total Price</th>
+                <th>Amount</th>
+                <th>Worker</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Reason</th>
               </tr>
             </thead>
             <tbody>
                 @foreach ($lists as $list)
                 <tr>
                     <td>
-                      {{ $list->post_title }}
+                      {{ $list->campaign->post_title }}
                     </td>
                     <td>
-                        {{ $list->completed()->where('status', 'Approved')->count(); }}/{{ $list->number_of_staff }}
+                        &#8358; {{ $list->amount }}
                      </td>
                     <td>
-                        &#8358; {{ $list->campaign_amount }}
+                         {{ $list->user->name }}
                       </td>
                       <td>
-                        &#8358; {{ number_format($list->total_amount) }}
+                         {{ $list->status }}
                       </td>
-                     
-                   
-                    <td>{{ $list->status }}</td>
-                    <td>
-                      @if($list->status == "Offline")
-                        <a href="{{ url('golive/'.$list->job_id) }}" class="btn btn-primary btn-sm"> Go Live </a>
-                      @else
-                      <a href="{{ url('campaign/activities/'.$list->job_id) }}" class="btn btn-success btn-sm"> View Activities </a>
-                      @endif
-                    </td>
+                      <td>
+                        {{ $list->reason }}
+                     </td>
                   </tr>
                 @endforeach
               

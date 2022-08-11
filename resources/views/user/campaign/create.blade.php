@@ -39,6 +39,12 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form action="{{ route('post.campaign') }}" method="POST" >
         @csrf
       <div class="block block-rounded">

@@ -6,6 +6,7 @@ use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
@@ -122,7 +123,8 @@ class CampaignController extends Controller
     public function viewCampaign($job_id)
     {
         $getCampaign = Campaign::where('job_id', $job_id)->first();
-        return view('user.campaign.view', ['campaign' => $getCampaign]);
+        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
     }
 
     public function postCampaignWork(Request $request)
@@ -136,6 +138,54 @@ class CampaignController extends Controller
     {
         $work = CampaignWorker::where('id', $id)->first();
         return view('user.campaign.my_submitted_campaign', ['work' => $work]);
+    }
+
+    public function activities($id)
+    {
+       $cam = Campaign::where('job_id', $id)->first();
+    //    return  $cam->completed;
+       return view('user.campaign.activities', ['lists' => $cam]);
+    }
+
+    public function approveCampaign($id)
+    {
+
+       $approve = CampaignWorker::where('id', $id)->first();
+       $approve->status = 'Approved';
+       $approve->reason = 'Approved by User';
+       $approve->save();
+
+       $wallet = Wallet::where('user_id', $approve->user_id)->first();
+       $wallet->balance += $approve->amount;
+       $wallet->save();
+       return back()->with('success', 'Campaign Approve Successfully');
+
+    }
+
+    public function denyCampaign($id)
+    {
+        $deny = CampaignWorker::where('id', $id)->first();
+        $deny->status = 'Denied';
+        $deny->reason = 'Denied by User';
+        $deny->save();
+        return back()->with('error', 'Campaign Denied Successfully');
+    }
+
+    public function approvedCampaigns()
+    {
+        $approved = CampaignWorker::where('status', 'Approved')->orderby('created_at', 'ASC')->get();
+        return view('user.campaign.approved', ['lists' => $approved]);
+    }
+    public function deniedCampaigns()
+    {
+        $denied = CampaignWorker::where('status', 'Denied')->orderby('created_at', 'ASC')->get();
+        return view('user.campaign.denied', ['lists' => $denied]);
+    }
+
+    public function completedJobs()
+    {
+        $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->get();
+        return view('user.campaign.completed_jobs', ['lists' => $completedJobs]);
     }
 
     

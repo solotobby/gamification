@@ -175,6 +175,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Unicodeveloper\Paystack\PaystackServiceProvider::class,
 
     ],
 
@@ -232,6 +233,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'PaystackHelper' => App\Helpers\PaystackHelper::class,
         'AfricaTalkingHandlers' => App\Helpers\AfricaTalkingHandlers::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
     ],
 
 ];

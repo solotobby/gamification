@@ -67,6 +67,12 @@
    
         <!-- Page Content -->
         <div class="content content-boxed content-full">
+          @if (session('success'))
+          <div class="alert alert-success" role="alert">
+              {{ session('success') }}
+          </div>
+          @endif
+
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available jobs
               </h2>
@@ -93,7 +99,7 @@
                       </a>
                       {{-- <span class="pull-left">1700</span> --}}
                       <div class="fs-sm fw-semibold text-muted mb-2">
-                        Number of Worker - 0 / {{ $job->number_of_staff }}
+                        Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}
                       </div>
                       <p class="text-muted mb-2">
                         {{-- {!! substr($job->description, 0,  350) !!} --}}
@@ -130,9 +136,15 @@
                 <h4 class="fw-normal text-muted text-center">
                Only verified users have unlimited access to jobs! 
                 </h4>
-                <a class="btn btn-hero btn-primary" href="javascript:void(0)" data-toggle="click-ripple">
+                @if(auth()->user()->is_verified == '0')
+                <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
                   Get Verified Now!
                 </a>
+                @else
+                <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
+                  Verification Successfull
+                </a>
+                @endif
               </div>
             </div>
     </div>

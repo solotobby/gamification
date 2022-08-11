@@ -126,6 +126,8 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">Post Proof of Completion</h3>
             </div>
+            
+
                 @if($campaign->user_id == auth()->user()->id)
                 <div class="block-content">
                     <div class="row">
@@ -138,10 +140,11 @@
                 </div>
                 @else
 
-                    @if($campaign->myCompleted)
+                
+                    @if($completed)
                         
                     <div class="block-content">
-                        <div class="row">
+                      <div class="row">
                         <div class="col-md-12">
                             
                             <h4 class="fw-normal text-muted text-center">
@@ -153,10 +156,28 @@
                               </a>
                             </center>
                         </div>
-                    </div>
+                      </div>
                     </div>
 
                     @else
+
+                      <?php 
+                       $completed_count = $campaign->completed()->where('status', 'Approved')->count();
+
+                      ?>
+                      @if($completed_count == $campaign->number_of_staff)
+                      <div class="block-content">
+                        <div class="row">
+                          <div class="col-md-12">
+                              
+                              <h4 class="fw-normal text-muted text-center">
+                                  This campaign has reachec maximum worker
+                              </h4>
+                             
+                          </div>
+                        </div>
+                      </div>
+                      @else
                         <div class="block-content">
                             <div class="row">
                             <form action="{{ route('post.campaign.work') }}" method="POST">
@@ -181,6 +202,7 @@
 
                         </div>
                         @endif
+                    @endif
 
                 @endif
             </div>
