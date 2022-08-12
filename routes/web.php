@@ -14,6 +14,7 @@
 */
 
 
+
 Route::get('/', [App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('contact', [App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
 Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
@@ -77,10 +78,15 @@ Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, '
 Route::get('campaign/approve/{id}', [\App\Http\Controllers\CampaignController::class, 'approveCampaign']);
 Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::class, 'denyCampaign']);
 
+Route::get('wallet/fund', [\App\Http\Controllers\WalletController::class, 'fund'])->name('fund');
+Route::get('wallet/withdraw', [\App\Http\Controllers\WalletController::class, 'withdraw'])->name('withdraw');
+Route::post('store/fund', [\App\Http\Controllers\WalletController::class, 'storeFund'])->name('store.funds');
+Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 'storeWithdraw'])->name('store.withdraw');
+Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
 
 
 //Admin Routes
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('user/home', [App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');

@@ -66,16 +66,16 @@
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-wallet"></i>
           <span class="nav-main-link-name">Wallet</span>
-           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ number_format(auth()->user()->wallet->balance) }}</span>
+           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358; {{ number_format(auth()->user()->wallet->balance) }}</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_styles.html">
+            <a class="nav-main-link" href="{{ route('fund') }}">
               <span class="nav-main-link-name">Fund Wallet</span>
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="be_blocks_options.html">
+            <a class="nav-main-link" href="{{ route('withdraw') }}">
               <span class="nav-main-link-name">Withdraw</span>
             </a>
           </li>

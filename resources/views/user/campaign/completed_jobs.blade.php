@@ -50,7 +50,7 @@
               <tr>
                 <th>Name</th>
                 <th>Amount</th>
-                <th>Worker</th>
+                {{-- <th>Worker</th> --}}
                 <th>Status</th>
                 <th>Reason</th>
               </tr>
@@ -64,9 +64,6 @@
                     <td>
                         &#8358; {{ $list->amount }}
                      </td>
-                    <td>
-                         {{ $list->user->name }}
-                      </td>
                       <td>
                          {{ $list->status }}
                       </td>

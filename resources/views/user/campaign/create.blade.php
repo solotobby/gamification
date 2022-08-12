@@ -61,20 +61,7 @@
               </p>
             </div>
             <div class="col-lg-6 offset-lg-1">
-                <div class="mb-4">
-                    <label class="form-label" for="post-title">Title</label>
-                    <input type="text" class="form-control" id="post-title" name="post_title" required>
-                    <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label" for="post-title">External Link</label>
-                    <input type="url" class="form-control" id="post-title" name="post_link" required>
-                    <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
-                </div>
-                  
-                  
-
+               
               <div class="mb-4">
                 <label class="form-label" for="post-type">Type</label>
                 <select class="js-select2 form-select" id="post-type" name="campaign_type" style="width: 100%;" data-placeholder="Choose type.." required>
@@ -120,12 +107,24 @@
             </div>
             <div class="col-lg-6 offset-lg-1">
               <div class="mb-4">
+                <label class="form-label" for="post-title">Title</label>
+                <input type="text" class="form-control" id="post-title" name="post_title" value="{{ old('post_title') }}" required>
+                <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="post-title">External Link</label>
+                <input type="url" class="form-control" id="post-title" name="post_link" value="{{ old('url') }}" required>
+                <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
+            </div>
+
+              <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description <small>(Ensure you provide simple and clear instruction on task to be done)</small></label>
                         <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
                     </div>
               <div class="mb-4">
                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request for social 
-                    media handle, email or other mean of identifying the worker)</small></label>
+                    media handle, email or other means of identifying the worker)</small></label>
                     <iframe name="server_answer" style="display:none"></iframe>
                     <textarea id="mytextareas" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
               </div>
@@ -135,6 +134,12 @@
                       <input type="checkbox" name="validate" required class="">
                       <span><small> I agree that this campaign will be automatically approve after five if i fail to approve it within five (5) days </small></span>
               </div>
+
+              {{-- <div class="mb-4">
+                  <div class="alert alert-info">
+
+                  </div>
+              </div> --}}
 
               
 

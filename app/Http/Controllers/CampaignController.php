@@ -108,14 +108,22 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
+        
+        
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (50 / 100) * $est_amount;
         $total = $est_amount + $percent;
         [$est_amount, $percent, $total];
         $job_id = rand(10000,10000000);
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
-        $campaign = Campaign::create($request->all());
-        $campaign->save();
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($wallet->balance >= $total){
+            $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
+            $campaign = Campaign::create($request->all());
+            $campaign->save();
+        }else{
+            return back()->with('error', 'You do not have surficient fund in your wallet');
+        }
+        
 
         return back()->with('success', 'Campaign Posted Successfully');
     }
