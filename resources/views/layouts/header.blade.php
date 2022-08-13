@@ -15,8 +15,8 @@
                             <ul class="basic-menu clearfix">
                                 <li><a href="{{ url('/') }}">Home</a></li>
                                 <li><a href="{{ route('goal') }}">Goal</a></li>
-                                <li><a href="{{  route('game.list') }}">Game List</a></li>
-                                <li><a href="{{  route('winner.list') }}">Winners List</a></li>
+                                {{-- <li><a href="{{  route('game.list') }}">Game List</a></li> --}}
+                                {{-- <li><a href="{{  route('winner.list') }}">Winners List</a></li> --}}
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                                 @if(Auth::user())
                                     <li><a href="{{ route('instruction') }}">Play Game</a></li>
@@ -47,8 +47,8 @@
                             <ul>
                                 <li><a href="{{ url('/') }}">Home</a></li>
                                 <li><a href="{{ route('goal') }}">Goal</a></li>
-                                <li><a href="{{  route('game.list') }}">Game List</a></li>
-                                <li><a href="{{  route('winner.list') }}">Winners List</a></li>
+                                {{-- <li><a href="{{  route('game.list') }}">Game List</a></li> --}}
+                                {{-- <li><a href="{{  route('winner.list') }}">Winners List</a></li> --}}
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                                 @if(Auth::user())
                                     <li><a href="{{ route('instruction') }}">Play Game</a></li>

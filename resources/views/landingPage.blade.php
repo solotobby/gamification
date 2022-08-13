@@ -2,8 +2,40 @@
 @section('title', 'Get Rewards quizzes')
 
 @section('content')
+<!-- basic-slider start -->
+<div class="slider-section">
+	<div class="slider-active owl-carousel">
+		<div class="single-slider" style="background-image: url({{ asset('asset/img/banner_1.jpg') }});">
+			<div class="container">
+				<div class="slider-content">
+					<h2> <br /><br /><br /><br />
+						{{-- <span class="dot"></span>
+						<span class="dot"></span>
+						<span class="dot"></span> --}}
+					</h2>
+					{{-- <p>Design | Development | Branding</p> --}}
+					{{-- <a class="btn" href="#">About Us</a> --}}
+				</div>
+			</div>
+		</div>
+		<div class="single-slider" style="background-image: url({{ asset('asset/img/banner_2.jpg') }});">
+			<div class="container">
+				<div class="slider-content">
+					<h2><br /><br /><br /><br />
+						{{-- <span class="dot"></span>
+						<span class="dot"></span>
+						<span class="dot"></span> --}}
+					</h2>
+					{{-- <p>Design | Development | Branding</p>
+					<a class="btn" href="#">About Us</a> --}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- basic-slider end -->
 
-        <div class="ptb-150 border-t-b" style="background-image: url({{ asset('asset/img/cup.jpg') }})">
+        {{-- <div class="ptb-150 border-t-b" style="background-image: url({{ asset('asset/img/cup.jpg') }})">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-8">
@@ -18,13 +50,13 @@
                                 @if(Auth::user())
                                     {{-- <a class="btn" href="{{ route('instruction') }}" style="color: azure">Play Game</a> --}}
                                 @else
-                                    <a class="btn" href="{{ url('auth/google') }}" style="color: azure">Get Started</a>
+                                    {{-- <a class="btn" href="{{ url('auth/google') }}" style="color: azure">Get Started</a> --}}
                                 @endif
-						</div>
+						{{-- </div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>  --}}
 		<!-- basic-slider end -->
 
 

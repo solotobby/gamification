@@ -70,4 +70,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(CampaignWorker::class, 'campaign_id');
     }
+
+    
 }
