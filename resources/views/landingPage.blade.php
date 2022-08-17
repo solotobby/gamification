@@ -18,33 +18,33 @@
 				</div>
 			</div>
 		</div>
-		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_2.jpg') }});">
+		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_2.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2><br /><br /><br /><br />
+					<h2><br /><br /><br /><br /> --}}
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}
-					</h2>
+					{{-- </h2> --}}
 					{{-- <p>Design | Development | Branding</p>
 					<a class="btn" href="#">About Us</a> --}}
-				</div>
+				{{-- </div>
 			</div>
-		</div>
-		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
+		</div> --}}
+		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2><br /><br /><br /><br />
+					<h2><br /><br /><br /><br /> --}}
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}
-					</h2>
+					{{-- </h2> --}}
 					{{-- <p>Design | Development | Branding</p>
 					<a class="btn" href="#">About Us</a> --}}
-				</div>
+				{{-- </div>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 </div>
 <!-- basic-slider end -->
 
