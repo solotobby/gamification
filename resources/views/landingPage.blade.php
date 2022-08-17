@@ -1,23 +1,70 @@
 @extends('layouts.master')
 @section('title', 'Earn Money Online')
+@section('style')
 
+<style>
+	.carousel-item {
+		height: 100vh;
+		min-height: 350px;
+		background: no-repeat center center scroll;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	</style>
+@endsection
 @section('content')
 <!-- basic-slider start -->
+
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active" style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }})">
+        {{-- <div class="carousel-caption">
+          <h5>First slide label</h5>
+          <p>Some representative placeholder content for the first slide.</p>
+        </div> --}}
+      </div>
+      <div class="carousel-item" style="background-image: url({{ asset('asset/img/freebyz_1.jpg') }})">
+        {{-- <div class="carousel-caption">
+          <h5>Second slide label</h5>
+          <p>Some representative placeholder content for the second slide.</p>
+        </div> --}}
+      </div>
+      {{-- <div class="carousel-item" style="background-image: url('https://source.unsplash.com/szFUQoyvrxM/1920x1080')"> --}}
+        {{-- <div class="carousel-caption">
+          <h5>Third slide label</h5>
+          <p>Some representative placeholder content for the third slide.</p>
+        </div> --}}
+      {{-- </div> --}}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+
 <div class="slider-section">
-	<div class="slider-active owl-carousel">
-		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
+	
+	{{-- <div class="slider-active owl-carousel">
+		<div class="single-slider"  style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2> <br /><br /><br /><br />
+					<h2> <br /><br /><br /><br /> --}}
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}
-					</h2>
+					{{-- </h2> --}}
 					{{-- <p>Design | Development | Branding</p> --}}
 					{{-- <a class="btn" href="#">About Us</a> --}}
-				</div>
+				{{-- </div>
 			</div>
-		</div>
+		</div> --}}
 		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_2.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
