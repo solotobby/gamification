@@ -105,9 +105,15 @@
           <div class="block-header block-header-default">
             <h3 class="block-title">Campaign Description</h3>
           </div>
-          <div class="block-content">
-           {!! $campaign->description !!}
-          </div>
+          
+
+            <div class="block-content">
+              @if($campaign->post_link != '')
+              Link: <a href="{{ $campaign->post_link }}" target="_blank" class="">{{ $campaign->post_link }}</a>
+              <hr>
+              @endif
+            {!! $campaign->description !!}
+            </div>
         </div>
 
         <div class="block block-rounded">
