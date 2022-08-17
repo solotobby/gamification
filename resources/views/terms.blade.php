@@ -26,12 +26,25 @@
 						<div class="contact-person">
 							<h4></h4>
 							<p>
-                                Asides putting a smile on many faces by providing a mean to earn online, we aim at supporting 
-                                hardworking creators,  business owners, and organizations to gain meaningful organic engagement 
-                                that will translate to massive sales. Although our platform allows you work, play a game and win 
-                                cash, airtime and data rewards, it also a platform built to inspire you to get knowledge, 
-                                be kind to the world and extend a helping hand. The goal is a build a community that is ready 
-                                to give value and earn from it.
+                              
+                                1. By signing up to Freebyz, you agree to create a wallet where you can either make money as an affiliate/social media worker or a business owner/creator/entrepreneur who wants to post online social media and special digital jobs for online workers.<br>
+                                2. You account must be used solely for that purpose or purposes as updated on the website.<br>
+                                3. Your account may be suspended if you attempt to spam people or post spurious jobs. <br>
+                                4. All Jobs will be screened before approval<br>
+                                5. Every Job you advertise must be approved within 5days otherwise those Jobs will be automatically approved.<br>  
+                                6. All users must be verified to <br>
+                                (a) access more than 2 jobs<br>
+                                (b) withdraw from wallet<br>
+                                (c) Post Jobs<br>
+                                7. All users can use referral codes to refer friends.<br>
+                                8. A sum of 500 NGN is required to verify an account. Withdrawal can be requested any time but payment is only made on Fridays.
+                                Minimum withdrawal is 2000 NGN with 5% withdrawal charges. Withdrawal  requests made before 12pm on Fridays will be processed next Friday.
+                                Withdrawal will only be made to your bank account or PayPal that matches exactly the names used in registration. Disparities in names can delay payment (s).<br>
+                                9. You are paid a sum of N250 on every friend you refer to Freebyz using your affiliate link (available on your dashboard). <br>
+                                10. Unverified users can refer friends but cannot post jobs or make withdrawal (s).<br>
+                                11. You can play games and quizzes to earn points which can be converted to money.<br>
+                                This Terms of Use will be updated regularly.You will find the updates in your dashboard.<br><br>
+                                Thank you for using Freebyz.
 
                                 {{-- Asides putting a smile on many faces, we aim at achieving a community of brilliant
                                  people who are ready to take up challenges and answer the questions of life! Although 

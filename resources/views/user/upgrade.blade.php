@@ -25,10 +25,14 @@
       </div>
       <div class="block-content">
         <div class="row items-push">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <!-- Simple -->
             <p class="text-muted mb-2">
-              Setting up rating is just a class away
+                With just N500, your account is verified and that simply gives you <br>
+                (a) unlimited access to available jobs<br>
+                 (b) post jobs to hire workers<br>
+                 (c) access to withdraw all your earnings and other juicy offers coming up shortly.
+                 <br>
             </p>
             @if(auth()->user()->is_verified == '0')
             <a href="{{ route('make.payment') }}" class="btn btn-primary"> <i class="fa fa-share"></i>  Upgrade</a>

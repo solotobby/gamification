@@ -31,7 +31,7 @@ class UserController extends Controller
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
-            'amount' => 500*100,
+            'amount' => 515*100,
             'channels' => ['card'],
             'currency' => 'NGN',
             'reference' => $ref,

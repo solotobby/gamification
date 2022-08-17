@@ -103,6 +103,9 @@ class WalletController extends Controller
     public function storeFund(Request $request)
     {
         $ref = time();
+
+        $percent = 3/100 * $request->balance;
+        $amount = $request->balance + $percent;
         
         $res = Http::withHeaders([
             'Accept' => 'application/json',
@@ -110,7 +113,7 @@ class WalletController extends Controller
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
-            'amount' => $request->balance*100,
+            'amount' => $amount*100,
             'channels' => ['card'],
             'currency' => 'NGN',
             'reference' => $ref,
@@ -150,6 +153,10 @@ class WalletController extends Controller
        $paystack_amount = $res['data']['amount'];
        $amount = $paystack_amount / 100;
 
+       $percent = 2.90/100 * $amount;
+       $formatedAm = number_format($percent, 0);
+       $newamount = $amount - $formatedAm;
+
        if($status == 'success')
        {
             $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
@@ -157,7 +164,7 @@ class WalletController extends Controller
             $fetchPaymentTransaction->save();
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            $wallet->balance += $amount;
+            $wallet->balance += $newamount;
             $wallet->save();
        }
 
