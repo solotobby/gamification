@@ -5,7 +5,7 @@
 <!-- basic-slider start -->
 <div class="slider-section">
 	<div class="slider-active owl-carousel">
-		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_1.jpg') }});">
+		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
 					<h2> <br /><br /><br /><br />
