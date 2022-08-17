@@ -19,7 +19,7 @@
 			<div class="container">
 				<div class="area-title text-center">
 					<h2>Create Account</h2>
-					<p>Fill the form below to login</p>
+					<p>Sign up below in just 2 minutes</p>
 				</div>
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">

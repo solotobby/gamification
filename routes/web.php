@@ -21,7 +21,9 @@ Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->nam
 Route::get('games', [App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 Route::get('winner/list', [App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
-
+Route::get('make-money', [\App\Http\Controllers\GeneralController::class, 'make_money']);
+Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
+Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 
 Auth::routes();
 

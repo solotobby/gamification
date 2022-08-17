@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Our Goal')
+@section('title', 'Terms of Use')
 
 @section('content')
 
@@ -8,10 +8,10 @@
     <div class="basic-breadcrumb-area gray-bg ptb-70">
         <div class="container">
             <div class="basic-breadcrumb text-center">
-                <h3 class="">Our Goal</h3>
+                <h3 class="">Terms of Use</h3>
                 <ol class="breadcrumb text-xs">
                     <li><a href="{{ url('/') }}">Home</a></li>
-                    <li class="active">Our Goal</li>
+                    <li class="active">Terms of Use</li>
                 </ol>
             </div>
         </div>

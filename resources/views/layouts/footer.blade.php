@@ -8,6 +8,7 @@
 						<a href="#"><i class="ion-social-facebook"></i></a>
 						{{-- <a href="#"><i class="ion-social-googleplus"></i></a> --}}
 						<a href="#"><i class="ion-social-instagram"></i></a>
+						<a href="#"><i class="ion-social-twitter"></i></a>
 						{{-- <a href="#"><i class="ion-social-dribbble"></i></a> --}}
 					</div>
 					<div class="footer-menu mt-30">
@@ -16,6 +17,8 @@
 								<li><a href="{{ url('/') }}">Home</a></li>
 								<li><a href="{{ route('goal') }}">Goal</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
+								<li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
+								<li><a href="{{ route('terms') }}">Terms of Use</a></li>
 							</ul>
 						</nav>
 					</div>

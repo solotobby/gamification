@@ -41,4 +41,19 @@ class GeneralController extends Controller
         $games = Games::orderBy('created_at', 'desc')->get();
         return view('gamelist', ['games' => $games]);
     }
+
+    public function terms()
+    {
+        return view('terms');
+    }
+
+    public function privacy()
+    {
+        return view('privacy');
+    }
+    
+    public function make_money()
+    {
+        return view('make_money');
+    }
 }

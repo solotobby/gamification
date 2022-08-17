@@ -46,7 +46,7 @@ class HomeController extends Controller
 
     public function userHome()
     {
-        $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'ASC')->get();
+        $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         return view('user.home', ['available_jobs' => $available_jobs]);
     }
 

@@ -22,7 +22,7 @@
 			<div class="container">
 				<div class="area-title">
 					<h2></h2>
-					<p>Provide the phone number you'll want your airtime or data sent</p>
+					<p>Please enter your phone number</p>
 				</div>
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2">

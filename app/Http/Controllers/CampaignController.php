@@ -119,7 +119,13 @@ class CampaignController extends Controller
         if($wallet->balance >= $total){
             $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
             $campaign = Campaign::create($request->all());
+            $campaign->status = 'Live';
             $campaign->save();
+           
+            $wallet->balance -= $total;
+            $wallet->save();
+
+            
         }else{
             return back()->with('error', 'You do not have surficient fund in your wallet');
         }

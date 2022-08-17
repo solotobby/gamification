@@ -36,7 +36,7 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">980</p>
+          <p class="fs-3 text-dark mb-0">0</p>
           <p class="text-muted mb-0">
             Completed Jobs
           </p>

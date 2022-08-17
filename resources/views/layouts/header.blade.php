@@ -14,12 +14,13 @@
                         <nav>
                             <ul class="basic-menu clearfix">
                                 <li><a href="{{ url('/') }}">Home</a></li>
-                                <li><a href="{{ route('goal') }}">Goal</a></li>
+                                <li><a href="{{ url('make-money') }}">Make Money</a></li>
+                                {{-- <li><a href="{{ route('goal') }}">Goal</a></li> --}}
                                 {{-- <li><a href="{{  route('game.list') }}">Game List</a></li> --}}
                                 {{-- <li><a href="{{  route('winner.list') }}">Winners List</a></li> --}}
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                                 @if(Auth::user())
-                                    <li><a href="{{ route('instruction') }}">Play Game</a></li>
+                                    {{-- <li><a href="{{ route('instruction') }}">Play Game</a></li> --}}
                                 @else
                                     <li><a href="{{ url('login') }}">Login</a></li>
                                     <li><a href="{{ url('register') }}">Register</a></li>
@@ -46,12 +47,13 @@
                         <nav id="mobile-nav">
                             <ul>
                                 <li><a href="{{ url('/') }}">Home</a></li>
-                                <li><a href="{{ route('goal') }}">Goal</a></li>
+                                <li><a href="{{ url('make-money') }}">Make Money</a></li>
+                                {{-- <li><a href="{{ route('goal') }}">Goal</a></li> --}}
                                 {{-- <li><a href="{{  route('game.list') }}">Game List</a></li> --}}
                                 {{-- <li><a href="{{  route('winner.list') }}">Winners List</a></li> --}}
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                                 @if(Auth::user())
-                                    <li><a href="{{ route('instruction') }}">Play Game</a></li>
+                                    {{-- <li><a href="{{ route('instruction') }}">Play Game</a></li> --}}
                                 @else
                                     <li><a href="{{ url('login') }}">Login</a></li>
                                     <li><a href="{{ url('register') }}">Register</a></li>
