@@ -176,5 +176,11 @@ class AdminController extends Controller
         return PaystackHelpers::reloadlyAuth0Token();
     }
 
+    public function userList()
+    {
+        $users = User::orderBy('created_at', 'desc')->get();
+        return view('admin.users', ['users' => $users]);
+    }
+
    
 }

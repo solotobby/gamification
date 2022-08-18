@@ -19,7 +19,7 @@
 			<div class="container">
 				<div class="area-title text-center">
 					<h2>Create Account</h2>
-					<p>Fill the form below to login</p>
+					<p>Sign up below in just 2 minutes</p>
 				</div>
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
@@ -29,7 +29,7 @@
 							<div class="row">
                                 <div class="col-md-12 form-group">
 
-									<label class="sr-only">Full Name</label>
+									<label>Full Name</label>
 									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required placeholder="Enter Name" >
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -40,7 +40,8 @@
 
 								<div class="col-md-12 form-group">
 
-									<label class="sr-only">Email</label>
+									<label>Email Address</label>
+                                      
 									<input id="email" type="email" class="form-control intput-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Enter Email Address" >
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -51,7 +52,7 @@
 
                                 <div class="col-md-12 form-group">
 
-									<label class="sr-only">Phone Number</label>
+									<label>Phone Number</label>
 									<input id="text" type="text" class="form-control intput-lg @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter Phone Number" >
                                     @error('phone')
                                         <span class="invalid-feedback" role="alert">
@@ -61,7 +62,7 @@
 								</div>
 
 								<div class="col-md-12 form-group">
-									<label class="sr-only">Password</label>
+									<label>Password</label>
                                     <input id="passwordj" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Enter Password">
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -71,7 +72,7 @@
 								</div>
 
                                 <div class="col-md-12 form-group">
-									<label class="sr-only">Confirm Password</label>
+									<label>Confirm Password</label>
                                     <input id="passwordh" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required placeholder="Repeat Password">
                                     {{-- @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -81,10 +82,28 @@
 								</div>
 
                                 <div class="col-md-12 form-group">
+                                    <label>How did you hear about Freebyz.com</label>
+                                   <select class="form-control" name="source" required>
+                                        <option value="">Select One</option>
+                                        <option>Facebook</option>
+                                        <option>WhatsApp</option>
+                                        <option>Youtube</option>
+                                        <option>Instagram</option>
+                                        <option>Twitter</option>
+                                        <option>Online Ads</option>
+                                        <option>Referred by a Friend</option>
+                                   </select>
+                                   
+                                </div>
 
-									<label class="sr-only">Referral Name</label>
-									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->name }}" required readonly>
+                                <div class="col-md-12 form-group">
+
+									<label>Referral Code</label>
+									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->referral_code }}" required readonly>
 								</div>
+                                <div class="col-md-12 form-group">
+                                    <input type="checkbox" name="terms" required> <span>Agree with the <a href="{{ url('terms') }}">Terms and Conditions</a></span> 
+                                </div>
 
                                 <input hidden name="ref_id" value="{{ $name->id }}">
 								

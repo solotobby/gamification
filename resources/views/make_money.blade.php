@@ -25,8 +25,14 @@
 						<div class="contact-person">
 							<h4></h4>
 							<p>
+                                Welcome to Freebyz<br>
 
-
+                                You can earn as much as  10,000 NGN daily when you like, share, comment on a post or play games on Freebyz!
+                               
+                               You can also hire social media workers to engage your posts on your blog and all social media channels for organic growth &  increased visibility for more sales.
+                               
+                               On Freebyz, you earn N250 on each referral using your referral code on your dashboard.<br>
+                               Click <a href="{{ url('register') }}">here</a> to Get started and start making cool cash.
 
                             </p>
 

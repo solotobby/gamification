@@ -132,7 +132,7 @@
               
               <div class="mb-4">
                       <input type="checkbox" name="validate" required class="">
-                      <span><small> I agree that this campaign will be automatically approved after five if i fail to approve it within five (5) days </small></span>
+                      <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it within five (5) days </small></span>
               </div>
 
               {{-- <div class="mb-4">

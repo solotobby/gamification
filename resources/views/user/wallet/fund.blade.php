@@ -9,10 +9,11 @@
           <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
             <!-- Header -->
             <div class="mb-2 text-center">
-              <p class="link-fx fw-bold fs-1">
-                &#8358; {{ auth()->user()->wallet->balance }}
-              </p>
-              <p class="text-uppercase fw-bold fs-sm text-muted">Wallet Balance</p>
+                <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
+                <p class="link-fx fw-bold fs-1">
+                    &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+                </p>
+                <p>Wallet Balance</p>
             </div>
             <!-- END Header -->
 
@@ -21,7 +22,7 @@
                 @csrf
               <div class="mb-4">
                 <div class="input-group input-group-lg">
-                  <input type="text" class="form-control" id="reminder-credential" name="balance" placeholder="Enter Amount">
+                  <input type="number" class="form-control" id="reminder-credential" name="balance" min="1000" placeholder="Enter Amount" required>
                 </div>
               </div>
               <div class="text-center mb-4">

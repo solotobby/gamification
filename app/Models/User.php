@@ -26,7 +26,8 @@ class User extends Authenticatable
         'twitter_id',
         'avatar',
         'role',
-        'referral_code'
+        'referral_code', 
+        'source'
     ];
 
     /**

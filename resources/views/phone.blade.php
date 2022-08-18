@@ -50,9 +50,23 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-								</div>								
+								</div>
+                                <div class="col-md-12 form-group">
+                                    <label>How did you hear about Freebyz.com</label>
+                                   <select class="form-control" name="source" required>
+                                        <option value="">Select One</option>
+                                        <option>Facebook</option>
+                                        <option>WhatsApp</option>
+                                        <option>Youtube</option>
+                                        <option>Instagram</option>
+                                        <option>Twitter</option>
+                                        <option>Online Ads</option>
+                                        <option>Referred by a Friend</option>
+                                   </select>
+                                   
+                                </div>								
                                 <div class="col-md-12 text-center">
-									<button type="submit" class="btn btn-lg btn-round btn-dark"> Save Number </button>
+									<button type="submit" class="btn btn-lg btn-round btn-dark"> Complete Registration</button>
 								</div>
 
 							</div><!-- .row -->

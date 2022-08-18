@@ -28,7 +28,7 @@
                                 @endif
                             
                                 @if(Auth::user())
-                                    <li><a href="{{ route('score.list') }}">Score List</a></li>
+                                    {{-- <li><a href="{{ route('score.list') }}">Score List</a></li> --}}
                                     <li><a href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">
@@ -61,7 +61,7 @@
                                 @endif
 
                                 @if(Auth::user())
-                                    <li><a href="{{ route('score.list') }}">Score List</a></li>
+                                    {{-- <li><a href="{{ route('score.list') }}">Score List</a></li> --}}
                                     <li><a href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">

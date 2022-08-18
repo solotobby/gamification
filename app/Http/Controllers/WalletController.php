@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PaymentTransaction;
 use App\Models\Wallet;
+use App\Models\Withrawal;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -174,6 +176,23 @@ class WalletController extends Controller
 
     public function storeWithdraw(Request $request)
     {
-        return $request;
+        
+        $nextFriday = Carbon::now()->endOfWeek('-2'); //get the friday of the week
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($wallet->balance < $request->balance)
+        {
+            return back()->with('error', 'Insufficient balance');
+        }
+        $wallet->balance -= $request->balance;
+        $wallet->save();
+
+        Withrawal::create([
+            'user_id' => auth()->user()->id, 
+            'amount' => $request->balance,
+            'next_payment_date' => $nextFriday
+        ]);
+
+        return back()->with('success', 'Withdrawal Successfully queued');
+
     }
 }

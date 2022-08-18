@@ -74,12 +74,16 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+            'source' => $data['source'],
             'password' => Hash::make($data['password']),
         ]);
         $user->referral_code = Str::random(7);
         $user->save();
         Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
-        \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+        if($ref_id != 'null'){
+            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+        }
+       
         return $user;
     }
 

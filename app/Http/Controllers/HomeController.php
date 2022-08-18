@@ -46,7 +46,12 @@ class HomeController extends Controller
 
     public function userHome()
     {
-        $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
+        $user = User::where('id', auth()->user()->id)->first();
+        if($user->is_verified == true){
+            $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
+        }else{
+            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
+        }
         return view('user.home', ['available_jobs' => $available_jobs]);
     }
 
@@ -68,6 +73,7 @@ class HomeController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
         $user->phone = $request->phone;
+        $user->source = $request->source;
         $user->save();
         return redirect('/home');
     }
