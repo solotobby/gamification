@@ -30,7 +30,7 @@
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('user.list') }}">
-              <span class="nav-main-link-name">Create</span>
+              <span class="nav-main-link-name">View</span>
             </a>
           </li>
         </ul>

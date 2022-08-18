@@ -46,7 +46,11 @@ class HomeController extends Controller
 
     public function userHome()
     {
+
         $user = User::where('id', auth()->user()->id)->first();
+        if($user->phone == ''){
+            return view('phone');
+        }
         if($user->is_verified == true){
             $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         }else{

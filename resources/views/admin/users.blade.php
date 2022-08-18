@@ -35,7 +35,7 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
-                                    <td>{{ $user->is_verified == "1" ? 'Active' : 'Not Active' }}</td>
+                                    <td>{{ $user->is_verified == "1" ? 'Verified' : 'Not Verified' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                                 </tr>
                             @endforeach
