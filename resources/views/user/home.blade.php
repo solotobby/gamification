@@ -24,7 +24,7 @@
       
       <div class="d-flex justify-content-center align-items-center mt-5">
         <div class="px-2 px-sm-5">
-          <p class="fs-3 text-dark mb-0">&#8358; {{ number_format(auth()->user()->wallet->balance) }}</p>
+          <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
           <p class="text-muted mb-0">
             Wallet Balance
           </p>
@@ -36,7 +36,7 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">0</p>
+          <p class="fs-3 text-dark mb-0">{{ $completed }}</p>
           <p class="text-muted mb-0">
             Completed Jobs
           </p>

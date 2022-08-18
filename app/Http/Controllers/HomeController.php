@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use AfricasTalking\SDK\AfricasTalking;
 use AfricasTalking\SDK\Airtime;
 use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\Reward;
 use App\Models\Wallet;
 use Nette\Utils\Random;
@@ -56,7 +57,8 @@ class HomeController extends Controller
         }else{
             $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
         }
-        return view('user.home', ['available_jobs' => $available_jobs]);
+        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
+        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed]);
     }
 
     public function adminHome()

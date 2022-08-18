@@ -52,16 +52,16 @@
 <div class="slider-section">
 	
 	<div class="slider-active owl-carousel">
-		<div class="single-slider"  style="background-image: url({{ asset('asset/img/freebyz_3.jpg') }});">
+		<div class="single-slider"  style="background-image: url({{ asset('asset/img/cup.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2> <br /><br /><br /><br />
+					<h2 style="color: aliceblue">Earn &#8358;10,000+ Daily on Social Media Jobs...
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}
-					{{-- </h2> --}}
-					{{-- <p>Design | Development | Branding</p> --}}
-					{{-- <a class="btn" href="#">About Us</a> --}}
+					</h2>
+					{{-- <p>doing social work</p> --}}
+					<a class="btn" href="{{ url('register') }}">Get Started Now</a>
 				</div>
 			</div>
 		</div>
@@ -78,10 +78,10 @@
 				{{-- </div>
 			</div>
 		</div> --}}
-		<div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_1.jpg') }});">
+		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_1.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2><br /><br /><br /><br /> 
+					<h2><br /><br /><br /><br />  --}}
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}
@@ -89,9 +89,9 @@
 					{{-- <p>Design | Development | Branding</p>
 					<a class="btn" href="#">About Us</a> --}}
 				{{-- {{-- </div> --}}
-			</div>
+			{{-- </div>
 		</div>
-	</div> 
+	</div>  --}}
 </div>
 <!-- basic-slider end -->
 
@@ -222,9 +222,9 @@
 					<div class="col-md-3 col-sm-3 col-xs-12 text-right">
 						<div class="call-to-action">
                             @if(Auth::user())
-                                    <a class="btn btn-large" href="{{ route('instruction') }}">Play Game</a>
+                                    {{-- <a class="btn btn-large" href="{{ route('instruction') }}">Play Game</a> --}}
                                 @else
-                                    <a class="btn btn-large" href="{{ url('auth/google') }}">Get Started</a>
+                                    <a class="btn btn-large" href="{{ url('register') }}">Get Started</a>
                             @endif
 						</div>
 					</div>

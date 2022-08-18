@@ -29,7 +29,7 @@
               @csrf
             <div class="mb-4">
               <div class="input-group input-group-lg">
-                <input type="number" class="form-control" id="reminder-credential" min="2000" name="balance" placeholder="Enter Amount">
+                <input type="number" class="form-control" id="reminder-credential" min="2000" name="balance" placeholder="Enter Amount" required>
               </div>
             </div>
             <div class="text-center mb-4">
@@ -39,7 +39,7 @@
               </button>
               @else
               <button type="button" class="btn btn-primary disabled">
-                <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Withdraw Fund
+                <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Withdrawal Not Activated
               </button>
               @endif
             </div>
