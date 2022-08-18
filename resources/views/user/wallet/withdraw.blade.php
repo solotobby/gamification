@@ -45,7 +45,7 @@
             </div>
            
           </form>
-          <p style="color: brown"><i>Note: Withdrawal are made every friday of the week. Only verified user can withdraw</i> </p>
+          <p style="color: brown"><i>Note: Withdrawals are made every friday of the week. Only verified users can withdraw</i> </p>
           <!-- END Reminder Form -->
         </div>
         

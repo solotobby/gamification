@@ -60,6 +60,28 @@
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available jobs
               </h2>
+
+              <div class="bg-body-dark mb-5">
+                <div class="content content-full text-center">
+                  <div class="py-3">
+                    <h3 class="mb-2 text-center">
+                      Get Access to More Jobs
+                    </h3>
+                    <h4 class="fw-normal text-muted text-center">
+                   Only verified users have unlimited access to jobs! 
+                    </h4>
+                    @if(auth()->user()->is_verified == '0')
+                    <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
+                      Get Verified Now!
+                    </a>
+                    @else
+                    <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
+                      Verification Successfull
+                    </a>
+                    @endif
+                  </div>
+              </div>
+              
   
             <!-- Jobs -->
             @foreach ($available_jobs as $job)
@@ -127,7 +149,7 @@
                 </a>
                 @endif
               </div>
-            </div>
+          </div>
     </div>
           <!-- END Call to Action -->
 
