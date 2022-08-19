@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SubmitJob;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CampaignController extends Controller
 {
@@ -142,8 +144,8 @@ class CampaignController extends Controller
     public function postCampaignWork(Request $request)
     {
         $campaignWorker = CampaignWorker::create($request->all());
-        $campaignWorker->save();
-        return back()->with('success', 'Campaign Submitted Successfully');
+        // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
+        return back()->with('success', 'Job Submitted Successfully');
     }
 
     public function mySubmittedCampaign($id)

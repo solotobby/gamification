@@ -55,7 +55,7 @@ class HomeController extends Controller
         if($user->is_verified == true){
             $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         }else{
-            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
+            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 20)->orderBy('created_at', 'desc')->get();
         }
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed]);
