@@ -102,7 +102,7 @@
 									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->referral_code }}" required readonly>
 								</div>
                                 <div class="col-md-12 form-group">
-                                    <input type="checkbox" name="terms" required> <span>Agree with the <a href="{{ url('terms') }}">Terms and Conditions</a></span> 
+                                    <input type="checkbox" name="terms" required> <span>I agree with the <a href="{{ url('terms') }}">Terms and Conditions</a></span> 
                                 </div>
 
                                 <input hidden name="ref_id" value="{{ $name->id }}">

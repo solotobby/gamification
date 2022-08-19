@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PaymentTransaction;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\Withrawal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -106,6 +107,18 @@ class UserController extends Controller
     public function error()
     {
         return view('user.error');
+    }
+
+    public function transactions()
+    {
+        $list = PaymentTransaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('user.transactions', ['lists' => $list]);
+    }
+
+    public function withdrawal_requests()
+    {
+        $list = Withrawal::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('user.wallet.withdrawal_requests', ['lists' => $list]);
     }
 
 }

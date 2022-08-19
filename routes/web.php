@@ -71,6 +71,8 @@ Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upg
 
 Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
 Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
+Route::get('transactions', [\App\Http\Controllers\UserController::class, 'transactions'])->name('transactions');
+Route::get('withrawal/requests', [\App\Http\Controllers\UserController::class, 'withdrawal_requests'])->name('withdraw.requests');
 
 Route::get('approved/campaigns', [\App\Http\Controllers\CampaignController::class, 'approvedCampaigns']);
 Route::get('denied/campaigns', [\App\Http\Controllers\CampaignController::class, 'deniedCampaigns']);

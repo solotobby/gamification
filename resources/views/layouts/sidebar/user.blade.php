@@ -79,6 +79,11 @@
               <span class="nav-main-link-name">Withdraw</span>
             </a>
           </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('withdraw.requests') }}">
+              <span class="nav-main-link-name">Withdrawal Requests</span>
+            </a>
+          </li>
         </ul>
       </li>
 
@@ -101,6 +106,14 @@
           </li> --}}
         </ul>
       </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('transactions') }}">
+          <i class="nav-main-link-icon fa fa-table"></i>
+          <span class="nav-main-link-name">Transactions List</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+
 
     </ul>
   </div>
