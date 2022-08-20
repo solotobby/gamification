@@ -16,6 +16,10 @@ class Campaign extends Model
         'campaign_amount', 'description', 'proof', 'total_amount', 'is_paid', 'approved', 'status', 'job_id'];
 
     
+        public function user(){
+            return $this->belongsTo(User::class);
+        }
+        
         public function campaignType()
         {
             return $this->belongsTo(Category::class, 'campaign_type');

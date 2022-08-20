@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApproveCampaign;
+use App\Mail\CreateCampaign;
 use App\Mail\SubmitJob;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
@@ -121,17 +123,16 @@ class CampaignController extends Controller
             $campaign = Campaign::create($request->all());
             $campaign->status = 'Live';
             $campaign->save();
-           
             $wallet->balance -= $total;
             $wallet->save();
-
-            
+            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+            return back()->with('success', 'Campaign Posted Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
         
 
-        return back()->with('success', 'Campaign Posted Successfully');
+        // return back()->with('success', 'Campaign Posted Successfully');
     }
 
     public function viewCampaign($job_id)
@@ -144,7 +145,7 @@ class CampaignController extends Controller
     public function postCampaignWork(Request $request)
     {
         $campaignWorker = CampaignWorker::create($request->all());
-        // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
+        Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
         return back()->with('success', 'Job Submitted Successfully');
     }
 
@@ -172,6 +173,11 @@ class CampaignController extends Controller
        $wallet = Wallet::where('user_id', $approve->user_id)->first();
        $wallet->balance += $approve->amount;
        $wallet->save();
+
+       $subject = 'Job Approved';
+       $status = 'Approved';
+       Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+
        return back()->with('success', 'Campaign Approve Successfully');
 
     }
@@ -182,6 +188,10 @@ class CampaignController extends Controller
         $deny->status = 'Denied';
         $deny->reason = 'Denied by User';
         $deny->save();
+        $subject = 'Job Denied';
+        $status = 'Denied';
+        Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
+
         return back()->with('error', 'Campaign Denied Successfully');
     }
 
