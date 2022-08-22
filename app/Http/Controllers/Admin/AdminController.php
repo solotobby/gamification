@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\Games;
+use App\Models\PaymentTransaction;
 use App\Models\Question;
 use App\Models\Reward;
 use App\Models\User;
@@ -180,6 +181,12 @@ class AdminController extends Controller
     {
         $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
         return view('admin.users', ['users' => $users]);
+    }
+
+    public function adminTransaction()
+    {
+        $list = PaymentTransaction::where('user_type', 'admin')->orderBy('created_at', 'desc')->get();
+        return view('admin.transactions', ['lists' => $list]);
     }
 
    

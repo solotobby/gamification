@@ -108,8 +108,45 @@ class UserController extends Controller
                 'type' => 'referer_bonus',
                 'description' => 'Referer Bonus from '.auth()->user()->name
             ]);
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += 250;
+            $adminWallet->save();
+            //Admin Transaction Tablw
+            PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 250,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'referer_bonus',
+                'description' => 'Referer Bonus from '.$user->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+
            }else{
-            /// nothing happens
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += 500;
+            $adminWallet->save();
+             //Admin Transaction Tablw
+             PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 500,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'direct_referer_bonus',
+                'description' => 'Direct Referer Bonus from '.$user->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+           
            }
            return redirect('success');
 
@@ -132,7 +169,7 @@ class UserController extends Controller
 
     public function transactions()
     {
-        $list = PaymentTransaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('user_type', 'regular')->orderBy('created_at', 'desc')->get();
         return view('user.transactions', ['lists' => $list]);
     }
 

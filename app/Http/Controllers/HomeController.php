@@ -15,6 +15,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use AfricasTalking\SDK\Airtime;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Wallet;
@@ -73,10 +74,12 @@ class HomeController extends Controller
         $user = User::where('role', 'regular')->get();
         $wallet = Wallet::all();
         $ref_rev = Referral::where('is_paid', true)->count();
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev]);
+        $transactions = PaymentTransaction::where('user_type', 'admin')->get();
+        $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
 
     }
-
+ 
     public function savePhoneInformation(Request $request)
     {
         $this->validate($request, [

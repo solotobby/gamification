@@ -121,3 +121,4 @@ Route::post('post/category', [\App\Http\Controllers\CategoryController::class, '
 Route::post('post/subcategory', [\App\Http\Controllers\CategoryController::class, 'storeSubcategory'])->name('store.subcategory');
 //User List
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
+Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');

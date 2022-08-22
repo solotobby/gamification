@@ -139,6 +139,25 @@ class CampaignController extends Controller
                 'type' => 'campaign_posted',
                 'description' => $campaign->post_title.' Campaign'
             ]);
+
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += $percent;
+            $adminWallet->save();
+             //Admin Transaction Tablw
+             PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $percent,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'campaign_revenue',
+                'description' => 'Campaign revenue from '.auth()->user()->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
             // Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
             return back()->with('success', 'Campaign Posted Successfully');
         }else{
