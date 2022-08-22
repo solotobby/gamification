@@ -67,7 +67,7 @@ class HomeController extends Controller
         // $games = Games::orderBy('id', 'desc')->get();
         // $questions = Question::all()->count();
         // $gameplayed = Answer::select('id')->count();
-        $campaigns = Campaign::all();
+        $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
         $wallet = Wallet::all();
