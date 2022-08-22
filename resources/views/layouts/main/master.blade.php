@@ -24,7 +24,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('src/assets/media/favicons/favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('src/assets/media/favicons/apple-touch-icon-180x180.png') }}">
     <!-- END Icons -->
-
+    <link rel="stylesheet" href="{{ asset('src/assets/js/plugins/slick-carousel/slick.css')}}">
+    <link rel="stylesheet" href="{{ asset('src/assets/js/plugins/slick-carousel/slick-theme.css')}}">
     <!-- Stylesheets -->
     <!-- Fonts and Dashmix framework -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
