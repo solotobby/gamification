@@ -15,6 +15,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use AfricasTalking\SDK\Airtime;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Wallet;
 use Nette\Utils\Random;
@@ -71,7 +72,8 @@ class HomeController extends Controller
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
         $wallet = Wallet::all();
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet]);
+        $ref_rev = Referral::where('is_paid', true)->count();
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev]);
 
     }
 

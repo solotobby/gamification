@@ -15,6 +15,7 @@ class ReferralController extends Controller
     {
         $user = auth()->user();
         $list = $user->referees;
-        return view('user.referral.all', ['lists' => $list]);
+        $verified = $user->referees()->where('is_verified', true)->count();
+        return view('user.referral.all', ['lists' => $list, 'verified' => $verified]);
     }
 }

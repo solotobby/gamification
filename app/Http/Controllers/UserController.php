@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentTransaction;
+use App\Models\Referral;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
@@ -81,12 +83,31 @@ class UserController extends Controller
             $user->is_verified = true;
             $user->save();
 
-           $referee =  \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+           $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+           
 
            if($referee){
             $wallet = Wallet::where('user_id', $referee->referee_id)->first();
             $wallet->balance += '250';
             $wallet->save();
+
+            $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+            $refereeUpdate->is_paid = true;
+            $refereeUpdate->save();
+
+            $referee_user = User::where('id', $referee->referee_id)->first();
+            ///Transactions
+            PaymentTransaction::create([
+                'user_id' => $referee_user->id,///auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 250,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'referer_bonus',
+                'description' => 'Referer Bonus from '.auth()->user()->name
+            ]);
            }else{
             /// nothing happens
            }

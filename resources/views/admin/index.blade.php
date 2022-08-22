@@ -180,6 +180,77 @@
           </div>
         </div>
       </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+          <div class="block-content block-content-full">
+            <div class="item rounded-3 bg-body mx-auto my-3">
+              <i class="fa fa-wallet fa-lg text-primary"></i>
+            </div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($campaigns->sum('total_amount') * 0.5) }}</div>
+            <div class="text-muted mb-3">Campaign Revenue</div>
+            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
+              <i class="fa fa-caret-down me-1"></i>
+              {{-- &#8358;{{ number_format($campaigns->sum('total_amount') * 0.5) }} --}}
+            </div>
+          </div>
+          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
+            <a class="fw-medium" href="javascript:void(0)">
+              Withdrawal options
+              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+          <div class="block-content block-content-full">
+            <div class="item rounded-3 bg-body mx-auto my-3">
+              <i class="fa fa-wallet fa-lg text-primary"></i>
+            </div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($ref_rev * 250) }}</div>
+            <div class="text-muted mb-3">Referral Revenue</div>
+            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
+              <i class="fa fa-caret-down me-1"></i>
+              {{ number_format($ref_rev) }}
+              
+            </div>
+          </div>
+          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
+            <a class="fw-medium" href="javascript:void(0)">
+              Withdrawal options
+              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+          <div class="block-content block-content-full">
+            <div class="item rounded-3 bg-body mx-auto my-3">
+              <i class="fa fa-wallet fa-lg text-primary"></i>
+            </div>
+            <?php 
+            $verifiedUser =  $users->where('is_verified')->count() - $ref_rev;
+            
+            ?>
+            <div class="fs-1 fw-bold"> &#8358; {{ $verifiedUser * 500 }}</div>
+            <div class="text-muted mb-3">Direct Reg. Revenue</div>
+            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
+              <i class="fa fa-caret-down me-1"></i>
+              {{-- {{ number_format($ref_rev) }} --}}
+              {{ $users->where('is_verified')->count() - $ref_rev }}
+              
+            </div>
+          </div>
+          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
+            <a class="fw-medium" href="javascript:void(0)">
+              Withdrawal options
+              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
 

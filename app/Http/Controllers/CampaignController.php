@@ -8,6 +8,7 @@ use App\Mail\SubmitJob;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
+use App\Models\PaymentTransaction;
 use App\Models\SubCategory;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -125,6 +126,19 @@ class CampaignController extends Controller
             $campaign->save();
             $wallet->balance -= $total;
             $wallet->save();
+
+            $ref = time();
+            PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => $campaign->id,
+                'reference' => $ref,
+                'amount' => $total,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'campaign_posted',
+                'description' => $campaign->post_title.' Campaign'
+            ]);
             // Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
             return back()->with('success', 'Campaign Posted Successfully');
         }else{
