@@ -178,7 +178,7 @@
                              
                           </p>
                           <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
-                            More Info <i class="fa fa-arrow-right ms-1"></i>
+                            Watch Video Guide <i class="fa fa-arrow-right ms-1"></i>
                           </button>
                         </div>
                         <div class="slick-slide p-5">
