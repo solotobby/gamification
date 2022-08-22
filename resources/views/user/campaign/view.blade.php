@@ -169,7 +169,6 @@
 
                       <?php 
                        $completed_count = $campaign->completed()->where('status', 'Approved')->count();
-
                       ?>
                       @if($completed_count == $campaign->number_of_staff)
                       <div class="block-content">
@@ -177,7 +176,7 @@
                           <div class="col-md-12">
                               
                               <h4 class="fw-normal text-muted text-center">
-                                  This campaign has reachec maximum worker
+                                  This campaign has reached maximum worker.
                               </h4>
                              
                           </div>

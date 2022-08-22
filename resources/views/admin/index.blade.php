@@ -169,7 +169,7 @@
             <div class="text-muted mb-3">Verified Earnings</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
               <i class="fa fa-caret-down me-1"></i>
-              &#8358;{{ number_format($wallet->sum('balance')) }}
+              &#8358;{{ number_format($wallet->where('user_type', 'regular')->sum('balance')) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
