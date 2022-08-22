@@ -101,11 +101,11 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">{{  $userCount }}</div>
+            <div class="fs-1 fw-bold">{{  $users->count() }}</div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              19.2%
+              {{ $users->where('is_verified')->count() }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -122,11 +122,12 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-level-up-alt fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">9000</div>
+            <div class="fs-1 fw-bold">{{ $campaigns->count() }}</div>
             <div class="text-muted mb-3">Total Campaigns</div>
-            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
+            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              2.3%
+              5
+              
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -143,11 +144,11 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">860</div>
-            <div class="text-muted mb-3">Completed Campaigns</div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($campaigns->sum('total_amount')) }}</div>
+            <div class="text-muted mb-3"> Campaigns Value</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              7.9%
+              &#8358;{{ number_format($workers->where('status', 'Approved')->sum('amount')) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -164,11 +165,11 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">$4,920</div>
-            <div class="text-muted mb-3">Total Earnings</div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($users->where('is_verified')->count() * 500) }}</div>
+            <div class="text-muted mb-3">Verified Earnings</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
               <i class="fa fa-caret-down me-1"></i>
-              0.3%
+              &#8358;{{ number_format($wallet->sum('balance')) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -241,7 +242,7 @@
       <!-- END Store Growth -->
 
       <!-- Latest Orders + Stats -->
-      <div class="row">
+      {{-- <div class="row">
         <div class="col-md-8">
           <!--  Latest Orders -->
           <div class="block block-rounded block-mode-loading-refresh">
@@ -496,7 +497,7 @@
           </div>
           <!-- END Stats -->
         </div>
-      </div>
+      </div> --}}
       <!-- END Latest Orders + Stats -->
 
   </div>
