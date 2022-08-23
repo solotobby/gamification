@@ -56,4 +56,9 @@ class GeneralController extends Controller
     {
         return view('make_money');
     }
+
+    public function trackRecord()
+    {
+        return view('track_record');
+    }
 }

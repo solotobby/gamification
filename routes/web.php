@@ -24,6 +24,7 @@ Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterContr
 Route::get('make-money', [\App\Http\Controllers\GeneralController::class, 'make_money']);
 Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
+Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 
 Auth::routes();
 
