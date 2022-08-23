@@ -7,6 +7,7 @@ use App\Models\Referral;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -177,6 +178,75 @@ class UserController extends Controller
     {
         $list = Withrawal::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         return view('user.wallet.withdrawal_requests', ['lists' => $list]);
+    }
+    
+    public function airtimePurchase()
+    {
+        return view('user.wallet.buy_airtime');
+    }
+
+    public function buyAirtime(Request $request){
+        $request->validate([
+            'amount' => 'required|numeric',
+            'phone' => 'required|numeric|digits:11'
+        ]);
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($request->amount > $wallet->balance){
+            return back()->with('error', 'Insurficient balance...');
+        }
+
+        $occurence = PaymentTransaction::where('user_id', auth()->user()->id)->where('type', 'airtime_purchase')->whereDate('created_at', Carbon::today())->sum('amount');
+        if($occurence >= 200){
+            return back()->with('error', 'You have reach your airtime limit today. Try again tomorrow');
+        }
+        $ref = time();
+        $balance = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json-patch+json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+         ])->get('https://api.flutterwave.com/v3/balances/NGN')->throw()['data']['available_balance'];
+
+        if($request->amount > $balance){
+            return back()->with('error', 'An Error Occour while processing airtime');
+        }
+
+        $payload = [
+            "country"=> "NG",
+            "customer"=> '+234'.substr($request->phone, 1),
+            "amount"=> $request->amount,
+            "type"=> "AIRTIME",
+            "reference"=> $ref
+        ];
+       $res =  Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
+        // return $res;
+
+        if($res['status'] == 'success'){
+            $wallet->balance -= $request->amount;
+            $wallet->save();
+
+             //Admin Transaction Tablw
+             PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' =>$ref,
+                'amount' => $request->amount,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'flutterwave',
+                'type' => 'airtime_purchase',
+                'description' => 'Airtime Purchase from '.auth()->user()->name,
+                'tx_type' => 'Debit',
+                'user_type' => 'regular'
+            ]);
+            return back()->with('success', 'Airtime Successfully sent');
+        }else{
+            return back()->with('error', 'An error occoured while processing your airtime');
+        }
+
+
     }
 
 }

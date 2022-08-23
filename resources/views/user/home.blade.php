@@ -194,7 +194,7 @@
                           </iframe> --}}
                          
                           <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
-                            Close <i class="fa fa-check opacity-50 ms-1"></i>
+                            Close <i class="fa fa-times opacity-50 ms-1"></i>
                           </button>
                           
                           {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 2);">

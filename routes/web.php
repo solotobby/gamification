@@ -87,8 +87,8 @@ Route::get('wallet/withdraw', [\App\Http\Controllers\WalletController::class, 'w
 Route::post('store/fund', [\App\Http\Controllers\WalletController::class, 'storeFund'])->name('store.funds');
 Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 'storeWithdraw'])->name('store.withdraw');
 Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
-
-
+Route::get('airtime', [\App\Http\Controllers\UserController::class, 'airtimePurchase'])->name('airtime');
+Route::post('buy/airtime', [\App\Http\Controllers\UserController::class, 'buyAirtime'])->name('buy.airtime');
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
