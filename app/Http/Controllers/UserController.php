@@ -197,7 +197,7 @@ class UserController extends Controller
 
         $occurence = PaymentTransaction::where('user_id', auth()->user()->id)->where('type', 'airtime_purchase')->whereDate('created_at', Carbon::today())->sum('amount');
         if($occurence >= 200){
-            return back()->with('error', 'You have reach your airtime limit today. Try again tomorrow');
+            return back()->with('error', 'You have reached your airtime limit today. Try again tomorrow');
         }
         $ref = time();
         $balance = Http::withHeaders([
