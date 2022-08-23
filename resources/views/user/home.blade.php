@@ -164,6 +164,11 @@
                     </div>
                   </div> --}}
                   <div class="col-md-12">
+                    <div class="p-3 text-end text-md-start">
+                      <a class="fw-semibold text-white" href="#" data-bs-dismiss="modal" aria-label="Close">
+                        Skip Intro
+                      </a>
+                    </div>
                     <div class="bg-body-extra-light shadow-lg">
                       <div class="js-slider slick-dotted-inner" data-dots="true" data-arrows="false" data-infinite="false">
                         <div class="p-5">
@@ -188,9 +193,9 @@
                           src="https://www.youtube.com/embed/tgbNymZ7vqY">
                           </iframe> --}}
                          
-                          {{-- <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
-                            Get Started <i class="fa fa-check opacity-50 ms-1"></i>
-                          </button> --}}
+                          <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
+                            Close <i class="fa fa-check opacity-50 ms-1"></i>
+                          </button>
                           
                           {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 2);">
                             Complete Profile <i class="fa fa-arrow-right ms-1"></i>
