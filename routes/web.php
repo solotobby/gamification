@@ -25,6 +25,7 @@ Route::get('make-money', [\App\Http\Controllers\GeneralController::class, 'make_
 Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
+Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
 
 Auth::routes();
 

@@ -61,4 +61,9 @@ class GeneralController extends Controller
     {
         return view('track_record');
     }
+
+    public function faq()
+    {
+        return view('faq');
+    }
 }
