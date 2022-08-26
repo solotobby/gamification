@@ -216,7 +216,7 @@ class CampaignController extends Controller
         'currency' => 'NGN',
         'channel' => 'paystack',
         'type' => 'campaign_payment',
-        'description' => 'Payment for '.$approve->campaign->post_title,
+        'description' => 'Campaign Payment for '.$approve->campaign->post_title,
         'tx_type' => 'Credit',
         'user_type' => 'regular'
     ]);
