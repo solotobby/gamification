@@ -85,7 +85,7 @@
   
             <!-- Jobs -->
             @foreach ($available_jobs as $job)
-            @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+            @if($job->completed()->count() >= $job->number_of_staff)
             @else
             <div class="block block-rounded">
                 <div class="block-content block-content-full">

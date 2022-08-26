@@ -16,7 +16,7 @@
 							<ul>
 								<li><a href="{{ url('/') }}">Home</a></li>
 								<li><a href="{{ route('goal') }}">Goal</a></li>
-								<li><a href="{{ route('FAQ') }}">FAQ</a></li>
+								<li><a href="{{ route('faq') }}">FAQ</a></li>
                                 <li><a href="{{ route('track.record') }}">Track Rcord</a></li>
 								<li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
 								<li><a href="{{ route('terms') }}">Terms of Use</a></li>

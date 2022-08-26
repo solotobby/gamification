@@ -69,8 +69,12 @@
                         <td>{{ $list->status }}</td>
                         <td>
                             @if($list->status == 'Pending')
-                              <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>
+                            @if($lists->completed()->where('status', 'Approved')->count() >= $list->campaign->number_of_staff)
+                              
                             @else
+                              <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>
+                            @endif
+                              @else
                             <a href="#" class="btn btn-alt-info btn-sm disabled">Completed</a>
                             @endif
                         </td>

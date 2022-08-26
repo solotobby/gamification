@@ -206,6 +206,20 @@ class CampaignController extends Controller
        $wallet = Wallet::where('user_id', $approve->user_id)->first();
        $wallet->balance += $approve->amount;
        $wallet->save();
+       $ref = time();
+       PaymentTransaction::create([
+        'user_id' => $approve->user_id,
+        'campaign_id' => '1',
+        'reference' => $ref,
+        'amount' => $approve->amount,
+        'status' => 'successful',
+        'currency' => 'NGN',
+        'channel' => 'paystack',
+        'type' => 'campaign_payment',
+        'description' => 'Payment for '.$approve->campaign->post_title,
+        'tx_type' => 'Credit',
+        'user_type' => 'regular'
+    ]);
 
        $subject = 'Job Approved';
        $status = 'Approved';
