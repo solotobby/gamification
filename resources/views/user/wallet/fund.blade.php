@@ -22,7 +22,7 @@
                 @csrf
               <div class="mb-4">
                 <div class="input-group input-group-lg">
-                  <input type="number" class="form-control" id="reminder-credential" name="balance" min="1000" placeholder="Enter Amount" required>
+                  <input type="number" class="form-control" id="reminder-credential" name="balance" min="500" placeholder="Enter Amount" required>
                 </div>
               </div>
               <div class="text-center mb-4">

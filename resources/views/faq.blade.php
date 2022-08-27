@@ -30,7 +30,7 @@
                             </p>
 
                             <h4>How can I withdraw my money on Freebyz?</h4>
-							<p>You can withdraw your funds at any time. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is N2000 ($3). Sign up to start earning now.Click on <a href="https:/freebyz.com/register">www.freebyz.com</a> then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with 250 on each friend you refer to Freebyz.
+							<p>You can withdraw your funds at any time. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is &#8358;500. Sign up to start earning now.Click on <a href="https:/freebyz.com/register">www.freebyz.com</a> then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with 250 on each friend you refer to Freebyz.
                             </p>
                             
                             <h4>How do I become an affiliate marketer on Freebyz?</h4>

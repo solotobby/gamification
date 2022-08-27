@@ -114,8 +114,8 @@
                         {!! \Illuminate\Support\Str::words($job->description, 50) !!}
                       </p>
                       <div>
-                        <span class="badge bg-primary">{{  $job->campaignType->name }}</span>
-                        <span class="badge bg-primary">{{ $job->campaignCategory->name }}</span>
+                        <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
+                        <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
                         {{-- <span class="badge bg-primary">Social</span> --}}
                       </div>
                     </div>

@@ -129,91 +129,117 @@
           
         <!-- Similar Jobs -->
             <div class="block block-rounded">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Post Proof of Completion</h3>
-            </div>
-            
-
-                @if($campaign->user_id == auth()->user()->id)
-                <div class="block-content">
+              <div class="block-header block-header-default">
+                  <h3 class="block-title">Post Proof of Completion</h3>
+              </div>
+              @if($campaign->campaign_amount >= 10 && auth()->user()->is_verified != true)
+                  <div class="block-content">
                     <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-info">
-                            You cannot do this campaign because you created it.
-                        </div>
-                    </div>
-                </div>
-                </div>
-                @else
-
-                
-                    @if($completed)
-                        
-                    <div class="block-content">
-                      <div class="row">
                         <div class="col-md-12">
-                            
-                            <h4 class="fw-normal text-muted text-center">
-                                Opps!! You have completed this campaign
-                            </h4>
+                            <div class="alert alert-info">
+                              This is a premium Campaign, please verify to access Campaign
+                            </div>
                             <center>
-                                <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
-                                View Work
+                              <a class="btn btn-hero btn-primary mb-4" href="{{ url('upgrade') }}" data-toggle="click-ripple">
+                                Get Verified
                               </a>
                             </center>
+                            
                         </div>
-                      </div>
                     </div>
+                  </div>
+              @else
 
-                    @else
-
-                      <?php 
-                       $completed_count = $campaign->completed()->where('status', 'Approved')->count();
-                      ?>
-                      @if($completed_count == $campaign->number_of_staff)
-                      <div class="block-content">
-                        <div class="row">
-                          <div class="col-md-12">
-                              
-                              <h4 class="fw-normal text-muted text-center">
-                                  This campaign has reached maximum worker.
-                              </h4>
-                             
-                          </div>
-                        </div>
-                      </div>
-                      @else
+            
+                  {{-- @if(auth()->user()->is_verified == true) --}}
+                  
+                      @if($campaign->user_id == auth()->user()->id)
                         <div class="block-content">
                             <div class="row">
-                            <form action="{{ route('post.campaign.work') }}" method="POST">
-                                @csrf
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="comment" id="js-ckeditor5-classic"></textarea>
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    You cannot do this campaign because you created it.
                                 </div>
-                                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
-                                <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
-
-                                <div class="row mb-4 mt-4">
-                                    <div class="col-lg-6">
-                                    <button type="submit" class="btn btn-alt-primary">
-                                        <i class="fa fa-plus opacity-50 me-1"></i> Submit
-                                    </button>
-                                    </div>
-                                </div>
-                            </form>
                             </div>
-                            
-
                         </div>
-                        @endif
-                    @endif
+                        </div>
+                      @else
+                          @if($completed)
+                              
+                            <div class="block-content">
+                              <div class="row">
+                                <div class="col-md-12">
+                                    
+                                    <h4 class="fw-normal text-muted text-center">
+                                        Opps!! You have completed this campaign
+                                    </h4>
+                                    <center>
+                                        <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
+                                        View Work
+                                      </a>
+                                    </center>
+                                </div>
+                              </div>
+                            </div>
 
-                @endif
-            </div>
-        
+                          @else
+                              <?php 
+                              $completed_count = $campaign->completed()->where('status', 'Approved')->count();
+                              ?>
+                              @if($completed_count == $campaign->number_of_staff)
+                                <div class="block-content">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                        
+                                        <h4 class="fw-normal text-muted text-center">
+                                            This campaign has reached maximum worker.
+                                        </h4>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              @else
+                                  <div class="block-content">
+                                      <div class="row">
+                                      <form action="{{ route('post.campaign.work') }}" method="POST">
+                                          @csrf
+                                          <div class="col-md-12">
+                                              <textarea class="form-control" name="comment" id="js-ckeditor5-classic"></textarea>
+                                          </div>
+                                          <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                          <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
+                                          <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
 
-       
+                                          <div class="row mb-4 mt-4">
+                                              <div class="col-lg-6">
+                                              <button type="submit" class="btn btn-alt-primary">
+                                                  <i class="fa fa-plus opacity-50 me-1"></i> Submit
+                                              </button>
+                                              </div>
+                                          </div>
+                                      </form>
+                                      </div>
+                                      
+
+                                  </div>
+                                @endif
+                          @endif
+
+                      @endif
+                  {{-- @else
+                      <div class="block-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                  You do not qualify for this job
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                  @endif --}}
+
+                  @endif
+              </div>
       </div>
     </div>
   </div>
