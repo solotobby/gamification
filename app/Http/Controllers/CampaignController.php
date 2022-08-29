@@ -177,7 +177,12 @@ class CampaignController extends Controller
 
     public function postCampaignWork(Request $request)
     {
-        $campaignWorker = CampaignWorker::create($request->all());
+       
+        $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
+        if($check){
+            return back()->with('error', 'You have comppleted this campaign before');
+        }
+        CampaignWorker::create($request->all());
         // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
         return back()->with('success', 'Job Submitted Successfully');
     }
