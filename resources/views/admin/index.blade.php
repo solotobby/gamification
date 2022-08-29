@@ -256,7 +256,7 @@
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
            
-            <div class="fs-1 fw-bold"> &#8358; {{ number_format($wal->balance) }}</div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($wal->balance) }}</div>
             <div class="text-muted mb-3">Wallet Balance</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
