@@ -56,6 +56,27 @@
                             <p>You can hire online workers to share your flyers online on Whatsapp status, Whatsapp group, Instagram and other social media platforms at the cheapest rate.
                                 Sign up now on freebyz.com to hire workers instantly.
                             </p>
+                            <h4>I have issues with my card. How can I fund my wallet or verify my account without using my debit can?
+                            </h4>
+                            <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to freebyzcom@gmail.com after payment. 
+                                <br><b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
+                            </p>
+                            <h4> How much can I withdraw from FREEBYZ</h4>
+                            <p>
+                                You can withdraw as low as N500 to your account. Your account number must match the name you used to register on FREEBYZ. You can also use your money to buy airtime/recharge card on FREEBYZ
+                            </p>
+                            <h4>
+                                Can I work and make money on Freebyz without verifying my account?
+                            </h4>
+                            <p>
+                                Yes, you can work and make money on Freebyz without verifying your account but you will only have access to small jobs (not highly paid jobs) and will not be able to withdraw your account because your identity is not verified. Learn more on benefits of verifying your accounts <a href="{{ url('faq') }}" target="_blank">here</a>
+                            </p>
+                            <h4>
+                                How can I hire workers on FREEBYZ?
+                            </h4>
+                            <p>
+                                To hire workers on Freebyz, sign up or login to your account and select ‘post campaign’. You will be able to select the available job categories and then hire the workers.
+                            </p>
 						</div>
 					</div>
 				</div>
