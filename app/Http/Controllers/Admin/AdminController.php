@@ -189,5 +189,10 @@ class AdminController extends Controller
         return view('admin.transactions', ['lists' => $list]);
     }
 
+    public function userInfo($id)
+    {
+        return $id;
+    }
+
    
 }
