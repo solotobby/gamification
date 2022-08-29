@@ -24,7 +24,10 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Job List</h3>
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->completed->count() }} 
+          | Approved - {{ $lists->completed()->where('status', 'Approved')->count() }} 
+          | Denied - {{ $lists->completed()->where('status', 'Denied')->count() }} 
+          | Amount Spent -   &#8358;{{ number_format($lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
