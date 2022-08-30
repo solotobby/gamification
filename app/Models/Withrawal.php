@@ -12,4 +12,9 @@ class Withrawal extends Model
     protected $table = "withrawals"; 
     protected $fillable = ['user_id', 'amount', 'next_payment_date', 'status'];
 
+    public function user()
+    {
+        return  $this->belongsTo(User::class);
+    }
+
 }

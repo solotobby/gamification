@@ -10,6 +10,7 @@ use App\Models\Question;
 use App\Models\Reward;
 use App\Models\User;
 use App\Models\UserScore;
+use App\Models\Withrawal;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
@@ -192,6 +193,12 @@ class AdminController extends Controller
     public function userInfo($id)
     {
         return $id;
+    }
+
+    public function withdrawalRequest()
+    {
+        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->get();
+        return view('admin.withdrawal', ['withdrawals' => $withdrawal]);
     }
 
    

@@ -125,3 +125,4 @@ Route::post('post/subcategory', [\App\Http\Controllers\CategoryController::class
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
+Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');

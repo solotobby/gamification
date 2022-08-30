@@ -42,6 +42,14 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
+          <i class="nav-main-link-icon fa fa-table"></i>
+          <span class="nav-main-link-name">Withdrawal Requests</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+      
 
 
     </ul>
