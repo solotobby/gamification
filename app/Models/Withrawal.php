@@ -10,7 +10,7 @@ class Withrawal extends Model
     use HasFactory;
 
     protected $table = "withrawals"; 
-    protected $fillable = ['user_id', 'amount', 'next_payment_date', 'status'];
+    protected $fillable = ['user_id', 'amount', 'next_payment_date', 'status', 'currency', 'channel'];
 
     public function user()
     {
