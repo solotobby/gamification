@@ -132,7 +132,7 @@
               <div class="block-header block-header-default">
                   <h3 class="block-title">Post Proof of Completion</h3>
               </div>
-              @if($campaign->campaign_amount >= 10 && auth()->user()->is_verified != true)
+              {{-- @if($campaign->campaign_amount >= 10 && auth()->user()->is_verified != true)
                   <div class="block-content">
                     <div class="row">
                         <div class="col-md-12">
@@ -148,11 +148,9 @@
                         </div>
                     </div>
                   </div>
-              @else
+              @else --}}
 
-            
-                  {{-- @if(auth()->user()->is_verified == true) --}}
-                  
+               
                       @if($campaign->user_id == auth()->user()->id)
                         <div class="block-content">
                             <div class="row">
@@ -238,7 +236,7 @@
                       </div>
                   @endif --}}
 
-                  @endif
+                  {{-- @endif --}}
               </div>
       </div>
     </div>
