@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="col-md-4 d-flex align-items-center">
-            <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="be_pages_jobs_apply.html">
+            <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="#">
               <div class="block-content block-content-full px-5 py-4">
                 <div class="fs-2 fw-semibold text-white">
                     &#8358; {{$campaign->campaign_amount}}<span class="text-white-50"></span>
