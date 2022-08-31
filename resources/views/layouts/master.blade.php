@@ -110,7 +110,7 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>@yield('title')</title>
-        <meta name="description" content="">
+        <meta name="description" content="afiliate, afiliate marketing, money, cash, online, online money, make money online">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- favicon icon -->
         <link rel="icon" href="{{ asset('asset/img/favicon.png') }}">

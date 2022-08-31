@@ -27,6 +27,15 @@
           <!-- Reminder Form -->
           <form class="js-validation-reminder" action="{{ route('store.withdraw') }}" method="POST">
               @csrf
+              <div class="mb-4">
+                <div class="input-group input-group-lg">
+                  <select name="type" class="form-control" required>
+                    <option value="">Select An Option</option>
+                    <option value="local_withdrawal">Local Withdrawal</option>
+                    <option value="paypal_withdrawal">Paypal Withdrawal</option>
+                  </select>
+                </div>
+              </div>  
             <div class="mb-4">
               <div class="input-group input-group-lg">
                 <input type="number" class="form-control" id="reminder-credential" min="500" name="balance" placeholder="Enter Amount" required>
