@@ -1,0 +1,255 @@
+@extends('layouts.main.master')
+@section('style')
+<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
+<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}">
+
+@endsection
+@section('content')
+
+<div class="content">
+    <!-- Search -->
+    <div class="p-3 bg-body-extra-light rounded push">
+      <form action="be_pages_generic_search.html" method="POST">
+        <div class="input-group input-group-lg">
+          {{$info->name}} | &#8358;{{$info->wallet->balance}}
+        </div>
+      </form>
+    </div>
+    <!-- END Search -->
+
+    <!-- Results -->
+    <div class="block block-rounded">
+      <ul class="nav nav-tabs nav-tabs-block" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="search-classic-tab" data-bs-toggle="tab" data-bs-target="#search-classic" role="tab" aria-controls="search-classic" aria-selected="true">
+            Referees({{$info->referees->count()}})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="search-photos-tab" data-bs-toggle="tab" data-bs-target="#search-photos" role="tab" aria-controls="search-photos" aria-selected="false">
+            Transactions({{ $info->transactions->count() }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="search-customers-tab" data-bs-toggle="tab" data-bs-target="#search-customers" role="tab" aria-controls="search-customers" aria-selected="false">
+            Jobs({{ $info->myJobs->count() }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="search-projects-tab" data-bs-toggle="tab" data-bs-target="#search-projects" role="tab" aria-controls="search-projects" aria-selected="false">
+            Campaigns ({{ $info->myCampaigns->count() }})
+          </button>
+        </li>
+      </ul>
+      <div class="block-content tab-content overflow-hidden">
+        <!-- Classic -->
+        <div class="tab-pane fade show active" id="search-classic" role="tabpanel" aria-labelledby="search-classic-tab">
+          <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            <span class="text-primary fw-bold">{{$info->referees->count()}}</span> Referee 
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Wallet</th>
+                  <th>Status</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @foreach ($info->referees as $inf)
+                  <tr>
+                      <td>
+                        <a href="{{ url('user/'.$inf->id.'/info') }}"> {{$inf->name }}</a>
+                      </td>
+                      <td>
+                         {{ $inf->email }}
+                      </td>
+                      <td>
+                          {{ $inf->phone}}
+                      </td>
+                      <td>
+                        &#8358;{{ number_format($inf->wallet->balance) }}
+                      </td>
+                      <td>
+                          {{ $inf->is_verified == '1' ? 'Verified' : 'Unverified' }}
+                      </td>
+                      <td>
+                          {{ $inf->created_at }}
+                      </td>
+                    </tr>
+                  @endforeach
+                
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <!-- END Classic -->
+
+        <!-- Photos -->
+        <div class="tab-pane fade" id="search-photos" role="tabpanel" aria-labelledby="search-photos-tab">
+          <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            &#8358;<span class="text-primary fw-bold">{{ number_format($info->transactions->where('status', 'successful')->sum('amount')) }}</span> Transaction Value
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Amount</th>
+                  <th>Currency</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @foreach ($info->transactions as $list)
+                  <tr>
+                      <td>
+                        {{ $list->reference }}
+                      </td>
+                      <td>
+                          &#8358;{{ number_format($list->amount) }}
+                      </td>
+                      <td>
+                          {{ $list->currency }}
+                      </td>
+                      <td>
+                          {{ $list->status }}
+                      </td>
+                      <td>
+                          {{ $list->description }}
+                      </td>
+                      <td>
+                          {{ $list->created_at }}
+                      </td>
+                    </tr>
+                  @endforeach
+                
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+        <!-- END Photos -->
+
+        <!-- Customers -->
+        <div class="tab-pane fade" id="search-customers" role="tabpanel" aria-labelledby="search-customers-tab">
+          <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            &#8358;<span class="text-primary fw-bold">{{ $info->myJobs->where('status', 'Approved')->sum('amount') }}</span> Approved Value |  &#8358;<span class="text-primary fw-bold">{{ $info->myJobs->where('status', 'Denied')->sum('amount') }}</span> Denied Value
+          </div>
+          <div class="table-responsive">
+         
+
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                  <tr>
+                    <th>Campaign Name</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>When Done</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    @foreach ($info->myJobs as $job)
+                    <tr>
+                        <td>
+                          {{ $job->campaign->post_title }}
+                        </td>
+                        <td>
+                            &#8358;{{ number_format($job->amount) }}
+                        </td>
+                        <td>
+                            {{ $job->status }}
+                        </td>
+                        
+                        <td>
+                            {{ $job->created_at }}
+                        </td>
+                      </tr>
+                    @endforeach
+                  
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <!-- END Customers -->
+
+        <!-- Projects -->
+        <div class="tab-pane fade" id="search-projects" role="tabpanel" aria-labelledby="search-projects-tab">
+          <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
+          </div>
+       
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                  <tr>
+                    <th>Campaign Name</th>
+                    <th>Unit Amount</th>
+                    <th>No. of Worker</th>
+                    <th>Total Value</th>
+                    <th>When Done</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    @foreach ($info->myCampaigns as $campaign)
+                    <tr>
+                        <td>
+                          {{ $campaign->post_title }}
+                        </td>
+                        <td>
+                            &#8358;{{ number_format($campaign->campaign_amount) }}
+                        </td>
+                        <td>
+                            {{ $campaign->number_of_staff }}
+                        </td>
+                        <td>
+                            &#8358;{{ number_format($campaign->total_amount) }}
+                        </td>
+                        
+                        <td>
+                            {{ $campaign->created_at }}
+                        </td>
+                      </tr>
+                    @endforeach
+                  
+                </tbody>
+              </table>
+          </div>
+         
+        </div>
+        <!-- END Projects -->
+      </div>
+    </div>
+    <!-- END Results -->
+  </div>
+@endsection
+
+@section('script')
+
+<!-- jQuery (required for DataTables plugin) -->
+<script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
+
+<!-- Page JS Plugins -->
+<script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons-jszip/jszip.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
+
+<!-- Page JS Code -->
+<script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
+@endsection

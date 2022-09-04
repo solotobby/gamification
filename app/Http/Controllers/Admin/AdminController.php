@@ -187,12 +187,18 @@ class AdminController extends Controller
     public function adminTransaction()
     {
         $list = PaymentTransaction::where('user_type', 'admin')->orderBy('created_at', 'desc')->get();
-        return view('admin.transactions', ['lists' => $list]);
+        return view('admin.admin_transactions', ['lists' => $list]);
+    }
+    public function userTransaction()
+    {
+        $list = PaymentTransaction::where('user_type', 'regular')->orderBy('created_at', 'desc')->get();
+        return view('admin.user_transactions', ['lists' => $list]);
     }
 
     public function userInfo($id)
     {
-        return $id;
+        $info = User::where('id', $id)->first();
+        return view('admin.user_info', ['info' => $info]);
     }
 
     public function withdrawalRequest()

@@ -73,5 +73,20 @@ class User extends Authenticatable
         return $this->hasMany(CampaignWorker::class, 'campaign_id');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function myJobs()
+    {
+        return $this->hasMany(CampaignWorker::class);
+    }
+
+    public function myCampaigns()
+    {
+        return $this->hasMany(Campaign::class);
+    }
+
     
 }

@@ -99,6 +99,7 @@
               <tr>
                 <th>#</th>
                 <th>Name</th>
+                <th>Count</th>
                 <th>View</th>
               </tr>
             </thead>
@@ -108,8 +109,52 @@
                 <tr>
                     <td>{{ $i++ }}</td>
                     <td>{{$s->name}}</td>
-                    <td>View</td>
+                    <td>{{ $s->subCate->count() }}</td>
+                    <td>
+                        <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">View</button>
+                    </td>
                 </tr>
+                <div class="modal fade" id="modal-default-popout-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-popout" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">SubCategories</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body pb-1">
+                            <div class="col-xl-12">
+                                <!-- With Badges -->
+                                <div class="block block-rounded">
+                                  <div class="block-header block-header-default">
+                                    <h3 class="block-title">{{ $s->name }}</h3>
+                                  </div>
+                                  <div class="block-content">
+                                    <ul class="list-group push">
+                                        <?php $i = 1; ?>
+                                        @foreach ($s->subCate as $n)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ $i++ }} - {{$n->name}}
+                                            <span class="badge rounded-pill bg-info">&#8358;{{ number_format($n->amount) }}</span>
+                                          </li>
+                                        @endforeach
+                                      
+                                      
+                                    </ul>
+                                  </div>
+                                </div>
+                                <!-- END With Badges -->
+                              </div>
+                            
+                        </div>
+                        
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                        {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                        </div>
+                    </div>
+                    </div>
+                </div>
                 @endforeach
             </tbody>
           </table>

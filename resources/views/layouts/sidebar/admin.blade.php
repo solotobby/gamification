@@ -35,13 +35,24 @@
           </li>
         </ul>
       </li>
+
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('admin.transaction') }}">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-table"></i>
-          <span class="nav-main-link-name">Transaction List</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+          <span class="nav-main-link-name">Transactions</span>
         </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.transaction') }}">
+              <span class="nav-main-link-name">Admin List</span>
+            </a>
+            <a class="nav-main-link" href="{{ route('user.transaction') }}">
+              <span class="nav-main-link-name">Users List</span>
+            </a>
+          </li>
+        </ul>
       </li>
+
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
           <i class="nav-main-link-icon fa fa-table"></i>

@@ -27,7 +27,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Users List</h3>
+        <h3 class="block-title">Users List - {{ $users->count() }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -39,7 +39,7 @@
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
                 <tr>
-                    
+                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -54,7 +54,7 @@
                 <?php $i = 1; ?>
                 @foreach ($users as $user)
                     <tr>
-                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
+                        <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
@@ -77,8 +77,6 @@
 @endsection
 
 @section('script')
-
-<script src="{{asset('src/assets/js/dashmix.app.min.js')}}"></script>
 
 <!-- jQuery (required for DataTables plugin) -->
 <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
