@@ -183,6 +183,11 @@ class AdminController extends Controller
         $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
         return view('admin.users', ['users' => $users]);
     }
+    public function verifiedUserList()
+    {
+        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
+        return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
+    }
 
     public function adminTransaction()
     {
