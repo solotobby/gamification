@@ -116,18 +116,37 @@ class CampaignController extends Controller
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (50 / 100) * $est_amount;
         $total = $est_amount + $percent;
-        [$est_amount, $percent, $total];
+        // [$est_amount, $percent, $total];
         $job_id = rand(10000,10000000);
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        if($wallet->balance >= $total){
-            $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
-            $campaign = Campaign::create($request->all());
-            $campaign->status = 'Live';
-            $campaign->save();
+        //check if the bonus balance is valid
+        if($wallet->bonus >= $total){
+            $wallet->bonus -= $total;
+            $wallet->save();
+            $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
+            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+            return back()->with('success', 'Campaign Posted Successfully');
+        }elseif($wallet->balance >= $total){
             $wallet->balance -= $total;
             $wallet->save();
+            $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
+            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+            return back()->with('success', 'Campaign Posted Successfully');
+        }else{
+            return back()->with('error', 'You do not have suficient funds in your wallet');
+        }
 
-            $ref = time();
+       
+    }
+
+    public function processCampaign($total, $request, $job_id, $wallet, $percent)
+    {
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
+        $campaign = Campaign::create($request->all());
+        $campaign->status = 'Live';
+        $campaign->save();
+
+        $ref = time();
             PaymentTransaction::create([
                 'user_id' => auth()->user()->id,
                 'campaign_id' => $campaign->id,
@@ -158,14 +177,10 @@ class CampaignController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
-            return back()->with('success', 'Campaign Posted Successfully');
-        }else{
-            return back()->with('error', 'You do not have suficient funds in your wallet');
-        }
-        
+           
 
-        // return back()->with('success', 'Campaign Posted Successfully');
+            return $campaign;
+
     }
 
     public function viewCampaign($job_id)

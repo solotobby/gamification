@@ -30,6 +30,12 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
+          <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->bonus) }}</p>
+          <p class="text-muted mb-0">
+            Bonus Balance
+          </p>
+        </div>
+        <div class="px-2 px-sm-5 border-start">
           <p class="fs-3 text-dark mb-0">{{ auth()->user()->referees()->count(); }}</p>
           <p class="text-muted mb-0">
             Referrals
@@ -175,6 +181,54 @@
                     <div class="bg-body-extra-light shadow-lg">
                       <div class="js-slider slick-dotted-inner" data-dots="true" data-arrows="false" data-infinite="false">
                         <div class="p-5">
+                          {{-- <i class="fa fa-user-check fa-3x text-muted my-4"></i> --}}
+                          
+                          {{-- <h3 class="fs-2 fw-light">Let us know your name</h3> --}}
+                          @if(auth()->user()->is_verified == '0')
+
+                          <h3 class="mb-2 text-center">
+                            Get Access to More Jobs
+                          </h3>
+
+                          <h4 class="fw-normal text-muted text-center">
+                            verify your account to enjoy &#8358;1,000 user bonus and unlimited access to funds withdrawal.
+                          </h4>
+
+                          <center>
+                            <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
+                              Get Verified Now!
+                            </a>
+                          </center>
+                          
+                          @else
+                          <h3 class="mb-2 text-center">
+                            Make more Money...
+                          </h3>
+
+                          <h4 class="fw-normal text-muted text-center">
+                            We'll reward you with &#8358;250 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
+                          </h4>
+                          
+                          
+                          <center>{{url('register/'.auth()->user()->referral_code)}}</center>
+
+
+                          @endif
+                          
+                          {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
+                            More About Freebyz.com <i class="fa fa-arrow-right ms-1"></i>
+                          </button> --}}
+                        </div>
+
+                        {{-- <div class="slick-slide p-5">
+                          <iframe width="100%" height="415" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         
+                          <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
+                            Close <i class="fa fa-times opacity-50 ms-1"></i>
+                          </button>
+                        </div> --}}
+
+                        {{-- <div class="slick-slide p-5">
                           <i class="fa fa-award fa-3x text-muted my-4"></i>
                           <h3 class="fs-2 fw-light mb-2">Welcome to your Freebyz.com!</h3>
                           <p class="text-muted">
@@ -185,40 +239,12 @@
 						                  We just want to reward you for every minute you spend on Freebyz!
                              
                           </p>
-                          <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
+                          <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 2);">
                             Watch Video Guide <i class="fa fa-arrow-right ms-1"></i>
                           </button>
-                        </div>
-                        <div class="slick-slide p-5">
-                          <iframe width="100%" height="415" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                         
-                          {{-- <iframe width="420" height="315"
-                          src="https://www.youtube.com/embed/tgbNymZ7vqY">
-                          </iframe> --}}
-                         
-                          <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
-                            Close <i class="fa fa-times opacity-50 ms-1"></i>
-                          </button>
-                          
-                          {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 2);">
-                            Complete Profile <i class="fa fa-arrow-right ms-1"></i>
-                          </button> --}}
-                        </div>
-                        {{-- <div class="slick-slide p-5">
-                          <i class="fa fa-user-check fa-3x text-muted my-4"></i>
-                          <h3 class="fs-2 fw-light">Let us know your name</h3>
-                          <form class="mb-3">
-                            <div class="mb-4">
-                              <input type="text" class="form-control form-control-alt" id="onboard-first-name" name="onboard-first-name" placeholder="Enter your first name..">
-                            </div>
-                            <div class="mb-4">
-                              <input type="text" class="form-control form-control-alt" id="onboard-last-name" name="onboard-last-name" placeholder="Enter your last name..">
-                            </div>
-                          </form>
-                          <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
-                            Get Started <i class="fa fa-check opacity-50 ms-1"></i>
-                          </button>
                         </div> --}}
+
+                       
                       </div>
                     </div>
                   </div>

@@ -80,6 +80,28 @@ class UserController extends Controller
             $fetchPaymentTransaction->status = 'successful';
             $fetchPaymentTransaction->save();
 
+            //credit User with 1,000 bonus
+            $bonus = Wallet::where('user_id', auth()->user()->id)->first();
+            $bonus->bonus += '1000';
+            $bonus->save();
+
+            if($bonus){
+                 //user transction table for bonus 
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => time(),
+                    'amount' => 1000,
+                    'status' => 'successful',
+                    'currency' => 'NGN',
+                    'channel' => 'paystack',
+                    'type' => 'upgrade_bonus',
+                    'description' => 'Verification Bonus for '.auth()->user()->name,
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+            }
+           
             $user = User::where('id', auth()->user()->id)->first();
             $user->is_verified = true;
             $user->save();

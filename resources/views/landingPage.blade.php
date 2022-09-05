@@ -125,12 +125,19 @@
 				<div class="area-title text-center">
 					<h2>Welcome to Freebyz</h2>
 					<p>
+						Freebyz was created for you to make cool cash everyday by doing simple social media jobs on Youtube, Facebook, TikTok, Instagram and other social media platforms. <br>
+						Use Freebyz to answer survey questions, play games and install applications to make money online daily.
+						On Freebyz, you can hire online workers to increase your business visibility and organic growth through engagements on Facebook, Instagram, YouTube, TikTok, WhatsApp and Twitter. 
+						<br>Our workers will engage your post real time to drive massive sales for you.
+						When you tell your friends about Freebyz, We will reward you with N250 on each friend and instant bonus of N5,000 when you reach 50 verified referral limit. 
+					</p>
+					{{-- <p>
 						Freebyz was created for you to make cool cash everyday by doing simple social media jobs 
 						or increasing your business visibility and organic growth through engagements on your
 						 posts on Facebook, Instagram, YouTube, TikTok, WhatsApp and Twitter.<br>
 						On top of that, we reward you with 250 NGN everytime you referral a friend. 
 						We just want to reward you for every minute you spend on Freebyz!
-					</p>
+					</p> --}}
 					 {{-- <p>The platform is created to help build your mind, educate you and then sprinkle a bit of love 
 						 and smile on your faces. No matter how small it is, you are rewarded with airtime, data bundles 
 						 and cash for playing our weekly games. <br>This might look a bit off, but it is what it is! Just play
