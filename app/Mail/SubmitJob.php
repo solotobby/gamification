@@ -17,7 +17,8 @@ class SubmitJob extends Mailable
      *
      * @return void
      */
-    protected $campaignWorker;
+    public $campaignWorker;
+    
     public function __construct($campaignWorker)
     {
         $this->campaignWorker = $campaignWorker;

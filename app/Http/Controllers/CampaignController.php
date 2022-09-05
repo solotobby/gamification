@@ -182,14 +182,18 @@ class CampaignController extends Controller
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
-        CampaignWorker::create($request->all());
-        // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
+        $campaignWorker = CampaignWorker::create($request->all());
+        Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
         return back()->with('success', 'Job Submitted Successfully');
     }
 
     public function mySubmittedCampaign($id)
     {
         $work = CampaignWorker::where('id', $id)->first();
+        if(!$work)
+        {
+            return redirect('home');
+        }
         return view('user.campaign.my_submitted_campaign', ['work' => $work]);
     }
 
