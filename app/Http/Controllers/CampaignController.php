@@ -158,7 +158,7 @@ class CampaignController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-            // Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
             return back()->with('success', 'Campaign Posted Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
@@ -232,7 +232,7 @@ class CampaignController extends Controller
 
        $subject = 'Job Approved';
        $status = 'Approved';
-    //    Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+       Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
 
        return back()->with('success', 'Campaign Approve Successfully');
 
@@ -246,7 +246,7 @@ class CampaignController extends Controller
         $deny->save();
         $subject = 'Job Denied';
         $status = 'Denied';
-        // Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
+        Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
 
         return back()->with('error', 'Campaign Denied Successfully');
     }
