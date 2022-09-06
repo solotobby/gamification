@@ -51,7 +51,7 @@ class UserController extends Controller
             'status' => 'unsuccessful',
             'currency' => 'NGN',
             'channel' => 'paystack',
-            'type' => 'campaign_payment',
+            'type' => 'upgrade_payment',
             'description' => 'Ugrade Payment'
         ]);
         return redirect($url);

@@ -11,7 +11,7 @@
     <div class="p-3 bg-body-extra-light rounded push">
       <form action="be_pages_generic_search.html" method="POST">
         <div class="input-group input-group-lg">
-          {{$info->name}} | &#8358;{{$info->wallet->balance}}
+          {{$info->name}} | &#8358;{{$info->wallet->balance}} | {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}}
         </div>
       </form>
     </div>
@@ -40,6 +40,11 @@
             Campaigns ({{ $info->myCampaigns->count() }})
           </button>
         </li>
+        <li class="nav-item">
+            <button class="nav-link" id="search-project-tab-manage" data-bs-toggle="tab" data-bs-target="#search-project-manage" role="tab" aria-controls="search-project-manage" aria-selected="false">
+              User Management 
+            </button>
+          </li>
       </ul>
       <div class="block-content tab-content overflow-hidden">
         <!-- Classic -->
@@ -228,6 +233,44 @@
          
         </div>
         <!-- END Projects -->
+
+
+        <!-- Manage -->
+        <div class="tab-pane fade" id="search-project-manage" role="tabpanel" aria-labelledby="search-project-tab-manage">
+            <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+              <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
+            </div>
+         
+            <div class="bg-body-dark mb-5">
+
+                @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                <div class="content content-full text-center">
+                  <div class="py-3">
+                    <h3 class="mb-2 text-center">
+                     Manual Verification
+                    </h3>
+                    <h4 class="fw-normal text-muted text-center">
+                    Please Click the Button below to Upgrade User
+                    </h4>
+                    @if($info->is_verified == '0')
+                    <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
+                       Verify User Now!
+                    </a>
+                    @else
+                    <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
+                      Verification Successfull
+                    </a>
+                    @endif
+                  </div>
+              </div>
+           
+          </div>
+          <!-- END Projects -->
       </div>
     </div>
     <!-- END Results -->
