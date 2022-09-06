@@ -27,11 +27,11 @@
            Get Verified...
           </h2>
           <h3 class="fw-light text-muted push text-center">
-            If you get gerified today you will get all the following at no extra cost.
+            If you get verified today you will get all the following at no extra cost.
           </h3>
         </div>
         <div class="row py-3">
-          <div class="col-sm-6 col-md-4 mb-5">
+          <div class="col-sm-6 col-md-3 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-phone text-xeco"></i>
             </div>
@@ -42,7 +42,7 @@
               You will get unlimited access to available jobs including premium ones.  
             </p>
           </div>
-          <div class="col-sm-6 col-md-4 mb-5">
+          <div class="col-sm-6 col-md-3 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-users text-danger"></i>
             </div>
@@ -53,7 +53,7 @@
               You will have unlimited access to hire workers to promote jobs.
             </p>
           </div>
-          <div class="col-sm-6 col-md-4 mb-5">
+          <div class="col-sm-6 col-md-3 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-share text-xinspire"></i>
             </div>
@@ -61,7 +61,20 @@
               Unlimited Withdrawals
             </h4>
             <p class="mb-0 text-muted">
-              Access to withdraw all your earnings and other juicy offers coming up shortly.
+              Access to withdraw all your earnings and other juicy offers coming up shortly. 
+              You'll earn &#8358;12,500 on put friends you refer and we'll reward you with &#8358;5,000 extra.
+            </p>
+          </div>
+          <div class="col-sm-6 col-md-3 mb-5">
+            <div class="my-3">
+              <i class="fa fa-2x fa-hand-paper text-xinspire"></i>
+            </div>
+            <h4 class="h5 mb-2">
+              Manual Withdrawals
+            </h4>
+            <p class="mb-0 text-muted">
+              You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to freebyzcom@gmail.com after payment.
+              <b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
             </p>
           </div>
         </div>
