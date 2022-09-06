@@ -116,7 +116,7 @@ class WalletController extends Controller
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => $amount*100,
-            'channels' => ['card'],
+            'channels' => ['card', 'bank'],
             'currency' => 'NGN',
             'reference' => $ref,
             'callback_url' => env('PAYSTACK_CALLBACK_URL').'/wallet/topup'

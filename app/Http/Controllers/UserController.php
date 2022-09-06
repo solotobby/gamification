@@ -36,7 +36,7 @@ class UserController extends Controller
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => 515*100,
-            'channels' => ['card', 'bank', 'bank_transfer', 'mobile_money'],
+            'channels' => ['card', 'bank'],
             'currency' => 'NGN',
             'reference' => $ref,
             'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
