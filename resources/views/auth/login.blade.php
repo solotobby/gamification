@@ -49,11 +49,11 @@
                                         </span>
                                     @enderror
 
-                                    {{-- @if (Route::has('password.request'))
+                                    @if (Route::has('password.request'))
                                         <a href="{{ route('password.request') }}">
                                             {{ __('Forgot Your Password?') }}
                                         </a>
-                                    @endif --}}
+                                    @endif
 								</div>
 								
 								<div class="col-md-12 text-center">
