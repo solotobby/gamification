@@ -209,7 +209,7 @@ class UserController extends Controller
 
     public function buyAirtime(Request $request){
         $request->validate([
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|max:100',
             'phone' => 'required|numeric|digits:11'
         ]);
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();

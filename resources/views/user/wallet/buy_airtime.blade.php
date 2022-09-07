@@ -45,7 +45,7 @@
               @csrf
             <div class="mb-4">
               <div class="input-group input-group-lg">
-                <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="100" name="amount" value="{{ old('amount') }}" placeholder="Enter Amount" required>
+                <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="50" max="100" name="amount" value="{{ old('amount') }}" placeholder="Enter Amount" required>
               </div>
                 @error('amount')
                     <span class="invalid-feedback" role="alert">
