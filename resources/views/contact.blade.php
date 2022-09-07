@@ -30,7 +30,7 @@
 								and that would solve it....  
 
 							</p>
-							<a href="mailto:freebyzcom@gmail.com">Send Us A Mail Here</a>
+							<a href="mailto:info@dominahl.com">Send Us A Mail Here</a>
 						</div>
 					</div>
 					

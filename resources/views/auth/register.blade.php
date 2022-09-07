@@ -110,6 +110,11 @@
                             <br><br>
 							<a href="{{ url('auth/google') }}" class="btn btn-lg btn-round btn-dark">Register Using Google</a>
 						</div>
+                        <div class="col-md-12 text-center">
+                            <br><br>
+                            <a href="{{ route('login') }}" >Already a registered, Click Here to Login</a>
+
+                        </div>
 						<!-- Ajax response -->
 						<div class="ajax-response text-center"></div>
 					</div>

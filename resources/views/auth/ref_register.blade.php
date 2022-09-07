@@ -110,6 +110,11 @@
 								<div class="col-md-12 text-center">
 									<button type="submit" class="btn btn-lg btn-round btn-dark">Register</button>
 								</div>
+                                <div class="col-md-12 text-center">
+                                    <br><br>
+                                    <a href="{{ route('login') }}" >Already a registered, Click Here to Login</a>
+        
+                                </div>
                                 
                                 	
 
