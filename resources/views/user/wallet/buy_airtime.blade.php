@@ -58,7 +58,7 @@
             <div class="mb-4">
               <div class="input-group">
                 <span class="input-group-text">
-                  Number
+                  <i class="fa fa-phone"></i>
                 </span>
                 <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}" placeholder="Enter phone Number" required>
                 {{-- <input type="text" class="form-control" id="example-group1-input1" name="example-group1-input1"> --}}
