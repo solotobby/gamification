@@ -31,7 +31,7 @@
           </h3>
         </div>
         <div class="row py-3">
-          <div class="col-sm-6 col-md-3 mb-5">
+          <div class="col-sm-6 col-md-6 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-phone text-xeco"></i>
             </div>
@@ -42,7 +42,7 @@
               You will get unlimited access to available jobs including premium ones.  
             </p>
           </div>
-          <div class="col-sm-6 col-md-3 mb-5">
+          <div class="col-sm-6 col-md-6 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-users text-danger"></i>
             </div>
@@ -53,7 +53,9 @@
               You will have unlimited access to hire workers to promote jobs.
             </p>
           </div>
-          <div class="col-sm-6 col-md-3 mb-5">
+        </div>
+        <div class="row py-3">
+          <div class="col-sm-6 col-md-6 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-share text-xinspire"></i>
             </div>
@@ -65,7 +67,7 @@
               You'll earn &#8358;12,500 on put friends you refer and we'll reward you with &#8358;5,000 extra.
             </p>
           </div>
-          <div class="col-sm-6 col-md-3 mb-5">
+          <div class="col-sm-6 col-md-6 mb-5">
             <div class="my-3">
               <i class="fa fa-2x fa-hand-paper text-xinspire"></i>
             </div>
