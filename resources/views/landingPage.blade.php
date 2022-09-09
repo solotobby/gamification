@@ -367,6 +367,80 @@
 				</div>
 			</div>
 		</div>
+		<!-- basic-blog-area -->
+		<div class="basic-blo-area gray-bg pt-90 pb-50">
+			<div class="container">
+				<div class="area-title text-center">
+					<h2>What people are saying</h2>
+					{{-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi tempora veritatis nemo aut ea iusto eos est
+						expedita,
+						quas ab adipisci.</p> --}}
+				</div>
+				<div class="row">
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from Facebook</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										I earn steady income on Freebyz by performing a simple social media tasks, I also use my earnings to buy airtime. It is fast and reliable. Sign up now  to get started 
+									</p>
+								</div>
+								<div class="link-box">
+									- Salau Muhibat Nifemi Oyefusi
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from Facebook</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										With Freebyz, I earn with my social media handles by just liking, follow or simply comment and I get paid, the interesting thing with Freebyz is that you can buy Airtime of your choice with you available balance and receive it instantly. On two occasion, I have bought MTN airtime and got it instantly. Freebyz all the way.
+									</p>
+								</div>
+								<div class="link-box">
+									- Adolphus Augustine Owolo
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		<!-- basic-blog-area end -->
 		
 
 
