@@ -68,7 +68,7 @@
                          {{ $list->status }}
                       </td>
                       <td>
-                        {{ $list->reason }}
+                        {!! $list->reason !!}
                      </td>
                   </tr>
                 @endforeach

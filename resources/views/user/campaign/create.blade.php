@@ -45,6 +45,16 @@
         </div>
     @endif
 
+    @if ($errors->any())
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div>
+    @endif
+
     <form action="{{ route('post.campaign') }}" method="POST" >
         @csrf
       <div class="block block-rounded">
@@ -79,7 +89,7 @@
               <div class="row mb-4">
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Number of Workers</label>
-                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="10" value="10" required>
+                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="20" value="20" required>
                 </div>
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
@@ -134,13 +144,6 @@
                       <input type="checkbox" name="validate" required class="">
                       <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it within five (5) days </small></span>
               </div>
-
-              {{-- <div class="mb-4">
-                  <div class="alert alert-info">
-
-                  </div>
-              </div> --}}
-
               
 
             </div>

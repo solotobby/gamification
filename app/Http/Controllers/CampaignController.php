@@ -177,10 +177,7 @@ class CampaignController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-           
-
             return $campaign;
-
     }
 
     public function viewCampaign($job_id)
@@ -214,9 +211,54 @@ class CampaignController extends Controller
 
     public function activities($id)
     {
-       $cam = Campaign::where('job_id', $id)->first();
-    //    return  $cam->completed;
+       $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
+        if(!$cam){
+            return redirect('home');
+        }
        return view('user.campaign.activities', ['lists' => $cam]);
+    }
+
+    public function campaignDecision(Request $request){
+        $request->validate([
+            'reason' => 'required|string',
+        ]);
+        if($request->action == 'approve'){
+            $approve = CampaignWorker::where('id', $request->id)->first();
+            $approve->status = 'Approved';
+            $approve->reason = $request->reason;
+            $approve->save();
+     
+            $wallet = Wallet::where('user_id', $approve->user_id)->first();
+            $wallet->balance += $approve->amount;
+            $wallet->save();
+            $ref = time();
+            PaymentTransaction::create([
+                'user_id' => $approve->user_id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $approve->amount,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'campaign_payment',
+                'description' => 'Campaign Payment for '.$approve->campaign->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+            $subject = 'Job Approved';
+            $status = 'Approved';
+            Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+            return back()->with('success', 'Campaign Approve Successfully');
+        }else{
+            $deny = CampaignWorker::where('id', $request->id)->first();
+            $deny->status = 'Denied';
+            $deny->reason = $request->reason;;
+            $deny->save();
+            $subject = 'Job Denied';
+            $status = 'Denied';
+            Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
+            return back()->with('error', 'Campaign Denied Successfully');
+        }
     }
 
     public function approveCampaign($id)

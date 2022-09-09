@@ -1,4 +1,12 @@
 @extends('layouts.main.master')
+@section('style')
+<script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
+@endsection
 @section('content')
 
 
@@ -95,8 +103,22 @@
                             <div class="modal-body pb-1">
                                 {!! $list->comment !!}
                                 <hr>
-                                <a href="{{ url('campaign/approve/'.$list->id) }}" class="btn btn-alt-primary btn-lg ml-10"><i class="fa fa-check"></i> Approve </a>
-                                <a href="{{ url('campaign/deny/'.$list->id) }}" class="btn btn-alt-danger btn-lg"><i class="fa fa-times"></i> Deny</a>
+                                <form action="{{ route('campaign.decision') }}" method="POST">
+                                  @csrf
+                                  <div class="mb-4">
+                                    <label class="form-label" for="post-files">Reason</small></label>
+                                        <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+                                  </div>
+                                  <input type="hidden" name="id" value="{{ $list->id }}">
+                                  <div class="mb-4">
+                                    <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
+                                    <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button>
+                                  </div>
+
+
+                                {{-- <a href="{{ url('campaign/approve/'.$list->id) }}" class="btn btn-alt-primary btn-lg ml-10"><i class="fa fa-check"></i> Approve </a>
+                                <a href="{{ url('campaign/deny/'.$list->id) }}" class="btn btn-alt-danger btn-lg"><i class="fa fa-times"></i> Deny</a> --}}
+                                </form>
                                 <br>
                             </div>
                             
@@ -124,5 +146,7 @@
 
 
 @section('script')
+<script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
 @endsection

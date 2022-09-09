@@ -191,7 +191,8 @@
                           </h3>
 
                           <h4 class="fw-normal text-muted text-center">
-                            verify your account to enjoy &#8358;1,000 user bonus and unlimited access to funds withdrawal.
+                            verify your account to enjoy &#8358;1,000 user bonus and unlimited access to withdraw funds. <br>
+                            When you refer up to 50 friends, you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from Freebyz.com.
                           </h4>
 
                           <center>
