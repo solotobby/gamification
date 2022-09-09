@@ -46,8 +46,11 @@
             <thead>
               <tr>
                 <th>Reference</th>
+                <th>User Name</th>
+                <th>Email</th>
                 <th>Amount</th>
                 <th>Currency</th>
+                <th>Tx. Type</th>
                 <th>Status</th>
                 <th>Description</th>
                 <th>When</th>
@@ -60,11 +63,20 @@
                       {{ $list->reference }}
                     </td>
                     <td>
+                      {{ $list->user->name }}
+                    </td>
+                    <td>
+                      {{ $list->user->email }}
+                    </td>
+                    <td>
                         &#8358;{{ number_format($list->amount) }}
                     </td>
                     <td>
                         {{ $list->currency }}
                     </td>
+                    <td>
+                      {{ $list->type}}
+                  </td>
                     <td>
                         {{ $list->status }}
                     </td>
