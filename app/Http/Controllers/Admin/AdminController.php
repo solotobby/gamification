@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Mail\UpgradeUser;
+use App\Models\Campaign;
 use App\Models\Games;
 use App\Models\PaymentTransaction;
 use App\Models\Question;
@@ -326,6 +327,12 @@ class AdminController extends Controller
        //Mail::send($getUser->email)
        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
        return back()->with('success', 'Updrage Successful');
+    }
+
+    public function campaignList()
+    {
+        $campaigns = Campaign::orderBy('created_at', 'ASC')->get();
+        return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
    
