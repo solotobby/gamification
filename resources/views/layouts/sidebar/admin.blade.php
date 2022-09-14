@@ -2,7 +2,7 @@
     <ul class="nav-main">
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('home') }}">
-          <i class="nav-main-link-icon fa fa-location-arrow"></i>
+          <i class="nav-main-link-icon fa fa-home"></i>
           <span class="nav-main-link-name">Dashboard</span>
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
@@ -68,6 +68,21 @@
         <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
           <span class="nav-main-link-name">Withdrawal Requests</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('unapproved') }}">
+          <i class="nav-main-link-icon fa fa-table"></i>
+          <span class="nav-main-link-name">UnApproved Jobs</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('mass.mail') }}">
+          <i class="nav-main-link-icon fa fa-envelope"></i>
+          <span class="nav-main-link-name">Mass Mail</span>
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>

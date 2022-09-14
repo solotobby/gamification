@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
+use App\Mail\ApproveCampaign;
+use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
 use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\Games;
 use App\Models\PaymentTransaction;
 use App\Models\Question;
@@ -326,7 +329,7 @@ class AdminController extends Controller
 
        //Mail::send($getUser->email)
        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
-       return back()->with('success', 'Updrage Successful');
+       return back()->with('success', 'Upgrade Successful');
     }
 
     public function campaignList()
@@ -334,6 +337,74 @@ class AdminController extends Controller
         $campaigns = Campaign::orderBy('created_at', 'ASC')->get();
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
+
+    public function unapprovedJobs()
+    {
+        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->get();
+        return view('admin.unapproved_list', ['campaigns' => $list]); 
+    }
+
+    public function massApproval(Request $request){
+       $ids = $request->id;
+       if(empty($ids)){
+        return back()->with('error', 'Please select at least one item');
+       }
+
+       foreach($ids as $id){
+        $ca = CampaignWorker::where('id', $id)->first();
+        $ca->status = 'Approved';
+        $ca->save();
+        
+        $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        $wallet->balance += $ca->amount;
+        $wallet->save();
+        $ref = time();
+
+        PaymentTransaction::create([
+            'user_id' => $ca->user_id,
+            'campaign_id' => '1',
+            'reference' => $ref,
+            'amount' => $ca->amount,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'campaign_payment',
+            'description' => 'Campaign Payment for '.$ca->campaign->post_title,
+            'tx_type' => 'Credit',
+            'user_type' => 'regular'
+        ]);
+
+       $subject = 'Job Approved';
+       $status = 'Approved';
+       Mail::to($ca->user->email)->send(new ApproveCampaign($ca, $subject, $status));
+
+       }
+       return back()->with('success', 'Mass Approval Successful');
+
+    }
+
+    public function massMail()
+    {
+        return view('admin.mass_mail');
+    }
+
+    public function sendMassMail(Request $request){
+        if($request->type == 'all'){
+            $users = User::where('is_verified', 0)->where('role', 'regular')->get();
+        }else{
+            $users = User::where('is_verified', 1)->where('role', 'regular')->get();
+        }
+
+        $message = $request->message;
+        $subject = $request->subject;
+        foreach($users as $user){
+            Mail::to($user->email)->send(new MassMail($user, $message, $subject));
+        }
+        return back()->with('success', 'Mail Sent Successful');
+    }
+
+    
+
 
    
 }
