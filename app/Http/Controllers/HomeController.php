@@ -285,7 +285,6 @@ class HomeController extends Controller
         if($accountInformation['status'] == 'true')
         {
              $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
-
                 BankInformation::create([
                     'user_id' => auth()->user()->id,
                     'name' => $accountInformation['data']['account_name'],
@@ -295,38 +294,11 @@ class HomeController extends Controller
                     'recipient_code' => $recipientCode['data']['recipient_code'],
                     'currency' => 'NGN'
                 ]);
-                $parameters = Reward::where('name', 'CASH')->first();
-                $amount = $parameters->amount * 100;
-                
-                //transfer the fund
-                $transfer = $this->transferFund($amount, $recipientCode['data']['recipient_code']);
-                if($transfer['status'] == 'false'){
-
-                    if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
-                    {
-                        $userScore = UserScore::where('id', $request->user_score_id)->first();
-                        $userScore->is_redeem = true;
-                        $userScore->save();
-
-                        Transaction::create([
-                            'user_id' => auth()->user()->id,
-                            'game_id' => $userScore->game_id,
-                            'amount' => $transfer['data']['amount'],
-                            'reward_type' => 'CASH',
-                            'reference' => $transfer['data']['reference'],
-                            'transfer_code' => $transfer['data']['transfer_code'],
-                            'recipient' => $transfer['data']['recipient'],
-                            'status' => $transfer['data']['status'],
-                            'currency' => $transfer['data']['currency']
-                        ]);
-                        return redirect('score/list')->with('status', 'Account Information saved successfully and money successfully send');
-                    }
-                }else{
-                    return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later!!!');
-                }
+                return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
         }else{
-            return back()->with('error', 'Sorry We could not save your bank information');
+            return back()->with('error', 'Your bank account is not valid');
         }
+       
     }
 
     public function transferFund($amount, $recipient)

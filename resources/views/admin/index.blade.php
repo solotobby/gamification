@@ -1,67 +1,6 @@
 @extends('layouts.main.master')
 
 @section('content')
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-md-4">
-                    <h2>{{  $userCount }}</h2>
-                    <h5>Users</h5>
-                </div>
-                <div class="col-md-4">
-                    <h2>{{  $questionCount }}</h2>
-                    <h5>Questions</h5>
-                </div>
-                <div class="col-md-4">
-                    <h2>{{  $gamesPlayed }}</h2>
-                    <h5>Games Played</h5>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">{{ __('List of Games') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Winners</th>
-                            <th scope="col">Status</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $i = 1; ?>
-                            @foreach ($games as $game)
-                                <tr>
-                                    <th scope="row">{{ $i++ }}</th>
-                                    <td>{{ $game->name }}</td>
-                                    <td>{{ $game->type }}</td>
-                                    <td>{{ $game->number_of_winners }}</td>
-                                    <td>{{ $game->status == "1" ? 'Active' : 'Not Active' }}</td>
-                                    <td><a href="{{ route('game.status', $game->id) }}" class="btn btn-primary btn-sm">Change Status</a></td>
-                                    <td><a href="{{ route('view.activities', $game->id) }}" class="btn btn-info btn-sm">View Activities</a></td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
@@ -208,7 +147,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold"> &#8358;{{ $tx->where('type', 'referer_bonus')->sum('amount') }}</div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($tx->where('type', 'referer_bonus')->sum('amount')) }}</div>
             <div class="text-muted mb-3">Referral Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -232,7 +171,7 @@
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
            
-            <div class="fs-1 fw-bold"> &#8358;  {{ $tx->where('type', 'direct_referer_bonus')->sum('amount') }}</div>
+            <div class="fs-1 fw-bold"> &#8358;{{ number_format($tx->where('type', 'direct_referer_bonus')->sum('amount')) }}</div>
             <div class="text-muted mb-3">Direct Reg. Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>

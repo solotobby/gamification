@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
+use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
 use App\Models\Wallet;
 use App\Models\Withrawal;
@@ -176,7 +178,13 @@ class WalletController extends Controller
 
     public function storeWithdraw(Request $request)
     {
-        
+       $amount = $request->balance;
+       $percent = 5/100 * $amount;
+       $formatedAm = number_format($percent, 0);
+       $newamount_to_be_withdrawn = $amount - $formatedAm;
+
+       $ref = time();
+
         $nextFriday = Carbon::now()->endOfWeek('-2'); //get the friday of the week
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if($wallet->balance < $request->balance)
@@ -188,10 +196,51 @@ class WalletController extends Controller
 
         Withrawal::create([
             'user_id' => auth()->user()->id, 
-            'amount' => $request->balance,
+            'amount' => $newamount_to_be_withdrawn,
             'next_payment_date' => $nextFriday
         ]);
 
+        PaymentTransaction::create([
+            'user_id' => auth()->user()->id,
+            'campaign_id' => '1',
+            'reference' => time(),
+            'amount' => $newamount_to_be_withdrawn,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'cash_withdrawal',
+            'description' => 'Cash Withdrawal from '.auth()->user()->name,
+            'tx_type' => 'Credit',
+            'user_type' => 'regular'
+        ]);
+
+
+
+        //admin commission
+        $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += $percent;
+            $adminWallet->save();
+            //Admin Transaction Tablw
+            PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $percent,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'withdrawal_commission',
+                'description' => 'Withdrwal Commission from '.auth()->user()->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+
+
+        $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
+        if($bankInformation == null){
+            $bankList = PaystackHelpers::bankList();
+            return view('user.bank_information', ['bankList' => $bankList]);
+        }
         return back()->with('success', 'Withdrawal Successfully queued');
 
     }
