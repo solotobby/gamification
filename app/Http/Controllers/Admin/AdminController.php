@@ -403,8 +403,15 @@ class AdminController extends Controller
         return back()->with('success', 'Mail Sent Successful');
     }
 
-    
-
-
-   
+    public function campaignPending()
+    {
+        $pendingCampaign = Campaign::where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
+        return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
+    }
+    public function campaignStatus($status, $id){
+        $camp = Campaign::find($id);
+        $camp->status = $status;
+        $camp->save();
+        return back()->with('success', 'Campaign Successfully '.$status);
+    }
 }

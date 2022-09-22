@@ -134,17 +134,15 @@ class CampaignController extends Controller
             return back()->with('success', 'Campaign Posted Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
-        }
-
-       
+        }  
     }
 
     public function processCampaign($total, $request, $job_id, $wallet, $percent)
     {
         $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
-        $campaign->status = 'Live';
-        $campaign->save();
+        // $campaign->status = 'Live';
+        // $campaign->save();
 
         $ref = time();
             PaymentTransaction::create([
@@ -158,8 +156,6 @@ class CampaignController extends Controller
                 'type' => 'campaign_posted',
                 'description' => $campaign->post_title.' Campaign'
             ]);
-
-
             $adminWallet = Wallet::where('user_id', '1')->first();
             $adminWallet->balance += $percent;
             $adminWallet->save();

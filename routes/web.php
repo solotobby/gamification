@@ -132,6 +132,8 @@ Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminControl
 Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
+Route::get('campaigns/pending', [App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
+Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');
 
