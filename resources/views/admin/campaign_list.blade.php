@@ -35,6 +35,12 @@
         </div>
       </div>
       <div class="block-content">
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
