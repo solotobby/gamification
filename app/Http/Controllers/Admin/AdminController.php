@@ -334,7 +334,7 @@ class AdminController extends Controller
 
     public function campaignList()
     {
-        $campaigns = Campaign::orderBy('created_at', 'ASC')->get();
+        $campaigns = Campaign::orderBy('created_at', 'DESC')->get();
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
