@@ -53,13 +53,76 @@
                 @foreach ($campaigns as $camp)
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
-                        <td class="fw-semibold"><a href="{{ url('user/'.$camp->id.'/info') }}" target="_blank"> {{$camp->post_title }}</a></td>
+                        <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
                         <td>{{ $camp->user->name }}</td>
                         <td>{{ $camp->number_of_staff }}</td>
                         <td>&#8358;{{ number_format($camp->campaign_amount) }}</td>
                         <td>&#8358;{{ number_format($camp->total_amount) }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
+
+                    <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-popout" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                          <h5 class="modal-title">Info</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+  
+                          <div class="modal-body pb-1">
+                              <div class="col-xl-12">
+                                  <!-- With Badges -->
+                                  <div class="block block-rounded">
+                                    <div class="block-header block-header-default">
+                                      <h3 class="block-title">{{ $camp->post_title }}</h3>
+                                    </div>
+
+                                    <p>
+                                      <h5>Description</h5>
+                                      {!! $camp->description !!}
+                                    </p>
+
+                                    <p>
+                                      <h5>Proof</h5>
+                                      {!! $camp->proof !!}
+                                    </p>
+
+                                    <ul class="list-group push">
+                                      
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                          Category 
+                                          <span class="badge rounded-pill bg-info">{{$camp->campaignType->name}}</span>
+                                      </li>
+
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Sub Category 
+                                        <span class="badge rounded-pill bg-info">{{$camp->campaignCategory->name}}</span>
+                                     </li>
+
+                                     <div class="mb-4 mt-4">
+                                      <a href="{{ url('campaign/status/Approve/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a>
+                                     <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a>
+                                     
+                                      {{-- <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
+                                      <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button> --}}
+                                     </div>
+                                  </ul>
+                                    
+
+
+                                  </div>
+                                  <!-- END With Badges -->
+                                </div>
+                              
+                          </div>
+                          
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                          {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                          </div>
+                      </div>
+                      </div>
+                  </div>
                 @endforeach
               
             </tbody>
