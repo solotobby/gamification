@@ -106,8 +106,8 @@
                                      </li>
 
                                      <div class="mb-4 mt-4">
-                                      <a href="{{ url('campaign/status/Approve/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a>
-                                     <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a>
+                                      {{-- <a href="{{ url('campaign/status/Live/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a> --}}
+                                     {{-- <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a> --}}
                                      
                                       {{-- <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
                                       <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button> --}}
