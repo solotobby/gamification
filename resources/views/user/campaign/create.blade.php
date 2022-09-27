@@ -99,7 +99,7 @@
               </div>
               <hr>
             
-              <h4>Estimated Cost: &#8358; <span id="demo"></span></h4>
+              <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
               
             </div>
           </div>

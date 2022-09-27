@@ -11,6 +11,7 @@ use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
 use App\Models\PaymentTransaction;
+use App\Models\ProductType;
 use App\Models\Question;
 use App\Models\Referral;
 use App\Models\Reward;
@@ -413,5 +414,14 @@ class AdminController extends Controller
         $camp->status = $status;
         $camp->save();
         return back()->with('success', 'Campaign Successfully '.$status);
+    }
+
+    public function marketplaceCreateProduct(){
+        $product_type = ProductType::all();
+        return view('admin.market_place.create', ['product_type' => $product_type]);
+    }
+
+    public function storeMarketplace(Request $request){
+        return $request;
     }
 }

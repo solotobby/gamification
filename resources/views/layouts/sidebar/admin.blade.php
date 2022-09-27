@@ -80,7 +80,7 @@
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            <a class="nav-main-link" href="">
+            <a class="nav-main-link" href="{{ route('marketplace.create.product') }}">
               <span class="nav-main-link-name">Create Product</span>
             </a>
           </li>
