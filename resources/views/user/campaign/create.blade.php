@@ -89,12 +89,11 @@
               <div class="row mb-4">
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Number of Workers</label>
-                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="20" value="20" required>
+                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="15" value="15" required>
                 </div>
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
-                  <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
-                  
+                    <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
                 </div>
               </div>
               <hr>
