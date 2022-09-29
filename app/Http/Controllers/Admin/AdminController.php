@@ -10,6 +10,7 @@ use App\Mail\UpgradeUser;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
+use App\Models\MarketPlaceProduct;
 use App\Models\PaymentTransaction;
 use App\Models\ProductType;
 use App\Models\Question;
@@ -20,6 +21,7 @@ use App\Models\UserScore;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Str;
 use DB;
@@ -422,6 +424,59 @@ class AdminController extends Controller
     }
 
     public function storeMarketplace(Request $request){
-        return $request;
+        // return $request;
+        $this->validate($request, [
+            'banners' => 'image|size:2048|mimes:png,jpeg,gif,jpg',
+            'products' => 'mimes:pm3,mpeg,mp4,3gp,pdf',
+            'name' => 'required|string',
+            'amount' => 'required|numeric',
+        ]);
+
+
+        if($request->hasFile('banner') && $request->hasFile('product')){
+            // $allowedBannerExtension = ['jpeg','png','jpg','gif','svg'];
+            // $allowedProductExtension = ['mp3','mpeg','mp4','3gp', 'pdf'];
+
+            $fileBanner = $request->file('banner');
+            $fileProduct = $request->file('product');
+
+            $Bannername = time() . $fileBanner->getClientOriginalName();
+            $Productname = time() . $fileProduct->getClientOriginalName();
+
+            $filenameExtensionBanner = $fileBanner->getClientOriginalExtension();
+            $filenameExtensionProduct = $fileProduct->getClientOriginalExtension();
+
+            // if ($filenameExtensionBanner != 'jpg' || $filenameExtensionBanner != 'jpeg' || $filenameExtensionBanner != 'png' || $filenameExtensionBanner != 'gif' || $filenameExtensionBanner != 'svg') {
+            //     return back()->with('error', 'Please upload the correct format of image for the Banner');
+            // }
+
+            // if ($filenameExtensionProduct != 'mp3' || $filenameExtensionProduct != 'mpeg' || $filenameExtensionProduct != 'mp4' || $filenameExtensionProduct != '3gp' || $filenameExtensionProduct != 'pdf') {
+            //     return back()->with('error', 'Please upload the correct format of Product');
+            // }
+
+            $filePathBanner = 'banners/' . $Bannername;
+            $filePathProduct = 'products/' . $Productname;
+
+            $storeBanner = Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            $bannerUrl = Storage::disk('s3')->url($filePathBanner);
+
+            $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
+            $prodductUrl = Storage::disk('s3')->url($filePathProduct);
+
+            $data['user_id'] = auth()->user()->id;
+            $data['name'] = $request->name;
+            $data['amount'] = $request->amount;
+            $data['commission'] = $request->commission;
+            $data['total_payment'] = $request->total_payment;
+            $data['type'] = 'electronic';
+            $data['commission_payment'] = $request->commission_payment;
+            $data['banner'] = $bannerUrl;
+            $data['product'] = $prodductUrl;
+            MarketPlaceProduct::create($data);
+            return back()->with('success', 'Product Successfully created');
+            
+        }else{
+            return back()->with('error', 'Please upload an image');
+        }
     }
 }

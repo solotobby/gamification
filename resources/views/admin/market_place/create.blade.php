@@ -8,6 +8,27 @@
         <h3 class="block-title">Create Product</h3>
       </div>
     <div class="block-content">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <form class="js-validation-reminder" action="{{ route('store.marketplace') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -22,6 +43,7 @@
                </div>
                <div class="col-lg-8 col-xl-5">
                  <div class="mb-4">
+                    <label class="form-label" for="formFileMultiple" class="form-label">Product Name</label>
                    <div class="input-group">
                      <span class="input-group-text">
                        Name
@@ -31,6 +53,7 @@
                  </div>
                  
                  <div class="mb-4">
+                    <label class="form-label" for="formFileMultiple" class="form-label">Amount</label>
                    <div class="input-group">
                      <span class="input-group-text">
                         &#8358;
@@ -40,7 +63,8 @@
                    </div>
                  </div>
 
-                 <div class="mb-4">
+                <div class="mb-4">
+                    <label class="form-label" for="formFileMultiplesss" class="form-label">Commission</label>
                     <div class="input-group">
                       <select class="form-control" name="commission" id="commission" required>
                         <option value="">Select Affiliate Commission</option>
@@ -50,25 +74,19 @@
                         <option value="40">40%</option>
                       </select>
                     </div>
-                  </div>
+                </div>
                   
+                 
                   <div class="mb-4">
-                    
-                    <div class="input-group">
-                      <select class="form-control" name="type" id="type_id" required>
-                        <option value="">Select Type</option>
-                        
-                        @foreach ($product_type as $type)
-                            <option value="{{ $type->id }}">{{$type->name}}</option>
-                        @endforeach
-                      </select>
-                    </div>
+                    <label class="form-label" for="formFileMultiple" class="form-label">Upload Banner</label>
+                    <input class="form-control" type="file" name="banner" id="example-file-input-multiple" required>
                   </div>
                   <div class="mb-4">
-                    <hr>
-                    {{-- <label class="form-label" for="formFileMultiple" class="form-label">File Input (Multiple)</label> --}}
-                    <input class="form-control" type="file" name="images" id="example-file-input-multiple" multiple>
+                    <label class="form-label" for="formFileMultiples" class="form-label">Upload Product e.g audio or ebook</label>
+                    <input class="form-control" type="file" name="product" id="example-file-input-multiple" required>
                   </div>
+                  <input type="hidden" name="total_payment" value="" id="demos">
+                  <input type="hidden" name="commission_payment" value="" id="demos_">
                  
                   <h5>Amount Payable: &#8358;<span id="demo"></span></h5>
                </div>
@@ -115,6 +133,8 @@
             
 
             document.getElementById("demo").innerHTML = new_total;
+            document.getElementById("demos").value = new_total;
+            document.getElementById("demos_").value = percentageValue;
 
             
             // var z = document.getElementById("amount_per_campaign").value;
