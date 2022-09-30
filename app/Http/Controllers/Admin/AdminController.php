@@ -426,8 +426,8 @@ class AdminController extends Controller
     public function storeMarketplace(Request $request){
         // return $request;
         $this->validate($request, [
-            'banners' => 'image|size:2048|mimes:png,jpeg,gif,jpg',
-            'products' => 'mimes:pm3,mpeg,mp4,3gp,pdf',
+            'banner' => 'image|size:2048|mimes:png,jpeg,gif,jpg',
+            'product' => 'mimes:pm3,mpeg,mp4,3gp,pdf',
             'name' => 'required|string',
             'amount' => 'required|numeric',
         ]);
