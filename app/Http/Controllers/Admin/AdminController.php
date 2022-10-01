@@ -427,7 +427,7 @@ class AdminController extends Controller
         // return $request;
         $this->validate($request, [
             'banner' => 'image|size:2048|mimes:png,jpeg,gif,jpg',
-            'product' => 'size:204800|mimes:pm3,mpeg,mp4,3gp,pdf',
+            'product' => 'size:204800|mimes:mp3,mpeg,mp4,3gp,pdf',
             'name' => 'required|string',
             'amount' => 'required|numeric',
         ]);
