@@ -88,5 +88,10 @@ class User extends Authenticatable
         return $this->hasMany(Campaign::class);
     }
 
+    public function accountDetails()
+    {
+        return $this->hasOne(BankInformation::class,  'user_id');
+    }
+
     
 }

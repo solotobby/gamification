@@ -17,4 +17,9 @@ class Withrawal extends Model
         return  $this->belongsTo(User::class);
     }
 
+    public function accountDetails()
+    {
+        return $this->belongsTo(BankInformation::class);
+    }
+
 }

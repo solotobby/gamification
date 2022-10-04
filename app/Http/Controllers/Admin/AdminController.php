@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Mail\ApproveCampaign;
+use App\Mail\GeneralMail;
 use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
 use App\Models\Campaign;
@@ -478,5 +479,19 @@ class AdminController extends Controller
         }else{
             return back()->with('error', 'Please upload an image');
         }
+    }
+
+    public function updateWithdrawalRequest($id)
+    {
+        $withdrawals = Withrawal::where('id', $id)->first();
+        $withdrawals->status = true;
+        $withdrawals->save();
+
+        $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+        $subject = 'Withdrawal Request Granted';
+        $user = User::where('id', $withdrawals->user->id)->first();
+        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
+        return back()->with('success', 'Withdrawals Updated');
+
     }
 }

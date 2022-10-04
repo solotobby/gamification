@@ -24,6 +24,7 @@
 
   <!-- Page Content -->
   <div class="content">
+    
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
@@ -35,6 +36,12 @@
         </div>
       </div>
       <div class="block-content">
+        @if (session('success'))
+          <div class="alert alert-success" role="alert">
+              {{ session('success') }}
+          </div>
+        @endif
+
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
             <thead>
@@ -44,9 +51,10 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Amount</th>
+                    <th>Status</th>
                     <th>Date Rquested</th>
                     <th>Liq. Date</th>
-                    <th>Action</th>
+                    
                     
                     </tr>
             </thead>
@@ -55,14 +63,67 @@
                 @foreach ($withdrawals as $with)
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
-                        <td class="fw-semibold"> {{$with->user->name }}</td>
+                        <td class="fw-semibold"> <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}"> {{$with->user->name }}</a></td>
                         <td>{{ $with->user->email }}</td>
                         <td>{{ $with->user->phone }}</td>
                         <td>&#8358;{{ number_format(@$with->amount) }}</td>
+                        <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
                         <td>{{ \Carbon\Carbon::parse($with->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->format('d/m/Y @ h:i:s a') }}</td>
-                        <td></td>
+                        
                     </tr>
+
+
+                    <div class="modal fade" id="modal-default-popout-upgrade-{{ $with->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-popout" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                          <h5 class="modal-title">Bank Account Information</h5> 
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+          
+                          <div class="modal-body pb-1">
+                             
+                              <hr>
+                              <div class="block-content">
+                                <ul class="list-group push">
+                                  <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                    Bank Name 
+                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->bank_name }} </span>
+                                    
+                                   </li>
+                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                    Account Name
+                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->name }} </span>
+                                    
+                                   </li>
+                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                    Account Number
+                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->account_number }} </span>
+                                    
+                                   </li>
+
+                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                    Amount
+                                     <span class="badge rounded-pill bg-info">&#8358;{{ number_format($with->amount) }} </span>
+                                    
+                                   </li>
+                                </ul>
+                              </div>
+                              
+                          </div>
+                          
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                          @if($with->status != '1')
+                          <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
+                          @else
+                          <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
+                          @endif
+                          </div>
+                      </div>
+                      </div>
+                  </div>
                 @endforeach
               
             </tbody>

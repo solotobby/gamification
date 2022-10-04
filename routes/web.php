@@ -70,6 +70,7 @@ Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 
 Route::get('upgrade', [\App\Http\Controllers\UserController::class, 'upgrade'])->name('upgrade');
 Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePayment'])->name('make.payment');
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
+Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
 
 Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
 Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
@@ -129,6 +130,7 @@ Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::cla
 
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');
+Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequest']);
 Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
