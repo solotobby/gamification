@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Mail\ApproveCampaign;
 use App\Mail\CreateCampaign;
+use App\Mail\GeneralMail;
 use App\Mail\SubmitJob;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
 use App\Models\PaymentTransaction;
 use App\Models\SubCategory;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -190,8 +192,15 @@ class CampaignController extends Controller
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
+
         $campaignWorker = CampaignWorker::create($request->all());
         Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
+        $campaign = Campaign::where('id', $request->campaign_id)->first();
+        $user = User::where('id', $campaign->user->id)->first();
+        $subject = 'Job Submission';
+        $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+    
         return back()->with('success', 'Job Submitted Successfully');
     }
 
