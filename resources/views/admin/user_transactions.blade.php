@@ -48,7 +48,7 @@
                 <th>Reference</th>
                 <th>User Name</th>
                 <th>Email</th>
-                <th>Amount</th>
+                <th>&#8358;Amount</th>
                 <th>Currency</th>
                 <th>Tx. Type</th>
                 <th>Status</th>
@@ -69,7 +69,7 @@
                       {{ $list->user->email }}
                     </td>
                     <td>
-                        &#8358;{{ number_format($list->amount) }}
+                        {{ number_format($list->amount) }}
                     </td>
                     <td>
                         {{ $list->currency }}
