@@ -42,7 +42,7 @@
         <p>
         </p>
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
               <tr>
                 <th>Reference</th>
