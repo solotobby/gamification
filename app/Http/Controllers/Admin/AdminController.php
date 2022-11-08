@@ -462,6 +462,7 @@ class AdminController extends Controller
             $data['type'] = 'electronic';
             $data['commission_payment'] = $request->commission_payment;
             $data['banner'] = $bannerUrl;
+            $data['views'] = '0';
             $data['product_id'] = Str::random(7);
             $data['product'] = $request->product;//$prodductUrl;
             MarketPlaceProduct::create($data);
