@@ -465,6 +465,7 @@ class AdminController extends Controller
             $data['views'] = '0';
             $data['product_id'] = Str::random(7);
             $data['product'] = $request->product;//$prodductUrl;
+            $data['description'] = $request->description;
             MarketPlaceProduct::create($data);
             return back()->with('success', 'Product Successfully created');
             

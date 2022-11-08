@@ -86,6 +86,12 @@
                     {{-- <input class="form-control" type="file" name="product" id="example-file-input-multiple" required> --}}
                     <input type="url" name="product" class="form-control" required>
                   </div>
+                  <div class="mb-4">
+                    <label class="form-label" for="formFileMultiples" class="form-label">Desctiption of product</label>
+                    {{-- <input class="form-control" type="file" name="product" id="example-file-input-multiple" required> --}}
+                    {{-- <input type="url" name="product" class="form-control" required> --}}
+                    <textarea name="description" class="form-control" required>{{ old('description') }}</textarea>
+                  </div>
                   <input type="hidden" name="total_payment" value="" id="demos">
                   <input type="hidden" name="commission_payment" value="" id="demos_">
                   <h5>Amount Payable: &#8358;<span id="demo"></span></h5>
