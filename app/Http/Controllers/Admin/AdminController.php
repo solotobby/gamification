@@ -425,44 +425,34 @@ class AdminController extends Controller
     }
 
     public function storeMarketplace(Request $request){
-        // return $request;
+        //return $request;
         $this->validate($request, [
-            'banner' => 'image|size:2048|mimes:png,jpeg,gif,jpg',
-            'product' => 'mimes:mp3,mpeg,mp4,3gp,pdf',
+            'banner' => 'image|mimes:png,jpeg,gif,jpg',
+            // 'product' => 'mimes:mp3,mpeg,mp4,3gp,pdf',
             'name' => 'required|string',
             'amount' => 'required|numeric',
         ]);
 
-
-        if($request->hasFile('banner') && $request->hasFile('product')){
-            // $allowedBannerExtension = ['jpeg','png','jpg','gif','svg'];
-            // $allowedProductExtension = ['mp3','mpeg','mp4','3gp', 'pdf'];
-
+        //&& $request->hasFile('product')
+        if($request->hasFile('banner')){
+         
             $fileBanner = $request->file('banner');
-            $fileProduct = $request->file('product');
+            // $fileProduct = $request->file('product');
 
             $Bannername = time() . $fileBanner->getClientOriginalName();
-            $Productname = time() . $fileProduct->getClientOriginalName();
+            // $Productname = time() . $fileProduct->getClientOriginalName();
 
             $filenameExtensionBanner = $fileBanner->getClientOriginalExtension();
-            $filenameExtensionProduct = $fileProduct->getClientOriginalExtension();
-
-            // if ($filenameExtensionBanner != 'jpg' || $filenameExtensionBanner != 'jpeg' || $filenameExtensionBanner != 'png' || $filenameExtensionBanner != 'gif' || $filenameExtensionBanner != 'svg') {
-            //     return back()->with('error', 'Please upload the correct format of image for the Banner');
-            // }
-
-            // if ($filenameExtensionProduct != 'mp3' || $filenameExtensionProduct != 'mpeg' || $filenameExtensionProduct != 'mp4' || $filenameExtensionProduct != '3gp' || $filenameExtensionProduct != 'pdf') {
-            //     return back()->with('error', 'Please upload the correct format of Product');
-            // }
+            // $filenameExtensionProduct = $fileProduct->getClientOriginalExtension();
 
             $filePathBanner = 'banners/' . $Bannername;
-            $filePathProduct = 'products/' . $Productname;
+            // $filePathProduct = 'products/' . $Productname;
 
             $storeBanner = Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
 
-            $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
-            $prodductUrl = Storage::disk('s3')->url($filePathProduct);
+            // $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
+            // $prodductUrl = Storage::disk('s3')->url($filePathProduct);
 
             $data['user_id'] = auth()->user()->id;
             $data['name'] = $request->name;
@@ -472,13 +462,20 @@ class AdminController extends Controller
             $data['type'] = 'electronic';
             $data['commission_payment'] = $request->commission_payment;
             $data['banner'] = $bannerUrl;
-            $data['product'] = $prodductUrl;
+            $data['product_id'] = Str::random(7);
+            $data['product'] = $request->product;//$prodductUrl;
             MarketPlaceProduct::create($data);
             return back()->with('success', 'Product Successfully created');
             
         }else{
             return back()->with('error', 'Please upload an image');
         }
+    }
+
+    public function viewMarketplace()
+    {
+        $list = MarketPlaceProduct::orderBy('created_at', 'ASC')->get();
+        return view('admin.market_place.view', ['marketPlaceLists' => $list]);
     }
 
     public function updateWithdrawalRequest($id)
@@ -492,6 +489,15 @@ class AdminController extends Controller
         $user = User::where('id', $withdrawals->user->id)->first();
         Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
         return back()->with('success', 'Withdrawals Updated');
+    }
 
+    public function removeMarketplaceProduct($product_id){
+        $productInfo = MarketPlaceProduct::where('product_id', $product_id)->first();
+        $excludedUrl = explode('https://freebyz.s3.us-east-1.amazonaws.com/banners/', $productInfo->banner);
+        $bannerName = $excludedUrl[1];
+        Storage::disk('s3')->delete('banners/'.$bannerName);
+        $productInfo->delete();
+        // return Storage::disk('s3')->download('banners/'.$bannerName);
+        return back()->with('success', 'Product removed Successfully');
     }
 }

@@ -27,6 +27,13 @@ Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
 
+Route::get('marketplace/payment/callback', [App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
+Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
+
+Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
+Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
+Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']);//->name('marketplace');
+
 Auth::routes();
 
 Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
@@ -92,6 +99,9 @@ Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 's
 Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
 Route::get('airtime', [\App\Http\Controllers\UserController::class, 'airtimePurchase'])->name('airtime');
 Route::post('buy/airtime', [\App\Http\Controllers\UserController::class, 'buyAirtime'])->name('buy.airtime');
+//Marketplace
+Route::get('marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace');
+
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
@@ -143,10 +153,9 @@ Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'u
 Route::post('mass/approval', [\App\Http\Controllers\Admin\AdminController::class, 'massApproval'])->name('mass.approval');
 
 /////Market Place
-
-Route::get('marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
-Route::post('post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
-
-
+Route::get('admin/marketplace/view', [App\Http\Controllers\Admin\AdminController::class, 'viewMarketplace'])->name('view.admin.marketplace');
+Route::get('admin/marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
+Route::post('admin/post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
+Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeMarketplaceProduct']);
 
 

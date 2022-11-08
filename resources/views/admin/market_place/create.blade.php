@@ -48,7 +48,7 @@
                      <span class="input-group-text">
                        Name
                      </span>
-                     <input type="text" class="form-control" required id="example-group1-input1" name="name">
+                     <input type="text" class="form-control" required id="example-group1-input1" name="name" value="{{ old('name') }}">
                    </div>
                  </div>
                  
@@ -58,7 +58,7 @@
                      <span class="input-group-text">
                         &#8358;
                      </span>
-                     <input type="text" class="form-control text-center" required id="input-amount" name="amount" placeholder="00">
+                     <input type="text" class="form-control text-center" required id="input-amount" name="amount" placeholder="00" value="{{ old('amount') }}">
                      <span class="input-group-text">.00</span>
                    </div>
                  </div>
@@ -82,12 +82,12 @@
                     <input class="form-control" type="file" name="banner" id="example-file-input-multiple" required>
                   </div>
                   <div class="mb-4">
-                    <label class="form-label" for="formFileMultiples" class="form-label">Upload Product e.g audio or ebook</label>
-                    <input class="form-control" type="file" name="product" id="example-file-input-multiple" required>
+                    <label class="form-label" for="formFileMultiples" class="form-label">Enter Product Url e.g www.facebook.com/img.png</label>
+                    {{-- <input class="form-control" type="file" name="product" id="example-file-input-multiple" required> --}}
+                    <input type="url" name="product" class="form-control" required>
                   </div>
                   <input type="hidden" name="total_payment" value="" id="demos">
                   <input type="hidden" name="commission_payment" value="" id="demos_">
-                 
                   <h5>Amount Payable: &#8358;<span id="demo"></span></h5>
                </div>
              </div>

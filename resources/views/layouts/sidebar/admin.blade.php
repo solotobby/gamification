@@ -84,6 +84,11 @@
               <span class="nav-main-link-name">Create Product</span>
             </a>
           </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('view.admin.marketplace') }}">
+              <span class="nav-main-link-name">View Products</span>
+            </a>
+          </li>
         </ul>
       </li>
 

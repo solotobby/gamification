@@ -65,7 +65,6 @@
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                 @endforeach
-              
             </tbody>
           </table>
         </div>

@@ -108,22 +108,6 @@
         </ul>
       </li>
 
-      {{-- <li class="nav-main-item">
-        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-users"></i>
-          <span class="nav-main-link-name">Market Place</span>
-           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->referees()->count(); }}</span>
-        </a>
-        <ul class="nav-main-submenu">
-          <li class="nav-main-item">
-            <a class="nav-main-link" href="{{route('ref.all')}}">
-              <span class="nav-main-link-name">View All</span>
-            </a>
-          </li>
-        </ul>
-      </li> --}}
-
-
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('airtime') }}">
           <i class="nav-main-link-icon fa fa-share"></i>
@@ -131,7 +115,12 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
-
+      {{-- <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('marketplace') }}">
+          <i class="nav-main-link-icon fa fa-ring"></i>
+          <span class="nav-main-link-name">Market Place</span>
+        </a>
+      </li>  --}}
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
@@ -139,6 +128,7 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
+     
 
 
     </ul>
