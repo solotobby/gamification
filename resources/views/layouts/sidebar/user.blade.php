@@ -115,12 +115,12 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('marketplace') }}">
           <i class="nav-main-link-icon fa fa-ring"></i>
           <span class="nav-main-link-name">Market Place</span>
         </a>
-      </li> 
+      </li>  --}}
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
