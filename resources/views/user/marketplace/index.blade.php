@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content">
-    <h2 class="content-heading">Link Stories</h2>
+    <h2 class="content-heading">List of Products</h2>
     <div class="row">
         @foreach ($marketPlaceLists as $list)
         <div class="col-md-6">

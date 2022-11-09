@@ -51,6 +51,7 @@ class GeneralMarketplaceController extends Controller
 
         $prd = MarketPlaceProduct::where('id', $product_id)->first();
         $user = User::where('referral_code', $referral_code)->first();
+        $customerInfo = MarketPlacePayment::where('ref', $ref)->first();
       
         
         $res = Http::withHeaders([
@@ -58,7 +59,7 @@ class GeneralMarketplaceController extends Controller
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         ])->post('https://api.paystack.co/transaction/initialize', [
-            'email' => auth()->user()->email,
+            'email' => $customerInfo->email,
             'amount' => $prd->total_payment*100,
             'channels' => ['card'],
             'currency' => 'NGN',
