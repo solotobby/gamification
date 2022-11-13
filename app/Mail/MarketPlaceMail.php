@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class GeneralMail extends Mailable
+class MarketPlaceMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -35,8 +35,9 @@ class GeneralMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.general')->subject($this->subject)->with([
+        return $this->markdown('emails.marketplace')->subject($this->subject)->with([
             'name' => $this->user->name,
+            'url' => $this->user->url,
             'content' => $this->content
         ]);
     }

@@ -10,6 +10,7 @@ use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\DataBundle;
 use App\Models\Games;
 use App\Models\MarketPlaceProduct;
 use App\Models\PaymentTransaction;
@@ -190,42 +191,35 @@ class AdminController extends Controller
         return PaystackHelpers::reloadlyAuth0Token();
     }
 
-    public function userList()
-    {
+    public function userList(){
         $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
         return view('admin.users', ['users' => $users]);
     }
-    public function verifiedUserList()
-    {
+    public function verifiedUserList(){
         $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
 
-    public function adminTransaction()
-    {
+    public function adminTransaction(){
         $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
         return view('admin.admin_transactions', ['lists' => $list]);
     }
-    public function userTransaction()
-    {
+    public function userTransaction(){
         $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
         return view('admin.user_transactions', ['lists' => $list]);
     }
 
-    public function userInfo($id)
-    {
+    public function userInfo($id){
         $info = User::where('id', $id)->first();
         return view('admin.user_info', ['info' => $info]);
     }
 
-    public function withdrawalRequest()
-    {
+    public function withdrawalRequest(){
         $withdrawal = Withrawal::orderBy('created_at', 'DESC')->get();
         return view('admin.withdrawal', ['withdrawals' => $withdrawal]);
     }
 
-    public function upgradeUser($id)
-    {
+    public function upgradeUser($id){
         $getUser = User::where('id', $id)->first();
         $getUser->is_verified = true;
         $getUser->save();
@@ -336,14 +330,12 @@ class AdminController extends Controller
        return back()->with('success', 'Upgrade Successful');
     }
 
-    public function campaignList()
-    {
+    public function campaignList(){
         $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
-    public function unapprovedJobs()
-    {
+    public function unapprovedJobs(){
         $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->get();
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
@@ -387,8 +379,7 @@ class AdminController extends Controller
 
     }
 
-    public function massMail()
-    {
+    public function massMail(){
         return view('admin.mass_mail');
     }
 
@@ -407,8 +398,7 @@ class AdminController extends Controller
         return back()->with('success', 'Mail Sent Successful');
     }
 
-    public function campaignPending()
-    {
+    public function campaignPending(){
         $pendingCampaign = Campaign::where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
@@ -474,14 +464,12 @@ class AdminController extends Controller
         }
     }
 
-    public function viewMarketplace()
-    {
+    public function viewMarketplace(){
         $list = MarketPlaceProduct::orderBy('created_at', 'ASC')->get();
         return view('admin.market_place.view', ['marketPlaceLists' => $list]);
     }
 
-    public function updateWithdrawalRequest($id)
-    {
+    public function updateWithdrawalRequest($id){
         $withdrawals = Withrawal::where('id', $id)->first();
         $withdrawals->status = true;
         $withdrawals->save();
@@ -501,5 +489,17 @@ class AdminController extends Controller
         $productInfo->delete();
         // return Storage::disk('s3')->download('banners/'.$bannerName);
         return back()->with('success', 'Product removed Successfully');
+    }
+
+    public function createDatabundles(){
+        $databundles = DataBundle::orderby('name', 'ASC')->get();
+        return view('admin.databundles.index', ['databundles' => $databundles]);
+    }
+
+    public function storeDatabundles(Request $request){
+        $created = DataBundle::create($request->all());
+        $created->save();
+        return back()->with('success', 'Databundle Created Successfully');
+
     }
 }

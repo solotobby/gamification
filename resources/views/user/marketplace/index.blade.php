@@ -25,7 +25,7 @@
                    
                     <div class="row g-0 fs-sm">
                         <div class="col-12">
-                            <a href="{{ url('marketplace/'.auth()->user()->referral_code.'/'.$list->product_id) }}">{{ url('marketplace/'.auth()->user()->referral_code.'/'.$list->product_id) }}</a>
+                            <a href="{{ url('marketplace/'.auth()->user()->referral_code.'/'.$list->product_id) }}" target="_blank">{{ url('marketplace/'.auth()->user()->referral_code.'/'.$list->product_id) }}</a>
                         </div>
                         <div class="col-6">
                             {{-- <a href="" class="btn btn-primary btn-sm">

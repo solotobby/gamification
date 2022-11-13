@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\UpgradeUser;
+use App\Models\DataBundle;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\User;
@@ -179,7 +180,8 @@ class UserController extends Controller
 
     }
 
-    public function makePaymentWallet(){
+    public function makePaymentWallet()
+    {
         $ref = time();
         $bonus = Wallet::where('user_id', auth()->user()->id)->first();
          //debit  User wallet first
@@ -317,6 +319,11 @@ class UserController extends Controller
         return view('user.wallet.buy_airtime');
     }
 
+    public function databundlePurchase(){
+        $databundles = DataBundle::orderby('name', 'ASC')->get();
+        return view('user.wallet.data_bundle', ['databundles'=>$databundles]);
+    }
+
     public function buyAirtime(Request $request){
         $request->validate([
             'amount' => 'required|numeric|max:100',
@@ -379,6 +386,55 @@ class UserController extends Controller
         }
 
 
+    }
+
+    public function buyDatabundle(Request $request){
+        $values = explode(':',$request->name);
+        $gig = $values['0'];
+        $amount = $values['1'];
+
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($wallet->balance <=  $amount)
+        {
+            return back()->with('error', 'Insurficient fund in your wallet');
+        }
+        $wallet->balance -= $amount; ///debit wallet
+        $wallet->save();
+        $ref = time();
+        $message = auth()->user()->name.". WITH PHONE NO: .".auth()->user()->phone." REQUEST SME DATABUNDLE FOR ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
+        $this->sendNotification($message);
+
+        PaymentTransaction::create([
+            'user_id' => 1,
+            'campaign_id' => '1',
+            'reference' => $ref,
+            'amount' => $amount,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'termii',
+            'type' => 'databundle',
+            'description' => $gig.' Databundle Purchase',
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+        return back()->with('error', 'Databundle has been queued, you will recieve it shortly');
+    }
+
+    public function sendNotification($message)
+    {
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post('https://api.ng.termii.com/api/sms/send', [
+            "to"=> '2348150773992',//$number,
+            "from"=> "FREEBYZ",
+            "sms"=> $message,
+            "type"=> "plain",
+            "channel"=> "generic",
+            "api_key"=> env('TERMI_KEY')
+        ]);
+
+         return json_decode($res->getBody()->getContents(), true);
     }
 
 }

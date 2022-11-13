@@ -33,7 +33,7 @@ Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarke
 Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
 Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
 Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']);//->name('marketplace');
-
+Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
 Auth::routes();
 
 Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
@@ -99,6 +99,9 @@ Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 's
 Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
 Route::get('airtime', [\App\Http\Controllers\UserController::class, 'airtimePurchase'])->name('airtime');
 Route::post('buy/airtime', [\App\Http\Controllers\UserController::class, 'buyAirtime'])->name('buy.airtime');
+Route::get('databundle', [\App\Http\Controllers\UserController::class, 'databundlePurchase'])->name('databundle');
+Route::post('buy/databundle', [\App\Http\Controllers\UserController::class, 'buyDatabundle'])->name('buy.databundle');
+
 //Marketplace
 Route::get('marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace');
 
@@ -157,5 +160,6 @@ Route::get('admin/marketplace/view', [App\Http\Controllers\Admin\AdminController
 Route::get('admin/marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
 Route::post('admin/post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
 Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeMarketplaceProduct']);
-
-
+//Databundles
+Route::get('create/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'createDatabundles'])->name('create.databundles');
+Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'storeDatabundles'])->name('store.databundles');
