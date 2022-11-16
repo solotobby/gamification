@@ -396,7 +396,7 @@ class UserController extends Controller
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if($wallet->balance <=  $amount)
         {
-            return back()->with('error', 'Insurficient fund in your wallet');
+            return back()->with('error', 'Insufficient fund in your wallet');
         }
         $wallet->balance -= $amount; ///debit wallet
         $wallet->save();
