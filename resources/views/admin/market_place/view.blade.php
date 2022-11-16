@@ -7,11 +7,12 @@
         @foreach ($marketPlaceLists as $list)
         <div class="col-md-4">
             <div class="block block-rounded block-link-rotate">
-                <div class="block-content pb-8 bg-image" style="background-image: url({{$list->banner}});">
+                <div class="block-content pb-8 bg-image" style="background-image: url({{$list->banner}})">
                     <span class="badge bg-success fw-bold p-2 text-uppercase">
-                    %{{$list->commission}}
+                    {{$list->commission}}%
                     </span>
                 </div>
+
                 <div class="block-content">
                     <p class="fw-semibold text-dark mb-1">
                     {{$list->name}}

@@ -401,7 +401,7 @@ class UserController extends Controller
         $wallet->balance -= $amount; ///debit wallet
         $wallet->save();
         $ref = time();
-        $message = auth()->user()->name.". WITH PHONE NO: .".auth()->user()->phone." REQUEST SME DATABUNDLE FOR ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
+        $message = auth()->user()->name." REQUEST ".$gig." DATABUNDLE FOR  ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
         $this->sendNotification($message);
 
         PaymentTransaction::create([
@@ -413,7 +413,7 @@ class UserController extends Controller
             'currency' => 'NGN',
             'channel' => 'termii',
             'type' => 'databundle',
-            'description' => $gig.' Databundle Purchase',
+            'description' => $gig.' sent to '.$request->phone.' for Databundle Purchase',
             'tx_type' => 'Debit',
             'user_type' => 'regular'
         ]);
@@ -426,7 +426,7 @@ class UserController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post('https://api.ng.termii.com/api/sms/send', [
-            "to"=> '2348150773992',//$number,
+            "to"=> '2349153590716',//$number,
             "from"=> "FREEBYZ",
             "sms"=> $message,
             "type"=> "plain",
