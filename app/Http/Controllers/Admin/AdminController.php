@@ -340,6 +340,65 @@ class AdminController extends Controller
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
+    public function approvedJobs(){
+        $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->get();
+        return view('admin.approved_list', ['campaigns' => $list]); 
+    }
+
+    public function jobReversal($id){
+        $list = CampaignWorker::where('id', $id)->first();
+        $list->status = 'Pending';
+        $list->save();
+
+        $campaignAmount = Campaign::where('id', $list->campaign_id)->first(); //get campaign information
+        //debit worker
+        $wallet = Wallet::where('user_id', $list->user_id)->first();
+        $wallet->balance -= $campaignAmount->campaign_amount;
+        $wallet->save();
+
+        //credit campaigner
+        $wallet = Wallet::where('user_id', $campaignAmount->user_id)->first();
+        $wallet->balance += $campaignAmount->campaign_amount;
+        $wallet->save();
+
+        $ref = time();
+
+        PaymentTransaction::create([
+            'user_id' => $list->user_id,
+            'campaign_id' => $campaignAmount->id,
+            'reference' => $ref,
+            'amount' => $campaignAmount->campaign_amount,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'campaign_job_reversal',
+            'description' => 'Reversal of job revenue on '.$campaignAmount->post_title,
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+
+        PaymentTransaction::create([
+            'user_id' =>  $campaignAmount->user_id,
+            'campaign_id' => $campaignAmount->id,
+            'reference' => $ref,
+            'amount' => $campaignAmount->campaign_amount,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'campaign_job_reversal_credit',
+            'description' => 'Reversal of amount spent on '.$campaignAmount->post_title,
+            'tx_type' => 'Credit',
+            'user_type' => 'regular'
+        ]);
+
+        $user = User::where('id', $campaignAmount->user_id)->first();
+        $subject = 'Job Reversal';
+        $content = 'Your request to for job reversal is successful. A total of NGN' .$campaignAmount->campaign_amount . ' has been credited to your wallet from '.$campaignAmount->post_title.' job';
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        return back()->with('success', 'Reversal Successful');
+    }
+
+
     public function massApproval(Request $request){
        $ids = $request->id;
        if(empty($ids)){

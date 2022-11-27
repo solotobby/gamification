@@ -217,7 +217,7 @@
 
 
      <!-- Store Growth -->
-     <div class="block block-rounded">
+      {{-- <div class="block block-rounded">
         <div class="block-header block-header-default">
           <h3 class="block-title">
             Store Growth
@@ -271,7 +271,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- END Store Growth -->
 
       <!-- Latest Orders + Stats -->

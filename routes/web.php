@@ -153,6 +153,8 @@ Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'ma
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');
 
 Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'unapprovedJobs'])->name('unapproved');
+Route::get('approved', [\App\Http\Controllers\Admin\AdminController::class, 'approvedJobs'])->name('approved');
+Route::get('reverse/transaction/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'jobReversal']);
 Route::post('mass/approval', [\App\Http\Controllers\Admin\AdminController::class, 'massApproval'])->name('mass.approval');
 
 /////Market Place
