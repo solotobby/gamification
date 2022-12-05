@@ -66,6 +66,7 @@ Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'in
 Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
 Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'activities']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
+Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
 ///paystack payment 
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
@@ -165,3 +166,4 @@ Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin
 //Databundles
 Route::get('create/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'createDatabundles'])->name('create.databundles');
 Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'storeDatabundles'])->name('store.databundles');
+Route::get('charts', [\App\Http\Controllers\Admin\AdminController::class, 'charts']);

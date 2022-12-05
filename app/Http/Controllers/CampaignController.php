@@ -72,9 +72,10 @@ class CampaignController extends Controller
      * @param  \App\Models\Campaign  $campaign
      * @return \Illuminate\Http\Response
      */
-    public function edit(Campaign $campaign)
+    public function edit($id)
     {
-        //
+        $campaign = Campaign::where('job_id', $id)->first();
+        return view('user.campaign.edit', ['campaign' => $campaign]);
     }
 
     /**

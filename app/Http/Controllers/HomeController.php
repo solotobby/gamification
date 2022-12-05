@@ -78,10 +78,16 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
-
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
+        $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+       
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal, 'data' => $data]);
 
     }
+
+   
  
     public function savePhoneInformation(Request $request)
     {

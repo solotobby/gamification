@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Mail\GeneralMail;
 use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class WalletController extends Controller
 {
@@ -241,6 +244,10 @@ class WalletController extends Controller
             $bankList = PaystackHelpers::bankList();
             return view('user.bank_information', ['bankList' => $bankList]);
         }
+        $user = User::where('id', '1')->first();
+        $subject = 'Withdrawal Request Queued!!';
+        $content = 'A withdrwal request has been made and it being queued';
+        Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject));
         return back()->with('success', 'Withdrawal Successfully queued');
 
     }

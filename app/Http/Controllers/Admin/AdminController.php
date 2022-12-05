@@ -36,6 +36,17 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function charts()
+    {
+        $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
+                ->groupBy('date')
+                ->orderBy('date', 'desc')
+                ->get();
+
+        return response()->json($data['signUps']);
+    }
+
     public function createGame()
     {
         $user = auth()->user();

@@ -1,5 +1,20 @@
 @extends('layouts.main.master')
+@section('style')
 
+{{-- <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
+    <style type="text/css">      
+      html, body, #container { 
+        width: 100%; height: 100%; margin: 0; padding: 0; 
+      } 
+
+      .chart{
+        height: 800px;
+      }
+    </style> --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+@endsection
 @section('content')
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
@@ -212,8 +227,39 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-xl-12">
+        <!-- Lines Chart -->
+        <div class="block block-rounded">
+          <div class="block-header block-header-default">
+            <h3 class="block-title">Activity Chart</h3>
+            <div class="block-options">
+              <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                <i class="si si-refresh"></i>
+              </button>
+            </div>
+          </div>
+          <div class="block-content block-content-full text-center" >
+            <div class="py-3">
+
+               
+              <!-- Lines Chart Container -->
+              {{-- <div id="container" style="height: 400px"></div> --}}
+              {{-- <div id="chart1"></div> --}}
+              {{-- <canvas id="js-chartjs-lines"></canvas> --}}
+
+              <canvas id="myChart" style="width:100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <!-- END Lines Chart -->
+      </div>
+    </div>
+
     
   </div>
+
+
 
 
      <!-- Store Growth -->
@@ -263,6 +309,7 @@
             </div>
             <div class="col-md-7 col-xl-8 d-md-flex align-items-md-center">
               <div class="p-md-2 p-lg-3 w-100">
+                
                 <!-- Bars Chart Container -->
                 <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
                 <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
@@ -543,5 +590,122 @@
 
  <!-- Page JS Code -->
  <script src="{{asset('src/assets/js/pages/be_pages_dashboard.min.js')}}"></script>
+
+ 
+ <script src="{{asset('src/assets/js/dashmix.app.min.js')}}"></script>
+
+ <!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
+ <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
+
+ <script>
+  var xVal = '';
+  var yVal = '';
+    $.ajax({
+                url: '{{ url("charts") }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(datas) {
+                  // console.log(datas);  
+                  $.each(datas, function(key, value){
+                      //[console.log(value.date, value.total_reg)]
+
+                       xVal = [value.date];//[50,60,70,80,90,100,110,120,130,140,150];
+                       yVal = [value.total_reg];//[7,8,8,9,9,9,10,11,14,14,15];
+                  });
+                }
+               
+            });
+            
+
+
+  var xValues = xVal;//[50,60,70,80,90,100,110,120,130,140,150];
+  var yValues = yVal; //[7,8,8,9,9,9,10,11,14,14,15];
+  
+  new Chart("myChart", {
+    type: "line",
+    data: {
+      labels: xValues,
+      datasets: [{
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "rgba(0,0,255,1.0)",
+        borderColor: "rgba(0,0,255,0.1)",
+        data: yValues
+      }]
+    },
+    options: {
+      legend: {display: false},
+      scales: {
+        yAxes: [{ticks: {min: 6, max:16}}],
+      }
+    }
+  });
+  </script>
+
+
+ <script type="text/javascript">
+  anychart.onDocumentReady(function () {
+  
+
+  // add data
+
+  // var data = [];
+
+  $.ajax({
+                url: '{{ url("charts") }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(datas) {
+                  console.log(datas);
+                  // data = Object.entries(datas);
+
+                
+                 
+                  // $.each(datas, function(key, value){
+                  //     [console.log(value.date, value.total_reg)]
+                  // });
+                }
+               
+            });
+
+            var data = [];
+            
+
+           
+ 
+
+  // create a data set
+  var dataSet = anychart.data.set(data);
+
+  // map the data for all series
+  var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
+  // var secondSeriesData = dataSet.mapAs({x: 0, value: 2});
+  // var thirdSeriesData = dataSet.mapAs({x: 0, value: 3});
+
+  // create a line chart
+  var chart = anychart.line();
+
+  // create the series and name them
+  var firstSeries = chart.line(firstSeriesData);
+  firstSeries.name("SignUps");
+  // var secondSeries = chart.line(secondSeriesData);
+  // secondSeries.name("Rafael Nadal");
+  // var thirdSeries = chart.line(thirdSeriesData);
+  // thirdSeries.name("Novak Djokovic");
+
+  // add a legend
+  chart.legend().enabled(true);
+
+  // add a title
+  chart.title("");
+
+  // specify where to display the chart
+  chart.container("container");
+
+  // draw the resulting chart
+  chart.draw();
+
+});
+ </script>
 
 @endsection
