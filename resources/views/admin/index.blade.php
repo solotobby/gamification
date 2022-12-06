@@ -12,7 +12,7 @@
       }
     </style> --}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
 
 @endsection
 @section('content')
@@ -248,19 +248,14 @@
               {{-- <div id="chart1"></div> --}}
               {{-- <canvas id="js-chartjs-lines"></canvas> --}}
 
-              <canvas id="myChart" style="width:100%;"></canvas>
+              {{-- <canvas id="myChart" style="width:100%;"></canvas> --}}
             </div>
           </div>
         </div>
         <!-- END Lines Chart -->
       </div>
     </div>
-
-    
   </div>
-
-
-
 
      <!-- Store Growth -->
       {{-- <div class="block block-rounded">
@@ -584,11 +579,9 @@
 @endsection
 
 @section('script')
-
- <!-- jQuery (required for Easy Pie Chart + jQuery Sparkline plugin) -->
- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
+ {{-- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
  <!-- Page JS Plugins -->
- <script src="{{asset('src/assets/js/plugins/chart.js/chart.min.js')}}"></script>
+ {{-- <script src="{{asset('src/assets/js/plugins/chart.js/chart.min.js')}}"></script> --}}
 
  <!-- Page JS Code -->
  <script src="{{asset('src/assets/js/pages/be_pages_dashboard.min.js')}}"></script>
@@ -598,114 +591,114 @@
 
 
  <script>
-  var xVal = '';
-  var yVal = '';
-    $.ajax({
-                url: '{{ url("charts") }}',
-                type: 'GET',
-                dataType: 'json',
-                success: function(datas) {
-                  // console.log(datas);  
-                  $.each(datas, function(key, value){
-                      //[console.log(value.date, value.total_reg)]
+  // var xVal = '';
+  // var yVal = '';
+  //   $.ajax({
+  //               url: '{{ url("charts") }}',
+  //               type: 'GET',
+  //               dataType: 'json',
+  //               success: function(datas) {
+  //                 // console.log(datas);  
+  //                 $.each(datas, function(key, value){
+  //                     //[console.log(value.date, value.total_reg)]
 
-                       xVal = [value.date];//[50,60,70,80,90,100,110,120,130,140,150];
-                       yVal = [value.total_reg];//[7,8,8,9,9,9,10,11,14,14,15];
-                  });
-                }
+  //                      xVal = [value.date];//[50,60,70,80,90,100,110,120,130,140,150];
+  //                      yVal = [value.total_reg];//[7,8,8,9,9,9,10,11,14,14,15];
+  //                 });
+  //               }
                
-            });
+  //           });
             
 
 
-  var xValues = xVal;//[50,60,70,80,90,100,110,120,130,140,150];
-  var yValues = yVal; //[7,8,8,9,9,9,10,11,14,14,15];
+  // var xValues = xVal;//[50,60,70,80,90,100,110,120,130,140,150];
+  // var yValues = yVal; //[7,8,8,9,9,9,10,11,14,14,15];
   
-  new Chart("myChart", {
-    type: "line",
-    data: {
-      labels: xValues,
-      datasets: [{
-        fill: false,
-        lineTension: 0,
-        backgroundColor: "rgba(0,0,255,1.0)",
-        borderColor: "rgba(0,0,255,0.1)",
-        data: yValues
-      }]
-    },
-    options: {
-      legend: {display: false},
-      scales: {
-        yAxes: [{ticks: {min: 6, max:16}}],
-      }
-    }
-  });
+  // new Chart("myChart", {
+  //   type: "line",
+  //   data: {
+  //     labels: xValues,
+  //     datasets: [{
+  //       fill: false,
+  //       lineTension: 0,
+  //       backgroundColor: "rgba(0,0,255,1.0)",
+  //       borderColor: "rgba(0,0,255,0.1)",
+  //       data: yValues
+  //     }]
+  //   },
+  //   options: {
+  //     legend: {display: false},
+  //     scales: {
+  //       yAxes: [{ticks: {min: 6, max:16}}],
+  //     }
+  //   }
+  // });
   </script>
 
 
  <script type="text/javascript">
-  anychart.onDocumentReady(function () {
+//   anychart.onDocumentReady(function () {
   
 
-  // add data
+//   // add data
 
-  // var data = [];
+//   // var data = [];
 
-  $.ajax({
-                url: '{{ url("charts") }}',
-                type: 'GET',
-                dataType: 'json',
-                success: function(datas) {
-                  console.log(datas);
-                  // data = Object.entries(datas);
+//   $.ajax({
+//                 url: '{{ url("charts") }}',
+//                 type: 'GET',
+//                 dataType: 'json',
+//                 success: function(datas) {
+//                   console.log(datas);
+//                   // data = Object.entries(datas);
 
                 
                  
-                  // $.each(datas, function(key, value){
-                  //     [console.log(value.date, value.total_reg)]
-                  // });
-                }
+//                   // $.each(datas, function(key, value){
+//                   //     [console.log(value.date, value.total_reg)]
+//                   // });
+//                 }
                
-            });
+//             });
 
-            var data = [];
+//             var data = [];
             
 
            
  
 
-  // create a data set
-  var dataSet = anychart.data.set(data);
+//   // create a data set
+//   var dataSet = anychart.data.set(data);
 
-  // map the data for all series
-  var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
-  // var secondSeriesData = dataSet.mapAs({x: 0, value: 2});
-  // var thirdSeriesData = dataSet.mapAs({x: 0, value: 3});
+//   // map the data for all series
+//   var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
+//   // var secondSeriesData = dataSet.mapAs({x: 0, value: 2});
+//   // var thirdSeriesData = dataSet.mapAs({x: 0, value: 3});
 
-  // create a line chart
-  var chart = anychart.line();
+//   // create a line chart
+//   var chart = anychart.line();
 
-  // create the series and name them
-  var firstSeries = chart.line(firstSeriesData);
-  firstSeries.name("SignUps");
-  // var secondSeries = chart.line(secondSeriesData);
-  // secondSeries.name("Rafael Nadal");
-  // var thirdSeries = chart.line(thirdSeriesData);
-  // thirdSeries.name("Novak Djokovic");
+//   // create the series and name them
+//   var firstSeries = chart.line(firstSeriesData);
+//   firstSeries.name("SignUps");
+//   // var secondSeries = chart.line(secondSeriesData);
+//   // secondSeries.name("Rafael Nadal");
+//   // var thirdSeries = chart.line(thirdSeriesData);
+//   // thirdSeries.name("Novak Djokovic");
 
-  // add a legend
-  chart.legend().enabled(true);
+//   // add a legend
+//   chart.legend().enabled(true);
 
-  // add a title
-  chart.title("");
+//   // add a title
+//   chart.title("");
 
-  // specify where to display the chart
-  chart.container("container");
+//   // specify where to display the chart
+//   chart.container("container");
 
-  // draw the resulting chart
-  chart.draw();
+//   // draw the resulting chart
+//   chart.draw();
 
-});
- </script>
+// });
+//  </script>
 
 @endsection
