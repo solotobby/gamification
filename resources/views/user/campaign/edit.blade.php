@@ -55,7 +55,7 @@
       </div>
     @endif
 
-    <form action="{{ route('post.campaign') }}" method="POST" >
+    <form action="{{ route('edit.campaign') }}" method="POST" >
         @csrf
       <div class="block block-rounded">
 
@@ -73,7 +73,7 @@
             <div class="col-lg-6 offset-lg-1">
                
               <div class="mb-4">
-                <label class="form-label" for="post-type">Type</label> :  <i>{{$campaign->post_title}}</i> 
+                <label class="form-label" for="post-type">Type</label> :  <i>{{$campaign->campaignType->name}}</i> 
                 {{-- <select class="js-select2 form-select" id="post-type" name="campaign_type" style="width: 100%;" data-placeholder="Choose type.." required>
                     <option value="{{ $campaign->id }}">{{$campaign->post_title}}</option>
                 </select> --}}
@@ -88,17 +88,18 @@
 
               <div class="row mb-4">
                 <div class="col-6">
-                    <label class="form-label" for="post-salary-min">Number of Workers</label>
-                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="15" value="15" required>
+                    <label class="form-label" for="post-salary-min">Add More Workers</label>
+                  <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" value="{{ $campaign->number_of_staff }}"  required>
                 </div>
                 <div class="col-6">
                     <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
-                    <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
+                    <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly required>
                 </div>
               </div>
               <hr>
             
               <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
+              <input type="hidden" name="total_amount_pay" id="demo_text">
               
             </div>
           </div>
@@ -117,29 +118,30 @@
             <div class="col-lg-6 offset-lg-1">
               <div class="mb-4">
                 <label class="form-label" for="post-title">Title</label>
-                <input type="text" class="form-control" id="post-title" name="post_title" value="{{ old('post_title') }}" required>
+                <input type="text" class="form-control" id="post-title" name="post_title" value="{{ $campaign->post_title }}" required>
                 <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
             </div>
 
             <div class="mb-4">
                 <label class="form-label" for="post-title">External Link</label>
-                <input type="url" class="form-control" id="post-title" name="post_link" value="{{ old('url') }}" required>
+                <input type="url" class="form-control" id="post-title" name="post_link" value="{{ $campaign->post_link }}" required>
                 <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
             </div>
 
               <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description <small>(Ensure you provide simple and clear instruction on task to be done)</small></label>
-                        <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
+                        <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ $campaign->description }}</textarea>
                     </div>
               <div class="mb-4">
                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request for social 
                     media handle, email or other means of identifying the worker)</small></label>
                     <iframe name="server_answer" style="display:none"></iframe>
-                    <textarea id="mytextareas" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
+                    <textarea id="mytextareas" class="form-control" name="proof" required>{{ $campaign->proof }}</textarea>
               </div>
 
               
               <div class="mb-4">
+                        <input type="hidden" name="post_id" value="{{ $campaign->id  }}">
                       <input type="checkbox" name="validate" required class="">
                       <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it within five (5) days </small></span>
               </div>
@@ -155,7 +157,7 @@
           <div class="row mb-4">
             <div class="col-lg-6 offset-lg-5">
               <button type="submit" class="btn btn-alt-primary">
-                <i class="fa fa-plus opacity-50 me-1"></i> Post Campaign
+                <i class="fa fa-plus opacity-50 me-1"></i> Update Campaign
               </button>
             </div>
           </div>
@@ -200,8 +202,8 @@
                     }
                 });
 
-                $('#post-type').change(function(){
-                    var typeID = this.value;
+                // $('#post-type').change(function(){
+                    var typeID = <?php echo $campaign->campaignCategory->id; ?>//this.value;
 
                     $("#post-category").html('');
                         $.ajax({
@@ -212,6 +214,7 @@
                             },
                             dataType: 'json',
                             success: function(result) {
+                                //console.log(result)
                                 var new_result = result.sort(function(a, b) {
                                     return a.name.localeCompare(b.name);
                                 });
@@ -222,10 +225,10 @@
                                 });
                             }
                     });
-                });
+                //});
 
-                $('#post-category').change(function(){
-                    var categoryID = this.value;
+                // $('#post-category').change(function(){
+                    var categoryID = <?php echo $campaign->campaignCategory->id ?>; //this.value;
                     // api/get/sub/categories/info/{id}
                     $.ajax({
                         // url: ' url("api/get/sub/categories/info") }}/' + encodeURI(typeID))',
@@ -248,11 +251,12 @@
                             var percent = (percentToGet / 100) * total_amount;
 
                             document.getElementById("demo").innerHTML = total_amount + percent;
+                            document.getElementById("demo_text").value= total_amount + percent;
 
 
                         }
                     });
-                });
+                // });
 
                 
        

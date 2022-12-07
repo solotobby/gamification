@@ -14,6 +14,7 @@ use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class CampaignController extends Controller
@@ -87,7 +88,76 @@ class CampaignController extends Controller
      */
     public function update(Request $request, Campaign $campaign)
     {
-        //
+        //return $request; 
+        
+        $ref = time();
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transaction/initialize', [
+            'email' => auth()->user()->email,
+            'amount' => $request->total_amount_pay*100,
+            'channels' => ['card'],
+            'currency' => 'NGN',
+            'reference' => $ref,
+            'metadata' => ['number_of_staff' => $request->number_of_staff, 'total_amount' => $request->total_amount_pay],
+            'callback_url' => env('PAYSTACK_CALLBACK_URL').'/extend/payment'
+        ]);
+
+        $url = $res['data']['authorization_url'];
+
+        $camp = Campaign::where('id', $request->post_id)->first();
+        $camp->extension_references = $ref;
+        // $camp->number_of_staff += $request->number_of_staff;
+        // $camp->total_amount += $request->total_amount_pay;
+        $camp->save();
+        
+        PaymentTransaction::create([
+            'user_id' => auth()->user()->id,
+            'campaign_id' => $request->post_id,
+            'reference' => $ref,
+            'amount' => $request->total_amount_pay,
+            'status' => 'unsuccessful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'edit_campaign_payment',
+            'description' => 'Extent Campaign Payment'
+        ]);
+        return redirect($url);
+        
+    }
+
+    public function campaign_extension_payment(){
+        $url = request()->fullUrl();
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+        $ref = $params['trxref'];
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
+       $meta = $res['data']['metadata'];
+       //$meata['number_of_staff'];
+       $status = $res['data']['status'];
+       if($status == 'success'){
+            $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
+            $fetchPaymentTransaction->status = 'successful';
+            $fetchPaymentTransaction->save();
+
+            $camp = Campaign::where('extension_references', $ref)->first();
+            $camp->extension_references = null;
+            $camp->number_of_staff += $meta['number_of_staff'];
+            $camp->total_amount += $meta['total_amount'];
+            $camp->save();
+
+            return redirect('my/campaigns')->with('success', 'Campaign Successfully Edited');
+
+       }
+       return redirect('my/campaigns')->with('error', 'An Error occoured while editing campaign');
     }
 
     /**

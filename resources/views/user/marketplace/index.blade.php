@@ -61,14 +61,14 @@
  {{-- <script>Dashmix.helpersOnLoad(['jq-magnific-popup']);</script> --}}
 
 
-<script src="{{asset('src/assets/js/dashmix.app.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/dashmix.app.min.js')}}"></script> --}}
 
 <!-- jQuery (required for Magnific Popup plugin) -->
 {{-- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
 
 <!-- Page JS Plugins -->
-<script src="{{asset('src/assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/plugins/magnific-popup/jquery.magnific-popup.min.js')}}"></script> --}}
 
 <!-- Page JS Helpers (Magnific Popup Plugin) -->
-<script>Dashmix.helpersOnLoad(['jq-magnific-popup']);</script>
+{{-- <script>Dashmix.helpersOnLoad(['jq-magnific-popup']);</script> --}}
 @endsection

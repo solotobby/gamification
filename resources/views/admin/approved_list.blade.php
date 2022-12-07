@@ -66,7 +66,6 @@
                     </tr>
             </thead>
             <tbody>
-                
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $list)
                     <tr>
@@ -79,7 +78,6 @@
                         <td><a href="{{ url('reverse/transaction/'.$list->id) }}" class="btn btn-primary btn-sm">Reverse</a></td>
                     </tr>
                 @endforeach
-              
             </tbody>
           </table>
           {{-- <button class="btn btn-primary mb-2" type="submit">Approve All</button> --}}

@@ -80,7 +80,7 @@
                       @else
                       <a href="{{ url('campaign/activities/'.$list->job_id) }}" class="btn btn-success btn-sm"> View Activities </a>
                       @endif
-                      {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Edit</a>  --}}
+                      <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Edit</a> 
                     </td>
                   </tr>
                 @endforeach
