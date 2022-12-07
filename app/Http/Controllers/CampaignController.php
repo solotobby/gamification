@@ -123,7 +123,7 @@ class CampaignController extends Controller
             'currency' => 'NGN',
             'channel' => 'paystack',
             'type' => 'edit_campaign_payment',
-            'description' => 'Extent Campaign Payment'
+            'description' => 'Extend Campaign Payment'
         ]);
         return redirect($url);
         
