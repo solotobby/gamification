@@ -99,7 +99,7 @@
               <hr>
             
               <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
-              <input type="hidden" name="total_amount_pay" id="demo_text">
+              {{-- <input type="text" name="total_amount_pay" id="demo"> --}}
               
             </div>
           </div>
