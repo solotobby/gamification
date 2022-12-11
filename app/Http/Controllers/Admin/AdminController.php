@@ -485,7 +485,7 @@ class AdminController extends Controller
             $userWallet->balance += $amount;
             $userWallet->save(); 
 
-            return $est_amount = $camp->number_of_staff * $camp->campaign_amount;
+            $est_amount = $camp->number_of_staff * $camp->campaign_amount;
             $percent = (50 / 100) * $est_amount;
             $adminCom = $est_amount - $percent;
 
