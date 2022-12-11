@@ -347,7 +347,7 @@ class AdminController extends Controller
     }
 
     public function unapprovedJobs(){
-        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->get();
+        $list = CampaignWorker::orderBy('created_at', 'DESC')->get();
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
