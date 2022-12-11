@@ -88,8 +88,6 @@ class CampaignController extends Controller
      */
     public function update(Request $request, Campaign $campaign)
     {
-        //return $request;
-
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (50 / 100) * $est_amount;
         $total = $est_amount + $percent;

@@ -474,8 +474,42 @@ class AdminController extends Controller
     }
     public function campaignStatus($status, $id){
         $camp = Campaign::find($id);
-        $camp->status = $status;
-        $camp->save();
+
+        if($status = 'Decline'){
+            $amount = $camp->total_amount;
+            $camp->status = $status;
+            $camp->save();
+
+            //reverse the money
+            $userWallet = Wallet::where('user_id', $camp->user_id)->first();
+            $userWallet->balance += $amount;
+            $userWallet->save(); 
+
+            return $est_amount = $camp->number_of_staff * $camp->campaign_amount;
+            $percent = (50 / 100) * $est_amount;
+            $adminCom = $est_amount - $percent;
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance -= $adminCom;
+            $adminWallet->save(); 
+            
+            PaymentTransaction::create([
+                'user_id' => $camp->user_id,
+                'campaign_id' => $camp->id,
+                'reference' => time(),
+                'amount' => $amount,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'campaign_reversal',
+                'description' => 'Campaign Reversal for '.$camp->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);          
+        }else{
+            $camp->status = $status;
+            $camp->save();
+        }
         return back()->with('success', 'Campaign Successfully '.$status);
     }
 
