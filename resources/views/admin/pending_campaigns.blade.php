@@ -51,6 +51,7 @@
                     <th>Number of Staff</th>
                     <th>Unit Price</th>
                     <th>Total</th>
+                    <th>Status</th>
                     <th>When Created</th>
                     <th></th>
                     </tr>
@@ -65,6 +66,7 @@
                         <td>{{ $camp->number_of_staff }}</td>
                         <td>&#8358;{{ number_format($camp->campaign_amount) }}</td>
                         <td>&#8358;{{ number_format($camp->total_amount) }}</td>
+                        <td>{{ $camp->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>
                           <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}">View</button>
