@@ -347,7 +347,7 @@ class AdminController extends Controller
     }
 
     public function unapprovedJobs(){
-        $list = CampaignWorker::orderBy('created_at', 'DESC')->get();
+        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->get();
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
@@ -469,7 +469,7 @@ class AdminController extends Controller
     }
 
     public function campaignPending(){
-        $pendingCampaign = Campaign::where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
+        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
     public function campaignStatus($status, $id){
