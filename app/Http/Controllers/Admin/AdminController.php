@@ -125,7 +125,6 @@ class AdminController extends Controller
 
     public function gameStore(Request $request)
     {
-
         $slug = Str::slug($request->name);
         $game = Games::create([
             'name' => $request->name, 
@@ -473,9 +472,11 @@ class AdminController extends Controller
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
     public function campaignStatus($status, $id){
+        
         $camp = Campaign::find($id);
 
-        if($status = 'Decline'){
+        if($status == 'Decline'){
+            // return $status;
             $amount = $camp->total_amount;
             $camp->status = $status;
             $camp->save();
@@ -507,6 +508,7 @@ class AdminController extends Controller
                 'user_type' => 'regular'
             ]);          
         }else{
+            // return $status;
             $camp->status = $status;
             $camp->save();
         }
