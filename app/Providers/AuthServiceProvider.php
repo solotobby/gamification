@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,8 +25,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
-        //
+        // $this->registerPolicies();
+        // ResetPassword
+        ResetPassword::toMailUsing(function ($notifiable, $token) {
+            $url = route('password.reset',$token).'?email='.$notifiable->getEmailForPasswordReset();
+            return (new MailMessage())
+                ->subject('Password Reset')
+                ->view('emails.reset', compact('url'));
+        });
     }
 }
