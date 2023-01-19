@@ -79,8 +79,6 @@ class HomeController extends Controller
         // ->groupBy('date')
         // ->orderBy('date', 'desc')
         // ->get();
-        // return view('admin.home', ['users' => $user, 'campaigns' => $campaigns]);
-
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
 
     }
