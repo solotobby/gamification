@@ -12,7 +12,6 @@
                     Hi,  your password reset link is below.
                     <br>
                     {{ $url }}
-                    
                 </p>
                 <p style="margin-bottom: 10px;">
                     - OR - <br><br>

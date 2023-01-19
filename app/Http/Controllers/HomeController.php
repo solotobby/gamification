@@ -68,9 +68,6 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-        // $games = Games::orderBy('id', 'desc')->get();
-        // $questions = Question::all()->count();
-        // $gameplayed = Answer::select('id')->count();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
@@ -78,12 +75,13 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
-        $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
-        ->groupBy('date')
-        ->orderBy('date', 'desc')
-        ->get();
-       
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal, 'data' => $data]);
+        // $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
+        // ->groupBy('date')
+        // ->orderBy('date', 'desc')
+        // ->get();
+        // return view('admin.home', ['users' => $user, 'campaigns' => $campaigns]);
+
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
 
     }
 
