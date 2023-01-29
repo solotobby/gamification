@@ -304,7 +304,7 @@ class UserController extends Controller
 
     public function transactions()
     {
-        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('user_type', 'regular')->orderBy('created_at', 'desc')->get();
+        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('user_type', 'regular')->orderBy('created_at', 'DESC')->get();
         return view('user.transactions', ['lists' => $list]);
     }
 
@@ -402,7 +402,7 @@ class UserController extends Controller
         $wallet->save();
         $ref = time();
         $message = auth()->user()->name." REQUEST ".$gig." DATABUNDLE FOR  ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
-        $this->sendNotification($message);
+        return $this->sendNotification($message);
 
         PaymentTransaction::create([
             'user_id' => 1,
@@ -426,7 +426,7 @@ class UserController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post('https://api.ng.termii.com/api/sms/send', [
-            "to"=> '2349153590716',//$number,
+            "to"=> '2349153590716',//2349153590716$number,
             "from"=> "FREEBYZ",
             "sms"=> $message,
             "type"=> "plain",

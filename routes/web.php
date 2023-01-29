@@ -91,6 +91,8 @@ Route::get('approved/campaigns', [\App\Http\Controllers\CampaignController::clas
 Route::get('denied/campaigns', [\App\Http\Controllers\CampaignController::class, 'deniedCampaigns']);
 Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, 'completedJobs']);
 
+Route::post('addmore/workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');
+
 
 Route::get('campaign/approve/{id}', [\App\Http\Controllers\CampaignController::class, 'approveCampaign']);
 Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::class, 'denyCampaign']);

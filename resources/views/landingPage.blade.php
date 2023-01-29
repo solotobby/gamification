@@ -203,10 +203,6 @@
 								<p>
 									Hire social media workers to engage your posts on your blog and all 
 									social media channels for organic growth &  increased visibility for more sales.
-									{{-- We also give Data Bundles to encourage you to study more and make 
-									good researches. This will be processed the same way the Airtime rewards are shared. 
-									A minimum of 1gig data will be sent to candidates with good scores. This reward is still being 
-									processed at the moment! --}}
 								</p>
 							</div>
 						</div>
@@ -430,6 +426,64 @@
 								</div>
 								<div class="link-box">
 									- Adolphus Augustine Owolo
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from Facebook</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										I have used Freebyz to make money online and have been paid directly to my account severally. I also earn money on every friend I refer.
+									</p>
+								</div>
+								<div class="link-box">
+									- Friday Mathias Friday
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from Facebook</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										I can recommend Freebyz for you to make small small money online everyday.
+									</p>
+								</div>
+								<div class="link-box">
+									- Juliet 
 									{{-- <a href="#">Read More</a> --}}
 								</div>
 							</div>

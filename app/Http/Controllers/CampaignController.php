@@ -419,7 +419,6 @@ class CampaignController extends Controller
         $subject = 'Job Denied';
         $status = 'Denied';
         Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
-
         return back()->with('error', 'Campaign Denied Successfully');
     }
 
@@ -438,6 +437,31 @@ class CampaignController extends Controller
     {
         $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->get();
         return view('user.campaign.completed_jobs', ['lists' => $completedJobs]);
+    }
+
+    public function addMoreWorkers(Request $request){
+        $est_amount = $request->new_number * $request->amount;
+        $percent = (50 / 100) * $est_amount;
+        $total = $est_amount + $percent;
+        //[$est_amount, $percent, $total];
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($wallet->balance >= $total){
+        $wallet->balance -= $total;
+        $wallet->save();
+        
+        $campaign = Campaign::where('job_id', $request->id)->first();
+        $campaign->number_of_staff += $request->new_number;
+        $campaign->total_amount += $est_amount;
+        $campaign->save();
+
+        $content = "You have successfully increased the number of your workers.";
+        $subject = "Add More Worker";
+        $user = User::where('id', auth()->user()->id)->first();
+        Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject));
+            return back()->with('success', 'Worker Updated Successfully');
+        }else{
+            return back()->with('error', 'You do not have suficient funds in your wallet');
+        }
     }
 
     

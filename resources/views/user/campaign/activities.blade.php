@@ -96,7 +96,7 @@
                         <div class="modal-dialog modal-dialog-popout" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title">Response to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
+                            <h5 class="modal-title">Respond to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
