@@ -19,6 +19,10 @@
           <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
             {{url('register/'.auth()->user()->referral_code)}}
           </p>
+          <p>
+            Payment Via Transfer: Bank Name - Zenith Bank; Account Name - Dominahl Tech Services; Account Number - 1014763749
+          </p>
+
         </div>
       </div>
       
