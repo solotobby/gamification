@@ -54,6 +54,7 @@
                 {{-- <span class="input-group-text">,00</span> --}}
 
                 <select class="form-control" required name="name">
+                  <option value=""> Select Data Plan </option>
                     @foreach ($databundles as $data)
                         <option value="{{ $data->name }}:{{ $data->amount }}">{{ $data->name }} @ &#8358;{{ number_format($data->amount) }}</option>
                     @endforeach
