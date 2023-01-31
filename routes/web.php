@@ -109,6 +109,9 @@ Route::post('buy/databundle', [\App\Http\Controllers\UserController::class, 'buy
 
 //Marketplace
 Route::get('marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace');
+Route::get('marketplace/view', [\App\Http\Controllers\MarketplaceController::class, 'createProduct'])->name('create.marketplace');
+Route::post('marketplace/store', [\App\Http\Controllers\MarketplaceController::class, 'storeProduct'])->name('store.marketplace.product');
+Route::get('marketplace/list', [\App\Http\Controllers\MarketplaceController::class, 'myProduct'])->name('my.marketplace.products');
 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);

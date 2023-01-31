@@ -29,7 +29,7 @@
                     <p class="lead">
                         You have completed the payment. Please check your email for the content. Thank you for shopping with us!!!
                     </p>
-                    <a href="{{ url('/') }}" class="btn btn-lg">Back Home ›</a>
+                    <a href="{{ url('/home') }}" class="btn btn-lg">Back Home ›</a>
                 </div>
             </div>
         </div>

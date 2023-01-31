@@ -90,6 +90,33 @@
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-ring"></i>
+          <span class="nav-main-link-name">Market Place</span>
+           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</span> --}}
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('my.marketplace.products') }}">
+              <span class="nav-main-link-name">My Products</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('marketplace') }}">
+              <span class="nav-main-link-name">View</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('create.marketplace') }}">
+              <span class="nav-main-link-name">Create</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li>
+
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-users"></i>
           <span class="nav-main-link-name">Referral</span>
            <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->referees()->count(); }}</span>
@@ -114,12 +141,7 @@
           <span class="nav-main-link-name">Buy DataBundle</span>
         </a>
       </li>
-      <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('marketplace') }}">
-          <i class="nav-main-link-icon fa fa-ring"></i>
-          <span class="nav-main-link-name">Market Place</span>
-        </a>
-      </li>  
+      
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
