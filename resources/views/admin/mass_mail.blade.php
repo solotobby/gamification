@@ -31,7 +31,7 @@
     <h2 class="content-heading">Send Mass Email</h2>
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        {{-- <h3 class="block-title">Markdown Editor</h3> --}}
+        <h3 class="block-title">Send Broadcast Mail</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -39,6 +39,11 @@
         </div>
       </div>
       <div class="block-content">
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <form action="{{ route('send.mass.email') }}" method="POST">
             @csrf
             <div class="mb-4">

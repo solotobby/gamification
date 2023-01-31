@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMassEmail;
 use App\Mail\ApproveCampaign;
 use App\Mail\GeneralMail;
 use App\Mail\MassMail;
@@ -461,8 +462,9 @@ class AdminController extends Controller
 
         $message = $request->message;
         $subject = $request->subject;
+
         foreach($users as $user){
-            Mail::to($user->email)->send(new MassMail($user, $message, $subject));
+            dispatch(new SendMassEmail($user, $message, $subject)); 
         }
         return back()->with('success', 'Mail Sent Successful');
     }
