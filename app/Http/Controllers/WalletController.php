@@ -178,14 +178,15 @@ class WalletController extends Controller
         
         $ref = $params['tx_ref'];
         $status = $params['status'];
-        $transactionId = $params['transaction_id'];
+       
 
         // $res = Http::withHeaders([
         //     'Accept' => 'application/json',
         //     'Content-Type' => 'application/json',
         //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
-
+        if($status == 'success'){
+            $transactionId = $params['transaction_id'];
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -213,6 +214,9 @@ class WalletController extends Controller
        }
 
        return redirect('success');
+    }else{
+        return redirect('wallet/fund');
+    }
     }
 
     public function storeWithdraw(Request $request)
