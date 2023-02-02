@@ -34,6 +34,8 @@ Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\Ge
 Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
 Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']);//->name('marketplace');
 Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
+
+
 Auth::routes();
 
 Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
@@ -113,6 +115,9 @@ Route::get('marketplace/view', [\App\Http\Controllers\MarketplaceController::cla
 Route::post('marketplace/store', [\App\Http\Controllers\MarketplaceController::class, 'storeProduct'])->name('store.marketplace.product');
 Route::get('marketplace/list', [\App\Http\Controllers\MarketplaceController::class, 'myProduct'])->name('my.marketplace.products');
 
+Route::get('feedback', [\App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback');
+
+// ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
@@ -174,3 +179,5 @@ Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin
 Route::get('create/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'createDatabundles'])->name('create.databundles');
 Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'storeDatabundles'])->name('store.databundles');
 Route::get('charts', [\App\Http\Controllers\Admin\AdminController::class, 'charts']);
+Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings');
+Route::post('store/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'store'])->name('store.settings');

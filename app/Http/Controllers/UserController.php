@@ -32,20 +32,58 @@ class UserController extends Controller
     {
         $ref = time();
         
+        // $res = Http::withHeaders([
+        //     'Accept' => 'application/json',
+        //     'Content-Type' => 'application/json',
+        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        // ])->post('https://api.paystack.co/transaction/initialize', [
+        //     'email' => auth()->user()->email,
+        //     'amount' => 515*100,
+        //     'channels' => ['card'],
+        //     'currency' => 'NGN',
+        //     'reference' => $ref,
+        //     'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
+        // ]);
+        // $url = $res['data']['authorization_url'];
+
         $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->post('https://api.paystack.co/transaction/initialize', [
-            'email' => auth()->user()->email,
-            'amount' => 515*100,
-            'channels' => ['card'],
-            'currency' => 'NGN',
-            'reference' => $ref,
-            'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
-        ]);
-        $url = $res['data']['authorization_url'];
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+            ])->post('https://api.flutterwave.com/v3/payments', [
+
+                // 'email' => auth()->user()->email,
+                // 'amount' => 515*100,
+                // 'channels' => ['card'],
+                // 'currency' => 'NGN',
+                // 'reference' => $ref,
+                // 'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
+
+
+                'tx_ref'=> $ref,
+                'amount' => "515",
+                'currency' => "NGN",
+                'redirect_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment',//"https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc",
+                'meta'=> [
+                    'consumer_id'=> auth()->user()->id,
+                    'consumer_mac'=> "92a3-912ba-1192a"
+                ],
+                
+                
+                'customer' => [
+                    'email'=> auth()->user()->email,
+                    'phonenumber'=> auth()->user()->phone,
+                    'name'=> auth()->user()->name
+                ],
+                'customizations' => [
+                'title'=> "Account Activation Fee",
+                'logo'=> "https://scontent-lhr8-2.xx.fbcdn.net/v/t39.30808-6/299480030_186914963695163_5730832757031573548_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YorxiJMZ-TYAX-ozGv0&_nc_ht=scontent-lhr8-2.xx&oh=00_AfDNs_jlMvbCpF2_uZz0Fjh0G0J-jp5Fg3eWWkJ_YE953Q&oe=63E11ACD"
+                ]
+            ]);
+
+             $url = $res['data']['link'];
         
+
         PaymentTransaction::create([
             'user_id' => auth()->user()->id,
             'campaign_id' => '1',
@@ -57,7 +95,7 @@ class UserController extends Controller
             'type' => 'upgrade_payment',
             'description' => 'Ugrade Payment'
         ]);
-        return redirect($url);
+         return redirect($url);
         //return $res;
     }
 
@@ -66,17 +104,27 @@ class UserController extends Controller
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
-        $ref = $params['trxref'];
+        $ref = $params['tx_ref'];
+        $status = $params['status'];
+        $transactionId = $params['transaction_id'];
 
-        $res = Http::withHeaders([
+        // $ref = $params['trxref']; //paystack
+//https://api.flutterwave.com/v3/hosted/pay/f524c1196ffda5556341
+        // $res = Http::withHeaders([
+        //     'Accept' => 'application/json',
+        //     'Content-Type' => 'application/json',
+        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
+
+         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/transactions/'.$transactionId.'/verify')->throw();
 
-       $status = $res['data']['status'];
+        $statusVerification = $res['data']['status'];
 
-       if($status == 'success')
+       if($statusVerification == 'successful')
        {
             $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
             $fetchPaymentTransaction->status = 'successful';

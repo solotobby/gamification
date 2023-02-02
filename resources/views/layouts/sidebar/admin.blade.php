@@ -137,6 +137,14 @@
         </a>
       </li>
 
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('settings') }}">
+          <i class="nav-main-link-icon fa fa-cogs"></i>
+          <span class="nav-main-link-name">Settings</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+
 
     </ul>
   </div>

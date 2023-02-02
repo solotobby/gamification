@@ -28,7 +28,7 @@
   <div class="content">
     <!-- SimpleMDE Editor (js-simplemde class is initialized in Helpers.jsSimpleMDE()) -->
     <!-- For more info and examples you can check out https://github.com/NextStepWebs/simplemde-markdown-editor -->
-    <h2 class="content-heading">Send Mass Email</h2>
+    {{-- <h2 class="content-heading">Send Mass Email</h2> --}}
     <div class="block block-rounded">
       <div class="block-header block-header-default">
         <h3 class="block-title">Send Broadcast Mail</h3>

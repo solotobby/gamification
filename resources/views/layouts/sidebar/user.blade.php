@@ -154,11 +154,8 @@
         <a class="nav-main-link" href="{{ route('feedback') }}">
           <i class="nav-main-link-icon fa fa-reply"></i>
           <span class="nav-main-link-name">Feedback</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span>
         </a>
       </li> --}}
-     
-
 
     </ul>
   </div>
