@@ -185,8 +185,9 @@ class WalletController extends Controller
         //     'Content-Type' => 'application/json',
         //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
-        if($status == 'success'){
-            $transactionId = $params['transaction_id'];
+        if($status == 'successful'){
+            $transactionId =  $params['transaction_id'];
+        
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -214,6 +215,7 @@ class WalletController extends Controller
        }
 
        return redirect('success');
+
     }else{
         return redirect('wallet/fund');
     }

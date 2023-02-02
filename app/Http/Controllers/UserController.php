@@ -109,14 +109,15 @@ class UserController extends Controller
        
 
         // $ref = $params['trxref']; //paystack
-//https://api.flutterwave.com/v3/hosted/pay/f524c1196ffda5556341
+        //https://api.flutterwave.com/v3/hosted/pay/f524c1196ffda5556341
         // $res = Http::withHeaders([
         //     'Accept' => 'application/json',
         //     'Content-Type' => 'application/json',
         //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
 
-        if($status == 'success'){
+        if($status == 'successful'){
+
             $transactionId = $params['transaction_id'];
             $res = Http::withHeaders([
                 'Accept' => 'application/json',
@@ -227,6 +228,7 @@ class UserController extends Controller
            }else{
                 return redirect('error');
            }
+
         }else{
             return redirect('upgrade');
         }

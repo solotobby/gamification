@@ -27,7 +27,7 @@
               </div>
               <div class="text-center mb-4">
                 <button type="submit" class="btn btn-primary">
-                  <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Fund Wallet
+                  <i class="fa fa-fw fa-money-bill opacity-50 me-1"></i> Fund Wallet
                 </button>
               </div>
             </form>
