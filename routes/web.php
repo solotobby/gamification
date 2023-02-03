@@ -28,7 +28,7 @@ Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'tra
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
 
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
-Route::get('marketplace/payment/completion', [\\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
+Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
 
 Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
 Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
