@@ -27,8 +27,8 @@ Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
 
-Route::get('marketplace/payment/callback', [App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
-Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
+Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
+Route::get('marketplace/payment/completion', [\\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
 
 Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
 Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
@@ -38,19 +38,19 @@ Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController
 
 Auth::routes();
 
-Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
+Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 //Take Quiz
-Route::get('instruction', [App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
-Route::get('take/quiz', [App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
-Route::get('next/question', [App\Http\Controllers\HomeController::class, 'nextQuestion']);
-Route::get('submit/answers', [App\Http\Controllers\HomeController::class, 'submitAnswers']);
-Route::post('store/asnwer', [App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
-Route::get('score/list', [App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
-Route::get('redeem/reward/{id}', [App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
-Route::post('save/bank/information', [App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
-Route::post('save/phone/information', [App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
+Route::get('instruction', [\App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
+Route::get('take/quiz', [\App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
+Route::get('next/question', [\App\Http\Controllers\HomeController::class, 'nextQuestion']);
+Route::get('submit/answers', [\App\Http\Controllers\HomeController::class, 'submitAnswers']);
+Route::post('store/asnwer', [\App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
+Route::get('score/list', [\App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
+Route::get('redeem/reward/{id}', [\App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
+Route::post('save/bank/information', [\App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
+Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 
 ////Referral Routes
@@ -73,7 +73,7 @@ Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::clas
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
 ///paystack payment 
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
-Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 
 ///payment routes
 Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::class, 'goLive']);
@@ -137,10 +137,10 @@ Route::post('assign/reward', [\App\Http\Controllers\Admin\AdminController::class
 
 
 
-Route::get('game/create', [App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
-Route::post('game/store', [App\Http\Controllers\Admin\AdminController::class, 'gameStore'])->name('game.store');
-Route::get('view/amount', [App\Http\Controllers\Admin\AdminController::class, 'viewAmount'])->name('view.amount');
-Route::post('update/amount', [App\Http\Controllers\Admin\AdminController::class, 'updateAmount'])->name('update.amount');
+Route::get('game/create', [\App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
+Route::post('game/store', [\App\Http\Controllers\Admin\AdminController::class, 'gameStore'])->name('game.store');
+Route::get('view/amount', [\App\Http\Controllers\Admin\AdminController::class, 'viewAmount'])->name('view.amount');
+Route::post('update/amount', [\App\Http\Controllers\Admin\AdminController::class, 'updateAmount'])->name('update.amount');
 
 //airtime mgt
 //Route::get('airime', [App\Http\Controllers\Admin\AdminController::class, 'sendAirtime'])->name('airtime');
@@ -161,7 +161,7 @@ Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminControlle
 Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
-Route::get('campaigns/pending', [App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
+Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
 Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');
@@ -172,7 +172,7 @@ Route::get('reverse/transaction/{id}', [\App\Http\Controllers\Admin\AdminControl
 Route::post('mass/approval', [\App\Http\Controllers\Admin\AdminController::class, 'massApproval'])->name('mass.approval');
 
 /////Market Place
-Route::get('admin/marketplace/view', [App\Http\Controllers\Admin\AdminController::class, 'viewMarketplace'])->name('view.admin.marketplace');
+Route::get('admin/marketplace/view', [\App\Http\Controllers\Admin\AdminController::class, 'viewMarketplace'])->name('view.admin.marketplace');
 Route::get('admin/marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
 Route::post('admin/post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
 Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeMarketplaceProduct']);
