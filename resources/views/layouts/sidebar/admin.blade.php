@@ -138,12 +138,13 @@
       </li>
 
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('settings') }}">
-          <i class="nav-main-link-icon fa fa-cogs"></i>
-          <span class="nav-main-link-name">Settings</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        <a class="nav-main-link" href="{{ route('admin.feedback') }}">
+          <i class="nav-main-link-icon fa fa-paper-plane"></i>
+          <span class="nav-main-link-name">Feebacks</span>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">0</span>
         </a>
       </li>
+      
 
 
     </ul>

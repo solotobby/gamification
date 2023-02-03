@@ -44,4 +44,8 @@ class SettingsController extends Controller
         $setting = Settings::create(['name' => $key, 'value' => $value]);
         return $setting;
     }
+
 }
+
+
+    

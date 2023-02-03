@@ -150,12 +150,12 @@
         </a>
       </li>
 
-      {{-- <li class="nav-main-item">
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('feedback') }}">
-          <i class="nav-main-link-icon fa fa-reply"></i>
+          <i class="nav-main-link-icon fa fa-paper-plane"></i>
           <span class="nav-main-link-name">Feedback</span>
         </a>
-      </li> --}}
+      </li>
 
     </ul>
   </div>

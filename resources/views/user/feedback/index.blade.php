@@ -7,25 +7,70 @@
         <div class="block block-rounded">
           <!-- Chat #1 Header -->
           <div class="block-content block-content-full bg-primary text-center">
-            <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar10.jpg" alt="">
+            {{-- <img class="img-avatar img-avatar-thumb" src="{{asset('assets/media/avatars/avatar10.jpg')}}" alt=""> --}}
             <p class="fs-lg fw-semibold text-white mt-3 mb-0">
-              James Smith
+              Feedback
             </p>
-            <p class="text-white-75 mb-0">
+            {{-- <p class="text-white-75 mb-0">
               Web Developer
-            </p>
+            </p> --}}
           </div>
           <!-- END Chat #1 Header -->
 
-          <!-- Chat #1 Messages -->
-          <div class="js-chat-messages block-content block-content-full text-break overflow-y-auto" data-chat-id="1" style="height: 300px;"></div>
+        
 
+          
+          
           <!-- Chat #1 Input -->
-          <div class="js-chat-form block-content p-2 bg-body-dark">
-            <form action="be_comp_chat.html" method="POST">
-              <input type="text" class="js-chat-input form-control form-control-alt" data-target-chat-id="1" placeholder="Type a message..">
-            </form>
-          </div>
+          
+
+          <div class="block-content">
+            <div class="row">
+                <div class="alert alert-info"> We want to here from you. Please let us know whow you feel about Freebyz.</div>
+                @if ($errors->any())
+                    <div class="alert alert-danger mt-2">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('store.feedback') }}" method="POST">
+                    @csrf
+                    <div class="col-md-12 mb-3">
+                        <label>Pick an option</label>
+                        <select class="form-control" name="category" required>
+                            <option value="">Select an Option</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="complaint">Complaint</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label>Meesage</label>
+                        <textarea class="form-control" name="message" id="js-ckeditor5-classic"></textarea>
+                    </div>
+                    <input type="hidden" name='user_id' value="{{ auth()->user()->id }}">
+                    <div class="row mb-4 mt-4">
+                        <div class="col-lg-6">
+                            <button type="submit" class="btn btn-alt-primary">
+                                <i class="fa fa-paper-plane opacity-50 me-1"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+
+        </div>
+
           <!-- END Chat #1 Input -->
         </div>
         <!-- END Chat #1 -->
@@ -35,10 +80,10 @@
   </div>
 @endsection
 @section('script')
- <!-- Page JS Plugins -->
- <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 
- <!-- Page JS Code -->
- <script src="{{ asset('src/assets/js/pages/be_comp_chat.min.js')}}"></script>
+<script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- Page JS Helpers (CKEditor 5 plugins) -->
+<script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script>
  
 @endsection

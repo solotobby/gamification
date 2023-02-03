@@ -13,13 +13,13 @@
 |
 */
 
+use Illuminate\Support\Facades\App;
 
-
-Route::get('/', [App\Http\Controllers\GeneralController::class, 'landingPage']);
-Route::get('contact', [App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
-Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
-Route::get('games', [App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
-Route::get('winner/list', [App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
+Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
+Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
+Route::get('goal', [\App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
+Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
+Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
 Route::get('make-money', [\App\Http\Controllers\GeneralController::class, 'make_money']);
 Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
@@ -116,23 +116,24 @@ Route::post('marketplace/store', [\App\Http\Controllers\MarketplaceController::c
 Route::get('marketplace/list', [\App\Http\Controllers\MarketplaceController::class, 'myProduct'])->name('my.marketplace.products');
 
 Route::get('feedback', [\App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback');
+Route::post('feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('store.feedback');
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
-Route::get('user/home', [App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
-Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
+Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
 
-Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);
-Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
-Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
-Route::post('question/update', [App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('questions.update');
-Route::get('question/list', [App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
+Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
+Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
+Route::post('question/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
+Route::post('question/update', [\App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('questions.update');
+Route::get('question/list', [\App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
 //Game Routes
-Route::get('game/status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
-Route::get('view/activities/{id}', [App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
-Route::post('assign/reward', [App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
+Route::get('game/status/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
+Route::get('view/activities/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
+Route::post('assign/reward', [\App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
 
 
 
@@ -181,3 +182,9 @@ Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::c
 Route::get('charts', [\App\Http\Controllers\Admin\AdminController::class, 'charts']);
 Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings');
 Route::post('store/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'store'])->name('store.settings');
+Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'index'])->name('admin.feedback');
+Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
+Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
+
+
+
