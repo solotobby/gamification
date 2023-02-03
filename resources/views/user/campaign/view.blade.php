@@ -1,4 +1,3 @@
-
 @extends('layouts.main.master')
 
 @section('title', 'Winner List')
@@ -83,14 +82,58 @@
               </li>
               <li>
                 <span class="fa-li text-primary">
-                  <i class="fa fa-clock"></i>
+                  <i class="fa fa-users"></i>
                 </span>
                 <div class="fw-semibold">Number of Worker</div>
                 <div class="text-muted">{{$campaign->number_of_staff}}</div>
               </li>
+              @if($campaign->user_id == auth()->user()->id)
+                <li>
+                  <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}">Add More Workers</button>
+                </li>
+              @endif
             </ul>
           </div>
         </div>
+
+        <div class="modal fade" id="modal-default-popout-{{ $campaign->job_id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-popout" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h5 class="modal-title"> Add More Worker </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="modal-body pb-1">
+                Current Number of Workers - {{ $campaign->number_of_staff }} <br>
+                Current Value per Job  - {{ number_format($campaign->campaign_amount) }} <br>
+                Current Value  - &#8358;{{ number_format($campaign->total_amount) }} <br>
+                <hr>
+                <form action="{{ route('addmore.workers') }}" method="POST">
+                  @csrf
+                  <div class="mb-4">
+                    <label class="form-label" for="post-files">Number of Worker</small></label>
+                        <input class="form-control" name="new_number" type="number" required>
+                  </div>
+                  <input type="hidden" name="id" value="{{ $campaign->job_id }}">
+                  <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
+                  <div class="mb-4">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                  </div>
+                 </form>
+
+                 
+              </div>
+              
+              <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+              {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+              </div>
+          </div>
+          </div>
+      </div>
+
+
         <!-- END Job Summary -->
       </div>
       <div class="col-md-8 order-md-0">

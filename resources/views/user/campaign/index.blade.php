@@ -77,7 +77,7 @@
                     <td>{{ $list->status }}</td>
                     <td>
                       @if($list->status == "Offline")
-                        <a href="{{ url('golive/'.$list->job_id) }}" class="btn btn-primary btn-sm"> Go Live </a>
+                        {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}
                       @else
                       <a href="{{ url('campaign/activities/'.$list->job_id) }}" class="btn btn-success btn-sm"> View Activities </a>
                       @endif
