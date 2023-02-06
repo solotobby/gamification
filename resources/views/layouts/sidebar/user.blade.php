@@ -153,7 +153,7 @@
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('feedback') }}">
           <i class="nav-main-link-icon fa fa-paper-plane"></i>
-          <span class="nav-main-link-name">Feedback</span>
+          <span class="nav-main-link-name">Talk to Us</span>
         </a>
       </li>
 

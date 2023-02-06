@@ -16,9 +16,11 @@
         <h2 class="content-heading">Feedback/Complaint</h2>
         <div class="row">
           <div class="col-lg-12">
-            <div class="alert alert-info text-small">
-                Sender Name - {{ $feedback->user->name }}<br>
+            <div class="alert alert-warning text-small">
+                Sender Name - <a href="{{ url('user/'.$feedback->user->id.'/info')}} "> {{$feedback->user->name }} </a><br>
+                Sender Email - {{ $feedback->user->email }}<br>
                 Category - {{ $feedback->category }}<br>
+               
             </div>
 
             <p class="text-muted">
@@ -35,7 +37,7 @@
             @foreach ($replies as $reply)
             <p class="text-muted">
 
-                <small>{{$reply->user->name}}</small>:
+                <small>{{$reply->user->name}} </small>:
                <code> {!! $reply->message !!} </code>
             </p>
             @endforeach
