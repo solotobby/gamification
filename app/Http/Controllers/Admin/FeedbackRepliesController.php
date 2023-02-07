@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\GeneralMail;
 use App\Models\Feedback;
 use App\Models\FeedbackReplies;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FeedbackRepliesController extends Controller
 {
@@ -28,7 +31,15 @@ class FeedbackRepliesController extends Controller
         $request->validate([
             'message' => 'required',
         ]);
-        FeedbackReplies::create($request->all());
+        $replies = FeedbackReplies::create($request->all());
+
+        $senderEmail = $replies->feedback->user->email;
+
+        $user = User::where('id', auth()->user()->id)->first();
+        $subject = 'Admin Feedback Reply';
+        $content = $request->message;
+        Mail::to($senderEmail)->send(new GeneralMail($user, $content, $subject));
+        
         return back()->with('success', 'Reply sent');
     }
 }
