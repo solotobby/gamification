@@ -33,13 +33,13 @@ class FeedbackRepliesController extends Controller
         ]);
         $replies = FeedbackReplies::create($request->all());
 
-        $senderEmail = $replies->feedback->user->email;
+        $senderID = $replies->feedback->user->id;
 
-        $user = User::where('id', auth()->user()->id)->first();
+        $user = User::where('id', $senderID)->first();
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
-        Mail::to($senderEmail)->send(new GeneralMail($user, $content, $subject));
-        
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+
         return back()->with('success', 'Reply sent');
     }
 }
