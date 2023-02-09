@@ -26,7 +26,7 @@
 
           <div class="block-content">
             <div class="row">
-                <div class="alert alert-info"> We want to here from you. Please let us know how you feel about Freebyz.</div>
+                <div class="alert alert-info"> We want to hear from you. Please let us know how you feel about Freebyz.</div>
                 @if ($errors->any())
                     <div class="alert alert-danger mt-2">
                         <ul>
