@@ -19,6 +19,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Nette\Utils\Random;
 
 class HomeController extends Controller
@@ -87,8 +88,29 @@ class HomeController extends Controller
         foreach ($data as $key => $value) {
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
         }
+
+        $monthlyCounts = \DB::table('users')
+                        ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
+                        ->selectRaw('count(*) as count')
+                        ->selectRaw('SUM(is_verified) as verified')
+                        ->groupBy('month')
+                        ->orderBy('month', 'asc')
+                        ->get();//pluck('count', 'month');
+        $listResult[] = ['Month', 'Registered', 'Verified'];
+        foreach ($monthlyCounts as $key => $value) {
+            $listResult[++$key] = [$value->month, (int)$value->count, (int)$value->verified];
+        }
+
+
+
+        // return $users = User::select('name', 'created_at')
+        //     ->get()
+        //     ->groupBy(function($date) {
+        //         return Carbon::parse($date->created_at)->format('M'); // grouping by months
+        //     });
+
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($result));
+        ->with('visitor',json_encode($result))->with('monthly',json_encode($listResult));
 
     }
 

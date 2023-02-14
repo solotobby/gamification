@@ -9,18 +9,42 @@
   function drawChart() {
     var data = google.visualization.arrayToDataTable(visitor);
     var options = {
-      // title: 'Activity Chart',
+      title: 'Daily Activity',
       curveType: 'function',
-      legend: { position: 'top' }
+      legend: { position: 'bottom' }
     };
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));
     chart.draw(data, options);
   }
-</script>
+</script> 
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      var monthly = <?php echo $monthly; ?>;
+      console.log(monthly);
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable(monthly);
+
+        var options = {
+          title : 'Monthly Registeration and Verification',
+          vAxis: {title: 'Number'},
+          hAxis: {title: 'Month'},
+          seriesType: 'bars',
+          series: {5: {type: 'line'}}
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 @endsection
 @section('content')
 <div class="content">
-  
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
         <h1 class="h3 mb-1">
@@ -232,24 +256,12 @@
 
     <div class="row">
       <div class="col-xl-12">
-        <!-- Lines Chart -->
-        <div class="block block-rounded">
-          <div class="block-header block-header-default">
-            <h3 class="block-title">Activity Chart</h3>
-            <div class="block-options">
-              <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                <i class="si si-refresh"></i>
-              </button>
-            </div>
-          </div>
-         {{-- <div class="block-content block-content-full text-center" > --}}
-            
 
-              <div id="linechart" style="width: 100%; height: 500px"></div>
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        
+        <hr>
 
-          {{--</div>--}}
-        </div>
-       
+        <div id="linechart" style="width: 100%; height: 500px"></div>
       </div>
     </div>
   </div>
