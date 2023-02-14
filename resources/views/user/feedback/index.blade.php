@@ -16,11 +16,6 @@
             </p> --}}
           </div>
           <!-- END Chat #1 Header -->
-
-        
-
-          
-          
           <!-- Chat #1 Input -->
           
 

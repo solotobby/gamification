@@ -78,11 +78,17 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
-        // $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
-        // ->groupBy('date')
-        // ->orderBy('date', 'desc')
-        // ->get();
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
+        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+        // DATE_FORMAT(created_at, "%d-%b-%Y")
+        $result[] = ['Year','Registered','Verified'];
+        foreach ($data as $key => $value) {
+            $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
+        }
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        ->with('visitor',json_encode($result));
 
     }
 

@@ -1,6 +1,26 @@
 @extends('layouts.main.master')
+@section('style')
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  var visitor = <?php echo $visitor; ?>;
+  console.log(visitor);
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable(visitor);
+    var options = {
+      // title: 'Activity Chart',
+      curveType: 'function',
+      legend: { position: 'top' }
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+    chart.draw(data, options);
+  }
+</script>
+@endsection
 @section('content')
 <div class="content">
+  
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
         <h1 class="h3 mb-1">
@@ -223,16 +243,13 @@
             </div>
           </div>
           <div class="block-content block-content-full text-center" >
-            <div class="py-3">
+            
+
+              <div id="linechart" style="width: 100%; height: 500px"></div>
 
                
-              <!-- Lines Chart Container -->
-              {{-- <div id="container" style="height: 400px"></div> --}}
-              {{-- <div id="chart1"></div> --}}
-              {{-- <canvas id="js-chartjs-lines"></canvas> --}}
-
-              {{-- <canvas id="myChart" style="width:100%;"></canvas> --}}
-            </div>
+             
+            
           </div>
         </div>
         <!-- END Lines Chart -->
