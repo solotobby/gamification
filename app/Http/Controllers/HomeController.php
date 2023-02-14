@@ -80,7 +80,7 @@ class HomeController extends Controller
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
         ->groupBy('date')
-        ->orderBy('date', 'desc')
+        ->orderBy('date', 'asc')
         ->get();
         // DATE_FORMAT(created_at, "%d-%b-%Y")
         $result[] = ['Year','Registered','Verified'];
