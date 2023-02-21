@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
 use App\Mail\UpgradeUser;
 use App\Models\DataBundle;
 use App\Models\PaymentTransaction;
@@ -31,72 +32,10 @@ class UserController extends Controller
     public function makePayment()
     {
         $ref = time();
-        
-        // $res = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        // ])->post('https://api.paystack.co/transaction/initialize', [
-        //     'email' => auth()->user()->email,
-        //     'amount' => 515*100,
-        //     'channels' => ['card'],
-        //     'currency' => 'NGN',
-        //     'reference' => $ref,
-        //     'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
-        // ]);
-        // $url = $res['data']['authorization_url'];
-
-        $res = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-            ])->post('https://api.flutterwave.com/v3/payments', [
-
-                // 'email' => auth()->user()->email,
-                // 'amount' => 515*100,
-                // 'channels' => ['card'],
-                // 'currency' => 'NGN',
-                // 'reference' => $ref,
-                // 'callback_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment'
-
-
-                'tx_ref'=> $ref,
-                'amount' => "515",
-                'currency' => "NGN",
-                'redirect_url' => env('PAYSTACK_CALLBACK_URL').'/upgrade/payment',//"https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc",
-                'meta'=> [
-                    'consumer_id'=> auth()->user()->id,
-                    'consumer_mac'=> "92a3-912ba-1192a"
-                ],
-                
-                
-                'customer' => [
-                    'email'=> auth()->user()->email,
-                    'phonenumber'=> auth()->user()->phone,
-                    'name'=> auth()->user()->name
-                ],
-                'customizations' => [
-                'title'=> "Account Activation Fee",
-                'logo'=> "https://scontent-lhr8-2.xx.fbcdn.net/v/t39.30808-6/299480030_186914963695163_5730832757031573548_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YorxiJMZ-TYAX-ozGv0&_nc_ht=scontent-lhr8-2.xx&oh=00_AfDNs_jlMvbCpF2_uZz0Fjh0G0J-jp5Fg3eWWkJ_YE953Q&oe=63E11ACD"
-                ]
-            ]);
-
-             $url = $res['data']['link'];
-        
-
-        PaymentTransaction::create([
-            'user_id' => auth()->user()->id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => 500,
-            'status' => 'unsuccessful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
-            'type' => 'upgrade_payment',
-            'description' => 'Ugrade Payment'
-        ]);
-         return redirect($url);
-        //return $res;
+        $url = PaystackHelpers::initiateTrasaction($ref, 515, '/upgrade/payment');
+        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 500, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+        return redirect($url);
+       
     }
 
     public function upgradeCallback()
@@ -104,55 +43,25 @@ class UserController extends Controller
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
-        $ref = $params['tx_ref'];
-        $status = $params['status'];
-       
 
-        // $ref = $params['trxref']; //paystack
-        //https://api.flutterwave.com/v3/hosted/pay/f524c1196ffda5556341
-        // $res = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
-
-        if($status == 'successful'){
-
-            $transactionId = $params['transaction_id'];
-            $res = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-            ])->get('https://api.flutterwave.com/v3/transactions/'.$transactionId.'/verify')->throw();
-    
+        $ref = $params['trxref']; //paystack
+        $res = PaystackHelpers::verifyTransaction($ref);
+      
             $statusVerification = $res['data']['status'];
     
-           if($statusVerification == 'successful')
+           if($statusVerification == 'success')
            {
-                $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
-                $fetchPaymentTransaction->status = 'successful';
-                $fetchPaymentTransaction->save();
-    
+
+            PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
+            
                 //credit User with 1,000 bonus
                 $bonus = Wallet::where('user_id', auth()->user()->id)->first();
                 $bonus->bonus += '1000';
                 $bonus->save();
     
                 if($bonus){
-                     //user transction table for bonus 
-                    PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => '1',
-                        'reference' => time(),
-                        'amount' => 1000,
-                        'status' => 'successful',
-                        'currency' => 'NGN',
-                        'channel' => 'paystack',
-                        'type' => 'upgrade_bonus',
-                        'description' => 'Verification Bonus for '.auth()->user()->name,
-                        'tx_type' => 'Credit',
-                        'user_type' => 'regular'
-                    ]);
+                    $description = 'Verification Bonus for '.auth()->user()->name;
+                    PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', time(), 1000, 'successful', 'upgrade_bonus', $description, 'Credit', 'regular');
                 }
                
                 $user = User::where('id', auth()->user()->id)->first();
@@ -172,35 +81,17 @@ class UserController extends Controller
     
                 $referee_user = User::where('id', $referee->referee_id)->first();
                 ///Transactions
-                PaymentTransaction::create([
-                    'user_id' => $referee_user->id,///auth()->user()->id,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => 250,
-                    'status' => 'successful',
-                    'currency' => 'NGN',
-                    'channel' => 'paystack',
-                    'type' => 'referer_bonus',
-                    'description' => 'Referer Bonus from '.auth()->user()->name
-                ]);
+                $description = 'Referer Bonus from '.auth()->user()->name;
+                PaystackHelpers::paymentTrasanction($referee_user->id, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+  
     
                 $adminWallet = Wallet::where('user_id', '1')->first();
                 $adminWallet->balance += 250;
                 $adminWallet->save();
                 //Admin Transaction Tablw
-                PaymentTransaction::create([
-                    'user_id' => 1,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => 250,
-                    'status' => 'successful',
-                    'currency' => 'NGN',
-                    'channel' => 'paystack',
-                    'type' => 'referer_bonus',
-                    'description' => 'Referer Bonus from '.$user->name,
-                    'tx_type' => 'Credit',
-                    'user_type' => 'admin'
-                ]);
+                $description = 'Referer Bonus from '.$user->name;
+                PaystackHelpers::paymentTrasanction(1, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+  
     
                }else{
     
@@ -208,26 +99,11 @@ class UserController extends Controller
                 $adminWallet->balance += 500;
                 $adminWallet->save();
                  //Admin Transaction Tablw
-                 PaymentTransaction::create([
-                    'user_id' => 1,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => 500,
-                    'status' => 'successful',
-                    'currency' => 'NGN',
-                    'channel' => 'paystack',
-                    'type' => 'direct_referer_bonus',
-                    'description' => 'Direct Referer Bonus from '.$user->name,
-                    'tx_type' => 'Credit',
-                    'user_type' => 'admin'
-                ]);
+                $description = 'Direct Referer Bonus from '.$user->name;
+                PaystackHelpers::paymentTrasanction(1, '1', time(), 500, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
                }
                Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
                return redirect('success');
-    
-           }else{
-                return redirect('error');
-           }
 
         }else{
             return redirect('upgrade');

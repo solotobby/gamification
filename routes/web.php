@@ -26,6 +26,8 @@ Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
+Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
+Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
 Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);

@@ -95,19 +95,12 @@ class HomeController extends Controller
                         ->selectRaw('SUM(is_verified) as verified')
                         ->groupBy('month')
                         ->orderBy('month', 'asc')
-                        ->get();//pluck('count', 'month');
+                        ->get();
+
         $listResult[] = ['Month', 'Registered', 'Verified'];
         foreach ($monthlyCounts as $key => $value) {
-            $listResult[++$key] = [$value->month, (int)$value->count, (int)$value->verified];
+            $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
         }
-
-
-
-        // return $users = User::select('name', 'created_at')
-        //     ->get()
-        //     ->groupBy(function($date) {
-        //         return Carbon::parse($date->created_at)->format('M'); // grouping by months
-        //     });
 
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($result))->with('monthly',json_encode($listResult));

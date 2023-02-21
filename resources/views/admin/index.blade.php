@@ -32,7 +32,7 @@
 
         var options = {
           title : 'Monthly Registeration and Verification',
-          vAxis: {title: 'Number'},
+          vAxis: {title: 'Numbers'},
           hAxis: {title: 'Month'},
           seriesType: 'bars',
           series: {5: {type: 'line'}}

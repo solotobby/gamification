@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\PaymentTransaction;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Http;
 
@@ -62,62 +63,55 @@ class PaystackHelpers{
          return json_decode($res->getBody()->getContents(), true);
     }
 
-    public static function reloadlyAuth0Token()
-    {
+    public static function initiateTrasaction($ref, $amount, $redirect_url){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            //'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->post('https://auth.reloadly.com/oauth/token', [
-            "client_id"=> env('RELOADLY_CLIENT_ID'),
-            "client_secret"=> env('RELOADLY_CLIENT_SECRET'),
-            "grant_type"=>"client_credentials",
-            "audience"=>"https://topups.reloadly.com"
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transaction/initialize', [
+            'email' => auth()->user()->email,
+            'amount' => $amount*100,
+            'channels' => ['card'],
+            'currency' => 'NGN',
+            'reference' => $ref,
+            'callback_url' => env('PAYSTACK_CALLBACK_URL').$redirect_url
         ]);
-
-         return json_decode($res->getBody()->getContents(), true);
+       return $res['data']['authorization_url'];
     }
 
-    public static function getRealoadlyMobileOperator($bearerToken, $phone)
-    {
+    public static function verifyTransaction($ref){
         $res = Http::withHeaders([
-            'Accept'=> 'application/com.reloadly.topups-v1+json',
+            'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.$bearerToken,
-        ])->get('https://topups.reloadly.com/operators/auto-detect/phone/'.$phone.'/countries/NG?suggestedAmountsMap=true&SuggestedAmounts=true')->throw();
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
     }
 
-    public static function initiateReloadlyAirtime($bearerToken, $phone, $operatorId, $amount)
+    public static function paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
     {
-        
-        $res = Http::withHeaders([
-            // 'Accept' => 'application/json',
-            'Accept'=> 'application/com.reloadly.topups-v1+json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.$bearerToken,
-        ])->post('https://topups.reloadly.com/topups', [
-            // "client_id"=>"bHVLIFVUZCiUnuRu8wlWGrzpBADxJCys",
-            // "client_secret"=>"XqtUp4EciM-opj2pYWE52R4qh98iHe-NshjBtMzfcFok4jq2YnEIg0XWohnerSu",
-            // "grant_type"=>"client_credentials",
-            // "audience"=>"https://topups.reloadly.com"
-
-            "operatorId"=>$operatorId,
-            "amount"=>$amount,
-            "customIdentifier"=> "This is example identifier 092",
-            "recipientPhone"=> [
-                "countryCode"=> "NG",
-                "number"=> $phone,
-            ],
-            "senderPhone"=> [
-                "countryCode"=> "CA",
-                "number"=> "1231231231"
-            ]
+       return PaymentTransaction::create([
+            'user_id' => $userId,
+            'campaign_id' => $campaign_id,
+            'reference' => $ref,
+            'amount' => $amount,
+            'status' => $status,
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => $type,
+            'description' => $description,
+            'tx_type' => $tx_type,
+            'user_type' => $user_type
         ]);
+    }
 
-        return json_decode($res->getBody()->getContents(), true);
+    public static function paymentUpdate($ref, $status){
+        $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
+        $fetchPaymentTransaction->status = $status;
+        $fetchPaymentTransaction->save();
 
+        return $fetchPaymentTransaction;
     }
 
     public static function sendNotificaion($number, $message)
@@ -136,6 +130,7 @@ class PaystackHelpers{
 
          return json_decode($res->getBody()->getContents(), true);
     }
+
 
     
 

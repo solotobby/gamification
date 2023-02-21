@@ -13,12 +13,12 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-        $prizes = Transaction::where('reward_type', 'CASH')->sum('amount') / 100;
-        $otherPrizes = Transaction::where('reward_type', 'DATA')->where('reward_type', 'AIRTIME')->sum('amount');
-        $prizesWon = $prizes + $otherPrizes;
-        $gameplayed = Answer::select('id')->count();
-        $user = User::where('role', 'regular')->count();
-        return view('landingPage', ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        // $prizes = Transaction::where('reward_type', 'CASH')->sum('amount') / 100;
+        // $otherPrizes = Transaction::where('reward_type', 'DATA')->where('reward_type', 'AIRTIME')->sum('amount');
+        // $prizesWon = $prizes + $otherPrizes;
+        // $gameplayed = Answer::select('id')->count();
+        // $user = User::where('role', 'regular')->count();
+        return view('landingPage');// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
     public function contact()
     {
@@ -65,5 +65,15 @@ class GeneralController extends Controller
     public function faq()
     {
         return view('faq');
+    }
+
+    public function download()
+    {
+        return view('download');
+    }
+
+    public function download_url(Request $request)
+    {
+        return $request;
     }
 }
