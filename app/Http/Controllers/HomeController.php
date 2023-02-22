@@ -89,21 +89,21 @@ class HomeController extends Controller
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
         }
 
-        $monthlyCounts = \DB::table('users')
-                        ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
-                        ->selectRaw('count(*) as count')
-                        ->selectRaw('SUM(is_verified) as verified')
-                        ->groupBy('month')
-                        ->orderBy('month', 'asc')
-                        ->get();
+        // return $monthlyCounts = \DB::table('users')
+        //                 ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
+        //                 ->selectRaw('count(*) as count')
+        //                 ->selectRaw('SUM(is_verified) as verified')
+        //                 ->groupBy('month')
+        //                 ->orderBy('month', 'asc')
+        //                 ->get();
 
-        $listResult[] = ['Month', 'Registered', 'Verified'];
-        foreach ($monthlyCounts as $key => $value) {
-            $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
-        }
+        // $listResult[] = ['Month', 'Registered', 'Verified'];
+        // foreach ($monthlyCounts as $key => $value) {
+        //     $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
+        // }
 
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($result))->with('monthly',json_encode($listResult));
+        ->with('visitor',json_encode($result));//->with('monthly',json_encode($listResult));
 
     }
 

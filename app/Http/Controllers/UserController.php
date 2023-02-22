@@ -84,17 +84,14 @@ class UserController extends Controller
                 $description = 'Referer Bonus from '.auth()->user()->name;
                 PaystackHelpers::paymentTrasanction($referee_user->id, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
   
-    
                 $adminWallet = Wallet::where('user_id', '1')->first();
                 $adminWallet->balance += 250;
                 $adminWallet->save();
-                //Admin Transaction Tablw
+                
+                //Admin Transaction Table
                 $description = 'Referer Bonus from '.$user->name;
                 PaystackHelpers::paymentTrasanction(1, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
-  
-    
                }else{
-    
                 $adminWallet = Wallet::where('user_id', '1')->first();
                 $adminWallet->balance += 500;
                 $adminWallet->save();
@@ -108,8 +105,7 @@ class UserController extends Controller
         }else{
             return redirect('upgrade');
         }
-         
-
+        
     }
 
     public function makePaymentWallet()
