@@ -87,7 +87,7 @@ class UserController extends Controller
                 $adminWallet = Wallet::where('user_id', '1')->first();
                 $adminWallet->balance += 250;
                 $adminWallet->save();
-                
+
                 //Admin Transaction Table
                 $description = 'Referer Bonus from '.$user->name;
                 PaystackHelpers::paymentTrasanction(1, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
@@ -267,6 +267,7 @@ class UserController extends Controller
             return back()->with('error', 'You have reached your airtime limit today. Try again tomorrow');
         }
         $ref = time();
+        
         $balance = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json-patch+json',
@@ -288,9 +289,10 @@ class UserController extends Controller
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
         ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
-        // return $res;
+         //return $res;
 
         if($res['status'] == 'success'){
+
             $wallet->balance -= $request->amount;
             $wallet->save();
 

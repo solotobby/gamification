@@ -13,7 +13,7 @@
 |
 */
 
-use Illuminate\Support\Facades\App;
+// use Illuminate\Support\Facades\App;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
@@ -188,5 +188,8 @@ Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesControl
 Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
 Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
 
+///// External Fintech Api 
+
+Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
 
 

@@ -110,7 +110,6 @@ class PaystackHelpers{
         $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
         $fetchPaymentTransaction->status = $status;
         $fetchPaymentTransaction->save();
-
         return $fetchPaymentTransaction;
     }
 
@@ -127,8 +126,18 @@ class PaystackHelpers{
             "channel"=> "generic",
             "api_key"=> env('TERMI_KEY')
         ]);
-
+        
          return json_decode($res->getBody()->getContents(), true);
+    }
+
+    public static function listFlutterwaveTransaction(){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/transactions')->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
     }
 
 

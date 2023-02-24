@@ -19,9 +19,9 @@
           <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
             {{url('register/'.auth()->user()->referral_code)}}
           </p>
-          <p>
+          {{-- <p>
             Payment Via Transfer: Bank Name - Zenith Bank; Account Name - Dominahl Tech Services; Account Number - 1014763749
-          </p>
+          </p> --}}
 
         </div>
       </div>
@@ -213,25 +213,18 @@
                           <h4 class="fw-normal text-muted text-center">
                             We'll reward you with &#8358;250 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
                           </h4>
-                          
-                          
                           <center>{{url('register/'.auth()->user()->referral_code)}}</center>
-
-
-                          @endif
-                          
-                          {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
-                            More About Freebyz.com <i class="fa fa-arrow-right ms-1"></i>
-                          </button> --}}
                         </div>
 
-                        {{-- <div class="slick-slide p-5">
-                          <iframe width="100%" height="415" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         <div class="slick-slide p-5">
+                          <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                          
                           <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
                             Close <i class="fa fa-times opacity-50 ms-1"></i>
                           </button>
-                        </div> --}}
+                        </div>
+
+                        @endif
 
                         {{-- <div class="slick-slide p-5">
                           <i class="fa fa-award fa-3x text-muted my-4"></i>

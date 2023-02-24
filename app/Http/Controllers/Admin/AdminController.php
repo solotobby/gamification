@@ -610,4 +610,8 @@ class AdminController extends Controller
         return back()->with('success', 'Databundle Created Successfully');
 
     }
+
+    public function listFlutterwaveTrf(){
+        return PaystackHelpers::listFlutterwaveTransaction();
+    }
 }
