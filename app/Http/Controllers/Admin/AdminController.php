@@ -197,26 +197,22 @@ class AdminController extends Controller
 
     }
 
-    public function sendAirtime()
-    {
-        return PaystackHelpers::reloadlyAuth0Token();
-    }
 
     public function userList(){
-        $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
+        $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->paginate(50);
         return view('admin.users', ['users' => $users]);
     }
     public function verifiedUserList(){
-        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
+        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->paginate(50);
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
 
     public function adminTransaction(){
-        $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.admin_transactions', ['lists' => $list]);
     }
     public function userTransaction(){
-        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.user_transactions', ['lists' => $list]);
     }
 
@@ -226,7 +222,7 @@ class AdminController extends Controller
     }
 
     public function withdrawalRequest(){
-        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->get();
+        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.withdrawal', ['withdrawals' => $withdrawal]);
     }
 

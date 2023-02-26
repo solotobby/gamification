@@ -27,7 +27,7 @@
         </li>
         <li class="nav-item">
           <button class="nav-link" id="search-photos-tab" data-bs-toggle="tab" data-bs-target="#search-photos" role="tab" aria-controls="search-photos" aria-selected="false">
-            Transactions({{ $info->transactions->count() }})
+            Transactions({{ $info->transactions()->where('status', 'successful')->count() }})
           </button>
         </li>
         <li class="nav-item">
@@ -103,7 +103,7 @@
           </div>
           
           <div class="table-responsive">
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <table class="table table-bordered table-striped table-vcenter">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -115,7 +115,7 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach ($info->transactions as $list)
+                  @foreach ($info->transactions->where('status', 'successful') as $list)
                   <tr>
                       <td>
                         {{ $list->reference }}

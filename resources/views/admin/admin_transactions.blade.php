@@ -42,7 +42,7 @@
         <p>
         </p>
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
                 <th>Reference</th>
@@ -77,9 +77,11 @@
                     </td>
                   </tr>
                 @endforeach
-              
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $lists->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@
 
 // <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 //     <script type="text/javascript">
-//      
+     
 //       console.log(monthly);
 //       google.charts.load('current', {'packages':['corechart']});
 //       google.charts.setOnLoadCallback(drawVisualization);
@@ -257,9 +257,9 @@
     <div class="row">
       <div class="col-xl-12">
 
-        {{-- <div id="chart_div" style="width: 100%; height: 500px;"></div> --}}
+        {{--<div id="chart_div" style="width: 100%; height: 500px;"></div>
         
-        
+        <hr>--}}
 
        <div id="linechart" style="width: 100%; height: 500px"></div> 
       </div>

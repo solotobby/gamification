@@ -36,10 +36,11 @@
       </div>
       <div class="block-content">
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          {{--<table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">--}}
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -54,7 +55,7 @@
                 <?php $i = 1; ?>
                 @foreach ($users as $user)
                     <tr>
-                        <th scope="row">{{ $i++ }}.</th>
+                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
@@ -67,6 +68,9 @@
                 @endforeach
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $users->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>
