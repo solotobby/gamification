@@ -604,7 +604,14 @@ class AdminController extends Controller
         $created = DataBundle::create($request->all());
         $created->save();
         return back()->with('success', 'Databundle Created Successfully');
+    }
 
+    public function adminWalletTopUp(Request $request){
+        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+        $wallet->balance += $request->amount;
+        $wallet->save();
+        PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
+        return back()->with('success', 'Wallet Successfully Funded');
     }
 
     public function listFlutterwaveTrf(){

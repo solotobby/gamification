@@ -240,16 +240,40 @@
             <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
               <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
             </div>
-         
-            <div class="bg-body-dark mb-5">
+            <div class="container">
+              @if (session('success'))
+                  <div class="alert alert-success" role="alert">
+                      {{ session('success') }}
+                  </div>
+              @endif
 
-                @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
+                    <h4 class="fw-normal text-muted text-center">
+                      Manual Wallet TopUp
+                    </h4>
+              <form action="{{ route('admin.wallet.topup') }}" method="POST">
+                @csrf
+                <div class="form-row align-items-center">
+                  <div class="col-auto">
+                   
+                    <div class="input-group mb-2">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">&#8358;</div>
+                      </div>
+                      <input type="number" class="form-control" name="amount" placeholder="Amount" required>
+                    </div>
+                  </div>
+                  <input type="hidden" name="user_id" value="{{ $info->id }}">
+                 
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-2">Fund...</button>
+                  </div>
                 </div>
-                @endif
-
+              </form>
+            </div>
+            <hr>
+            <div class="bg-body-dark mb-5">
                 <div class="content content-full text-center">
+                 
                   <div class="py-3">
                     <h3 class="mb-2 text-center">
                      Manual Verification

@@ -187,7 +187,7 @@ Route::post('store/settings', [\App\Http\Controllers\Admin\SettingsController::c
 Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'index'])->name('admin.feedback');
 Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
 Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
-
+Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
 ///// External Fintech Api 
 
 Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
