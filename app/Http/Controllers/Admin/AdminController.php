@@ -611,6 +611,10 @@ class AdminController extends Controller
         $wallet->balance += $request->amount;
         $wallet->save();
         PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
+        $content = 'Your walet has been succesfully credited with '.$request->amount.'. Thank you for choosing Freebyz.com';
+        $subject = 'Wallet Topup';
+        $user = User::where('id', $request->user_id)->first();
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
         return back()->with('success', 'Wallet Successfully Funded');
     }
 
