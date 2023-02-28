@@ -244,7 +244,7 @@
 								<span class=" icon-trophy"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">2500</h1>
+								<h1 class="counter">4500</h1>
 								<span>Available Jobs</span>
 							</div>
 						</div>
@@ -255,7 +255,7 @@
 								<span class="icon-alarmclock"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">2546</h1>
+								<h1 class="counter">6546</h1>
 								<span>Users</span>
 							</div>
 						</div>
@@ -271,17 +271,59 @@
 							</div>
 						</div>
 					</div> --}}
-					 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
 						<div class="counter-wrapper text-center mb-30 wow fadeInUp" data-wow-delay="1.2s">
 							{{-- <div class="counter-icon">
 								<span class="icon-megaphone"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">4000</h1>
+								<h1 class="counter">8791</h1>
 								<span>Completed Jobs</span>
 							</div>
 						</div>
 					</div> 
+				</div>
+				<div class="row">
+						
+						<div class="col-md-12 blog-item">
+							<div class="blog-wrapper blog-column mb-10">
+								<div class="blog-desc">
+									<div class="blog-content">
+										<h2 class="blog-title">
+											<center>How people are paid...</>
+										</h2>
+										
+										<div class="table-responsive">
+										  <table class="table table-striped">
+											<thead>
+											  <tr>
+												<th scope="col">Name</th>
+												<th scope="col">Amount</th>
+												<th scope="col">Description</th>
+											  </tr>
+											</thead>
+											<tbody>
+												@foreach ($transactions as $trx)
+													<tr>
+														<td>{{ $trx->user->name }}</td>
+														<td>&#8358;{{ number_format($trx->amount) }}</td>
+														<td>{{$trx->description}}</td>
+													</tr>
+											    @endforeach
+											</tbody>
+										  </table>
+										</div>
+
+										
+									</div>
+									
+				
+								</div>
+							</div>
+						</div>
+						
+					
+					
 				</div>
 			</div>
 		</div>

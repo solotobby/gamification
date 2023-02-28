@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Games;
+use App\Models\PaymentTransaction;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
@@ -18,7 +19,8 @@ class GeneralController extends Controller
         // $prizesWon = $prizes + $otherPrizes;
         // $gameplayed = Answer::select('id')->count();
         // $user = User::where('role', 'regular')->count();
-        return view('landingPage');// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
+        return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
     public function contact()
     {
