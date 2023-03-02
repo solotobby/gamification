@@ -25,7 +25,6 @@ class UserController extends Controller
 
     public function upgrade()
     {
-        
         return view('user.upgrade');
     }
 

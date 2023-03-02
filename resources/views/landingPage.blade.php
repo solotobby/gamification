@@ -290,7 +290,7 @@
 								<div class="blog-desc">
 									<div class="blog-content">
 										<h2 class="blog-title">
-											<center>How people are paid...</>
+											<center>See some payouts...</>
 										</h2>
 										
 										<div class="table-responsive">

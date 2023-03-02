@@ -53,7 +53,6 @@ class HomeController extends Controller
 
     public function userHome()
     {
-
         $user = User::where('id', auth()->user()->id)->first();
         if($user->phone == ''){
             return view('phone');
@@ -63,9 +62,7 @@ class HomeController extends Controller
         }else{
             $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
         }
-
         // $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
-
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed]);
     }
@@ -89,29 +86,24 @@ class HomeController extends Controller
         foreach ($data as $key => $value) {
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
         }
+        //    return $monthlyCounts = \DB::table('users')
+        //                     ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
+        //                     ->selectRaw('count(*) as count')
+        //                     ->selectRaw('SUM(is_verified) as verified')
+        //                     ->groupBy('month')
+        //                     ->orderBy('month', 'asc')
+        //                     ->get();
 
-
-
-    //    return $monthlyCounts = \DB::table('users')
-    //                     ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
-    //                     ->selectRaw('count(*) as count')
-    //                     ->selectRaw('SUM(is_verified) as verified')
-    //                     ->groupBy('month')
-    //                     ->orderBy('month', 'asc')
-    //                     ->get();
-
-    //     $listResult[] = ['Month', 'Registered', 'Verified'];
-    //     foreach ($monthlyCounts as $key => $value) {
-    //         $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
-    //     }
+        //     $listResult[] = ['Month', 'Registered', 'Verified'];
+        //     foreach ($monthlyCounts as $key => $value) {
+        //         $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
+        //     }
 
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($result));//->with('monthly',json_encode($listResult));
 
     }
 
-   
- 
     public function savePhoneInformation(Request $request)
     {
         $this->validate($request, [

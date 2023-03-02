@@ -9,16 +9,12 @@
           <div class="block-content block-content-full bg-primary text-center">
             {{-- <img class="img-avatar img-avatar-thumb" src="{{asset('assets/media/avatars/avatar10.jpg')}}" alt=""> --}}
             <p class="fs-lg fw-semibold text-white mt-3 mb-0">
-              Feedback
+              Talk to Us!
             </p>
-            {{-- <p class="text-white-75 mb-0">
-              Web Developer
-            </p> --}}
+            
           </div>
           <!-- END Chat #1 Header -->
           <!-- Chat #1 Input -->
-          
-
           <div class="block-content">
             <div class="row">
                 <div class="alert alert-info"> We want to hear from you. Please let us know how you feel about Freebyz.</div>
@@ -46,6 +42,7 @@
                             <option value="">Select an Option</option>
                             <option value="feedback">Feedback</option>
                             <option value="complaint">Complaint</option>
+                            <option value="transfer_issue">Transfer Issue</option>
                         </select>
                     </div>
                     <div class="col-md-12">
@@ -62,10 +59,7 @@
                     </div>
                 </form>
             </div>
-            
-
-        </div>
-
+          </div>
           <!-- END Chat #1 Input -->
         </div>
         <!-- END Chat #1 -->
