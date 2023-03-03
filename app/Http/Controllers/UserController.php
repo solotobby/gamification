@@ -326,9 +326,9 @@ class UserController extends Controller
     }
 
     public function buyDatabundle(Request $request){
-        
-        $values = explode(':',$request->name);
-        $gig = $values['0'];
+       
+        $values = explode(':',$request->code);
+        $code = $values['0'];
         $amount = $values['1'];
 
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
@@ -336,26 +336,36 @@ class UserController extends Controller
         {
             return back()->with('error', 'Insufficient fund in your wallet');
         }
-        $wallet->balance -= $amount; ///debit wallet
-        $wallet->save();
+        
         $ref = time();
-        // $message = auth()->user()->name." REQUEST ".$gig." DATABUNDLE FOR  ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
-        // return $this->sendNotification($message);
+        $access_token = CapitalSage::access_token();
+        $network = $request->network.'DATA';
+        $provider = $request->network;
+        return $response = CapitalSage::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
+        
+        if($response['status'] == 'success'){
+            $wallet->balance -= $amount; ///debit wallet
+            $wallet->save();
+            PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $amount,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'capital_sage',
+                'type' => 'databundle',
+                'description' => $provider.' data purchase', //$gig.' sent to '.$request->phone.' for Databundle Purchase',
+                'tx_type' => 'Debit',
+                'user_type' => 'regular'
+            ]);
+            return back()->with('success', 'Databundle processed successfully');
+        }else{
+            return back()->with('error', 'An error Occoured');
+        }
 
-        PaymentTransaction::create([
-            'user_id' => 1,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => $amount,
-            'status' => 'successful',
-            'currency' => 'NGN',
-            'channel' => 'termii',
-            'type' => 'databundle',
-            'description' => $gig.' sent to '.$request->phone.' for Databundle Purchase',
-            'tx_type' => 'Debit',
-            'user_type' => 'regular'
-        ]);
-        return back()->with('error', 'Databundle has been queued, you will recieve it shortly');
+       
+        
     }
 
     public function sendNotification($message)

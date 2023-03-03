@@ -26,4 +26,19 @@ class CapitalSage{
         ])->get('https://sagecloud.ng/api/v2/internet/data/lookup?provider='.$network)->throw();
         return json_decode($res->getBody()->getContents(), true)['data'];
     }
+    public static function purchaseData($access_token, $code, $network_type, $provider, $phone, $ref){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.$access_token
+        ])->post('https://sagecloud.ng/api/v2/internet/data', [
+            "reference"=>$ref,
+            "type"=>$network_type,
+            "code"=>$code,
+            "network"=>$provider,
+            "phone"=>$phone,
+            "provider"=>$provider
+        ])->throw();
+        return json_decode($res->getBody()->getContents(), true);
+    }
 }

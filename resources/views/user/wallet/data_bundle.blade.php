@@ -48,10 +48,10 @@
               <div class="input-group">
                 <select class="form-control" required name="network" id="network">
                   <option value=""> Select Network </option>
-                  <option value="AIRTELDATA">AIRTEL</option>
-                  <option value="GLODATA">GLO</option>
-                  <option value="MTNDATA">MTN</option>
-                   <option value="9MOBILEDATA">9MOBILE</option>
+                  <option value="AIRTEL">AIRTEL</option>
+                  <option value="GLO">GLO</option>
+                  <option value="MTN">MTN</option>
+                   <option value="9MOBILE">9MOBILE</option>
                 </select>
               </div>
             </div>
@@ -99,8 +99,8 @@
 <script>
 $(document).ready(function(){
     $('#network').change(function(){
-        var network = this.value;
-
+        var network = this.value + 'DATA';
+        //alert(network)
         $("#bundle").html('');
 
         $.ajax({
@@ -116,9 +116,9 @@ $(document).ready(function(){
               $('#bundle').html('<option value="">Select Bundle</option>');
               $.each(result, function(key, value) {
                     if(network == 'MTNDATA'){
-                      $("#bundle").append('<option value="'+value.code+'">' + value.duration + ' @ ' + value.amount+'</option>');
+                      $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.duration + ' @ ' + value.amount+'</option>');
                     }else{
-                      $("#bundle").append('<option value="'+value.code+'">' + value.value + ' for ' +value.duration+ ' @ ' + value.amount+'</option>');
+                      $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.value + ' for ' +value.duration+ ' @ ' + value.amount+'</option>');
                     }
                       
               });
