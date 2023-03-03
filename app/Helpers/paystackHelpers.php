@@ -14,7 +14,7 @@ class PaystackHelpers{
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->get('https://api.paystack.co/bank');
+        ])->get('https://api.paystack.co/bank')->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data'];
     }

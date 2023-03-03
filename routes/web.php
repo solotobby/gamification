@@ -111,6 +111,8 @@ Route::post('buy/airtime', [\App\Http\Controllers\UserController::class, 'buyAir
 Route::get('databundle', [\App\Http\Controllers\UserController::class, 'databundlePurchase'])->name('databundle');
 Route::post('buy/databundle', [\App\Http\Controllers\UserController::class, 'buyDatabundle'])->name('buy.databundle');
 
+//databundle api
+Route::get('load/network/{network}', [\App\Http\Controllers\UserController::class, 'loadData']);
 //Marketplace
 Route::get('marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace');
 Route::get('marketplace/view', [\App\Http\Controllers\MarketplaceController::class, 'createProduct'])->name('create.marketplace');

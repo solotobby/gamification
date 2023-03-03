@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Mail\UpgradeUser;
 use App\Models\DataBundle;
@@ -247,8 +248,15 @@ class UserController extends Controller
     }
 
     public function databundlePurchase(){
+        //return CapitalSage::access_token();
         $databundles = DataBundle::orderby('name', 'ASC')->get();
         return view('user.wallet.data_bundle', ['databundles'=>$databundles]);
+    }
+
+    public function loadData($network){
+        //$network;
+        $access_token = CapitalSage::access_token();
+        return CapitalSage::loadNetworkData($access_token, $network);
     }
 
     public function buyAirtime(Request $request){
@@ -318,6 +326,7 @@ class UserController extends Controller
     }
 
     public function buyDatabundle(Request $request){
+        
         $values = explode(':',$request->name);
         $gig = $values['0'];
         $amount = $values['1'];
@@ -330,8 +339,8 @@ class UserController extends Controller
         $wallet->balance -= $amount; ///debit wallet
         $wallet->save();
         $ref = time();
-        $message = auth()->user()->name." REQUEST ".$gig." DATABUNDLE FOR  ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
-        return $this->sendNotification($message);
+        // $message = auth()->user()->name." REQUEST ".$gig." DATABUNDLE FOR  ".$request->phone.". WITH .".$ref." REF HAS BEEN QUEUED"; //"A ".$gig. " GIG SME DATA REQUEST FROM ".$request->phone." AT ".$amount." NGN HAS BEEN QUEUED";
+        // return $this->sendNotification($message);
 
         PaymentTransaction::create([
             'user_id' => 1,

@@ -46,19 +46,19 @@
             @endif
             <div class="mb-4">
               <div class="input-group">
-                {{-- <span class="input-group-text">
-                  &#8358;
-                </span> --}}
-                {{-- <input type="text" class="form-control text-center" id="example-group1-input3" name="example-group1-input3" placeholder="00"> --}}
-                {{-- <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="50" max="100" name="amount" value="{{ old('amount') }}" placeholder="Enter Amount" required> --}}
-                {{-- <span class="input-group-text">,00</span> --}}
-
-                <select class="form-control" required name="name">
-                  <option value=""> Select Data Plan </option>
-                    @foreach ($databundles as $data)
-                        <option value="{{ $data->name }}:{{ $data->amount }}">{{ $data->name }} @ &#8358;{{ number_format($data->amount) }}</option>
-                    @endforeach
-                   
+                <select class="form-control" required name="network" id="network">
+                  <option value=""> Select Network </option>
+                  <option value="AIRTELDATA">AIRTEL</option>
+                  <option value="GLODATA">GLO</option>
+                  <option value="MTNDATA">MTN</option>
+                   <option value="9MOBILEDATA">9MOBILE</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-4">
+              <div class="input-group">
+                <select class="form-control" required name="code" id="bundle">
+                  <option value="">Select Bundle</option>
                 </select>
               </div>
             </div>
@@ -91,8 +91,41 @@
 
 @section('script')
  <!-- Page JS Plugins -->
- <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-
+ {{-- <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script> --}}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <!-- Page JS Code -->
- <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
+ {{-- <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script> --}}
+
+<script>
+$(document).ready(function(){
+    $('#network').change(function(){
+        var network = this.value;
+
+        $("#bundle").html('');
+
+        $.ajax({
+            url: '{{ url("load/network") }}/' + encodeURI(network),
+            type: "GET",
+            data: {
+                //  country_id: country_id,
+                _token: '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success: function(result) {
+              // console.log(result)
+              $('#bundle').html('<option value="">Select Bundle</option>');
+              $.each(result, function(key, value) {
+                    if(network == 'MTNDATA'){
+                      $("#bundle").append('<option value="'+value.code+'">' + value.duration + ' @ ' + value.amount+'</option>');
+                    }else{
+                      $("#bundle").append('<option value="'+value.code+'">' + value.value + ' for ' +value.duration+ ' @ ' + value.amount+'</option>');
+                    }
+                      
+              });
+            }
+          });
+        
+    });
+  });
+</script>
 @endsection
