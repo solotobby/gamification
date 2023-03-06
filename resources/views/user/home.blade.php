@@ -75,12 +75,16 @@
                 <div class="content content-full text-center">
                   <div class="py-3">
                     <h3 class="mb-2 text-center">
-                      Get Access to More Jobs
+                      How to make money with freebyz
                     </h3>
-                    <h4 class="fw-normal text-muted text-center">
+                    {{-- <h4 class="fw-normal text-muted text-center">
                    Only verified users have unlimited access to jobs! 
-                    </h4>
-                    @if(auth()->user()->is_verified == '0')
+                    </h4> --}}
+
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         
+
+                    {{-- @if(auth()->user()->is_verified == '0')
                     <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
                       Get Verified Now!
                     </a>
@@ -88,7 +92,7 @@
                     <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
                       Verification Successfull
                     </a>
-                    @endif
+                    @endif --}}
                   </div>
               </div>
               
@@ -97,12 +101,43 @@
             @foreach ($available_jobs as $job)
             @if($job->completed()->count() >= $job->number_of_staff)
             @else
-            <div class="block block-rounded">
+              <!-- Story -->
+              <div class="block block-rounded">
+                <div class="block-content p-0 overflow-hidden">
+                  <div class="row g-0">
+                    <div class="col-md-3 col-lg-3 overflow-hidden d-flex align-items-center">
+                      <a href="{{ url('campaign/'.$job->job_id) }}">
+                        <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
+                      </a>
+                    </div>
+                    <div class="col-md-9 col-lg-9 d-flex align-items-center">
+                      <div class="px-4 py-3">
+                        <h4 class="mb-1">
+                          <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
+                        </h4>
+                        <div class="fs-sm mb-2">
+                            <strong>&#8358;{{ $job->campaign_amount}}</strong> · <em class="text-muted"> Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
+                        </div>
+                        <p class="mb-0">
+                          {!! \Illuminate\Support\Str::words($job->description, 50) !!}
+                        </p>
+                        <br>
+                        <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
+                        <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END Story -->
+
+
+            {{-- <div class="block block-rounded">
                 <div class="block-content block-content-full">
                   <div class="d-sm-flex">
                     <div class="ms-sm-2 me-sm-4 py-2 text-center">
                       <a class="item item-rounded bg-body-dark text-dark fs-5 mb-2 mx-auto" href="{{ url('campaign/'.$job->job_id) }}">
-                        {{-- <i class="fab fa-fw fa-cloudsmith"></i> --}}
+                       
                         &#8358;{{ $job->campaign_amount}}
                       </a>
                       <div class="btn-group btn-group-sm">
@@ -115,23 +150,23 @@
                       <a class="link-fx h4 mb-1 d-inline-block text-dark" href="{{ url('campaign/'.$job->job_id) }}">
                         {!! $job->post_title !!}
                       </a>
-                      {{-- <span class="pull-left">1700</span> --}}
+                     
                       <div class="fs-sm fw-semibold text-muted mb-2">
                         Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}
                       </div>
                       <p class="text-muted mb-2">
-                        {{-- {!! substr($job->description, 0,  350) !!} --}}
+                      
                         {!! \Illuminate\Support\Str::words($job->description, 50) !!}
                       </p>
                       <div>
                         <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
                         <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
-                        {{-- <span class="badge bg-primary">Social</span> --}}
+                       
                       </div>
                     </div>
                   </div>
                 </div>
-            </div>
+            </div> --}}
             @endif
             @endforeach     
         </div>
@@ -216,12 +251,12 @@
                           <center>{{url('register/'.auth()->user()->referral_code)}}</center>
                         </div>
 
-                         <div class="slick-slide p-5">
+                         {{-- <div class="slick-slide p-5">
                           <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                          
                           <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
                             Close <i class="fa fa-times opacity-50 ms-1"></i>
-                          </button>
+                          </button> --}}
                         </div>
 
                         @endif
