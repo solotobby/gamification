@@ -44,6 +44,19 @@
                     </ul>
                 </div>
             @endif
+            {{-- <div class="mb-4">
+              <div class="input-group">
+               
+               <select class="form-control" name="network" required>
+                  <option value="">Select One</option>
+                  <option value="MTN">MTN</option>
+                  <option value="AIRTEL">AIRTEL</option>
+                  <option value="GLO">GLO</option>
+                  <option value="9MOBILE">9MOBILE</option>
+               </select>
+              </div>
+            </div> --}}
+
             <div class="mb-4">
               <div class="input-group">
                 <span class="input-group-text">

@@ -264,39 +264,52 @@ class UserController extends Controller
             'amount' => 'required|numeric|max:100',
             'phone' => 'required|numeric|digits:11'
         ]);
-        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        if($request->amount > $wallet->balance){
-            return back()->with('error', 'Insurficient balance...');
-        }
-
+        // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        // if($request->amount > $wallet->balance){
+        //     return back()->with('error', 'Insurficient balance...');
+        // }
+        return back()->with('error', 'The service is currenctly not available, please check back later');
+       
+       
+       
         $occurence = PaymentTransaction::where('user_id', auth()->user()->id)->where('type', 'airtime_purchase')->whereDate('created_at', Carbon::today())->sum('amount');
         if($occurence >= 200){
             return back()->with('error', 'You have reached your airtime limit today. Try again tomorrow');
         }
         $ref = time();
         
-        $balance = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json-patch+json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-         ])->get('https://api.flutterwave.com/v3/balances/NGN')->throw()['data']['available_balance'];
+        // $balance = Http::withHeaders([
+        //     'Accept' => 'application/json',
+        //     'Content-Type' => 'application/json-patch+json',
+        //     'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        //  ])->get('https://api.flutterwave.com/v3/balances/NGN')->throw()['data']['available_balance'];
 
-        if($request->amount > $balance){
-            return back()->with('error', 'An Error Occour while processing airtime');
-        }
+        // if($request->amount > $balance){
+        //     return back()->with('error', 'An Error Occour while processing airtime');
+        // }
 
         $payload = [
-            "country"=> "NG",
-            "customer"=> '+234'.substr($request->phone, 1),
-            "amount"=> $request->amount,
-            "type"=> "AIRTIME",
-            "reference"=> $ref
+            // "country"=> "NG",
+            // "customer"=> '+234'.substr($request->phone, 1),
+            // "amount"=> $request->amount,
+            // "type"=> "AIRTIME",
+            // "reference"=> $ref
+
+            "reference"=>$ref,
+            "network"=>$request->network,
+            "service"=>$request->network."VTU",
+            "phone"=>$request->phone,
+            "amount"=>$request->amount,
         ];
-       $res =  Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
-         //return $res;
+
+       
+    //    $res =  Http::withHeaders([
+    //         'Content-Type' => 'application/json',
+    //         'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+    //     ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
+    //      return $res;
+        return $access_token = CapitalSage::access_token();
+        $res = CapitalSage::buyAirtime($payload, $access_token);
 
         if($res['status'] == 'success'){
 
@@ -311,7 +324,7 @@ class UserController extends Controller
                 'amount' => $request->amount,
                 'status' => 'successful',
                 'currency' => 'NGN',
-                'channel' => 'flutterwave',
+                'channel' => 'capital_sage',
                 'type' => 'airtime_purchase',
                 'description' => 'Airtime Purchase from '.auth()->user()->name,
                 'tx_type' => 'Debit',

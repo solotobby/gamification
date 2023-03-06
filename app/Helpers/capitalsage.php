@@ -41,4 +41,13 @@ class CapitalSage{
         ])->throw();
         return json_decode($res->getBody()->getContents(), true);
     }
+
+    public static function buyAirtime($payload, $access_token){
+        $res =  Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.$access_token
+        ])->post('https://sagecloud.ng/api/v2/epin/purchase', $payload)->throw();
+        return json_decode($res->getBody()->getContents(), true);
+    }
 }

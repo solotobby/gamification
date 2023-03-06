@@ -305,6 +305,7 @@ class CampaignController extends Controller
 
         $campaignWorker = CampaignWorker::create($request->all());
         Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
+       
         $campaign = Campaign::where('id', $request->campaign_id)->first();
         $user = User::where('id', $campaign->user->id)->first();
         $subject = 'Job Submission';
