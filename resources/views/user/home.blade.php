@@ -116,10 +116,15 @@
                           <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
                         </h4>
                         <div class="fs-sm mb-2">
-                            <strong>&#8358;{{ $job->campaign_amount}}</strong> · <em class="text-muted"> Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
+                            <strong>&#8358;{{ $job->campaign_amount}}</strong> ·
+                              @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                                <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
+                               @else
+                                <em class="text-muted">Completed</em> <li class="fa fa-check"></li>
+                               @endif
                         </div>
                         <p class="mb-0">
-                          {!! \Illuminate\Support\Str::words($job->description, 50) !!}
+                          {!! \Illuminate\Support\Str::words($job->description, 20) !!}
                         </p>
                         <br>
                         <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
