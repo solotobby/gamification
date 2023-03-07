@@ -99,8 +99,8 @@
   
             <!-- Jobs -->
             @foreach ($available_jobs as $job)
-            @if($job->completed()->count() >= $job->number_of_staff)
-            @else
+            {{-- @if($job->completed()->count() >= $job->number_of_staff)
+            @else --}}
               <!-- Story -->
               <div class="block block-rounded">
                 <div class="block-content p-0 overflow-hidden">
@@ -167,7 +167,7 @@
                   </div>
                 </div>
             </div> --}}
-            @endif
+            {{-- @endif --}}
             @endforeach     
         </div>
 
