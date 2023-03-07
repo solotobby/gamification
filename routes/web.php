@@ -129,6 +129,8 @@ Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
 
+Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
+
 Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
@@ -166,6 +168,7 @@ Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::c
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
+Route::get('campaigns/completed', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCompleted'])->name('campaign.completed');
 Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');

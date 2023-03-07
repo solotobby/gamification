@@ -618,6 +618,11 @@ class AdminController extends Controller
         return back()->with('success', 'Wallet Successfully Funded');
     }
 
+    public function campaignCompleted(){
+        $campaigns = Campaign::where('status', 'Live')->get();
+        return view('admin.campaign_completed', ['campaigns' => $campaigns]);
+    }
+
     public function listFlutterwaveTrf(){
         return PaystackHelpers::listFlutterwaveTransaction();
     }
