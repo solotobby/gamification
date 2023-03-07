@@ -95,10 +95,18 @@
         <span class="m-2 d-inline-block">
           @if(auth()->user()->is_verified == '0')
           <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i>Get Verified 
-          </a>
+            <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
+          </a><br><br>
           {{-- <button type="button" class="btn btn-hero btn-primary" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade"><i class="fa fa-link opacity-50 me-1"></i> Get Verified</button> --}}
-         
+          @if(auth()->user()->wallet->balance >= 500)
+          <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+            <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+          </a>
+          @else
+          <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+            <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+          </a>
+          @endif
 
           <div class="modal fade" id="modal-default-popout-upgrade" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
             <div class="modal-dialog modal-dialog-popout" role="document">
