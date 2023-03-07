@@ -37,7 +37,7 @@
             @foreach ($replies as $reply)
             <p class="text-muted">
 
-                <small>{{$reply->user->name}} </small>:
+                <small>{{$reply->user->name}} | {{ \Carbon\Carbon::parse($reply->created_at)->format('d/m/Y @ h:i:sa') }}</small>:
                <code> {!! $reply->message !!} </code>
             </p>
             @endforeach
@@ -82,7 +82,14 @@
                         <i class="fa fa-paper-plane opacity-50 me-1"></i> Send
                     </button>
                 </div>
-            </div>
+          
+            
+              <div class="col-lg-6 ">
+                  <a href="{{ url('admin/feedback') }}" class="btn btn-alt-warning pull-right">
+                      <i class="fa fa-back opacity-50 me-1"></i> Back to List
+                  </a>
+              </div>
+          </div>
         </form>
           </div>
         </div>

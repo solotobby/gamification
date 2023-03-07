@@ -23,6 +23,8 @@ class FeedbackRepliesController extends Controller
 
     public function view($id){
         $feedback = Feedback::where('id', $id)->firstOrFail();
+        $feedback->status = true;
+        $feedback->save();
         $replies = FeedbackReplies::where('feedback_id', $id)->get();
         return view('admin.feedback.view', ['feedback' => $feedback, 'replies' => $replies]);
     }

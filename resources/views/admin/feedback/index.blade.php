@@ -48,9 +48,10 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Category</th>
-                    <th>Message</th>
-                    <th>Reply</th>
-                    <th>When</th>
+                    {{-- <th>Message</th> --}}
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>When Created</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,9 +61,10 @@
                         <th scope="row">{{ $i++ }}.</th>
                         <td>{{ $feedback->user->name }}</td>
                         <td>{{ $feedback->category }}</td>
-                        <td>{!! substr(strip_tags($feedback->message) , 0, 10). '...' !!}</td>
-                        <td><a href="{{ url('admin/feedback/'.$feedback->id) }}">Reply</a></td>
-                        <td>{{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y') }}</td>
+                        {{-- <td>{!! substr(strip_tags($feedback->message) , 0, 10). '...' !!}</td> --}}
+                        <td>{{ $feedback->status == false ? 'Unread' : 'Read' }}</td>
+                        <td><a href="{{ url('admin/feedback/'.$feedback->id) }}" class="btn btn-primary btn-sm">View</a></td>
+                        <td>{{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y @ h:i:sa') }}</td>
                     </tr>
                 @endforeach
               
