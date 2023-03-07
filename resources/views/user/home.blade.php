@@ -118,9 +118,9 @@
                         <div class="fs-sm mb-2">
                             <strong>&#8358;{{ $job->campaign_amount}}</strong> ·
                               @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
-                                <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
+                                  <em class="text-muted">Completed</em> <li class="fa fa-check"></li>
                                @else
-                                <em class="text-muted">Completed</em> <li class="fa fa-check"></li>
+                                  <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
                                @endif
                         </div>
                         <p class="mb-0">
