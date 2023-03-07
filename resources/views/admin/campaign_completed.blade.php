@@ -58,7 +58,7 @@
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $camp)
-                @if($camp->completed()->count() >= $camp->number_of_staff)
+                @if($camp->completed()->where('status', 'Approved')->count() >= $camp->number_of_staff)
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
