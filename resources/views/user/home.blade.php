@@ -106,14 +106,28 @@
                 <div class="block-content p-0 overflow-hidden">
                   <div class="row g-0">
                     <div class="col-md-3 col-lg-3 overflow-hidden d-flex align-items-center">
-                      <a href="{{ url('campaign/'.$job->job_id) }}">
-                        <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
-                      </a>
+
+                      @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                          <a href="#">
+                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
+                          </a>
+                      @else
+                          <a href="{{ url('campaign/'.$job->job_id) }}">
+                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
+                          </a>
+                      @endif
+                     
                     </div>
                     <div class="col-md-9 col-lg-9 d-flex align-items-center">
                       <div class="px-4 py-3">
                         <h4 class="mb-1">
-                          <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
+                          @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                              <a class="text-dark" href="#"> {!! $job->post_title !!}</a>
+                          @else
+                              {{-- <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em> --}}
+                              <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
+                          @endif
+                          
                         </h4>
                         <div class="fs-sm mb-2">
                             <strong>&#8358;{{ $job->campaign_amount}}</strong> ·
