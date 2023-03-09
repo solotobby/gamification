@@ -81,6 +81,10 @@ class HomeController extends Controller
         return $available_jobs;
     }
 
+    public function howTo(){
+        return view('user.documentation.how_to_approve');
+    }
+
     public function adminHome()
     {
         $campaigns = Campaign::where('status', 'Live')->get();

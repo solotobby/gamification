@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\PaymentTransaction;
+use App\Models\Statistics;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Http;
 
@@ -50,4 +51,16 @@ class CapitalSage{
         ])->post('https://sagecloud.ng/api/v2/epin/purchase', $payload)->throw();
         return json_decode($res->getBody()->getContents(), true);
     }
+
+
+    public static function dailyVisit(){
+       
+        // $validate = Statistics::where('type', 'home')->where('created_at', today())->first();
+        // if($validate){
+        //     $validate->count += 1;
+        //     $validate->save();
+        // }else{
+        //     Statistics::create(['type' => 'home', 'count' => '1']);
+        // }
+    } 
 }

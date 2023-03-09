@@ -144,14 +144,8 @@
         <a class="nav-main-link" href="{{ route('admin.feedback') }}">
           <i class="nav-main-link-icon fa fa-paper-plane"></i>
           <span class="nav-main-link-name">Feebacks</span>
-          <?php  ?>
-
-          
           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Feedback::where('status', false)->count() }}</span>
         </a>
       </li>
-      
-
-
     </ul>
   </div>

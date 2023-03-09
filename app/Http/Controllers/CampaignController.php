@@ -463,7 +463,5 @@ class CampaignController extends Controller
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
-    }
-
-    
+    }    
 }

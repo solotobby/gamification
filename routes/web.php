@@ -130,6 +130,7 @@ Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
 
 Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
+Route::get('how/to', [\App\Http\Controllers\HomeController::class, 'howTo'])->name('howto');
 
 Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
