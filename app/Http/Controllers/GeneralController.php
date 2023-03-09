@@ -20,7 +20,7 @@ class GeneralController extends Controller
         // $prizesWon = $prizes + $otherPrizes;
         // $gameplayed = Answer::select('id')->count();
         // $user = User::where('role', 'regular')->count();
-       CapitalSage::dailyVisit();
+    //    CapitalSage::dailyVisit();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
         return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
