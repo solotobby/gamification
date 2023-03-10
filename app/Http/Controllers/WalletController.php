@@ -153,7 +153,7 @@ class WalletController extends Controller
     {
        $amount = $request->balance;
        $percent = 5/100 * $amount;
-       $formatedAm = number_format($percent, 0);
+       $formatedAm = $percent;
        $newamount_to_be_withdrawn = $amount - $formatedAm;
 
        $ref = time();
