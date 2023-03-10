@@ -17,7 +17,11 @@
           <!-- Chat #1 Input -->
           <div class="block-content">
             <div class="row">
-                <div class="alert alert-info"> We want to hear from you. Please let us know how you feel about Freebyz.</div>
+                <div class="alert alert-info"> 
+                    We want to hear from you. Please let us know how you feel about Freebyz.
+                    <br>
+                    Note: <i>If you are reporting a worker, please include the worker name, email and the Job done. This will enable use take proper action.</i>
+                </div>
                 @if ($errors->any())
                     <div class="alert alert-danger mt-2">
                         <ul>
@@ -43,6 +47,7 @@
                             <option value="feedback">Feedback</option>
                             <option value="complaint">Complaint</option>
                             <option value="transfer_issue">Transfer Issue</option>
+                            <option value="report_worker">Report A Worker</option>
                         </select>
                     </div>
                     <div class="col-md-12">

@@ -97,7 +97,7 @@ class HomeController extends Controller
         
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
         ->groupBy('date')
-        ->orderBy('date', 'asc')
+        ->orderBy('date', 'ASC')
         ->get();
         // DATE_FORMAT(created_at, "%d-%b-%Y")
         $result[] = ['Year','Registered','Verified'];

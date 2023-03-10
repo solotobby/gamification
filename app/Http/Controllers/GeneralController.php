@@ -15,11 +15,6 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-        // $prizes = Transaction::where('reward_type', 'CASH')->sum('amount') / 100;
-        // $otherPrizes = Transaction::where('reward_type', 'DATA')->where('reward_type', 'AIRTIME')->sum('amount');
-        // $prizesWon = $prizes + $otherPrizes;
-        // $gameplayed = Answer::select('id')->count();
-        // $user = User::where('role', 'regular')->count();
     //    CapitalSage::dailyVisit();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
         return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
