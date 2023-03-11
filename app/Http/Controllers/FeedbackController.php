@@ -52,6 +52,7 @@ class FeedbackController extends Controller
             $feedback['user_id'] = auth()->user()->id;
             $feedback['category'] = $request->category;
             $feedback['message'] = $request->message;
+            $feedback['status'] = false;
             $feedback['proof_url'] = $proofUrl;
             Feedback::create($feedback);
 
