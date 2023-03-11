@@ -7,6 +7,7 @@ use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class FeedbackController extends Controller
 {
@@ -21,10 +22,13 @@ class FeedbackController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
+
+        $this->validate($request, [
+            'proof' => 'image|mimes:png,jpeg,gif,jpg',
             'category' => 'required',
-            'message' => 'required',
+            'message' => 'required|string',
         ]);
+
         if($request->category == 'transfer_issue'){
             $category = 'transfer issue';
             $content = 'Thank you for taking the time to send this '.$category.'. We have recieved it and will act on it accordingly. Please send a screenshot of proof of payment to info@dominahl.com.  Thank you once again.';
@@ -35,10 +39,30 @@ class FeedbackController extends Controller
             $category = 'feedback';
             $content = 'Thank you for taking the time to send this '.$category.'. We have recieved it and will act on it accordingly. Thank you once again.';
         }
-        Feedback::create($request->all());
-        $subject = 'Feedback Received';
-        $user = User::where('id', auth()->user()->id)->first();
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
-        return back()->with('success', 'Thank you for your feedback, we will look into it.');
+
+        if($request->hasFile('proof')){
+         
+            $fileBanner = $request->file('proof');
+            $Bannername = time() . $fileBanner->getClientOriginalName();
+            $filePathBanner = 'banners/' . $Bannername;
+    
+            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+
+            $feedback['user_id'] = auth()->user()->id;
+            $feedback['category'] = $request->category;
+            $feedback['message'] = $request->message;
+            $feedback['proof_url'] = $proofUrl;
+            Feedback::create($feedback);
+
+            $subject = 'Feedback Received';
+            $user = User::where('id', auth()->user()->id)->first();
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+
+            return back()->with('success', 'Thank you for your feedback, we will look into it.');
+
+        }else{
+            return back()->with('error', 'Image not uploaded');
+        }
     }
 }

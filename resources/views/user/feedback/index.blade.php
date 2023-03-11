@@ -38,7 +38,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('store.feedback') }}" method="POST">
+                <form action="{{ route('store.feedback') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-12 mb-3">
                         <label>Pick an option</label>
@@ -50,12 +50,18 @@
                             <option value="report_worker">Report A Worker</option>
                         </select>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mb-3">
                         <label>Meesage</label>
                         <textarea class="form-control" name="message" id="js-ckeditor5-classic"></textarea>
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof</label>
+                        <input class="form-control" type="file" name="proof" id="example-file-input-multiple" required>
+                        {{-- <label>Proof (image format only)</label>
+                        <input type="file" class="form-control" name="proof"> --}}
+                    </div>
                     <input type="hidden" name='user_id' value="{{ auth()->user()->id }}">
-                    <div class="row mb-4 mt-4">
+                    <div class="row mb-4">
                         <div class="col-lg-6">
                             <button type="submit" class="btn btn-alt-primary">
                                 <i class="fa fa-paper-plane opacity-50 me-1"></i> Send

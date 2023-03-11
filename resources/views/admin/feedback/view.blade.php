@@ -13,19 +13,26 @@
       </div>
       <div class="block-content">
         <!-- Inline Layout -->
-        <h2 class="content-heading">Feedback/Complaint</h2>
+        {{-- <h2 class="content-heading">Feedback/Complaint</h2> --}}
         <div class="row">
           <div class="col-lg-12">
-            <div class="alert alert-warning text-small">
-                Sender Name - <a href="{{ url('user/'.$feedback->user->id.'/info')}} "> {{$feedback->user->name }} </a><br>
-                Sender Email - {{ $feedback->user->email }}<br>
-                Category - {{ $feedback->category }}<br>
-               
+            <div class="alert alert-info text-small">
+                <strong>Sender Name:</strong> <a href="{{ url('user/'.$feedback->user->id.'/info')}} "> {{$feedback->user->name }} </a><br>
+                <strong> Email:</strong> {{ $feedback->user->email }}<br>
+                <strong> Category:</strong> {{ $feedback->category }}<br>
             </div>
 
             <p class="text-muted">
+              <i><small>{{$feedback->user->name}} | {{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y @ h:i:sa') }}</small>:</i>
                 {!! $feedback->message !!}
             </p>
+            @if($feedback->proof_url != null)
+            <img src="{{ $feedback->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+            @else
+            <div class="alert alert-warning text-small">
+              No Image attached
+            </div>
+            @endif
           </div>
         </div>
         <!-- END Inline Layout -->
@@ -34,7 +41,7 @@
         <h2 class="content-heading">Replies</h2>
         <div class="row">
           <div class="col-lg-12">
-            @foreach ($replies as $reply)
+            @foreach (@$feedback->reply as $reply)
             <p class="text-muted">
 
                 <small>{{$reply->user->name}} | {{ \Carbon\Carbon::parse($reply->created_at)->format('d/m/Y @ h:i:sa') }}</small>:
