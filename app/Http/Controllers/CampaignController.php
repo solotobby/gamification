@@ -16,6 +16,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller
 {
@@ -297,22 +298,44 @@ class CampaignController extends Controller
 
     public function postCampaignWork(Request $request)
     {
-       
+        $this->validate($request, [
+            'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
+            'comment' => 'required|string',
+        ]);
+
         $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
-
-        $campaignWorker = CampaignWorker::create($request->all());
-        Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
-       
         $campaign = Campaign::where('id', $request->campaign_id)->first();
-        $user = User::where('id', $campaign->user->id)->first();
-        $subject = 'Job Submission';
-        $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        if($request->hasFile('proof')){
+         
+            $fileBanner = $request->file('proof');
+            $Bannername = time() . $fileBanner->getClientOriginalName();
+            $filePathBanner = 'proofs/' . $Bannername;
     
-        return back()->with('success', 'Job Submitted Successfully');
+            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+
+            $campaignWorker['user_id'] = auth()->user()->id;
+            $campaignWorker['campaign_id'] = $request->campaign_id;
+            $campaignWorker['comment'] = $request->comment;
+            $campaignWorker['amount'] = $request->amount;
+            $campaignWorker['proof_url'] = $proofUrl;
+            $campaignWork = CampaignWorker::create($campaignWorker);
+
+            Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+        
+            //return $campaign = Campaign::where('id', $request->campaign_id)->first();
+            $user = User::where('id', $campaign->user->id)->first();
+            $subject = 'Job Submission';
+            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        
+            return back()->with('success', 'Job Submitted Successfully');
+        }else{
+            return back()->with('error', 'Upload an image');
+        }
     }
 
     public function mySubmittedCampaign($id)

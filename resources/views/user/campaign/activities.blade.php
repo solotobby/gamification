@@ -32,7 +32,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->completed->count() }} 
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
           | Approved - {{ $lists->completed()->where('status', 'Approved')->count() }} 
           | Denied - {{ $lists->completed()->where('status', 'Denied')->count() }} 
           | Amount Spent -   &#8358;{{ number_format($lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
@@ -102,6 +102,16 @@
 
                             <div class="modal-body pb-1">
                                 {!! $list->comment !!}
+
+                                @if($list->proof_url != null)
+                                  <hr>
+                                  <h5>Proof of work Image</h5>
+                                  <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+                                  @else
+                                  <div class="alert alert-warning text-small">
+                                    No Image attached
+                                  </div>
+                                @endif
                                 <hr>
                                 <form action="{{ route('campaign.decision') }}" method="POST">
                                   @csrf

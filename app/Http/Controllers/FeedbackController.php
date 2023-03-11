@@ -44,7 +44,7 @@ class FeedbackController extends Controller
          
             $fileBanner = $request->file('proof');
             $Bannername = time() . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'banners/' . $Bannername;
+            $filePathBanner = 'feedbacks/' . $Bannername;
     
             Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $proofUrl = Storage::disk('s3')->url($filePathBanner);

@@ -99,8 +99,8 @@
 
                         <div class="modal-body pb-1">
                           Current Number of Workers - {{ $list->number_of_staff }} <br>
-                          Current Value per Job  - {{ number_format($list->campaign_amount) }} <br>
-                          Current Value  - &#8358;{{ number_format($list->total_amount) }} <br>
+                          Value per Job  - &#8358;{{ number_format($list->campaign_amount) }} <br>
+                          Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
                           <hr>
                           <form action="{{ route('addmore.workers') }}" method="POST">
                             @csrf

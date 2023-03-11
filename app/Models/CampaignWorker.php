@@ -11,7 +11,7 @@ class CampaignWorker extends Model
 
     protected $table = "campaign_workers";
     
-    protected $fillable = ['user_id', 'campaign_id', 'comment', 'amount', 'status', 'reason'];
+    protected $fillable = ['user_id', 'campaign_id', 'comment', 'amount', 'status', 'reason', 'proof_url'];
 
     public function user()
     {

@@ -55,10 +55,8 @@
                         <textarea class="form-control" name="message" id="js-ckeditor5-classic"></textarea>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof</label>
-                        <input class="form-control" type="file" name="proof" id="example-file-input-multiple" required>
-                        {{-- <label>Proof (image format only)</label>
-                        <input type="file" class="form-control" name="proof"> --}}
+                        <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg)</label>
+                        <input class="form-control" type="file" name="proof" id="example-file-input-multiple">
                     </div>
                     <input type="hidden" name='user_id' value="{{ auth()->user()->id }}">
                     <div class="row mb-4">
