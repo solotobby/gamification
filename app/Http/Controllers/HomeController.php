@@ -54,6 +54,8 @@ class HomeController extends Controller
 
     public function userHome()
     {
+
+        PaystackHelpers::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
         if($user->phone == ''){
             return view('phone');
@@ -88,6 +90,8 @@ class HomeController extends Controller
 
     public function adminHome()
     {
+
+        PaystackHelpers::dailyVisit();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
@@ -355,18 +359,18 @@ class HomeController extends Controller
 
     public function transferFund($amount, $recipient)
     {
-           return $fundTransfer = PaystackHelpers::transferFund($amount, $recipient);
+           return PaystackHelpers::transferFund($amount, $recipient);
     }
 
     public function sendAirtime($phone, $amount)
     {
-        $bearerToken = PaystackHelpers::reloadlyAuth0Token();
-        $bearerToken['access_token'];
+        // $bearerToken = PaystackHelpers::reloadlyAuth0Token();
+        // $bearerToken['access_token'];
 
-        $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
-        $operatorId = $operator['operatorId'];
+        // $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
+        // $operatorId = $operator['operatorId'];
 
-        return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
+        // return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
 
         //return PaystackHelpers::reloadlyAuth0Token();
 

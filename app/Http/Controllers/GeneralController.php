@@ -16,13 +16,14 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-        
         PaystackHelpers::dailyVisit();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
         return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
     public function contact()
     {
+
+        PaystackHelpers::dailyVisit();
         return view('contact');
     }
 
@@ -60,11 +61,15 @@ class GeneralController extends Controller
 
     public function trackRecord()
     {
+
+        PaystackHelpers::dailyVisit();
         return view('track_record');
     }
 
     public function faq()
     {
+
+        PaystackHelpers::dailyVisit();
         return view('faq');
     }
 

@@ -152,7 +152,6 @@ class PaystackHelpers{
         }else{
             $check->count += 1;
             $check->save();
-            // $check->update(['count' => $oldCount+1]);
         }
     } 
 
