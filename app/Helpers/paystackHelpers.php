@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\PaymentTransaction;
 use Illuminate\Support\Env;
+use App\Models\Statistics;
 use Illuminate\Support\Facades\Http;
 
 class PaystackHelpers{
@@ -139,6 +140,21 @@ class PaystackHelpers{
 
         return json_decode($res->getBody()->getContents(), true);
     }
+
+    public static function dailyVisit(){
+
+        $date = \Carbon\Carbon::today()->toDateString();
+
+        $check = Statistics::where('date', $date)->first();
+        if($check == null)
+        {
+            Statistics::create(['type' => 'visits', 'date' => $date, 'count' => '1']);
+        }else{
+            $check->count += 1;
+            $check->save();
+            // $check->update(['count' => $oldCount+1]);
+        }
+    } 
 
 
     

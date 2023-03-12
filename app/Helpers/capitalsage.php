@@ -53,18 +53,18 @@ class CapitalSage{
     }
 
 
-    public static function dailyVisit(){
+    // public static function dailyVisit(){
 
-        $date = \Carbon\Carbon::today()->toDateString();
+    //     $date = \Carbon\Carbon::today()->toDateString();
 
-        $check = Statistics::where('date', $date)->first();
-        if($check == null)
-        {
-            Statistics::create(['type' => 'visits', 'date' => $date, 'count' => '1']);
-        }else{
-            $check->count += 1;
-            $check->save();
-            // $check->update(['count' => $oldCount+1]);
-        }
-    } 
+    //     $check = Statistics::where('date', $date)->first();
+    //     if($check == null)
+    //     {
+    //         Statistics::create(['type' => 'visits', 'date' => $date, 'count' => '1']);
+    //     }else{
+    //         $check->count += 1;
+    //         $check->save();
+    //         // $check->update(['count' => $oldCount+1]);
+    //     }
+    // } 
 }
