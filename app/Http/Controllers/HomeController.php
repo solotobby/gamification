@@ -18,6 +18,7 @@ use App\Models\CampaignWorker;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
+use App\Models\Statistics;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Nette\Utils\Random;
@@ -104,7 +105,19 @@ class HomeController extends Controller
         foreach ($data as $key => $value) {
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
         }
-        //    return $monthlyCounts = \DB::table('users')
+
+        $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
+        ->groupBy('date')
+        ->orderBy('date', 'ASC')
+        ->get();
+        // DATE_FORMAT(created_at, "%d-%b-%Y")
+        $dailyVisitresult[] = ['Year','Visits'];
+        foreach ($data as $key => $value) {
+            $dailyVisitresult[++$key] = [$value->date, (int)$value->visits, ];
+        }
+
+
+        //    $monthlyCounts = \DB::table('users')
         //                     ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
         //                     ->selectRaw('count(*) as count')
         //                     ->selectRaw('SUM(is_verified) as verified')
@@ -118,7 +131,7 @@ class HomeController extends Controller
         //     }
 
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($result));//->with('monthly',json_encode($listResult));
+        ->with('visitor',json_encode($result))->with('daily',json_encode($dailyVisitresult));
 
     }
 

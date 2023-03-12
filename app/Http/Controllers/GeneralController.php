@@ -15,7 +15,7 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-    //    CapitalSage::dailyVisit();
+       CapitalSage::dailyVisit();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
         return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }

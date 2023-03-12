@@ -54,13 +54,17 @@ class CapitalSage{
 
 
     public static function dailyVisit(){
-       
-        // $validate = Statistics::where('type', 'home')->where('created_at', today())->first();
-        // if($validate){
-        //     $validate->count += 1;
-        //     $validate->save();
-        // }else{
-        //     Statistics::create(['type' => 'home', 'count' => '1']);
-        // }
+
+        $date = \Carbon\Carbon::today()->toDateString();
+
+        $check = Statistics::where('date', $date)->first();
+        if($check == null)
+        {
+            Statistics::create(['type' => 'visits', 'date' => $date, 'count' => '1']);
+        }else{
+            $check->count += 1;
+            $check->save();
+            // $check->update(['count' => $oldCount+1]);
+        }
     } 
 }

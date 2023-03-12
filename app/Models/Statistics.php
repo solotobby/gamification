@@ -11,5 +11,5 @@ class Statistics extends Model
 
     protected $table = 'statistics';
 
-    protected $fillable = ['type', 'count'];
+    protected $fillable = ['type', 'date', 'count'];
 }
