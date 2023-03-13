@@ -55,7 +55,7 @@
         var data = google.visualization.arrayToDataTable(monthly);
 
         var options = {
-          title : 'Monthly Visit',
+          title : 'Monthly Registration',
           vAxis: {title: 'Hits'},
           hAxis: {title: 'Months'},
           seriesType: 'bars',

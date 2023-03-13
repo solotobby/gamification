@@ -99,32 +99,25 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
-        
+        //users registered
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
-        ->groupBy('date')
+        ->where('created_at', '>=', Carbon::now()->subMonths(6))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
-        // DATE_FORMAT(created_at, "%d-%b-%Y")
+       
         $result[] = ['Year','Registered','Verified'];
         foreach ($data as $key => $value) {
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
         }
-         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users' ))->groupBy('month')->get();
-
-        // $MonthlyVisitresult = \DB::select("
-        //     SELECT COUNT(*) as user_per_month, 
-        //     SUM(is_verified) as verified_users,
-        //     DATE_FORMAT(created_at, '%m-%Y') as created_month 
-        //     FROM `users` 
-        //     GROUP BY created_month
-        // ");
-
+        //monthly visis
+        $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
+         ->where('created_at', '>=', Carbon::now()->subMonths(6))->groupBy('month')->get();
         $MonthlyVisit[] = ['Month', 'Users','Verified'];
         foreach ($MonthlyVisitresult as $key => $value) {
-            $MonthlyVisit[++$key] = [@$value->month, @(int)$value->user_per_month, @(int)$value->verified_users ];
+            $MonthlyVisit[++$key] = [$value->month, (int)$value->user_per_month, (int)$value->verified_users ];
         }
 
-
+        ///daily visits
         $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
         ->groupBy('date')
         ->orderBy('date', 'ASC')
@@ -134,30 +127,6 @@ class HomeController extends Controller
         foreach ($data as $key => $value) {
             $dailyVisitresult[++$key] = [$value->date, (int)$value->visits, ];
         }
-        // $select = "count(*) as count, DATE_FORMAT('%Y-%m', created_at) as ym";
-        // $sql = "DATE_FORMAT(created_at, '%Y-%m') as year_month, count(*) as user_per_month";
-        // return $activity = User::select(\DB::raw($sql))
-        // ->groupBy('year_month')
-        // ->get();
-
-        // return $users = User::get()->groupBy(function($user) {
-        //     return Carbon::parse($user->created_at)->format('M Y');
-        // });
-
-
-        //    $monthlyCounts = \DB::table('users')
-        //                     ->selectRaw('DATE_FORMAT(created_at, "%b %Y") as month')
-        //                     ->selectRaw('count(*) as count')
-        //                     ->selectRaw('SUM(is_verified) as verified')
-        //                     ->groupBy('month')
-        //                     ->orderBy('month', 'asc')
-        //                     ->get();
-
-        //     $listResult[] = ['Month', 'Registered', 'Verified'];
-        //     foreach ($monthlyCounts as $key => $value) {
-        //         $listResult[++$key] = [(int)$value->month, (int)$value->count, (int)$value->verified];
-        //     }
-
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($result))->with('daily',json_encode($dailyVisitresult))->with('monthly', json_encode($MonthlyVisit));
 
