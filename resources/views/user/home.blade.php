@@ -250,7 +250,8 @@
 
                           <h4 class="fw-normal text-muted text-center">
                             verify your account to enjoy &#8358;1,000 user bonus and unlimited access to withdraw funds. When you refer up to 50 friends, 
-                            you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. <br>Got Payment Issues, transfer to 1014763749 - DOMINAHL TECH SERVICES (ZENITH) then send us a mail- info@dominahl.com
+                            you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
+                            <br>Got Payment Issues, transfer to 1014763749 - DOMINAHL TECH SERVICES (ZENITH) then upload proof of evidence via our <b>Talk To Us</b> panel
                           </h4>
 
                           <center>
@@ -261,7 +262,7 @@
                           
                           @else
                           <h3 class="mb-2 text-center">
-                            Make more Money...
+                            Refer friends and cashout out every Friday
                           </h3>
 
                           <h4 class="fw-normal text-muted text-center">
