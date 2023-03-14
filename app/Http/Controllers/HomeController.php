@@ -101,7 +101,7 @@ class HomeController extends Controller
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
         //users registered
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(6))->groupBy('date')
+        ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
        
@@ -111,7 +111,7 @@ class HomeController extends Controller
         }
         //monthly visis
         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
-         ->where('created_at', '>=', Carbon::now()->subMonths(6))->groupBy('month')->get();
+         ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('month')->get();
         $MonthlyVisit[] = ['Month', 'Users','Verified'];
         foreach ($MonthlyVisitresult as $key => $value) {
             $MonthlyVisit[++$key] = [$value->month, (int)$value->user_per_month, (int)$value->verified_users ];
@@ -119,7 +119,7 @@ class HomeController extends Controller
 
         ///daily visits
         $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
-        ->groupBy('date')
+        ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
         // DATE_FORMAT(created_at, "%d-%b-%Y")
