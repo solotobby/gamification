@@ -5,6 +5,8 @@ namespace App\Helpers;
 use App\Models\PaymentTransaction;
 use Illuminate\Support\Env;
 use App\Models\Statistics;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class PaystackHelpers{
@@ -201,7 +203,43 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    ///////////////////////////
 
+    public static function ddailyActivities(){
+        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
+        ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('date')
+        ->orderBy('date', 'ASC')
+        ->get();
+       
+        $result[] = ['Year','Registered','Verified'];
+        foreach ($data as $key => $value) {
+            $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
+        }
+
+        return $result;
+    }
+
+    public static function dailyStats(){
+        $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
+        ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
+        ->orderBy('date', 'ASC')
+        ->get();
+        // DATE_FORMAT(created_at, "%d-%b-%Y")
+        $dailyVisitresult[] = ['Year','Visits'];
+        foreach ($data as $key => $value) {
+            $dailyVisitresult[++$key] = [$value->date, (int)$value->visits];
+        }
+
+        return $dailyVisitresult;
+    }
     
-
+    public static function monthlyVisits(){
+        $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
+         ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('month')->get();
+        $MonthlyVisit[] = ['Month', 'Users','Verified'];
+        foreach ($MonthlyVisitresult as $key => $value) {
+            $MonthlyVisit[++$key] = [$value->month, (int)$value->user_per_month, (int)$value->verified_users ];
+        }
+        return $MonthlyVisit;
+    }
 }

@@ -100,35 +100,16 @@ class HomeController extends Controller
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
         //users registered
-        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('date')
-        ->orderBy('date', 'ASC')
-        ->get();
-       
-        $result[] = ['Year','Registered','Verified'];
-        foreach ($data as $key => $value) {
-            $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
-        }
+        $dailyActivity = PaystackHelpers::ddailyActivities();
+
         //monthly visis
-        $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
-         ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('month')->get();
-        $MonthlyVisit[] = ['Month', 'Users','Verified'];
-        foreach ($MonthlyVisitresult as $key => $value) {
-            $MonthlyVisit[++$key] = [$value->month, (int)$value->user_per_month, (int)$value->verified_users ];
-        }
+        $MonthlyVisit = PaystackHelpers::monthlyVisits();
 
         ///daily visits
-        $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
-        ->orderBy('date', 'ASC')
-        ->get();
-        // DATE_FORMAT(created_at, "%d-%b-%Y")
-        $dailyVisitresult[] = ['Year','Visits'];
-        foreach ($data as $key => $value) {
-            $dailyVisitresult[++$key] = [$value->date, (int)$value->visits, ];
-        }
+        $dailyVisits = PaystackHelpers::dailyStats();
+        
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($result))->with('daily',json_encode($dailyVisitresult))->with('monthly', json_encode($MonthlyVisit));
+        ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit));
 
     }
 
