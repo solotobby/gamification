@@ -107,9 +107,12 @@ class HomeController extends Controller
 
         ///daily visits
         $dailyVisits = PaystackHelpers::dailyStats();
+
+        //registration channel
+        $registrationChannel = PaystackHelpers::registrationChannel();
         
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit));
+        ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
 
     }
 

@@ -66,6 +66,26 @@
         chart.draw(data, options);
       }
     </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      var channel = <?php echo $channel; ?>;
+      console.log(channel);
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(channel);
+
+        var options = {
+          title: 'Registration Channel',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
+
 @endsection
 @section('content')
 <div class="content">
@@ -288,6 +308,8 @@
         <hr>
 
        <div id="linechart" style="width: 100%; height: 500px"></div> 
+       <hr>
+       <div id="donutchart" style="width: 100%; height: 500px;"></div>
       </div>
     </div>
   </div>

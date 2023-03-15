@@ -242,4 +242,13 @@ class PaystackHelpers{
         }
         return $MonthlyVisit;
     }
+
+    public static function registrationChannel(){
+        $registrationChannel = User::select('source', \DB::raw('count(*) as total'))->groupBy('source')->get();
+        $list[] = ['Channel', 'Total'];
+         foreach($registrationChannel as $key => $value){
+            $list[++$key] = [$value->source, (int)$value->total ];
+         }
+         return $list;
+    }
 }
