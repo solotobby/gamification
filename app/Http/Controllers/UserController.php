@@ -81,7 +81,7 @@ class UserController extends Controller
     
                 $referee_user = User::where('id', $referee->referee_id)->first();
                 ///Transactions
-                $description = 'Referer Bonus from '.auth()->user()->name;
+                $description = 'Referer Bonus from '.$referee_user->name;
                 PaystackHelpers::paymentTrasanction($referee_user->id, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
   
                 $adminWallet = Wallet::where('user_id', '1')->first();
