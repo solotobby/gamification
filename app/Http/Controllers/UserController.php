@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -264,10 +265,10 @@ class UserController extends Controller
             'amount' => 'required|numeric|max:100',
             'phone' => 'required|numeric|digits:11'
         ]);
-        // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        // if($request->amount > $wallet->balance){
-        //     return back()->with('error', 'Insurficient balance...');
-        // }
+        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        if($request->amount > $wallet->balance){
+            return back()->with('error', 'Insurficient balance...');
+        }
         return back()->with('error', 'The service is currenctly not available, please check back later');
        
         $occurence = PaymentTransaction::where('user_id', auth()->user()->id)->where('type', 'airtime_purchase')->whereDate('created_at', Carbon::today())->sum('amount');
@@ -285,15 +286,15 @@ class UserController extends Controller
         // if($request->amount > $balance){
         //     return back()->with('error', 'An Error Occour while processing airtime');
         // }
-
+       
         $payload = [
             // "country"=> "NG",
             // "customer"=> '+234'.substr($request->phone, 1),
             // "amount"=> $request->amount,
             // "type"=> "AIRTIME",
             // "reference"=> $ref
-
-            "reference"=>$ref,
+            
+            "reference"=>Str::random(7),
             "network"=>$request->network,
             "service"=>$request->network."VTU",
             "phone"=>$request->phone,
@@ -301,20 +302,20 @@ class UserController extends Controller
         ];
 
        
-    //    $res =  Http::withHeaders([
+    //   return $res =  Http::withHeaders([
     //         'Content-Type' => 'application/json',
     //         'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
     //     ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
-    //      return $res;
+
         return $access_token = CapitalSage::access_token();
-        $res = CapitalSage::buyAirtime($payload, $access_token);
+        return $res = CapitalSage::buyAirtime($payload, $access_token);
 
         if($res['status'] == 'success'){
 
             $wallet->balance -= $request->amount;
             $wallet->save();
 
-             //Admin Transaction Tablw
+             //Admin Transaction Table
              PaymentTransaction::create([
                 'user_id' => auth()->user()->id,
                 'campaign_id' => '1',
@@ -352,7 +353,7 @@ class UserController extends Controller
         $access_token = CapitalSage::access_token();
         $network = $request->network.'DATA';
         $provider = $request->network;
-        return $response = CapitalSage::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
+        $response = CapitalSage::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
         
         if($response['status'] == 'success'){
             $wallet->balance -= $amount; ///debit wallet

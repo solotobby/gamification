@@ -44,9 +44,9 @@
                     </ul>
                 </div>
             @endif
-            {{-- <div class="mb-4">
+
+            <div class="mb-4">
               <div class="input-group">
-               
                <select class="form-control" name="network" required>
                   <option value="">Select One</option>
                   <option value="MTN">MTN</option>
@@ -55,16 +55,15 @@
                   <option value="9MOBILE">9MOBILE</option>
                </select>
               </div>
-            </div> --}}
+            </div>
 
             <div class="mb-4">
               <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
                 </span>
-                {{-- <input type="text" class="form-control text-center" id="example-group1-input3" name="example-group1-input3" placeholder="00"> --}}
                 <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="50" max="100" name="amount" value="{{ old('amount') }}" placeholder="Enter Amount" required>
-                {{-- <span class="input-group-text">,00</span> --}}
+                <span class="input-group-text">.00</span>
               </div>
             </div>
 
@@ -79,7 +78,7 @@
             </div>
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary">
-                <i class="fa fa-fw fa-reply opacity-50 me-1"></i> Buy Airtime
+                <i class="fa fa-fw fa-share opacity-50 me-1"></i> Buy Airtime
               </button>
 
             </div>
