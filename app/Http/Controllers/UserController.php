@@ -256,8 +256,8 @@ class UserController extends Controller
 
     public function loadData($network){
         //$network;
-        $access_token = CapitalSage::access_token();
-        return CapitalSage::loadNetworkData($access_token, $network);
+        $access_token = PaystackHelpers::access_token();
+        return PaystackHelpers::loadNetworkData($access_token, $network);
     }
 
     public function buyAirtime(Request $request){
@@ -307,8 +307,8 @@ class UserController extends Controller
     //         'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
     //     ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
 
-        return $access_token = CapitalSage::access_token();
-        return $res = CapitalSage::buyAirtime($payload, $access_token);
+        return $access_token = PaystackHelpers::access_token();
+        return $res = PaystackHelpers::buyAirtime($payload, $access_token);
 
         if($res['status'] == 'success'){
 
@@ -350,10 +350,10 @@ class UserController extends Controller
         }
         
         $ref = time();
-        $access_token = CapitalSage::access_token();
+        $access_token = PaystackHelpers::access_token();
         $network = $request->network.'DATA';
         $provider = $request->network;
-        $response = CapitalSage::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
+        $response = PaystackHelpers::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
         
         if($response['status'] == 'success'){
             $wallet->balance -= $amount; ///debit wallet
