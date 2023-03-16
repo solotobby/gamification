@@ -9,6 +9,7 @@ use App\Mail\ApproveCampaign;
 use App\Mail\GeneralMail;
 use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
+use App\Models\BankInformation;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\DataBundle;
@@ -574,15 +575,27 @@ class AdminController extends Controller
     }
 
     public function updateWithdrawalRequest($id){
-        $withdrawals = Withrawal::where('id', $id)->first();
-        $withdrawals->status = true;
-        $withdrawals->save();
+       $withdrawals = Withrawal::where('id', $id)->first();
+       $user = User::where('id', $withdrawals->user->id)->first();
+       $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
+       $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
+       if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
+            $withdrawals->status = true;
+            $withdrawals->save();
+            //send mail
+            $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+            $subject = 'Withdrawal Request Granted';
+            Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
+            return back()->with('success', 'Withdrawals Updated');
+       }else{
+        return back()->with('error', 'Withdrawals Error');
+       }
+    }
 
-        $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-        $subject = 'Withdrawal Request Granted';
-        $user = User::where('id', $withdrawals->user->id)->first();
-        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
-        return back()->with('success', 'Withdrawals Updated');
+
+    public function transferFund($amount, $recipient)
+    {
+           return PaystackHelpers::transferFund($amount, $recipient);
     }
 
     public function removeMarketplaceProduct($product_id){
