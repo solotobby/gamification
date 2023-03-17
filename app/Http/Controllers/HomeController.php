@@ -11,8 +11,6 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
-use AfricasTalking\SDK\AfricasTalking;
-use AfricasTalking\SDK\Airtime;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\PaymentTransaction;
@@ -100,7 +98,7 @@ class HomeController extends Controller
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
         //users registered
-        $dailyActivity = PaystackHelpers::ddailyActivities();
+        $dailyActivity = PaystackHelpers::dailyActivities();
 
         //monthly visis
         $MonthlyVisit = PaystackHelpers::monthlyVisits();

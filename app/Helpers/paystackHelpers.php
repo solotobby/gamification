@@ -178,6 +178,7 @@ class PaystackHelpers{
         ])->get('https://sagecloud.ng/api/v2/internet/data/lookup?provider='.$network)->throw();
         return json_decode($res->getBody()->getContents(), true)['data'];
     }
+    
     public static function purchaseData($access_token, $code, $network_type, $provider, $phone, $ref){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
@@ -205,7 +206,7 @@ class PaystackHelpers{
 
     ///////////////////////////
 
-    public static function ddailyActivities(){
+    public static function dailyActivities(){
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
         ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('date')
         ->orderBy('date', 'ASC')

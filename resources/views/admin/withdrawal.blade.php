@@ -89,17 +89,17 @@
                                 <ul class="list-group push">
                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Bank Name 
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->bank_name }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->bank_name }} </span>
                                     
                                    </li>
                                    <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Account Name
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->name }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }} </span>
                                     
                                    </li>
                                    <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Account Number
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->account_number }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->account_number }} </span>
                                     
                                    </li>
 
