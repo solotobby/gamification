@@ -452,18 +452,35 @@ class AdminController extends Controller
 
     public function sendMassMail(Request $request){
         if($request->type == 'all'){
-            $users = User::where('is_verified', 0)->where('role', 'regular')->get();
+            $users = User::where('is_verified', 0)->where('role', 'regular')->pluck('phone')->toArray();
         }else{
-            $users = User::where('is_verified', 1)->where('role', 'regular')->get();
+            $users = User::where('is_verified', 1)->where('role', 'regular')->pluck('phone')->toArray();
         }
+        // return $users;
 
         $message = $request->message;
         $subject = $request->subject;
+        $number = $users;
 
-        foreach($users as $user){
-            dispatch(new SendMassEmail($user, $message, $subject)); 
+        // foreach($users as $user){
+        //     dispatch(new SendMassEmail($user, $message, $subject));
+        // }
+
+        // $list = [];
+        // foreach($users as $key => $value){
+        //     $value['phone'];
+        //     //$list[++$key] = ['234'.substr($value->phone, 1)];//$value->phone];
+        // }
+        // return $list;
+
+        $process = PaystackHelpers::sendBulkSMS($number, $message);
+        if($process['code'] == 'ok'){
+            return back()->with('success', 'SMS Sent Successful');
+        }else{
+            return back()->with('error', 'There was an error in transit');
         }
-        return back()->with('success', 'Mail Sent Successful');
+
+        
     }
 
     public function campaignPending(){

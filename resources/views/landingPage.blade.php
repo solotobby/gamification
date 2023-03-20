@@ -532,6 +532,102 @@
 						</div>
 					</div>
 					
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										I am  witness to it, it is working absolutely fine
+									</p>
+								</div>
+								<div class="link-box">
+									- tochuckuwadika1
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										It is a good platform to make money online
+									</p>
+								</div>
+								<div class="link-box">
+									- mulero58
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										It is a good platform to make money online
+									</p>
+								</div>
+								<div class="link-box">
+									- mulero58
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										I highly recommend this website to everyone...Wonder website ever...Great thanks to the creator, earning my money steady.
+									</p>
+								</div>
+								<div class="link-box">
+									- richytech7
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
 					
 				</div>
 			</div>

@@ -22,7 +22,10 @@
           {{-- <p>
             Payment Via Transfer: Bank Name - Zenith Bank; Account Name - Dominahl Tech Services; Account Number - 1014763749
           </p> --}}
-
+          <p style="color:brown">
+            We'll reward you with &#8358;35,000 when you refer 100 verified users and &#8358;350,000 when you refer 1,000 verified users.
+            <br>Copy your referral link below to start earning big!
+          </p>
         </div>
       </div>
       

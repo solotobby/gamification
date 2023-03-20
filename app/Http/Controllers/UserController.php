@@ -380,21 +380,21 @@ class UserController extends Controller
         
     }
 
-    public function sendNotification($message)
-    {
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post('https://api.ng.termii.com/api/sms/send', [
-            "to"=> '2349153590716',//2349153590716$number,
-            "from"=> "FREEBYZ",
-            "sms"=> $message,
-            "type"=> "plain",
-            "channel"=> "generic",
-            "api_key"=> env('TERMI_KEY')
-        ]);
+    // public function sendNotification($message)
+    // {
+    //     $res = Http::withHeaders([
+    //         'Accept' => 'application/json',
+    //         'Content-Type' => 'application/json',
+    //     ])->post('https://api.ng.termii.com/api/sms/send', [
+    //         "to"=> '2349153590716',//2349153590716$number,
+    //         "from"=> "FREEBYZ",
+    //         "sms"=> $message,
+    //         "type"=> "plain",
+    //         "channel"=> "generic",
+    //         "api_key"=> env('TERMI_KEY')
+    //     ]);
 
-         return json_decode($res->getBody()->getContents(), true);
-    }
+    //      return json_decode($res->getBody()->getContents(), true);
+    // }
 
 }

@@ -178,7 +178,7 @@ class PaystackHelpers{
         ])->get('https://sagecloud.ng/api/v2/internet/data/lookup?provider='.$network)->throw();
         return json_decode($res->getBody()->getContents(), true)['data'];
     }
-    
+
     public static function purchaseData($access_token, $code, $network_type, $provider, $phone, $ref){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
@@ -251,5 +251,21 @@ class PaystackHelpers{
             $list[++$key] = [$value->source, (int)$value->total ];
          }
          return $list;
+    }
+
+    public static function sendBulkSMS($number, $message){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post('https://api.ng.termii.com/api/sms/send/bulk', [
+            "to"=> $number,
+            "from"=> "FREEBYZ",
+            "sms"=> $message,
+            "type"=> "plain",
+            "channel"=> "generic",
+            "api_key"=> env('TERMI_KEY')
+        ]);
+
+        return json_decode($res->getBody()->getContents(), true);
     }
 }

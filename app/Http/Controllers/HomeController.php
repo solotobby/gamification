@@ -45,9 +45,13 @@ class HomeController extends Controller
         if($user->hasRole('admin')){
             // return 'admin';
             return redirect()->route('admin.home');
-        }
-       
-        return redirect()->route('user.home');
+        }elseif($user->hasRole('staff')){
+            // return 'staff';
+            return redirect()->route('staff.home');
+        }else{
+            // return 'user';
+            return redirect()->route('user.home');
+        } 
     }
 
     public function userHome()
@@ -68,19 +72,19 @@ class HomeController extends Controller
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed]);
     }
 
-    public function userApi(){
-        $user = User::where('id', auth()->user()->id)->first();
-        if($user->phone == ''){
-            return view('phone');
-        }
-        if($user->is_verified == true){
-            $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
-        }else{
-            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
-        }
+    // public function userApi(){
+    //     $user = User::where('id', auth()->user()->id)->first();
+    //     if($user->phone == ''){
+    //         return view('phone');
+    //     }
+    //     if($user->is_verified == true){
+    //         $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
+    //     }else{
+    //         $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
+    //     }
 
-        return $available_jobs;
-    }
+    //     return $available_jobs;
+    // }
 
     public function howTo(){
         return view('user.documentation.how_to_approve');
@@ -89,7 +93,7 @@ class HomeController extends Controller
     public function adminHome()
     {
 
-        PaystackHelpers::dailyVisit();
+        // PaystackHelpers::dailyVisit();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
