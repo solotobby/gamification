@@ -152,44 +152,6 @@
                 </div>
               </div>
               <!-- END Story -->
-
-
-            {{-- <div class="block block-rounded">
-                <div class="block-content block-content-full">
-                  <div class="d-sm-flex">
-                    <div class="ms-sm-2 me-sm-4 py-2 text-center">
-                      <a class="item item-rounded bg-body-dark text-dark fs-5 mb-2 mx-auto" href="{{ url('campaign/'.$job->job_id) }}">
-                       
-                        &#8358;{{ $job->campaign_amount}}
-                      </a>
-                      <div class="btn-group btn-group-sm">
-                        <a class="btn btn-primary" href="{{ url('campaign/'.$job->job_id) }}">
-                         Apply
-                        </a>
-                      </div>
-                    </div>
-                    <div class="py-2">
-                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="{{ url('campaign/'.$job->job_id) }}">
-                        {!! $job->post_title !!}
-                      </a>
-                     
-                      <div class="fs-sm fw-semibold text-muted mb-2">
-                        Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}
-                      </div>
-                      <p class="text-muted mb-2">
-                      
-                        {!! \Illuminate\Support\Str::words($job->description, 50) !!}
-                      </p>
-                      <div>
-                        <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
-                        <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
-                       
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div> --}}
-            {{-- @endif --}}
             @endforeach     
         </div>
 

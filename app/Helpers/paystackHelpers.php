@@ -268,4 +268,28 @@ class PaystackHelpers{
 
         return json_decode($res->getBody()->getContents(), true);
     }
+
+    public static function numberFormat($number, $plus = true){
+        if($number >= 1000000000){
+            $number = number_format(($number/1000000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'B+':(int)$number.'B';
+            return $number;
+        }
+        if($number >= 1000000){
+            $number = number_format(($number/1000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'M+':(int)$number.'M';
+            return $number;
+        }
+
+        if($number >= 1000){
+            $number = number_format(($number/1000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'K+':(int)$number.'K';
+            return $number;
+        }
+        return $number;
+    }
+// add_filter("wdm_before_fetch_template", function($vars, $template, $type){
+//     $vars['download_count'] = number_format($vars['download_count']);
+//     return $vars;
+// }, 10, 3);
 }
