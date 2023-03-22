@@ -269,39 +269,39 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
-    // public static function numberFormat($number, $plus = true){
-    //     if($number >= 1000000000){
-    //         $number = number_format(($number/1000000000), 1);
-    //         $number = $number > (int)$number && $plus ? (int)$number.'B+':(int)$number.'B';
-    //         return $number;
-    //     }
-    //     if($number >= 1000000){
-    //         $number = number_format(($number/1000000), 1);
-    //         $number = $number > (int)$number && $plus ? (int)$number.'M+':(int)$number.'M';
-    //         return $number;
-    //     }
+    public static function numberFormat($number, $plus = true){
+        if($number >= 1000000000){
+            $number = number_format(($number/1000000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'B+':(int)$number.'B';
+            return $number;
+        }
+        if($number >= 1000000){
+            $number = number_format(($number/1000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'M+':(int)$number.'M';
+            return $number;
+        }
 
-    //     if($number >= 1000){
-    //         $number = number_format(($number/1000), 1);
-    //         $number = $number > (int)$number && $plus ? (int)$number.'K+':(int)$number.'K';
-    //         return $number;
-    //     }
-    //     return $number;
-    // }
-
-    public static function numberFormat($number) {
-        $number = (int) preg_replace('/[^0-9]/', '', $number);
-        if ($number >= 1000) {
-            $rn = round($number);
-            $format_number = number_format($rn);
-            $ar_nbr = explode(',', $format_number);
-            $x_parts = array('K', 'M', 'B', 'T', 'Q');
-            $x_count_parts = count($ar_nbr) - 1;
-            $dn = $ar_nbr[0] . ((int) $ar_nbr[1][0] !== 0 ? '.' . $ar_nbr[1][0] : '');
-            $dn .= $x_parts[$x_count_parts - 1];
-    
-            return $dn;
+        if($number >= 1000){
+            $number = number_format(($number/1000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'K+':(int)$number.'K';
+            return $number;
         }
         return $number;
     }
+
+    // public static function numberFormat($number) {
+    //     $number = (int) preg_replace('/[^0-9]/', '', $number);
+    //     if ($number >= 1000) {
+    //         $rn = round($number);
+    //         $format_number = number_format($rn);
+    //         $ar_nbr = explode(',', $format_number);
+    //         $x_parts = array('K', 'M', 'B', 'T', 'Q');
+    //         $x_count_parts = count($ar_nbr) - 1;
+    //         $dn = $ar_nbr[0] . ((int) $ar_nbr[1][0] !== 0 ? '.' . $ar_nbr[1][0] : '');
+    //         $dn .= $x_parts[$x_count_parts - 1];
+    
+    //         return $dn;
+    //     }
+    //     return $number;
+    // }
 }
