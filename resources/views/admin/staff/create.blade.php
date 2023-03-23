@@ -47,10 +47,10 @@
                             <option value="Quality Assurance Officer">Quality Assurance Officer</option>
                         </select>
                     </div>
-                    <div class="mb-2">
+                    {{-- <div class="mb-2">
                         <label class="form-label" for="example-text-input">Name</label>
                         <input type="text" class="form-control" id="example-text-input" name="name" required>
-                    </div>
+                    </div> --}}
 
                     <div class="mb-2">
                         <label class="form-label" for="example-text-input">Email</label>
