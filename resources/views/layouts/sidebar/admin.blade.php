@@ -10,7 +10,7 @@
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-location-arrow"></i>
+          <i class="nav-main-link-icon fa fa-star"></i>
           <span class="nav-main-link-name">Campaigns</span>
         </a>
         <ul class="nav-main-submenu">
@@ -109,6 +109,30 @@
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('view.admin.marketplace') }}">
               <span class="nav-main-link-name">View Products</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-users"></i>
+          <span class="nav-main-link-name">Staff Mgt.</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.create') }}">
+              <span class="nav-main-link-name">Create</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.list') }}">
+              <span class="nav-main-link-name">View</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.salary') }}">
+              <span class="nav-main-link-name">Process Salary</span>
             </a>
           </li>
         </ul>

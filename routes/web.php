@@ -128,6 +128,13 @@ Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
+///staff Routes
+Route::get('staff/create', [\App\Http\Controllers\Admin\StaffController::class, 'create'])->name('staff.create');
+Route::get('staff/list', [\App\Http\Controllers\Admin\StaffController::class, 'index'])->name('staff.list');
+Route::get('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'salary'])->name('staff.salary');
+
+Route::post('staff/store', [\App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
 
 Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
 Route::get('how/to', [\App\Http\Controllers\HomeController::class, 'howTo'])->name('howto');

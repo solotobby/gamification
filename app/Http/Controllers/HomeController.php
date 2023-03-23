@@ -118,6 +118,28 @@ class HomeController extends Controller
 
     }
 
+    public function staffHome(){
+        $campaigns = Campaign::where('status', 'Live')->get();
+        $campaignWorker = CampaignWorker::all();
+        $user = User::where('role', 'regular')->get();
+        $wallet = Wallet::all();
+        $ref_rev = Referral::where('is_paid', true)->count();
+        $transactions = PaymentTransaction::where('user_type', 'admin')->get();
+        $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+        //users registered
+        $dailyActivity = PaystackHelpers::dailyActivities();
+
+        //monthly visis
+        $MonthlyVisit = PaystackHelpers::monthlyVisits();
+
+        ///daily visits
+        $dailyVisits = PaystackHelpers::dailyStats();
+
+        //registration channel
+        $registrationChannel = PaystackHelpers::registrationChannel();
+        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]) ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
+    }
+
     public function savePhoneInformation(Request $request)
     {
         $this->validate($request, [
