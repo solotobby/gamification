@@ -42,6 +42,9 @@
                         <select name="role" class="form-control" required>
                             <option value="">Select One</option>
                             <option value="Chief Technology Officer">Chief Technology Officer</option>
+                            <option value="Chief Product Officer">Chief Product Officer</option>
+                            <option value="Chief Satisfaction Officer">Customer Satisfaction Officer</option>
+                            <option value="Quality Assurance Officer">Quality Assurance Officer</option>
                         </select>
                     </div>
                     <div class="mb-2">
