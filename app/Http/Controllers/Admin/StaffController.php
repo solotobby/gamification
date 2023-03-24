@@ -15,7 +15,7 @@ class StaffController extends Controller
         $this->middleware('auth');
     }
 
-    
+
     public function index()
     {
         $staff = User::where('role', 'staff')->get();
@@ -28,6 +28,10 @@ class StaffController extends Controller
     }
 
     public function store(Request $request){
+        $request->validate([
+            'email' => 'required|unique:users',
+            'phone' => 'required|numeric',
+        ]);
         $bankCode = explode(":", $request->bank_code);
         $bankInfor = PaystackHelpers::resolveBankName($request->account_number, $bankName = $bankCode['0']);
         $bankInfor['data']['account_name'];
