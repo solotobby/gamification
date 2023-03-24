@@ -133,6 +133,7 @@ Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHom
 Route::get('staff/create', [\App\Http\Controllers\Admin\StaffController::class, 'create'])->name('staff.create');
 Route::get('staff/list', [\App\Http\Controllers\Admin\StaffController::class, 'index'])->name('staff.list');
 Route::get('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'salary'])->name('staff.salary');
+Route::post('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'processSalary'])->name('process.salary');
 
 Route::post('staff/store', [\App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
 

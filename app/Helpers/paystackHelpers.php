@@ -66,6 +66,10 @@ class PaystackHelpers{
          return json_decode($res->getBody()->getContents(), true);
     }
 
+    public function bulkFundTransfer(){
+
+    }
+
     public static function initiateTrasaction($ref, $amount, $redirect_url){
         $res = Http::withHeaders([
             'Accept' => 'application/json',

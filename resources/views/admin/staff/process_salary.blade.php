@@ -36,35 +36,51 @@
       </div>
       <div class="block-content">
         <div class="table-responsive">
+
+          @if(session('success'))
+              <div class="alert alert-success" role="alert">
+                  {{ session('success') }}
+              </div>
+          @endif
+
+          @if(session('error'))
+              <div class="alert alert-danger" role="alert">
+                  {{ session('error') }}
+              </div>
+          @endif
+
+          <form action="{{ route('process.salary') }}" method="POST">
+            @csrf
           <table class="table table-bordered table-striped table-vcenter">
-          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
             <thead>
                 <tr>
-                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Staff ID</th>
                     <th>Acc. Info.</th>
                     <th>Role</th>
                     <th>Basic Salary</th>
-                    {{-- <th>When Created</th> --}}
                     </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($staffs as $staff)
                     <tr>
-                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
                         <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
                         <td>{{ $staff->staff->staff_id }}</td>
                         <td>{{ $staff->staff->bank_name}} - {{ $staff->staff->account_number}}</td>
                         <td>{{ $staff->staff->role }}</td>
                         <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
-                        {{-- <td>{{ \Carbon\Carbon::parse($staff->created_at)->format('d/m/Y') }}</td> --}}
+                        <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}">
                     </tr>
                 @endforeach
             </tbody>
           </table>
-          <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
+          @if($today >= '21')
+              <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
+              @else
+              <button type="button" class="btn btn-primary mb-2 disabled">Process Payment</button>
+              @endif
+          </form>
           {{-- <div class="d-flex">
             {!! $users->links('pagination::bootstrap-4') !!}
           </div> --}}

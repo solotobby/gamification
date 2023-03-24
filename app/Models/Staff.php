@@ -11,5 +11,5 @@ class Staff extends Model
 
     protected $table = "staff";
 
-    protected $fillable = ['user_id', 'staff_id', 'role', 'account_number', 'account_name', 'bank_name', 'basic_salary', 'bonus', 'gross', 'status'];
+    protected $fillable = ['user_id', 'staff_id', 'role', 'account_number', 'account_name', 'bank_name', 'basic_salary', 'bonus', 'gross', 'status', 'recipient_code'];
 }
