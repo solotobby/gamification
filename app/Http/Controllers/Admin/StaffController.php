@@ -68,7 +68,7 @@ class StaffController extends Controller
                 $staffList = Staff::whereIn('id', $request->id)->select(['user_id', 'basic_salary', 'recipient_code'])->get();
                 $list = [];
                foreach($staffList as $key=>$value){
-                $list = ['amount' => $value->basic_salary, 'reason' => $message, 'recipient' => $value->recipient_code];
+                $list = ['amount' => $value->basic_salary*100, 'reason' => $message, 'recipient' => $value->recipient_code];
                 }
             $bulkTransfer =  PaystackHelpers::bulkFundTransfer($list);
             if($bulkTransfer['status'] == true){
