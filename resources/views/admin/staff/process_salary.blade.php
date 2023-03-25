@@ -54,6 +54,7 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Staff ID</th>
                     <th>Acc. Info.</th>
@@ -65,18 +66,24 @@
                 <?php $i = 1; ?>
                 @foreach ($staffs as $staff)
                     <tr>
+                        <td><input type="checkbox" name="id[]"  value="{{@$staff->staff->id}}"></td>
                         <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
                         <td>{{ $staff->staff->staff_id }}</td>
                         <td>{{ $staff->staff->bank_name}} - {{ $staff->staff->account_number}}</td>
                         <td>{{ $staff->staff->role }}</td>
                         <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
-                        <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}">
+                       
+                        {{-- <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}"> --}}
                     </tr>
                 @endforeach
             </tbody>
           </table>
           @if($today >= '21')
-              <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
+                @if(!$check)
+                    <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
+                    @else
+                    <button type="submit" class="btn btn-warning mb-2 disabled">Payment Successful for {{ $check->date }}</button>
+                @endif
               @else
               <button type="button" class="btn btn-primary mb-2 disabled">Process Payment</button>
               @endif

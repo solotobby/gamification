@@ -66,8 +66,21 @@ class PaystackHelpers{
          return json_decode($res->getBody()->getContents(), true);
     }
 
-    public function bulkFundTransfer(){
+    public static function bulkFundTransfer($transfers){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transfer/bulk', [
+            "currency"=> "NGN",
+            "source"=> "balance", 
+            "transfers"=> [$transfers]
+            // "amount"=> $amount, 
+            // "recipient"=> $recipient, 
+            // "reason"=> "Freebyz Withdrawal" 
+        ]);
 
+         return json_decode($res->getBody()->getContents(), true);
     }
 
     public static function initiateTrasaction($ref, $amount, $redirect_url){
