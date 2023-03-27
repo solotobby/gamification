@@ -1,92 +1,24 @@
 @extends('layouts.main.master')
 @section('style')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-  var visitor = <?php echo $visitor; ?>;
-  console.log(visitor);
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable(visitor);
-    var options = {
-      title: 'Daily Activity',
-      curveType: 'function',
-      legend: { position: 'bottom' }
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-    chart.draw(data, options);
-  }
-</script> 
-
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      var daily = <?php echo $daily; ?>;
-      console.log(daily);
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawVisualization);
-
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable(daily);
-
-        var options = {
-          title : 'Daily Visit',
-          vAxis: {title: 'Hits'},
-          hAxis: {title: 'Days'},
-          seriesType: 'bars',
-          series: {5: {type: 'line'}}
-        };
-
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      var monthly = <?php echo $monthly; ?>;
-      console.log(monthly);
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawVisualization);
-
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable(monthly);
-
-        var options = {
-          title : 'Monthly Registration',
-          vAxis: {title: 'Hits'},
-          hAxis: {title: 'Months'},
-          seriesType: 'bars',
-          series: {5: {type: 'line'}}
-        };
-
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div_monthly'));
-        chart.draw(data, options);
-      }
-    </script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      var channel = <?php echo $channel; ?>;
-      console.log(channel);
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable(channel);
-
-        var options = {
-          title: 'Registration Channel',
-          // pieHole: 0.3,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-      }
-    </script>
-
+<script>
+  var visitor = <?php echo $visitor; ?>
+</script>
+<script>
+  var daily = <?php echo $daily; ?>
+</script>
+<script>
+  var monthly = <?php echo $monthly; ?>
+</script>
+<script>
+  var channel = <?php echo $channel; ?>
+</script>
+<script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
+<script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
+<script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
+<script src="{{ asset('js/admin/dailyActivities.js')}}"></script>
 @endsection
+
 @section('content')
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
