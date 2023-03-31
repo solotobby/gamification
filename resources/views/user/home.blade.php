@@ -1,6 +1,6 @@
 @extends('layouts.main.master')
 
-@section('title', 'Winner List')
+{{-- @section('title', 'Winner List') --}}
 
 @section('content')
  <!-- Hero Section -->
@@ -14,7 +14,7 @@
           {{-- <p class="fs-lg fw-normal text-muted">
             We offer the most complete job platform to publish your job offers and apply for your dream job.
           </p> --}}
-          <p>Earn 250 NGN each time you refer a friend. <br>
+          <p>Earn 1000 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
           <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
             {{url('register/'.auth()->user()->referral_code)}}

@@ -33,8 +33,8 @@ class UserController extends Controller
     public function makePayment()
     {
         $ref = time();
-        $url = PaystackHelpers::initiateTrasaction($ref, 515, '/upgrade/payment');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 500, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+        $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
+        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
         return redirect($url);
        
     }
@@ -55,15 +55,15 @@ class UserController extends Controller
            if($statusVerification == 'success'){
             PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
             
-                //credit User with 1,000 bonus
-                $bonus = Wallet::where('user_id', auth()->user()->id)->first();
-                $bonus->bonus += '1000';
-                $bonus->save();
+                // //credit User with 1,000 bonus
+                // $bonus = Wallet::where('user_id', auth()->user()->id)->first();
+                // $bonus->bonus += '1000';
+                // $bonus->save();
     
-                if($bonus){
-                    $description = 'Verification Bonus for '.auth()->user()->name;
-                    PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', time(), 1000, 'successful', 'upgrade_bonus', $description, 'Credit', 'regular');
-                }
+                // if($bonus){
+                //     $description = 'Verification Bonus for '.auth()->user()->name;
+                //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', time(), 1000, 'successful', 'upgrade_bonus', $description, 'Credit', 'regular');
+                // }
                
                 $user = User::where('id', auth()->user()->id)->first();
                 $user->is_verified = true;
@@ -73,7 +73,7 @@ class UserController extends Controller
     
                if($referee){
                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                $wallet->balance += '250';
+                $wallet->balance += '500';
                 $wallet->save();
     
                 $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -86,19 +86,19 @@ class UserController extends Controller
                 PaystackHelpers::paymentTrasanction($referee_user->id, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
   
                 $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 250;
+                $adminWallet->balance += 500;
                 $adminWallet->save();
 
                 //Admin Transaction Table
                 $description = 'Referer Bonus from '.$user->name;
-                PaystackHelpers::paymentTrasanction(1, '1', time(), 250, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+                PaystackHelpers::paymentTrasanction(1, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
                }else{
                 $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 500;
+                $adminWallet->balance += 1000;
                 $adminWallet->save();
                  //Admin Transaction Tablw
                 $description = 'Direct Referer Bonus from '.$user->name;
-                PaystackHelpers::paymentTrasanction(1, '1', time(), 500, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
+                PaystackHelpers::paymentTrasanction(1, '1', time(), 1000, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
                }
                Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
                return redirect('success');
@@ -118,17 +118,17 @@ class UserController extends Controller
         $ref = time();
         $bonus = Wallet::where('user_id', auth()->user()->id)->first();
          //debit  User wallet first
-         $bonus->balance -= '500';
+         $bonus->balance -= '1050';
          $bonus->save();
         //credit User with 1,000 bonus
-        $bonus->bonus += '1000';
-        $bonus->save();
+        // $bonus->bonus += '1000';
+        // $bonus->save();
 
         PaymentTransaction::create([
             'user_id' => auth()->user()->id,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 500,
+            'amount' => 1000,
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'wallet',
@@ -138,19 +138,19 @@ class UserController extends Controller
             'user_type' => 'regular'
         ]);
 
-        PaymentTransaction::create([
-            'user_id' => auth()->user()->id,
-            'campaign_id' => '1',
-            'reference' => time(),
-            'amount' => 1000,
-            'status' => 'successful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
-            'type' => 'upgrade_bonus',
-            'description' => 'Verification Bonus for '.auth()->user()->name,
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
+        // PaymentTransaction::create([
+        //     'user_id' => auth()->user()->id,
+        //     'campaign_id' => '1',
+        //     'reference' => time(),
+        //     'amount' => 1000,
+        //     'status' => 'successful',
+        //     'currency' => 'NGN',
+        //     'channel' => 'paystack',
+        //     'type' => 'upgrade_bonus',
+        //     'description' => 'Verification Bonus for '.auth()->user()->name,
+        //     'tx_type' => 'Credit',
+        //     'user_type' => 'regular'
+        // ]);
 
 
            $user = User::where('id', auth()->user()->id)->first();
@@ -161,7 +161,7 @@ class UserController extends Controller
            
            if($referee){
             $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-            $wallet->balance += '250';
+            $wallet->balance += 500;
             $wallet->save();
 
             $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -174,7 +174,7 @@ class UserController extends Controller
                 'user_id' => $referee_user->id,///auth()->user()->id,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => 250,
+                'amount' => 500,
                 'status' => 'successful',
                 'currency' => 'NGN',
                 'channel' => 'paystack',
@@ -183,14 +183,14 @@ class UserController extends Controller
             ]);
 
             $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += 250;
+            $adminWallet->balance += 500;
             $adminWallet->save();
             //Admin Transaction Tablw
             PaymentTransaction::create([
                 'user_id' => 1,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => 250,
+                'amount' => 500,
                 'status' => 'successful',
                 'currency' => 'NGN',
                 'channel' => 'paystack',
@@ -203,14 +203,14 @@ class UserController extends Controller
            }else{
 
             $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += 500;
+            $adminWallet->balance += 1000;
             $adminWallet->save();
              //Admin Transaction Tablw
              PaymentTransaction::create([
                 'user_id' => 1,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => 500,
+                'amount' => 1000,
                 'status' => 'successful',
                 'currency' => 'NGN',
                 'channel' => 'paystack',

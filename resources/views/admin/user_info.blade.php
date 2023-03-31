@@ -101,6 +101,7 @@
         </div>
         <!-- END Classic -->
 
+       
         <!-- Photos -->
         <div class="tab-pane fade" id="search-photos" role="tabpanel" aria-labelledby="search-photos-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">

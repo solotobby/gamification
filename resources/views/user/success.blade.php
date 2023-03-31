@@ -19,16 +19,7 @@
     {{-- <h2 class="content-heading">Basic <small>Animate elements and make them visible on scrolling</small></h2> --}}
     <div class="row">
       <div class="col-sm-2">
-        {{-- <div class="block block-rounded invisible" data-toggle="appear">
-          <div class="block-content block-content-full">
-            <div class="py-5 text-center">
-              <div class="item item-2x item-circle bg-info text-white mx-auto">
-                <i class="fa fa-2x fa-train"></i>
-              </div>
-              <div class="fs-4 fw-semibold pt-3 mb-0">Train</div>
-            </div>
-          </div>
-        </div> --}}
+        
       </div>
       <div class="col-sm-8">
         <div class="block block-rounded invisible" data-toggle="appear">
@@ -43,16 +34,7 @@
         </div>
       </div>
       <div class="col-sm-2">
-        {{-- <div class="block block-rounded invisible" data-toggle="appear">
-          <div class="block-content block-content-full">
-            <div class="py-5 text-center">
-              <div class="item item-2x item-circle bg-dark text-white mx-auto">
-                <i class="fa fa-2x fa-car"></i>
-              </div>
-              <div class="fs-4 fw-semibold pt-3 mb-0">Car</div>
-            </div>
-          </div>
-        </div> --}}
+        
       </div>
     </div>
 

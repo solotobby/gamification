@@ -152,10 +152,10 @@ class HomeController extends Controller
 
         if(count($userScore) > 0)
         {
-            return view('error');
+            return view('user.error');
         }
         $questions = Question::inRandomOrder()->limit(1)->first();
-        return view('play', ['question' => $questions, 'game' => $games]);
+        return view('user.play', ['question' => $questions, 'game' => $games]);
     }
 
     public function storeAnswer(Request $request)
@@ -206,7 +206,7 @@ class HomeController extends Controller
             return redirect('submit/answers');
         }
 
-        return view('next', ['question' => $questions, 'game' => $games, 'index' => $index]);
+        return view('user.next', ['question' => $questions, 'game' => $games, 'index' => $index]);
     }
 
     public function submitAnswers()
@@ -223,13 +223,13 @@ class HomeController extends Controller
             return view('completed', ['score' => $percentage]);
         }
         UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
-        return view('completed', ['score' => $percentage]);
+        return view('user.completed', ['score' => $percentage]);
     }
 
     public function scores()
     {
         $scores = UserScore::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
-        return view('scores', ['scores' => $scores]);
+        return view('user.scores', ['scores' => $scores]);
     }
 
     public function redeemReward($id)
