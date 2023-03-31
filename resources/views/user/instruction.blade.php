@@ -1,22 +1,9 @@
-@extends('layouts.master')
-@section('title', 'Instruction Page')
+@extends('layouts.main.master')
+{{-- @section('title', 'Instruction Page') --}}
 
 @section('content')
 
-		<!-- basic-breadcrumb start -->
-		<div class="basic-breadcrumb-area gray-bg ptb-70">
-			<div class="container">
-				<div class="basic-breadcrumb text-center">
-					<h3 class="">Instruction</h3>
-					<ol class="breadcrumb text-xs">
-						<li><a href="{{ url('/') }}">Home</a></li>
-						<li class="active">Instruction</li>
-					</ol>
-				</div>
-			</div>
-		</div>
-		<!-- basic-breadcrumb end -->
-
+		
 <!-- features-area start -->
 		<div id="about" class="features-area pt-90 pb-70">
 			<div class="container">
@@ -36,5 +23,7 @@
 			</div>
 		</div>
 		<!-- features-area end -->
+
+		
 
 @endsection

@@ -141,7 +141,7 @@ class HomeController extends Controller
     public function instruction()
     {
         $games = Games::where('status', '1')->first();
-        return view('instruction', ['games' => $games]);
+        return view('user.instruction', ['games' => $games]);
     }
 
     public function takeQuiz()
@@ -221,11 +221,8 @@ class HomeController extends Controller
         if(count($userScore) > 0)
         {
             return view('completed', ['score' => $percentage]);
-
         }
-
-         UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
-
+        UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
         return view('completed', ['score' => $percentage]);
     }
 

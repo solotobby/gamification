@@ -54,8 +54,6 @@
                     <th>Status</th>
                     <th>Date Rquested</th>
                     <th>Liq. Date</th>
-                    
-                    
                     </tr>
             </thead>
             <tbody>
@@ -69,8 +67,7 @@
                         <td>&#8358;{{ number_format(@$with->amount) }}</td>
                         <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
                         <td>{{ \Carbon\Carbon::parse($with->created_at)->format('d/m/Y @ h:i:s a') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->format('d/m/Y @ h:i:s a') }}</td>
-                        
+                        <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->diffForHumans() }}</td>
                     </tr>
 
 
@@ -117,6 +114,8 @@
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                           @if($with->status != '1')
                           <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
+
+                          <a href="{{ url('update/withdrawal/manual'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
                           @else
                           <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
                           @endif

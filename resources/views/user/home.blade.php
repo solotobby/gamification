@@ -1,4 +1,4 @@
- @extends('layouts.main.master')
+@extends('layouts.main.master')
 
 @section('title', 'Winner List')
 
@@ -43,7 +43,7 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">{{ auth()->user()->referees()->count(); }}</p>
+          <p class="fs-3 text-dark mb-0">{{ auth()->user()->referees()->count() }}</p>
           <p class="text-muted mb-0">
             Referrals
           </p>

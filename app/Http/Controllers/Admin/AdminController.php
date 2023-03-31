@@ -101,7 +101,6 @@ class AdminController extends Controller
     {
 
         $game = Games::where('id', $id)->first();
-
         if($game->status == '1'){
             $game->status = '0';
             $game->save();
@@ -137,8 +136,6 @@ class AdminController extends Controller
             'number_of_questions'=>$request->number_of_questions,
             'status' => 1
         ]);
-        // $game->save();
-
         return back()->with('status', 'Game Created Successfully');
 
     }
@@ -150,7 +147,6 @@ class AdminController extends Controller
         $reward->amount = $request->amount;
         $reward->save();
         return back()->with('status', 'Amount updated Successfully');
-
     }
 
     public function viewAmount()
@@ -176,7 +172,7 @@ class AdminController extends Controller
 
     public function assignReward(Request $request)
     {
-        
+
         if(empty($request->id))
         {
              return back()->with('error', 'Please Select A Score');
@@ -193,9 +189,7 @@ class AdminController extends Controller
             $message = "Hello ".$score->user->name. " you have a ".$request->name." reward of ".$formattedReward." from Freebyz.com. Please login to cliam it. Thanks";
             PaystackHelpers::sendNotificaion($phone, $message);
         }
-
         return back()->with('status', 'Reward Assigned Successfully');
-
     }
 
 
