@@ -172,7 +172,6 @@ class AdminController extends Controller
 
     public function assignReward(Request $request)
     {
-
         if(empty($request->id))
         {
              return back()->with('error', 'Please Select A Score');
@@ -192,11 +191,25 @@ class AdminController extends Controller
         return back()->with('status', 'Reward Assigned Successfully');
     }
 
-
-    public function userList(){
-        $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
+    public function userList(Request $request){
+        if($request){
+            $users = User::where([
+                [function ($query) use ($request) {
+                    if (($search = $request->search)) {
+                        $query->orWhere('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                            ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
+                            ->get();
+                    }
+                }]
+            ])->paginate(100);
+        }else{
+            $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->paginate(100);
+        }
         return view('admin.users', ['users' => $users]);
     }
+
     public function verifiedUserList(){
         $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->paginate(50);
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
@@ -601,6 +614,17 @@ class AdminController extends Controller
        }else{
         return back()->with('error', 'Withdrawals Error');
        }
+    }
+
+    public function updateWithdrawalRequestManual($id){
+        $withdrawals = Withrawal::where('id', $id)->first();
+        $withdrawals->status = true;
+        $withdrawals->save();
+        $user = User::where('id', $withdrawals->user->id)->first();
+        $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+        $subject = 'Withdrawal Request Granted';
+        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
+        return back()->with('success', 'Withdrawals Updated');
     }
 
 
