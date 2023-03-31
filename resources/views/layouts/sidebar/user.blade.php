@@ -83,7 +83,6 @@
               <span class="nav-main-link-name">Withdrawal Requests</span>
             </a>
           </li>
-          
         </ul>
       </li>
 

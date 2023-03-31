@@ -48,11 +48,11 @@ class UserController extends Controller
         $ref = $params['trxref']; //paystack
         $res = PaystackHelpers::verifyTransaction($ref);
       
-            $statusVerification = $res['data']['status'];
+        $statusVerification = $res['data']['status'];
     
-           if($statusVerification == 'success')
-           {
-
+        $checkCount = PaymentTransaction::where('reference', $ref)->first();
+        if($checkCount->status == 'successful'){
+           if($statusVerification == 'success'){
             PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
             
                 //credit User with 1,000 bonus
@@ -103,8 +103,12 @@ class UserController extends Controller
                Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
                return redirect('success');
 
-        }else{
+            }else{
             return redirect('upgrade');
+            }
+    
+        }else{
+            return redirect('success');
         }
         
     }

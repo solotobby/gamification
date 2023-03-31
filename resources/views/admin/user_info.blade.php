@@ -50,9 +50,12 @@
         <!-- Classic -->
         <div class="tab-pane fade show active" id="search-classic" role="tabpanel" aria-labelledby="search-classic-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
-            <span class="text-primary fw-bold">{{$info->referees()->where('is_verified', true)->count()}}</span> Verified  
+            <span class="text-primary fw-bold">{{$info->referees()->where('is_verified', true)->count()}} - {{ $info->referees()->where('is_verified', true)->count() * 250 }}</span> Verified  
             |
             <span class="text-primary fw-bold">{{$info->referees->count()}}</span> Referee 
+            <hr>
+
+            Total Ref: {{ $info->transactions()->where('type', 'referer_bonus')->sum('amount') }}
           </div>
           
           <div class="table-responsive">
