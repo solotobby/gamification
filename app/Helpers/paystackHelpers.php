@@ -225,7 +225,7 @@ class PaystackHelpers{
 
     public static function dailyActivities(){
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('date')
+        ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
        
