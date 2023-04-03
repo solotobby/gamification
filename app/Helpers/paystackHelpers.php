@@ -247,7 +247,6 @@ class PaystackHelpers{
         foreach ($data as $key => $value) {
             $dailyVisitresult[++$key] = [$value->date, (int)$value->visits];
         }
-
         return $dailyVisitresult;
     }
     

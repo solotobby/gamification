@@ -59,7 +59,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">{{ App\Helpers\PaystackHelpers::numberFormat($users->count()) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($users->count())}}">{{ App\Helpers\PaystackHelpers::numberFormat($users->count()) }}</div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
@@ -80,7 +80,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-level-up-alt fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">{{ $campaigns->count() }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->count())}}">{{ $campaigns->count() }}</div>
             <div class="text-muted mb-3">Total Campaigns</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -101,7 +101,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount')) }}</div>
             <div class="text-muted mb-3"> Campaigns Value</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
@@ -122,7 +122,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($users->where('is_verified')->count() * 500) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$users->where('is_verified')->count() * 500}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($users->where('is_verified')->count() * 500) }}</div>
             <div class="text-muted mb-3">Verified Earnings</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -143,7 +143,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount') * 0.5) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$campaigns->sum('total_amount') * 0.5}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount') * 0.5) }}</div>
             <div class="text-muted mb-3">Campaign Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -165,7 +165,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($tx->where('type', 'referer_bonus')->sum('amount')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$tx->where('type', 'referer_bonus')->sum('amount')}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($tx->where('type', 'referer_bonus')->sum('amount')) }}</div>
             <div class="text-muted mb-3">Referral Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -189,7 +189,7 @@
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
            
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($tx->where('type', 'direct_referer_bonus')->sum('amount')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$tx->where('type', 'direct_referer_bonus')->sum('amount')}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($tx->where('type', 'direct_referer_bonus')->sum('amount')) }}</div>
             <div class="text-muted mb-3">Direct Reg. Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -213,7 +213,7 @@
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
            
-            <div class="fs-1 fw-bold"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($wal->balance) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($wal->balance)}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($wal->balance) }}</div>
             <div class="text-muted mb-3">Wallet Balance</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -250,6 +250,12 @@
 @endsection
 
 @section('script')
+
+<script>
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  })
+  </script>
  {{-- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
  <!-- Page JS Plugins -->
  {{-- <script src="{{asset('src/assets/js/plugins/chart.js/chart.min.js')}}"></script> --}}
