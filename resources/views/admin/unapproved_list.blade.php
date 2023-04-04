@@ -76,7 +76,7 @@
                         <td>{{ @$list->campaign->user->name }}</td>
                         <td>&#8358;{{ number_format(@$list->amount) }}</td>
                         <td>{{ $list->status }}</td>
-                        <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d/m/Y @ h:i:s a') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
                     </tr>
                 @endforeach
               
