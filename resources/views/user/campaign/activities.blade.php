@@ -33,9 +33,9 @@
     <div class="block block-rounded">
       <div class="block-header block-header-default">
         <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
-          | Approved - {{ $lists->completed()->where('status', 'Approved')->count() }} 
-          | Denied - {{ $lists->completed()->where('status', 'Denied')->count() }} 
-          | Amount Spent -   &#8358;{{ number_format($lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
+          | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
+          | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
+          | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -72,7 +72,7 @@
                             {{ $list->user->name }}
                             </td>
                         <td>
-                        {{ $list->campaign->post_title }}
+                        {{ @$list->campaign->post_title }}
                         </td>
                         <td>
                             &#8358; {{ $list->amount }}
@@ -80,7 +80,7 @@
                         <td>{{ $list->status }}</td>
                         <td>
                             @if($list->status == 'Pending')
-                            @if($lists->completed()->where('status', 'Approved')->count() >= $list->campaign->number_of_staff)
+                            @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
                             <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
                             @else
                               <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>

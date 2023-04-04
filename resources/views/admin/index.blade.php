@@ -2,7 +2,7 @@
 @section('style')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-  var visitor = <?php echo $visitor; ?>
+  var visitor = <?php echo $visitor ?>
 </script>
 <script>
   var daily = <?php echo $daily; ?>
