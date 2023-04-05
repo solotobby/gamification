@@ -115,6 +115,9 @@ class UserController extends Controller
 
     public function makePaymentWallet()
     {
+        if(auth()->user()->wallet->balance >= 1050){
+
+        
         $ref = time();
         $bonus = Wallet::where('user_id', auth()->user()->id)->first();
          //debit  User wallet first
@@ -222,6 +225,10 @@ class UserController extends Controller
            }
            Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
            return redirect('success');
+        }else{
+            return back()->with('error', 'Your balance is too low');
+            // return redirect('error');
+        }
     }
 
     public function success()

@@ -21,6 +21,11 @@
      <!-- Special Offer -->
      <div class="bg-body-light">
       <div class="content content-boxed content-full">
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="py-5">
           <h2 class="mb-2 text-center">
            Get Verified...
@@ -122,7 +127,7 @@
                     <hr>
                     <div class="block-content">
                       <ul class="list-group push">
-                         @if(auth()->user()->wallet->balance >= 1000)
+                         @if(auth()->user()->wallet->balance >= 1050)
                           <a href="{{ route('make.payment.wallet') }}"> 
                             <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                              Upgrade with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}}
