@@ -343,7 +343,7 @@ class AdminController extends Controller
         return view('admin.approved_list', ['campaigns' => $list]); 
     }
     public function deniedCampaigns(){
-        $list = CampaignWorker::where('status', 'Denied')->orderBy('created_at', 'DESC')->get();
+        $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->get();
         return view('admin.denied_list', ['campaigns' => $list]); 
     }
 
