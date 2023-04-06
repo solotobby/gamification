@@ -474,7 +474,7 @@ class AdminController extends Controller
     }
 
     public function campaignPending(){
-        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->get();
+        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
     public function campaignStatus($status, $id){
@@ -650,7 +650,7 @@ class AdminController extends Controller
     }
 
     public function campaignCompleted(){
-        $campaigns = Campaign::where('status', 'Live')->get();
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         return view('admin.campaign_completed', ['campaigns' => $campaigns]);
     }
 
