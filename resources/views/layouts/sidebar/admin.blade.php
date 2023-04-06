@@ -21,6 +21,9 @@
             <a class="nav-main-link" href="{{ url('campaigns/pending') }}">
               <span class="nav-main-link-name">Pending</span>
             </a>
+            <a class="nav-main-link" href="{{ url('campaigns/denied') }}">
+              <span class="nav-main-link-name">Denied</span>
+            </a>
             <a class="nav-main-link" href="{{ url('campaigns/completed') }}">
               <span class="nav-main-link-name">Completed</span>
             </a>

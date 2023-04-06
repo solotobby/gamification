@@ -342,6 +342,10 @@ class AdminController extends Controller
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->get();
         return view('admin.approved_list', ['campaigns' => $list]); 
     }
+    public function deniedCampaigns(){
+        $list = CampaignWorker::where('status', 'Denied')->orderBy('created_at', 'DESC')->get();
+        return view('admin.denied_list', ['campaigns' => $list]); 
+    }
 
     public function jobReversal($id){
         $list = CampaignWorker::where('id', $id)->first();
