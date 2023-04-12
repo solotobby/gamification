@@ -7,14 +7,14 @@
  <div class="bg-body-extra-light text-center">
     <div class="content content-boxed content-full py-5 py-md-7">
       <div class="row justify-content-center">
-        <div class="col-md-10 col-xl-6">
+        <div class="col-md-10 col-xl-10">
           <h1 class="h2 mb-2">
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
           {{-- <p class="fs-lg fw-normal text-muted">
             We offer the most complete job platform to publish your job offers and apply for your dream job.
           </p> --}}
-          <p>Earn 1000 NGN each time you refer a friend. <br>
+          <p>Earn 500 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
           <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
             {{url('register/'.auth()->user()->referral_code)}}
@@ -24,8 +24,11 @@
           </p> --}}
           <p style="color:brown">
             We'll reward you with &#8358;35,000 when you refer 100 verified users and &#8358;350,000 when you refer 1,000 verified users.
-            <br>Copy your referral link below to start earning big!
+            {{-- <br>Copy your referral link ab to start earning big! --}}
           </p>
+          <div class="alert alert-info">
+            Note that we will be migrating to a new server on the 13th April between 12:00 and 3:00 am in the morning. Thanks for choosing Freebyz 
+          </div>
         </div>
       </div>
       
