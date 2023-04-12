@@ -27,7 +27,7 @@
             {{-- <br>Copy your referral link ab to start earning big! --}}
           </p>
           <div class="alert alert-info">
-            Note that we will be migrating to a new server on the 13th April between 12:00 and 3:00 am in the morning. Thanks for choosing Freebyz 
+            Note that there will be a system maitenance on the 13th April between 12:00 and 3:00 am in the morning. Thanks for choosing Freebyz 
           </div>
         </div>
       </div>
