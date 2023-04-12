@@ -1,6 +1,4 @@
-
-<h1>System Under maitenance</h1>
-{{-- @extends('layouts.master')
+@extends('layouts.master')
 @section('title', 'Register')
 @section('content')
 
@@ -119,4 +117,4 @@
 				</div>
 			</div>
 		</div>
-@endsection --}}
+@endsection 
