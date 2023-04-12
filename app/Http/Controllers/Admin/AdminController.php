@@ -481,14 +481,14 @@ class AdminController extends Controller
         $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
-    public function campaignStatus($status, $id){
-        
-        $camp = Campaign::find($id);
+    public function campaignStatus(Request $request){
+        // return $request;
+        $camp = Campaign::find($request->id);
 
-        if($status == 'Decline'){
+        if($request->status == 'Decline'){
             // return $status;
             $amount = $camp->total_amount;
-            $camp->status = $status;
+            $camp->status = $request->status;
             $camp->save();
 
             //reverse the money
@@ -516,13 +516,21 @@ class AdminController extends Controller
                 'description' => 'Campaign Reversal for '.$camp->post_title,
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
-            ]);          
+            ]); 
+            $user = User::where('id', $camp->user_id)->first();
+            $content = $request->reason.'. Thank you for choosing Freebyz.com';
+            $subject = 'Campaign Declined';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));     
         }else{
             // return $status;
-            $camp->status = $status;
+            $camp->status = $request->status;
             $camp->save();
+            $user = User::where('id', $camp->user_id)->first();
+            $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
+            $subject = 'Campaign Live!!!';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
         }
-        return back()->with('success', 'Campaign Successfully '.$status);
+        return back()->with('success', 'Campaign Successfully '.$request->status);
     }
 
     public function marketplaceCreateProduct(){

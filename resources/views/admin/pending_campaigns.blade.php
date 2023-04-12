@@ -10,11 +10,11 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Pending Campaigsn</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Pending Campaigns</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">Users</li>
-            <li class="breadcrumb-item active" aria-current="page">Users List</li>
+            <li class="breadcrumb-item">Campaigns</li>
+            <li class="breadcrumb-item active" aria-current="page">Pending Campaigns</li>
           </ol>
         </nav>
       </div>
@@ -110,18 +110,24 @@
                                         Sub Category 
                                         <span class="badge rounded-pill bg-info">{{$camp->campaignCategory->name}}</span>
                                      </li>
-
-                                     <div class="mb-4 mt-4">
-                                      <a href="{{ url('campaign/status/Live/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a>
-                                      <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a>
+                                    </ul>
+                                    <hr>
+                                     <form action="{{ route('campaign.status') }}" method="POST">
+                                      @csrf
+                                      <div class="form-group">
+                                        <label for="exampleInputEmail1">Enter Reason</label>
+                                        <textarea class="form-control" id="exampleInputEmail1" name="reason" required></textarea>
+                                      </div>
+                                      <input type="hidden" name="id" value="{{ $camp->id }}">
+                                      <div class="mb-4 mt-4">
+                                      <button type="submit"  class="btn btn-alt-primary" name="status" value="Live"><i class="fa fa-check"></i> Approve</button>
+                                      <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i class="fa fa-times"></i> Decline</button>
+                                      </div>
+                                    </form>
                                      
-                                      {{-- <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
-                                      <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button> --}}
-                                     </div>
-                                  </ul>
-                                    
-
-
+                                      {{-- <a href="{{ url('campaign/status/Live/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a>
+                                      <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a> --}}
+                                     
                                   </div>
                                   <!-- END With Badges -->
                                 </div>

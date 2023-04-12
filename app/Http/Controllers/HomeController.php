@@ -89,7 +89,7 @@ class HomeController extends Controller
         //users registered
         $dailyActivity = PaystackHelpers::dailyActivities();
 
-        //monthly visis
+        //monthly visits
         $MonthlyVisit = PaystackHelpers::monthlyVisits();
 
         ///daily visits
@@ -99,7 +99,10 @@ class HomeController extends Controller
         $registrationChannel = PaystackHelpers::registrationChannel();
         
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
+        ->with('visitor',json_encode($dailyActivity))
+        ->with('daily',json_encode($dailyVisits))
+        ->with('monthly', json_encode($MonthlyVisit))
+        ->with('channel', json_encode($registrationChannel));
 
     }
 
@@ -282,8 +285,6 @@ class HomeController extends Controller
             //$phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
             $phone = auth()->user()->phone;
-
-            
             return $airtime = $this->sendAirtime($phone, $amount);//['data'];              
             // if($airtime->errorMessage == "None")
             // {

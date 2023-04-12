@@ -254,8 +254,6 @@ class CampaignController extends Controller
     {
         $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
-        // $campaign->status = 'Live';
-        // $campaign->save();
 
         $ref = time();
             PaymentTransaction::create([
@@ -298,7 +296,15 @@ class CampaignController extends Controller
 
     public function postCampaignWork(Request $request)
     {
-        $this->validate($request, [
+        //return $request;
+       // return $file = $request->file('proof');//->store('uploads');
+       if($request->hasFile('proof')){
+        return redirect('sucsess');
+       }else{
+        return redirect('error');
+       }
+
+       $this->validate($request, [
             'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
             'comment' => 'required|string',
         ]);
