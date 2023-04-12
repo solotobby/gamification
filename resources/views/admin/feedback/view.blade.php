@@ -20,7 +20,7 @@
                 <strong>Sender Name:</strong> <a href="{{ url('user/'.$feedback->user->id.'/info')}} "> {{$feedback->user->name }} </a><br>
                 <strong> Email:</strong> {{ $feedback->user->email }}<br>
                 <strong> Category:</strong> {{ $feedback->category }}<br>
-                <strong> Verified:</strong> {{ isset($feedback->user->is_verified) &&  $feedback->user->is_verified == true ? 'Verified' : 'Not verified' }}<br>
+                <strong> Verification:</strong> {{ isset($feedback->user->is_verified) &&  $feedback->user->is_verified == true ? 'Verified' : 'Not verified' }}<br>
             </div>
 
             <p class="text-muted">
