@@ -296,14 +296,6 @@ class CampaignController extends Controller
 
     public function postCampaignWork(Request $request)
     {
-        //return $request;
-       // return $file = $request->file('proof');//->store('uploads');
-       if($request->hasFile('proof')){
-        return redirect('sucsess');
-       }else{
-        return redirect('error');
-       }
-
        $this->validate($request, [
             'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
             'comment' => 'required|string',
