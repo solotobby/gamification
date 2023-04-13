@@ -54,7 +54,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Balance</th>
+                    {{-- <th>Balance</th> --}}
                     <th>Ref. No</th>
                     <th>Ref. Code</th>
                     <th>Status</th>
@@ -70,7 +70,7 @@
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
-                        <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td>
+                        {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
                         <td>{{ @$user->referees->count() }}</td>
                         <td>{{ @$user->referral_code}}</td>
                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
