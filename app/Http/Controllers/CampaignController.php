@@ -322,13 +322,13 @@ class CampaignController extends Controller
             $campaignWorker['proof_url'] = $proofUrl;
             $campaignWork = CampaignWorker::create($campaignWorker);
 
-            //Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+            Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
-            //return $campaign = Campaign::where('id', $request->campaign_id)->first();
-            // $user = User::where('id', $campaign->user->id)->first();
-            // $subject = 'Job Submission';
-            // $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+            return $campaign = Campaign::where('id', $request->campaign_id)->first();
+            $user = User::where('id', $campaign->user->id)->first();
+            $subject = 'Job Submission';
+            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
         
             return back()->with('success', 'Job Submitted Successfully');
         }else{
