@@ -324,7 +324,7 @@ class CampaignController extends Controller
 
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
-            return $campaign = Campaign::where('id', $request->campaign_id)->first();
+            $campaign = Campaign::where('id', $request->campaign_id)->first();
             $user = User::where('id', $campaign->user->id)->first();
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
