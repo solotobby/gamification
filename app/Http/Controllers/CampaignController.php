@@ -446,12 +446,14 @@ class CampaignController extends Controller
 
     public function approvedCampaigns()
     {
-        $approved = CampaignWorker::where('status', 'Approved')->orderby('created_at', 'ASC')->get();
+        $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
+        $approved = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Approved')->orderby('created_at', 'ASC')->get();
         return view('user.campaign.approved', ['lists' => $approved]);
     }
     public function deniedCampaigns()
-    {
-        $denied = CampaignWorker::where('status', 'Denied')->orderby('created_at', 'ASC')->get();
+    { 
+        $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
+        $denied = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Denied')->orderby('created_at', 'ASC')->get();
         return view('user.campaign.denied', ['lists' => $denied]);
     }
 
