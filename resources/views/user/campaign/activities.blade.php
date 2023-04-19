@@ -93,7 +93,7 @@
 
                      <!-- Pop Out Default Modal -->
                     <div class="modal fade" id="modal-default-popout-{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-popout" role="document">
+                        <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                             <h5 class="modal-title">Respond to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
@@ -124,10 +124,6 @@
                                     <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
                                     <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button>
                                   </div>
-
-
-                                {{-- <a href="{{ url('campaign/approve/'.$list->id) }}" class="btn btn-alt-primary btn-lg ml-10"><i class="fa fa-check"></i> Approve </a>
-                                <a href="{{ url('campaign/deny/'.$list->id) }}" class="btn btn-alt-danger btn-lg"><i class="fa fa-times"></i> Deny</a> --}}
                                 </form>
                                 <br>
                             </div>

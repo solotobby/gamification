@@ -244,7 +244,7 @@
 								<span class=" icon-trophy"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">4500</h1>
+								<h1 class="counter">14500</h1>
 								<span>Available Jobs</span>
 							</div>
 						</div>

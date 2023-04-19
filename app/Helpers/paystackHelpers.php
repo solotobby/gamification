@@ -252,7 +252,7 @@ class PaystackHelpers{
     
     public static function monthlyVisits(){
         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
-         ->where('created_at', '>=', Carbon::now()->subMonths(5))->groupBy('month')->get();
+         ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('month')->get();
         $MonthlyVisit[] = ['Month', 'Users','Verified'];
         foreach ($MonthlyVisitresult as $key => $value) {
             $MonthlyVisit[++$key] = [$value->month, (int)$value->user_per_month, (int)$value->verified_users ];

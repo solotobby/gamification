@@ -48,7 +48,7 @@
                     <th>#</th>
                     <th>Creator</th>
                     <th>Name</th>
-                    <th>Number of Staff</th>
+                    <th>Staffs</th>
                     <th>Unit Price</th>
                     <th>Total</th>
                     <th>When Created</th>
@@ -57,18 +57,19 @@
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $camp)
+                
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
                         <td>{{ $camp->user->name }}</td>
-                        <td>{{ $camp->number_of_staff }}</td>
+                        <td>{{ $camp->completed()->count() }}/{{ $camp->number_of_staff }} </td>
                         <td>&#8358;{{ number_format($camp->campaign_amount) }}</td>
                         <td>&#8358;{{ number_format($camp->total_amount) }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
 
                     <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-popout" role="document">
+                      <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
                       <div class="modal-content">
                           <div class="modal-header">
                           <h5 class="modal-title">Info</h5>
@@ -106,13 +107,26 @@
                                      </li>
 
                                      <div class="mb-4 mt-4">
-                                      {{-- <a href="{{ url('campaign/status/Live/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a> --}}
-                                     {{-- <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a> --}}
-                                     
-                                      {{-- <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
-                                      <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button> --}}
+                                      <hr>
+                                      <h5>List of Workers - {{ $camp->completed()->count() }}</h5>
+                                      @foreach ($camp->completed as $list )
+                                      <ul class="list-group push">
+                                      
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                          Name
+                                          <span class="badge rounded-pill bg-info">{{$list->user->name}}</span> 
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                          Status <span class="badge rounded-pill bg-primary">{{$list->status}}</span>
+                                        </li>
+                    
+                                      </ul>
+                                      <hr>
+                                      @endforeach
                                      </div>
                                   </ul>
+                                 
+
                                     
 
 
