@@ -121,7 +121,10 @@ Route::get('marketplace/list', [\App\Http\Controllers\MarketplaceController::cla
 
 Route::get('feedback', [\App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback');
 Route::post('feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('store.feedback');
+Route::post('feedback/reply', [\App\Http\Controllers\FeedbackController::class, 'reply'])->name('reply.feedback');
 
+Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 'create']);
+Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);

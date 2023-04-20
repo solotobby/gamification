@@ -42,7 +42,7 @@
         <h2 class="content-heading">Replies</h2>
         <div class="row">
           <div class="col-lg-12">
-            @foreach (@$feedback->reply as $reply)
+            @foreach (@$feedback->replies as $reply)
             <p class="text-muted">
 
                 <small>{{$reply->user->name}} | {{ \Carbon\Carbon::parse($reply->created_at)->format('d/m/Y @ h:i:sa') }}</small>:

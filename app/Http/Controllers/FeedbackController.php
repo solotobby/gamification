@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\GeneralMail;
 use App\Models\Feedback;
+use App\Models\FeedbackReplies;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -18,7 +19,31 @@ class FeedbackController extends Controller
     }
 
     public function index(){
-        return view('user.feedback.index');
+        $feedbacks = Feedback::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+        return view('user.feedback.index', ['feedbacks' => $feedbacks]);
+    }
+    public function create(){
+        return view('user.feedback.create');
+    }
+    public function view($feedback_id){
+        $feedbacks = Feedback::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+        $feedbackReplies = Feedback::where('id', $feedback_id)->first();
+        return view('user.feedback.view', ['replies' => $feedbackReplies, 'feedbacks' => $feedbacks]);
+    }
+
+    public function reply(Request $request){
+        $this->validate($request, [
+            'message' => 'required|string',
+        ]);
+
+        $fd = FeedbackReplies::create($request->all());
+        $fd->status = false;
+        $fd->save();
+        $content = $request->message;
+        $subject = 'Feedback Reply';
+        $user = User::where('role', 'staff')->first();
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        return back()->with('success', 'Thank you for your reply, we will get back to you soon.');
     }
 
     public function store(Request $request){

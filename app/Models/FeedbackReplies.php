@@ -11,7 +11,7 @@ class FeedbackReplies extends Model
 
     protected $table = "feedback_replies";
 
-    protected $fillable = ['feedback_id', 'user_id', 'message'];
+    protected $fillable = ['feedback_id', 'user_id', 'message', 'status'];
 
     public function user(){
         return $this->belongsTo(User::class);

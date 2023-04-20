@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "aphp artisan --versionpp/",
+            "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
