@@ -61,7 +61,7 @@
                         <th scope="row">{{ $i++ }}.</th>
                         <td>{{ $feedback->user->name }}</td>
                         <td>{{ $feedback->category }}</td>
-                        <td>{{ $feedback->status == false ? 'Unread' : 'Read' }}/{{ $feedback->reply()->count() > 0 ? 'Replied' : 'Not Replied' }} </td>
+                        <td>{{ $feedback->status == false ? 'Unread' : 'Read' }}/{{ $feedback->replies()->count() > 0 ? 'Replied' : 'Not Replied' }} </td>
                         
                         <td><a href="{{ url('admin/feedback/'.$feedback->id) }}" class="btn btn-primary btn-sm">View</a></td>
                         <td>{{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y @ h:i:sa') }}</td>
