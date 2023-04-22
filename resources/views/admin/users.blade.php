@@ -35,16 +35,28 @@
         </div>
       </div>
       <div class="block-content">
+        <form action="{{ url('users') }}" method="GET">
+          <div class="mb-4">
+            <div class="input-group">
+              <input type="text" class="form-control" id="example-group3-input1" name="search" placeholder="Search Name, Phone, Email or Referral code" required>
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search me-1"></i> Search
+              </button>
+            </div>
+          </div>
+        </form>
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Balance</th>
+                    {{-- <th>Balance</th> --}}
                     <th>Ref. No</th>
+                    <th>Ref. Code</th>
                     <th>Status</th>
                     <th>Hw u Heard</th>
                     <th>When Created</th>
@@ -54,12 +66,13 @@
                 <?php $i = 1; ?>
                 @foreach ($users as $user)
                     <tr>
-                        <th scope="row">{{ $i++ }}.</th>
+                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
-                        <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td>
+                        {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
                         <td>{{ @$user->referees->count() }}</td>
+                        <td>{{ @$user->referral_code}}</td>
                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
                         <td>{{ $user->source }}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
@@ -67,6 +80,9 @@
                 @endforeach
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $users->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>

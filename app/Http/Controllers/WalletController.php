@@ -113,59 +113,9 @@ class WalletController extends Controller
 
         $percent = 3/100 * $request->balance;
         $amount = $request->balance + $percent;
-        
-        // $res = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        // ])->post('https://api.paystack.co/transaction/initialize', [
-        //     'email' => auth()->user()->email,
-        //     'amount' => $amount*100,
-        //     'channels' => ['card'],
-        //     'currency' => 'NGN',
-        //     'reference' => $ref,
-        //     'callback_url' => env('PAYSTACK_CALLBACK_URL').'/wallet/topup'
-        // ]);
-        // $url = $res['data']['authorization_url'];
 
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        ])->post('https://api.flutterwave.com/v3/payments', [
-            'tx_ref'=> $ref,
-            'amount' => $amount,
-            'currency' => "NGN",
-            'redirect_url' => env('PAYSTACK_CALLBACK_URL').'/wallet/topup',//"https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc",
-            'meta'=> [
-                'consumer_id'=> auth()->user()->id,
-                'consumer_mac'=> "92a3-912ba-1192a"
-            ],
-            'customer' => [
-                'email'=> auth()->user()->email,
-                'phonenumber'=> auth()->user()->phone,
-                'name'=> auth()->user()->name
-            ],
-            'customizations' => [
-            'title'=> "Account Activation Fee",
-            'logo'=> "https://scontent-lhr8-2.xx.fbcdn.net/v/t39.30808-6/299480030_186914963695163_5730832757031573548_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YorxiJMZ-TYAX-ozGv0&_nc_ht=scontent-lhr8-2.xx&oh=00_AfDNs_jlMvbCpF2_uZz0Fjh0G0J-jp5Fg3eWWkJ_YE953Q&oe=63E11ACD"
-            ]
-        ]);
-
-         $url = $res['data']['link'];
-    
-        PaymentTransaction::create([
-            'user_id' => auth()->user()->id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => $request->balance,
-            'status' => 'unsuccessful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
-            'type' => 'wallet_topup',
-            'description' => 'Wallet Top Up'
-        ]);
-        // return $url;
+        $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
         return redirect($url);
     }
 
@@ -174,62 +124,39 @@ class WalletController extends Controller
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
-       // $ref = $params['trxref'];  paystack 
-        
-        $ref = $params['tx_ref'];
-        $status = $params['status'];
-       
 
-        // $res = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        // ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
-        if($status == 'successful'){
-            $transactionId =  $params['transaction_id'];
-        
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        ])->get('https://api.flutterwave.com/v3/transactions/'.$transactionId.'/verify')->throw();
-
-        $status = $res['data']['status'];
+        $ref = $params['trxref']; //paystack
+        $res = PaystackHelpers::verifyTransaction($ref); //
    
-       $paystack_amount = $res['data']['amount'];
-       $amount = $paystack_amount; /// 100;
+       $amount = $res['data']['amount'];
 
-       $percent = 2.90/100 * $amount;
-       $formatedAm = number_format($percent, 0);
-       $newamount = $amount - $formatedAm;
+        $percent = 2.90/100 * $amount;
+        $formatedAm = $percent;
+        $newamount = $amount - $formatedAm; //verify transaction
+        $creditAmount = $newamount / 100;
 
-       if($status == 'successful') //success - paystack
+       if($res['data']['status'] == 'success') //success - paystack
        {
-            $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
-            $fetchPaymentTransaction->status = 'successful';
-            $fetchPaymentTransaction->save();
 
+            PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
+            
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            $wallet->balance += $newamount;
+            $wallet->balance += $creditAmount;
             $wallet->save();
+            return redirect('success');
+       }else{
+        return redirect('error');
        }
-
-       return redirect('success');
-
-    }else{
-        return redirect('wallet/fund');
-    }
     }
 
     public function storeWithdraw(Request $request)
     {
        $amount = $request->balance;
        $percent = 5/100 * $amount;
-       $formatedAm = number_format($percent, 0);
+       $formatedAm = $percent;
        $newamount_to_be_withdrawn = $amount - $formatedAm;
 
        $ref = time();
-
         $nextFriday = Carbon::now()->endOfWeek('-2'); //get the friday of the week
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if($wallet->balance < $request->balance)

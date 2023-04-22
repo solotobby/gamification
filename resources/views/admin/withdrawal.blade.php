@@ -28,7 +28,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Withdrawal Request</h3>
+        <h3 class="block-title">Withdrawal Request | Total Sent - &#8358;{{ number_format($withdrawals->where('status', true)->sum('amount')) }} | Queued - &#8358;{{ number_format($withdrawals->where('status', false)->sum('amount')) }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -43,7 +43,7 @@
         @endif
 
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -54,8 +54,6 @@
                     <th>Status</th>
                     <th>Date Rquested</th>
                     <th>Liq. Date</th>
-                    
-                    
                     </tr>
             </thead>
             <tbody>
@@ -69,8 +67,7 @@
                         <td>&#8358;{{ number_format(@$with->amount) }}</td>
                         <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
                         <td>{{ \Carbon\Carbon::parse($with->created_at)->format('d/m/Y @ h:i:s a') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->format('d/m/Y @ h:i:s a') }}</td>
-                        
+                        <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->diffForHumans() }}</td>
                     </tr>
 
 
@@ -89,17 +86,17 @@
                                 <ul class="list-group push">
                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Bank Name 
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->bank_name }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->bank_name }} </span>
                                     
                                    </li>
                                    <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Account Name
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->name }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }} </span>
                                     
                                    </li>
                                    <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                     Account Number
-                                     <span class="badge rounded-pill bg-info">{{ $with->user->accountDetails->account_number }} </span>
+                                     <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->account_number }} </span>
                                     
                                    </li>
 
@@ -117,6 +114,8 @@
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                           @if($with->status != '1')
                           <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
+
+                          <a href="{{ url('update/withdrawal/manual'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
                           @else
                           <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
                           @endif
@@ -128,6 +127,9 @@
               
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $withdrawals->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>

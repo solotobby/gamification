@@ -139,11 +139,7 @@
       <div class="col-md-8 order-md-0">
         <!-- Job Description -->
         <div class="block block-rounded">
-            @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+           
 
           <div class="block-header block-header-default">
             <h3 class="block-title">Campaign Description</h3>
@@ -151,6 +147,12 @@
           
 
             <div class="block-content">
+              @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+              @endif
+
               @if($campaign->post_link != '')
               Link: <a href="{{ $campaign->post_link }}" target="_blank" class="">{{ $campaign->post_link }}</a>
               <hr>
@@ -242,10 +244,14 @@
                               @else
                                   <div class="block-content">
                                       <div class="row">
-                                      <form action="{{ route('post.campaign.work') }}" method="POST">
+                                      <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
                                           @csrf
-                                          <div class="col-md-12">
+                                          <div class="col-md-12 mb-3">
                                               <textarea class="form-control" name="comment" id="js-ckeditor5-classic"></textarea>
+                                          </div>
+                                          <div class="col-md-12 mb-3">
+                                            <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg)</label>
+                                            <input class="form-control" type="file" name="proof" id="example-file-input-multiple" required>
                                           </div>
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">

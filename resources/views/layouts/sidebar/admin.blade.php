@@ -10,7 +10,7 @@
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-location-arrow"></i>
+          <i class="nav-main-link-icon fa fa-star"></i>
           <span class="nav-main-link-name">Campaigns</span>
         </a>
         <ul class="nav-main-submenu">
@@ -20,6 +20,12 @@
             </a>
             <a class="nav-main-link" href="{{ url('campaigns/pending') }}">
               <span class="nav-main-link-name">Pending</span>
+            </a>
+            <a class="nav-main-link" href="{{ url('campaigns/denied') }}">
+              <span class="nav-main-link-name">Denied</span>
+            </a>
+            <a class="nav-main-link" href="{{ url('campaigns/completed') }}">
+              <span class="nav-main-link-name">Completed</span>
             </a>
           </li>
         </ul>
@@ -112,6 +118,30 @@
       </li>
 
       <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-users"></i>
+          <span class="nav-main-link-name">Staff Mgt.</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.create') }}">
+              <span class="nav-main-link-name">Create</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.list') }}">
+              <span class="nav-main-link-name">View</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('staff.salary') }}">
+              <span class="nav-main-link-name">Process Salary</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
           <span class="nav-main-link-name">Withdrawal Requests</span>
@@ -138,13 +168,11 @@
       </li>
 
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('settings') }}">
-          <i class="nav-main-link-icon fa fa-cogs"></i>
-          <span class="nav-main-link-name">Settings</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        <a class="nav-main-link" href="{{ route('admin.feedback') }}">
+          <i class="nav-main-link-icon fa fa-paper-plane"></i>
+          <span class="nav-main-link-name">Feebacks</span>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Feedback::where('status', false)->count() }}</span>
         </a>
       </li>
-
-
     </ul>
   </div>

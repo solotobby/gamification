@@ -59,6 +59,7 @@
                     <th>#</th>
                     <th>Camp. Name</th>
                     <th>Worker</th>
+                    <th>Poster</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th>When Created</th>
@@ -72,9 +73,10 @@
                         <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
                         <td>{{ $list->campaign->post_title }}</td>
                         <td>{{ $list->user->name }}</td>
+                        <td>{{ @$list->campaign->user->name }}</td>
                         <td>&#8358;{{ number_format(@$list->amount) }}</td>
                         <td>{{ $list->status }}</td>
-                        <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d/m/Y @ h:i:s a') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
                     </tr>
                 @endforeach
               

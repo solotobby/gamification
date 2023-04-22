@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.3|^8.1",
         "africastalking/africastalking": "^3.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "swiftmailer/swiftmailer": "^6.3",
         "unicodeveloper/laravel-paystack": "^1.0"
     },
     "require-dev": {

@@ -32,10 +32,10 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->completed->count() }} 
-          | Approved - {{ $lists->completed()->where('status', 'Approved')->count() }} 
-          | Denied - {{ $lists->completed()->where('status', 'Denied')->count() }} 
-          | Amount Spent -   &#8358;{{ number_format($lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
+          | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
+          | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
+          | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -72,7 +72,7 @@
                             {{ $list->user->name }}
                             </td>
                         <td>
-                        {{ $list->campaign->post_title }}
+                        {{ @$list->campaign->post_title }}
                         </td>
                         <td>
                             &#8358; {{ $list->amount }}
@@ -80,7 +80,7 @@
                         <td>{{ $list->status }}</td>
                         <td>
                             @if($list->status == 'Pending')
-                            @if($lists->completed()->where('status', 'Approved')->count() >= $list->campaign->number_of_staff)
+                            @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
                             <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
                             @else
                               <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>
@@ -93,7 +93,7 @@
 
                      <!-- Pop Out Default Modal -->
                     <div class="modal fade" id="modal-default-popout-{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-popout" role="document">
+                        <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                             <h5 class="modal-title">Respond to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
@@ -102,6 +102,16 @@
 
                             <div class="modal-body pb-1">
                                 {!! $list->comment !!}
+
+                                @if($list->proof_url != null)
+                                  <hr>
+                                  <h5>Proof of work Image</h5>
+                                  <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+                                  @else
+                                  <div class="alert alert-warning text-small">
+                                    No Image attached
+                                  </div>
+                                @endif
                                 <hr>
                                 <form action="{{ route('campaign.decision') }}" method="POST">
                                   @csrf
@@ -114,10 +124,6 @@
                                     <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
                                     <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button>
                                   </div>
-
-
-                                {{-- <a href="{{ url('campaign/approve/'.$list->id) }}" class="btn btn-alt-primary btn-lg ml-10"><i class="fa fa-check"></i> Approve </a>
-                                <a href="{{ url('campaign/deny/'.$list->id) }}" class="btn btn-alt-danger btn-lg"><i class="fa fa-times"></i> Deny</a> --}}
                                 </form>
                                 <br>
                             </div>

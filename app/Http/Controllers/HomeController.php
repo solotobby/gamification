@@ -11,14 +11,14 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
-use AfricasTalking\SDK\AfricasTalking;
-use AfricasTalking\SDK\Airtime;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
+use App\Models\Statistics;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Nette\Utils\Random;
 
 class HomeController extends Controller
@@ -41,33 +41,44 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
+        
         if($user->hasRole('admin')){
+            // return 'admin';
             return redirect()->route('admin.home');
-        }
-        return redirect()->route('user.home');
+        }elseif($user->hasRole('staff')){
+            // return 'staff';
+            return redirect()->route('staff.home');
+        }else{
+            // return 'user';
+            return redirect()->route('user.home');
+        } 
     }
 
     public function userHome()
     {
-
+        PaystackHelpers::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
         if($user->phone == ''){
             return view('phone');
         }
+        //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         if($user->is_verified == true){
-            $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
+            $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         }else{
-            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'desc')->get();
+            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'DESC')->get();
         }
-
-        // $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
-
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed]);
     }
 
+    public function howTo(){
+        return view('user.documentation.how_to_approve');
+    }
+
     public function adminHome()
     {
+
+        // PaystackHelpers::dailyVisit();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
@@ -75,16 +86,48 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
-        // $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
-        // ->groupBy('date')
-        // ->orderBy('date', 'desc')
-        // ->get();
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]);
+        //users registered
+        $dailyActivity = PaystackHelpers::dailyActivities();
+
+        //monthly visits
+        $MonthlyVisit = PaystackHelpers::monthlyVisits();
+
+        ///daily visits
+        $dailyVisits = PaystackHelpers::dailyStats();
+
+        //registration channel
+        $registrationChannel = PaystackHelpers::registrationChannel();
+        
+        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        ->with('visitor',json_encode($dailyActivity))
+        ->with('daily',json_encode($dailyVisits))
+        ->with('monthly', json_encode($MonthlyVisit))
+        ->with('channel', json_encode($registrationChannel));
 
     }
 
-   
- 
+    public function staffHome(){
+        $campaigns = Campaign::where('status', 'Live')->get();
+        $campaignWorker = CampaignWorker::all();
+        $user = User::where('role', 'regular')->get();
+        $wallet = Wallet::all();
+        $ref_rev = Referral::where('is_paid', true)->count();
+        $transactions = PaymentTransaction::where('user_type', 'admin')->get();
+        $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+        //users registered
+        $dailyActivity = PaystackHelpers::dailyActivities();
+
+        //monthly visis
+        $MonthlyVisit = PaystackHelpers::monthlyVisits();
+
+        ///daily visits
+        $dailyVisits = PaystackHelpers::dailyStats();
+
+        //registration channel
+        $registrationChannel = PaystackHelpers::registrationChannel();
+        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]) ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
+    }
+
     public function savePhoneInformation(Request $request)
     {
         $this->validate($request, [
@@ -101,7 +144,7 @@ class HomeController extends Controller
     public function instruction()
     {
         $games = Games::where('status', '1')->first();
-        return view('instruction', ['games' => $games]);
+        return view('user.instruction', ['games' => $games]);
     }
 
     public function takeQuiz()
@@ -112,10 +155,10 @@ class HomeController extends Controller
 
         if(count($userScore) > 0)
         {
-            return view('error');
+            return view('user.error');
         }
         $questions = Question::inRandomOrder()->limit(1)->first();
-        return view('play', ['question' => $questions, 'game' => $games]);
+        return view('user.play', ['question' => $questions, 'game' => $games]);
     }
 
     public function storeAnswer(Request $request)
@@ -166,7 +209,7 @@ class HomeController extends Controller
             return redirect('submit/answers');
         }
 
-        return view('next', ['question' => $questions, 'game' => $games, 'index' => $index]);
+        return view('user.next', ['question' => $questions, 'game' => $games, 'index' => $index]);
     }
 
     public function submitAnswers()
@@ -181,18 +224,15 @@ class HomeController extends Controller
         if(count($userScore) > 0)
         {
             return view('completed', ['score' => $percentage]);
-
         }
-
-         UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
-
-        return view('completed', ['score' => $percentage]);
+        UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
+        return view('user.completed', ['score' => $percentage]);
     }
 
     public function scores()
     {
         $scores = UserScore::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
-        return view('scores', ['scores' => $scores]);
+        return view('user.scores', ['scores' => $scores]);
     }
 
     public function redeemReward($id)
@@ -245,8 +285,6 @@ class HomeController extends Controller
             //$phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
             $phone = auth()->user()->phone;
-
-            
             return $airtime = $this->sendAirtime($phone, $amount);//['data'];              
             // if($airtime->errorMessage == "None")
             // {
@@ -305,18 +343,18 @@ class HomeController extends Controller
 
     public function transferFund($amount, $recipient)
     {
-           return $fundTransfer = PaystackHelpers::transferFund($amount, $recipient);
+           return PaystackHelpers::transferFund($amount, $recipient);
     }
 
     public function sendAirtime($phone, $amount)
     {
-        $bearerToken = PaystackHelpers::reloadlyAuth0Token();
-        $bearerToken['access_token'];
+        // $bearerToken = PaystackHelpers::reloadlyAuth0Token();
+        // $bearerToken['access_token'];
 
-        $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
-        $operatorId = $operator['operatorId'];
+        // $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
+        // $operatorId = $operator['operatorId'];
 
-        return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
+        // return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
 
         //return PaystackHelpers::reloadlyAuth0Token();
 

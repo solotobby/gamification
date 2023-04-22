@@ -50,7 +50,7 @@
                             </p>
 
                             <h4>How can I get real time (organic) followers and subscribers for my Youtube Channel, Facebook, TikTok, Twitter and Instagram on Freebyz?</h4>
-                            <p>Freebies is committed to increasing your business visibility and organic growth through engagements on your posts on Facebook, Instagram, YouTube, TikTok, WhatsApp and Twitter. Sign up to hire real time workers to engage your post now</p>
+                            <p>Freebyz is committed to increasing your business visibility and organic growth through engagements on your posts on Facebook, Instagram, YouTube, TikTok, WhatsApp and Twitter. Sign up to hire real time workers to engage your post now</p>
 
                             <h4>How can I sell my product online through Freebyz ONLINE?</h4>
                             <p>You can hire online workers to share your flyers online on Whatsapp status, Whatsapp group, Instagram and other social media platforms at the cheapest rate.
@@ -58,7 +58,7 @@
                             </p>
                             <h4>I have issues with my card. How can I fund my wallet or verify my account without using my debit can?
                             </h4>
-                            <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to freebyzcom@gmail.com after payment. 
+                            <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to info@dominahl.com after payment. 
                                 <br><b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
                             </p>
                             <h4> How much can I withdraw from FREEBYZ</h4>

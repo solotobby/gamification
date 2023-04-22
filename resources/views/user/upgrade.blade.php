@@ -21,6 +21,11 @@
      <!-- Special Offer -->
      <div class="bg-body-light">
       <div class="content content-boxed content-full">
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="py-5">
           <h2 class="mb-2 text-center">
            Get Verified...
@@ -74,7 +79,8 @@
               Manual Withdrawals
             </h4>
             <p class="mb-0 text-muted">
-              You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to info@dominahl.com after payment.
+              You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. 
+              Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard.
               <b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
             </p>
           </div>
@@ -95,10 +101,18 @@
         <span class="m-2 d-inline-block">
           @if(auth()->user()->is_verified == '0')
           <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i>Get Verified 
-          </a>
+            <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
+          </a><br><br>
           {{-- <button type="button" class="btn btn-hero btn-primary" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade"><i class="fa fa-link opacity-50 me-1"></i> Get Verified</button> --}}
-         
+          @if(auth()->user()->wallet->balance >= 500)
+          <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+            <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+          </a>
+          @else
+          <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+            <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+          </a>
+          @endif
 
           <div class="modal fade" id="modal-default-popout-upgrade" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
             <div class="modal-dialog modal-dialog-popout" role="document">
@@ -113,7 +127,7 @@
                     <hr>
                     <div class="block-content">
                       <ul class="list-group push">
-                         @if(auth()->user()->wallet->balance >= 500)
+                         @if(auth()->user()->wallet->balance >= 1050)
                           <a href="{{ route('make.payment.wallet') }}"> 
                             <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                              Upgrade with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}}

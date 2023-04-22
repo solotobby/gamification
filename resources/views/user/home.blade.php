@@ -1,28 +1,32 @@
- @extends('layouts.main.master')
+@extends('layouts.main.master')
 
-@section('title', 'Winner List')
+{{-- @section('title', 'Winner List') --}}
 
 @section('content')
  <!-- Hero Section -->
  <div class="bg-body-extra-light text-center">
     <div class="content content-boxed content-full py-5 py-md-7">
       <div class="row justify-content-center">
-        <div class="col-md-10 col-xl-6">
+        <div class="col-md-10 col-xl-10">
           <h1 class="h2 mb-2">
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
           {{-- <p class="fs-lg fw-normal text-muted">
             We offer the most complete job platform to publish your job offers and apply for your dream job.
           </p> --}}
-          <p>Earn 250 NGN each time you refer a friend. <br>
+          <p>Earn 500 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
           <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
             {{url('register/'.auth()->user()->referral_code)}}
           </p>
-          <p>
+          {{-- <p>
             Payment Via Transfer: Bank Name - Zenith Bank; Account Name - Dominahl Tech Services; Account Number - 1014763749
+          </p> --}}
+          <p style="color:brown">
+            We'll reward you with &#8358;35,000 when you refer 100 verified users and &#8358;350,000 when you refer 1,000 verified users.
+            {{-- <br>Copy your referral link ab to start earning big! --}}
           </p>
-
+          
         </div>
       </div>
       
@@ -40,7 +44,7 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">{{ auth()->user()->referees()->count(); }}</p>
+          <p class="fs-3 text-dark mb-0">{{ auth()->user()->referees()->count() }}</p>
           <p class="text-muted mb-0">
             Referrals
           </p>
@@ -75,12 +79,16 @@
                 <div class="content content-full text-center">
                   <div class="py-3">
                     <h3 class="mb-2 text-center">
-                      Get Access to More Jobs
+                      How to make money with freebyz
                     </h3>
-                    <h4 class="fw-normal text-muted text-center">
+                    {{-- <h4 class="fw-normal text-muted text-center">
                    Only verified users have unlimited access to jobs! 
-                    </h4>
-                    @if(auth()->user()->is_verified == '0')
+                    </h4> --}}
+
+                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         
+
+                    {{-- @if(auth()->user()->is_verified == '0')
                     <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
                       Get Verified Now!
                     </a>
@@ -88,51 +96,63 @@
                     <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
                       Verification Successfull
                     </a>
-                    @endif
+                    @endif --}}
                   </div>
               </div>
               
   
             <!-- Jobs -->
             @foreach ($available_jobs as $job)
-            @if($job->completed()->count() >= $job->number_of_staff)
-            @else
-            <div class="block block-rounded">
-                <div class="block-content block-content-full">
-                  <div class="d-sm-flex">
-                    <div class="ms-sm-2 me-sm-4 py-2 text-center">
-                      <a class="item item-rounded bg-body-dark text-dark fs-5 mb-2 mx-auto" href="{{ url('campaign/'.$job->job_id) }}">
-                        {{-- <i class="fab fa-fw fa-cloudsmith"></i> --}}
-                        &#8358;{{ $job->campaign_amount}}
-                      </a>
-                      <div class="btn-group btn-group-sm">
-                        <a class="btn btn-primary" href="{{ url('campaign/'.$job->job_id) }}">
-                         Apply
-                        </a>
-                      </div>
+            {{-- @if($job->completed()->count() >= $job->number_of_staff)
+            @else --}}
+              <!-- Story -->
+              <div class="block block-rounded">
+                <div class="block-content p-0 overflow-hidden">
+                  <div class="row g-0">
+                    <div class="col-md-3 col-lg-3 overflow-hidden d-flex align-items-center">
+
+                      @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                          <a href="#">
+                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
+                          </a>
+                      @else
+                          <a href="{{ url('campaign/'.$job->job_id) }}">
+                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
+                          </a>
+                      @endif
+                     
                     </div>
-                    <div class="py-2">
-                      <a class="link-fx h4 mb-1 d-inline-block text-dark" href="{{ url('campaign/'.$job->job_id) }}">
-                        {!! $job->post_title !!}
-                      </a>
-                      {{-- <span class="pull-left">1700</span> --}}
-                      <div class="fs-sm fw-semibold text-muted mb-2">
-                        Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}
-                      </div>
-                      <p class="text-muted mb-2">
-                        {{-- {!! substr($job->description, 0,  350) !!} --}}
-                        {!! \Illuminate\Support\Str::words($job->description, 50) !!}
-                      </p>
-                      <div>
+                    <div class="col-md-9 col-lg-9 d-flex align-items-center">
+                      <div class="px-4 py-3">
+                        <h4 class="mb-1">
+                          @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                              <a class="text-dark" href="#"> {!! $job->post_title !!}</a>
+                          @else
+                              {{-- <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em> --}}
+                              <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
+                          @endif
+                          
+                        </h4>
+                        <div class="fs-sm mb-2">
+                            <strong>&#8358;{{ $job->campaign_amount}}</strong> ·
+                              @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
+                                  <em class="text-muted">Completed</em> <li class="fa fa-check"></li>
+                               @else
+                                  <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
+                               @endif
+                        </div>
+                        <p class="mb-0">
+                          {!! \Illuminate\Support\Str::words($job->description, 20) !!}
+                        </p>
+                        <br>
                         <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
                         <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
-                        {{-- <span class="badge bg-primary">Social</span> --}}
                       </div>
                     </div>
                   </div>
                 </div>
-            </div>
-            @endif
+              </div>
+              <!-- END Story -->
             @endforeach     
         </div>
 
@@ -195,8 +215,10 @@
                           </h3>
 
                           <h4 class="fw-normal text-muted text-center">
-                            verify your account to enjoy &#8358;1,000 user bonus and unlimited access to withdraw funds. When you refer up to 50 friends, 
-                            you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. <br>Got Payment Issues, transfer to 1014763749 - DOMINAHL TECH SERVICES (ZENITH) then send us a mail- info@dominahl.com
+                            verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
+                            you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
+                            <br>Got Payment Issues, transfer to 1014763749 - DOMINAHL TECH SERVICES (ZENITH) then upload proof of evidence via our <b>Talk To Us</b> panel
+                            <br><span style="color:brown">From 1st April, verification fee would now be ₦1000 and you'll have opportunity to win amazing prices on a weekly basis!!</span>
                           </h4>
 
                           <center>
@@ -207,31 +229,24 @@
                           
                           @else
                           <h3 class="mb-2 text-center">
-                            Make more Money...
+                            Refer friends and cashout out every Friday
                           </h3>
 
                           <h4 class="fw-normal text-muted text-center">
                             We'll reward you with &#8358;250 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
                           </h4>
-                          
-                          
                           <center>{{url('register/'.auth()->user()->referral_code)}}</center>
-
-
-                          @endif
-                          
-                          {{-- <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
-                            More About Freebyz.com <i class="fa fa-arrow-right ms-1"></i>
-                          </button> --}}
                         </div>
 
-                        {{-- <div class="slick-slide p-5">
-                          <iframe width="100%" height="415" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                         {{-- <div class="slick-slide p-5">
+                          <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                          
                           <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
                             Close <i class="fa fa-times opacity-50 ms-1"></i>
-                          </button>
-                        </div> --}}
+                          </button> --}}
+                        </div>
+
+                        @endif
 
                         {{-- <div class="slick-slide p-5">
                           <i class="fa fa-award fa-3x text-muted my-4"></i>

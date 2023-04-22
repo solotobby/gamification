@@ -13,21 +13,23 @@
 |
 */
 
+// use Illuminate\Support\Facades\App;
 
-
-Route::get('/', [App\Http\Controllers\GeneralController::class, 'landingPage']);
-Route::get('contact', [App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
-Route::get('goal', [App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
-Route::get('games', [App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
-Route::get('winner/list', [App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
+Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
+Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
+Route::get('goal', [\App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
+Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
+Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
 Route::get('make-money', [\App\Http\Controllers\GeneralController::class, 'make_money']);
 Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
+Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
+Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
-Route::get('marketplace/payment/callback', [App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
+Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
 Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
 
 Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
@@ -38,19 +40,19 @@ Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController
 
 Auth::routes();
 
-Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
+Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback']);
 
 //Take Quiz
-Route::get('instruction', [App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
-Route::get('take/quiz', [App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
-Route::get('next/question', [App\Http\Controllers\HomeController::class, 'nextQuestion']);
-Route::get('submit/answers', [App\Http\Controllers\HomeController::class, 'submitAnswers']);
-Route::post('store/asnwer', [App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
-Route::get('score/list', [App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
-Route::get('redeem/reward/{id}', [App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
-Route::post('save/bank/information', [App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
-Route::post('save/phone/information', [App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
+Route::get('instruction', [\App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
+Route::get('take/quiz', [\App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');
+Route::get('next/question', [\App\Http\Controllers\HomeController::class, 'nextQuestion']);
+Route::get('submit/answers', [\App\Http\Controllers\HomeController::class, 'submitAnswers']);
+Route::post('store/asnwer', [\App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
+Route::get('score/list', [\App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
+Route::get('redeem/reward/{id}', [\App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
+Route::post('save/bank/information', [\App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
+Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 
 ////Referral Routes
@@ -69,11 +71,12 @@ Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
 Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
 Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'activities']);
+Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
 ///paystack payment 
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
-Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 
 ///payment routes
 Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::class, 'goLive']);
@@ -109,6 +112,8 @@ Route::post('buy/airtime', [\App\Http\Controllers\UserController::class, 'buyAir
 Route::get('databundle', [\App\Http\Controllers\UserController::class, 'databundlePurchase'])->name('databundle');
 Route::post('buy/databundle', [\App\Http\Controllers\UserController::class, 'buyDatabundle'])->name('buy.databundle');
 
+//databundle api
+Route::get('load/network/{network}', [\App\Http\Controllers\UserController::class, 'loadData']);
 //Marketplace
 Route::get('marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace');
 Route::get('marketplace/view', [\App\Http\Controllers\MarketplaceController::class, 'createProduct'])->name('create.marketplace');
@@ -116,30 +121,45 @@ Route::post('marketplace/store', [\App\Http\Controllers\MarketplaceController::c
 Route::get('marketplace/list', [\App\Http\Controllers\MarketplaceController::class, 'myProduct'])->name('my.marketplace.products');
 
 Route::get('feedback', [\App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback');
+Route::post('feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('store.feedback');
+Route::post('feedback/reply', [\App\Http\Controllers\FeedbackController::class, 'reply'])->name('reply.feedback');
 
+Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 'create']);
+Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
-Route::get('user/home', [App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
-Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
+Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
+///staff Routes
+Route::get('staff/create', [\App\Http\Controllers\Admin\StaffController::class, 'create'])->name('staff.create');
+Route::get('staff/list', [\App\Http\Controllers\Admin\StaffController::class, 'index'])->name('staff.list');
+Route::get('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'salary'])->name('staff.salary');
+Route::post('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'processSalary'])->name('process.salary');
 
-Route::get('/games/create/{id}', [App\Http\Controllers\Admin\AdminController::class, 'createGame']);
-Route::get('question/create', [App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
-Route::post('question/store', [App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
-Route::post('question/update', [App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('questions.update');
-Route::get('question/list', [App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
+Route::post('staff/store', [\App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
+
+Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
+Route::get('how/to', [\App\Http\Controllers\HomeController::class, 'howTo'])->name('howto');
+
+Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
+Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
+Route::post('question/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
+Route::post('question/update', [\App\Http\Controllers\Admin\AdminController::class, 'updateQuestion'])->name('questions.update');
+Route::get('question/list', [\App\Http\Controllers\Admin\AdminController::class, 'listQuestion'])->name('question.list');
 //Game Routes
-Route::get('game/status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
-Route::get('view/activities/{id}', [App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
-Route::post('assign/reward', [App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
+Route::get('game/status/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
+Route::get('view/activities/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
+Route::post('assign/reward', [\App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
 
 
 
-Route::get('game/create', [App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
-Route::post('game/store', [App\Http\Controllers\Admin\AdminController::class, 'gameStore'])->name('game.store');
-Route::get('view/amount', [App\Http\Controllers\Admin\AdminController::class, 'viewAmount'])->name('view.amount');
-Route::post('update/amount', [App\Http\Controllers\Admin\AdminController::class, 'updateAmount'])->name('update.amount');
+Route::get('game/create', [\App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
+Route::post('game/store', [\App\Http\Controllers\Admin\AdminController::class, 'gameStore'])->name('game.store');
+Route::get('view/amount', [\App\Http\Controllers\Admin\AdminController::class, 'viewAmount'])->name('view.amount');
+Route::post('update/amount', [\App\Http\Controllers\Admin\AdminController::class, 'updateAmount'])->name('update.amount');
 
 //airtime mgt
 //Route::get('airime', [App\Http\Controllers\Admin\AdminController::class, 'sendAirtime'])->name('airtime');
@@ -157,11 +177,15 @@ Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::cla
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');
 Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequest']);
+Route::get('update/withdrawal/manual/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequestManual']);
 Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
-Route::get('campaigns/pending', [App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
-Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
+Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
+Route::get('campaigns/completed', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCompleted'])->name('campaign.completed');
+Route::get('campaigns/denied', [\App\Http\Controllers\Admin\AdminController::class, 'deniedCampaigns']);
+// Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
+Route::post('campaign/status', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus'])->name('campaign.status');
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');
 
@@ -171,7 +195,7 @@ Route::get('reverse/transaction/{id}', [\App\Http\Controllers\Admin\AdminControl
 Route::post('mass/approval', [\App\Http\Controllers\Admin\AdminController::class, 'massApproval'])->name('mass.approval');
 
 /////Market Place
-Route::get('admin/marketplace/view', [App\Http\Controllers\Admin\AdminController::class, 'viewMarketplace'])->name('view.admin.marketplace');
+Route::get('admin/marketplace/view', [\App\Http\Controllers\Admin\AdminController::class, 'viewMarketplace'])->name('view.admin.marketplace');
 Route::get('admin/marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
 Route::post('admin/post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
 Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeMarketplaceProduct']);
@@ -181,3 +205,12 @@ Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::c
 Route::get('charts', [\App\Http\Controllers\Admin\AdminController::class, 'charts']);
 Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings');
 Route::post('store/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'store'])->name('store.settings');
+Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'index'])->name('admin.feedback');
+Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
+Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
+Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
+///// External Fintech Api 
+
+Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
+
+

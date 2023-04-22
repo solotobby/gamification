@@ -27,7 +27,7 @@
         </li>
         <li class="nav-item">
           <button class="nav-link" id="search-photos-tab" data-bs-toggle="tab" data-bs-target="#search-photos" role="tab" aria-controls="search-photos" aria-selected="false">
-            Transactions({{ $info->transactions->count() }})
+            Transactions({{ $info->transactions()->where('status', 'successful')->count() }})
           </button>
         </li>
         <li class="nav-item">
@@ -50,7 +50,12 @@
         <!-- Classic -->
         <div class="tab-pane fade show active" id="search-classic" role="tabpanel" aria-labelledby="search-classic-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            <span class="text-primary fw-bold">{{$info->referees()->where('is_verified', true)->count()}} - {{ $info->referees()->where('is_verified', true)->count() * 250 }}</span> Verified  
+            |
             <span class="text-primary fw-bold">{{$info->referees->count()}}</span> Referee 
+            <hr>
+
+            Total Ref: {{ $info->transactions()->where('type', 'referer_bonus')->sum('amount') }}
           </div>
           
           <div class="table-responsive">
@@ -96,6 +101,7 @@
         </div>
         <!-- END Classic -->
 
+       
         <!-- Photos -->
         <div class="tab-pane fade" id="search-photos" role="tabpanel" aria-labelledby="search-photos-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
@@ -103,7 +109,7 @@
           </div>
           
           <div class="table-responsive">
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <table class="table table-bordered table-striped table-vcenter">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -115,7 +121,7 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach ($info->transactions as $list)
+                  @foreach ($info->transactions->where('status', 'successful') as $list)
                   <tr>
                       <td>
                         {{ $list->reference }}
@@ -240,16 +246,40 @@
             <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
               <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
             </div>
-         
-            <div class="bg-body-dark mb-5">
+            <div class="container">
+              @if (session('success'))
+                  <div class="alert alert-success" role="alert">
+                      {{ session('success') }}
+                  </div>
+              @endif
 
-                @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
+                    <h4 class="fw-normal text-muted text-center">
+                      Manual Wallet TopUp
+                    </h4>
+              <form action="{{ route('admin.wallet.topup') }}" method="POST">
+                @csrf
+                <div class="form-row align-items-center">
+                  <div class="col-auto">
+                   
+                    <div class="input-group mb-2">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">&#8358;</div>
+                      </div>
+                      <input type="number" class="form-control" name="amount" placeholder="Amount" required>
+                    </div>
+                  </div>
+                  <input type="hidden" name="user_id" value="{{ $info->id }}">
+                 
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-2">Fund...</button>
+                  </div>
                 </div>
-                @endif
-
+              </form>
+            </div>
+            <hr>
+            <div class="bg-body-dark mb-5">
                 <div class="content content-full text-center">
+                 
                   <div class="py-3">
                     <h3 class="mb-2 text-center">
                      Manual Verification

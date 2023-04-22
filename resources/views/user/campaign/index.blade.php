@@ -80,6 +80,7 @@
                         {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}
                       @else
                       <a href="{{ url('campaign/activities/'.$list->job_id) }}" class="btn btn-success btn-sm"> View Activities </a>
+                      <a href="{{ url('campaign/activities/pause/'.$list->job_id) }}" class="btn btn-warning btn-sm"> Pause Campaign </a>
                       @endif
                       <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->job_id }}">Add More Workers</button>
                       {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Modify Workers</a>  --}}
@@ -99,8 +100,8 @@
 
                         <div class="modal-body pb-1">
                           Current Number of Workers - {{ $list->number_of_staff }} <br>
-                          Current Value per Job  - {{ number_format($list->campaign_amount) }} <br>
-                          Current Value  - &#8358;{{ number_format($list->total_amount) }} <br>
+                          Value per Job  - &#8358;{{ number_format($list->campaign_amount) }} <br>
+                          Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
                           <hr>
                           <form action="{{ route('addmore.workers') }}" method="POST">
                             @csrf

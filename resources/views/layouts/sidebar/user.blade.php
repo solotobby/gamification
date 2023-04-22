@@ -7,7 +7,6 @@
         <a class="nav-main-link" href="{{ url('home') }}">
           <i class="nav-main-link-icon fa fa-location-arrow"></i>
           <span class="nav-main-link-name">Dashboard</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
       <li class="nav-main-item">
@@ -66,7 +65,7 @@
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-wallet"></i>
           <span class="nav-main-link-name">Wallet</span>
-           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</span>
+           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ @number_format(auth()->user()->wallet->balance) }}</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
@@ -84,7 +83,6 @@
               <span class="nav-main-link-name">Withdrawal Requests</span>
             </a>
           </li>
-          
         </ul>
       </li>
 
@@ -129,12 +127,12 @@
           </li>
         </ul>
       </li>
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('airtime') }}">
           <i class="nav-main-link-icon fa fa-phone"></i>
           <span class="nav-main-link-name">Buy Airtime</span>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('databundle') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
@@ -146,16 +144,30 @@
         <a class="nav-main-link" href="{{ route('transactions') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
           <span class="nav-main-link-name">Transactions List</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('howto') }}">
+          <i class="nav-main-link-icon fa fa-grip-vertical"></i>
+          <span class="nav-main-link-name">How to Approve Jobs</span>
         </a>
       </li>
 
       {{-- <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('feedback') }}">
-          <i class="nav-main-link-icon fa fa-reply"></i>
-          <span class="nav-main-link-name">Feedback</span>
+        <a class="nav-main-link" href="{{ route('instruction') }}">
+          <i class="nav-main-link-icon fa fa-award"></i>
+          <span class="nav-main-link-name">Win Weekly Prizes</span>
         </a>
       </li> --}}
+
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('feedback') }}">
+          <i class="nav-main-link-icon fa fa-paper-plane"></i>
+          <span class="nav-main-link-name">Talk to Us</span>
+        </a>
+      </li>
+
+      
 
     </ul>
   </div>

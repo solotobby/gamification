@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CapitalSage;
+use App\Helpers\PaystackHelpers;
 use App\Models\Answer;
 use App\Models\Games;
+use App\Models\PaymentTransaction;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
@@ -13,15 +16,15 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-        $prizes = Transaction::where('reward_type', 'CASH')->sum('amount') / 100;
-        $otherPrizes = Transaction::where('reward_type', 'DATA')->where('reward_type', 'AIRTIME')->sum('amount');
-        $prizesWon = $prizes + $otherPrizes;
-        $gameplayed = Answer::select('id')->count();
-        $user = User::where('role', 'regular')->count();
-        return view('landingPage', ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        PaystackHelpers::dailyVisit();
+        $users = User::where('role', 'regular')->count();
+        $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
+        return view('landingPage', ['transactions' => $transactions, 'users' => $users]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
+
     public function contact()
     {
+        PaystackHelpers::dailyVisit();
         return view('contact');
     }
 
@@ -59,11 +62,25 @@ class GeneralController extends Controller
 
     public function trackRecord()
     {
+
+        PaystackHelpers::dailyVisit();
         return view('track_record');
     }
 
     public function faq()
     {
+
+        PaystackHelpers::dailyVisit();
         return view('faq');
+    }
+
+    public function download()
+    {
+        return view('download');
+    }
+
+    public function download_url(Request $request)
+    {
+        return $request;
     }
 }

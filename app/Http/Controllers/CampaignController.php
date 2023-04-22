@@ -16,6 +16,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller
 {
@@ -253,8 +254,6 @@ class CampaignController extends Controller
     {
         $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
-        // $campaign->status = 'Live';
-        // $campaign->save();
 
         $ref = time();
             PaymentTransaction::create([
@@ -297,21 +296,44 @@ class CampaignController extends Controller
 
     public function postCampaignWork(Request $request)
     {
-       
+       $this->validate($request, [
+            'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
+            'comment' => 'required|string',
+        ]);
+
         $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
-
-        $campaignWorker = CampaignWorker::create($request->all());
-        Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWorker)); //send email to the member
         $campaign = Campaign::where('id', $request->campaign_id)->first();
-        $user = User::where('id', $campaign->user->id)->first();
-        $subject = 'Job Submission';
-        $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        if($request->hasFile('proof')){
+         
+            $fileBanner = $request->file('proof');
+            $Bannername = time() . $fileBanner->getClientOriginalName();
+            $filePathBanner = 'proofs/' . $Bannername;
     
-        return back()->with('success', 'Job Submitted Successfully');
+            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+
+            $campaignWorker['user_id'] = auth()->user()->id;
+            $campaignWorker['campaign_id'] = $request->campaign_id;
+            $campaignWorker['comment'] = $request->comment;
+            $campaignWorker['amount'] = $request->amount;
+            $campaignWorker['proof_url'] = $proofUrl;
+            $campaignWork = CampaignWorker::create($campaignWorker);
+
+            Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+        
+            $campaign = Campaign::where('id', $request->campaign_id)->first();
+            $user = User::where('id', $campaign->user->id)->first();
+            $subject = 'Job Submission';
+            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        
+            return back()->with('success', 'Job Submitted Successfully');
+        }else{
+            return back()->with('error', 'Upload an image');
+        }
     }
 
     public function mySubmittedCampaign($id)
@@ -331,6 +353,20 @@ class CampaignController extends Controller
             return redirect('home');
         }
        return view('user.campaign.activities', ['lists' => $cam]);
+    }
+
+    public function pauseCampaign($id){
+        $campaign = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
+        if($campaign->status == 'Live'){
+           
+            $campaign->status = 'Paused';
+            $campaign->save();
+        }else{
+            
+            $campaign->status = 'Live';
+            $campaign->save();
+        }
+        return back()->with('success', 'Campaign status updated!');
     }
 
     public function campaignDecision(Request $request){
@@ -424,12 +460,14 @@ class CampaignController extends Controller
 
     public function approvedCampaigns()
     {
-        $approved = CampaignWorker::where('status', 'Approved')->orderby('created_at', 'ASC')->get();
+        $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
+        $approved = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Approved')->orderby('created_at', 'ASC')->get();
         return view('user.campaign.approved', ['lists' => $approved]);
     }
     public function deniedCampaigns()
-    {
-        $denied = CampaignWorker::where('status', 'Denied')->orderby('created_at', 'ASC')->get();
+    { 
+        $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
+        $denied = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Denied')->orderby('created_at', 'ASC')->get();
         return view('user.campaign.denied', ['lists' => $denied]);
     }
 
@@ -462,7 +500,5 @@ class CampaignController extends Controller
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
-    }
-
-    
+    }    
 }

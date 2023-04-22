@@ -244,7 +244,7 @@
 								<span class=" icon-trophy"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">2500</h1>
+								<h1 class="counter">14500</h1>
 								<span>Available Jobs</span>
 							</div>
 						</div>
@@ -255,7 +255,7 @@
 								<span class="icon-alarmclock"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">2546</h1>
+								<h1 class="counter">{{$users}}</h1>
 								<span>Users</span>
 							</div>
 						</div>
@@ -271,17 +271,59 @@
 							</div>
 						</div>
 					</div> --}}
-					 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
 						<div class="counter-wrapper text-center mb-30 wow fadeInUp" data-wow-delay="1.2s">
 							{{-- <div class="counter-icon">
 								<span class="icon-megaphone"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">4000</h1>
+								<h1 class="counter">34791</h1>
 								<span>Completed Jobs</span>
 							</div>
 						</div>
 					</div> 
+				</div>
+				<div class="row">
+						
+						<div class="col-md-12 blog-item">
+							<div class="blog-wrapper blog-column mb-10">
+								<div class="blog-desc">
+									<div class="blog-content">
+										<h2 class="blog-title">
+											<center>See some payouts...</>
+										</h2>
+										
+										<div class="table-responsive">
+										  <table class="table table-striped">
+											<thead>
+											  <tr>
+												<th scope="col">Name</th>
+												<th scope="col">Amount</th>
+												<th scope="col">Description</th>
+											  </tr>
+											</thead>
+											<tbody>
+												@foreach ($transactions as $trx)
+													<tr>
+														<td>{{ $trx->user->name }}</td>
+														<td>&#8358;{{ number_format($trx->amount) }}</td>
+														<td>{{$trx->description}}</td>
+													</tr>
+											    @endforeach
+											</tbody>
+										  </table>
+										</div>
+
+										
+									</div>
+									
+				
+								</div>
+							</div>
+						</div>
+						
+					
+					
 				</div>
 			</div>
 		</div>
@@ -339,7 +381,7 @@
                             </p>
                             <h4>I have issues with my card. How can I fund my wallet or verify my account without using my debit can?
                             </h4>
-                            <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to freebyzcom@gmail.com after payment. 
+                            <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to info@dominahl.com after payment. 
                                 <br><b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
                             </p>
                             <h4> How much can I withdraw from FREEBYZ</h4>
@@ -490,6 +532,102 @@
 						</div>
 					</div>
 					
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										I am  witness to it, it is working absolutely fine
+									</p>
+								</div>
+								<div class="link-box">
+									- tochuckuwadika1
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										It is a good platform to make money online
+									</p>
+								</div>
+								<div class="link-box">
+									- mulero58
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									
+									<p>
+										It is a good platform to make money online
+									</p>
+								</div>
+								<div class="link-box">
+									- mulero58
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 blog-item mb-40">
+						<div class="blog-wrapper blog-column">
+							{{-- <div class="blog-thumb">
+								<a href="blog-details.html">
+									<img src="img/blog/1.jpg" alt="" />
+								</a>
+							</div> --}}
+							<div class="blog-desc">
+								<div class="meta-info">
+									<ul>
+										{{-- <li class="posts-time">January 28, 2020</li> --}}
+										<li class="posts-time"> <br> ...from TikTok</li>
+									</ul>
+								</div>
+								<div class="blog-content">
+									{{-- <h2 class="blog-title">
+										<a href="#">Tips for Delivering a Great Perfor mance in Your Next</a>
+									</h2> --}}
+									<p>
+										I highly recommend this website to everyone...Wonder website ever...Great thanks to the creator, earning my money steady.
+									</p>
+								</div>
+								<div class="link-box">
+									- richytech7
+									{{-- <a href="#">Read More</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
 					
 				</div>
 			</div>

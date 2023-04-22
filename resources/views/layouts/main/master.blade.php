@@ -183,8 +183,10 @@
           <!-- Side Navigation -->
             @if(auth()->user()->hasRole('admin'))
                 @include('layouts.sidebar.admin')
+            @elseif(auth()->user()->hasRole('staff'))
+                @include('layouts.sidebar.staff')
             @else
-            @include('layouts.sidebar.user')
+                @include('layouts.sidebar.user')
             @endif
           <!-- END Side Navigation -->
         </div>

@@ -9,6 +9,7 @@ use App\Mail\ApproveCampaign;
 use App\Mail\GeneralMail;
 use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
+use App\Models\BankInformation;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\DataBundle;
@@ -100,7 +101,6 @@ class AdminController extends Controller
     {
 
         $game = Games::where('id', $id)->first();
-
         if($game->status == '1'){
             $game->status = '0';
             $game->save();
@@ -136,8 +136,6 @@ class AdminController extends Controller
             'number_of_questions'=>$request->number_of_questions,
             'status' => 1
         ]);
-        // $game->save();
-
         return back()->with('status', 'Game Created Successfully');
 
     }
@@ -149,7 +147,6 @@ class AdminController extends Controller
         $reward->amount = $request->amount;
         $reward->save();
         return back()->with('status', 'Amount updated Successfully');
-
     }
 
     public function viewAmount()
@@ -175,7 +172,6 @@ class AdminController extends Controller
 
     public function assignReward(Request $request)
     {
-        
         if(empty($request->id))
         {
              return back()->with('error', 'Please Select A Score');
@@ -192,31 +188,39 @@ class AdminController extends Controller
             $message = "Hello ".$score->user->name. " you have a ".$request->name." reward of ".$formattedReward." from Freebyz.com. Please login to cliam it. Thanks";
             PaystackHelpers::sendNotificaion($phone, $message);
         }
-
         return back()->with('status', 'Reward Assigned Successfully');
-
     }
 
-    public function sendAirtime()
-    {
-        return PaystackHelpers::reloadlyAuth0Token();
-    }
-
-    public function userList(){
-        $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->get();
+    public function userList(Request $request){
+        if($request){
+            $users = User::where([
+                [function ($query) use ($request) {
+                    if (($search = $request->search)) {
+                        $query->orWhere('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                            ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
+                            ->get();
+                    }
+                }]
+            ])->paginate(100);
+        }else{
+            $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->paginate(100);
+        }
         return view('admin.users', ['users' => $users]);
     }
+
     public function verifiedUserList(){
-        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
+        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->paginate(50);
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
 
     public function adminTransaction(){
-        $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.admin_transactions', ['lists' => $list]);
     }
     public function userTransaction(){
-        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.user_transactions', ['lists' => $list]);
     }
 
@@ -226,7 +230,7 @@ class AdminController extends Controller
     }
 
     public function withdrawalRequest(){
-        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->get();
+        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.withdrawal', ['withdrawals' => $withdrawal]);
     }
 
@@ -235,17 +239,17 @@ class AdminController extends Controller
         $getUser->is_verified = true;
         $getUser->save();
 
-         //credit User with 1,000 bonus
-         $bonus = Wallet::where('user_id',$getUser->id)->first();
-         $bonus->bonus += '1000';
-         $bonus->save();
+        //  //credit User with 1,000 bonus
+        //  $bonus = Wallet::where('user_id',$getUser->id)->first();
+        //  $bonus->bonus += '1000';
+        //  $bonus->save();
 
         $ref = time();
         PaymentTransaction::create([
             'user_id' => $getUser->id,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 500,
+            'amount' => 1000,
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',
@@ -253,29 +257,14 @@ class AdminController extends Controller
             'description' => 'Manual Ugrade Payment'
         ]);
 
-        if($bonus){
-            //user transction table for bonus 
-           PaymentTransaction::create([
-               'user_id' => $getUser->id,
-               'campaign_id' => '1',
-               'reference' => time(),
-               'amount' => 1000,
-               'status' => 'successful',
-               'currency' => 'NGN',
-               'channel' => 'paystack',
-               'type' => 'upgrade_bonus',
-               'description' => 'Verification Bonus for '.$getUser->name,
-               'tx_type' => 'Credit',
-               'user_type' => 'regular'
-           ]);
-       }
+       
 
 
         $referee = \DB::table('referral')->where('user_id',  $getUser->id)->first();
           
        if($referee){
         $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-        $wallet->balance += 250;
+        $wallet->balance += 500;
         $wallet->save();
 
         $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -288,7 +277,7 @@ class AdminController extends Controller
             'user_id' => $referee_user->id,///auth()->user()->id,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 250,
+            'amount' => 500,
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',
@@ -297,14 +286,14 @@ class AdminController extends Controller
         ]);
 
         $adminWallet = Wallet::where('user_id', '1')->first();
-        $adminWallet->balance += 250;
+        $adminWallet->balance += 500;
         $adminWallet->save();
         //Admin Transaction Tablw
         PaymentTransaction::create([
             'user_id' => 1,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 250,
+            'amount' => 500,
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',
@@ -317,14 +306,14 @@ class AdminController extends Controller
        }else{
 
         $adminWallet = Wallet::where('user_id', '1')->first();
-        $adminWallet->balance += 500;
+        $adminWallet->balance += 1000;
         $adminWallet->save();
          //Admin Transaction Tablw
          PaymentTransaction::create([
             'user_id' => 1,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 500,
+            'amount' => 1000,
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',
@@ -335,8 +324,6 @@ class AdminController extends Controller
         ]);
        
        }
-
-       //Mail::send($getUser->email)
        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
        return back()->with('success', 'Upgrade Successful');
     }
@@ -354,6 +341,10 @@ class AdminController extends Controller
     public function approvedJobs(){
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->get();
         return view('admin.approved_list', ['campaigns' => $list]); 
+    }
+    public function deniedCampaigns(){
+        $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->get();
+        return view('admin.denied_list', ['campaigns' => $list]); 
     }
 
     public function jobReversal($id){
@@ -455,32 +446,49 @@ class AdminController extends Controller
 
     public function sendMassMail(Request $request){
         if($request->type == 'all'){
-            $users = User::where('is_verified', 0)->where('role', 'regular')->get();
+            $users = User::where('is_verified', 0)->where('role', 'regular')->pluck('phone')->toArray();
         }else{
-            $users = User::where('is_verified', 1)->where('role', 'regular')->get();
+            $users = User::where('is_verified', 1)->where('role', 'regular')->pluck('phone')->toArray();
         }
+        // return $users;
 
         $message = $request->message;
         $subject = $request->subject;
+        $number = $users;
 
-        foreach($users as $user){
-            dispatch(new SendMassEmail($user, $message, $subject)); 
+        // foreach($users as $user){
+        //     dispatch(new SendMassEmail($user, $message, $subject));
+        // }
+
+        // $list = [];
+        // foreach($users as $key => $value){
+        //     $value['phone'];
+        //     //$list[++$key] = ['234'.substr($value->phone, 1)];//$value->phone];
+        // }
+        // return $list;
+
+        $process = PaystackHelpers::sendBulkSMS($number, $message);
+        if($process['code'] == 'ok'){
+            return back()->with('success', 'SMS Sent Successful');
+        }else{
+            return back()->with('error', 'There was an error in transit');
         }
-        return back()->with('success', 'Mail Sent Successful');
+
+        
     }
 
     public function campaignPending(){
-        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->get();
+        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
-    public function campaignStatus($status, $id){
-        
-        $camp = Campaign::find($id);
+    public function campaignStatus(Request $request){
+        // return $request;
+        $camp = Campaign::find($request->id);
 
-        if($status == 'Decline'){
+        if($request->status == 'Decline'){
             // return $status;
             $amount = $camp->total_amount;
-            $camp->status = $status;
+            $camp->status = $request->status;
             $camp->save();
 
             //reverse the money
@@ -508,13 +516,21 @@ class AdminController extends Controller
                 'description' => 'Campaign Reversal for '.$camp->post_title,
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
-            ]);          
+            ]); 
+            $user = User::where('id', $camp->user_id)->first();
+            $content = $request->reason.'. Thank you for choosing Freebyz.com';
+            $subject = 'Campaign Declined';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));     
         }else{
             // return $status;
-            $camp->status = $status;
+            $camp->status = $request->status;
             $camp->save();
+            $user = User::where('id', $camp->user_id)->first();
+            $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
+            $subject = 'Campaign Live!!!';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
         }
-        return back()->with('success', 'Campaign Successfully '.$status);
+        return back()->with('success', 'Campaign Successfully '.$request->status);
     }
 
     public function marketplaceCreateProduct(){
@@ -578,15 +594,38 @@ class AdminController extends Controller
     }
 
     public function updateWithdrawalRequest($id){
+       $withdrawals = Withrawal::where('id', $id)->first();
+       $user = User::where('id', $withdrawals->user->id)->first();
+       $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
+       $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
+       if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
+            $withdrawals->status = true;
+            $withdrawals->save();
+            //send mail
+            $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+            $subject = 'Withdrawal Request Granted';
+            Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
+            return back()->with('success', 'Withdrawals Updated');
+       }else{
+        return back()->with('error', 'Withdrawals Error');
+       }
+    }
+
+    public function updateWithdrawalRequestManual($id){
         $withdrawals = Withrawal::where('id', $id)->first();
         $withdrawals->status = true;
         $withdrawals->save();
-
+        $user = User::where('id', $withdrawals->user->id)->first();
         $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
-        $user = User::where('id', $withdrawals->user->id)->first();
         Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
         return back()->with('success', 'Withdrawals Updated');
+    }
+
+
+    public function transferFund($amount, $recipient)
+    {
+           return PaystackHelpers::transferFund($amount, $recipient);
     }
 
     public function removeMarketplaceProduct($product_id){
@@ -608,6 +647,26 @@ class AdminController extends Controller
         $created = DataBundle::create($request->all());
         $created->save();
         return back()->with('success', 'Databundle Created Successfully');
+    }
 
+    public function adminWalletTopUp(Request $request){
+        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+        $wallet->balance += $request->amount;
+        $wallet->save();
+        PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
+        $content = 'Your walet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
+        $subject = 'Wallet Topup';
+        $user = User::where('id', $request->user_id)->first();
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        return back()->with('success', 'Wallet Successfully Funded');
+    }
+
+    public function campaignCompleted(){
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        return view('admin.campaign_completed', ['campaigns' => $campaigns]);
+    }
+
+    public function listFlutterwaveTrf(){
+        return PaystackHelpers::listFlutterwaveTransaction();
     }
 }

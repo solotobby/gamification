@@ -88,6 +88,7 @@
                                         <option>Facebook</option>
                                         <option>WhatsApp</option>
                                         <option>Youtube</option>
+                                        <option>TikTok</option>
                                         <option>Instagram</option>
                                         <option>Twitter</option>
                                         <option>Online Ads</option>
