@@ -355,6 +355,20 @@ class CampaignController extends Controller
        return view('user.campaign.activities', ['lists' => $cam]);
     }
 
+    public function pauseCampaign($id){
+        $campaign = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
+        if($campaign->status == 'Live'){
+           
+            $campaign->status = 'Paused';
+            $campaign->save();
+        }else{
+            
+            $campaign->status = 'Live';
+            $campaign->save();
+        }
+        return back()->with('success', 'Campaign status updated!');
+    }
+
     public function campaignDecision(Request $request){
         $request->validate([
             'reason' => 'required|string',

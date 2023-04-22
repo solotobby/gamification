@@ -71,6 +71,7 @@ Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
 Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
 Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'activities']);
+Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
 ///paystack payment 

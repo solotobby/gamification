@@ -80,6 +80,7 @@
                         {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}
                       @else
                       <a href="{{ url('campaign/activities/'.$list->job_id) }}" class="btn btn-success btn-sm"> View Activities </a>
+                      <a href="{{ url('campaign/activities/pause/'.$list->job_id) }}" class="btn btn-warning btn-sm"> Pause Campaign </a>
                       @endif
                       <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->job_id }}">Add More Workers</button>
                       {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Modify Workers</a>  --}}
