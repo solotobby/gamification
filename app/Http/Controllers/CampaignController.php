@@ -358,11 +358,11 @@ class CampaignController extends Controller
     public function pauseCampaign($id){
         $campaign = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
         if($campaign->status == 'Live'){
-           
             $campaign->status = 'Paused';
             $campaign->save();
+        }elseif($campaign->status == 'Decline'){
+    
         }else{
-            
             $campaign->status = 'Live';
             $campaign->save();
         }
