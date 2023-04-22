@@ -94,7 +94,7 @@ class PaystackHelpers{
             'channels' => ['card'],
             'currency' => 'NGN',
             'reference' => $ref,
-            'callback_url' => env('PAYSTACK_CALLBACK_URL').$redirect_url
+            'callback_url' => url($redirect_url)
         ]);
        return $res['data']['authorization_url'];
     }
