@@ -109,6 +109,19 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    public static function virtualAccount($data){
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/dedicated_account', $data);
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
+    ///system functions 
+
     public static function paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
     {
        return PaymentTransaction::create([
@@ -305,6 +318,7 @@ class PaystackHelpers{
         return $number;
     }
 
+   
     // public static function numberFormat($number) {
     //     $number = (int) preg_replace('/[^0-9]/', '', $number);
     //     if ($number >= 1000) {

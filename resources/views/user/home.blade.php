@@ -26,6 +26,9 @@
             We'll reward you with &#8358;35,000 when you refer 100 verified users and &#8358;350,000 when you refer 1,000 verified users.
             {{-- <br>Copy your referral link ab to start earning big! --}}
           </p>
+          {{-- <p>
+            <a href="{{ route('assign.virtual.account') }}" class="btn btn-primary">Get Virtual Account</a>
+          </p> --}}
           
         </div>
       </div>
@@ -233,7 +236,7 @@
                           </h3>
 
                           <h4 class="fw-normal text-muted text-center">
-                            We'll reward you with &#8358;250 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
+                            We'll reward you with &#8358;500 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
                           </h4>
                           <center>{{url('register/'.auth()->user()->referral_code)}}</center>
                         </div>
