@@ -38,7 +38,7 @@
         <form action="{{ url('users') }}" method="GET">
           <div class="mb-4">
             <div class="input-group">
-              <input type="text" class="form-control" id="example-group3-input1" name="search" placeholder="Search Name, Phone, Email or Referral code" required>
+              <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
               <button type="submit" class="btn btn-primary">
                 <i class="fa fa-search me-1"></i> Search
               </button>
