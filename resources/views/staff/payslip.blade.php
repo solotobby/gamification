@@ -22,7 +22,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Staff List - {{ $staffs->count() }}</h3>
+        <h3 class="block-title">Numbers of Months - {{ $months_paid ->count() }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -34,24 +34,25 @@
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Name</th>
-                    <th>Staff ID</th>
-                    <th>Email</th>
-                    <th>Phone</th>
+                    <th>Action</th>
+                    {{-- <th>Phone</th>
                     <th>Role</th>
-                    <th>Gross</th>
+                    <th>Gross</th> --}}
                     </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
-                @foreach ($staffs as $staff)
+                @foreach ($months_paid as $staff)
                     <tr>
-                        <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
-                        <td>{{ $staff->staff->staff_id }}</td>
-                        <td>{{ $staff->email }}</td>
-                        <td>{{ $staff->phone }}</td>
+                        {{-- <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td> --}}
+                        <td>{{ $i++ }}</td>
+                        <td>{{ $staff->date }}</td>
+                         <td><a href=""></a></td>
+                        {{--<td>{{ $staff->phone }}</td>
                         <td>{{ $staff->staff->role }}</td>
-                        <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
+                        <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>
