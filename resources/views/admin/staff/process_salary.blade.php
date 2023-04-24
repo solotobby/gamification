@@ -78,11 +78,12 @@
                 @endforeach
             </tbody>
           </table>
+          {{-- <button type="submit" class="btn btn-primary mb-2">Process Payment</button> --}}
           @if($today >= '26')
                   @if(!$check)
                       <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
                       @else
-                      <button type="submit" class="btn btn-warning mb-2 disabled">Payment Successful for {{ $check->date }}</button>
+                      <button type="button" class="btn btn-warning mb-2 disabled">Payment Successful for {{ $check->date }}</button>
                   @endif
               @else
                   <button type="button" class="btn btn-primary mb-2 disabled">Process Payment</button>
