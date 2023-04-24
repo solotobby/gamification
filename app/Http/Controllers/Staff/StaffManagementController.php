@@ -17,7 +17,7 @@ class StaffManagementController extends Controller
     public function payslip(){
         $user = Staff::where('user_id', auth()->user()->id)->first();
         //get all months paid
-        $months_paid = $user->salaryPaid()->orderBy('created_at', 'DESC')->get();
-        return view('staff.payslip', ['months_paid' => $months_paid]);
+        $months_paid = $user->salaryPaid()->orderBy('created_at', 'DESC')->paginate('12');
+        return view('staff.payslip', ['months_paid' => $months_paid, 'user' => $user]);
     }
 }
