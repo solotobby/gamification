@@ -31,12 +31,12 @@
       </div>
       <div class="block-content">
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          <table class="table table-bordered table-striped table-vcenter ">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Action</th>
+                    <th>Month</th>
+                    <th>Amount Paid</th>
                     {{-- <th>Phone</th>
                     <th>Role</th>
                     <th>Gross</th> --}}
@@ -46,20 +46,18 @@
                 <?php $i = 1; ?>
                 @foreach ($months_paid as $staff)
                     <tr>
-                        {{-- <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td> --}}
+                     
                         <td>{{ $i++ }}</td>
                         <td>{{ $staff->date }}</td>
-                         <td><a href=""></a></td>
-                        {{--<td>{{ $staff->phone }}</td>
-                        <td>{{ $staff->staff->role }}</td>
-                        <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td> --}}
+                         <td>&#8358;{{ number_format(@$user->basic_salary) }}</td>
+                        
                     </tr>
                 @endforeach
             </tbody>
           </table>
-          {{-- <div class="d-flex">
-            {!! $users->links('pagination::bootstrap-4') !!}
-          </div> --}}
+          <div class="d-flex">
+            {!! $months_paid->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>
@@ -76,7 +74,7 @@
 <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
 
 <!-- Page JS Plugins -->
-<script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
@@ -84,7 +82,7 @@
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script> --}}
 
 <!-- Page JS Code -->
 <script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
