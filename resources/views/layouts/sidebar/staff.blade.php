@@ -82,5 +82,12 @@
         </a>
       </li>
 
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('staff.payslip') }}">
+          <i class="nav-main-link-icon fa fa-file-invoice-dollar"></i>
+          <span class="nav-main-link-name">Pay Slip</span>
+        </a>
+      </li>
+
     </ul>
 </div>

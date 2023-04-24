@@ -63,7 +63,7 @@ class StaffController extends Controller
       
         if(!empty($request->id)){
             $todays_date =  now()->format('d');
-            if($todays_date >= '21'){
+            if($todays_date >= '26'){
                 $message = 'Freebyz Salary Payment for '.now()->format('F, Y');
                 $staffList = Staff::whereIn('id', $request->id)->select(['user_id', 'basic_salary', 'recipient_code'])->get();
                 $list = [];
@@ -87,7 +87,5 @@ class StaffController extends Controller
         }else{
             return back()->with('error', 'Please select at least one staff');
         }
-        
-   
     }
 }
