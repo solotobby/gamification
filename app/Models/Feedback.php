@@ -11,7 +11,7 @@ class Feedback extends Model
 
     protected $table = "feedback";
 
-    protected $fillable = ['user_id', 'category', 'message', 'status', 'proof_url'];
+    protected $fillable = ['user_id', 'category', 'message', 'status', 'proof_url', 'respondent_id'];
 
     public function user(){
         return $this->belongsTo(User::class);

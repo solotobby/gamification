@@ -39,9 +39,10 @@ class FeedbackController extends Controller
         $fd = FeedbackReplies::create($request->all());
         $fd->status = false;
         $fd->save();
+        $fedbackRespondent = Feedback::where('id', $request->feedback_id)->first();
         $content = $request->message;
-        $subject = 'Feedback Reply';
-        $user = User::where('role', 'staff')->first();
+        $subject = 'Feedback Reply from '.auth()->user()->name;
+        $user = User::where('id', $fedbackRespondent->respondent_id)->first();
         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
         return back()->with('success', 'Thank you for your reply, we will get back to you soon.');
     }
