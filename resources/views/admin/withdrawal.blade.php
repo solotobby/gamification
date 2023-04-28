@@ -41,6 +41,11 @@
               {{ session('success') }}
           </div>
         @endif
+        @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+      @endif
 
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
@@ -115,7 +120,7 @@
                           @if($with->status != '1')
                           <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
 
-                          <a href="{{ url('update/withdrawal/manual'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
+                          <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
                           @else
                           <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
                           @endif
