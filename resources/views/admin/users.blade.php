@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="block-content">
-        <form action="{{ url('users') }}" method="GET">
+        {{-- <form action="{{ url('users') }}" method="GET">
           <div class="mb-4">
             <div class="input-group">
               <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
@@ -44,10 +44,10 @@
               </button>
             </div>
           </div>
-        </form>
+        </form> --}}
         <div class="table-responsive">
-          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
-          <table class="table table-bordered table-striped table-vcenter">
+          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
             <thead>
                 <tr>
                     {{-- <th>#</th> --}}
@@ -55,10 +55,10 @@
                     <th>Email</th>
                     <th>Phone</th>
                     {{-- <th>Balance</th> --}}
-                    <th>Ref. No</th>
+                    {{-- <th>Ref. No</th> --}}
                     <th>Ref. Code</th>
                     <th>Status</th>
-                    <th>Hw u Heard</th>
+                    {{-- <th>Hw u Heard</th> --}}
                     <th>When Created</th>
                     </tr>
             </thead>
@@ -71,17 +71,17 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
                         {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
-                        <td>{{ @$user->referees->count() }}</td>
+                        {{-- <td>{{ @$user->referees->count() }}</td> --}}
                         <td>{{ @$user->referral_code}}</td>
                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
-                        <td>{{ $user->source }}</td>
+                        {{-- <td>{{ $user->source }}</td> --}}
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                 @endforeach
             </tbody>
           </table>
           <div class="d-flex">
-            {!! $users->links('pagination::bootstrap-4') !!}
+            {{-- {!! $users->links('pagination::bootstrap-4') !!} --}}
           </div>
         </div>
       </div>
