@@ -216,7 +216,7 @@ class WalletController extends Controller
         $user = User::where('id', '1')->first();
         $subject = 'Withdrawal Request Queued!!';
         $content = 'A withdrwal request has been made and it being queued';
-        Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject));
+        Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawal Successfully queued');
 
     }

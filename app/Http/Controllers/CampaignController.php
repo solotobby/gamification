@@ -293,7 +293,7 @@ class CampaignController extends Controller
             $user = User::where('id', $campaign->user->id)->first();
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return back()->with('success', 'Job Submitted Successfully');
         }else{
             return back()->with('error', 'Upload an image');
@@ -459,7 +459,7 @@ class CampaignController extends Controller
         $content = "You have successfully increased the number of your workers.";
         $subject = "Add More Worker";
         $user = User::where('id', auth()->user()->id)->first();
-        Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject));
+        Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
             return back()->with('success', 'Worker Updated Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
