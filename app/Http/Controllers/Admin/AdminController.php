@@ -472,9 +472,7 @@ class AdminController extends Controller
             return back()->with('success', 'SMS Sent Successful');
         }else{
             return back()->with('error', 'There was an error in transit');
-        }
-
-        
+        } 
     }
 
     public function campaignPending(){
@@ -564,7 +562,6 @@ class AdminController extends Controller
 
             $storeBanner = Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
-
             // $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
             // $prodductUrl = Storage::disk('s3')->url($filePathProduct);
 
@@ -595,8 +592,8 @@ class AdminController extends Controller
 
     public function updateWithdrawalRequest($id){
        $withdrawals = Withrawal::where('id', $id)->first();
-    //    return $withdrawals;
-       if($withdrawals->status == true){
+       
+       if($withdrawals->status == '0'){
             $user = User::where('id', $withdrawals->user->id)->first();
             $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
             $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
@@ -612,7 +609,7 @@ class AdminController extends Controller
                 return back()->with('error', 'Withdrawals Error');
             }
        }else{
-        return back()->with('error', 'Payment has already been processed');
+            return back()->with('error', 'Payment has already been processed');
        }
        
     }
