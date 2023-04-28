@@ -164,6 +164,8 @@
         <a class="nav-main-link" href="{{ route('feedback') }}">
           <i class="nav-main-link-icon fa fa-paper-plane"></i>
           <span class="nav-main-link-name">Talk to Us</span>
+          {{-- //->where('user_id', '!=', auth()->user()->id)->where('status', true)->count()  --}}
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->myFeedBackList }}</span> --}}
         </a>
       </li>
 
