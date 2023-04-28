@@ -595,20 +595,26 @@ class AdminController extends Controller
 
     public function updateWithdrawalRequest($id){
        $withdrawals = Withrawal::where('id', $id)->first();
-       $user = User::where('id', $withdrawals->user->id)->first();
-       $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
-       $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
-       if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
-            $withdrawals->status = true;
-            $withdrawals->save();
-            //send mail
-            $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-            $subject = 'Withdrawal Request Granted';
-            Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
-            return back()->with('success', 'Withdrawals Updated');
+    //    return $withdrawals;
+       if($withdrawals->status == true){
+            $user = User::where('id', $withdrawals->user->id)->first();
+            $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
+            $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
+            if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
+                $withdrawals->status = true;
+                $withdrawals->save();
+                //send mail
+                $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+                $subject = 'Withdrawal Request Granted';
+                Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject));
+                return back()->with('success', 'Withdrawals Updated');
+            }else{
+                return back()->with('error', 'Withdrawals Error');
+            }
        }else{
-        return back()->with('error', 'Withdrawals Error');
+        return back()->with('error', 'Payment has already been processed');
        }
+       
     }
 
     public function updateWithdrawalRequestManual($id){
