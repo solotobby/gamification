@@ -97,5 +97,12 @@ class User extends Authenticatable
         return $this->hasOne(BankInformation::class,  'user_id');
     }
 
+    public function myFeedBackList(){
+        return $this->hasMany(Feedback::class,  'user_id');
+    }
+    public function myFeedBackReplies(){
+        return $this->hasMany(FeedbackReplies::class,  'user_id');
+    }
+
     
 }

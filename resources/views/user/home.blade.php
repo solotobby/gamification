@@ -5,10 +5,13 @@
 @section('content')
  <!-- Hero Section -->
  <div class="bg-body-extra-light text-center">
+  
     <div class="content content-boxed content-full py-5 py-md-7">
       <div class="row justify-content-center">
         <div class="col-md-10 col-xl-10">
           <h1 class="h2 mb-2">
+
+            
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
           {{-- <p class="fs-lg fw-normal text-muted">
