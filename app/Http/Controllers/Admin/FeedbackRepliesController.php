@@ -42,7 +42,8 @@ class FeedbackRepliesController extends Controller
         $user = User::where('id', $senderID)->first();
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
+        $url = 'feedback/view/'.$request->feedback_id;
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
         return back()->with('success', 'Reply sent');
     }
 }

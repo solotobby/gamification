@@ -20,12 +20,14 @@ class GeneralMail extends Mailable
     public $user;
     public $content;
     public $subject;
+    public $url;
 
-    public function __construct($user, $content, $subject)
+    public function __construct($user, $content, $subject, $url)
     {
         $this->user = $user;
         $this->content = $content;
         $this->subject = $subject;
+        $this->url = $url;
     }
 
     /**
@@ -37,7 +39,8 @@ class GeneralMail extends Mailable
     {
         return $this->markdown('emails.general')->subject($this->subject)->with([
             'name' => $this->user->name,
-            'content' => $this->content
+            'content' => $this->content,
+            'url' => isset($this->url) && $this->url ? $this->url : 'home'
         ]);
     }
 }
