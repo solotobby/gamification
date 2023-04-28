@@ -192,21 +192,22 @@ class AdminController extends Controller
     }
 
     public function userList(Request $request){
-        if($request){
-            $users = User::where([
-                [function ($query) use ($request) {
-                    if (($search = $request->search)) {
-                        $query->orWhere('name', 'LIKE', '%' . $search . '%')
-                            ->orWhere('email', 'LIKE', '%' . $search . '%')
-                            ->orWhere('phone', 'LIKE', '%' . $search . '%')
-                            ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
-                            ->get();
-                    }
-                }]
-            ])->paginate(100);
-        }else{
-            $users = User::where('role', 'regular')->orderBy('created_at', 'desc')->paginate(100);
-        }
+        // if($request){
+        //     $users = User::where([
+        //         [function ($query) use ($request) {
+        //             if (($search = $request->search)) {
+        //                 $query->orWhere('name', 'LIKE', '%' . $search . '%')
+        //                     ->orWhere('email', 'LIKE', '%' . $search . '%')
+        //                     ->orWhere('phone', 'LIKE', '%' . $search . '%')
+        //                     ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
+        //                     ->get();
+        //             }
+        //         }]
+        //     ])->paginate(100);
+        // }else{
+        //     $users = User::where(['role', 'regular'])->orderBy('created_at', 'DESC')->paginate(100);
+        // }
+        $users = User::where('role', 'regular')->orderBy('created_at', 'DESC')->get();//paginate(100);
         return view('admin.users', ['users' => $users]);
     }
 
@@ -236,13 +237,8 @@ class AdminController extends Controller
 
     public function upgradeUser($id){
         $getUser = User::where('id', $id)->first();
-        $getUser->is_verified = true;
+        $getUser->is_verified = 1;
         $getUser->save();
-
-        //  //credit User with 1,000 bonus
-        //  $bonus = Wallet::where('user_id',$getUser->id)->first();
-        //  $bonus->bonus += '1000';
-        //  $bonus->save();
 
         $ref = time();
         PaymentTransaction::create([
@@ -257,51 +253,48 @@ class AdminController extends Controller
             'description' => 'Manual Ugrade Payment'
         ]);
 
-       
-
-
-        $referee = \DB::table('referral')->where('user_id',  $getUser->id)->first();
+        $referee = Referral::where('user_id',  $getUser->id)->first();
           
        if($referee){
-        $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-        $wallet->balance += 500;
-        $wallet->save();
+            $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+            $wallet->balance += 500;
+            $wallet->save();
 
-        $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-        $refereeUpdate->is_paid = true;
-        $refereeUpdate->save();
+            $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+            $refereeUpdate->is_paid = 1;
+            $refereeUpdate->save();
 
-        $referee_user = User::where('id', $referee->referee_id)->first();
-        ///Transactions
-        PaymentTransaction::create([
-            'user_id' => $referee_user->id,///auth()->user()->id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => 500,
-            'status' => 'successful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
-            'type' => 'referer_bonus',
-            'description' => 'Referer Bonus from '.auth()->user()->name
-        ]);
+            $referee_user = User::where('id', $referee->referee_id)->first();
+            ///Transactions
+            PaymentTransaction::create([
+                'user_id' => $referee_user->id,///auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 500,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'referer_bonus',
+                'description' => 'Referer Bonus from '.auth()->user()->name
+            ]);
 
-        $adminWallet = Wallet::where('user_id', '1')->first();
-        $adminWallet->balance += 500;
-        $adminWallet->save();
-        //Admin Transaction Tablw
-        PaymentTransaction::create([
-            'user_id' => 1,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => 500,
-            'status' => 'successful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
-            'type' => 'referer_bonus',
-            'description' => 'Referer Bonus from '.$getUser->name,
-            'tx_type' => 'Credit',
-            'user_type' => 'admin'
-        ]);
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += 500;
+            $adminWallet->save();
+            //Admin Transaction Table
+            PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 500,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'referer_bonus',
+                'description' => 'Referer Bonus from '.$getUser->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
 
        }else{
 
