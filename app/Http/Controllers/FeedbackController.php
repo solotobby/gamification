@@ -28,6 +28,13 @@ class FeedbackController extends Controller
     public function view($feedback_id){
         $feedbacks = Feedback::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
         $feedbackReplies = Feedback::where('id', $feedback_id)->first();
+        $feedbackReplies->replies()->where('feedback_id', $feedback_id)->where('user_id', $feedbackReplies->respondent_id)->where('status', 1)->update(['status' => 0]);
+        // $updateUserReadStatus = FeedbackReplies::where('feedback_id', $feedback_id)->where('status', 1)->get();  //
+        // foreach($updateUserReadStatus as $update){
+        //     $df = FeedbackReplies::where('id', $update->id)->first();
+        //     $df->status = '0';
+        //     $df->save();
+        // }
         return view('user.feedback.view', ['replies' => $feedbackReplies, 'feedbacks' => $feedbacks]);
     }
 
@@ -37,8 +44,9 @@ class FeedbackController extends Controller
         ]);
 
         $fd = FeedbackReplies::create($request->all());
-        $fd->status = false;
+        $fd->status = true;
         $fd->save();
+
         $fedbackRespondent = Feedback::where('id', $request->feedback_id)->first();
         $content = $request->message;
         $subject = 'Feedback Reply from '.auth()->user()->name;
