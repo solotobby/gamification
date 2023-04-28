@@ -126,47 +126,6 @@ class CampaignController extends Controller
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
 
-        
-
-
-        
-       
-        
-        // $res = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        // ])->post('https://api.paystack.co/transaction/initialize', [
-        //     'email' => auth()->user()->email,
-        //     'amount' => $request->total_amount_pay*100,
-        //     'channels' => ['card'],
-        //     'currency' => 'NGN',
-        //     'reference' => $ref,
-        //     'metadata' => ['number_of_staff' => $request->number_of_staff, 'total_amount' => $request->total_amount_pay],
-        //     'callback_url' => env('PAYSTACK_CALLBACK_URL').'/extend/payment'
-        // ]);
-
-        // $url = $res['data']['authorization_url'];
-
-        // $camp = Campaign::where('id', $request->post_id)->first();
-        // $camp->extension_references = $ref;
-        // // $camp->number_of_staff += $request->number_of_staff;
-        // // $camp->total_amount += $request->total_amount_pay;
-        // $camp->save();
-        
-        // PaymentTransaction::create([
-        //     'user_id' => auth()->user()->id,
-        //     'campaign_id' => $request->post_id,
-        //     'reference' => $ref,
-        //     'amount' => $request->total_amount_pay,
-        //     'status' => 'unsuccessful',
-        //     'currency' => 'NGN',
-        //     'channel' => 'paystack',
-        //     'type' => 'edit_campaign_payment',
-        //     'description' => 'Extend Campaign Payment'
-        // ]);
-        // return redirect($url);
-        
     }
 
     public function campaign_extension_payment(){
@@ -232,22 +191,28 @@ class CampaignController extends Controller
         // [$est_amount, $percent, $total];
         $job_id = rand(10000,10000000);
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        //check if the bonus balance is valid
-        if($wallet->bonus >= $total){
-            $wallet->bonus -= $total;
-            $wallet->save();
-            $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
-            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
-            return back()->with('success', 'Campaign Posted Successfully');
-        }elseif($wallet->balance >= $total){
+        if($wallet->balance >= $total){
             $wallet->balance -= $total;
             $wallet->save();
-            $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
+            $campaign = $this->processCampaign($total,$request,$job_id,$wallet,$percent);
             Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
             return back()->with('success', 'Campaign Posted Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }  
+
+        //check if the bonus balance is valid
+        // if($wallet->bonus >= $total){
+        //     $wallet->bonus -= $total;
+        //     $wallet->save();
+        //     $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
+        //     Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+        //     return back()->with('success', 'Campaign Posted Successfully');
+        // }elseif($wallet->balance >= $total){
+            
+        // }else{
+        //     return back()->with('error', 'You do not have suficient funds in your wallet');
+        // }  
     }
 
     public function processCampaign($total, $request, $job_id, $wallet, $percent)
@@ -329,7 +294,6 @@ class CampaignController extends Controller
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
-        
             return back()->with('success', 'Job Submitted Successfully');
         }else{
             return back()->with('error', 'Upload an image');

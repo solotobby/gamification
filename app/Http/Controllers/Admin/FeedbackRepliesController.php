@@ -25,7 +25,6 @@ class FeedbackRepliesController extends Controller
         $feedback = Feedback::where('id', $id)->firstOrFail();
         $feedback->status = true;
         $feedback->save();
-        //$replies = FeedbackReplies::where('feedback_id', $id)->get();
         return view('admin.feedback.view', ['feedback' => $feedback]);
     }
 
@@ -33,6 +32,9 @@ class FeedbackRepliesController extends Controller
         $request->validate([
             'message' => 'required',
         ]);
+        $respondent = Feedback::where('id', $request->feedback_id)->first();
+        $respondent->respondent_id = auth()->user()->id;
+        $respondent->save();
         $replies = FeedbackReplies::create($request->all());
 
         $senderID = $replies->feedback->user->id;
@@ -41,7 +43,6 @@ class FeedbackRepliesController extends Controller
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject));
-
         return back()->with('success', 'Reply sent');
     }
 }

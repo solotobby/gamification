@@ -19,9 +19,6 @@
         <h1 class="h2 text-white mb-2">
         Create Campaign
         </h1>
-        {{-- <p class="fs-lg fw-normal text-white-75 mb-0">
-          1 more remaining, <a href="javascript:void(0)">upgrade your account today</a>!
-        </p> --}}
       </div>
     </div>
   </div>
@@ -141,7 +138,7 @@
               
               <div class="mb-4">
                       <input type="checkbox" name="validate" required class="">
-                      <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it within five (5) days </small></span>
+                      <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it. </small></span>
               </div>
               
 
@@ -198,7 +195,6 @@
                         $.each(result, function(key, value) {
                             $("#post-type").append('<option value="' + value.id + '">' + value.name + '</option>');
                         });
-                        // $('#city-dropdown').html('<option value="">Select Region/State/Province First</option>');
                     }
                 });
 
