@@ -72,12 +72,13 @@
           <div class="list-group fs-sm">
             @foreach ($feedbacks as $feedback)
             <a class="list-group-item list-group-item-action" href="{{url('feedback/view/'.$feedback->id)}}">
-                {{-- <span class="badge rounded-pill bg-dark m-1 float-end">3</span> --}}
+              {{-- Number of unread messages --}}
+                <span class="badge rounded-pill bg-dark m-1 float-end">{{ $feedback->replies()->where('user_id', '!=', auth()->user()->id)->where('status', true)->count() }}</span> 
                 <p class="fs-6 fw-bold mb-0">
                     Ticket #{{$feedback->id}}
                 </p>
                 <p class="text-muted mb-2">
-                    {!! \Illuminate\Support\Str::words($feedback->message, 20) !!}
+                    {!! \Illuminate\Support\Str::words($feedback->message, 10) !!}
                 </p>
                 <p class="fs-sm text-muted mb-0">
                     <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->updated_at)->diffForHumans()}} 
@@ -185,7 +186,7 @@
                   <tr class="table-active">
                     <td class="d-none d-sm-table-cell"></td>
                     <td class="fs-sm text-muted">
-                      <a href="">{{$reply->user->name}}</a> on <span>{{ \Carbon\Carbon::parse($replies->created_at)->format('d l, Y : h:i:s:a') }}</span>
+                      <a href="">{{ $reply->user->id == auth()->user()->id ? 'You' : $reply->user->name}}</a> on <span>{{ \Carbon\Carbon::parse($replies->created_at)->format('d l, Y : h:i:s:a') }}</span>
                     </td>
                   </tr>
                   <tr>
