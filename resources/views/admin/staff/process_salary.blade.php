@@ -60,7 +60,7 @@
                     <th>Acc. Info.</th>
                     <th>Role</th>
                     <th>Basic Salary</th>
-                    </tr>
+                </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
@@ -72,7 +72,6 @@
                         <td>{{ $staff->staff->bank_name}} - {{ $staff->staff->account_number}}</td>
                         <td>{{ $staff->staff->role }}</td>
                         <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
-                       
                         {{-- <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}"> --}}
                     </tr>
                 @endforeach

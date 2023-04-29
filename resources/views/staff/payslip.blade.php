@@ -37,20 +37,17 @@
                     <th>#</th>
                     <th>Month</th>
                     <th>Amount Paid</th>
-                    {{-- <th>Phone</th>
-                    <th>Role</th>
-                    <th>Gross</th> --}}
-                    </tr>
+                    <th>Type</th>
+                </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($months_paid as $staff)
                     <tr>
-                     
                         <td>{{ $i++ }}</td>
                         <td>{{ $staff->date }}</td>
-                         <td>&#8358;{{ number_format(@$user->basic_salary) }}</td>
-                        
+                        <td>&#8358;{{ number_format(@$user->basic_salary) }}</td>
+                        <td>{{ $staff->payment_type }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -62,28 +59,11 @@
       </div>
     </div>
     <!-- END Full Table -->
-
   </div>
-
 @endsection
-
-
 @section('script')
-
 <!-- jQuery (required for DataTables plugin) -->
 <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
-
-<!-- Page JS Plugins -->
-{{-- <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-jszip/jszip.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script> --}}
-
 <!-- Page JS Code -->
 <script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
 @endsection
