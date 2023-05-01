@@ -1,6 +1,9 @@
 @extends('layouts.master')
 @section('title', 'Enter Phone Number');
-
+@section('style')
+<link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/css/intlTelInput.css"/>
+<script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+@endsection
 @section('content')
 
 
@@ -27,9 +30,9 @@
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2">
                          @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
                         @endif
 
                         @if (session('error'))
@@ -38,14 +41,13 @@
                             </div>
                         @endif
 
-
 						<form id="contact-form" action="{{ route('save.phone.information') }}" method="post">
                             @csrf
 							
 								<div class="col-md-12 form-group">
 									<label class="sr-only">Phone Number</label>
-                                    <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
-                                    @error('phone')
+                                    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone_number')}}" required size="100%" />
+                                    @error('phone_number')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -80,3 +82,26 @@
 
 
 @endsection
+
+@section('script')
+<script>
+
+$("document").ready( function () {
+
+    var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
+        separateDialCode: true,
+        preferredCountries:["ng", "gb", "us"],
+        hiddenInput: "full",
+        utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
+    });
+    function myFunction() {
+        var full_number = phone_number.getNumber(intlTelInputUtils.numberFormat.E164);
+        $("input[name='phone_number[full]'").val(full_number);
+        // alert(full_number)
+    }
+
+}); 
+</script>
+
+@endsection
+

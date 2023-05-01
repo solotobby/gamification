@@ -130,12 +130,12 @@ class HomeController extends Controller
 
     public function savePhoneInformation(Request $request)
     {
-        $this->validate($request, [
-            'phone' => 'numeric|required|digits:11|unique:users'
-        ]);
-
+        // $this->validate($request, [
+        //     // 'phone' => 'numeric|required|digits:11|unique:users'
+        // ]);
+        
         $user = User::where('id', auth()->user()->id)->first();
-        $user->phone = $request->phone;
+        $user->phone = $request->phone_number['full'];
         $user->source = $request->source;
         $user->save();
         return redirect('/home');

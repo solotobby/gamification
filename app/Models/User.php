@@ -28,7 +28,8 @@ class User extends Authenticatable
         'role',
         'referral_code', 
         'source', 
-        'phone'
+        'phone',
+        'country'
     ];
 
     /**
@@ -100,6 +101,7 @@ class User extends Authenticatable
     public function myFeedBackList(){
         return $this->hasMany(Feedback::class,  'user_id');
     }
+    
     public function myFeedBackReplies(){
         return $this->hasMany(FeedbackReplies::class,  'user_id');
     }

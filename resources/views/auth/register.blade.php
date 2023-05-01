@@ -1,5 +1,14 @@
 @extends('layouts.master')
 @section('title', 'Register')
+@section('style')
+<link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/css/intlTelInput.css"/>
+<script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="{{asset('dist/css/bootstrap-select-country.min.css')}}" />
+@endsection
+
 @section('content')
 
     <!-- basic-breadcrumb start -->
@@ -50,14 +59,19 @@
 								</div>
 
                                 <div class="col-md-12 form-group">
-
 									<label>Phone Number</label>
-									<input id="text" type="text" class="form-control intput-lg @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter Phone Number" >
-                                    @error('phone')
+                                    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%" />
+									{{-- <input id="text" type="text" class="form-control intput-lg @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter Phone Number" > --}}
+                                    @error('phone_number')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
+								</div>
+
+                                <div class="col-md-12 form-group">
+									<label>Select Country</label>
+                                    <select class="selectpicker countrypicker form-control" data-flag="true" data-live-search="true" required name="country"></select>
 								</div>
 
 								<div class="col-md-12 form-group">
@@ -89,6 +103,8 @@
                                    </select>
                                    
                                 </div>
+                                
+
                                 <div class="col-md-12 form-group">
                                     <input type="checkbox" name="terms" required> <span>I agree with the <a href="{{ url('terms') }}">Terms and Conditions</a></span> 
                                 </div>
@@ -117,4 +133,32 @@
 				</div>
 			</div>
 		</div>
+
+
 @endsection 
+@section('script')
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+
+<script src="{{asset('dist/js/bootstrap-select-country.min.js')}}"></script>
+<script>
+
+$("document").ready( function () {
+    var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
+        separateDialCode: true,
+        preferredCountries:["ng", "gb", "us"],
+        hiddenInput: "full",
+        utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
+    });
+    function myFunction() {
+        var full_number = phone_number.getNumber(intlTelInputUtils.numberFormat.E164);
+        $("input[name='phone_number[full]'").val(full_number);
+        // alert(full_number)
+    }
+}); 
+</script>
+
+@endsection

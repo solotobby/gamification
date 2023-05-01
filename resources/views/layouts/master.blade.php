@@ -45,7 +45,6 @@
 
         gtag('config', 'G-G7C4X8TR6T');
         </script>
-
         @yield('script')
         @yield('style')
     </head>
@@ -71,7 +70,7 @@
 		@include('layouts.footer')
 		<!-- footer end -->
 
-
+        
 		<!-- All js plugins here -->
         <script src="{{ asset('asset/js/vendor/jquery-1.12.0.min.js') }}"></script>
         <script src="{{ asset('asset/js/bootstrap.min.js') }}"></script>
@@ -81,5 +80,6 @@
         <script src="{{ asset('asset/js/jquery.meanmenu.js') }}"></script>
         <script src="{{ asset('asset/js/plugins.js') }}"></script>
         <script src="{{ asset('asset/js/main.js') }}"></script>
+        @yield('script')
     </body>
 </html>
