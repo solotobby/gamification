@@ -50,7 +50,7 @@
           {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
             <thead>
                 <tr>
-                    {{-- <th>#</th> --}}
+                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -63,10 +63,10 @@
                     </tr>
             </thead>
             <tbody>
-                <?php $i = 1; ?>
+                {{-- <?php $i = 1; ?> --}}
                 @foreach ($users as $user)
                     <tr>
-                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
+                        <th scope="row">{{ $user->id }}.</th>
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
