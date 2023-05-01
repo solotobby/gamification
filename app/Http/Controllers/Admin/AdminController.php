@@ -207,7 +207,7 @@ class AdminController extends Controller
         // }else{
         //     $users = User::where(['role', 'regular'])->orderBy('created_at', 'DESC')->paginate(100);
         // }
-        $users = User::where('role', 'regular')->orderBy('created_at', 'DESC')->get();//paginate(100);
+        $users = User::where('role', 'regular')->orderBy('id', 'DESC')->get();//paginate(100);
         return view('admin.users', ['users' => $users]);
     }
 
