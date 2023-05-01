@@ -58,7 +58,7 @@
                     {{-- <th>Ref. No</th> --}}
                     <th>Ref. Code</th>
                     <th>Status</th>
-                    {{-- <th>Hw u Heard</th> --}}
+                    <th>Country</th>
                     <th>When Created</th>
                     </tr>
             </thead>
@@ -74,7 +74,7 @@
                         {{-- <td>{{ @$user->referees->count() }}</td> --}}
                         <td>{{ @$user->referral_code}}</td>
                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
-                        {{-- <td>{{ $user->source }}</td> --}}
+                        <td>{{ $user->country }}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                 @endforeach
