@@ -1,5 +1,16 @@
 @extends('layouts.master')
 @section('title', 'Register')
+
+@section('style')
+<link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/css/intlTelInput.css"/>
+<script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
+{{-- <link rel="stylesheet" href="{{asset('dist/css/bootstrap-select-country.min.css')}}" />  --}}
+
+@endsection
+
 @section('content')
 
     <!-- basic-breadcrumb start -->
@@ -27,75 +38,7 @@
                         @csrf
 
 							<div class="row">
-                                <div class="col-md-12 form-group">
-
-									<label>Full Name</label>
-									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required placeholder="Enter Name" >
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-								</div>
-
-								<div class="col-md-12 form-group">
-
-									<label>Email Address</label>
-                                      
-									<input id="email" type="email" class="form-control intput-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Enter Email Address" >
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-								</div>
-
-                                <div class="col-md-12 form-group">
-
-									<label>Phone Number</label>
-									<input id="text" type="text" class="form-control intput-lg @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter Phone Number" >
-                                    @error('phone')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-								</div>
-
-								<div class="col-md-12 form-group">
-									<label>Password</label>
-                                    <input id="passwordj" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Enter Password">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-								</div>
-
-                                <div class="col-md-12 form-group">
-									<label>Confirm Password</label>
-                                    <input id="passwordh" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required placeholder="Repeat Password">
-                                    {{-- @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror --}}
-								</div>
-
-                                <div class="col-md-12 form-group">
-                                    <label>How did you hear about Freebyz.com</label>
-                                   <select class="form-control" name="source" required>
-                                        <option value="">Select One</option>
-                                        <option>Facebook</option>
-                                        <option>WhatsApp</option>
-                                        <option>Youtube</option>
-                                        <option>TikTok</option>
-                                        <option>Instagram</option>
-                                        <option>Twitter</option>
-                                        <option>Online Ads</option>
-                                        <option>Referred by a Friend</option>
-                                   </select>
-                                   
-                                </div>
+                                @include('layouts.resources.reg')
 
                                 <div class="col-md-12 form-group">
 
@@ -122,16 +65,43 @@
 							</div><!-- .row -->
 						</form>
 
-                        {{-- <div class="col-md-12 text-center">
-                            <br><br>
-							<a href="{{ url('auth/google') }}" class="btn btn-lg btn-round btn-dark">Register Using Google</a>
-						</div> --}}
-						<!-- Ajax response -->
-						<div class="ajax-response text-center"></div>
+                       
 					</div>
 				</div>
 			</div>
 		</div>
 
+
+@endsection
+
+@section('script')
+<!-- Latest compiled and minified JavaScript -->
+{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+
+<script src="{{asset('dist/js/bootstrap-select-country.min.js')}}"></script> --}}
+
+<script>
+
+$("document").ready( function () {
+       // alert("Hello, world");
+   
+    
+    var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
+        separateDialCode: true,
+        preferredCountries:["ng", "gb", "us"],
+        hiddenInput: "full",
+        utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
+    });
+    function myFunction() {
+        var full_number = phone_number.getNumber(intlTelInputUtils.numberFormat.E164);
+        $("input[name='phone_number[full]'").val(full_number);
+        // alert(full_number)
+    }
+
+}); 
+</script>
 
 @endsection
