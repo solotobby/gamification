@@ -223,7 +223,7 @@ class UserController extends Controller
         if($request->amount > $wallet->balance){
             return back()->with('error', 'Insurficient balance...');
         }
-        return back()->with('error', 'The service is currenctly not available, please check back later');
+        // return back()->with('error', 'The service is currenctly not available, please check back later');
        
         $occurence = PaymentTransaction::where('user_id', auth()->user()->id)->where('type', 'airtime_purchase')->whereDate('created_at', Carbon::today())->sum('amount');
         if($occurence >= 200){
