@@ -197,7 +197,7 @@ class PaystackHelpers{
             "email"=>"farohunbi.st@gmail.com",
 	        "password"=>"Solomon001."
         ]);
-        return json_decode($res->getBody()->getContents(), true)['data']['token']['access_token'];
+        return json_decode($res->getBody()->getContents(), true);
     }
 
     public static function loadNetworkData($access_token, $network){

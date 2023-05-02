@@ -6,7 +6,6 @@
 @endsection
 
 @section('content')
-
  <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -48,7 +47,7 @@
                     <th>Status</th>
                     <th>Hw u Heard</th>
                     <th>When Created</th>
-                    </tr>
+                </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
@@ -74,7 +73,6 @@
       </div>
     </div>
     <!-- END Full Table -->
-
   </div>
 @endsection
 

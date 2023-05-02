@@ -118,9 +118,13 @@
                           <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                           @if($with->status != '1')
-                          <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
-
-                          <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
+                              
+                                @if(@$with->user->accountDetails->bank_name == '')
+                                  <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
+                                @else
+                                  <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
+                                @endif
+                              
                           @else
                           <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
                           @endif
