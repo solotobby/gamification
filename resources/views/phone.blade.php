@@ -29,7 +29,7 @@
 			<div class="container">
 				<div class="area-title">
 					<h2></h2>
-					<p>Please enter your phone number</p>
+					<p>Please enter your details in just 30 secs</p>
 				</div>
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2">
