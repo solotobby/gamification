@@ -137,6 +137,7 @@ class HomeController extends Controller
         $user = User::where('id', auth()->user()->id)->first();
         $user->phone = $request->phone_number['full'];
         $user->source = $request->source;
+        $user->country = $request->country;
         $user->save();
         return redirect('/home');
     }
