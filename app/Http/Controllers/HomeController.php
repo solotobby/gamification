@@ -58,7 +58,7 @@ class HomeController extends Controller
     {
         PaystackHelpers::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
-        if($user->phone == ''){
+        if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
         //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
