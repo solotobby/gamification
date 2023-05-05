@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="block-content">
-        {{-- <form action="{{ url('users') }}" method="GET">
+        <form action="{{ url('users') }}" method="GET">
           <div class="mb-4">
             <div class="input-group">
               <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
@@ -44,10 +44,10 @@
               </button>
             </div>
           </div>
-        </form> --}}
+        </form>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -81,7 +81,7 @@
             </tbody>
           </table>
           <div class="d-flex">
-            {{-- {!! $users->links('pagination::bootstrap-4') !!} --}}
+            {!! $users->links('pagination::bootstrap-4') !!}
           </div>
         </div>
       </div>

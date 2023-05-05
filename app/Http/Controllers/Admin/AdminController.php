@@ -192,22 +192,23 @@ class AdminController extends Controller
     }
 
     public function userList(Request $request){
-        // if($request){
-        //     $users = User::where([
-        //         [function ($query) use ($request) {
-        //             if (($search = $request->search)) {
-        //                 $query->orWhere('name', 'LIKE', '%' . $search . '%')
-        //                     ->orWhere('email', 'LIKE', '%' . $search . '%')
-        //                     ->orWhere('phone', 'LIKE', '%' . $search . '%')
-        //                     ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
-        //                     ->get();
-        //             }
-        //         }]
-        //     ])->paginate(100);
-        // }else{
-        //     $users = User::where(['role', 'regular'])->orderBy('created_at', 'DESC')->paginate(100);
-        // }
-        $users = User::where('role', 'regular')->orderBy('id', 'DESC')->get();//paginate(100);
+        if(isset($request)){
+            $users = User::where([
+                [function ($query) use ($request) {
+                    if (($search = $request->search)) {
+                        $query->orWhere('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                            ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
+                            ->get();
+                    }
+                }]
+            ])->paginate(500);
+        }else{
+            $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(500);
+        }
+        
+        // $users = User::where('role', 'regular')->orderBy('id', 'DESC')->get();//paginate(100);
         return view('admin.users', ['users' => $users]);
     }
 
