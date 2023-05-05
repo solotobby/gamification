@@ -157,7 +157,12 @@ class WalletController extends Controller
        $newamount_to_be_withdrawn = $amount - $formatedAm;
 
        $ref = time();
-        $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s'); //Carbon::now()->endOfWeek('-2'); //get the friday of the week
+       
+       if(Carbon::now()->format('l') == 'Friday'){
+        $nextFriday = Carbon::now()->endOfDay();
+       }else{
+        $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s');
+       }
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if($wallet->balance < $request->balance)
         {
