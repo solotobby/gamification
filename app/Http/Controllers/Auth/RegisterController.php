@@ -70,6 +70,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if($data['phone_number']['full'] == '' || $data['country']){
+            return back()->with('error', 'Please Enter Phone Number');
+        }
         $ref_id = $data['ref_id'];
         $user = User::create([
             'name' => $data['name'],
