@@ -1,6 +1,49 @@
 @extends('layouts.main.master')
 
-{{-- @section('title', 'Winner List') --}}
+@section('style')
+
+<style>
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    color: :black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: #555;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  </style>
+
+@endsection
 
 @section('content')
  <!-- Hero Section -->
@@ -14,17 +57,26 @@
             
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
-          {{-- <p class="fs-lg fw-normal text-muted">
-            We offer the most complete job platform to publish your job offers and apply for your dream job.
-          </p> --}}
+       
           <p>Earn 500 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
-          <span>Your Referral Link</span>  <p class="fs-lg fw-normal text-muted">
-            {{url('register/'.auth()->user()->referral_code)}}
+       
           </p>
-          {{-- <p>
-            Payment Via Transfer: Bank Name - Zenith Bank; Account Name - Dominahl Tech Services; Account Number - 1014763749
-          </p> --}}
+
+         
+          <center>
+            <div class="col-md-6 mb-3">
+              <div class="input-group">
+                <input type="text" value="{{url('register/'.auth()->user()->referral_code)}}" class="form-control form-control-alt" id="myInput">
+                <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
+                  <i class="fa fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </center>
+        
+          
+         
           <p style="color:brown">
             We'll reward you with &#8358;35,000 when you refer 100 verified users and &#8358;350,000 when you refer 1,000 verified users.
             {{-- <br>Copy your referral link ab to start earning big! --}}
@@ -87,22 +139,12 @@
                     <h3 class="mb-2 text-center">
                       How to make money with freebyz
                     </h3>
+                    
                     {{-- <h4 class="fw-normal text-muted text-center">
                    Only verified users have unlimited access to jobs! 
                     </h4> --}}
 
                     <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                         
-
-                    {{-- @if(auth()->user()->is_verified == '0')
-                    <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
-                      Get Verified Now!
-                    </a>
-                    @else
-                    <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
-                      Verification Successfull
-                    </a>
-                    @endif --}}
                   </div>
               </div>
               
@@ -295,6 +337,24 @@
 
  <!-- Page JS Code -->
  <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
+
+
+ <script>
+  function myFunction() {
+    var copyText = document.getElementById("myInput");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    
+    var tooltip = document.getElementById("myTooltip");
+    tooltip.innerHTML = "Copied: " + copyText.value;
+  }
+  
+  function outFunc() {
+    var tooltip = document.getElementById("myTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
+  }
+  </script>
 
 @endsection
 
