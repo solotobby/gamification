@@ -68,7 +68,7 @@
             </tbody>
           </table>
           <div class="d-flex">
-            {!! $verifiedUsers->links('pagination::bootstrap-4') !!}
+            {{-- {!! $verifiedUsers->links('pagination::bootstrap-4') !!} --}}
           </div>
         </div>
       </div>

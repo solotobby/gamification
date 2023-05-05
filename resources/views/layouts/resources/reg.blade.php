@@ -10,7 +10,6 @@
 </div>
 
 <div class="col-md-12 form-group">
-
     <label>Email Address</label>
     <input id="email" type="email" class="form-control intput-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Enter Email Address" >
     @error('email')

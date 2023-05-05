@@ -7,7 +7,7 @@
      <div class="basic-breadcrumb-area gray-bg ptb-70">
         <div class="container">
             <div class="basic-breadcrumb text-center">
-                <h3 class="">Paasword Reset</h3>
+                <h3 class="">Pasword Reset</h3>
                 <ol class="breadcrumb text-xs">
                     <li><a href="{{ url('/') }}">Home</a></li>
                     <li class="active">Password Resset</li>
