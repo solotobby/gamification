@@ -12,7 +12,6 @@
             @csrf
           <!-- Text -->
     
-    
           <div class="row">
             <div class="col-lg-3"></div>
               <div class="col-lg-6">
@@ -62,13 +61,11 @@
                     {{-- <span class="input-group-text">,00</span> --}}
                   </div>
                 </div>
-    
                 
                 <div class="text-center mb-4">
                   <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-fw fa-save opacity-50 me-1"></i> Save
+                    <i class="fa fa-fw fa-save opacity-50 me-1"></i> Save & Continue
                   </button>
-    
                 </div>
               </div>
               <div class="col-lg-3"></div>
