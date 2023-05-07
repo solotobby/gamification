@@ -91,7 +91,7 @@
 
     <div class="block-content">
         <p>
-            CList of Categories
+            List of Categories
         </p>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
