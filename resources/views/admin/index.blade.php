@@ -13,6 +13,7 @@
 <script>
   var channel = <?php echo $channel; ?>
 </script>
+
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -233,16 +234,20 @@
     <div class="row">
       <div class="col-xl-12">
         <div id="chart_div_monthly" style="width: 100%; height: 500px;"></div>
-        
-        <hr>
-        <div id="chart_div" style="width: 100%; height: 500px;"></div>
-        
-        <hr>
-
-       <div id="linechart" style="width: 100%; height: 500px"></div> 
-       <hr>
-       <div id="donutchart" style="width: 100%; height: 500px;"></div>
       </div>
+      <hr>
+      <div class="col-xl-12">
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+      </div>
+      <hr>
+      <div class="col-xl-12">
+       <div id="linechart" style="width: 100%; height: 500px"></div> 
+      </div>
+      <hr>
+       <div class="col-xl-12 mb-3">
+          <div id="donutchart" style="width: 100%; height: 500px;"></div>
+      </div>
+
     </div>
   </div>
 
