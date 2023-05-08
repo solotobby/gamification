@@ -5,7 +5,7 @@
 @section('content')
 
  <!-- Hero Section -->
- <div class="bg-image" style="background-image: url('src/assets/media/photos/photo12@2x.jpg');">
+ <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo12@2x.jpg')}}' );">
     <div class="bg-black-75">
       <div class="content content-boxed content-full py-5">
         <div class="row">
@@ -89,7 +89,7 @@
               </li>
               @if($campaign->user_id == auth()->user()->id)
                 <li>
-                  <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}">Add More Workers</button>
+                  <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}"> <i class="fa fa-plus opacity-50 me-1"></i> Add More Workers</button>
                 </li>
               @endif
             </ul>
@@ -286,7 +286,10 @@
                   @endif --}}
 
                   {{-- @endif --}}
-              </div>
+            </div>
+
+            <a href="{{ url('home') }}" class="btn btn-secondary btn-sm mb-2"><i class="fa fa-backspace"></i> Back Home</a>
+
       </div>
     </div>
   </div>
