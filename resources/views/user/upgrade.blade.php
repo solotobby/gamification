@@ -80,7 +80,7 @@
             <p class="mb-0 text-muted">
               You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. 
               Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard.
-              <b>ACCOUNT DETAILS: 1014763749 - DOMINAHL TECH SERVICES (ZENITH)</b>
+              <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)</b>
             </p>
           </div>
         </div>
