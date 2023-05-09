@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
 use App\Mail\ApproveCampaign;
 use App\Mail\CreateCampaign;
 use App\Mail\GeneralMail;
@@ -255,6 +256,12 @@ class CampaignController extends Controller
     public function viewCampaign($job_id)
     {
         $getCampaign = Campaign::where('job_id', $job_id)->first();
+        // if($getCampaign->campaignType->name == 'Facebook Influencer'){
+        //     if(auth()->user()->facebook_id == null){
+        //         // return PaystackHelpers::getPosts();
+        //         return redirect('auth/facebook');
+        //     }
+        // }
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
     }

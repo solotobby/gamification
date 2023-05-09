@@ -120,6 +120,23 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    ///facebook graph apis
+
+    public static function getPosts(){
+        // 267978826632355
+
+        $post_id = '267978826632355';//{post-id}';
+        $access_token = 'EAAD3fnxa5H0BAKNCZCGTRzCUTZAjZAeZCv1aM7AiUE0WiwS9Tv7XLKXVpRDZAPICz1PZAFuhnHNpJ7CAjn4FHuZCTXn4CkNmtZAFTMUj1bnSHvqaz4WTTfg0rld4EJZB1xH0RrBvC884VT5aY4ml4zZCvp6px8e7DZAu2vTB4vHO47Y6HoA3o6m8b5JT4S9VLSBGeXfqdf5gXfcgQZDZD';
+
+        $response = Http::withToken($access_token)
+            ->get("https://graph.facebook.com/{$post_id}/likes");
+
+        return $response->json();
+
+        // return json_decode($res->getBody()->getContents(), true);
+
+    }
+
     ///system functions 
 
     public static function paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
