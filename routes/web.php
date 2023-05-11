@@ -37,6 +37,7 @@ Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\
 Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']);//->name('marketplace');
 Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
 
+Route::post('register/user', [\App\Http\Controllers\Auth\RegisterController::class, 'registerUser'])->name('register.user');
 
 Auth::routes();
 //GOOGLE AUTH
