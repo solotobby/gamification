@@ -55,7 +55,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form id="contact-form" method="POST" action="{{ route('register') }}">
+                        <form id="contact-form" method="POST" action="{{ url('register/user') }}">
                         @csrf
 
 							<div class="row">

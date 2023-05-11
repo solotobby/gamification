@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -44,6 +45,39 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+
+    public function registerUser(Request $request){
+       
+        
+        if($request->country == '' || $request->phone_number['full'] == ''){
+            return back()->with('error', 'Please Enter Phone Number');
+        }
+       
+        $ref_id = $request->ref_id;
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'country' => $request->country,
+            'phone' => $request->phone_number['full'],
+            'source' => $request->source,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->referral_code = Str::random(7);
+        $user->save();
+        Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
+        if($ref_id != 'null'){
+            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+        }
+
+        if($user){
+            Auth::login($user);
+            return redirect('/home');
+        }
+
+    }
+
+
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -70,9 +104,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if($data['phone_number']['full'] == '' || $data['country']){
-            return back()->with('error', 'Please Enter Phone Number');
-        }
+        
         $ref_id = $data['ref_id'];
         $user = User::create([
             'name' => $data['name'],
@@ -100,4 +132,6 @@ class RegisterController extends Controller
         }
         return view('auth.ref_register', ['name' => $name]);
     }
+
+    
 }
