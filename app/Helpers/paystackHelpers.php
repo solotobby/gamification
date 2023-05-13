@@ -345,13 +345,13 @@ class PaystackHelpers{
         return $number;
     }
 
-    public static function loginPoints(){
+    public static function loginPoints($user){
         $date = \Carbon\Carbon::today()->toDateString();
 
         $check = LoginPoints::where('date', $date)->first();
         if($check == null)
         {
-            LoginPoints::create(['user_id' => auth()->user()->id, 'date' => $date, 'point' => '50']);
+            LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
         }
 
     }

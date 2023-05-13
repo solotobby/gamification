@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wallet;
@@ -44,7 +45,8 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
-
+                
+                PaystackHelpers::loginPoints($finduser);
                 return redirect('/home');
      
             }else{
@@ -65,6 +67,7 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
+                PaystackHelpers::loginPoints($newUser);
                 return redirect('/home');
             }
     
