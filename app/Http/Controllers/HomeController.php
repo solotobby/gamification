@@ -50,6 +50,7 @@ class HomeController extends Controller
             return redirect()->route('staff.home');
         }else{
             // return 'user';
+            PaystackHelpers::loginPoints($user);
             return redirect()->route('user.home');
         } 
     }
@@ -58,10 +59,11 @@ class HomeController extends Controller
     {
         PaystackHelpers::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
+       
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
-        PaystackHelpers::loginPoints($user);
+       
         //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         if($user->is_verified == true){
             $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
