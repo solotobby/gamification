@@ -347,11 +347,12 @@ class PaystackHelpers{
 
     public static function loginPoints($user){
         $date = \Carbon\Carbon::today()->toDateString();
-        $check = LoginPoints::where('date', $date)->first();
-        if(!$check)
-        {
-            LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
-        }
+        // $check = LoginPoints::where('date', $date)->first();
+        LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50', 'is_redeemed' => true]);
+        // if(!$check)
+        // {
+        //     LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
+        // }
 
     }
 
