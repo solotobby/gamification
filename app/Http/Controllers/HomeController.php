@@ -61,7 +61,7 @@ class HomeController extends Controller
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
-        PaystackHelpers::loginPoints();
+        PaystackHelpers::loginPoints($user);
         //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         if($user->is_verified == true){
             $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
