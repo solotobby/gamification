@@ -134,6 +134,12 @@
         </a>
       </li> --}}
       <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('points') }}">
+          <i class="nav-main-link-icon fa fa-gifts"></i>
+          <span class="nav-main-link-name">Login Points</span>
+        </a>
+      </li>
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('databundle') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
           <span class="nav-main-link-name">Buy DataBundle</span>

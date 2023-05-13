@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\LoginPoints;
 use App\Models\PaymentTransaction;
 use Illuminate\Support\Env;
 use App\Models\Statistics;
@@ -212,7 +213,7 @@ class PaystackHelpers{
             'Content-Type' => 'application/json',
         ])->post('https://sagecloud.ng/api/v2/merchant/authorization', [
             "email"=>"farohunbi.st@gmail.com",
-	        "password"=>"Solomon001."
+	        "password"=>"Solomon001"
         ]);
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -333,6 +334,17 @@ class PaystackHelpers{
             return $number;
         }
         return $number;
+    }
+
+    public static function loginPoints(){
+        $date = \Carbon\Carbon::today()->toDateString();
+
+        $check = LoginPoints::where('date', $date)->first();
+        if($check == null)
+        {
+            LoginPoints::create(['user_id' => auth()->user()->id, 'date' => $date, 'point' => '50']);
+        }
+
     }
 
    
