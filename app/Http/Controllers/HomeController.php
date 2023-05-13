@@ -78,7 +78,6 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-
         // PaystackHelpers::dailyVisit();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
@@ -87,6 +86,7 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+
         //users registered
         $dailyActivity = PaystackHelpers::dailyActivities();
 
@@ -98,12 +98,15 @@ class HomeController extends Controller
 
         //registration channel
         $registrationChannel = PaystackHelpers::registrationChannel();
+
+        $revenueChannel = PaystackHelpers::revenueChannel();
         
         return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
-        ->with('channel', json_encode($registrationChannel));
+        ->with('channel', json_encode($registrationChannel))
+        ->with('revenue', json_encode($revenueChannel));
 
     }
 

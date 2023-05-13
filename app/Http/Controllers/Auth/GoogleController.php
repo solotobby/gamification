@@ -28,13 +28,10 @@ class GoogleController extends Controller
             $finduser = User::where('google_id', $user->id)->first();
      
             if($finduser){
-     
                 Auth::login($finduser);
-
                 $get = User::where('id', auth()->user()->id)->first();
                 $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-                if(!$wallet)
-                {
+                if(!$wallet){
                     //create the wallet
                     Wallet::create(['user_id'=> $get->id, 'balance' => '0.00']);
                 }
@@ -47,6 +44,7 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
+
                 return redirect('/home');
      
             }else{

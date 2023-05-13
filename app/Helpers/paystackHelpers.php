@@ -215,7 +215,7 @@ class PaystackHelpers{
             "email"=>"farohunbi.st@gmail.com",
 	        "password"=>"Solomon001"
         ]);
-        return json_decode($res->getBody()->getContents(), true);
+        return json_decode($res->getBody()->getContents(), true)['data']['token']['access_token'];
     }
 
     public static function loadNetworkData($access_token, $network){
@@ -252,7 +252,7 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
-    ///////////////////////////
+    /////////////////////////// statistics
 
     public static function dailyActivities(){
         $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
@@ -292,10 +292,19 @@ class PaystackHelpers{
     }
 
     public static function registrationChannel(){
-        $registrationChannel = User::select('source', \DB::raw('count(*) as total'))->groupBy('source')->get();
+        $registrationChannel = User::select('source', \DB::raw('COUNT(*) as total'))->groupBy('source')->get();
         $list[] = ['Channel', 'Total'];
          foreach($registrationChannel as $key => $value){
             $list[++$key] = [$value->source == null ? 'Organic' :$value->source, (int)$value->total ];
+         }
+         return $list;
+    }
+
+    public static function revenueChannel(){
+       $revenue = PaymentTransaction::select('type', \DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->get();
+       $list[] = ['Revenue Channel', 'Total'];
+         foreach($revenue as $key => $value){
+            $list[++$key] = [$value->type, (int)$value->amount ];
          }
          return $list;
     }
