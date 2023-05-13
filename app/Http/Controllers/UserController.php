@@ -251,7 +251,7 @@ class UserController extends Controller
             "reference"=>Str::random(7),
             "network"=>$request->network,
             "service"=>$request->network."VTU",
-            "phone"=>$request->phone,
+            "phone"=>'234'.$request->phone,
             "amount"=>$request->amount,
         ];
 
@@ -261,8 +261,8 @@ class UserController extends Controller
     //         'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
     //     ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
 
-        return $access_token = PaystackHelpers::access_token();
-        return $res = PaystackHelpers::buyAirtime($payload, $access_token);
+        $access_token = PaystackHelpers::access_token();
+        $res = PaystackHelpers::buyAirtime($payload, $access_token);
 
         if($res['status'] == 'success'){
 

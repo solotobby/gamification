@@ -13,11 +13,15 @@
 <script>
   var channel = <?php echo $channel; ?>
 </script>
+<script>
+  var revenue = <?php echo $revenue; ?>
+</script>
 
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
 <script src="{{ asset('js/admin/dailyActivities.js')}}"></script>
+<script src="{{ asset('js/admin/revenueChannel.js')}}"></script>
 @endsection
 
 @section('content')
@@ -244,8 +248,13 @@
        <div id="linechart" style="width: 100%; height: 500px"></div> 
       </div>
       <hr>
-       <div class="col-xl-12 mb-3">
+       <div class="col-xl-12">
           <div id="donutchart" style="width: 100%; height: 500px;"></div>
+      </div>
+      
+      <hr>
+       <div class="col-xl-12 mb-3">
+          <div id="donutchart_revenue" style="width: 100%; height: 500px;"></div>
       </div>
 
     </div>
