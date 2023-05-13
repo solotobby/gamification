@@ -81,6 +81,9 @@ Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::clas
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 
+///Points Routes
+Route::get('points', [\App\Http\Controllers\LoginPointCountroller::class, 'index'])->name('points');
+Route::get('points/redeem', [\App\Http\Controllers\LoginPointCountroller::class, 'redeemPoint'])->name('redeem.point');
 ///payment routes
 Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::class, 'goLive']);
 Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 'paystackCallback']);

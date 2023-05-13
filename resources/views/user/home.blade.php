@@ -113,13 +113,11 @@
           </p>
         </div>
       </div>
+      <div class="alert alert-info mt-3">Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!!</div>
     </div>
   </div>
   <!-- END Hero Section -->
-
-
-
-   
+  
         <!-- Page Content -->
         <div class="content content-boxed content-full">
           @if (session('success'))
