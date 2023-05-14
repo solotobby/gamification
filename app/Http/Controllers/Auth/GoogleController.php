@@ -45,8 +45,6 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
-                
-                PaystackHelpers::loginPoints($finduser);
                 return redirect('/home');
      
             }else{

@@ -29,10 +29,10 @@
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
         <h1 class="h3 mb-1">
-          Dashboard
+          Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Welcome, admin! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
+          Welcome, {{ auth()->user()->name }}! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
         </p>
       </div>
       <div class="mt-4 mt-md-0">
@@ -58,7 +58,7 @@
   <div class="content">
     <!-- Overview -->
     <div class="row items-push">
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -72,14 +72,14 @@
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-            <a class="fw-medium" href="javascript:void(0)">
+            <a class="fw-medium" href="{{ url('users') }}">
               View all users
               <i class="fa fa-arrow-right ms-1 opacity-25"></i>
             </a>
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -93,14 +93,14 @@
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-            <a class="fw-medium" href="javascript:void(0)">
-              Explore analytics
+            <a class="fw-medium" href="{{ url('campaigns') }}">
+              View Campaigns
               <i class="fa fa-arrow-right ms-1 opacity-25"></i>
             </a>
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -110,61 +110,20 @@
             <div class="text-muted mb-3"> Campaigns Value</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($workers->where('status', 'Approved')->sum('amount')) }}
+              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($workers) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-            <a class="fw-medium" href="javascript:void(0)">
+            <a class="fw-medium" href="{{url('campaigns')}}">
               View all sales
               <i class="fa fa-arrow-right ms-1 opacity-25"></i>
             </a>
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
-          <div class="block-content block-content-full">
-            <div class="item rounded-3 bg-body mx-auto my-3">
-              <i class="fa fa-wallet fa-lg text-primary"></i>
-            </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$users->where('is_verified')->count() * 500}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($users->where('is_verified')->count() * 500) }}</div>
-            <div class="text-muted mb-3">Verified Earnings</div>
-            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
-              <i class="fa fa-caret-down me-1"></i>
-              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($wallet->where('user_type', 'regular')->sum('balance')) }}
-            </div>
-          </div>
-          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-            <a class="fw-medium" href="javascript:void(0)">
-              Withdrawal options
-              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
-          <div class="block-content block-content-full">
-            <div class="item rounded-3 bg-body mx-auto my-3">
-              <i class="fa fa-wallet fa-lg text-primary"></i>
-            </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$campaigns->sum('total_amount') * 0.5}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount') * 0.5) }}</div>
-            <div class="text-muted mb-3">Campaign Revenue</div>
-            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-danger bg-danger-light">
-              <i class="fa fa-caret-down me-1"></i>
-              {{-- &#8358;{{ number_format($campaigns->sum('total_amount') * 0.5) }} --}}
-            </div>
-          </div>
-          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
-            <a class="fw-medium" href="javascript:void(0)">
-              Withdrawal options
-              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
-            </a>
-          </div>
-        </div>
-      </div>
+      
 
-      <div class="col-sm-6 col-xl-3">
+      {{--<div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -174,7 +133,7 @@
             <div class="text-muted mb-3">Referral Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              {{-- {{ number_format($ref_rev) }} --}}
+             
               {{ $tx->where('type', 'referer_bonus')->count() }}
               
             </div>
@@ -198,7 +157,7 @@
             <div class="text-muted mb-3">Direct Reg. Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              {{-- {{ number_format($ref_rev) }} --}}
+             
               {{ $tx->where('type', 'direct_referer_bonus')->count() }}
               
             </div>
@@ -222,7 +181,7 @@
             <div class="text-muted mb-3">Wallet Balance</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              {{-- {{ number_format($ref_rev) }} --}}
+             
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -232,7 +191,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div>--}}
     </div>
 
     <div class="row">
@@ -264,22 +223,9 @@
 @endsection
 
 @section('script')
-
 <script>
   $(function () {
       $('[data-toggle="tooltip"]').tooltip()
   })
   </script>
- {{-- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
- <!-- Page JS Plugins -->
- {{-- <script src="{{asset('src/assets/js/plugins/chart.js/chart.min.js')}}"></script> --}}
-
- <!-- Page JS Code -->
- {{-- <script src="{{asset('src/assets/js/pages/be_pages_dashboard.min.js')}}"></script> --}}
-
- 
- {{-- <script src="{{asset('src/assets/js/dashmix.app.min.js')}}"></script> --}}
-
-
-
 @endsection

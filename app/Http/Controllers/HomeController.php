@@ -50,7 +50,6 @@ class HomeController extends Controller
             return redirect()->route('staff.home');
         }else{
             // return 'user';
-            PaystackHelpers::loginPoints($user);
             return redirect()->route('user.home');
         } 
     }
@@ -63,7 +62,7 @@ class HomeController extends Controller
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
-       
+        PaystackHelpers::loginPoints($user);
         //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
         if($user->is_verified == true){
             $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
@@ -82,12 +81,12 @@ class HomeController extends Controller
     {
         // PaystackHelpers::dailyVisit();
         $campaigns = Campaign::where('status', 'Live')->get();
-        $campaignWorker = CampaignWorker::all();
+        $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         $user = User::where('role', 'regular')->get();
-        $wallet = Wallet::all();
-        $ref_rev = Referral::where('is_paid', true)->count();
-        $transactions = PaymentTransaction::where('user_type', 'admin')->get();
-        $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+        //$wallet = Wallet::all();
+        //$ref_rev = Referral::where('is_paid', true)->count();
+        //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
+        //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
         //users registered
         $dailyActivity = PaystackHelpers::dailyActivities();
@@ -101,15 +100,15 @@ class HomeController extends Controller
         //registration channel
         $registrationChannel = PaystackHelpers::registrationChannel();
 
+        //revenue channel
         $revenueChannel = PaystackHelpers::revenueChannel();
         
-        return view('admin.index', [ 'users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
         ->with('channel', json_encode($registrationChannel))
         ->with('revenue', json_encode($revenueChannel));
-
     }
 
     public function staffHome(){
