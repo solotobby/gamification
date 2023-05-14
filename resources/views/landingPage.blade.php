@@ -255,7 +255,7 @@
 								<span class="icon-alarmclock"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">{{$users}}</h1>
+								<h1 class="counter">11900</h1>
 								<span>Users</span>
 							</div>
 						</div>

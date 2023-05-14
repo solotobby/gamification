@@ -17,9 +17,9 @@ class GeneralController extends Controller
     public function landingPage()
     {
         PaystackHelpers::dailyVisit();
-        $users = User::where('role', 'regular')->count();
-        $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount', 'description'])->get();
-        return view('landingPage', ['transactions' => $transactions, 'users' => $users]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        //$users = User::where('role', 'regular')->count();
+        $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
+        return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 
     public function contact()
@@ -30,6 +30,7 @@ class GeneralController extends Controller
 
     public function goal()
     {
+        PaystackHelpers::dailyVisit();
         return view('goal');
     }
 
@@ -41,22 +42,26 @@ class GeneralController extends Controller
 
     public function gamelist()
     {
+        PaystackHelpers::dailyVisit();
         $games = Games::orderBy('created_at', 'desc')->get();
         return view('gamelist', ['games' => $games]);
     }
 
     public function terms()
     {
+        PaystackHelpers::dailyVisit();
         return view('terms');
     }
 
     public function privacy()
     {
+        PaystackHelpers::dailyVisit();
         return view('privacy');
     }
     
     public function make_money()
     {
+        PaystackHelpers::dailyVisit();
         return view('make_money');
     }
 
@@ -76,6 +81,7 @@ class GeneralController extends Controller
 
     public function download()
     {
+        PaystackHelpers::dailyVisit();
         return view('download');
     }
 

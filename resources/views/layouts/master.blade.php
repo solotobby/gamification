@@ -20,6 +20,9 @@
         <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
         <script src="{{ asset('asset/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4211954660767269"
+     crossorigin="anonymous"></script>
+
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 
         {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> --}}
@@ -45,6 +48,7 @@
 
         gtag('config', 'G-G7C4X8TR6T');
         </script>
+        
         @yield('script')
         @yield('style')
     </head>
