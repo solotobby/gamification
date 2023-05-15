@@ -231,38 +231,38 @@ class UserController extends Controller
         }
         $ref = time();
         
-        // $balance = Http::withHeaders([
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json-patch+json',
-        //     'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        //  ])->get('https://api.flutterwave.com/v3/balances/NGN')->throw()['data']['available_balance'];
+        $balance = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json-patch+json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+         ])->get('https://api.flutterwave.com/v3/balances/NGN')->throw()['data']['available_balance'];
 
-        // if($request->amount > $balance){
-        //     return back()->with('error', 'An Error Occour while processing airtime');
-        // }
+        if($request->amount > $balance){
+            return back()->with('error', 'An Error Occour while processing airtime');
+        }
        
         $payload = [
-            // "country"=> "NG",
-            // "customer"=> '+234'.substr($request->phone, 1),
-            // "amount"=> $request->amount,
-            // "type"=> "AIRTIME",
-            // "reference"=> $ref
+            "country"=> "NG",
+            "customer"=> '+234'.substr($request->phone, 1),
+            "amount"=> $request->amount,
+            "type"=> "AIRTIME",
+            "reference"=> $ref
             
-            "reference"=>Str::random(7),
-            "network"=>$request->network,
-            "service"=>$request->network."VTU",
-            "phone"=>'234'.$request->phone,
-            "amount"=>$request->amount,
+            // "reference"=>Str::random(7),
+            // "network"=>$request->network,
+            // "service"=>$request->network."VTU",
+            // "phone"=>'234'.$request->phone,
+            // "amount"=>$request->amount,
         ];
 
        
-    //   return $res =  Http::withHeaders([
-    //         'Content-Type' => 'application/json',
-    //         'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-    //     ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
+      return $res =  Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/bills', $payload)->throw();
 
-        $access_token = PaystackHelpers::access_token();
-        $res = PaystackHelpers::buyAirtime($payload, $access_token);
+        // $access_token = PaystackHelpers::access_token();
+        // $res = PaystackHelpers::buyAirtime($payload, $access_token);
 
         if($res['status'] == 'success'){
 
