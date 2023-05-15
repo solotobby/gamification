@@ -45,7 +45,7 @@
                 </div>
             @endif
 
-            <div class="mb-4">
+            {{-- <div class="mb-4">
               <div class="input-group">
                <select class="form-control" name="network" required>
                   <option value="">Select One</option>
@@ -55,7 +55,7 @@
                   <option value="9MOBILE">9MOBILE</option>
                </select>
               </div>
-            </div>
+            </div> --}}
 
             <div class="mb-4">
               <div class="input-group">
