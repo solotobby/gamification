@@ -23,19 +23,17 @@
 				<div class="row">
 					<div class="col-sm-12 col-md-12 col-lg-12 mb-40">
 						<div class="contact-person">
-							<h4></h4>
+							<h4>Four ways you can make money on Freebyz</h4>
 							<p>
-                                Welcome to Freebyz<br>
-
-                                You can earn as much as  10,000 NGN daily when you like, share, comment on a post or play games on Freebyz!
-                               
-                               You can also hire social media workers to engage your posts on your blog and all social media channels for organic growth &  increased visibility for more sales.
-                               
-                               On Freebyz, you earn N250 on each referral using your referral code on your dashboard.<br>
-                               Click <a href="{{ url('register') }}">here</a> to Get started and start making cool cash.
-
+                                1.	You can complete tasks and earn. As a verified user, you have access to limitless jobs above N10 <br>
+                                2.	You can hire workers to engage your social media posts to earn on Youtube, TikTok, etc <br>
+                                3.	You can invite your friends using your referral link and earn N500 on each verified friend. Some users have cashed out more than 10,000 at a time by just referring friends and not completing tasks at all. <br>
+                                Hurry now to invite your friends and earn big time.  <br>
+                                4.	You automatically earn login points each day you login and copy your referral code to social media. These points can be used for airtime, data or even withdrawal. Feel free to use any of these methods to earn big time on Freebyz. <br>
+                                Enjoy Life with Freebyz
+                                <br>
+                                Click <a href="{{ url('register') }}">here</a> to Get started and start making cool cash.
                             </p>
-
                         </div>
                     </div>
                 </div>
