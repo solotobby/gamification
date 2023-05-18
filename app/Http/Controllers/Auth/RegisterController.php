@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -56,7 +57,9 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-        
+        if(count($request->phone_number['full']) != '14' ){
+            return back()->with('error', 'Please Enter Phone Number');
+        }
         if($request->country == '' || $request->phone_number['full'] == ''){
             return back()->with('error', 'Please Enter Phone Number');
         }
@@ -76,16 +79,26 @@ class RegisterController extends Controller
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
-
+        $name = explode(' ', $request->name);
+        $fname = $name[0];
+        $lname = $name[1];
+       $payload = [
+            'first_name' =>  $fname,
+            'last_name' =>  $lname,
+            'password' => $request->password,
+            'password_confirmation' => $request->password,
+            'email' => $request->email,
+            'username' => Str::random(7),
+            'phone_number' => substr($request->phone_number['full'], 1),
+            'user_type' =>"CUSTOMER",
+            'mobile_token' => Str::random(7)
+        ];
+        // PaystackHelpers::sendUserToSendmonny($payload);
         if($user){
             Auth::login($user);
             return redirect('/home');
         }
-
     }
-
-
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -112,7 +125,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        
         $ref_id = $data['ref_id'];
         $user = User::create([
             'name' => $data['name'],
