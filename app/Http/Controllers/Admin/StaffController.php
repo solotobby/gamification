@@ -97,4 +97,8 @@ class StaffController extends Controller
         //     return back()->with('error', 'Please select at least one staff');
         // }
     }
+    public function info($id){
+        $info = User::find($id); 
+        return view('admin.staff.staff_info', ['info' => $info]);
+    }
 }

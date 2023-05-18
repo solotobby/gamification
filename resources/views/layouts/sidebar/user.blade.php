@@ -1,7 +1,5 @@
 <div class="content-side">
     <ul class="nav-main">
-      
-      
       <li class="nav-main-heading">Main Menu</li>
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('home') }}">
@@ -108,11 +106,8 @@
               <span class="nav-main-link-name">Create</span>
             </a>
           </li>
-          
         </ul>
       </li>
-
-
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-users"></i>
@@ -174,8 +169,5 @@
           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{ auth()->user()->myFeedBackList }}</span> --}}
         </a>
       </li>
-
-      
-
     </ul>
   </div>

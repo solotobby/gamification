@@ -21,5 +21,9 @@ class Staff extends Model
         return $this->belongsToMany(StaffPayment::class, 'staff_paid', 'user_id');
     }
 
+    public function payslips(){
+        return $this->hasMany(StaffPaymentLog::class, 'staff_id');
+    }
+
 
 }
