@@ -58,7 +58,7 @@
   <div class="content">
     <!-- Overview -->
     <div class="row items-push">
-      <div class="col-sm-6 col-xl-4">
+      <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -79,7 +79,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-4">
+      <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -100,7 +100,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-4">
+      <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -111,6 +111,27 @@
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
               &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($workers) }}
+            </div>
+          </div>
+          <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
+            <a class="fw-medium" href="{{url('campaigns')}}">
+              View all sales
+              <i class="fa fa-arrow-right ms-1 opacity-25"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+          <div class="block-content block-content-full flex-grow-1">
+            <div class="item rounded-3 bg-body mx-auto my-3">
+              <i class="fa fa-chart-line fa-lg text-primary"></i>
+            </div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{(number_format($loginPoints->sum('point')))}}">{{ App\Helpers\PaystackHelpers::numberFormat($loginPoints->sum('point')) }}</div>
+            <div class="text-muted mb-3"> Campaigns Value</div>
+            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
+              <i class="fa fa-caret-up me-1"></i>
+              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($loginPoints->sum('point') / 5) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">

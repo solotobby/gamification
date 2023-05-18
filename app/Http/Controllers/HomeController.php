@@ -13,6 +13,7 @@ use App\Models\UserScore;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\LoginPoints;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
@@ -83,6 +84,7 @@ class HomeController extends Controller
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         $user = User::where('role', 'regular')->get();
+        $loginPoints = LoginPoints::where('is_redeemed', false)->get();
         //$wallet = Wallet::all();
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -103,7 +105,7 @@ class HomeController extends Controller
         //revenue channel
         $revenueChannel = PaystackHelpers::revenueChannel();
         
-        return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
