@@ -128,10 +128,10 @@
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{(number_format($loginPoints->sum('point')))}}">{{ App\Helpers\PaystackHelpers::numberFormat($loginPoints->sum('point')) }}</div>
-            <div class="text-muted mb-3"> Campaigns Value</div>
+            <div class="text-muted mb-3">Login Points</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($loginPoints->sum('point') / 5) }}
+              &#8358;{{$loginPoints->sum('point') / 5 }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
