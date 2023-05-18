@@ -57,9 +57,9 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-        if(count($request->phone_number['full']) != '14' ){
-            return back()->with('error', 'Please Enter Phone Number');
-        }
+        // if(count($request->phone_number['full']) != '14' ){
+        //     return back()->with('error', 'Please Enter Phone Number');
+        // }
         if($request->country == '' || $request->phone_number['full'] == ''){
             return back()->with('error', 'Please Enter Phone Number');
         }

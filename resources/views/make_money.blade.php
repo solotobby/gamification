@@ -57,7 +57,7 @@
                             </div> --}}
                             <div class="service-content">
                                 <h3>Sign Up</h3>
-                                    <p>Sign up to get your referral code and start earning 250 NGN on every referral.
+                                    <p>Sign up to get your referral code and start earning 500 NGN on every referral.
                                          Your referral code is your affiliate link to earn more money. Start Earning Now...
                                          {{-- More referrals means fat wallet for you. We pay every Friday. --}}
                                          </p>
