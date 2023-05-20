@@ -40,7 +40,7 @@
                   <tr>
                     <th scope="row">1</th>
                     <td>System</td>
-                    <td>&#8358;{{ number_formart($transactions->where('tx_type', 'Credit')->where('user_type', 'admin')->sum('amount')) }}</td>
+                    <td>&#8358;{{ number_format($transactions->where('tx_type', 'Credit')->where('user_type', 'admin')->sum('amount')) }}</td>
                     <td>&#8358;{{ number_format($transactions->whereIn('type', ['databundle', 'cash_withdrawal', 'airtime_purchase'])->sum('amount')) }} (withdrawals, databundle, airtime) </td>
                   </tr>
                   {{-- <tr>
