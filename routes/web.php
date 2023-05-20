@@ -210,6 +210,7 @@ Route::get('admin/marketplace/view', [\App\Http\Controllers\Admin\AdminControlle
 Route::get('admin/marketplace/create', [\App\Http\Controllers\Admin\AdminController::class, 'marketplaceCreateProduct'])->name('marketplace.create.product');
 Route::post('admin/post/marketplace', [\App\Http\Controllers\Admin\AdminController::class, 'storeMarketplace'])->name('store.marketplace');
 Route::get('admin/remove/marketplace/product/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeMarketplaceProduct']);
+
 //Databundles
 Route::get('create/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'createDatabundles'])->name('create.databundles');
 Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::class, 'storeDatabundles'])->name('store.databundles');
@@ -220,8 +221,10 @@ Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesControl
 Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
 Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
 Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
-///// External Fintech Api 
 
+///// External Fintech Api 
 Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
 
-
+///Accounts
+Route::get('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'view'])->name('account.view');
+Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'store'])->name('account.store');

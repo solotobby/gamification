@@ -80,7 +80,7 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-        // PaystackHelpers::dailyVisit();
+        // return PaystackHelpers::getPosts();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         $user = User::where('role', 'regular')->get();
