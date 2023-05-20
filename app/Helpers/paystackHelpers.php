@@ -127,7 +127,7 @@ class PaystackHelpers{
         // 267978826632355
 
         $post_id = '267978826632355';//{post-id}';
-        $access_token = 'EAAD3fnxa5H0BAKNCZCGTRzCUTZAjZAeZCv1aM7AiUE0WiwS9Tv7XLKXVpRDZAPICz1PZAFuhnHNpJ7CAjn4FHuZCTXn4CkNmtZAFTMUj1bnSHvqaz4WTTfg0rld4EJZB1xH0RrBvC884VT5aY4ml4zZCvp6px8e7DZAu2vTB4vHO47Y6HoA3o6m8b5JT4S9VLSBGeXfqdf5gXfcgQZDZD';
+        $access_token = 'EAAD3fnxa5H0BAPZCjkMSCIUr1PG7o6Tvz2KBl7bZCixTZCCfOwoJYMi3n71G2XGtu9yQRtrEqTx1aRKuaHaBvggDQ9tTgxnRZAaqnVxvcpxXMCWlh8ez0faZCoVo05PplkV3EIQfYxZBslP8fatnAZCALIfR0zAsHvo0nxOrokIuYOFRcO97drBWZAHXWfVcKvZA4PH204YX4LgZDZD';
 
         $response = Http::withToken($access_token)
             ->get("https://graph.facebook.com/{$post_id}/likes");
