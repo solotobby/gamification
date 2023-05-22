@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('title', 'Affiliate Marketing Hub | Make Money Online')
 @section('style')
-
 <style>
 	.carousel-item {
 		height: 100vh;
@@ -32,61 +31,8 @@
 				</div>
 			</div>
 		</div>
-		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_2.jpg') }});">
-			<div class="container">
-				<div class="slider-content">
-					<h2><br /><br /><br /><br /> --}}
-						{{-- <span class="dot"></span>
-						<span class="dot"></span>
-						<span class="dot"></span> --}}
-					{{-- </h2> --}}
-					{{-- <p>Design | Development | Branding</p>
-					<a class="btn" href="#">About Us</a> --}}
-				{{-- </div>
-			</div>
-		</div> --}}
-		{{-- <div class="single-slider" style="background-image: url({{ asset('asset/img/freebyz_1.jpg') }});">
-			<div class="container">
-				<div class="slider-content">
-					<h2><br /><br /><br /><br />  --}}
-						{{-- <span class="dot"></span>
-						<span class="dot"></span>
-						<span class="dot"></span> --}}
-					{{-- </h2> --}}
-					{{-- <p>Design | Development | Branding</p>
-					<a class="btn" href="#">About Us</a> --}}
-				{{-- {{-- </div> --}}
-			{{-- </div>
-		</div>
-	</div>  --}}
+		
 </div>
-<!-- basic-slider end -->
-
-        {{-- <div class="ptb-150 border-t-b" style="background-image: url({{ asset('asset/img/cup.jpg') }})">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="slider-content" >
-							<h2 style="color: azure">Holla....Amazing stuffs for Amazing people
-							</h2>
-							{{-- <p style="color: azure">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by
-								the
-								charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound
-								to
-								ensue; and equal blame belongs to those.</p> --}}
-                                @if(Auth::user())
-                                    {{-- <a class="btn" href="{{ route('instruction') }}" style="color: azure">Play Game</a> --}}
-                                @else
-                                    {{-- <a class="btn" href="{{ url('auth/google') }}" style="color: azure">Get Started</a> --}}
-                                @endif
-						{{-- </div>
-					</div>
-				</div>
-			</div>
-		</div>  --}}
-		<!-- basic-slider end -->
-
-
         <div class="basic-service-area white-bg pt-90 pb-50">
 			<div class="container">
 				<div class="area-title text-center">
@@ -272,9 +218,9 @@
 											<tbody>
 												@foreach ($transactions as $trx)
 													<tr>
-														<td>{{ $trx->user->name }}</td>
+														<td>{{ \App\Helpers\PaystackHelpers::getInitials(@$trx->user->name) }}</td>
 														<td>&#8358;{{ number_format($trx->amount) }}</td>
-														<td>{{$trx->description}}</td>
+														<td>Cash Withdrawals</td>
 													</tr>
 											    @endforeach
 											</tbody>

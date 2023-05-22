@@ -356,6 +356,19 @@ class PaystackHelpers{
 
     }
 
+    public static function getInitials($name){
+        $names = explode(' ', $name);
+        $initials = '';
+        foreach ($names as $name) {
+            $initials .= $name[0] . '.';
+        }
+        $initials = rtrim($initials, '.');
+        
+        // Output the initials
+        return $initials;
+        
+    }
+
     ////sendmonny apis
 
     public static function sendUserToSendmonny($payload){
