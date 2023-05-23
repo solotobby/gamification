@@ -75,7 +75,7 @@ class PaystackHelpers{
         ])->post('https://api.paystack.co/transfer/bulk', [
             "currency"=> "NGN",
             "source"=> "balance", 
-            "transfers"=> [$transfers]
+            "transfers"=> $transfers
             // "amount"=> $amount, 
             // "recipient"=> $recipient, 
             // "reason"=> "Freebyz Withdrawal" 
