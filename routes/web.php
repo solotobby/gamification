@@ -26,6 +26,7 @@ Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
+Route::get('about', [\App\Http\Controllers\GeneralController::class, 'about'])->name('about');
 Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 

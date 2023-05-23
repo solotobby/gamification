@@ -67,16 +67,19 @@ class GeneralController extends Controller
 
     public function trackRecord()
     {
-
         PaystackHelpers::dailyVisit();
         return view('track_record');
     }
 
     public function faq()
     {
-
         PaystackHelpers::dailyVisit();
         return view('faq');
+    }
+    public function about()
+    {
+        PaystackHelpers::dailyVisit();
+        return view('about');
     }
 
     public function download()
