@@ -254,15 +254,19 @@
                             verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
                             you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
                             <br>Got Payment Issues, transfer to 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) then upload proof of evidence via our <b>Talk To Us</b> panel
-                            {{-- <br><span style="color:brown">From 1st April, verification fee would now be ₦1000 and you'll have opportunity to win amazing prices on a weekly basis!!</span> --}}
+                            <br>
+                            <center>
+                              <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
+                                Get Verified Now!
+                              </a>
+                              <br> <br> 
+                              Can't pay in Naira, Click the Link Button Below
+                              <br>
+                              <a class="btn btn-hero btn-secondary" href="https://flutterwave.com/pay/payfreebyz" target="_blank" data-toggle="click-ripple">
+                                Get Verified with USD!
+                              </a>
+                            </center>
                           </h4>
-
-                          <center>
-                            <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
-                              Get Verified Now!
-                            </a>
-                          </center>
-                          
                           @else
                           <h3 class="mb-2 text-center">
                             Refer friends and cashout out every Friday
