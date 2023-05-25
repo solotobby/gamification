@@ -38,17 +38,6 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
-
-    public function charts()
-    {
-        $data['signUps'] = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'))
-                ->groupBy('date')
-                ->orderBy('date', 'desc')
-                ->get();
-
-        return response()->json($data['signUps']);
-    }
-
     public function createGame()
     {
         $user = auth()->user();
@@ -213,7 +202,7 @@ class AdminController extends Controller
     }
 
     public function verifiedUserList(){
-        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->paginate(50);
+        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
 

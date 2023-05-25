@@ -53,14 +53,11 @@
       <div class="row justify-content-center">
         <div class="col-md-10 col-xl-10">
           <h1 class="h2 mb-2">
-
-            
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
        
           <p>Earn 500 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
-       
           </p>
 
          
@@ -92,12 +89,6 @@
           <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
           <p class="text-muted mb-0">
             Wallet Balance
-          </p>
-        </div>
-        <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->bonus) }}</p>
-          <p class="text-muted mb-0">
-            Bonus Balance
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
