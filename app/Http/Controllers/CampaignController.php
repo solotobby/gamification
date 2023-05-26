@@ -293,7 +293,8 @@ class CampaignController extends Controller
             $campaignWorker['amount'] = $request->amount;
             $campaignWorker['proof_url'] = $proofUrl;
             $campaignWork = CampaignWorker::create($campaignWorker);
-
+            //activity log
+            PaystackHelpers::activityLog(auth()->user(), 'campaign_submission', auth()->user()->name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
             $campaign = Campaign::where('id', $request->campaign_id)->first();

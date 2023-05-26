@@ -191,8 +191,6 @@ class WalletController extends Controller
             'user_type' => 'regular'
         ]);
 
-
-
         //admin commission
             $adminWallet = Wallet::where('user_id', '1')->first();
             $adminWallet->balance += $percent;
