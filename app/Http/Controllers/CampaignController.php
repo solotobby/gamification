@@ -346,6 +346,9 @@ class CampaignController extends Controller
         ]);
         if($request->action == 'approve'){
             $approve = CampaignWorker::where('id', $request->id)->first();
+            if($approve->reason != null){
+                return back()->with('error', 'Campaign has been attended to');
+           }
             $approve->status = 'Approved';
             $approve->reason = $request->reason;
             $approve->save();
@@ -356,7 +359,7 @@ class CampaignController extends Controller
             $ref = time();
             PaymentTransaction::create([
                 'user_id' => $approve->user_id,
-                'campaign_id' => '1',
+                'campaign_id' => $approve->campaign->id,
                 'reference' => $ref,
                 'amount' => $approve->amount,
                 'status' => 'successful',
@@ -385,8 +388,10 @@ class CampaignController extends Controller
 
     public function approveCampaign($id)
     {
-
        $approve = CampaignWorker::where('id', $id)->first();
+       if($approve->reason != null){
+            return back()->with('error', 'Campaign has been attended to');
+       }
        $approve->status = 'Approved';
        $approve->reason = 'Approved by User';
        $approve->save();
@@ -397,7 +402,7 @@ class CampaignController extends Controller
        $ref = time();
        PaymentTransaction::create([
         'user_id' => $approve->user_id,
-        'campaign_id' => '1',
+        'campaign_id' => $approve->campaign->id,
         'reference' => $ref,
         'amount' => $approve->amount,
         'status' => 'successful',
