@@ -51,12 +51,13 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>#</th>
+                    
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Amount</th>
                     <th>Status</th>
+                    <th>View</th>
                     <th>Date Rquested</th>
                     <th>Liq. Date</th>
                     </tr>
@@ -65,12 +66,12 @@
                 <?php $i = 1; ?>
                 @foreach ($withdrawals as $with)
                     <tr>
-                        <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"> <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}"> {{$with->user->name }}</a></td>
                         <td>{{ $with->user->email }}</td>
                         <td>{{ $with->user->phone }}</td>
                         <td>&#8358;{{ number_format(@$with->amount) }}</td>
                         <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
+                        <td><a href="{{ url('user/'.@$with->user->id.'/info') }}" target="_blank" class="btn btn-primary btn-sm">User</a></td>
                         <td>{{ \Carbon\Carbon::parse($with->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->diffForHumans() }}</td>
                     </tr>
