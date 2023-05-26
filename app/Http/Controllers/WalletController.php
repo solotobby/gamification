@@ -194,7 +194,7 @@ class WalletController extends Controller
 
 
         //admin commission
-        $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet = Wallet::where('user_id', '1')->first();
             $adminWallet->balance += $percent;
             $adminWallet->save();
             //Admin Transaction Tablw
@@ -211,8 +211,7 @@ class WalletController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-
-
+        PaystackHelpers::activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
         $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
         if($bankInformation == null){
             $bankList = PaystackHelpers::bankList();

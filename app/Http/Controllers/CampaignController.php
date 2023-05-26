@@ -344,11 +344,14 @@ class CampaignController extends Controller
         $request->validate([
             'reason' => 'required|string',
         ]);
+
         if($request->action == 'approve'){
             $approve = CampaignWorker::where('id', $request->id)->first();
             if($approve->reason != null){
                 return back()->with('error', 'Campaign has been attended to');
            }
+           $user = User::where('id', $approve->user_id)->first();
+           
             $approve->status = 'Approved';
             $approve->reason = $request->reason;
             $approve->save();
@@ -370,6 +373,9 @@ class CampaignController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
+            
+            PaystackHelpers::activityLog($user, 'campaign_payment', $user->name .' received a campaign payment of NGN'.number_format($approve->amount), 'regular');
+            
             $subject = 'Job Approved';
             $status = 'Approved';
             Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));

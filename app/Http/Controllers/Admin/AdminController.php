@@ -583,6 +583,10 @@ class AdminController extends Controller
             if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
                 $withdrawals->status = true;
                 $withdrawals->save();
+                //set activity log
+                $am = number_format($withdrawals->amount*100);
+                $name = PaystackHelpers::getInitials($user->name);
+                PaystackHelpers::activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
                 //send mail
                 $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                 $subject = 'Withdrawal Request Granted';
@@ -602,6 +606,12 @@ class AdminController extends Controller
         $withdrawals->status = true;
         $withdrawals->save();
         $user = User::where('id', $withdrawals->user->id)->first();
+
+        //set activity log
+        $am = number_format($withdrawals->amount);
+        $name = PaystackHelpers::getInitials($user->name);
+        PaystackHelpers::activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
+
         $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
         Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));

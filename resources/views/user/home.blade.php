@@ -60,9 +60,8 @@
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
           </p>
 
-         
           <center>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-2">
               <div class="input-group">
                 <input type="text" value="{{url('register/'.auth()->user()->referral_code)}}" class="form-control form-control-alt" id="myInput">
                 <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
@@ -71,16 +70,10 @@
               </div>
             </div>
           </center>
-        
-          
          
           <p style="color:brown">
             We'll reward you with ₦55,000($78) when you refer 100 verified users and ₦510,000 ($728) when you refer 1,000 verified users.
           </p>
-          {{-- <p>
-            <a href="{{ route('assign.virtual.account') }}" class="btn btn-primary">Get Virtual Account</a>
-          </p> --}}
-          
         </div>
       </div>
       
@@ -105,6 +98,14 @@
         </div>
       </div>
       <div class="alert alert-info mt-3">Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!!</div>
+      <marquee>
+        <ul class="list-inline">
+          @foreach ($activity_log as $activity)
+          <li class="list-inline-item">&bull; {{$activity->description}}</li>
+          @endforeach
+         
+        </ul>
+      </marquee>
     </div>
   </div>
   <!-- END Hero Section -->
