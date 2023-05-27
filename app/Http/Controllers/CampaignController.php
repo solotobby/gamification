@@ -255,7 +255,7 @@ class CampaignController extends Controller
 
     public function viewCampaign($job_id)
     {
-        
+
         $getCampaign = Campaign::where('job_id', $job_id)->first();
         // if($getCampaign->campaignType->name == 'Facebook Influencer'){
         //     if(auth()->user()->facebook_id == null){
@@ -354,6 +354,11 @@ class CampaignController extends Controller
             if($approve->reason != null){
                 return back()->with('error', 'Campaign has been attended to');
            }
+           $campaign = Campaign::where('id', $approve->campaign_id)->first();//->number_of_staff;
+           $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
+           if($completed_campaign >= $campaign->number_of_staff){
+            return back()->with('error', 'Campaign has reached its maximum capacity');
+           }
            $user = User::where('id', $approve->user_id)->first();
            
             $approve->status = 'Approved';
@@ -364,6 +369,7 @@ class CampaignController extends Controller
             $wallet->balance += $approve->amount;
             $wallet->save();
             $ref = time();
+
             PaymentTransaction::create([
                 'user_id' => $approve->user_id,
                 'campaign_id' => $approve->campaign->id,
@@ -378,7 +384,7 @@ class CampaignController extends Controller
                 'user_type' => 'regular'
             ]);
             
-            PaystackHelpers::activityLog($user, 'campaign_payment', $user->name .' received a campaign payment of NGN'.number_format($approve->amount), 'regular');
+            PaystackHelpers::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
             
             $subject = 'Job Approved';
             $status = 'Approved';
