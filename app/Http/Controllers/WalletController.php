@@ -143,6 +143,10 @@ class WalletController extends Controller
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             $wallet->balance += $creditAmount;
             $wallet->save();
+            
+            $name = PaystackHelpers::getInitials(auth()->user()->name);
+            PaystackHelpers::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+            
             return redirect('success');
        }else{
         return redirect('error');

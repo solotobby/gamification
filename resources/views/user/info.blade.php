@@ -3,11 +3,11 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Success</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Info</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">Payment</li>
-            <li class="breadcrumb-item active" aria-current="page">Payment Successful</li>
+            <li class="breadcrumb-item">Dashboard</li>
+            <li class="breadcrumb-item active" aria-current="page">Info</li>
           </ol>
         </nav>
       </div>
@@ -18,22 +18,23 @@
   <div class="content">
     {{-- <h2 class="content-heading">Basic <small>Animate elements and make them visible on scrolling</small></h2> --}}
     <div class="row">
-    
+      
       <div class="col-sm-12">
         <div class="block block-rounded invisible" data-toggle="appear">
           <div class="block-content block-content-full">
             <div class="py-5 text-center">
-              <div class="item item-2x item-circle bg-success text-white mx-auto">
-                <i class="fa fa-2x fa-check"></i>
+              <div class="item item-2x item-circle bg-danger text-white mx-auto">
+                <i class="fa fa-2x fa-info"></i>
               </div>
-              <div class="fs-4 fw-semibold pt-3 mb-0">Payment Successful</div>
-              <br>
-              <a href="{{ url('home') }}" class="btn btn-primary btn-sm"> <li class="fa fa-home"> </li> Home </a>
+              <div class="fs-4 fw-semibold pt-3 mb-0">Opps</div>
+              <p> You are not verified yet. Please click the button below to get Verified!</p>
+              <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a>
             </div>
+          
           </div>
         </div>
       </div>
-      
+     
     </div>
 
   </div>

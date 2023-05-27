@@ -176,26 +176,7 @@
             <div class="block block-rounded">
               <div class="block-header block-header-default">
                   <h3 class="block-title">Post Proof of Completion</h3>
-              </div>
-              {{-- @if($campaign->campaign_amount >= 10 && auth()->user()->is_verified != true)
-                  <div class="block-content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="alert alert-info">
-                              This is a premium Campaign, please verify to access Campaign
-                            </div>
-                            <center>
-                              <a class="btn btn-hero btn-primary mb-4" href="{{ url('upgrade') }}" data-toggle="click-ripple">
-                                Get Verified
-                              </a>
-                            </center>
-                            
-                        </div>
-                    </div>
-                  </div>
-              @else --}}
-
-               
+              </div>    
                       @if($campaign->user_id == auth()->user()->id)
                         <div class="block-content">
                             <div class="row">
@@ -243,7 +224,7 @@
                                 </div>
                               @else
                                   <div class="block-content">
-                                      <div class="row">
+                                    <div class="row">
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
                                           @csrf
                                           <div class="col-md-12 mb-3">
@@ -256,16 +237,37 @@
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
                                           <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
-
+                                          @if(auth()->user()->is_verified)
                                           <div class="row mb-4 mt-4">
-                                              <div class="col-lg-6">
-                                              <button type="submit" class="btn btn-alt-primary">
-                                                  <i class="fa fa-plus opacity-50 me-1"></i> Submit
-                                              </button>
-                                              </div>
+                                            <div class="col-lg-6">
+                                            <button type="submit" class="btn btn-alt-primary">
+                                                <i class="fa fa-plus opacity-50 me-1"></i> Submit
+                                            </button>
+                                            </div>
+                                        </div>
+                                         
+                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount <= 10)
+                                        <div class="row mb-4 mt-4">
+                                          <div class="col-lg-6">
+                                          <button type="submit" class="btn btn-alt-primary">
+                                              <i class="fa fa-plus opacity-50 me-1"></i> Submit
+                                          </button>
                                           </div>
+                                        </div>
+                                        @else
+                                        <div class="row mb-4 mt-4">
+                                          <div class="col-lg-12">
+                                            <p> You are not verified yet. Please click the button below to get Verified!</p>
+                                            <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a>
+                                          {{-- <button type="button" class="btn btn-alt-primary">
+                                              <i class="fa fa-plus opacity-50 me-1 disabled"></i> Submit
+                                          </button> --}}
+                                          </div>
+                                        </div>
+                                        @endif
+                                          
                                       </form>
-                                      </div>
+                                    </div>
                                       
 
                                   </div>
@@ -273,19 +275,6 @@
                           @endif
 
                       @endif
-                  {{-- @else
-                      <div class="block-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="alert alert-info">
-                                  You do not qualify for this job
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                  @endif --}}
-
-                  {{-- @endif --}}
             </div>
 
             <a href="{{ url('home') }}" class="btn btn-secondary btn-sm mb-2"><i class="fa fa-backspace"></i> Back Home</a>

@@ -65,12 +65,13 @@ class HomeController extends Controller
         }
         PaystackHelpers::loginPoints($user);
         $activity_log = PaystackHelpers::showActivityLog();
-        //$available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'desc')->get();
-        if($user->is_verified == true){
-            $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
-        }else{
-            $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'DESC')->get();
-        }
+
+        // if($user->is_verified == true){
+        //     $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        // }else{
+        //     $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'DESC')->get();
+        // }
+        $available_jobs =  $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->paginate(10);
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log]);
     }

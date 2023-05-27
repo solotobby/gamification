@@ -41,6 +41,59 @@
     visibility: visible;
     opacity: 1;
   }
+
+  /* Campaign list Card css  */
+
+.card {
+    border: none;
+    border-radius: 10px
+}
+
+.c-details span {
+    font-weight: 300;
+    font-size: 13px
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 39px
+}
+
+.badge span {
+    background-color: #1e1a0912;
+    width: 60px;
+    height: 25px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #191918;
+    justify-content: center;
+    align-items: center
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px
+}
+
+.progress div {
+    /* background-color: red */
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}
   </style>
 
 @endsection
@@ -120,30 +173,81 @@
 
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available jobs
-              </h2>
+            </h2>
+              <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-              <div class="bg-body-dark mb-5">
-                <div class="content content-full text-center">
-                  <div class="py-3">
-                    <h3 class="mb-2 text-center">
-                      How to make money with freebyz
-                    </h3>
+              {{-- Campaign list --}}
+              <div class="col-lg-12">
+                  <ul class="nav nav-tabs nav-tabs-block align-items-center" role="tablist">
+                    <li class="nav-item">
+                      <button class="nav-link active" id="btabswo-static-home-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-home" role="tab" aria-controls="btabswo-static-home" aria-selected="true">Available Jobs</button>
+                    </li>
+                    {{-- <li class="nav-item">
+                      <button class="nav-link" id="btabswo-static-profile-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-profile" role="tab" aria-controls="btabswo-static-profile" aria-selected="false">Profile</button>
+                    </li> --}}
                     
-                    {{-- <h4 class="fw-normal text-muted text-center">
-                   Only verified users have unlimited access to jobs! 
-                    </h4> --}}
-
-                    <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="btabswo-static-home" role="tabpanel" aria-labelledby="btabswo-static-home-tab">
+                      @foreach ($available_jobs as $job)
+                        <div class="row mt-2">
+                          @if(auth()->user()->is_verified)
+                              <a href="{{ url('campaign/'.$job->job_id) }}">
+                            @elseif(!auth()->user()->is_verified && $job->campaign_amount <= 10)
+                              <a href="{{ url('campaign/'.$job->job_id) }}">
+                            @else
+                              <a href="{{ url('info') }}">
+                            @endif
+                                <div class="card p-3 mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
+                                            <div class="ms-2 c-details" style="color:#191918">
+                                                <h6 class="mb-0">&#8358;{{ $job->campaign_amount}}</h6> <span>{{  @$job->campaignType->name }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <h3 class="heading" style="color:#191918">{!! $job->post_title !!}</h3>
+                                        <div class="mt-2">
+                                          <?php 
+                                            $completed = $job->completed()->where('status', 'Approved')->count();
+                                            $div = $completed / $job->number_of_staff;
+                                            $percentage = $div * 100;
+                                          ?>
+                                         
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            
+                                            <div class="mt-3" style="color:#191918"> <span class="text1">{{  $completed }} completed <span class="text2">out of {{ $job->number_of_staff }} capacity</span></span> </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                      @endforeach
+                      {!! $available_jobs->links('pagination::bootstrap-4') !!}
+                    </div>
+                    
+                    {{-- <div class="tab-pane" id="btabswo-static-profile" role="tabpanel" aria-labelledby="btabswo-static-profile-tab">
+                      <h4 class="fw-normal">Profile Content</h4>
+                      <p>...</p>
+                    </div> --}}
                   </div>
+              
               </div>
+
+             
               
   
             <!-- Jobs -->
-            @foreach ($available_jobs as $job)
+            {{-- @foreach ($available_jobs as $job) --}}
             {{-- @if($job->completed()->count() >= $job->number_of_staff)
             @else --}}
               <!-- Story -->
-              <div class="block block-rounded">
+              {{-- <div class="block block-rounded">
                 <div class="block-content p-0 overflow-hidden">
                   <div class="row g-0">
                     <div class="col-md-3 col-lg-3 overflow-hidden d-flex align-items-center">
@@ -165,7 +269,7 @@
                           @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
                               <a class="text-dark" href="#"> {!! $job->post_title !!}</a>
                           @else
-                              {{-- <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em> --}}
+                              <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
                               <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
                           @endif
                           
@@ -188,9 +292,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
               <!-- END Story -->
-            @endforeach     
+            {{-- @endforeach      --}}
         </div>
 
 
@@ -331,6 +435,7 @@
  <!-- Page JS Code -->
  <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 
+ 
 
  <script>
   function myFunction() {
