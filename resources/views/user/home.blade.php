@@ -220,8 +220,11 @@
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            
+                                            @if($completed >= $job->number_of_staff)
+                                            <div class="mt-3" style="color:#191918"> <span class="text1">Completed <li class="fa fa-check"></li></span> </div>
+                                            @else
                                             <div class="mt-3" style="color:#191918"> <span class="text1">{{  $completed }} completed <span class="text2">out of {{ $job->number_of_staff }} capacity</span></span> </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
