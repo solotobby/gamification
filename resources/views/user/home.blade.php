@@ -206,7 +206,7 @@
                                                 <h6 class="mb-0">&#8358;{{ $job->campaign_amount}}</h6> <span>{{  @$job->campaignType->name }}</span>
                                             </div>
                                         </div>
-                                        <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div>
+                                        {{-- <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div> --}}
                                     </div>
                                     <div class="mt-2">
                                         <h3 class="heading" style="color:#191918">{!! $job->post_title !!}</h3>
@@ -233,18 +233,13 @@
                       @endforeach
                       {!! $available_jobs->links('pagination::bootstrap-4') !!}
                     </div>
-                    
                     {{-- <div class="tab-pane" id="btabswo-static-profile" role="tabpanel" aria-labelledby="btabswo-static-profile-tab">
                       <h4 class="fw-normal">Profile Content</h4>
                       <p>...</p>
                     </div> --}}
                   </div>
               
-              </div>
-
-             
-              
-  
+                </div>
             <!-- Jobs -->
             {{-- @foreach ($available_jobs as $job) --}}
             {{-- @if($job->completed()->count() >= $job->number_of_staff)
