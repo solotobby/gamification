@@ -206,7 +206,7 @@
                                                 <h6 class="mb-0">&#8358;{{ $job->campaign_amount}}</h6> <span>{{  @$job->campaignType->name }}</span>
                                             </div>
                                         </div>
-                                        <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div>
+                                        {{-- <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div> --}}
                                     </div>
                                     <div class="mt-2">
                                         <h3 class="heading" style="color:#191918">{!! $job->post_title !!}</h3>
