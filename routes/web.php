@@ -78,6 +78,7 @@ Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController
 Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
+
 ///paystack payment 
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
@@ -96,6 +97,7 @@ Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 
 
 //virtual account routes
 Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
+Route::get('info', [\App\Http\Controllers\UserController::class, 'info']);
 Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
 Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
 Route::get('transactions', [\App\Http\Controllers\UserController::class, 'transactions'])->name('transactions');

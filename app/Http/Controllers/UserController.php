@@ -54,7 +54,9 @@ class UserController extends Controller
         if($checkCount->status == 'unsuccessful'){
            if($statusVerification == 'success'){
             PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
-
+            
+            $name = PaystackHelpers::getInitials(auth()->user()->name);
+            PaystackHelpers::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
                 $user = User::where('id', auth()->user()->id)->first();
                 $user->is_verified = true;
                 $user->save();
@@ -114,9 +116,9 @@ class UserController extends Controller
          $userWallet->balance -= '1050';
          $userWallet->save();
 
-        //credit User with 1,000 bonus
-        // $bonus->bonus += '1000';
-        // $bonus->save();
+         $name = PaystackHelpers::getInitials(auth()->user()->name);
+         PaystackHelpers::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+         
         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
         
            $user = User::where('id', auth()->user()->id)->first();
@@ -183,6 +185,10 @@ class UserController extends Controller
     public function error()
     {
         return view('user.error');
+    }
+
+    public function info(){
+        return view('user.info');
     }
 
     public function transactions()
