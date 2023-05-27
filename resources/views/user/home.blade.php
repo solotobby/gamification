@@ -233,18 +233,13 @@
                       @endforeach
                       {!! $available_jobs->links('pagination::bootstrap-4') !!}
                     </div>
-                    
                     {{-- <div class="tab-pane" id="btabswo-static-profile" role="tabpanel" aria-labelledby="btabswo-static-profile-tab">
                       <h4 class="fw-normal">Profile Content</h4>
                       <p>...</p>
                     </div> --}}
                   </div>
               
-              </div>
-
-             
-              
-  
+                </div>
             <!-- Jobs -->
             {{-- @foreach ($available_jobs as $job) --}}
             {{-- @if($job->completed()->count() >= $job->number_of_staff)
