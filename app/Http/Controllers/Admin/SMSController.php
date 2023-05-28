@@ -34,6 +34,8 @@ class SMSController extends Controller
                 $phone = '234'.substr($value->phone, 1);
             }elseif($initials == '+'){
                 $phone = substr($value->phone, 1);
+            }elseif($initials == 2){
+                $phone = $value->phone;
             }
 
             if ($phone) {
