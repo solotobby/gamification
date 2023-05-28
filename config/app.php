@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -232,8 +233,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'PaystackHelper' => App\Helpers\PaystackHelper::class,
-        'AfricaTalkingHandlers' => App\Helpers\AfricaTalkingHandlers::class,
+        // 'AfricaTalkingHandlers' => App\Helpers\AfricaTalkingHandlers::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
 ];

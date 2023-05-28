@@ -121,8 +121,6 @@
                     <button class="btn btn-primary" type="submit">Add</button>
                   </div>
                  </form>
-
-                 
               </div>
               
               <div class="modal-footer">
@@ -137,15 +135,17 @@
         <!-- END Job Summary -->
       </div>
       <div class="col-md-8 order-md-0">
+        <div class="alert alert-info">
+          <li class="fa fa-info"></li> Please note that this job must be approved before payment. 
+          We'll automatically approve it if it is not approved by poster after 5days.
+        </div>
         <!-- Job Description -->
         <div class="block block-rounded">
            
-
+          
           <div class="block-header block-header-default">
             <h3 class="block-title">Campaign Description</h3>
           </div>
-          
-
             <div class="block-content">
               @if (session('success'))
                 <div class="alert alert-success" role="alert">
