@@ -29,12 +29,16 @@ class SMSController extends Controller
         $list = [];
         foreach($contacts as $key=>$value){
             $initials = PaystackHelpers::getInitials($value->phone);
+            $phone = '';
             if($initials == 0){
                 $phone = '234'.substr($value->phone, 1);
             }elseif($initials == '+'){
                 $phone = substr($value->phone, 1);
             }
-            $list[] = $phone;
+
+            if ($phone) {
+                $list[] = $phone;
+            }
         }
         return $list;
     }
