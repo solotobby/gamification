@@ -358,7 +358,7 @@ class PaystackHelpers{
                 $initials .= $name[0] . '.';
             }
             $initials = rtrim($initials, '.');
-            ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' gets 50 points for log in', 'user_type' => 'regular']);
+            ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' earned 50 points for log in', 'user_type' => 'regular']);
             LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
         }
 
