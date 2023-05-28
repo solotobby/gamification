@@ -26,7 +26,7 @@ class SMSController extends Controller
         }elseif($type == 'verified'){
             $contacts = User::where('role', 'regular')->where('is_verified', true)->where('country', 'Nigeria')->select(['phone'])->get();
         }
-        //return $contacts;
+
         foreach($contacts as $key=>$value){
             $initials = PaystackHelpers::getInitials($value->phone);
             if($initials == 0){
@@ -34,7 +34,7 @@ class SMSController extends Controller
             }elseif($initials == '+'){
                 $phone = substr($value->phone, 1);
             }
-            $list[] = $phone; //$value->phone;
+            $list[] = $phone;
         }
         return $list;
     }
