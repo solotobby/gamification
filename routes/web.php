@@ -202,6 +202,8 @@ Route::get('campaigns/denied', [\App\Http\Controllers\Admin\AdminController::cla
 Route::post('campaign/status', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus'])->name('campaign.status');
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');
 Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassMail'])->name('send.mass.email');
+Route::get('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'massSMS'])->name('mass.sms');
+Route::post('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'send_massSMS'])->name('send.mass.sms');
 
 Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'unapprovedJobs'])->name('unapproved');
 Route::get('approved', [\App\Http\Controllers\Admin\AdminController::class, 'approvedJobs'])->name('approved');
