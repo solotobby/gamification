@@ -37,6 +37,12 @@ class SMSController extends Controller
             }elseif($initials == 2){
                 $phone = $value->phone;
             }
+
+            $firstThreeChars = substr($phone, 0, 3);
+            if($firstThreeChars == 234){
+                $phone = substr($phone, 3);
+            }
+
             if ($phone) {
                 $list[] = $phone;
             }
