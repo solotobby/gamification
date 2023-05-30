@@ -1,7 +1,7 @@
 @extends('layouts.main.master')
 @section('style')
-<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
-<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}">
+{{-- <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
+<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}"> --}}
 
 @endsection
 
@@ -42,7 +42,8 @@
         @endif
 
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -100,7 +101,10 @@
                                     </p>
 
                                     <ul class="list-group push">
-                                      
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Url: 
+                                        <span class="badge rounded-pill bg-info"><a href="{{$camp->post_link}}" target="_blank">{{$camp->post_link}}</a></span>
+                                      </li>
                                       <li class="list-group-item d-flex justify-content-between align-items-center">
                                           Category 
                                           <span class="badge rounded-pill bg-info">{{$camp->campaignType->name}}</span>
@@ -124,10 +128,6 @@
                                       <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i class="fa fa-times"></i> Decline</button>
                                       </div>
                                     </form>
-                                     
-                                      {{-- <a href="{{ url('campaign/status/Live/'.$camp->id) }}" class="btn btn-alt-primary">Approve</a>
-                                      <a href="{{ url('campaign/status/Decline/'.$camp->id) }}" class="btn btn-alt-danger">Decline</a> --}}
-                                     
                                   </div>
                                   <!-- END With Badges -->
                                 </div>
@@ -160,7 +160,7 @@
 <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
 
 <!-- Page JS Plugins -->
-<script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
@@ -168,8 +168,8 @@
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script> --}}
 
 <!-- Page JS Code -->
-<script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script> --}}
 @endsection
