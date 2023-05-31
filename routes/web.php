@@ -234,3 +234,6 @@ Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController:
 ///Accounts
 Route::get('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'view'])->name('account.view');
 Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'store'])->name('account.store');
+
+//User Activity
+Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');

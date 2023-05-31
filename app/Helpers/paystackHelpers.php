@@ -8,8 +8,10 @@ use App\Models\PaymentTransaction;
 use Illuminate\Support\Env;
 use App\Models\Statistics;
 use App\Models\User;
+use App\Models\UserLocation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Stevebauman\Location\Facades\Location;
 
 class PaystackHelpers{
 
@@ -122,6 +124,21 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    //fluterwave apis
+    public static function listFlutterwaveTransaction(){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/transactions')->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
+    public static function initiateFlutterwavePayment(){
+        return 'flutterwave';
+    }
+
     ///facebook graph apis
 
     public static function getPosts(){
@@ -140,6 +157,29 @@ class PaystackHelpers{
     }
 
     ///system functions 
+
+    public static function userLocation($type){
+        $ip = request()->ip();
+        // '48.188.144.248';
+        $location = Location::get($ip);
+
+       return UserLocation::create([
+            'user_id' => auth()->user()->id,
+            'activity' => $type, 
+            'ip' => $ip,
+            'countryName' => $location->countryName, 
+            'countryCode' => $location->countryCode, 
+            'regionName' => $location->regionName,
+            'regionCode' => $location->regionCode, 
+            'cityName' => $location->cityName,
+            'zipCode' => $location->zipCode, 
+            'areaCode' => $location->areaCode, 
+            'timezone' => $location->timezone
+        ]);
+
+        // return auth()->user();
+
+    }
 
     public static function paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
     {
@@ -182,15 +222,7 @@ class PaystackHelpers{
          return json_decode($res->getBody()->getContents(), true);
     }
 
-    public static function listFlutterwaveTransaction(){
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        ])->get('https://api.flutterwave.com/v3/transactions')->throw();
-
-        return json_decode($res->getBody()->getContents(), true);
-    }
+    
 
     public static function dailyVisit(){
 

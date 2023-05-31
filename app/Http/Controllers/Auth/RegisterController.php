@@ -96,6 +96,7 @@ class RegisterController extends Controller
         // PaystackHelpers::sendUserToSendmonny($payload);
         if($user){
             Auth::login($user);
+            PaystackHelpers::userLocation('Registeration');
             return redirect('/home');
         }
     }

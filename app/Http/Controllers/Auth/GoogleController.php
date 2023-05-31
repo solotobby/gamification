@@ -45,6 +45,7 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
+               
                 return redirect('/home');
      
             }else{
@@ -61,11 +62,12 @@ class GoogleController extends Controller
     
                 Auth::login($newUser);
                 $get = User::where('id', auth()->user()->id)->first();
+                PaystackHelpers::userLocation('Google_Registeration');
                 if($get->phone == '')
                 {
                     return view('phone');
                 }
-                PaystackHelpers::loginPoints($newUser);
+                // PaystackHelpers::loginPoints($newUser);
                 return redirect('/home');
             }
     
