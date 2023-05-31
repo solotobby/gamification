@@ -64,7 +64,7 @@ class HomeController extends Controller
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
-        
+
         $date = \Carbon\Carbon::today()->toDateString();
         $check = UserLocation::where('user_id', auth()->user()->id)->where('created_at', $date)->first();
         if(!$check)
@@ -111,13 +111,17 @@ class HomeController extends Controller
 
         //revenue channel
         $revenueChannel = PaystackHelpers::revenueChannel();
+
+        //country distribution
+        $countryDistribution = PaystackHelpers::countryDistribution();
         
         return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
         ->with('channel', json_encode($registrationChannel))
-        ->with('revenue', json_encode($revenueChannel));
+        ->with('revenue', json_encode($revenueChannel))
+        ->with('country', json_encode($countryDistribution));
     }
 
     public function staffHome(){
