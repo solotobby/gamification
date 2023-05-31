@@ -18,6 +18,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Statistics;
+use App\Models\UserLocation;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Nette\Utils\Random;
@@ -63,14 +64,18 @@ class HomeController extends Controller
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
+        
+        $date = \Carbon\Carbon::today()->toDateString();
+        $check = UserLocation::where('user_id', auth()->user()->id)->where('created_at', $date)->first();
+        if(!$check)
+        {
+            PaystackHelpers::userLocation('Login');
+        }
+
         PaystackHelpers::loginPoints($user);
+
         $activity_log = PaystackHelpers::showActivityLog();
 
-        // if($user->is_verified == true){
-        //     $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
-        // }else{
-        //     $available_jobs = Campaign::where('status', 'Live')->where('campaign_amount', '<=', 10)->orderBy('created_at', 'DESC')->get();
-        // }
         $available_jobs =  $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->paginate(10);
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log]);

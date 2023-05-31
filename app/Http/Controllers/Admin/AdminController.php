@@ -21,6 +21,7 @@ use App\Models\Question;
 use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\User;
+use App\Models\UserLocation;
 use App\Models\UserScore;
 use App\Models\Wallet;
 use App\Models\Withrawal;
@@ -660,6 +661,11 @@ class AdminController extends Controller
     public function campaignCompleted(){
         $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         return view('admin.campaign_completed', ['campaigns' => $campaigns]);
+    }
+
+    public function userlocation(){
+        $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
+        return view('admin.user_location', ['userTracker' => $userTracker]);
     }
 
     public function listFlutterwaveTrf(){

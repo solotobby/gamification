@@ -19,6 +19,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "php-http/guzzle7-adapter": "^1.0",
         "realrashid/sweet-alert": "^7.0",
+        "stevebauman/location": "^6.6",
         "swiftmailer/swiftmailer": "^6.3",
         "unicodeveloper/laravel-paystack": "^1.0"
     },
