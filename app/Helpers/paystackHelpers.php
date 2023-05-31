@@ -159,7 +159,12 @@ class PaystackHelpers{
     ///system functions 
 
     public static function userLocation($type){
-        $ip = request()->ip();
+        if(env('APP_ENV') == 'local'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+        }
+       
         // '48.188.144.248';
         $location = Location::get($ip);
 
@@ -306,7 +311,6 @@ class PaystackHelpers{
         ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
-        // DATE_FORMAT(created_at, "%d-%b-%Y")
         $dailyVisitresult[] = ['Year','Visits'];
         foreach ($data as $key => $value) {
             $dailyVisitresult[++$key] = [$value->date, (int)$value->visits];
@@ -340,6 +344,15 @@ class PaystackHelpers{
             $list[++$key] = [$value->type, (int)$value->amount ];
          }
          return $list;
+    }
+
+    public static function countryDistribution(){
+        $countryDristibution = User::select('country', \DB::raw('COUNT(*) as total'))->groupBy('country')->get();
+        $country[] = ['Country', 'Total'];
+         foreach($countryDristibution as $key => $value){
+            $country[++$key] = [$value->country == null ? 'Unassigned' :$value->country, (int)$value->total ];
+         }
+         return $country;
     }
 
     public static function sendBulkSMS($number, $message){

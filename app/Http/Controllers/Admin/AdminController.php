@@ -664,7 +664,7 @@ class AdminController extends Controller
     }
 
     public function userlocation(){
-        $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
+        $userTracker = UserLocation::orderBy('created_at', 'ASC')->paginate(100);
         return view('admin.user_location', ['userTracker' => $userTracker]);
     }
 
