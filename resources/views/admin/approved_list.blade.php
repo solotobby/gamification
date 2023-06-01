@@ -69,7 +69,6 @@
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $list)
                     <tr>
-                        {{-- <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th> --}}
                         <td>{{ $list->campaign->post_title }}</td>
                         <td>{{ $list->user->name }}</td>
                         <td>&#8358;{{ number_format(@$list->amount) }}</td>
@@ -82,6 +81,9 @@
           </table>
           {{-- <button class="btn btn-primary mb-2" type="submit">Approve All</button> --}}
             </form>
+        </div>
+        <div class="d-flex">
+          {!! $campaigns->links('pagination::bootstrap-4') !!}
         </div>
       </div>
     </div>

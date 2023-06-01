@@ -318,12 +318,12 @@ class AdminController extends Controller
     }
 
     public function unapprovedJobs(){
-        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->get();
+        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->paginate(200);
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
     public function approvedJobs(){
-        $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->get();
+        $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->paginate(200);
         return view('admin.approved_list', ['campaigns' => $list]); 
     }
     public function deniedCampaigns(){
