@@ -85,6 +85,9 @@
           <button class="btn btn-primary mb-2" type="submit">Approve All</button>
             </form>
         </div>
+        <div class="d-flex">
+          {!! $campaigns->links('pagination::bootstrap-4') !!}
+        </div>
       </div>
     </div>
     <!-- END Full Table -->
