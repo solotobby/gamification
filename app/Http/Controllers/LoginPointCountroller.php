@@ -22,14 +22,15 @@ class LoginPointCountroller extends Controller
 
     public function redeemPoint(){
         $loginPoints = LoginPoints::where('user_id', auth()->user()->id)->where('is_redeemed', false)->get();
-   
+        
         if($loginPoints->sum('point') != 1000){
             return back()->with('error', 'Points cannot be redeemed until you have 1,000');
         }
 
         $total_point = $loginPoints->sum('point');
         $countable = $total_point / 50;
-        $amount = $countable * 5; //5naira per 50 points
+        $amount = $countable * 2.5; //2.5naira per 50 points
+
         //credit wallet
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         $wallet->balance += $amount;
