@@ -44,7 +44,7 @@
             
         <div class="alert alert-info">
             {{-- <li class="fa fa-info"></li>  --}}
-            You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;100 
+            You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;50 
         </div>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">

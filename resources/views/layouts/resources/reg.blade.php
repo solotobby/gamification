@@ -1,8 +1,17 @@
 <div class="col-md-12 form-group">
+    <label>First Name</label>
+    <input id="text" type="text" class="form-control intput-lg @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" required placeholder="Enter First Name" >
+    @error('first_name')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
-    <label>Full Name</label>
-    <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required placeholder="Enter Name" >
-    @error('name')
+<div class="col-md-12 form-group">
+    <label>Last Name</label>
+    <input id="text" type="text" class="form-control intput-lg @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required placeholder="Enter Last Name" >
+    @error('last_name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>

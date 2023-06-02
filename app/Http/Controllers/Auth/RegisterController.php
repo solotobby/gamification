@@ -50,7 +50,8 @@ class RegisterController extends Controller
     public function registerUser(Request $request){
        
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:255'],
             'source' => ['required', 'string', 'max:255'],
             // 'phone_number' => ['required', 'numeric'],
@@ -65,8 +66,9 @@ class RegisterController extends Controller
         }
        
         $ref_id = $request->ref_id;
+        $name = $request->first_name.' '.$request->last_name;
         $user = User::create([
-            'name' => $request->name,
+            'name' => $name,
             'email' => $request->email,
             'country' => $request->country,
             'phone' => $request->phone_number['full'],
@@ -79,12 +81,12 @@ class RegisterController extends Controller
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
-        $name = explode(' ', $request->name);
-        $fname = $name[0];
-        $lname = $name[1];
+
+       
+       
        $payload = [
-            'first_name' =>  $fname,
-            'last_name' =>  $lname,
+            'first_name' =>  $request->first_name,
+            'last_name' =>  $request->last_name,
             'password' => $request->password,
             'password_confirmation' => $request->password,
             'email' => $request->email,
@@ -93,7 +95,7 @@ class RegisterController extends Controller
             'user_type' =>"CUSTOMER",
             'mobile_token' => Str::random(7)
         ];
-        // PaystackHelpers::sendUserToSendmonny($payload);
+        // PaystackHelpers::sendUserToSendmonny($payload);  //simultaneous sync with sendmonny
         if($user){
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
