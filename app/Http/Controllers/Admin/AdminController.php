@@ -182,6 +182,7 @@ class AdminController extends Controller
     }
 
     public function userList(Request $request){
+        // $users = [];
         // if(isset($request)){
         //     $users = User::where([
         //         [function ($query) use ($request) {
@@ -193,9 +194,10 @@ class AdminController extends Controller
         //                     ->get();
         //             }
         //         }]
-        //     ])->paginate(100);
+        //     ])->get();//paginate(100);
+        // }
         // }else{
-        //     $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(100);
+        //     //$users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(100);
         // }
         
         $users = User::where('role', 'regular')->orderBy('id', 'DESC')->get();//paginate(100);
