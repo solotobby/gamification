@@ -55,8 +55,9 @@
                 <br>
                 
             </div>
-            <form action="{{ route('mass.sms.preview') }}" method="GET">
-                {{-- @csrf --}}
+            {{-- send.mass.sms --}}
+            <form action="{{ route('send.mass.sms') }}" method="POST">
+                @csrf
                 <div class="mb-4">
                     <label>Select Date Range</label>
                     <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">

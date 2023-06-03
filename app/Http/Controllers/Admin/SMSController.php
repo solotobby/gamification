@@ -22,12 +22,19 @@ class SMSController extends Controller
     }
 
     public function send_massSMS(Request $request){
+        // $type = $request->type;
+        // if($type == 'unverified'){
+        //     $contacts = User::where('role', 'regular')->where('is_verified', false)->where('country', 'Nigeria')->select(['phone'])->get();
+        // }elseif($type == 'verified'){
+        //     $contacts = User::where('role', 'regular')->where('is_verified', true)->where('country', 'Nigeria')->select(['phone'])->get();
+        // }
         $type = $request->type;
         if($type == 'unverified'){
-            $contacts = User::where('role', 'regular')->where('is_verified', false)->where('country', 'Nigeria')->select(['phone'])->get();
+            $contacts = $this->filter($request, false);
         }elseif($type == 'verified'){
-            $contacts = User::where('role', 'regular')->where('is_verified', true)->where('country', 'Nigeria')->select(['phone'])->get();
+           $contacts = $this->filter($request, true);
         }
+
         $list = [];
         foreach($contacts as $key=>$value){
             $initials = PaystackHelpers::getInitials($value->phone);
@@ -53,7 +60,7 @@ class SMSController extends Controller
         if($response['code'] == 'ok'){
             return back()->with('success', 'Broadcast Sent');
         }else{
-            return back()->with('success', 'An erro occour, broadcast not sent');
+            return back()->with('error', 'An erro occour, broadcast not sent');
         }
     }
 
