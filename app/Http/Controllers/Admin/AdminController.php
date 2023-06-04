@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\AfricaTalkingHandlers;
+use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
@@ -677,6 +678,6 @@ class AdminController extends Controller
     }
 
     public function test(){
-        return CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
+        return Analytics::index(); //CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
     }
 }

@@ -236,7 +236,8 @@ return [
         'AfricaTalkingHandlers' => App\Helpers\AfricaTalkingHandlers::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
-        'CapitalSage' => \App\Helpers\CapitalSage::class,
+        'CapitalSage' => App\Helpers\CapitalSage::class,
+        'Analytics' => App\Helpers\Analytics::class,
     ],
 
 ];
