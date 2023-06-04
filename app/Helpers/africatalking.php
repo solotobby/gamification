@@ -8,30 +8,31 @@
 
      public static  function  sendairtime()
      {
-         $username = "sandbox";
-         $apiKey = env('AFRICA_TALKING_SANDBOX');
+        return 'working';
+        //  $username = "sandbox";
+        //  $apiKey = env('AFRICA_TALKING_SANDBOX');
 
-         $AT = new AfricasTalking($username, $apiKey);
+        //  $AT = new AfricasTalking($username, $apiKey);
 
-         $airtime = $AT->airtime();
+        //  $airtime = $AT->airtime();
 
-         // Use the service
-         $recipients = [[
-             "phoneNumber"  => "+2348137331282",
-             "currencyCode" => "NGN",
-             "amount"       => 100
-         ]];
+        //  // Use the service
+        //  $recipients = [[
+        //      "phoneNumber"  => "+2348137331282",
+        //      "currencyCode" => "NGN",
+        //      "amount"       => 100
+        //  ]];
 
-         try {
-             // That's it, hit send and we'll take care of the rest
-             $results = $airtime->send([
-                 "recipients" => $recipients
-             ]);
+        //  try {
+        //      // That's it, hit send and we'll take care of the rest
+        //      $results = $airtime->send([
+        //          "recipients" => $recipients
+        //      ]);
 
 
-         } catch(\Exception $e) {
-             echo "Error: ".$e->getMessage();
-         }
-         return json_decode($results->getBody()->getContents(), true);
+        //  } catch(\Exception $e) {
+        //      echo "Error: ".$e->getMessage();
+        //  }
+        //  return json_decode($results->getBody()->getContents(), true);
      }
  }
