@@ -68,7 +68,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($users->count())}}">{{ App\Helpers\PaystackHelpers::numberFormat($users->count()) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($users->count())}}">{{ App\Helpers\SystemActivities::numberFormat($users->count()) }}</div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
@@ -110,11 +110,11 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($campaigns->sum('total_amount')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> &#8358;{{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }}</div>
             <div class="text-muted mb-3"> Campaigns Value</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($workers) }}
+              &#8358;{{ App\Helpers\SystemActivities::numberFormat($workers) }}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -131,7 +131,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{(number_format($loginPoints->sum('point')))}}">{{ App\Helpers\PaystackHelpers::numberFormat($loginPoints->sum('point')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{(number_format($loginPoints->sum('point')))}}">{{ App\Helpers\SystemActivities::numberFormat($loginPoints->sum('point')) }}</div>
             <div class="text-muted mb-3">Login Points</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>

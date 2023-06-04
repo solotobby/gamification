@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Mail\ApproveCampaign;
 use App\Mail\CreateCampaign;
 use App\Mail\GeneralMail;
@@ -296,8 +297,9 @@ class CampaignController extends Controller
             $campaignWorker['proof_url'] = $proofUrl;
             $campaignWork = CampaignWorker::create($campaignWorker);
             //activity log
-            $name = PaystackHelpers::getInitials(auth()->user()->name);
-            PaystackHelpers::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
+            
+            $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
             $campaign = Campaign::where('id', $request->campaign_id)->first();
@@ -384,7 +386,7 @@ class CampaignController extends Controller
                 'user_type' => 'regular'
             ]);
             
-            PaystackHelpers::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
+            SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
             
             $subject = 'Job Approved';
             $status = 'Approved';

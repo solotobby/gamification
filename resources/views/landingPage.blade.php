@@ -218,7 +218,7 @@
 											<tbody>
 												@foreach ($transactions as $trx)
 													<tr>
-														<td>{{ \App\Helpers\PaystackHelpers::getInitials(@$trx->user->name) }}</td>
+														<td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td>
 														<td>&#8358;{{ number_format($trx->amount) }}</td>
 														<td>Cash Withdrawals</td>
 													</tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Analytics;
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Models\Answer;
 use App\Models\BankInformation;
 use App\Models\Games;
@@ -73,9 +74,9 @@ class HomeController extends Controller
             PaystackHelpers::userLocation('Login');
         }
 
-        PaystackHelpers::loginPoints($user);
+        SystemActivities::loginPoints($user);
 
-        $activity_log = PaystackHelpers::showActivityLog();
+        $activity_log = SystemActivities::showActivityLog();
 
         $available_jobs =  $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->paginate(10);
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
