@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AfricaTalkingHandlers;
+use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMassEmail;
@@ -666,11 +668,15 @@ class AdminController extends Controller
     }
 
     public function userlocation(){
-        $userTracker = UserLocation::orderBy('created_at', 'ASC')->paginate(100);
+        $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
         return view('admin.user_location', ['userTracker' => $userTracker]);
     }
 
     public function listFlutterwaveTrf(){
         return PaystackHelpers::listFlutterwaveTransaction();
+    }
+
+    public function test(){
+        return CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
     }
 }

@@ -237,3 +237,5 @@ Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, '
 
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
+
+Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
