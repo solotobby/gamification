@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\ActivityLog;
+use App\Models\Campaign;
 use App\Models\LoginPoints;
 use Carbon\Carbon;
 
@@ -67,8 +68,35 @@ class SystemActivities{
     public static function showActivityLog(){
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
-       return ActivityLog::whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('user_type', 'regular')->get();
-        
+       return ActivityLog::whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('user_type', 'regular')->get();  
+    }
+
+    public static function availableJobs(){
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $list = [];
+        foreach($campaigns as $key => $value){
+            $attempts = $value->completed->count();
+            $completed = $value->completed()->where('status', 'Approved')->count();
+
+            $div = $completed / $value->number_of_staff;
+            $progress = $div * 100;
+            $list[] = [ 
+                'job_id' => $value->job_id, 
+                'campaign_amount' => $value->campaign_amount,
+                'post_title' => $value->post_title, 
+                'number_of_staff' => $value->number_of_staff, 
+                'type' => $value->campaignType->name, 
+                'category' => $value->campaignCategory->name,
+                'attempts' => $attempts,
+                'completed' => $completed,
+                'is_completed' => $completed >= $value->number_of_staff ? true : false,
+                'progress' => $progress 
+            ];
+        }
+
+        $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+        return $sortedList;
     }
 
 
