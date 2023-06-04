@@ -238,6 +238,7 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'CapitalSage' => App\Helpers\CapitalSage::class,
         'Analytics' => App\Helpers\Analytics::class,
+        'SystemActivities' => App\Helpers\SystemActivities::class,
     ],
 
 ];
