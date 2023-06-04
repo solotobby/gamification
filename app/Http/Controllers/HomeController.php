@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Analytics;
 use App\Helpers\PaystackHelpers;
 use App\Models\Answer;
 use App\Models\BankInformation;
@@ -58,7 +59,7 @@ class HomeController extends Controller
 
     public function userHome()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
        
         if($user->phone == '' || $user->country == ''){
@@ -98,22 +99,23 @@ class HomeController extends Controller
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
         //users registered
-        $dailyActivity = PaystackHelpers::dailyActivities();
+        
+        $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits
-        $MonthlyVisit = PaystackHelpers::monthlyVisits();
+        $MonthlyVisit = Analytics::monthlyVisits();
 
         ///daily visits
-        $dailyVisits = PaystackHelpers::dailyStats();
+        $dailyVisits = Analytics::dailyStats();
 
         //registration channel
-        $registrationChannel = PaystackHelpers::registrationChannel();
+        $registrationChannel = Analytics::registrationChannel();
 
         //revenue channel
-        $revenueChannel = PaystackHelpers::revenueChannel();
+        $revenueChannel = Analytics::revenueChannel();
 
         //country distribution
-        $countryDistribution = PaystackHelpers::countryDistribution();
+        $countryDistribution = Analytics::countryDistribution();
         
         return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
@@ -133,16 +135,16 @@ class HomeController extends Controller
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
         //users registered
-        $dailyActivity = PaystackHelpers::dailyActivities();
+        $dailyActivity = Analytics::dailyActivities();
 
         //monthly visis
-        $MonthlyVisit = PaystackHelpers::monthlyVisits();
+        $MonthlyVisit = Analytics::monthlyVisits();
 
         ///daily visits
-        $dailyVisits = PaystackHelpers::dailyStats();
+        $dailyVisits = Analytics::dailyStats();
 
         //registration channel
-        $registrationChannel = PaystackHelpers::registrationChannel();
+        $registrationChannel = Analytics::registrationChannel();
         return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]) ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
     }
 

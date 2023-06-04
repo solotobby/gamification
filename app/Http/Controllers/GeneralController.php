@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Models\Answer;
@@ -16,7 +17,8 @@ class GeneralController extends Controller
 {
     public function landingPage()
     {
-        PaystackHelpers::dailyVisit();
+        
+        Analytics::dailyVisit();
         //$users = User::where('role', 'regular')->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
         return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
@@ -24,13 +26,13 @@ class GeneralController extends Controller
 
     public function contact()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('contact');
     }
 
     public function goal()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('goal');
     }
 
@@ -42,49 +44,49 @@ class GeneralController extends Controller
 
     public function gamelist()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         $games = Games::orderBy('created_at', 'desc')->get();
         return view('gamelist', ['games' => $games]);
     }
 
     public function terms()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('terms');
     }
 
     public function privacy()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('privacy');
     }
     
     public function make_money()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('make_money');
     }
 
     public function trackRecord()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('track_record');
     }
 
     public function faq()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('faq');
     }
     public function about()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('about');
     }
 
     public function download()
     {
-        PaystackHelpers::dailyVisit();
+        Analytics::dailyVisit();
         return view('download');
     }
 
