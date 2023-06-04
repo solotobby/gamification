@@ -192,9 +192,9 @@
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
                           @if(auth()->user()->is_verified)
-                              <a href="{{ url('campaign/'.$job->job_id) }}">
-                            @elseif(!auth()->user()->is_verified && $job->campaign_amount <= 10)
-                              <a href="{{ url('campaign/'.$job->job_id) }}">
+                              <a href="{{ url('campaign/'.$job['job_id']) }}">
+                            @elseif(!auth()->user()->is_verified && $job['campaign_amount'] <= 10)
+                              <a href="{{ url('campaign/'.$job['job_id']) }}">
                             @else
                               <a href="{{ url('info') }}">
                             @endif
@@ -203,27 +203,27 @@
                                         <div class="d-flex flex-row align-items-center">
                                             <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                                             <div class="ms-2 c-details" style="color:#191918">
-                                                <h6 class="mb-0">&#8358;{{ $job->campaign_amount}}</h6> <span>{{  @$job->campaignType->name }}</span>
+                                                <h6 class="mb-0">&#8358;{{ $job['campaign_amount']}}</h6> <span>{{  @$job['type'] }}</span>
                                             </div>
                                         </div>
-                                        {{-- <div class="badge" style="color:#191918"> <span>{{ @$job->campaignCategory->name }}</span> </div> --}}
+                                        {{-- <div class="badge" style="color:#191918"> <span>{{ @$job['category'] }}</span> </div> --}}
                                     </div>
                                     <div class="mt-2">
-                                        <h3 class="heading" style="color:#191918">{!! $job->post_title !!}</h3>
+                                        <h3 class="heading" style="color:#191918">{!! $job['post_title'] !!}</h3>
                                         <div class="mt-2">
                                           <?php 
-                                            $completed = $job->completed()->where('status', 'Approved')->count();
-                                            $div = $completed / $job->number_of_staff;
-                                            $percentage = $div * 100;
+                                            // $completed = $job->completed()->where('status', 'Approved')->count();
+                                            // $div = $completed / $job->number_of_staff;
+                                            // $percentage = $div * 100;
                                           ?>
                                          
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar" role="progressbar" style="width: {{$job['progress']}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            @if($completed >= $job->number_of_staff)
+                                            @if($job['is_completed'] == true)
                                             <div class="mt-3" style="color:#191918"> <span class="text1">Completed <li class="fa fa-check"></li></span> </div>
                                             @else
-                                            <div class="mt-3" style="color:#191918"> <span class="text1">{{  $completed }} completed <span class="text2">out of {{ $job->number_of_staff }} capacity</span></span> </div>
+                                            <div class="mt-3" style="color:#191918"> <span class="text1">{{  $job['completed'] }} completed <span class="text2">out of {{ $job['number_of_staff'] }} capacity</span></span> </div>
                                             @endif
                                         </div>
                                     </div>
@@ -231,7 +231,8 @@
                             </a>
                         </div>
                       @endforeach
-                      {!! $available_jobs->links('pagination::bootstrap-4') !!}
+                      {{-- {!! $available_jobs->links('pagination::bootstrap-4') !!} --}}
+                       
                     </div>
                     {{-- <div class="tab-pane" id="btabswo-static-profile" role="tabpanel" aria-labelledby="btabswo-static-profile-tab">
                       <h4 class="fw-normal">Profile Content</h4>

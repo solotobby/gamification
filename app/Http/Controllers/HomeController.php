@@ -78,7 +78,8 @@ class HomeController extends Controller
 
         $activity_log = SystemActivities::showActivityLog();
 
-        $available_jobs =  $available_jobs = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->paginate(10);
+       $available_jobs = SystemActivities::availableJobs();
+
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log]);
     }
@@ -135,6 +136,7 @@ class HomeController extends Controller
         $ref_rev = Referral::where('is_paid', true)->count();
         $transactions = PaymentTransaction::where('user_type', 'admin')->get();
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
+
         //users registered
         $dailyActivity = Analytics::dailyActivities();
 
@@ -146,7 +148,13 @@ class HomeController extends Controller
 
         //registration channel
         $registrationChannel = Analytics::registrationChannel();
-        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal]) ->with('visitor',json_encode($dailyActivity))->with('daily',json_encode($dailyVisits))->with('monthly', json_encode($MonthlyVisit))->with('channel', json_encode($registrationChannel));
+
+        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+                ->with('visitor',json_encode($dailyActivity))
+                ->with('daily',json_encode($dailyVisits))
+                ->with('monthly', json_encode($MonthlyVisit))
+                ->with('channel', json_encode($registrationChannel));
+
     }
 
     public function savePhoneInformation(Request $request)
