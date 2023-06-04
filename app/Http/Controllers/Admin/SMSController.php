@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,7 +38,8 @@ class SMSController extends Controller
 
         $list = [];
         foreach($contacts as $key=>$value){
-            $initials = PaystackHelpers::getInitials($value->phone);
+            
+            $initials = SystemActivities::getInitials($value->phone);
             $phone = '';
             if($initials == 0){
                 $phone = '234'.substr($value->phone, 1);

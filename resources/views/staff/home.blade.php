@@ -104,7 +104,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold">{{ App\Helpers\PaystackHelpers::numberFormat($users->count()) }}</div>
+            <div class="fs-1 fw-bold">{{ App\Helpers\SystemActivities::numberFormat($users->count()) }}</div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>

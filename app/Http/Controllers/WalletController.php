@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Mail\GeneralMail;
 use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
@@ -144,8 +145,8 @@ class WalletController extends Controller
             $wallet->balance += $creditAmount;
             $wallet->save();
             
-            $name = PaystackHelpers::getInitials(auth()->user()->name);
-            PaystackHelpers::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+            $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
             return redirect('success');
        }else{
@@ -213,7 +214,7 @@ class WalletController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-        PaystackHelpers::activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
+            SystemActivities::activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
         $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
         if($bankInformation == null){
             $bankList = PaystackHelpers::bankList();
