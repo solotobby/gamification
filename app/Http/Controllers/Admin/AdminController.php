@@ -6,6 +6,7 @@ use App\Helpers\AfricaTalkingHandlers;
 use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMassEmail;
 use App\Mail\ApproveCampaign;
@@ -678,6 +679,8 @@ class AdminController extends Controller
     }
 
     public function test(){
-        return Analytics::index(); //CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
+        return SystemActivities::index(); 
+        
+        //CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
     }
 }
