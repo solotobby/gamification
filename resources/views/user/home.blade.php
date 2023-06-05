@@ -95,7 +95,6 @@
       color: #a5aec0
   }
   </style>
-
 @endsection
 
 @section('content')
@@ -154,9 +153,8 @@
       <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
-          <li class="list-inline-item">&bull; {{$activity->description}}</li>
+              <li class="list-inline-item">&bull; {{$activity->description}}</li>
           @endforeach
-         
         </ul>
       </marquee>
     </div>
@@ -379,7 +377,17 @@
                           <h4 class="fw-normal text-muted text-center">
                             We'll reward you with &#8358;500 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
                           </h4>
-                          <center>{{url('register/'.auth()->user()->referral_code)}}</center>
+                          <center>
+                            <div class="col-md-8 mb-2">
+                              <div class="input-group">
+                                <input type="text" value="{{url('register/'.auth()->user()->referral_code)}}" class="form-control form-control-alt" id="myInput">
+                                <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
+                                  <i class="fa fa-copy"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </center>
+                          {{-- <center>{{url('register/'.auth()->user()->referral_code)}}</center> --}}
                         </div>
 
                          {{-- <div class="slick-slide p-5">
