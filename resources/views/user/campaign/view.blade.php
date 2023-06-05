@@ -197,11 +197,11 @@
                                     <h4 class="fw-normal text-muted text-center">
                                         Opps!! You have completed this campaign
                                     </h4>
-                                    <center>
+                                    {{-- <center>
                                         <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
                                         View Work
                                       </a>
-                                    </center>
+                                    </center> --}}
                                 </div>
                               </div>
                             </div>

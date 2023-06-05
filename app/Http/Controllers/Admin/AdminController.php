@@ -506,7 +506,7 @@ class AdminController extends Controller
                 'user_type' => 'regular'
             ]); 
             $user = User::where('id', $camp->user_id)->first();
-            $content = $request->reason.'. Thank you for choosing Freebyz.com';
+            $content = 'Thank you for posing the campaign, unfortunately it has been declined at the moment. Reason: '.$request->reason.'. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Declined';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));     
         }else{
