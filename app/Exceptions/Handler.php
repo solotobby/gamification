@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ErrorNotification;
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +39,16 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    public function report(Throwable $exception){
+        if ($this->shouldReport($exception)) {
+            $errorMessage = $exception->getMessage();
+
+            Mail::to('solotobz5@gmail.com')->send(new ErrorNotification($errorMessage));
+        }
+
+        parent::report($exception);
     }
 }
