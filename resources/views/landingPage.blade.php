@@ -210,7 +210,7 @@
 										  <table class="table table-striped">
 											<thead>
 											  <tr>
-												<th scope="col">Name</th>
+												{{-- <th scope="col">Name</th> --}}
 												<th scope="col">Amount</th>
 												<th scope="col">Description</th>
 											  </tr>
@@ -218,7 +218,7 @@
 											<tbody>
 												@foreach ($transactions as $trx)
 													<tr>
-														<td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td>
+														{{-- <td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td> --}}
 														<td>&#8358;{{ number_format($trx->amount) }}</td>
 														<td>Cash Withdrawals</td>
 													</tr>
