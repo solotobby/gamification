@@ -13,7 +13,9 @@
             <td style="padding: 30px 30px 20px">
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
                 <p style="margin-bottom: 10px;">
-                    Thank you for completing the task on <b>{{ $campaign }}</b>. This is to let you know your submission has been <b>{{ $status }}</b> at <b>&#8358;{{ $amount }}</b>
+                    Thank you for completing the task on <b>{{ $campaign }}</b>. This is to let you know your submission has been <b>{{ $status }} </b> at <b>&#8358;{{ $amount }}</b>
+                    <br> 
+                    Reason for {{ $status }} : {{ $reason }}
                 </p>
                 <p style="margin-bottom: 10px;">
                     Click the button below to access more jobs... <br><br>
@@ -23,7 +25,7 @@
                 </p>
                 {{-- <p style="margin-bottom: 10px;">Its clean, minimal and pre-designed email template that is suitable for multiple purposes email template.</p>
                 <p style="margin-bottom: 15px;">Hope you'll enjoy the experience, we're here if you have any questions, drop us a line at info@yourwebsite.com anytime. </p> --}}
-                <p style="margin-top: 45px; margin-bottom: 15px;">---- <br> Regards, <br><i>{{ config('app.name') }} Team.</i></p>
+                <p style="margin-top: 45px; margin-bottom: 15px;">---- <br> Regards, <br><i>Freebyz Team.</i></p>
             </td>
         </tr>
     </tbody>
