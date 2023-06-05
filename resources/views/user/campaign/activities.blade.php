@@ -69,7 +69,7 @@
                 @foreach ($lists->completed as $list)
                     <tr>
                         <td>
-                            {{ $list->user->name }}
+                            {{ @$list->user->name }}
                             </td>
                         <td>
                         {{ @$list->campaign->post_title }}

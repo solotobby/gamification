@@ -40,7 +40,8 @@ class ApproveCampaign extends Mailable
             'subject' => $this->subject,
             'amount' => $this->approve->amount,
             'campaign' => $this->approve->campaign->post_title,
-            'status' => $this->status
+            'status' => $this->status,
+            'reason' => $this->approve->reason
         ]);
     }
 }
