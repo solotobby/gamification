@@ -27,7 +27,6 @@
         </span>
     @enderror
 </div>
-
 <?php 
     $loc = \App\Helpers\PaystackHelpers::getLocation();
     $loc->countryName;
@@ -43,7 +42,6 @@
     @enderror
 </div>
 @else
-
 <div class="col-md-12 form-group">
     <label>Phone Number</label>
     <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%" pattern="[0-9]"  />
