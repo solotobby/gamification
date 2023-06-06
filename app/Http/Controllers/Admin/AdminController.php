@@ -682,7 +682,5 @@ class AdminController extends Controller
 
     public function test(){
         return FacebookHelper::index();
-        
-        //CapitalSage::access_token(); //AfricaTalkingHandlers::sendairtime();
     }
 }
