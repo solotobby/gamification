@@ -141,6 +141,17 @@ class PaystackHelpers{
 
     ///system functions 
 
+    public static function getLocation(){
+        if(env('APP_ENV') == 'local'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+        }
+
+        return Location::get($ip);
+      // return $country = $location->countryName;
+
+    }
     public static function userLocation($type){
         if(env('APP_ENV') == 'local'){
             $ip = '48.188.144.248';

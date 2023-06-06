@@ -28,15 +28,32 @@
     @enderror
 </div>
 
+<?php 
+    $loc = \App\Helpers\PaystackHelpers::getLocation();
+    $loc->countryName;
+?>
+@if($loc == 'Nigeria')
 <div class="col-md-12 form-group">
     <label>Phone Number</label>
-    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%" />
+    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number e.g 8137237841" value="{{old('phone')}}" required size="100%" pattern="[0-9]{10}"  />
     @error('phone_number')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
     @enderror
 </div>
+@else
+
+<div class="col-md-12 form-group">
+    <label>Phone Number</label>
+    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%" pattern="[0-9]"  />
+    @error('phone_number')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+@endif
 
 <div class="col-md-12 form-group">
     <label>Select Country</label>
