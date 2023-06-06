@@ -32,7 +32,7 @@
                 </p>
                 {{-- <p style="margin-bottom: 10px;">Its clean, minimal and pre-designed email template that is suitable for multiple purposes email template.</p>
                 <p style="margin-bottom: 15px;">Hope you'll enjoy the experience, we're here if you have any questions, drop us a line at info@yourwebsite.com anytime. </p> --}}
-                <p style="margin-top: 45px; margin-bottom: 15px;">---- <br> Regards, <br><i>{{ config('app.name') }} Team.</i></p>
+                <p style="margin-top: 45px; margin-bottom: 15px;">---- <br> Regards, <br><i>Freebyz Team.</i></p>
             </td>
         </tr>
     </tbody>
