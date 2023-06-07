@@ -24,10 +24,10 @@
     </div>
     <div class="block-content">
         @if (session('success'))
-        <div class="alert alert-success" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
             @csrf
