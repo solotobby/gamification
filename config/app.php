@@ -240,6 +240,7 @@ return [
         'Analytics' => App\Helpers\Analytics::class,
         'SystemActivities' => App\Helpers\SystemActivities::class,
         'FacebookHelper' => App\Helpers\FacebookHelper::class,
+        'Sendmoony' => App\Helpers\Sendmonny::class,
     ],
 
 ];

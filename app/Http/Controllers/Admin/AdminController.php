@@ -7,6 +7,7 @@ use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\FacebookHelper;
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMassEmail;
@@ -681,6 +682,6 @@ class AdminController extends Controller
     }
 
     public function test(){
-        return FacebookHelper::index();
+        return Sendmonny::index();
     }
 }
