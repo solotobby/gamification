@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\ActivityLog;
 use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\LoginPoints;
 use Carbon\Carbon;
 
@@ -76,7 +77,7 @@ class SystemActivities{
         $list = [];
         foreach($campaigns as $key => $value){
             $attempts = $value->completed->count();
-            $completed = $value->completed()->where('status', 'Approved')->count();
+            $completed = $value->completed()->count();//->where('status', 'Approved')->count();
 
             $div = $completed / $value->number_of_staff;
             $progress = $div * 100;
@@ -97,6 +98,17 @@ class SystemActivities{
         $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         return $sortedList;
+    }
+
+    public static function viewCampaign($campaign_id){
+       $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
+
+       $data = $campaign;
+       $data['current_user_id'] = auth()->user()->id;
+       $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
+       $data['attempts'] = $campaign->completed()->count();
+       return $data;
+        //$completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
     }
 
 

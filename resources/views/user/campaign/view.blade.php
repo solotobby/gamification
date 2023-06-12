@@ -1,7 +1,5 @@
 @extends('layouts.main.master')
 
-@section('title', 'Winner List')
-
 @section('content')
 
  <!-- Hero Section -->
@@ -12,10 +10,10 @@
           <div class="col-md-8 d-flex align-items-center py-3">
             <div class="w-100 text-center text-md-start">
               <h1 class="h2 text-white mb-2">
-                {{$campaign->post_title}}
+                {{$campaign['post_title']}}
               </h1>
               <h2 class="h4 fs-sm text-uppercase fw-semibold text-white-75">
-                {{$campaign->campaignType->name}}
+                {{$campaign['campaignType']['name']}}
               </h2>
               <a class="fw-semibold" href="#">
                 <i class="fab fa-fw fa-leanpub text-white-50"></i> Freebyz.com.
@@ -26,7 +24,7 @@
             <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="#">
               <div class="block-content block-content-full px-5 py-4">
                 <div class="fs-2 fw-semibold text-white">
-                    &#8358; {{$campaign->campaign_amount}}<span class="text-white-50"></span>
+                    &#8358; {{$campaign['campaign_amount']}}<span class="text-white-50"></span>
                 </div>
                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Job</div>
                 {{-- <span class="btn btn-hero btn-primary">
@@ -64,30 +62,30 @@
                   <i class="fa fa-briefcase"></i>
                 </span>
                 <div class="fw-semibold">Campaign Type</div>
-                <div class="text-muted">{{$campaign->campaignType->name}}</div>
+                <div class="text-muted">{{$campaign['campaignType']['name']}}</div>
               </li>
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-briefcase"></i>
                 </span>
                 <div class="fw-semibold">Campaign Category</div>
-                <div class="text-muted">{{$campaign->campaignCategory->name}}</div>
+                <div class="text-muted">{{$campaign['campaignCategory']['name']}}</div>
               </li>
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-money-check-alt"></i>
                 </span>
                 <div class="fw-semibold">Amount per Campaign</div>
-                <div class="text-muted">&#8358; {{$campaign->campaign_amount}}</div>
+                <div class="text-muted">&#8358; {{$campaign['campaign_amount']}}</div>
               </li>
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-users"></i>
                 </span>
                 <div class="fw-semibold">Number of Worker</div>
-                <div class="text-muted">{{$campaign->number_of_staff}}</div>
+                <div class="text-muted">{{$campaign['number_of_staff']}}</div>
               </li>
-              @if($campaign->user_id == auth()->user()->id)
+              @if($campaign['user_id'] == auth()->user()->id)
                 <li>
                   <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}"> <i class="fa fa-plus opacity-50 me-1"></i> Add More Workers</button>
                 </li>
@@ -96,7 +94,7 @@
           </div>
         </div>
 
-        <div class="modal fade" id="modal-default-popout-{{ $campaign->job_id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+        <div class="modal fade" id="modal-default-popout-{{ $campaign['job_id'] }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
           <div class="modal-dialog modal-dialog-popout" role="document">
           <div class="modal-content">
               <div class="modal-header">
@@ -105,9 +103,9 @@
               </div>
 
               <div class="modal-body pb-1">
-                Current Number of Workers - {{ $campaign->number_of_staff }} <br>
-                Current Value per Job  - {{ number_format($campaign->campaign_amount) }} <br>
-                Current Value  - &#8358;{{ number_format($campaign->total_amount) }} <br>
+                Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
+                Current Value per Job  - {{ number_format($campaign['campaign_amount']) }} <br>
+                Current Value  - &#8358;{{ number_format($campaign['total_amount']) }} <br>
                 <hr>
                 <form action="{{ route('addmore.workers') }}" method="POST">
                   @csrf
@@ -115,8 +113,8 @@
                     <label class="form-label" for="post-files">Number of Worker</small></label>
                         <input class="form-control" name="new_number" type="number" required>
                   </div>
-                  <input type="hidden" name="id" value="{{ $campaign->job_id }}">
-                  <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
+                  <input type="hidden" name="id" value="{{ $campaign['job_id'] }}">
+                  <input type="hidden" name="amount" value="{{ $campaign['campaign_amount'] }}">
                   <div class="mb-4">
                     <button class="btn btn-primary" type="submit">Add</button>
                   </div>
@@ -208,7 +206,7 @@
 
                           @else
                               <?php 
-                              $completed_count = $campaign->completed()->where('status', 'Approved')->count();
+                              $completed_count = $campaign->completed()->count();
                               ?>
                               @if($completed_count == $campaign->number_of_staff)
                                 <div class="block-content">

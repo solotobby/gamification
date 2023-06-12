@@ -38,9 +38,4 @@ class Campaign extends Model
         {
             return $this->hasOne(CampaignWorker::class, 'campaign_id');
         }
-
-        
-        
-
-       
 }
