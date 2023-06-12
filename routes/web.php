@@ -236,7 +236,7 @@ Route::get('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'v
 Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'store'])->name('account.store');
 
 ///Points
-Route::get('points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('points'); 
+Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
 Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
 
 //User Activity
