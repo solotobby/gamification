@@ -77,7 +77,7 @@ class SystemActivities{
         $list = [];
         foreach($campaigns as $key => $value){
             $attempts = $value->completed->count();
-            $completed = $value->completed()->count();//->where('status', 'Approved')->count();
+            $completed = $value->completed()->where('status', '!=', 'Denied')->count();
 
             $div = $completed / $value->number_of_staff;
             $progress = $div * 100;
