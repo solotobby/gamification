@@ -206,7 +206,7 @@
 
                           @else
                               <?php 
-                              $completed_count = $campaign->completed()->count();
+                              $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
                               ?>
                               @if($completed_count == $campaign->number_of_staff)
                                 <div class="block-content">

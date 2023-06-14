@@ -9,10 +9,6 @@ use App\Models\LoginPoints;
 use Carbon\Carbon;
 
 class SystemActivities{
-    public static function index(){
-        return 'ok';
-    }
-
     public static function numberFormat($number, $plus = true){
         if($number >= 1000000000){
             $number = number_format(($number/1000000000), 1);
@@ -58,7 +54,6 @@ class SystemActivities{
             $initials .= $name[0] . '.';
         }
         $initials = rtrim($initials, '.');
-        // Output the initials
         return $initials; 
     }
 
@@ -77,7 +72,7 @@ class SystemActivities{
         $list = [];
         foreach($campaigns as $key => $value){
             $attempts = $value->completed->count();
-            $completed = $value->completed()->count();//->where('status', 'Approved')->count();
+            $completed = $value->completed()->where('status', '!=', 'Denied')->count();
 
             $div = $completed / $value->number_of_staff;
             $progress = $div * 100;
