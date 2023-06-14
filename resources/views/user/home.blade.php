@@ -190,9 +190,18 @@
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
                           @if(auth()->user()->is_verified)
-                              <a href="{{ url('campaign/'.$job['job_id']) }}">
+                              @if($job['is_completed'] == true)
+                                <a href="#">
+                              @else
+                                <a href="{{ url('campaign/'.$job['job_id']) }}">
+                              @endif
+                              
                             @elseif(!auth()->user()->is_verified && $job['campaign_amount'] <= 10)
-                              <a href="{{ url('campaign/'.$job['job_id']) }}">
+                              @if($job['is_completed'] == true)
+                                  <a href="#">
+                              @else
+                                  <a href="{{ url('campaign/'.$job['job_id']) }}">
+                              @endif
                             @else
                               <a href="{{ url('info') }}">
                             @endif
@@ -204,17 +213,10 @@
                                                 <h6 class="mb-0">&#8358;{{ $job['campaign_amount']}}</h6> <span>{{  @$job['type'] }}</span>
                                             </div>
                                         </div>
-                                        {{-- <div class="badge" style="color:#191918"> <span>{{ @$job['category'] }}</span> </div> --}}
                                     </div>
                                     <div class="mt-2">
                                         <h3 class="heading" style="color:#191918">{!! $job['post_title'] !!}</h3>
                                         <div class="mt-2">
-                                          <?php 
-                                            // $completed = $job->completed()->where('status', 'Approved')->count();
-                                            // $div = $completed / $job->number_of_staff;
-                                            // $percentage = $div * 100;
-                                          ?>
-                                         
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" style="width: {{$job['progress']}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>

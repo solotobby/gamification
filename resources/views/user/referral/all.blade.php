@@ -36,24 +36,16 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
-                <th class="text-center" style="width: 100px;">
-                  <i class="far fa-user"></i>
-                </th>
                 <th>Name</th>
-                {{-- <th style="width: 30%;">Email</th> --}}
                 <th style="width: 50%;">Status</th>
               </tr>
             </thead>
             <tbody>
                 @foreach ($lists as $list)
                 <tr>
-                    <td class="text-center">
-                      <img class="img-avatar img-avatar48" src="{{asset('src/assets/media/avatars/avatar5.jpg')}}" alt="">
-                    </td>
                     <td class="fw-semibold">
                       {{ $list->name }}
                     </td>
-                    {{-- <td>{{$list->email}}</td> --}}
                     <td>
                      @if($list->is_verified == '1')
                         Verified
@@ -63,7 +55,6 @@
                     </td>
                   </tr>
                 @endforeach
-              
             </tbody>
           </table>
         </div>

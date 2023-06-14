@@ -66,7 +66,7 @@
               </tr>
             </thead>
             <tbody>
-                @foreach ($lists->completed as $list)
+                @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
                     <tr>
                         <td>
                             {{ @$list->user->name }}

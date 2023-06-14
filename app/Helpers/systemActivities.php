@@ -9,10 +9,6 @@ use App\Models\LoginPoints;
 use Carbon\Carbon;
 
 class SystemActivities{
-    public static function index(){
-        return 'ok';
-    }
-
     public static function numberFormat($number, $plus = true){
         if($number >= 1000000000){
             $number = number_format(($number/1000000000), 1);
@@ -58,7 +54,6 @@ class SystemActivities{
             $initials .= $name[0] . '.';
         }
         $initials = rtrim($initials, '.');
-        // Output the initials
         return $initials; 
     }
 
