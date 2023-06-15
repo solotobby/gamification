@@ -56,33 +56,53 @@
         </button>
     </div> --}}
     <!-- END Latest Posts -->
-    </div>
-    <!-- END Page Content -->
 
-   </div>
+    <div class="block block-rounded">
+      <div class="block-content">
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        <form action="{{url('edit/staff')}}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <!-- User Profile -->
+          <h2 class="content-heading pt-0">
+            <i class="fa fa-fw fa-user-circle text-muted me-1"></i> Staff Information
+          </h2>
+          <div class="row push">
+            <div class="col-lg-4">
+              <p class="text-muted">
+                Edit Information
+              </p>
+            </div>
+            <div class="col-lg-8 col-xl-5">
+              <div class="mb-4">
+                <label class="form-label" for="dm-profile-edit-name">Salary</label>
+                <input type="number" class="form-control" id="dm-profile-edit-name" name="basic_salary" value="{{ $info->staff->basic_salary}}">
+              </div>
+            </div>
+          </div>
+          <!-- END User Profile -->
+          <input type="hidden" name="id" value="{{ $info->staff->id }}">
 
-   <!-- Vertically Centered Default Modal -->
-   <div class="modal" id="modal-default-vcenter" tabindex="-1" role="dialog" aria-labelledby="modal-default-vcenter" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal Title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body pb-1">
-          <p>Potenti elit lectus augue eget iaculis vitae etiam, ullamcorper etiam bibendum ad feugiat magna accumsan dolor, nibh molestie cras hac ac ad massa, fusce ante convallis ante urna molestie vulputate bibendum tempus ante justo arcu erat accumsan adipiscing risus, libero condimentum venenatis sit nisl nisi ultricies sed, fames aliquet consectetur consequat nostra molestie neque nullam scelerisque neque commodo turpis quisque etiam egestas vulputate massa, curabitur tellus massa venenatis congue dolor enim integer luctus, nisi suscipit gravida fames quis vulputate nisi viverra luctus id leo dictum lorem, inceptos nibh orci.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button>
-        </div>
+          <!-- Submit -->
+          <div class="row push">
+            <div class="col-lg-8 col-xl-5 offset-lg-4">
+              <div class="mb-4">
+                <button type="submit" class="btn btn-alt-primary">
+                  <i class="fa fa-check-circle opacity-50 me-1"></i> Update Information
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- END Submit -->
+        </form>
       </div>
     </div>
-  </div>
-  <!-- END Vertically Centered Default Modal -->
-
-
-  
-
+    </div>
+    <!-- END Page Content -->
+   </div>
 
 @endsection

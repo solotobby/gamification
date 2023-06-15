@@ -43,12 +43,6 @@
                     <td>&#8358;{{ number_format($transactions->where('tx_type', 'Credit')->where('user_type', 'admin')->sum('amount')) }}</td>
                     <td>&#8358;{{ number_format($transactions->whereIn('type', ['databundle', 'cash_withdrawal', 'airtime_purchase'])->sum('amount')) }} (withdrawals, databundle, airtime) </td>
                   </tr>
-                  {{-- <tr>
-                    <th scope="row">1</th>
-                    <td></td>
-                    <td> {{ $transactions->where('tx_type', 'Credit')->where('user_type', 'admin')->sum('amount') }}</td>
-                    <td> {{ $transactions->whereIn('type', ['databundle', 'cash_wthdrawal', 'airtime_purchase'])->sum('amount') }} (withdrawals, databundle, airtime) </td>
-                  </tr> --}}
                 </tbody>
               </table>
             <hr>
@@ -114,14 +108,18 @@
               </thead>
               <tbody>
                 @foreach ($accounts as $acc)
-                <tr>
+                  @if($acc->type == 'Credit')
+                      <tr style="color: forestgreen">
+                    @else
+                    <tr style="color: chocolate">
+                  @endif
                   {{-- <th scope="row">1</th> --}}
                   <td>{{ $acc->name }}</td>
                   <td>&#8358;{{ number_format($acc->amount) }}</td>
                   <td> {{ $acc->type }} </td>
                   <td> {{ $acc->description }} </td>
                   <td> {{ $acc->date }} </td>
-                  <td> {{ $acc->created_at }} </td>
+                  <td> {{ \Carbon\Carbon::parse($acc->created_at)->diffForHumans() }} </td>
                 </tr>
                 @endforeach
               </tbody>
