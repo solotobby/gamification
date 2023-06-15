@@ -97,6 +97,35 @@
                     </div>
                 </div>
             </form>
+            <hr>
+            <h4>Inputs</h4>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Date Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($accounts as $acc)
+                <tr>
+                  <th scope="row">1</th>
+                  <td>{{ $acc->name }}</td>
+                  <td>&#8358;{{ number_format($acc->amount) }}</td>
+                  <td> {{ $acc->type }} </td>
+                  <td> {{ $acc->description }} </td>
+                  <td> {{ $acc->date }} </td>
+                  <td> {{ $acc->created_at }} </td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
         </div>
 
 
