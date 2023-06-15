@@ -18,7 +18,8 @@ class AccountController extends Controller
         //INCOME
         $transactions = PaymentTransaction::where('status', 'successful')->select(['amount', 'type', 'tx_type', 'user_type'])->get();//where('tx_type', 'Credit')->where('user_type', 'admin')->select(['amount', 'type'])->get();
         // return $debit = PaymentTransaction::where('tx_type', 'Debit')->select(['amount', 'type'])->get();
-        return view('admin.account.index', ['transactions' => $transactions]);
+        $accounts = Accounts::orderBy('created_at', 'DESC')->get();
+        return view('admin.account.index', ['transactions' => $transactions, 'accounts' => $accounts]);
     }
 
     public function store(Request $request){
