@@ -89,11 +89,23 @@
       </li>
 
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('admin.feedback') }}">
-          <i class="nav-main-link-icon fa fa-paper-plane"></i>
-          <span class="nav-main-link-name">Feebacks</span>
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon si si-note"></i>
+          <span class="nav-main-link-name">Feedbacks</span>
           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Feedback::where('status', false)->count() }}</span>
         </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.feedback.unread') }}">
+              <span class="nav-main-link-name">Unread</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.feedback') }}">
+              <span class="nav-main-link-name">Read</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
       <li class="nav-main-item">
