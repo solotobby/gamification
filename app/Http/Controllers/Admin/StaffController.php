@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\PaystackHelpers;
 use App\Http\Controllers\Controller;
 use App\Mail\GeneralMail;
+use App\Models\Accounts;
 use App\Models\Staff;
 use App\Models\StaffPayment;
 use App\Models\StaffPaymentLog;
@@ -81,6 +82,7 @@ class StaffController extends Controller
             $bulkTransfer =  PaystackHelpers::bulkFundTransfer($list);
             if($bulkTransfer['status'] == true){
                 $staff_payment = StaffPayment::create(['user_id'=>auth()->user()->id, 'date' => now()->format('F, Y'), 'number_paid' => $staffList->count(), 'total_salary_paid' => $staffList->sum('basic_salary')]);
+                Accounts::create(['user_id' => auth()->user()->id, 'name' => 'Salary for '.now()->format('F, Y'), 'amount' => $staffList->sum('basic_salary'), 'type' => 'Debit', 'description' => 'Staff salary payment for '.now()->format('F, Y'), 'date' => now()->format('Y-m-d')]);
                 foreach($staffList as $list){
                     \DB::table('staff_paid')->insert(['staff_payment_id' => $staff_payment->id, 'user_id' => $list->id, 'created_at' => now(), 'updated_at' => now()]);
                     StaffPaymentLog::create(['staff_id' => $list->id, 'date' => now()->format('F, Y'), 'amount' => $list->basic_salary, 'payment_type' => 'salary']);
@@ -91,7 +93,7 @@ class StaffController extends Controller
             }
            
             }else{
-                return back()->with('error', 'You cannot process staffs record until after 26th of each month');
+                return back()->with('error', 'You cannot process staffs record until after 21st of each month');
             }
 
         }else{
@@ -101,5 +103,12 @@ class StaffController extends Controller
     public function info($id){
         $info = User::find($id); 
         return view('admin.staff.staff_info', ['info' => $info]);
+    }
+
+    public function edit(Request $request){
+        $staff = Staff::where('id', $request->id)->first();
+        $staff->basic_salary = $request->basic_salary;
+        $staff->save();
+        return  back()->with('success', 'Details Edited successfully');
     }
 }
