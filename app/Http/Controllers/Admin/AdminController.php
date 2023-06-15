@@ -230,8 +230,12 @@ class AdminController extends Controller
     }
 
     public function withdrawalRequest(){
-        $withdrawal = Withrawal::orderBy('created_at', 'DESC')->paginate(50);
-        return view('admin.withdrawal', ['withdrawals' => $withdrawal]);
+        $withdrawal = Withrawal::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
+        return view('admin.withdrawals.sent', ['withdrawals' => $withdrawal]);
+    }
+    public function withdrawalRequestQueued(){
+        $withdrawal = Withrawal::where('status', '0')->orderBy('created_at', 'DESC')->paginate(50);
+        return view('admin.withdrawals.queued', ['withdrawals' => $withdrawal]);
     }
 
     public function upgradeUser($id){
