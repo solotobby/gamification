@@ -19,7 +19,6 @@ class StaffController extends Controller
         $this->middleware('auth');
     }
 
-
     public function index()
     {
         $staff = User::where('role', 'staff')->get();

@@ -190,6 +190,7 @@ Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::cla
 
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');
+Route::get('admin/withdrawal/request/queued', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequestQueued'])->name('admin.withdrawal.queued');
 Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequest']);
 Route::get('update/withdrawal/manual/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequestManual']);
 Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');

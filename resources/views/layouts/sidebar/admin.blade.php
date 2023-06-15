@@ -140,14 +140,35 @@
           </li>
         </ul>
       </li>
-
+      {{-- admin.withdrawal.queued
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
           <span class="nav-main-link-name">Withdrawal Requests</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}
         </a>
+      </li> --}}
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-table"></i>
+          <span class="nav-main-link-name">Withdrawals</span>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Withrawal::where('status', false)->count() }}</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.withdrawal.queued') }}">
+              <span class="nav-main-link-name">Queued</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.withdrawal') }}">
+              <span class="nav-main-link-name">Sent</span>
+            </a>
+          </li>
+        </ul>
       </li>
+
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon si si-note"></i>
@@ -191,20 +212,9 @@
         </a>
       </li> --}}
 
-      <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('user.tracker') }}">
-          <i class="nav-main-link-icon fa fa-tty"></i>
-          <span class="nav-main-link-name">User Tacker</span>
-        </a>
-      </li>
+      
 
-      {{-- <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('admin.feedback') }}">
-          <i class="nav-main-link-icon fa fa-paper-plane"></i>
-          <span class="nav-main-link-name">Feebacks</span>
-          <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Feedback::where('status', false)->count() }}</span>
-        </a>
-      </li> --}}
+      
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -225,5 +235,14 @@
           </li>
         </ul>
       </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('user.tracker') }}">
+          <i class="nav-main-link-icon fa fa-tty"></i>
+          <span class="nav-main-link-name">User Tacker</span>
+        </a>
+      </li>
+
+
     </ul>
   </div>
