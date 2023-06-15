@@ -12,5 +12,9 @@ class LoginPointsRedeemed extends Model
     protected $table = 'login_points_redeemed';
 
     protected $fillable = ['user_id', 'point', 'amount'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
     
 }

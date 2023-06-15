@@ -8,7 +8,7 @@
         <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Manage Points</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"> Dashboard </li>
+            <li class="breadcrumb-item"> Points </li>
             <li class="breadcrumb-item active" aria-current="page">Point</li>
           </ol>
         </nav>

@@ -240,6 +240,7 @@ Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, '
 
 ///Points
 Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
+Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed'); 
 Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
 
 //User Activity
