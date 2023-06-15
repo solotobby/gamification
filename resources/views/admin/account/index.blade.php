@@ -98,12 +98,12 @@
                 </div>
             </form>
             <hr>
-            <h4>Inputs</h4>
+            <h4>Credit(Income) - &#8358;{{ number_format($accounts->where('type', 'Credit')->sum('amount')) }} | Debit - &#8358;{{ number_format($accounts->where('type', 'Debit')->sum('amount')) }}</h4>
 
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  {{-- <th scope="col">#</th> --}}
                   <th scope="col">Name</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Type</th>
@@ -115,7 +115,7 @@
               <tbody>
                 @foreach ($accounts as $acc)
                 <tr>
-                  <th scope="row">1</th>
+                  {{-- <th scope="row">1</th> --}}
                   <td>{{ $acc->name }}</td>
                   <td>&#8358;{{ number_format($acc->amount) }}</td>
                   <td> {{ $acc->type }} </td>
