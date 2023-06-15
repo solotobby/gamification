@@ -152,7 +152,7 @@ Route::get('staff/list', [\App\Http\Controllers\Admin\StaffController::class, 'i
 Route::get('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'salary'])->name('staff.salary');
 Route::post('staff/salary', [\App\Http\Controllers\Admin\StaffController::class, 'processSalary'])->name('process.salary');
 Route::post('staff/store', [\App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
-Route::get('staff/{id}/info', [\App\Http\Controllers\Admin\StaffController::class, 'info'])->name('staff.store');
+Route::get('staff/{id}/info', [\App\Http\Controllers\Admin\StaffController::class, 'info']);
 
 
 Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
