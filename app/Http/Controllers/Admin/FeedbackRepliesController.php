@@ -17,8 +17,13 @@ class FeedbackRepliesController extends Controller
     }
 
     public function index(){
-        $feedbacks = Feedback::orderBy('created_at', 'DESC')->get();
+        $feedbacks = Feedback::where('status', '1')->orderBy('created_at', 'DESC')->get();
         return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
+    }
+
+    public function unread(){
+        $feedbacks = Feedback::where('status', '0')->orderBy('created_at', 'DESC')->get();
+        return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
     }
 
     public function view($id){

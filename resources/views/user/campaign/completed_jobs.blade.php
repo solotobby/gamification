@@ -57,7 +57,7 @@
             </thead>
             <tbody>
                 @foreach ($lists as $list)
-                <tr>
+                  <tr>
                     <td>
                       {{ $list->campaign->post_title }}
                     </td>
@@ -68,7 +68,7 @@
                          {{ $list->status }}
                       </td>
                       <td>
-                        {!! $list->reason !!}
+                        <code>{{ $list->reason }}</code>
                      </td>
                   </tr>
                 @endforeach
