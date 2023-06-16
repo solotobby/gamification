@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $ref = time();
         $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
         return redirect($url);
        
     }
