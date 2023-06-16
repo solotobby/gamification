@@ -106,6 +106,10 @@ class SystemActivities{
         //$completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
     }
 
+    public static function awardPoints($point_type){
+        return $point_type;
+    }
+
 
 
 }

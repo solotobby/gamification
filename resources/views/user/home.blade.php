@@ -149,7 +149,11 @@
           </p>
         </div>
       </div>
-      <div class="alert alert-info mt-3">Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!!</div>
+      
+      <div class="alert alert-info mt-3">
+        Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank)
+        {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
+      </div>
       <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
