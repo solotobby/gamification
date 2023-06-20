@@ -15,6 +15,8 @@
 
 // use Illuminate\Support\Facades\App;
 
+use App\Http\Controllers\Admin\PreferenceController;
+
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
 Route::get('goal', [\App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
@@ -39,6 +41,7 @@ Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarket
 Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
 
 Route::post('register/user', [\App\Http\Controllers\Auth\RegisterController::class, 'registerUser'])->name('register.user');
+
 
 Auth::routes();
 //GOOGLE AUTH
@@ -242,6 +245,8 @@ Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, '
 Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
 Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed'); 
 Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
+
+Route::resource('preferences', PreferenceController::class);
 
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
