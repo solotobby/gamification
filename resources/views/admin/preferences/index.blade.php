@@ -74,7 +74,14 @@
                 <tr>
                     <td>{{ $i++ }}. </td>
                     <td>{{ $pref->name }}</td>
-                    <td> <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $pref->id }}">Edit</button></td>
+                    <td>
+                        <form action="{{ route('preferences.destroy',$pref->id) }}" method="Post">
+                            <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $pref->id }}">Edit</button>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
                     <td>{{ $pref->created_at }}</td>
                 </tr>
 
