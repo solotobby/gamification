@@ -93,6 +93,7 @@ class PreferenceController extends Controller
      */
     public function destroy(Preference $preference)
     {
-        //
+        $preference->delete();
+        return back()->with('success', 'Preference Deleted!');
     }
 }
