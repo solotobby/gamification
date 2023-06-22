@@ -191,6 +191,29 @@
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="btabswo-static-home" role="tabpanel" aria-labelledby="btabswo-static-home-tab">
+                      <div class="row mt-2">
+                        <a href="{{ route('survey') }}">
+                            <div class="card p-3 mb-2">
+                              <div class="d-flex justify-content-between">
+                                  <div class="d-flex flex-row align-items-center">
+                                      <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
+                                      <div class="ms-2 c-details" style="color:#191918">
+                                          <h6 class="mb-0">100 points</h6> <span>Survey</span>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="mt-2">
+                                  <h3 class="heading" style="color:#191918">Earn 100 points</h3>
+                                  <div class="mt-2">
+                                      <div class="progress">
+                                          <div class="progress-bar" role="progressbar" style="width: 30%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                      {{-- <div class="mt-3" style="color:#191918"> <span class="text1">{{  $job['completed'] }} completed <span class="text2">out of 9000 capacity</span></span> </div> --}}
+                                  </div>
+                              </div>
+                            </div>
+                        </a>
+                      </div>
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
                           @if(auth()->user()->is_verified)

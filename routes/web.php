@@ -98,8 +98,12 @@ Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePa
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
 Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
 
+// survey
+Route::get('survey', [\App\Http\Controllers\SurveyController::class, 'survey'])->name('survey');
+Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurvey'])->name('store.survey');
 //virtual account routes
 Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
+
 Route::get('info', [\App\Http\Controllers\UserController::class, 'info']);
 Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
 Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
