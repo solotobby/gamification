@@ -29,7 +29,9 @@ class User extends Authenticatable
         'referral_code', 
         'source', 
         'phone',
-        'country'
+        'country',
+        'age_range',
+        'gender'
     ];
 
     /**
@@ -104,6 +106,10 @@ class User extends Authenticatable
     
     public function myFeedBackReplies(){
         return $this->hasMany(FeedbackReplies::class,  'user_id');
+    }
+
+    public function interests(){
+        return $this->belongsToMany(Preference::class, 'user_interest', 'user_id');
     }
 
     

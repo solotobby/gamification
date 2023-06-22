@@ -79,7 +79,7 @@
                             <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $pref->id }}">Edit</button>
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            {{-- <button type="submit" class="btn btn-danger btn-sm">Delete</button> --}}
                         </form>
                     </td>
                     <td>{{ $pref->created_at }}</td>
