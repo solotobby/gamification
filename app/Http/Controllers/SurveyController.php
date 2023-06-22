@@ -20,7 +20,7 @@ class SurveyController extends Controller
     public function storeSurvey(Request $request){
         
         $request->validate([
-            'interest' => 'required|array|min:15',
+            'interest' => 'required|array|min:10',
             'age_range' => 'required|string',
             'gender' => 'required|string'
         ]);

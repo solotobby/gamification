@@ -156,7 +156,7 @@
               </div>
           </div>
 
-          <h2 class="content-heading pt-0">What are your Interests <small>(Select as much as you can)</small></h2>
+          <h2 class="content-heading pt-0">What are your Interests <small>(Please select at least 10)</small></h2>
           <div class="row push">
                 @foreach ($interests as $interest)
                     <div class="col-md-4 mb-3">
