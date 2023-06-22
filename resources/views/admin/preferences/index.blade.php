@@ -65,7 +65,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Action</th>
-                      <th>When Created</th>
+                      <th>Number of Interests</th>
                   </tr>
               </thead>
               <tbody>
@@ -82,7 +82,7 @@
                             {{-- <button type="submit" class="btn btn-danger btn-sm">Delete</button> --}}
                         </form>
                     </td>
-                    <td>{{ $pref->created_at }}</td>
+                    <td>{{ $pref->users()->count() }}</td>
                 </tr>
 
                 <div class="modal fade" id="modal-default-popout-{{ $pref->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
