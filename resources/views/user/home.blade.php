@@ -191,6 +191,8 @@
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="btabswo-static-home" role="tabpanel" aria-labelledby="btabswo-static-home-tab">
+                      @if($user->interests()->count() == 0)
+                      {{-- Survey card --}}
                       <div class="row mt-2">
                         <a href="{{ route('survey') }}">
                             <div class="card p-3 mb-2">
@@ -214,6 +216,9 @@
                             </div>
                         </a>
                       </div>
+                      @endif
+                     
+
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
                           @if(auth()->user()->is_verified)
