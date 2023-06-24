@@ -8,10 +8,20 @@ use App\Models\LoginPoints;
 use App\Models\Preference;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SurveyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function survey(){
+        $user = Auth::user();
+        if($user->interests()->count() > 0){
+            return back();
+        }
         $interests = Preference::orderBy('name', 'ASC')->get();
         return view('user.survey.index', ['interests' => $interests]);
     }
