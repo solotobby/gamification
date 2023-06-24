@@ -83,7 +83,7 @@
               <br>
               <b>
                 Account Details: 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
-                <i>(Please add your name, email address and date of transaction in the description while sending payment proof)</i>
+                <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i>
               </b>
               {{-- <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)</b> --}}
             </p>
