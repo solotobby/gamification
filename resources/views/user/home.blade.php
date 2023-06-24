@@ -273,59 +273,6 @@
                   </div>
               
                 </div>
-            <!-- Jobs -->
-            {{-- @foreach ($available_jobs as $job) --}}
-            {{-- @if($job->completed()->count() >= $job->number_of_staff)
-            @else --}}
-              <!-- Story -->
-              {{-- <div class="block block-rounded">
-                <div class="block-content p-0 overflow-hidden">
-                  <div class="row g-0">
-                    <div class="col-md-3 col-lg-3 overflow-hidden d-flex align-items-center">
-
-                      @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
-                          <a href="#">
-                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
-                          </a>
-                      @else
-                          <a href="{{ url('campaign/'.$job->job_id) }}">
-                            <img class="img-fluid img-link" src="{{asset('src/assets/media/photos/photo25.jpg')}}" alt="">
-                          </a>
-                      @endif
-                     
-                    </div>
-                    <div class="col-md-9 col-lg-9 d-flex align-items-center">
-                      <div class="px-4 py-3">
-                        <h4 class="mb-1">
-                          @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
-                              <a class="text-dark" href="#"> {!! $job->post_title !!}</a>
-                          @else
-                              <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
-                              <a class="text-dark" href="{{ url('campaign/'.$job->job_id) }}"> {!! $job->post_title !!}</a>
-                          @endif
-                          
-                        </h4>
-                        <div class="fs-sm mb-2">
-                            <strong>&#8358;{{ $job->campaign_amount}}</strong> ·
-                              @if($job->completed()->where('status', 'Approved')->count() >= $job->number_of_staff)
-                                  <em class="text-muted">Completed</em> <li class="fa fa-check"></li>
-                               @else
-                                  <em class="text-muted">  Number of Worker - {{  $job->completed()->where('status', 'Approved')->count(); }} / {{ $job->number_of_staff }}</em>
-                               @endif
-                        </div>
-                        <p class="mb-0">
-                          {!! \Illuminate\Support\Str::words($job->description, 20) !!}
-                        </p>
-                        <br>
-                        <span class="badge bg-primary">{{  @$job->campaignType->name }}</span>
-                        <span class="badge bg-primary">{{ @$job->campaignCategory->name }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> --}}
-              <!-- END Story -->
-            {{-- @endforeach      --}}
         </div>
 
 
@@ -389,7 +336,11 @@
                           <h4 class="fw-normal text-muted text-center">
                             verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
                             you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
-                            <br>Got Payment Issues, transfer to 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) then upload proof of evidence via our <b>Talk To Us</b> panel
+                            <br>Got Payment Issues, transfer to 
+                            1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
+                            (Please add your name, email address and date of transaction in the description while sending payment proof)
+                            {{-- 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)  --}}
+                            then upload proof of evidence via our <b>Talk To Us</b> panel
                             <br>
                             <center>
                               <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
