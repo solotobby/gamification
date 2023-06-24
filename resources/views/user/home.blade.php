@@ -338,7 +338,7 @@
                             you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
                             <br>Got Payment Issues, transfer to 
                             1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
-                            (Please add your name, email address and date of transaction in the description while sending payment proof)
+                            (Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)
                             {{-- 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)  --}}
                             then upload proof of evidence via our <b>Talk To Us</b> panel
                             <br>
