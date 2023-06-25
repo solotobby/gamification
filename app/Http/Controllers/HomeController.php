@@ -62,9 +62,13 @@ class HomeController extends Controller
     {
         Analytics::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
-        // || $user->country == 'age_range'
+        
         if($user->phone == '' || $user->country == ''){
             return view('phone');
+        }
+
+        if($user->age_range == '' || $user->gender == ''){ //compell people to take survey
+            return redirect('survey');
         }
 
         $date = \Carbon\Carbon::today()->toDateString();

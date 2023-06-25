@@ -31,6 +31,7 @@
         <h3 class="block-title"></h3>
       </div>
       <div class="block-content">
+        <div class="alert alert-info">Complete this survey and earn 100 points immediatedly!</div>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
