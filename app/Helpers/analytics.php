@@ -28,7 +28,7 @@ class Analytics{
     }
 
     public static function dailyActivities(){
-        $data = User::select(\DB::raw('DATE(updated_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
+        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
         ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
