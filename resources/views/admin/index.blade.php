@@ -20,12 +20,17 @@
   var country = <?php echo $country; ?>
 </script>
 
+<script>
+  var age = <?php echo $age; ?>
+</script>
+
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
 <script src="{{ asset('js/admin/dailyActivities.js')}}"></script>
 <script src="{{ asset('js/admin/revenueChannel.js')}}"></script>
 <script src="{{ asset('js/admin/countryDistribution.js')}}"></script>
+<script src="{{ asset('js/admin/ageDistribution.js')}}"></script>
 @endsection
 
 @section('content')
@@ -243,6 +248,10 @@
       <hr>
        <div class="col-xl-12 mb-3">
           <div id="country_distribution" style="width: 100%; height: 500px;"></div>
+      </div>
+      <hr>
+       <div class="col-xl-12 mb-3">
+          <div id="age_distribution" style="width: 100%; height: 500px;"></div>
       </div>
       
 

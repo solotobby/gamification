@@ -110,6 +110,8 @@ class SystemActivities{
         return $point_type;
     }
 
+   
+
 
 
 }

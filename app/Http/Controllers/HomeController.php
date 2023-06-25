@@ -62,7 +62,7 @@ class HomeController extends Controller
     {
         Analytics::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
-       
+        // || $user->country == 'age_range'
         if($user->phone == '' || $user->country == ''){
             return view('phone');
         }
@@ -78,7 +78,7 @@ class HomeController extends Controller
 
         $activity_log = SystemActivities::showActivityLog();
 
-       $available_jobs = SystemActivities::availableJobs();
+        $available_jobs = SystemActivities::availableJobs();
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>$user]);
@@ -118,6 +118,9 @@ class HomeController extends Controller
 
         //country distribution
         $countryDistribution = Analytics::countryDistribution();
+
+        //age distribution
+        $ageDistribution = Analytics::ageDistribution();
         
         return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
@@ -125,7 +128,8 @@ class HomeController extends Controller
         ->with('monthly', json_encode($MonthlyVisit))
         ->with('channel', json_encode($registrationChannel))
         ->with('revenue', json_encode($revenueChannel))
-        ->with('country', json_encode($countryDistribution));
+        ->with('country', json_encode($countryDistribution))
+        ->with('age', json_encode($ageDistribution));
     }
 
     public function staffHome(){
