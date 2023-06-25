@@ -3,15 +3,12 @@
 @section('content')
 
  <!-- Hero Section -->
- <div class="bg-image" style="background-image: url({{  }}'assets/media/photos/photo19@2x.jpg');">
+ <div class="bg-image" style="background-image: url({{ asset('assets/media/photos/photo19@2x.jpg') }});">
     <div class="bg-black-75">
       <div class="content content-boxed text-center py-5">
         <h1 class="h2 text-white mb-2">
           View Job
         </h1>
-        {{-- <p class="fs-lg fw-normal text-white-75 mb-0">
-          3 more remaining, <a href="javascript:void(0)">upgrade your account today</a>!
-        </p> --}}
       </div>
     </div>
   </div>
