@@ -90,5 +90,15 @@ class Analytics{
          return $country;
     }
 
+    public static function ageDistribution(){
+        $ageDristibution = User::select('age_range', \DB::raw('COUNT(*) as total'))->groupBy('age_range')->get();
+        $age[] = ['Age Range', 'Total'];
+         foreach($ageDristibution as $key => $value){
+            $age[++$key] = [$value->age_range == null ? 'Unassigned' :$value->age_range, (int)$value->total ];
+         }
+         return $age;
+       // return 'age';
+    }
+
 
 }
