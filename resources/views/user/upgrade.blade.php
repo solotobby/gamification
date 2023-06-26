@@ -82,12 +82,12 @@
               Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard.
               <br>
               <b>
-                {{-- Account Details: 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank) --}}
-                
-              </b>
-              <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
+                Account Details: 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
                 <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i>
               </b>
+              {{-- <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)  --}}
+                
+              {{-- </b> --}}
             </p>
           </div>
         </div>

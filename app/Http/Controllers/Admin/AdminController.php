@@ -686,6 +686,8 @@ class AdminController extends Controller
     }
 
     public function test(){
-        return Sendmonny::index();
+        $html =  Sendmonny::index();
+
+        return view('welcome', ['html' => $html]);
     }
 }
