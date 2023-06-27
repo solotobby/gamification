@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Http\Controllers\Controller;
+use App\Models\AccountInformation;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Wallet;
@@ -81,9 +83,7 @@ class RegisterController extends Controller
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
-
-       
-       
+ 
        $payload = [
             'first_name' =>  $request->first_name,
             'last_name' =>  $request->last_name,
@@ -95,8 +95,23 @@ class RegisterController extends Controller
             'user_type' =>"CUSTOMER",
             'mobile_token' => Str::random(7)
         ];
+       
         // PaystackHelpers::sendUserToSendmonny($payload);  //simultaneous sync with sendmonny
         if($user){
+            // $sendMonny = Sendmonny::sendUserToSendmonny($payload);
+            // if($sendMonny){
+            //     AccountInformation::create([
+            //         'user_id' => $user->id,
+            //         '_user_id' => $sendMonny['data']['user']['user_id'],
+            //         'wallet_id' => $sendMonny['data']['wallet']['id'],
+            //         'account_name' => $sendMonny['data']['wallet']['account_name'],
+            //         'account_number' => $sendMonny['data']['wallet']['account_number'],
+            //         'bank_name' => $sendMonny['data']['wallet']['bank'],
+            //         'bank_code' => $sendMonny['data']['wallet']['bank_code'],
+            //         'provider' => 'sendmonny - sudo',
+            //         'currency' => $sendMonny['data']['wallet']['currency'],
+            //     ]);
+            // }
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
             return redirect('/home');

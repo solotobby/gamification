@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Analytics;
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\Answer;
 use App\Models\BankInformation;
@@ -60,6 +61,8 @@ class HomeController extends Controller
 
     public function userHome()
     {
+
+        //Sendmonny::accessToken();
         Analytics::dailyVisit();
         $user = User::where('id', auth()->user()->id)->first();
         
