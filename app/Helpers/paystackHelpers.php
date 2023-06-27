@@ -285,15 +285,7 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
-    ////sendmonny apis
-
-    public static function sendUserToSendmonny($payload){
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post('http://localhost/api/freebyz/user', $payload);
-        return json_decode($res->getBody()->getContents(), true);
-    }
+   
 
 
 }
