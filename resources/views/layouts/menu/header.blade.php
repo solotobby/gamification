@@ -10,9 +10,12 @@
 
       <!-- Open Search Section -->
       <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-      {{-- <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
+      @if(auth()->user()->role == 'admin' || auth()->user()->role == 'staff')
+      <button type="button" class="btn btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
         <i class="fa fa-fw opacity-50 fa-search"></i> <span class="ms-1 d-none d-sm-inline-block">Search</span>
-      </button> --}}
+      </button>
+      @endif
+
       <!-- END Open Search Section -->
     </div>
     <!-- END Left Section -->
@@ -151,6 +154,25 @@
         <i class="far fa-fw fa-list-alt"></i>
       </button> --}}
       <!-- END Toggle Side Overlay -->
+
     </div>
     <!-- END Right Section -->
   </div>
+
+  <!-- Header Search -->
+  <div id="page-header-search" class="overlay-header bg-header-dark">
+    <div class="bg-white-10">
+      <div class="content-header">
+        <form class="w-100" action="{{ url('users/search') }}" method="GET">
+          <div class="input-group">
+            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+            <button type="button" class="btn btn-alt-primary" data-toggle="layout" data-action="header_search_off">
+              <i class="fa fa-fw fa-times-circle"></i>
+            </button>
+            <input type="text" name="q" class="form-control border-0" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- END Header Search -->
