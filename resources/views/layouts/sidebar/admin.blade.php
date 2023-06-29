@@ -79,9 +79,9 @@
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            <a class="nav-main-link" href="{{ route('user.list') }}">
+            {{-- <a class="nav-main-link" href="{{ route('user.list') }}">
               <span class="nav-main-link-name">All</span>
-            </a>
+            </a> --}}
             <a class="nav-main-link" href="{{ route('verified.user.list') }}">
               <span class="nav-main-link-name">Verified</span>
             </a>
