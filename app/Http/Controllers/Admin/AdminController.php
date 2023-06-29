@@ -187,7 +187,12 @@ class AdminController extends Controller
         return back()->with('status', 'Reward Assigned Successfully');
     }
 
-    public function userList(Request $request){
+    public function userList(){
+        $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(500);
+        return view('admin.users.list', ['users' => $users]);
+    }
+
+    public function userSearch(Request $request){
         if(isset($request)){
             $users = User::where([
                 [function ($query) use ($request) {
@@ -199,12 +204,9 @@ class AdminController extends Controller
                             ->get();
                     }
                 }]
-            ])->get();//paginate(100);
+            ])->get();
         }
-       
-        
-        // $users = User::where('role', 'regular')->orderBy('id', 'DESC')->get();//paginate(100);
-        return view('admin.users', ['users' => $users]);
+        return view('admin.users.search_result', ['users' => $users]);
     }
 
     public function verifiedUserList(){
@@ -218,12 +220,12 @@ class AdminController extends Controller
     }
     public function userTransaction(){
         $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
-        return view('admin.user_transactions', ['lists' => $list]);
+        return view('admin.users.user_transactions', ['lists' => $list]);
     }
 
     public function userInfo($id){
         $info = User::where('id', $id)->first();
-        return view('admin.user_info', ['info' => $info]);
+        return view('admin.users.user_info', ['info' => $info]);
     }
 
     public function withdrawalRequest(){
@@ -675,7 +677,7 @@ class AdminController extends Controller
 
     public function userlocation(){
         $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
-        return view('admin.user_location', ['userTracker' => $userTracker]);
+        return view('admin.users.user_location', ['userTracker' => $userTracker]);
     }
 
     public function listFlutterwaveTrf(){
