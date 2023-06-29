@@ -27,7 +27,7 @@ class LoginPointCountroller extends Controller
             return back()->with('error', 'Points cannot be redeemed until you have 1,000');
         }
 
-        $total_point = 1150; //$loginPoints->sum('point');
+        $total_point = $loginPoints->sum('point');
         $countable = $total_point / 50;
         $amount = $countable * 2.5; //2.5naira per 50 points
             
