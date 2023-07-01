@@ -110,8 +110,28 @@ class SystemActivities{
         return $point_type;
     }
 
-   
-
-
+    public static function phoneNumber($phone_number, $location){
+        $loc = $location->countryName;
+        $formatted_number = substr($phone_number, 1);
+        if($loc == "United States"){
+            if (preg_match('/^[0-9]+$/', $formatted_number)) {
+                return '+'.$formatted_number;
+            } else {
+               return 'error_1'; //return "Invalid phone number. It contains letters or special characters.";
+            }
+    
+            //count the  number of string
+            $phoneCount = preg_match_all('/\d/', $formatted_number);
+            if($phoneCount == 13){
+                return '+'.$formatted_number;
+            }else{
+                return 'error_2'; //"Phone Number is not valid";
+            }
+        }else{
+            return $phone_number;
+        }
+        
+        
+    }
 
 }

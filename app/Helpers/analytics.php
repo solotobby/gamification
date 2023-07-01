@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Campaign;
 use App\Models\PaymentTransaction;
 use App\Models\Statistics;
 use App\Models\User;
@@ -28,7 +29,7 @@ class Analytics{
     }
 
     public static function dailyActivities(){
-        $data = User::select(\DB::raw('DATE(updated_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
+        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
         ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
@@ -98,6 +99,47 @@ class Analytics{
          }
          return $age;
        // return 'age';
+    }
+
+    public static function campaignMetrics(){
+        // return $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->withCount(['completed'])->get();
+        return $campaigns = Campaign::with(['completedAll'])
+        ->where('status', 'Live')
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+
+        // foreach($campaigns as $camp){
+
+        // }
+
+        // $list = [];
+        // foreach($campaigns as $key => $value){
+        //     $attempts = $value->completed->count();
+        //     $completed = $value->completed()->where('status', '!=', 'Denied')->count();
+        //     $list[] = [
+        //         'total_campaigns' => $campaigns->count(),
+        //         'available_campaigns' => '4'
+        //     ];
+
+        //     // $div = $completed / $value->number_of_staff;
+        //     // $progress = $div * 100;
+        //     // $list[] = [ 
+        //     //     'job_id' => $value->job_id, 
+        //     //     'campaign_amount' => $value->campaign_amount,
+        //     //     'post_title' => $value->post_title, 
+        //     //     'number_of_staff' => $value->number_of_staff, 
+        //     //     'type' => $value->campaignType->name, 
+        //     //     'category' => $value->campaignCategory->name,
+        //     //     'attempts' => $attempts,
+        //     //     'completed' => $completed,
+        //     //     'is_completed' => $completed >= $value->number_of_staff ? true : false,
+        //     //     'progress' => $progress 
+        //     // ];
+        // }
+
+        // return $list;
+
     }
 
 
