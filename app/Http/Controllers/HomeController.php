@@ -65,8 +65,7 @@ class HomeController extends Controller
 
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
-        // $user = User::where('id', auth()->user()->id)->first();
-        // $user = Auth::user();
+        
         
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
@@ -85,7 +84,7 @@ class HomeController extends Controller
         $available_jobs = SystemActivities::availableJobs();
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
-        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>$user]);
+        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>auth()->user()]);
     }
 
     public function howTo(){
