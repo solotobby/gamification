@@ -159,22 +159,44 @@ class PaystackHelpers{
             $ip = request()->ip();
         }
        
-        // '48.188.144.248';
-        $location = Location::get($ip);
+       if($type == 'Login'){
+            $check = UserLocation::where('user_id', auth()->user()->id)->whereDate('created_at', today())->first();
 
-       return UserLocation::create([
-            'user_id' => auth()->user()->id,
-            'activity' => $type, 
-            'ip' => $ip,
-            'countryName' => $location->countryName, 
-            'countryCode' => $location->countryCode, 
-            'regionName' => $location->regionName,
-            'regionCode' => $location->regionCode, 
-            'cityName' => $location->cityName,
-            'zipCode' => $location->zipCode, 
-            'areaCode' => $location->areaCode, 
-            'timezone' => $location->timezone
-        ]);
+            if(!$check){
+                $location = Location::get($ip);
+                UserLocation::create([
+                     'user_id' => auth()->user()->id,
+                     'activity' => $type, 
+                     'ip' => $ip,
+                     'countryName' => $location->countryName, 
+                     'countryCode' => $location->countryCode, 
+                     'regionName' => $location->regionName,
+                     'regionCode' => $location->regionCode, 
+                     'cityName' => $location->cityName,
+                     'zipCode' => $location->zipCode, 
+                     'areaCode' => $location->areaCode, 
+                     'timezone' => $location->timezone
+                 ]);
+            }
+       }else{
+            $location = Location::get($ip);
+            UserLocation::create([
+                'user_id' => auth()->user()->id,
+                'activity' => $type, 
+                'ip' => $ip,
+                'countryName' => $location->countryName, 
+                'countryCode' => $location->countryCode, 
+                'regionName' => $location->regionName,
+                'regionCode' => $location->regionCode, 
+                'cityName' => $location->cityName,
+                'zipCode' => $location->zipCode, 
+                'areaCode' => $location->areaCode, 
+                'timezone' => $location->timezone
+            ]);
+
+       }
+        // '48.188.144.248';
+       
 
         // return auth()->user();
 

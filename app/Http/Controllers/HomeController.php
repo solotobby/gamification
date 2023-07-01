@@ -24,6 +24,7 @@ use App\Models\Statistics;
 use App\Models\UserLocation;
 use App\Models\Wallet;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Nette\Utils\Random;
 
 class HomeController extends Controller
@@ -64,24 +65,20 @@ class HomeController extends Controller
 
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
-        $user = User::where('id', auth()->user()->id)->first();
+        // $user = User::where('id', auth()->user()->id)->first();
+        // $user = Auth::user();
         
-        if($user->phone == '' || $user->country == ''){
+        if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }
 
-        if($user->age_range == '' || $user->gender == ''){ //compell people to take survey
+        if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
             return redirect('survey');
         }
 
-        $date = \Carbon\Carbon::today()->toDateString();
-        $check = UserLocation::where('user_id', auth()->user()->id)->where('created_at', $date)->first();
-        if(!$check)
-        {
-            PaystackHelpers::userLocation('Login');
-        }
+        PaystackHelpers::userLocation('Login');
 
-        SystemActivities::loginPoints($user);
+        SystemActivities::loginPoints(auth()->user());
 
         $activity_log = SystemActivities::showActivityLog();
 
