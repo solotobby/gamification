@@ -103,8 +103,9 @@ class HomeController extends Controller
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
+    
+        // $campaignMetric = Analytics::campaignMetrics();
         //users registered
-        
         $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits

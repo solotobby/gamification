@@ -33,7 +33,8 @@
 ?>
 <div class="col-md-12 form-group">
     <label>Phone Number</label>
-    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%"  />
+    {{-- <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required> --}}
+    <input type="tel" name="phone_number[full]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%"  />
     @error('phone_number')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
