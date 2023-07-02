@@ -84,34 +84,35 @@ class RegisterController extends Controller
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
  
-       $payload = [
-            'first_name' =>  $request->first_name,
-            'last_name' =>  $request->last_name,
-            'password' => $request->password,
-            'password_confirmation' => $request->password,
-            'email' => $request->email,
-            'username' => Str::random(7),
-            'phone_number' => substr($request->phone_number['full'], 1),
-            'user_type' =>"CUSTOMER",
-            'mobile_token' => Str::random(7)
-        ];
+    //    $payload = [
+    //         'first_name' =>  $request->first_name,
+    //         'last_name' =>  $request->last_name,
+    //         'password' => $request->password,
+    //         'password_confirmation' => $request->password,
+    //         'email' => $request->email,
+    //         'username' => Str::random(7),
+    //         'phone_number' => substr($request->phone_number['full'], 1),
+    //         'user_type' =>"CUSTOMER",
+    //         'mobile_token' => Str::random(7),
+                // 'source' => 'Freebyz'
+    //     ];
        
         //simultaneous sync with sendmonny
         if($user){
-            $sendMonny = Sendmonny::sendUserToSendmonny($payload);
-            if($sendMonny){
-                AccountInformation::create([
-                    'user_id' => $user->id,
-                    '_user_id' => $sendMonny['data']['user']['user_id'],
-                    'wallet_id' => $sendMonny['data']['wallet']['id'],
-                    'account_name' => $sendMonny['data']['wallet']['account_name'],
-                    'account_number' => $sendMonny['data']['wallet']['account_number'],
-                    'bank_name' => $sendMonny['data']['wallet']['bank'],
-                    'bank_code' => $sendMonny['data']['wallet']['bank_code'],
-                    'provider' => 'sendmonny - sudo',
-                    'currency' => $sendMonny['data']['wallet']['currency'],
-                ]);
-            }
+            // $sendMonny = Sendmonny::sendUserToSendmonny($payload);
+            // if($sendMonny){
+            //     AccountInformation::create([
+            //         'user_id' => $user->id,
+            //         '_user_id' => $sendMonny['data']['user']['user_id'],
+            //         'wallet_id' => $sendMonny['data']['wallet']['id'],
+            //         'account_name' => $sendMonny['data']['wallet']['account_name'],
+            //         'account_number' => $sendMonny['data']['wallet']['account_number'],
+            //         'bank_name' => $sendMonny['data']['wallet']['bank'],
+            //         'bank_code' => $sendMonny['data']['wallet']['bank_code'],
+            //         'provider' => 'sendmonny - sudo',
+            //         'currency' => $sendMonny['data']['wallet']['currency'],
+            //     ]);
+            // }
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
             return redirect('/home');
