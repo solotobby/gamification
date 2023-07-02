@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Admin;
 use App\Helpers\Analytics;
 use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
+use App\Models\AccountInformation;
 use App\Models\Answer;
 use App\Models\BankInformation;
 use App\Models\Games;
@@ -66,7 +68,6 @@ class HomeController extends Controller
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
         
-        
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }
@@ -74,7 +75,8 @@ class HomeController extends Controller
         if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
             return redirect('survey');
         }
-
+        // $balance =Sendmonny::getUserBalance(GetSendmonnyUserId(), Sendmonny::accessToken());
+        $balance ='';
         PaystackHelpers::userLocation('Login');
 
         SystemActivities::loginPoints(auth()->user());
@@ -84,7 +86,7 @@ class HomeController extends Controller
         $available_jobs = SystemActivities::availableJobs();
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
-        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>auth()->user()]);
+        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>auth()->user(), 'balance' => $balance]);
     }
 
     public function howTo(){

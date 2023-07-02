@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Mail\UpgradeUser;
 use App\Models\DataBundle;
@@ -108,6 +109,45 @@ class UserController extends Controller
 
     public function makePaymentWallet()
     {
+        
+        // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        
+        // if($balance >= 1050){
+        //     $payload = [
+        //         "sender_wallet_id" => GetSendmonnyUserWalletId(),
+        //         "sender_user_id" => GetSendmonnyUserId(),
+        //         "amount" => 1050,
+        //         "pin"=> "2222",
+        //         "narration" => "Freebyz Verification - Sendmonny",
+        //         "islocal" => true,
+        //         "reciever_wallet_id" => adminRevenue()['wallet_id']//"7f23a522-01ca-4337-98e9-83ae80f3b69a"
+        //     ];
+
+        //     // return $payload;
+
+        //     ///process withdrawal
+        //      $transfer = Sendmonny::transfer($payload, accessToken());
+
+        //     if($transfer['status'] == true){
+        //         //return 'Successful';
+        //         $ref = $transfer['status']['data']['reference'];
+        //         $name = SystemActivities::getInitials(auth()->user()->name);
+        //         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+        //         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+                
+        //         $user = User::where('id', auth()->user()->id)->first();
+        //         $user->is_verified = true;
+        //         $user->save();
+
+
+        //     }
+
+
+        // }else{
+        //     return back()->with('error', 'Your balance is too low');
+        // }
+
+
         if(auth()->user()->wallet->balance >= 1050){
 
         
@@ -120,7 +160,7 @@ class UserController extends Controller
          $name = SystemActivities::getInitials(auth()->user()->name);
          SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
          
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
         
            $user = User::where('id', auth()->user()->id)->first();
            $user->is_verified = true;
@@ -175,7 +215,9 @@ class UserController extends Controller
             return back()->with('error', 'Your balance is too low');
             // return redirect('error');
         }
-    }
+    } 
+
+    
 
     public function success()
     {

@@ -474,6 +474,7 @@ class AdminController extends Controller
         $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
+
     public function campaignStatus(Request $request){
         // return $request;
         $camp = Campaign::find($request->id);
@@ -678,6 +679,11 @@ class AdminController extends Controller
     public function userlocation(){
         $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
         return view('admin.users.user_location', ['userTracker' => $userTracker]);
+    }
+
+    public function blacklist($id){
+        User::where('id', $id)->update(['is_blacklisted' => 1]);
+        return back()->with('success', 'User Blacklisted');
     }
 
     public function listFlutterwaveTrf(){

@@ -280,21 +280,35 @@
                 <div class="content content-full text-center">
                  
                   <div class="py-3">
-                    <h3 class="mb-2 text-center">
-                     Manual Verification
-                    </h3>
-                    <h4 class="fw-normal text-muted text-center">
-                    Please Click the Button below to Upgrade User
-                    </h4>
-                    @if($info->is_verified == '0')
-                    <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
-                       Verify User Now!
-                    </a>
-                    @else
-                    <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
-                      Verification Successfull
-                    </a>
-                    @endif
+                      <h3 class="mb-2 text-center">
+                      Manual Verification
+                      </h3>
+                      <h4 class="fw-normal text-muted text-center">
+                      Please Click the Button below to Upgrade User
+                      </h4>
+                      @if($info->is_verified == '0')
+                      <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
+                        Verify User Now!
+                      </a>
+                      @else
+                      <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
+                        Verification Successfull
+                      </a>
+                      @endif
+                      <hr>
+                      <h5 class="fw-normal text-muted text-center mt-2">
+                        Dead-end for this User!!!!
+                        </h5>
+                        @if($info->is_blacklisted == '0')
+                        <a class="btn btn-hero btn-secondary" href="{{url('admin/blacklist/'.$info->id)}}" data-toggle="click-ripple">
+                          Blacklist User
+                        </a>
+                        @else
+                        <a class="btn btn-hero btn-danger" href="#" data-toggle="click-ripple">
+                          User Blaklisted!!
+                        </a>
+                        @endif
+
                   </div>
               </div>
            
