@@ -131,7 +131,7 @@
       
       <div class="d-flex justify-content-center align-items-center">
         <div class="px-2 px-sm-5">
-          <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
+          <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }} - ({{number_format($balance)}})</p>
           <p class="text-muted mb-0">
             Wallet Balance
           </p>

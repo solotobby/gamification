@@ -112,5 +112,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Preference::class, 'user_interest', 'user_id');
     }
 
+    public function accountInfo(){
+        return $this->hasOne(AccountInformation::class, 'user_id');
+    }
+
     
 }

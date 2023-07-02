@@ -14,6 +14,9 @@
                     &#8358;{{ number_format(auth()->user()->wallet->balance) }}
                 </p>
                 <p>Wallet Balance</p>
+                Account Balance: (&#8358;{{$balance}})
+                Account Number: {{auth()->user()->accountInfo->account_number}}<br>
+                Bank Name: {{auth()->user()->accountInfo->account_name}} 
             </div>
             <!-- END Header -->
 

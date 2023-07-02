@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Mail\GeneralMail;
 use App\Models\BankInformation;
@@ -99,7 +100,9 @@ class WalletController extends Controller
 
     public function fund()
     {
-        return  view('user.wallet.fund');
+        
+        $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        return  view('user.wallet.fund', ['balance' => $balance]);
     }
 
 
