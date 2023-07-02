@@ -241,6 +241,7 @@ return [
         'SystemActivities' => App\Helpers\SystemActivities::class,
         'FacebookHelper' => App\Helpers\FacebookHelper::class,
         'Sendmoony' => App\Helpers\Sendmonny::class,
+        'Admin' => App\Helpers\Admin::class,
     ],
 
 ];

@@ -96,22 +96,22 @@ class RegisterController extends Controller
             'mobile_token' => Str::random(7)
         ];
        
-        // PaystackHelpers::sendUserToSendmonny($payload);  //simultaneous sync with sendmonny
+        //simultaneous sync with sendmonny
         if($user){
-            // $sendMonny = Sendmonny::sendUserToSendmonny($payload);
-            // if($sendMonny){
-            //     AccountInformation::create([
-            //         'user_id' => $user->id,
-            //         '_user_id' => $sendMonny['data']['user']['user_id'],
-            //         'wallet_id' => $sendMonny['data']['wallet']['id'],
-            //         'account_name' => $sendMonny['data']['wallet']['account_name'],
-            //         'account_number' => $sendMonny['data']['wallet']['account_number'],
-            //         'bank_name' => $sendMonny['data']['wallet']['bank'],
-            //         'bank_code' => $sendMonny['data']['wallet']['bank_code'],
-            //         'provider' => 'sendmonny - sudo',
-            //         'currency' => $sendMonny['data']['wallet']['currency'],
-            //     ]);
-            // }
+            $sendMonny = Sendmonny::sendUserToSendmonny($payload);
+            if($sendMonny){
+                AccountInformation::create([
+                    'user_id' => $user->id,
+                    '_user_id' => $sendMonny['data']['user']['user_id'],
+                    'wallet_id' => $sendMonny['data']['wallet']['id'],
+                    'account_name' => $sendMonny['data']['wallet']['account_name'],
+                    'account_number' => $sendMonny['data']['wallet']['account_number'],
+                    'bank_name' => $sendMonny['data']['wallet']['bank'],
+                    'bank_code' => $sendMonny['data']['wallet']['bank_code'],
+                    'provider' => 'sendmonny - sudo',
+                    'currency' => $sendMonny['data']['wallet']['currency'],
+                ]);
+            }
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
             return redirect('/home');

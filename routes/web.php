@@ -253,6 +253,7 @@ Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store
 
 Route::resource('preferences', PreferenceController::class);
 
+Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
 

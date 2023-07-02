@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Mail\ApproveCampaign;
 use App\Mail\CreateCampaign;
@@ -174,15 +175,15 @@ class CampaignController extends Controller
 
     public function getCategories()
     {
-        return $categories = Category::orderBy('name', 'ASC')->get();
+        return Category::orderBy('name', 'ASC')->get();
     }
     public function getSubCategories($id)
     {
-        return $subCategories = SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
+        return SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
     }
     public function getSubcategoriesInfo($id)
     {
-        return $subCategoriesInfo = SubCategory::where('id', $id)->first();
+        return SubCategory::where('id', $id)->first();
     }
 
     public function postCampaign(Request $request)
@@ -192,32 +193,70 @@ class CampaignController extends Controller
         $total = $est_amount + $percent;
         // [$est_amount, $percent, $total];
         $job_id = rand(10000,10000000);
-        $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        if($wallet->balance >= $total){
-            $wallet->balance -= $total;
-            $wallet->save();
-            $campaign = $this->processCampaign($total,$request,$job_id,$wallet,$percent);
-            Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
-            return back()->with('success', 'Campaign Posted Successfully');
+       
+
+        if(auth()->user()->wallet->balance >= $total){
+            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+            if($wallet->balance >= $total){
+                $wallet->balance -= $total;
+                $wallet->save();
+                $campaign = $this->processCampaign($total,$request,$job_id,$wallet,$percent);
+                Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+                return back()->with('success', 'Campaign Posted Successfully');
+            }else{
+                return back()->with('error', 'You do not have suficient funds in your wallet');
+            }  
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
-        }  
+        }
 
-        //check if the bonus balance is valid
-        // if($wallet->bonus >= $total){
-        //     $wallet->bonus -= $total;
-        //     $wallet->save();
-        //     $campaign = $this->processCampaign($total, $request, $job_id, $wallet,$percent);
-        //     Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
-        //     return back()->with('success', 'Campaign Posted Successfully');
-        // }elseif($wallet->balance >= $total){
-            
-        // }else{
-        //     return back()->with('error', 'You do not have suficient funds in your wallet');
-        // }  
+        /////////////////////////sendmonny integration//////////////////////////////////////
+        
+        // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        // if($balance >= $total){
+        //     $payloadCollection = [
+        //         "sender_wallet_id" => GetSendmonnyUserWalletId(), //authenticated User sendmonnywalletid
+        //         "sender_user_id" => GetSendmonnyUserId(), //authenticated User sendmonnyuserid
+        //         "amount" => $est_amount,
+        //         "pin"=> "2222",
+        //         "narration" => "Freebyz Campaign",
+        //         "islocal" => true,
+        //         "reciever_wallet_id" => adminCollection()['wallet_id']
+        //     ];
+
+        //     $payloadRevenue = [
+        //         "sender_wallet_id" => GetSendmonnyUserWalletId(), //authenticated User sendmonnywalletid
+        //         "sender_user_id" => GetSendmonnyUserId(), //authenticated User sendmonnyuserid
+        //         "amount" => $percent,
+        //         "pin"=> "2222",
+        //         "narration" => "Freebyz Campaign",
+        //         "islocal" => true,
+        //         "reciever_wallet_id" => adminRevenue()['wallet_id']
+        //     ];
+
+        //     $collection = Sendmonny::transfer($payloadCollection, accessToken());
+        //     // return $ref_coll = $collection['status']['data'];
+        //     if($collection['status'] == true){
+                
+        //         $revenue = Sendmonny::transfer($payloadRevenue, accessToken());
+        //         if($revenue['status'] == true){
+        //             // return $ref_rev = $revenue['status']['data'];
+        //             $campaign = $this->processCampaign($total,$request,$job_id,$percent);
+        //             Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
+        //             return back()->with('success', 'Campaign Posted Successfully');
+        //         }
+        //     }else{
+        //         return back()->with('error', 'You do not have suficient funds in your wallet');
+        //     }
+
+        // }
+        
+       
+
+        
     }
 
-    public function processCampaign($total, $request, $job_id, $wallet, $percent)
+    public function processCampaign($total, $request, $job_id, $percent)
     {
         $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
@@ -234,9 +273,9 @@ class CampaignController extends Controller
                 'type' => 'campaign_posted',
                 'description' => $campaign->post_title.' Campaign'
             ]);
-            $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += $percent;
-            $adminWallet->save();
+            // $adminWallet = Wallet::where('user_id', '1')->first();
+            // $adminWallet->balance += $percent;
+            // $adminWallet->save();
              //Admin Transaction Tablw
              PaymentTransaction::create([
                 'user_id' => 1,
@@ -371,6 +410,21 @@ class CampaignController extends Controller
             $wallet = Wallet::where('user_id', $approve->user_id)->first();
             $wallet->balance += $approve->amount;
             $wallet->save();
+
+            ///sendmonny integration - sending money from freebyz collection account
+            
+            // $payload = [
+            //     "sender_wallet_id" => adminCollection()['wallet_id'], //freebyz admin wallet id
+            //     "sender_user_id" => adminCollection()['user_id'], //freebyzadmin sendmonny userid
+            //     "amount" => $approve->amount,
+            //     "pin"=> "2222",
+            //     "narration" => "Freebyz Campaign",
+            //     "islocal" => true,
+            //     "reciever_wallet_id" => userWalletId($approve->user_id)
+            // ];
+        
+            // $res = Sendmonny::transfer($payload, accessToken());
+            
             $ref = time();
 
             PaymentTransaction::create([

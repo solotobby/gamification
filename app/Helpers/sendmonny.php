@@ -38,9 +38,25 @@ class Sendmonny{
     }
 
     //requires authentication
-    public static function getUser(){
+    public static function getUserBalance($user_id, $token){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.$token
+        ])->get(env('SENDMONNY_URL').'wallets/'.$user_id)->throw();
 
-    } 
+        return json_decode($res->getBody()->getContents(), true)['data']['data']['availableBalance'];
+    }
+
+    public static function transfer($payload, $token){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.$token
+        ])->post(env('SENDMONNY_URL').'transfers/external', $payload);
+        return json_decode($res->getBody()->getContents(), true);
+    }
 
 
      
