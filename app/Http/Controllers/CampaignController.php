@@ -200,7 +200,7 @@ class CampaignController extends Controller
             if($wallet->balance >= $total){
                 $wallet->balance -= $total;
                 $wallet->save();
-                $campaign = $this->processCampaign($total,$request,$job_id,$wallet,$percent);
+                $campaign = $this->processCampaign($total,$request,$job_id,$percent);
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                 return back()->with('success', 'Campaign Posted Successfully');
             }else{
@@ -258,6 +258,7 @@ class CampaignController extends Controller
 
     public function processCampaign($total, $request, $job_id, $percent)
     {
+        
         $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id]);
         $campaign = Campaign::create($request->all());
 
@@ -273,9 +274,12 @@ class CampaignController extends Controller
                 'type' => 'campaign_posted',
                 'description' => $campaign->post_title.' Campaign'
             ]);
-            // $adminWallet = Wallet::where('user_id', '1')->first();
-            // $adminWallet->balance += $percent;
-            // $adminWallet->save();
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            // $amount = $adminWallet->balance;
+            // return $percent;
+            // $adminWallet->update(['balance' => $amount + $percent]);
+            $adminWallet->balance =+ $percent;
+            $adminWallet->save();
              //Admin Transaction Tablw
              PaymentTransaction::create([
                 'user_id' => 1,
