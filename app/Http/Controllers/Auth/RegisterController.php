@@ -48,7 +48,6 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-
     public function registerUser(Request $request){
        
         $request->validate([
@@ -56,24 +55,53 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:255'],
             'source' => ['required', 'string', 'max:255'],
-            // 'phone_number' => ['required', 'numeric'],
+            'phone' => ['required', 'numeric', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-        // if(count($request->phone_number['full']) != '14' ){
-        //     return back()->with('error', 'Please Enter Phone Number');
-        // }
-        if($request->country == '' || $request->phone_number['full'] == ''){
-            return back()->with('error', 'Please Enter Phone Number');
+
+       $payload = [
+            'first_name' =>  $request->first_name,
+            'last_name' =>  $request->last_name,
+            'password' => $request->password,
+            'password_confirmation' => $request->password,
+            'email' => $request->email,
+            'username' => Str::random(7),
+            'phone_number' => '234'.substr($request->phone, 1), //substr($request->phone_number['full'], 1),
+            'user_type' =>"CUSTOMER",
+            'mobile_token' => Str::random(7),
+            'source' => 'Freebyz'
+        ];
+
+        $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+        if($user){
+            $location = PaystackHelpers::getLocation(); //get user location dynamically
+            if($location->countryName == 'United States'){
+                $sendMonnyApi = $this->sendMonny($payload);
+                if($sendMonnyApi['status'] == true){
+                   $this->processAccountInformation($sendMonnyApi,$user);
+                }
+            }else{
+                AccountInformation::create([
+                    'user_id' => $user->id,
+                    'wallet_id' => '1234567890'
+                ]);
+            }
+
         }
-       
+            Auth::login($user);
+            PaystackHelpers::userLocation('Registeration');
+            return redirect('/home');
+    }
+
+    public function createUser($request){
         $ref_id = $request->ref_id;
         $name = $request->first_name.' '.$request->last_name;
         $user = User::create([
             'name' => $name,
             'email' => $request->email,
             'country' => $request->country,
-            'phone' => $request->phone_number['full'],
+            'phone' => $request->phone,
             'source' => $request->source,
             'password' => Hash::make($request->password),
         ]);
@@ -83,40 +111,25 @@ class RegisterController extends Controller
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
- 
-    //    $payload = [
-    //         'first_name' =>  $request->first_name,
-    //         'last_name' =>  $request->last_name,
-    //         'password' => $request->password,
-    //         'password_confirmation' => $request->password,
-    //         'email' => $request->email,
-    //         'username' => Str::random(7),
-    //         'phone_number' => substr($request->phone_number['full'], 1),
-    //         'user_type' =>"CUSTOMER",
-    //         'mobile_token' => Str::random(7),
-                // 'source' => 'Freebyz'
-    //     ];
-       
-        //simultaneous sync with sendmonny
-        if($user){
-            // $sendMonny = Sendmonny::sendUserToSendmonny($payload);
-            // if($sendMonny){
-            //     AccountInformation::create([
-            //         'user_id' => $user->id,
-            //         '_user_id' => $sendMonny['data']['user']['user_id'],
-            //         'wallet_id' => $sendMonny['data']['wallet']['id'],
-            //         'account_name' => $sendMonny['data']['wallet']['account_name'],
-            //         'account_number' => $sendMonny['data']['wallet']['account_number'],
-            //         'bank_name' => $sendMonny['data']['wallet']['bank'],
-            //         'bank_code' => $sendMonny['data']['wallet']['bank_code'],
-            //         'provider' => 'sendmonny - sudo',
-            //         'currency' => $sendMonny['data']['wallet']['currency'],
-            //     ]);
-            // }
-            Auth::login($user);
-            PaystackHelpers::userLocation('Registeration');
-            return redirect('/home');
-        }
+        return $user;
+    }
+
+    public function sendMonny($payload){
+        return Sendmonny::sendUserToSendmonny($payload);
+    }
+
+    public function processAccountInformation($sendMonnyApi, $user){
+        return AccountInformation::create([
+            'user_id' => $user->id,
+            '_user_id' => $sendMonnyApi['data']['user']['user_id'],
+            'wallet_id' => $sendMonnyApi['data']['wallet']['id'],
+            'account_name' => $sendMonnyApi['data']['wallet']['account_name'],
+            'account_number' => $sendMonnyApi['data']['wallet']['account_number'],
+            'bank_name' => $sendMonnyApi['data']['wallet']['bank'],
+            'bank_code' => $sendMonnyApi['data']['wallet']['bank_code'],
+            'provider' => 'Sendmonny - Sudo',
+            'currency' => $sendMonnyApi['data']['wallet']['currency'],
+        ]);
     }
     /**
      * Get a validator for an incoming registration request.
