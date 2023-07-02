@@ -221,7 +221,7 @@ class CampaignController extends Controller
                 "pin"=> "2222",
                 "narration" => "Freebyz Campaign",
                 "islocal" => true,
-                "reciever_wallet_id" => adminRevenue()['wallet_id']
+                "reciever_wallet_id" => adminCollection()['wallet_id']
             ];
 
             $payloadRevenue = [

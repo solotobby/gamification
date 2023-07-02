@@ -47,8 +47,8 @@ if(!function_exists('accessToken')){
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post(env('SENDMONNY_URL').'authenticate', [
-            "phone_number"=>"2348137331455",
-	        "password"=>"solomon001"
+            "phone_number"=>env('PHONE'),
+	        "password"=>env('PASS')
         ]);
         return json_decode($res->getBody()->getContents(), true)['data']['token'];
     }
