@@ -16,8 +16,9 @@ class LoginPointCountroller extends Controller
     }
 
     public function index(){
-        $loginPoints = LoginPoints::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->get();
-        return view('user.points.index', ['loginpoints' => $loginPoints]);
+        $loginPoints = LoginPoints::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->paginate(100);
+        $point = LoginPoints::where('user_id', auth()->user()->id)->get();
+        return view('user.points.index', ['loginpoints' => $loginPoints, 'point' => $point]);
     }
 
     public function redeemPoint(){

@@ -22,7 +22,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">List of Points | Redeemed Points - {{ $loginpoints->where('is_redeemed', true)->sum('point') }} | Unredeemed Point - {{$loginpoints->where('is_redeemed', false)->sum('point') }}</h3>
+        <h3 class="block-title">List of Points | Redeemed Points - {{ $point->where('is_redeemed', true)->sum('point') }} | Unredeemed Point - {{$point->where('is_redeemed', false)->sum('point') }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -75,6 +75,9 @@
           <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3">Redeem Points</a>
         </div>
       </div>
+    </div>
+    <div class="d-flex">
+      {!! $loginpoints->links('pagination::bootstrap-4') !!}
     </div>
     <!-- END Full Table -->
 
