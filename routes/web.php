@@ -232,6 +232,7 @@ Route::post('store/databundles', [\App\Http\Controllers\Admin\AdminController::c
 Route::get('charts', [\App\Http\Controllers\Admin\AdminController::class, 'charts']);
 Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings');
 Route::post('store/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'store'])->name('store.settings');
+Route::get('admin/settings/{id}', [\App\Http\Controllers\Admin\SettingsController::class, 'activate']);
 Route::get('admin/feedback', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'index'])->name('admin.feedback');
 Route::get('admin/feedback/unread', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'unread'])->name('admin.feedback.unread');
 Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);

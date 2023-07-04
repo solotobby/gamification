@@ -110,9 +110,9 @@
             <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
           </a><br><br>
 
-          <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+          {{-- <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
             <i class="fa fa-link opacity-50 me-1"></i> Verify 
-          </a>
+          </a> --}}
 
           @if(auth()->user()->wallet->balance >= 1050)
           <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">

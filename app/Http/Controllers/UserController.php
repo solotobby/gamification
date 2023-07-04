@@ -110,104 +110,104 @@ class UserController extends Controller
     public function makePaymentWallet()
     {
         
-        $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         
-        if($balance >= 1000){
-            $payload = [
-                "sender_wallet_id" => GetSendmonnyUserWalletId(),
-                "sender_user_id" => GetSendmonnyUserId(),
-                "amount" => 1000,
-                "pin"=> "2222",
-                "narration" => "Freebyz Verification - Sendmonny",
-                "islocal" => true,
-                "reciever_wallet_id" => adminRevenue()['wallet_id']//"7f23a522-01ca-4337-98e9-83ae80f3b69a"
-            ];
-            ///process withdrawal
-             $transfer = Sendmonny::transfer($payload, accessToken());
-            if($transfer['status'] == true){
-                //return 'Successful';
-                $ref = time(); //$transfer['status']['data']['reference'];
-                $name = SystemActivities::getInitials(auth()->user()->name);
-                SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
-                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+        // if($balance >= 1000){
+        //     $payload = [
+        //         "sender_wallet_id" => GetSendmonnyUserWalletId(),
+        //         "sender_user_id" => GetSendmonnyUserId(),
+        //         "amount" => 1000,
+        //         "pin"=> "2222",
+        //         "narration" => "Freebyz Verification - Sendmonny",
+        //         "islocal" => true,
+        //         "reciever_wallet_id" => adminRevenue()['wallet_id']//"7f23a522-01ca-4337-98e9-83ae80f3b69a"
+        //     ];
+        //     ///process withdrawal
+        //      $transfer = Sendmonny::transfer($payload, accessToken());
+        //     if($transfer['status'] == true){
+        //         //return 'Successful';
+        //         $ref = time(); //$transfer['status']['data']['reference'];
+        //         $name = SystemActivities::getInitials(auth()->user()->name);
+        //         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+        //         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
                 
-                $user = User::where('id', auth()->user()->id)->first();
-                $user->is_verified = true;
-                $user->save();
-                return redirect('success');
-            }
-        }else{
-            return back()->with('error', 'Your balance is too low');
-        }
-
-
-        // if(auth()->user()->wallet->balance >= 1050){
-
-        
-        // $ref = time();
-        // $userWallet = Wallet::where('user_id', auth()->user()->id)->first();
-        //  //debit  User wallet first
-        //  $userWallet->balance -= '1050';
-        //  $userWallet->save();
-
-        //  $name = SystemActivities::getInitials(auth()->user()->name);
-        //  SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
-         
-        //  PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
-        
-        //    $user = User::where('id', auth()->user()->id)->first();
-        //    $user->is_verified = true;
-        //    $user->save();
-
-        //    $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
-           
-        //    if($referee){
-        //     $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-        //     $wallet->balance += 500;
-        //     $wallet->save();
-
-        //     $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-        //     $refereeUpdate->is_paid = true;
-        //     $refereeUpdate->save();
-
-        //     ///Transactions
-        //     $description = 'Referer Bonus from '.auth()->user()->name;
-        //     PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
-
-
-        //     $adminWallet = Wallet::where('user_id', '1')->first();
-        //     $adminWallet->balance += 500;
-        //     $adminWallet->save();
-
-        //     //Admin Transaction Table
-        //     $description = 'Referer Bonus from '.auth()->user()->name;
-        //     PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
-
-        //    }else{
-        //     $adminWallet = Wallet::where('user_id', '1')->first();
-        //     $adminWallet->balance += 1000;
-        //     $adminWallet->save();
-        //      //Admin Transaction Tablw
-        //      PaymentTransaction::create([
-        //         'user_id' => 1,
-        //         'campaign_id' => '1',
-        //         'reference' => $ref,
-        //         'amount' => 1000,
-        //         'status' => 'successful',
-        //         'currency' => 'NGN',
-        //         'channel' => 'paystack',
-        //         'type' => 'direct_referer_bonus',
-        //         'description' => 'Direct Referer Bonus from '.$user->name,
-        //         'tx_type' => 'Credit',
-        //         'user_type' => 'admin'
-        //     ]);
-        //    }
-        //    Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-        //    return redirect('success');
+        //         $user = User::where('id', auth()->user()->id)->first();
+        //         $user->is_verified = true;
+        //         $user->save();
+        //         return redirect('success');
+        //     }
         // }else{
         //     return back()->with('error', 'Your balance is too low');
-        //     // return redirect('error');
         // }
+
+
+        if(auth()->user()->wallet->balance >= 1050){
+
+        
+        $ref = time();
+        $userWallet = Wallet::where('user_id', auth()->user()->id)->first();
+         //debit  User wallet first
+         $userWallet->balance -= '1050';
+         $userWallet->save();
+
+         $name = SystemActivities::getInitials(auth()->user()->name);
+         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+         
+         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+        
+           $user = User::where('id', auth()->user()->id)->first();
+           $user->is_verified = true;
+           $user->save();
+
+           $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+           
+           if($referee){
+            $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+            $wallet->balance += 500;
+            $wallet->save();
+
+            $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+            $refereeUpdate->is_paid = true;
+            $refereeUpdate->save();
+
+            ///Transactions
+            $description = 'Referer Bonus from '.auth()->user()->name;
+            PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += 500;
+            $adminWallet->save();
+
+            //Admin Transaction Table
+            $description = 'Referer Bonus from '.auth()->user()->name;
+            PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+
+           }else{
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance += 1000;
+            $adminWallet->save();
+             //Admin Transaction Tablw
+             PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 1000,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'direct_referer_bonus',
+                'description' => 'Direct Referer Bonus from '.$user->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+           }
+           Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+           return redirect('success');
+        }else{
+            return back()->with('error', 'Your balance is too low');
+            // return redirect('error');
+        }
     } 
 
     

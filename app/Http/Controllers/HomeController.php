@@ -75,8 +75,8 @@ class HomeController extends Controller
         if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
             return redirect('survey');
         }
-        $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
-        
+        // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        $balance = '';
         PaystackHelpers::userLocation('Login');
 
         SystemActivities::loginPoints(auth()->user());
