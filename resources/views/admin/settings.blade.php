@@ -21,7 +21,7 @@
     <!-- Elements -->
     <div class="block block-rounded">
         <div class="block-header block-header-default">
-          <h3 class="block-title">Settings</h3>
+          <h3 class="block-title">Wallet Handler</h3>
         </div>
         <div class="block-content">
             @if (session('success'))
@@ -30,7 +30,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('store.settings') }}" method="POST" enctype="multipart/form-data">
+            {{-- <form action="{{ route('store.settings') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row push">
                     <div class="col-lg-3">
@@ -45,7 +45,7 @@
                             <label class="form-label" for="example-text-input">Value</label>
                             <input type="text" class="form-control" id="example-text-input" name="value" placeholder="Paystack" required>
                         </div>
-                        {{-- <input type="hidden" name="id" value=""> --}}
+                        {{-- <input type="hidden" name="id" value=""> 
                         <div class="mb-4">
                             <button class="btn btn-primary" type="submit">Create</button>
                         </div>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 
-            </form>
+            </form> --}}
 
 
             <div class="row push">
@@ -67,9 +67,9 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Channel</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Value</th>
+                            {{-- <th scope="col">Value</th> --}}
                             <th scope="col"></th>
                         </tr>
                         </thead>
@@ -81,11 +81,19 @@
                                     <th scope="row">{{ $i++ }}.</th>
                                     <td>{{ $setting->name }}</td>
                                     <td>{{ $setting->status == '1' ? 'Active' : 'Inactive' }}</td>
-                                    <td>{{ $setting->value }}</td>
-                                    <td> <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $setting->id }}">Update</button></td>
+                                    {{-- <td>{{ $setting->value }}</td> --}}
+                                    <td> 
+                                        @if($setting->status == '1')
+                                           <button class="btn btn-sm btn-primary" disabled> Deactivate </button>
+                                        @else
+                                        <a href="{{ url('admin/settings/'.$setting->id) }}" class="btn btn-sm btn-primary"> Activate</a>
+                                           
+                                        @endif
+                                        {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $setting->id }}">Update</button> --}}
+                                    </td>
                                 </tr>
 
-                                <div class="modal fade" id="modal-default-popout-{{ $setting->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                                {{-- <div class="modal fade" id="modal-default-popout-{{ $setting->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-popout" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -111,13 +119,13 @@
                                         </div>
                                     </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             @endforeach 
                         </tbody>
 
                         
                     </table>
-                    <button class="btn btn-primary" type="submit">Update</button>
+                    {{-- <button class="btn btn-primary" type="submit">Update</button> --}}
                 </form>
                 </div>
             </div>

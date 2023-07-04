@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 
-// public $list = ['value'];
 class SettingsController extends Controller
 {
 
@@ -43,6 +42,14 @@ class SettingsController extends Controller
         }
         $setting = Settings::create(['name' => $key, 'value' => $value]);
         return $setting;
+    }
+
+    public function activate($id){
+        Settings::query()->update(['status' => false]);
+        $set = Settings::where('id', $id)->first();
+        $set->status = true;
+        $set->save();
+        return back()->with('success', 'Settings updated');
     }
 
 }

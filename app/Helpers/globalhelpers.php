@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AccountInformation;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 
@@ -68,5 +69,11 @@ if(!function_exists('isBlacklisted')){
         }else{
             return false;
         }
+    }
+}
+
+if(!function_exists('walletHandler')){
+    function walletHandler(){
+        return Settings::where('status', true)->first()->name;
     }
 }

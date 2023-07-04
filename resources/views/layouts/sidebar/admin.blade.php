@@ -225,6 +225,13 @@
         </a>
       </li> --}}
 
+       <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('settings') }}">
+          <i class="nav-main-link-icon fa fa-tty"></i>
+          <span class="nav-main-link-name">Settings</span>
+        </a>
+      </li>
+
       
 
       

@@ -1,6 +1,5 @@
 @extends('layouts.main.master')
 @section('content')
-
  <!-- Page Content -->
     <div class="row g-0 justify-content-center bg-black-75">
       <div class="hero-static col-sm-8 col-md-6 col-xl-4 d-flex align-items-center p-2 px-sm-0">
@@ -14,9 +13,9 @@
                     &#8358;{{ number_format(auth()->user()->wallet->balance) }}
                 </p>
                 <p>Wallet Balance</p>
-                Account Balance: (&#8358;{{$balance}})
+                {{-- Account Balance: (&#8358;{{$balance}})
                 Account Number: {{auth()->user()->accountInfo->account_number}}<br>
-                Bank Name: {{auth()->user()->accountInfo->account_name}} 
+                Bank Name: {{auth()->user()->accountInfo->account_name}}  --}}
             </div>
             <!-- END Header -->
 
@@ -47,7 +46,6 @@
 @section('script')
  <!-- Page JS Plugins -->
  <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-
  <!-- Page JS Code -->
  <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
 @endsection

@@ -74,21 +74,21 @@ class RegisterController extends Controller
         ];
 
         $user = $this->createUser($request); //CREATE USER ON FREEBYZ
-        if($user){
-            $location = PaystackHelpers::getLocation(); //get user location dynamically
-            if($location->countryName == 'United States'){
-                $sendMonnyApi = $this->sendMonny($payload);
-                if($sendMonnyApi['status'] == true){
-                   $this->processAccountInformation($sendMonnyApi,$user);
-                }
-            }else{
-                AccountInformation::create([
-                    'user_id' => $user->id,
-                    'wallet_id' => '1234567890'
-                ]);
-            }
+        // if($user){
+        //     $location = PaystackHelpers::getLocation(); //get user location dynamically
+        //     if($location->countryName == 'United States'){
+        //         $sendMonnyApi = $this->sendMonny($payload);
+        //         if($sendMonnyApi['status'] == true){
+        //            $this->processAccountInformation($sendMonnyApi,$user);
+        //         }
+        //     }else{
+        //         AccountInformation::create([
+        //             'user_id' => $user->id,
+        //             'wallet_id' => '1234567890'
+        //         ]);
+        //     }
 
-        }
+        // }
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
             return redirect('/home');
