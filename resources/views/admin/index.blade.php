@@ -44,7 +44,7 @@
           Welcome, {{ auth()->user()->name }}! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
         </p>
       </div>
-      <div class="mt-4 mt-md-0">
+      {{--<div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
         </a>
@@ -53,18 +53,37 @@
             Last 30 days <i class="fa fa-fw fa-angle-down"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
-            <a class="dropdown-item" href="javascript:void(0)">This Week</a>
-            <a class="dropdown-item" href="javascript:void(0)">Previous Week</a>
+            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Today</a>
+            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Last 7 days</a>
+            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Last 14 days</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)">This Month</a>
             <a class="dropdown-item" href="javascript:void(0)">Previous Month</a>
           </div>
         </div>
-      </div>
+      </div> --}}
     </div>
   </div>
+  
+       
+
+        
 
   <div class="content">
+
+    <form action="{{ url('users') }}" method="GET">
+          <div class="mb-4">
+              {{-- <label>Select Date Range</label>--}}
+              <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+              <input type="date" class="form-control" id="start" name="start_date" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+              <span class="input-group-text fw-semibold">
+                  <i class="fa fa-fw fa-arrow-right"></i>
+              </span>
+              <input type="date" class="form-control" id="end" name="end_date" placeholder="To" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+              </div>
+          </div>
+        </form>
+
     <!-- Overview -->
     <div class="row items-push">
       <div class="col-sm-6 col-xl-3">
@@ -73,11 +92,14 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($users->count())}}">{{ App\Helpers\SystemActivities::numberFormat($users->count()) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
+             {{-- {{ App\Helpers\SystemActivities::numberFormat($users->count()) }}  --}} 
+              <span id="totalUsers"></span></div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              {{ number_format($users->where('is_verified')->count()) }}
+              {{-- {{ number_format($users->where('is_verified')->count()) }} -  --}} 
+              <span id="verifiedUsers"></span>
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -94,7 +116,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-level-up-alt fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->count())}}">{{ $campaigns->count() }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title=""><span id="campaigns"></span></div>
             <div class="text-muted mb-3">Total Campaigns</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
@@ -115,11 +137,16 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> &#8358;{{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> 
+              {{-- {{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }} --}}
+              &#8358;<span id="campaignValue"></span>
+              </div>
             <div class="text-muted mb-3"> Campaigns Value</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              &#8358;{{ App\Helpers\SystemActivities::numberFormat($workers) }}
+              &#8358; <span id="campaignWorker"></span>
+              
+              {{-- {{ App\Helpers\SystemActivities::numberFormat($workers) }} --}}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -136,11 +163,16 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{(number_format($loginPoints->sum('point')))}}">{{ App\Helpers\SystemActivities::numberFormat($loginPoints->sum('point')) }}</div>
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
+              {{--{{ App\Helpers\SystemActivities::numberFormat($loginPoints->sum('point')) }} --}} 
+              <span id="loginPoints"></span>
+              </div>
             <div class="text-muted mb-3">Login Points</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              &#8358;{{$loginPoints->sum('point') / 5 }}
+
+              &#8358; <span id="loginPointsValue"></span>
+              {{-- {{$loginPoints->sum('point') / 5 }} --}}
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -267,4 +299,85 @@
       $('[data-toggle="tooltip"]').tooltip()
   })
   </script>
+
+  <script>
+    $(document).ready(function(){
+      //alert('loaded');
+        $.ajax({
+              url: '{{ url("admin/dashboard/api/default") }}',
+              method: 'GET',
+              data: {
+                  // period: 7,
+                  // end_date: endDate,
+              },
+              success: function(response) {
+                console.log(response);
+                var totalUsers = response.registeredUser;
+                var verifiedUsers = response.verifiedUser;
+                var campaigns = response.campaigns;
+                var campaignValue = response.campaignValue;
+                var campaignWorker = response.campaignWorker;
+                var loginPoints = response.loginPoints;
+                var loginPointsValue = response.loginPointsValue;
+                //  var amount = length*2;
+
+                document.getElementById("totalUsers").innerHTML = totalUsers;
+                document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                document.getElementById("campaigns").innerHTML = campaigns;
+                document.getElementById("campaignValue").innerHTML = campaignValue;
+                document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                document.getElementById("loginPoints").innerHTML = loginPoints;
+                document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                //  document.getElementById("amount").innerHTML = amount;
+              },
+              error: function(xhr, status, error) {
+                  console.error(status);
+              }
+        });
+
+
+        // $('#post-type').change(function(){
+        //     console.log('load');
+        // });
+
+
+        $('#end').change(function(){
+          var startDate = document.getElementById("start").value;
+          var endDate = document.getElementById("end").value;
+
+              $.ajax({
+                        url: '{{ url("admin/dashboard/api") }}',
+                        method: 'GET',
+                        data: {
+                            start_date: startDate,
+                            end_date: endDate,
+                        },
+                        success: function(response) {
+                          console.log(response);
+                          var totalUsers = response.registeredUser;
+                          var verifiedUsers = response.verifiedUser;
+                          var campaigns = response.campaigns;
+                          var campaignValue = response.campaignValue;
+                          var campaignWorker = response.campaignWorker;
+                          var loginPoints = response.loginPoints;
+                          var loginPointsValue = response.loginPointsValue;
+                        
+
+                          document.getElementById("totalUsers").innerHTML = totalUsers;
+                          document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                          document.getElementById("campaigns").innerHTML = campaigns;
+                          document.getElementById("campaignValue").innerHTML = campaignValue;
+                          document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                          document.getElementById("loginPoints").innerHTML = loginPoints;
+                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                         
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(status);
+                        }
+              });
+        });
+
+    });
+    </script>
 @endsection

@@ -93,8 +93,9 @@ class HomeController extends Controller
         return view('user.documentation.how_to_approve');
     }
 
-    public function adminHome()
+    public function adminHome(Request $request)
     {
+
         // return PaystackHelpers::getPosts();
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
@@ -137,6 +138,42 @@ class HomeController extends Controller
         ->with('country', json_encode($countryDistribution))
         ->with('age', json_encode($ageDistribution));
     }
+
+    public function adminApi(Request $request){
+        $data = [];
+            // $data['campaigns'] = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+            // $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
+            // $data['user'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+            // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+
+            $camp = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+            $data['campaigns'] = $camp->count();
+            $data['campaignValue'] = $camp->sum('total_amount');
+            $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
+            $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
+            $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
+            $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
+            $data['loginPointsValue'] = $data['loginPoints']/5;
+        
+        return $data;
+    }
+
+    public function adminApiDefault(){
+        
+         $data = [];
+        
+        $date = \Carbon\Carbon::today()->subDays(30);
+        $camp = Campaign::where('status', 'Live')->where('created_at','>=',$date)->get();
+        $data['campaigns'] = $camp->count();
+        $data['campaignValue'] = $camp->sum('total_amount');
+        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at','>=',$date)->sum('amount');
+        $data['registeredUser'] = User::where('role', 'regular')->where('created_at','>=',$date)->count();
+        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at','>=',$date)->count();
+        $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
+        $data['loginPointsValue'] = $data['loginPoints']/5;
+        return $data;
+    }
+        
 
     public function staffHome(){
         $campaigns = Campaign::where('status', 'Live')->get();
