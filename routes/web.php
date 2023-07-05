@@ -257,5 +257,6 @@ Route::resource('preferences', PreferenceController::class);
 Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
-
+Route::get('admin/dashboard/api', [\App\Http\Controllers\HomeController::class, 'adminApi']);
+Route::get('admin/dashboard/api/default', [\App\Http\Controllers\HomeController::class, 'adminApiDefault']);
 Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
