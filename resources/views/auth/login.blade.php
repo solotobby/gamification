@@ -1,5 +1,20 @@
 @extends('layouts.master')
 @section('title', 'Login')
+@section('style')
+<style>
+    .password-container {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      top: 30%;
+      right: 20px;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  </style>
+@endsection
 @section('content')
 
     <!-- basic-breadcrumb start -->
@@ -42,7 +57,10 @@
 
 								<div class="col-md-12 form-group">
 									<label class="sr-only">Password</label>
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Password">
+                                    {{-- <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Password"> --}}
+                                    <input type="password" id="password-input" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Password">
+                                    <span class="password-toggle" onclick="togglePasswordVisibility()">&#128065;</span>
+
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -81,4 +99,18 @@
 				</div>
 			</div>
 		</div>
+@endsection
+
+@section('script')
+
+<script>
+    function togglePasswordVisibility() {
+      var passwordInput = document.getElementById("password-input");
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    }
+  </script>
 @endsection
