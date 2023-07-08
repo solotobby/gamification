@@ -41,7 +41,7 @@ Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarket
 Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
 
 Route::post('register/user', [\App\Http\Controllers\Auth\RegisterController::class, 'registerUser'])->name('register.user');
-
+Route::post('login/user', [\App\Http\Controllers\Auth\RegisterController::class, 'loginUser'])->name('login.user');
 
 Auth::routes();
 //GOOGLE AUTH

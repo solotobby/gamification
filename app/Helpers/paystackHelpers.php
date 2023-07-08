@@ -148,8 +148,8 @@ class PaystackHelpers{
             $ip = request()->ip();
         }
 
-        return Location::get($ip);
-      // return $country = $location->countryName;
+         $location = Location::get($ip);
+      return $location->countryName;
 
     }
     public static function userLocation($type){

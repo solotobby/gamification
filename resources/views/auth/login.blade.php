@@ -37,10 +37,26 @@
 				<div class="area-title text-center">
 					<h2>Login to Account</h2>
 					<p>Fill the form below to login</p>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
 				</div>
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-                        <form id="contact-form" method="POST" action="{{ route('login') }}">
+                        <form id="contact-form" method="POST" action="{{ route('login.user') }}">
                         @csrf
 
 							<div class="row">

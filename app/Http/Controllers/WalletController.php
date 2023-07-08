@@ -100,10 +100,10 @@ class WalletController extends Controller
 
     public function fund()
     {
-        // $balance = '';
-        // if(walletHandler() == 'sendmonny'){
-        //     $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
-        // }
+        $balance = '';
+        if(walletHandler() == 'sendmonny'){
+            $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        }
         
         return  view('user.wallet.fund');
     }

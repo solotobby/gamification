@@ -44,6 +44,8 @@
           Welcome, {{ auth()->user()->name }}! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
         </p>
       </div>
+
+      <span id="monthly"></span>
       {{--<div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
@@ -65,10 +67,6 @@
     </div>
   </div>
   
-       
-
-        
-
   <div class="content">
 
     <form action="{{ url('users') }}" method="GET">
@@ -137,7 +135,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($campaigns->sum('total_amount'))}}"> 
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title=""> 
               {{-- {{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }} --}}
               &#8358;<span id="campaignValue"></span>
               </div>
@@ -319,6 +317,7 @@
                 var campaignWorker = response.campaignWorker;
                 var loginPoints = response.loginPoints;
                 var loginPointsValue = response.loginPointsValue;
+                var monthly = response.monthlyVisits;
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers;
@@ -328,7 +327,7 @@
                 document.getElementById("campaignWorker").innerHTML = campaignWorker;
                 document.getElementById("loginPoints").innerHTML = loginPoints;
                 document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
-                //  document.getElementById("amount").innerHTML = amount;
+                document.getElementById("monthly").innerHTML = monthly;
               },
               error: function(xhr, status, error) {
                   console.error(status);

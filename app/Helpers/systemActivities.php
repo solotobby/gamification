@@ -38,7 +38,7 @@ class SystemActivities{
             $names = explode(' ', $user->name);
             $initials = '';
             foreach ($names as $name) {
-                $initials .= $name[0] . '.';
+                $initials .= isset($name[0]) . '.';
             }
             $initials = rtrim($initials, '.');
             ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' earned 50 points for log in', 'user_type' => 'regular']);
@@ -51,7 +51,7 @@ class SystemActivities{
         $names = explode(' ', $name);
         $initials = '';
         foreach ($names as $name) {
-            $initials .= $name[0] . '.';
+            $initials .= isset($name[0]) . '.';
         }
         $initials = rtrim($initials, '.');
         return $initials; 
