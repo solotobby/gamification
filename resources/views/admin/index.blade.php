@@ -45,8 +45,8 @@
         </p>
       </div>
 
-      <span id="monthly"></span>
-      {{--<div class="mt-4 mt-md-0">
+       {{--<span id="monthly"></span>
+     <div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
         </a>
