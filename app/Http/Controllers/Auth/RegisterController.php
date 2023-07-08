@@ -150,9 +150,9 @@ class RegisterController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if($user->is_blacklisted){
-            return view('blocked');
-        }
+        // if($user->is_blacklisted){
+        //     return view('blocked');
+        // }
         if(Hash::check(trim($request->password), $user->password)){
             if($user->role != 'admin'){
                 $location = PaystackHelpers::getLocation(); //get user specific location
