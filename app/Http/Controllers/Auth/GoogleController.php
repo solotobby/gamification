@@ -45,6 +45,19 @@ class GoogleController extends Controller
                 {
                     return view('phone');
                 }
+
+
+                // $location = PaystackHelpers::getLocation(); //get user specific location
+                // if($location == "United States"){ //check if the person is in Nigeria
+                //     if($user->is_wallet_transfered == false){
+                //         //activate sendmonny wallet and fund wallet
+                //         if(walletHandler() == 'sendmonny'){ 
+                //             if($user->is_wallet_transfered == false){
+                //                  activateSendmonnyWallet($user, $request->password); //hand sendmonny 
+                //             }
+                //         }
+                //     }
+                // }
                
                 return redirect('/home');
      

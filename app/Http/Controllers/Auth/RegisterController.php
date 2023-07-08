@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
+use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Models\AccountInformation;
 use App\Providers\RouteServiceProvider;
@@ -73,25 +74,30 @@ class RegisterController extends Controller
             'source' => 'Freebyz'
         ];
 
-        $user = $this->createUser($request); //CREATE USER ON FREEBYZ
-        // if($user){
-        //     $location = PaystackHelpers::getLocation(); //get user location dynamically
-        //     if($location->countryName == 'United States'){
-        //         $sendMonnyApi = $this->sendMonny($payload);
-        //         if($sendMonnyApi['status'] == true){
-        //            $this->processAccountInformation($sendMonnyApi,$user);
-        //         }
-        //     }else{
-        //         AccountInformation::create([
-        //             'user_id' => $user->id,
-        //             'wallet_id' => '1234567890'
-        //         ]);
-        //     }
-
-        // }
-            Auth::login($user);
-            PaystackHelpers::userLocation('Registeration');
-            return redirect('/home');
+        if(walletHandler() == 'local'){
+            $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+        }else{
+            $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+            if($user){
+                $location = PaystackHelpers::getLocation(); //get user location dynamically
+                if($location->countryName == 'United States'){
+                    $sendMonnyApi = $this->sendMonny($payload);
+                    if($sendMonnyApi['status'] == true){
+                    $this->processAccountInformation($sendMonnyApi,$user);
+                    }
+                }else{
+                    AccountInformation::create([
+                        'user_id' => $user->id,
+                        'wallet_id' => '1234567890'
+                    ]);
+                }
+            }
+        }
+        
+        
+        Auth::login($user);
+        PaystackHelpers::userLocation('Registeration');
+        return redirect('/home');
     }
 
     public function createUser($request){
@@ -119,7 +125,7 @@ class RegisterController extends Controller
     }
 
     public function processAccountInformation($sendMonnyApi, $user){
-        return AccountInformation::create([
+        AccountInformation::create([
             'user_id' => $user->id,
             '_user_id' => $sendMonnyApi['data']['user']['user_id'],
             'wallet_id' => $sendMonnyApi['data']['wallet']['id'],
@@ -130,6 +136,45 @@ class RegisterController extends Controller
             'provider' => 'Sendmonny - Sudo',
             'currency' => $sendMonnyApi['data']['wallet']['currency'],
         ]);
+
+        $activate = User::where('id', $user->id)->first();
+        $activate->is_wallet_transfered = true;
+        $activate->save();
+    }
+
+
+    public function loginUser(Request $request){
+        $request->validate([
+            'email' => 'required|email|max:255',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if($user->is_blacklisted == true){
+            return view('blocked');
+        }
+        if(Hash::check(trim($request->password), $user->password)){
+            if($user->role != 'admin'){
+                $location = PaystackHelpers::getLocation(); //get user specific location
+                if($location == "United States"){ //check if the person is in Nigeria
+                    if($user->is_wallet_transfered == false){
+                        //activate sendmonny wallet and fund wallet
+                        if(walletHandler() == 'sendmonny'){ 
+                            if($user->is_wallet_transfered == false){
+                                activateSendmonnyWallet($user, $request->password); //hand sendmonny 
+                            }
+                        }
+                    }
+                }
+            }
+            // PaystackHelpers::userLocation('Login');
+            SystemActivities::loginPoints($user);
+
+            Auth::login($user); //log user in
+            return redirect('home'); //redirect to home
+        }else{
+            return back()->with('error', 'Email or Password is incorrect');
+        }
     }
     /**
      * Get a validator for an incoming registration request.

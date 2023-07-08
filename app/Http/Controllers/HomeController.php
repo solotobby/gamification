@@ -64,10 +64,8 @@ class HomeController extends Controller
 
     public function userHome()
     {
-
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
-        
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }
@@ -75,17 +73,15 @@ class HomeController extends Controller
         if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
             return redirect('survey');
         }
-        // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         $balance = '';
-        PaystackHelpers::userLocation('Login');
-
-        SystemActivities::loginPoints(auth()->user());
-
+        if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
+            $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        }
+    
         $activity_log = SystemActivities::showActivityLog();
-
         $available_jobs = SystemActivities::availableJobs();
-
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
+
         return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>auth()->user(), 'balance' => $balance]);
     }
 
@@ -97,10 +93,10 @@ class HomeController extends Controller
     {
 
         // return PaystackHelpers::getPosts();
-        $campaigns = Campaign::where('status', 'Live')->get();
-        $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
-        $user = User::where('role', 'regular')->get();
-        $loginPoints = LoginPoints::where('is_redeemed', false)->get();
+        // $campaigns = Campaign::where('status', 'Live')->get();
+        // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
+        // $user = User::where('role', 'regular')->get();
+        // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
         //$wallet = Wallet::all();
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -112,7 +108,9 @@ class HomeController extends Controller
         $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits
-        $MonthlyVisit = Analytics::monthlyVisits();
+        $start_date = \Carbon\Carbon::today()->subDays(30);
+        $end_date = \Carbon\Carbon::now()->format('Y-m-d');
+        $MonthlyVisit = Analytics::monthlyVisits($start_date, $end_date);
 
         ///daily visits
         $dailyVisits = Analytics::dailyStats();
@@ -129,7 +127,7 @@ class HomeController extends Controller
         //age distribution
         $ageDistribution = Analytics::ageDistribution();
         
-        return view('admin.index', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index') // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
@@ -163,6 +161,9 @@ class HomeController extends Controller
          $data = [];
         
         $date = \Carbon\Carbon::today()->subDays(30);
+        $start_date = \Carbon\Carbon::today()->subDays(30);
+        $end_date = \Carbon\Carbon::now()->format('Y-m-d');
+
         $camp = Campaign::where('status', 'Live')->where('created_at','>=',$date)->get();
         $data['campaigns'] = $camp->count();
         $data['campaignValue'] = $camp->sum('total_amount');
@@ -171,6 +172,8 @@ class HomeController extends Controller
         $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at','>=',$date)->count();
         $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         $data['loginPointsValue'] = $data['loginPoints']/5;
+       
+        $data['monthlyVisits'] = Analytics::monthlyVisits($start_date, $end_date);
         return $data;
     }
         
