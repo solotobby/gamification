@@ -97,7 +97,7 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-        //$wallet = Wallet::all();
+        $wallet = Wallet::all()->sum('balance');
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
@@ -127,7 +127,7 @@ class HomeController extends Controller
         //age distribution
         $ageDistribution = Analytics::ageDistribution();
         
-        return view('admin.index') // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index', ['wallet' => $wallet]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))

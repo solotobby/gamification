@@ -44,6 +44,7 @@
           Welcome, {{ auth()->user()->name }}! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
         </p>
       </div>
+      Wallet Balance - &#8358;{{ number_format($wallet) }}
 
        {{--<span id="monthly"></span>
      <div class="mt-4 mt-md-0">
