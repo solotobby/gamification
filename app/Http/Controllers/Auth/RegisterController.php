@@ -150,7 +150,7 @@ class RegisterController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if($user->is_blacklisted == true){
+        if($user->is_blacklisted){
             return view('blocked');
         }
         if(Hash::check(trim($request->password), $user->password)){
