@@ -167,10 +167,9 @@ class RegisterController extends Controller
                     }
                 }
             }
-            // PaystackHelpers::userLocation('Login');
-            SystemActivities::loginPoints($user);
-
             Auth::login($user); //log user in
+            PaystackHelpers::userLocation('Login');
+            SystemActivities::loginPoints($user);
             return redirect('home'); //redirect to home
         }else{
             return back()->with('error', 'Email or Password is incorrect');
