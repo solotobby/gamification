@@ -1,5 +1,6 @@
 @extends('layouts.main.master')
 @section('style')
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
   var visitor = <?php echo $visitor ?>
@@ -22,6 +23,11 @@
 
 <script>
   var age = <?php echo $age; ?>
+
+  function selectOption(days) {
+   
+          document.getElementById('selected-option').textContent = "Last " + days + " days";
+      }
 </script>
 
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
@@ -47,26 +53,22 @@
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
 
        
-     <div class="mt-4 mt-md-0">
+      <div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
         </a>
         <div class="dropdown d-inline-block">
           <button type="button" class="btn btn-sm btn-alt-primary px-3" id="dropdown-analytics-overview" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Last 30 days <i class="fa fa-fw fa-angle-down"></i>
+            <span id="selected-option">Last 30 days</span> <i class="fa fa-fw fa-angle-down"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
-             
-            <a class="dropdown-item"  id='7'>Last 7 days</a>
-            <a class="dropdown-item"  id='14'>Last 14 days</a>
-            {{-- 
-              <a class="dropdown-item"  id='1' >Today</a>
-              <div class="dropdown-divider"></div>
-            // <a class="dropdown-item" href="javascript:void(0)">This Month</a>
-            // <a class="dropdown-item" href="javascript:void(0)">Previous Month</a> --}}
+            <a class="dropdown-item" id="7" href="#">Last 7 days</a>
+            <a class="dropdown-item" id="14" href="#">Last 14 days</a>
           </div>
         </div>
-      </div> 
+      </div>
+      
+      
     </div>
   </div>
   
@@ -303,10 +305,25 @@
 
   <script>
     $(document).ready(function(){
+      
+          // Get the dropdown items
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        // Add click event listener to each dropdown item
+        dropdownItems.forEach(item => {
+          item.addEventListener('click', function() {
+            // Get the text content of the clicked dropdown item
+            const selectedOption = this.textContent;
+
+            // Update the active option in the button
+            document.getElementById('selected-option').textContent = selectedOption;
+          });
+        });
+
 
       function handleClick() {
           var id = this.id;
-          // alert("ID: " + id);
+         
           $.ajax({
               url: '{{ url("admin/dashboard/api/default") }}',
               method: 'GET',
@@ -323,7 +340,7 @@
                 var campaignWorker = response.campaignWorker;
                 var loginPoints = response.loginPoints;
                 var loginPointsValue = response.loginPointsValue;
-                var monthly = response.monthlyVisits;
+               
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers;
@@ -333,7 +350,7 @@
                 document.getElementById("campaignWorker").innerHTML = campaignWorker;
                 document.getElementById("loginPoints").innerHTML = loginPoints;
                 document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
-                document.getElementById("monthly").innerHTML = monthly;
+
               },
               error: function(xhr, status, error) {
                   console.error(status);
@@ -355,8 +372,7 @@
               url: '{{ url("admin/dashboard/api/default") }}',
               method: 'GET',
               data: {
-                  period: 30,
-                  // end_date: endDate,
+                  period: 30,  //number of days to filter
               },
               success: function(response) {
                 console.log(response);
@@ -367,7 +383,7 @@
                 var campaignWorker = response.campaignWorker;
                 var loginPoints = response.loginPoints;
                 var loginPointsValue = response.loginPointsValue;
-                var monthly = response.monthlyVisits;
+                // var monthly = response.monthlyVisits;
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers;
@@ -377,7 +393,7 @@
                 document.getElementById("campaignWorker").innerHTML = campaignWorker;
                 document.getElementById("loginPoints").innerHTML = loginPoints;
                 document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
-                document.getElementById("monthly").innerHTML = monthly;
+                // document.getElementById("monthly").innerHTML = monthly;
               },
               error: function(xhr, status, error) {
                   console.error(status);
