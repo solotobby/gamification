@@ -156,12 +156,13 @@ class HomeController extends Controller
         return $data;
     }
 
-    public function adminApiDefault(){
+    public function adminApiDefault(Request $request){
+        $period = $request->period;
         
          $data = [];
         
-        $date = \Carbon\Carbon::today()->subDays(30);
-        $start_date = \Carbon\Carbon::today()->subDays(30);
+        $date = \Carbon\Carbon::today()->subDays($period);
+        $start_date = \Carbon\Carbon::today()->subDays($period);
         $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
         $camp = Campaign::where('status', 'Live')->where('created_at','>=',$date)->get();

@@ -44,9 +44,9 @@
           Welcome, {{ auth()->user()->name }}! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
         </p>
       </div>
-      Wallet Balance - &#8358;{{ number_format($wallet) }}
+      {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
 
-       {{--<span id="monthly"></span>
+       
      <div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
@@ -56,15 +56,17 @@
             Last 30 days <i class="fa fa-fw fa-angle-down"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
-            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Today</a>
-            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Last 7 days</a>
-            <a class="dropdown-item" href="javascript:void(0)" id='post-type'>Last 14 days</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)">This Month</a>
-            <a class="dropdown-item" href="javascript:void(0)">Previous Month</a>
+             
+            <a class="dropdown-item"  id='7'>Last 7 days</a>
+            <a class="dropdown-item"  id='14'>Last 14 days</a>
+            {{-- 
+              <a class="dropdown-item"  id='1' >Today</a>
+              <div class="dropdown-divider"></div>
+            // <a class="dropdown-item" href="javascript:void(0)">This Month</a>
+            // <a class="dropdown-item" href="javascript:void(0)">Previous Month</a> --}}
           </div>
         </div>
-      </div> --}}
+      </div> 
     </div>
   </div>
   
@@ -72,7 +74,7 @@
 
     <form action="{{ url('users') }}" method="GET">
           <div class="mb-4">
-              {{-- <label>Select Date Range</label>--}}
+              <label>Select Date Range</label>
               <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
               <input type="date" class="form-control" id="start" name="start_date" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true">
               <span class="input-group-text fw-semibold">
@@ -301,12 +303,15 @@
 
   <script>
     $(document).ready(function(){
-      //alert('loaded');
-        $.ajax({
+
+      function handleClick() {
+          var id = this.id;
+          // alert("ID: " + id);
+          $.ajax({
               url: '{{ url("admin/dashboard/api/default") }}',
               method: 'GET',
               data: {
-                  // period: 7,
+                  period: id,
                   // end_date: endDate,
               },
               success: function(response) {
@@ -335,6 +340,51 @@
               }
         });
 
+      }
+
+      // var day_1 = document.getElementById('1');
+      var day_7 = document.getElementById('7');
+      var day_14 = document.getElementById('14');
+      
+      // day_1.addEventListener('click', handleClick);
+      day_7.addEventListener('click', handleClick);
+      day_14.addEventListener('click', handleClick);
+
+      //on load, it gets data for the last 30 days
+      $.ajax({
+              url: '{{ url("admin/dashboard/api/default") }}',
+              method: 'GET',
+              data: {
+                  period: 30,
+                  // end_date: endDate,
+              },
+              success: function(response) {
+                console.log(response);
+                var totalUsers = response.registeredUser;
+                var verifiedUsers = response.verifiedUser;
+                var campaigns = response.campaigns;
+                var campaignValue = response.campaignValue;
+                var campaignWorker = response.campaignWorker;
+                var loginPoints = response.loginPoints;
+                var loginPointsValue = response.loginPointsValue;
+                var monthly = response.monthlyVisits;
+                //  var amount = length*2;
+
+                document.getElementById("totalUsers").innerHTML = totalUsers;
+                document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                document.getElementById("campaigns").innerHTML = campaigns;
+                document.getElementById("campaignValue").innerHTML = campaignValue;
+                document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                document.getElementById("loginPoints").innerHTML = loginPoints;
+                document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                document.getElementById("monthly").innerHTML = monthly;
+              },
+              error: function(xhr, status, error) {
+                  console.error(status);
+              }
+        });
+
+       
 
         // $('#post-type').change(function(){
         //     console.log('load');
