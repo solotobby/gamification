@@ -9,7 +9,7 @@
   var daily = <?php echo $daily; ?>
 </script>
 <script>
-  var monthly = <?php echo $monthly; ?>
+  var monthly = <?php echo $monthly; ?>;
 </script>
 <script>
   var channel = <?php echo $channel; ?>
@@ -23,11 +23,6 @@
 
 <script>
   var age = <?php echo $age; ?>
-
-  function selectOption(days) {
-   
-          document.getElementById('selected-option').textContent = "Last " + days + " days";
-      }
 </script>
 
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
@@ -40,6 +35,7 @@
 @endsection
 
 @section('content')
+
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
@@ -62,8 +58,8 @@
             <span id="selected-option">Last 30 days</span> <i class="fa fa-fw fa-angle-down"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
-            <a class="dropdown-item" id="7" href="#">Last 7 days</a>
-            <a class="dropdown-item" id="14" href="#">Last 14 days</a>
+            <a class="dropdown-item" id="7" >Last 7 days</a>
+            <a class="dropdown-item" id="14" >Last 14 days</a>
           </div>
         </div>
       </div>
@@ -332,7 +328,7 @@
                   // end_date: endDate,
               },
               success: function(response) {
-                console.log(response);
+                // console.log(response);
                 var totalUsers = response.registeredUser;
                 var verifiedUsers = response.verifiedUser;
                 var campaigns = response.campaigns;
@@ -375,7 +371,7 @@
                   period: 30,  //number of days to filter
               },
               success: function(response) {
-                console.log(response);
+                // console.log(response);
                 var totalUsers = response.registeredUser;
                 var verifiedUsers = response.verifiedUser;
                 var campaigns = response.campaigns;
@@ -383,7 +379,7 @@
                 var campaignWorker = response.campaignWorker;
                 var loginPoints = response.loginPoints;
                 var loginPointsValue = response.loginPointsValue;
-                // var monthly = response.monthlyVisits;
+                var monthly = response.monthlyVisits;
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers;
@@ -393,7 +389,7 @@
                 document.getElementById("campaignWorker").innerHTML = campaignWorker;
                 document.getElementById("loginPoints").innerHTML = loginPoints;
                 document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
-                // document.getElementById("monthly").innerHTML = monthly;
+                document.getElementById("monthly").innerHTML = monthly;
               },
               error: function(xhr, status, error) {
                   console.error(status);
@@ -419,7 +415,7 @@
                             end_date: endDate,
                         },
                         success: function(response) {
-                          console.log(response);
+                          // console.log(response);
                           var totalUsers = response.registeredUser;
                           var verifiedUsers = response.verifiedUser;
                           var campaigns = response.campaigns;
