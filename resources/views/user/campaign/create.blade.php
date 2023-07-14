@@ -70,16 +70,16 @@
             <div class="col-lg-6 offset-lg-1">
                
               <div class="mb-4">
-                <label class="form-label" for="post-type">Type</label>
+                <label class="form-label" for="post-type">Category</label>
                 <select class="js-select2 form-select" id="post-type" name="campaign_type" style="width: 100%;" data-placeholder="Choose type.." required>
-                    <option value="">Select Type</option>
+                    <option value="">Select Category</option>
                 </select>
               </div>
 
               <div class="mb-4">
-                <label class="form-label" for="post-category">Category</label>
+                <label class="form-label" for="post-category">Sub-Category</label>
                 <select class="js-select2 form-select" id="post-category" name="campaign_subcategory" style="width: 100%;" data-placeholder="Choose category.." required>
-                    <option value="">Select Category</option>
+                    <option value="">Select Sub-Category</option>
                 </select>
               </div>
 

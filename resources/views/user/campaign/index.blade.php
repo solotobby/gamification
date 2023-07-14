@@ -49,7 +49,7 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Progress</th>
+                <th>Approved</th>
                 <th>Unit Price</th>
                 <th>Total Price</th>
                 <th>Status</th>
@@ -63,8 +63,7 @@
                       {{ $list->post_title }}
                     </td>
                     <td>
-                        {{ $list->completed()->where('status', 'Approved')->count(); }}/{{ $list->number_of_staff }}
-                        
+                        {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }}
                      </td>
                     <td>
                         &#8358; {{ $list->campaign_amount }}
