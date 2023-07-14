@@ -208,7 +208,7 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Available Jobs
+                  Incomplete Jobs
                 </p>
                 <p class="fs-3 mb-0">
                     {{ $metrics['incompleteSum'] }}
