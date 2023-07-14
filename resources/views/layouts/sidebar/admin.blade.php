@@ -27,6 +27,9 @@
             <a class="nav-main-link" href="{{ url('campaigns/completed') }}">
               <span class="nav-main-link-name">Completed</span>
             </a>
+            <a class="nav-main-link" href="{{ url('admin/campaign/metrics') }}">
+              <span class="nav-main-link-name">Metrics</span>
+            </a>
           </li>
         </ul>
       </li>

@@ -187,6 +187,11 @@ class AdminController extends Controller
         return back()->with('status', 'Reward Assigned Successfully');
     }
 
+    public function campaignMetrics(){
+        $metrics = Analytics::campaignMetrics();
+        return view('admin.campaign_metric.index', ['metrics' => $metrics]);
+    }
+
     public function userList(){
         $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(500);
         return view('admin.users.list', ['users' => $users]);

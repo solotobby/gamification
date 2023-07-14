@@ -253,7 +253,8 @@ Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController:
 Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
 
 Route::resource('preferences', PreferenceController::class);
-
+//Campaign metrics
+Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
