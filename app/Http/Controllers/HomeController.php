@@ -91,7 +91,6 @@ class HomeController extends Controller
 
     public function adminHome(Request $request)
     {
-
         // return PaystackHelpers::getPosts();
         // $campaigns = Campaign::where('status', 'Live')->get();
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
@@ -103,7 +102,7 @@ class HomeController extends Controller
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
     
-        // $campaignMetric = Analytics::campaignMetrics();
+        // return $campaignMetric = Analytics::campaignMetrics();
         //users registered
         $dailyActivity = Analytics::dailyActivities();
 
@@ -112,7 +111,7 @@ class HomeController extends Controller
         $end_date = \Carbon\Carbon::now()->format('Y-m-d');
         $MonthlyVisit = Analytics::monthlyVisits($start_date, $end_date);
 
-        ///daily visits
+        //daily visits
         $dailyVisits = Analytics::dailyStats();
 
         //registration channel

@@ -76,13 +76,6 @@ class SystemActivities{
             $attempts = $value->completed->count();
             $completed = $value->completed()->where('status', '!=', 'Denied')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
-            // ->where([
-            //     [function ($query) use ($data) {
-            //         $query->orWhere('status', $data['pending'])
-            //             ->orWhere('status', $data['approve'])
-            //             ->get();
-            //     }]
-            // ])->count();
             
             $div = $completed / $value->number_of_staff;
             $progress = $div * 100;

@@ -103,44 +103,31 @@ class Analytics{
     }
 
     public static function campaignMetrics(){
-        // return $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->withCount(['completed'])->get();
-        return $campaigns = Campaign::with(['completedAll'])
-        ->where('status', 'Live')
+        $campaigns = Campaign::with(['completed'])
         ->orderBy('created_at', 'DESC')
         ->get();
 
+        $list = [ ];
+        foreach($campaigns as $key => $value){
+            $completed =$value->completed()->where('status', '=', 'Approved')->count();
+            $list[] = [ 
+                'completed' => $completed,
+                'incomplete' => $value->number_of_staff - $completed,
+                'number_of_staff' =>(int) $value->number_of_staff, 
+            ];
+        }
 
-        // foreach($campaigns as $camp){
+        $collection = collect($list);
 
-        // }
-
-        // $list = [];
-        // foreach($campaigns as $key => $value){
-        //     $attempts = $value->completed->count();
-        //     $completed = $value->completed()->where('status', '!=', 'Denied')->count();
-        //     $list[] = [
-        //         'total_campaigns' => $campaigns->count(),
-        //         'available_campaigns' => '4'
-        //     ];
-
-        //     // $div = $completed / $value->number_of_staff;
-        //     // $progress = $div * 100;
-        //     // $list[] = [ 
-        //     //     'job_id' => $value->job_id, 
-        //     //     'campaign_amount' => $value->campaign_amount,
-        //     //     'post_title' => $value->post_title, 
-        //     //     'number_of_staff' => $value->number_of_staff, 
-        //     //     'type' => $value->campaignType->name, 
-        //     //     'category' => $value->campaignCategory->name,
-        //     //     'attempts' => $attempts,
-        //     //     'completed' => $completed,
-        //     //     'is_completed' => $completed >= $value->number_of_staff ? true : false,
-        //     //     'progress' => $progress 
-        //     // ];
-        // }
-
-        // return $list;
-
+        $data['completedSum'] = $collection->sum('completed');
+        $data['incompleteSum'] = $collection->sum('incomplete');
+        $data['staffSum'] = $collection->sum('number_of_staff');
+        $data['all_campaigns'] = $campaigns->count();
+        $data['live_campaigns'] = $campaigns->where('status', 'Live')->count();
+        $data['pending_campaigns'] = $campaigns->where('status', 'Offline')->count();
+        $data['denied_campaigns'] = $campaigns->where('status', 'Denied')->count();
+    
+        return $data;
     }
 
 
