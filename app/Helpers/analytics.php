@@ -125,7 +125,7 @@ class Analytics{
         $data['all_campaigns'] = $campaigns->count();
         $data['live_campaigns'] = $campaigns->where('status', 'Live')->count();
         $data['pending_campaigns'] = $campaigns->where('status', 'Offline')->count();
-        $data['denied_campaigns'] = $campaigns->where('status', 'Denied')->count();
+        $data['denied_campaigns'] = $campaigns->where('status', 'Declined')->count();
     
         return $data;
     }
