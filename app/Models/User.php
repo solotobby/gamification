@@ -31,7 +31,8 @@ class User extends Authenticatable
         'phone',
         'country',
         'age_range',
-        'gender'
+        'gender',
+        'base_currency'
     ];
 
     /**

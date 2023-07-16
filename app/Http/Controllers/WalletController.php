@@ -104,8 +104,8 @@ class WalletController extends Controller
         if(walletHandler() == 'sendmonny'){
             $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         }
-        
-        return  view('user.wallet.fund');
+        $location = PaystackHelpers::getLocation();
+        return  view('user.wallet.fund', ['location' => $location]);
     }
 
 
@@ -116,14 +116,50 @@ class WalletController extends Controller
 
     public function storeFund(Request $request)
     {
-        $ref = time();
+        $location = PaystackHelpers::getLocation();
+        if($location == 'Nigeria'){
+            $ref = time();
 
-        $percent = 3/100 * $request->balance;
-        $amount = $request->balance + $percent;
+            $percent = 3/100 * $request->balance;
+            $amount = $request->balance + $percent;
+    
+            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
+            return redirect($url);
+        
+        }else{
+            
+            $result = paypalPayment($request->balance, 'Wallet Funding', 'Top up Freebyz wallet');
+             if($result['status'] == 'CREATED'){
+                return redirect('https://www.sandbox.paypal.com/checkoutnow?token='.$result['id']);
+             }
+           
+        }
+        
+    }
 
-        $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
-        return redirect($url);
+    public function capturePaypal(){
+        $url = request()->fullUrl();
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+
+        $id = $params['token'];
+
+        $response = capturePaypalPayment($id);
+        
+    //     $decoded = json_decode($response, true);
+
+    //    $amount = $decoded['purchase_units'][0]['payments']['captures'][0]['amount'];
+
+    //     // Access the 'value' and 'currency_code'
+    //     $value = $amount['value'];
+    //     $currencyCode = $amount['currency_code'];
+
+
+
+        // if($response['status'] == 'COMPLETED'){
+        //     $response['purchase_units']['reference_id'];
+        // }
     }
 
     public function walletTop()

@@ -3,6 +3,7 @@
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\ConversionRate;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\Wallet;
@@ -145,6 +146,92 @@ if(!function_exists('activateSendmonnyWallet')){
             }
         }
        return $completeTransfer;
+    }  
+}
+
+if(!function_exists('conversionRate')){
+    function conversionRate(){
+        return ConversionRate::where('status', true)->first()->rate; //Settings::where('status', true)->first()->name;
     }
-    
+}
+
+if(!function_exists('paypalPayment')){
+    function paypalPayment($amount, $name, $description){
+
+        $res = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->withBasicAuth('AaNmCynFHWnhDic6NNn8HVs_bzhIIoFxs0UwuQcnCIMvi7uuo0iGrWLiUyR-F6m_qRimMB9dEMIoY2zZ', 'ECGLu3Yl1lPOSBSLQ5wnISVuBJCdZ8ipZH8TpqlhddHeUL163dhjCVq-oH4P765MBY5odQWABnnvfq45')
+        ->post('https://api-m.sandbox.paypal.com/v2/checkout/orders', [
+            "intent"=> "CAPTURE",
+            "purchase_units"=> [
+                [
+                    "items"=> [
+                        [
+                            "name"=> $name,
+                            "description"=> $description,
+                            "quantity"=> "1",
+                            "unit_amount"=> [
+                                "currency_code"=> "USD",
+                                "value"=> $amount
+                            ]
+                        ]
+                    ],
+                    "amount"=> [
+                        "currency_code"=> "USD",
+                        "value"=> $amount,
+                        "breakdown"=> [
+                            "item_total"=> [
+                                "currency_code"=> "USD",
+                                "value"=> $amount
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "application_context"=> [
+                "return_url"=> url('/paypal/return'),
+                "cancel_url"=> url('/home')
+            ]
+        ]);
+        return json_decode($res->getBody()->getContents(), true);
+    }
+}
+
+if(!function_exists('capturePaypalPayment')){
+    function capturePaypalPayment($id){
+
+        $url = 'https://api-m.sandbox.paypal.com/v2/checkout/orders/'.$id.'/capture';
+
+        // Request payload
+        $data = [ ];
+
+        // Basic Authorization credentials
+        $client_id = 'AaNmCynFHWnhDic6NNn8HVs_bzhIIoFxs0UwuQcnCIMvi7uuo0iGrWLiUyR-F6m_qRimMB9dEMIoY2zZ';
+        $client_secret = 'ECGLu3Yl1lPOSBSLQ5wnISVuBJCdZ8ipZH8TpqlhddHeUL163dhjCVq-oH4P765MBY5odQWABnnvfq45';
+
+        // Initialize cURL
+        $ch = curl_init($url);
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Basic ' . base64_encode($client_id . ':' . $client_secret),
+        ]);
+
+        // Execute the request
+        $response = curl_exec($ch);
+
+        // Check for cURL errors
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            // Handle the error
+        } else {
+            return response()->json([$response], 201);
+        }
+        // Close cURL resource
+        curl_close($ch);
+    }
 }

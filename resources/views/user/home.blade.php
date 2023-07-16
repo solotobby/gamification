@@ -131,7 +131,13 @@
       
       <div class="d-flex justify-content-center align-items-center">
         <div class="px-2 px-sm-5">
+
+          @if(auth()->user()->base_currency == "Naira")
           <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
+          @else
+          <p class="fs-3 text-dark mb-0">${{ number_format(auth()->user()->wallet->usd_balance) }}</p>
+          @endif
+
           <p class="text-muted mb-0">
             Wallet Balance
           </p>
@@ -184,9 +190,11 @@
                     <li class="nav-item">
                       <button class="nav-link active" id="btabswo-static-home-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-home" role="tab" aria-controls="btabswo-static-home" aria-selected="true">Available Jobs</button>
                     </li>
-                    {{-- <li class="nav-item">
+                    {{-- 
+                      <li class="nav-item">
                       <button class="nav-link" id="btabswo-static-profile-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-profile" role="tab" aria-controls="btabswo-static-profile" aria-selected="false">Profile</button>
-                    </li> --}}
+                      </li> 
+                    --}}
                     
                   </ul>
                   <div class="tab-content">
@@ -242,7 +250,10 @@
                                         <div class="d-flex flex-row align-items-center">
                                             <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                                             <div class="ms-2 c-details" style="color:#191918">
-                                                <h6 class="mb-0">&#8358;{{ $job['campaign_amount']}}</h6> <span>{{  @$job['type'] }}</span>
+                                              
+                                                <h6 class="mb-0">&#8358;{{ $job['campaign_amount']}}</h6> 
+                                                
+                                                <span>{{  @$job['type'] }}</span>
                                             </div>
                                         </div>
                                     </div>
