@@ -156,7 +156,7 @@ if(!function_exists('conversionRate')){
 }
 
 if(!function_exists('paypalPayment')){
-    function paypalPayment($amount, $name, $description){
+    function paypalPayment($amount){
 
         $res = Http::withHeaders([
             'Content-Type' => 'application/json',

@@ -128,9 +128,11 @@ class WalletController extends Controller
             return redirect($url);
         
         }else{
-            
-            $result = paypalPayment($request->balance, 'Wallet Funding', 'Top up Freebyz wallet');
+            $percent = 5/100 * $request->balance;
+            $am = $request->balance + $percent + 1;
+            $result = paypalPayment($am);
              if($result['status'] == 'CREATED'){
+                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
                 return redirect('https://www.sandbox.paypal.com/checkoutnow?token='.$result['id']);
              }
            
@@ -154,9 +156,9 @@ class WalletController extends Controller
             $sellerReceivableBreakdown = $response['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 
             // Access individual values
-            $grossAmount = $sellerReceivableBreakdown['gross_amount'];
-            $paypalFee = $sellerReceivableBreakdown['paypal_fee'];
-            $netAmount = $sellerReceivableBreakdown['net_amount'];
+            $grossAmount = $sellerReceivableBreakdown['gross_amount']['value'];
+            $paypalFee = $sellerReceivableBreakdown['paypal_fee']['value'];
+            $netAmount = $sellerReceivableBreakdown['net_amount']['value'];
 
             $currency = $response['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
 
@@ -164,9 +166,20 @@ class WalletController extends Controller
             $data['currency'] = $currency;
             $data['net'] = $netAmount;
             $data['amount'] = $grossAmount;
-            
+            $data['fee'] = $paypalFee;
 
-            return $data;
+            $update = PaymentTransaction::where('reference', $response['id'])->first();
+            $update->status = 'successful';
+            $update->reference = $response['purchase_units'][0]['reference_id'];
+            $update->save();
+
+            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+            $wallet->usd_balance = $update->amount;
+            $wallet->save();
+
+            return redirect('success');
+        }else{
+            return redirect('error');
         }
     }
 
