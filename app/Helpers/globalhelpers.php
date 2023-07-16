@@ -165,17 +165,18 @@ if(!function_exists('paypalPayment')){
             "intent"=> "CAPTURE",
             "purchase_units"=> [
                 [
-                    "items"=> [
-                        [
-                            "name"=> $name,
-                            "description"=> $description,
-                            "quantity"=> "1",
-                            "unit_amount"=> [
-                                "currency_code"=> "USD",
-                                "value"=> $amount
-                            ]
-                        ]
-                    ],
+                    // "items"=> [
+                    //     [
+                    //         "name"=> $name,
+                    //         "description"=> $description,
+                    //         "quantity"=> "1",
+                    //         "unit_amount"=> [
+                    //             "currency_code"=> "USD",
+                    //             "value"=> $amount
+                    //         ]
+                    //     ]
+                    // ],
+                    "reference_id"=> time(),
                     "amount"=> [
                         "currency_code"=> "USD",
                         "value"=> $amount,
@@ -203,7 +204,7 @@ if(!function_exists('capturePaypalPayment')){
         $url = 'https://api-m.sandbox.paypal.com/v2/checkout/orders/'.$id.'/capture';
 
         // Request payload
-        $data = [ ];
+        $data = [];
 
         // Basic Authorization credentials
         $client_id = 'AaNmCynFHWnhDic6NNn8HVs_bzhIIoFxs0UwuQcnCIMvi7uuo0iGrWLiUyR-F6m_qRimMB9dEMIoY2zZ';
@@ -229,7 +230,7 @@ if(!function_exists('capturePaypalPayment')){
             $error = curl_error($ch);
             // Handle the error
         } else {
-            return response()->json([$response], 201);
+            return json_decode($response, true); //return response()->json([$response], 201);
         }
         // Close cURL resource
         curl_close($ch);

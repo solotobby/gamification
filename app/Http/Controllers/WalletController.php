@@ -145,21 +145,29 @@ class WalletController extends Controller
 
         $id = $params['token'];
 
-        $response = capturePaypalPayment($id);
-        
-    //     $decoded = json_decode($response, true);
+          $response = capturePaypalPayment($id);
 
-    //    $amount = $decoded['purchase_units'][0]['payments']['captures'][0]['amount'];
+        if($response['status'] == 'COMPLETED'){
 
-    //     // Access the 'value' and 'currency_code'
-    //     $value = $amount['value'];
-    //     $currencyCode = $amount['currency_code'];
+            $ref = $response['purchase_units'][0]['reference_id'];
+         
+            $sellerReceivableBreakdown = $response['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 
+            // Access individual values
+            $grossAmount = $sellerReceivableBreakdown['gross_amount'];
+            $paypalFee = $sellerReceivableBreakdown['paypal_fee'];
+            $netAmount = $sellerReceivableBreakdown['net_amount'];
 
+            $currency = $response['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
 
-        // if($response['status'] == 'COMPLETED'){
-        //     $response['purchase_units']['reference_id'];
-        // }
+            $data['ref'] = $ref;
+            $data['currency'] = $currency;
+            $data['net'] = $netAmount;
+            $data['amount'] = $grossAmount;
+            
+
+            return $data;
+        }
     }
 
     public function walletTop()
