@@ -13,12 +13,15 @@ use App\Models\Referral;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
+use App\Notifications\NewNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -34,8 +37,9 @@ class UserController extends Controller
 
     public function makePayment()
     {
-        $location = PaystackHelpers::getLocation();
-        if($location == 'Nigeria'){
+        $user = Auth::user();
+        
+        if(auth()->user()->base_currency == 'Naira'){
             $ref = time();
             $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
@@ -75,6 +79,7 @@ class UserController extends Controller
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
 
+            systemNotification($user, 'success', 'Verification', '$'.$update->amount.' Account Verification Successful');
             return redirect('success');
         }else{
             return redirect('error');
