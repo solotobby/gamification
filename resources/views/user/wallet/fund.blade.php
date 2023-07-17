@@ -14,7 +14,12 @@
       <div class="mb-2 text-center content-heading mb-4">
         <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
+          @if(auth()->user()->base_currency == "Naira")
           &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+          @else
+          ${{ number_format(auth()->user()->wallet->usd_balance) }}
+          @endif
+          {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
         <p>Wallet Balance</p>
       </div>
@@ -57,6 +62,7 @@
             </div> --}}
 
             <div class="mb-4">
+              @if($location == 'Nigeria')
               <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
@@ -64,6 +70,16 @@
                 <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
               </div>
+              @else
+              <div class="input-group">
+                <span class="input-group-text">
+                  $
+                </span>
+                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="5" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                <span class="input-group-text">.00</span>
+              </div>
+              @endif
+
             </div>
 
             <div class="text-center mb-4">

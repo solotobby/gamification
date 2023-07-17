@@ -106,9 +106,12 @@
         </h3>
         <span class="m-2 d-inline-block">
           @if(auth()->user()->is_verified == '0')
+          
           <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
             <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
-          </a><br><br>
+          </a>
+          
+          <br><br>
 
           {{-- <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
             <i class="fa fa-link opacity-50 me-1"></i> Verify 

@@ -34,11 +34,51 @@ class UserController extends Controller
 
     public function makePayment()
     {
-        $ref = time();
-        $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
-        return redirect($url);
-       
+        $location = PaystackHelpers::getLocation();
+        if($location == 'Nigeria'){
+            $ref = time();
+            $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
+            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
+            return redirect($url);
+        }else{
+            $percent = 5/100 * 5;
+            $am = 5 + $percent + 1;
+            $result = paypalPayment($am, '/capture/upgrade');
+             if($result['status'] == 'CREATED'){
+                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
+                return redirect('https://www.sandbox.paypal.com/checkoutnow?token='.$result['id']);
+             }
+        } 
+    }
+
+    public function captureUpgrade(){
+        $url = request()->fullUrl();
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+
+        $id = $params['token'];
+
+          $response = capturePaypalPayment($id);
+
+        if($response['status'] == 'COMPLETED'){
+
+            $ref = $response['purchase_units'][0]['reference_id'];
+
+            $update = PaymentTransaction::where('reference', $response['id'])->first();
+            $update->status = 'successful';
+            $update->reference = $response['purchase_units'][0]['reference_id'];
+            $update->save();
+
+            $user = User::where('id', auth()->user()->id)->first();
+            $user->is_verified = true;
+            $user->save();
+            $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+
+            return redirect('success');
+        }else{
+            return redirect('error');
+        }
     }
 
     public function upgradeCallback()

@@ -78,9 +78,13 @@ class RegisterController extends Controller
             $user = $this->createUser($request); //CREATE USER ON FREEBYZ
         }else{
             $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+
             if($user){
                 $location = PaystackHelpers::getLocation(); //get user location dynamically
-                if($location->countryName == 'United States'){
+                if($location == 'Nigeria'){
+
+                }
+                if($location == 'United States'){
                     $sendMonnyApi = $this->sendMonny($payload);
                     if($sendMonnyApi['status'] == true){
                     $this->processAccountInformation($sendMonnyApi,$user);
@@ -93,14 +97,13 @@ class RegisterController extends Controller
                 }
             }
         }
-        
-        
         Auth::login($user);
         PaystackHelpers::userLocation('Registeration');
         return redirect('/home');
     }
 
     public function createUser($request){
+        $location = PaystackHelpers::getLocation(); //get user location dynamically
         $ref_id = $request->ref_id;
         $name = $request->first_name.' '.$request->last_name;
         $user = User::create([
@@ -112,6 +115,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $user->referral_code = Str::random(7);
+        $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $user->save();
         Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
         if($ref_id != 'null'){
@@ -148,12 +152,16 @@ class RegisterController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
-
+        $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
+        $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+        $user->save();
+        
         // if($user->is_blacklisted){
         //     return view('blocked');
         // }
-        if(Hash::check(trim($request->password), $user->password)){
+        
+        if(Hash::check($request->password, $user->password)){
             if($user->role != 'admin'){
                 $location = PaystackHelpers::getLocation(); //get user specific location
                 if($location == "United States"){ //check if the person is in Nigeria
