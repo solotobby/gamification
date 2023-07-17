@@ -116,8 +116,8 @@ class WalletController extends Controller
 
     public function storeFund(Request $request)
     {
-        $location = PaystackHelpers::getLocation();
-        if($location == 'Nigeria'){
+        // $location = PaystackHelpers::getLocation();
+        if(auth()->user()->base_currency == 'Naira'){
             $ref = time();
 
             $percent = 3/100 * $request->balance;
