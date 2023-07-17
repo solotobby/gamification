@@ -3,7 +3,9 @@
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\Category;
 use App\Models\ConversionRate;
+use App\Models\Notification;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\Wallet;
@@ -234,5 +236,19 @@ if(!function_exists('capturePaypalPayment')){
         }
         // Close cURL resource
         curl_close($ch);
+    }
+}
+
+if(!function_exists('systemNotification')){
+    function systemNotification($user, $category, $title, $message){
+        
+        $notification = Notification::create([
+            'user_id' => $user->id,
+            'category' => $category,
+            'title' => $title,
+            'message'=> $message
+        ]);
+
+        return $notification;
     }
 }

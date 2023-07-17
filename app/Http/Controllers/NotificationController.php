@@ -15,7 +15,10 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        
+        Notification::where('user_id', auth()->user()->id)->update(['is_read' => true]);
+        $notifications = auth()->user()->notifications()->latest()->paginate(20);
+
+        return view('user.notification.index', ['notifications' => $notifications]);
     }
 
     public function markAsRead(Notification $notification)

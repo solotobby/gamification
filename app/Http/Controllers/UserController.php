@@ -38,10 +38,7 @@ class UserController extends Controller
     public function makePayment()
     {
         $user = Auth::user();
-        // Notification::send($user, new NewNotification());
-        $user->notify(new NewNotification());
-        return 'ok';
-        // $location = PaystackHelpers::getLocation();
+        
         if(auth()->user()->base_currency == 'Naira'){
             $ref = time();
             $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
@@ -82,6 +79,7 @@ class UserController extends Controller
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
 
+            systemNotification($user, 'success', 'Verification', '$'.$update->amount.' Account Verification Successful');
             return redirect('success');
         }else{
             return redirect('error');

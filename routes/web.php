@@ -16,6 +16,7 @@
 // use Illuminate\Support\Facades\App;
 
 use App\Http\Controllers\Admin\PreferenceController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
@@ -146,6 +147,10 @@ Route::post('feedback/reply', [\App\Http\Controllers\FeedbackController::class, 
 
 Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 'create']);
 Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
+//notification
+Route::resource('notifications', NotificationController::class);
+
+
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
@@ -255,6 +260,7 @@ Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController:
 Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
 
 Route::resource('preferences', PreferenceController::class);
+
 //Campaign metrics
 Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);

@@ -13,6 +13,7 @@ use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -149,6 +150,7 @@ class WalletController extends Controller
 
           $response = capturePaypalPayment($id);
 
+          $user = Auth::user();
         if($response['status'] == 'COMPLETED'){
 
             $ref = $response['purchase_units'][0]['reference_id'];
@@ -177,6 +179,8 @@ class WalletController extends Controller
             $wallet->usd_balance += $update->amount;
             $wallet->save();
 
+            systemNotification($user, 'success', 'Wallet Topup', '$'.$update->amount.' Wallet Topup Successful');
+
             return redirect('success');
         }else{
             return redirect('error');
@@ -192,12 +196,14 @@ class WalletController extends Controller
         $ref = $params['trxref']; //paystack
         $res = PaystackHelpers::verifyTransaction($ref); //
    
-       $amount = $res['data']['amount'];
+        $amount = $res['data']['amount'];
 
         $percent = 2.90/100 * $amount;
         $formatedAm = $percent;
         $newamount = $amount - $formatedAm; //verify transaction
         $creditAmount = $newamount / 100;
+        
+        $user = Auth::user();
 
        if($res['data']['status'] == 'success') //success - paystack
        {
@@ -211,6 +217,8 @@ class WalletController extends Controller
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
+            systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
+
             return redirect('success');
        }else{
         return redirect('error');
