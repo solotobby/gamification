@@ -87,6 +87,7 @@ Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToG
 Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 //paypal
 Route::get('paypal/return', [\App\Http\Controllers\WalletController::class, 'capturePaypal']);
+Route::get('capture/upgrade', [\App\Http\Controllers\UserController::class, 'captureUpgrade']);
 ///Points Routes
 Route::get('points', [\App\Http\Controllers\LoginPointCountroller::class, 'index'])->name('points');
 Route::get('points/redeem', [\App\Http\Controllers\LoginPointCountroller::class, 'redeemPoint'])->name('redeem.point');

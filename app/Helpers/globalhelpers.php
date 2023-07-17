@@ -156,12 +156,12 @@ if(!function_exists('conversionRate')){
 }
 
 if(!function_exists('paypalPayment')){
-    function paypalPayment($amount){
+    function paypalPayment($amount, $url){
 
         $res = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->withBasicAuth('AaNmCynFHWnhDic6NNn8HVs_bzhIIoFxs0UwuQcnCIMvi7uuo0iGrWLiUyR-F6m_qRimMB9dEMIoY2zZ', 'ECGLu3Yl1lPOSBSLQ5wnISVuBJCdZ8ipZH8TpqlhddHeUL163dhjCVq-oH4P765MBY5odQWABnnvfq45')
-        ->post('https://api-m.sandbox.paypal.com/v2/checkout/orders', [
+        ])->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'))
+        ->post(env('PAYPAL_URL').'checkout/orders', [
             "intent"=> "CAPTURE",
             "purchase_units"=> [
                 [
@@ -190,7 +190,7 @@ if(!function_exists('paypalPayment')){
                 ]
             ],
             "application_context"=> [
-                "return_url"=> url('/paypal/return'),
+                "return_url"=> url($url),
                 "cancel_url"=> url('/home')
             ]
         ]);
@@ -201,14 +201,14 @@ if(!function_exists('paypalPayment')){
 if(!function_exists('capturePaypalPayment')){
     function capturePaypalPayment($id){
 
-        $url = 'https://api-m.sandbox.paypal.com/v2/checkout/orders/'.$id.'/capture';
+        $url = env('PAYPAL_URL').'checkout/orders/'.$id.'/capture';
 
         // Request payload
         $data = [];
 
         // Basic Authorization credentials
-        $client_id = 'AaNmCynFHWnhDic6NNn8HVs_bzhIIoFxs0UwuQcnCIMvi7uuo0iGrWLiUyR-F6m_qRimMB9dEMIoY2zZ';
-        $client_secret = 'ECGLu3Yl1lPOSBSLQ5wnISVuBJCdZ8ipZH8TpqlhddHeUL163dhjCVq-oH4P765MBY5odQWABnnvfq45';
+        $client_id = env('PAYPAL_CLIENT_ID');
+        $client_secret = env('PAYPAL_CLIENT_SECRET');
 
         // Initialize cURL
         $ch = curl_init($url);
