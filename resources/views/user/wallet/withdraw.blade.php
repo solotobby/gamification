@@ -15,7 +15,12 @@
         <div class="mb-2 text-center content-heading mb-4">
           <p class="text-uppercase fw-bold fs-sm text-muted">Withdraw Funds</p>
           <p class="link-fx fw-bold fs-1">
-            &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+            @if(auth()->user()->base_currency == "Naira")
+          &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+          @else
+          ${{ number_format(auth()->user()->wallet->usd_balance) }}
+          @endif
+            {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
           </p>
           <p>Wallet Balance</p>
         </div>
@@ -45,40 +50,56 @@
                   </div>
               @endif
   
-              {{-- <div class="mb-4">
-                <div class="input-group">
-                 <select class="form-control" name="network" required>
-                    <option value="">Select One</option>
-                    <option value="MTN">MTN</option>
-                    <option value="AIRTEL">AIRTEL</option>
-                    <option value="GLO">GLO</option>
-                    <option value="9MOBILE">9MOBILE</option>
-                 </select>
-                </div>
-              </div> --}}
-  
               <div class="mb-4">
                 <div class="input-group">
-                  <span class="input-group-text">
-                    &#8358;
-                  </span>
-                  <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="500" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
-                  <span class="input-group-text">.00</span>
+                  @if(auth()->user()->base_currency == 'Naira')
+                      <span class="input-group-text">
+                        &#8358;
+                      </span>
+                      <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="500" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                      <span class="input-group-text">.00</span>
+                  @else
+                      <span class="input-group-text">
+                        $
+                      </span>
+                      <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                      <span class="input-group-text">.00</span>
+                  @endif
                 </div>
               </div>
-  
-              <div class="mb-4">
-                <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="fa fa-grip-vertical"></i>
-                  </span>
-                  <select name="type" class="form-control" required>
-                    <option value="">Select An Option</option>
-                    <option value="local_withdrawal">Local Withdrawal</option>
-                    <option value="paypal_withdrawal">Paypal Withdrawal</option>
-                  </select>
-                </div>
-              </div>
+              @if(auth()->user()->base_currency == 'Naira')
+                  <div class="mb-4">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa fa-grip-vertical"></i>
+                      </span>
+                    
+                      <select name="type" class="form-control" required>
+                        <option value="">Select An Option</option>
+                        <option value="local_withdrawal">Local Withdrawal</option>
+                        <option value="paypal_withdrawal">Paypal Withdrawal</option>
+                      </select>
+                      
+                    </div>
+                  </div>
+              @else
+                  <div class="mb-4">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa fa-envelope"></i>
+                      </span>
+                      <input type="email" class="form-control @error('paypal_email') is-invalid @enderror" id="reminder-credential" name="paypal_email" value="{{ old('paypal_email') }}" placeholder="Enter Paypal Email Address" required>
+                      {{-- <span class="input-group-text">.00</span> --}}
+                    
+                      {{-- <select name="type" class="form-control" required>
+                        <option value="">Select An Option</option>
+                        <option value="local_withdrawal">Local Withdrawal</option>
+                        <option value="paypal_withdrawal">Paypal Withdrawal</option>
+                      </select> --}}
+                      
+                    </div>
+                  </div>
+              @endif
               <div class="text-center mb-4">
                
                 @if(auth()->user()->is_verified == true)

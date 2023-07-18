@@ -62,7 +62,7 @@
             </div> --}}
 
             <div class="mb-4">
-              @if($location == 'Nigeria')
+              @if(auth()->user()->base_currency == 'Naira')
               <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
