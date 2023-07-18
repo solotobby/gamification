@@ -6,6 +6,7 @@ use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Models\Answer;
+use App\Models\Campaign;
 use App\Models\Games;
 use App\Models\PaymentTransaction;
 use App\Models\Transaction;
@@ -15,6 +16,40 @@ use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
+
+    public function fix(){
+        
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $list = [];
+        foreach($campaigns as $key => $value){
+            $data['pending'] = 'Pending';
+            $data['approve'] = 'Approved';
+            // $attempts = $value->completed->count();
+            $completed = $value->completed()->where('status', '=', 'Approved')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
+            if($completed >= $value->number_of_staff){
+                Campaign::where('id', $value->id)->update(['is_completed' => true]);
+            }
+            
+            // $div = $completed / $value->number_of_staff;
+            // $progress = $div * 100;
+            // $list[] = [ 
+            //     // 'job_id' => $value->job_id, 
+            //     // 'campaign_amount' => $value->campaign_amount,
+            //     // 'post_title' => $value->post_title, 
+            //     'number_of_staff' => $value->number_of_staff, 
+            //     // 'type' => $value->campaignType->name, 
+            //     // 'category' => $value->campaignCategory->name,
+            //     // 'attempts' => $attempts,
+            //     'completed' => $completed,
+            //     'is_completed' => $completed >= $value->number_of_staff ? true : false,
+            //     // 'progress' => $progress 
+            // ];
+        }
+
+        // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+        return 'okay';
+    }
     public function landingPage()
     {
         
