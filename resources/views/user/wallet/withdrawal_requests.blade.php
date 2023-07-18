@@ -50,7 +50,12 @@
                 @foreach ($lists as $list)
                 <tr>
                     <td>
-                        &#8358;{{ number_format($list->amount) }}
+                        @if($list->is_usd == true)
+                        $
+                        @else
+                        &#8358;
+                        @endif
+                        {{ number_format($list->amount) }}
                     </td>
                     <td>
                         {{ $list->next_payment_date }}
