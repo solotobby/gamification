@@ -158,7 +158,9 @@
       
       <div class="alert alert-info mt-3">
         {{-- Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank) --}}
-        Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!!
+        {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
+        {{-- <br> --}}
+        Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! 
       </div>
       {{-- <marquee>
         <ul class="list-inline">

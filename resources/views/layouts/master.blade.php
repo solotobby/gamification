@@ -20,15 +20,15 @@
         <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
         <script src="{{ asset('asset/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4211954660767269"
-     crossorigin="anonymous"></script>
+        {{-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4211954660767269"
+     crossorigin="anonymous"></script> --}}
 
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 
         {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> --}}
         
               <!-- Google tag (gtag.js) - Google Analytics -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
+            {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
             </script>
             <script>
             window.dataLayer = window.dataLayer || [];
@@ -36,18 +36,18 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-238432357-1');
-            </script>
+            </script> --}}
 
         
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7C4X8TR6T"></script>
+        {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7C4X8TR6T"></script>
         <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
         gtag('config', 'G-G7C4X8TR6T');
-        </script>
+        </script> --}}
         
         @yield('script')
         @yield('style')

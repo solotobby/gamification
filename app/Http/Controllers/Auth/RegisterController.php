@@ -98,7 +98,7 @@ class RegisterController extends Controller
             }
         }
         Auth::login($user);
-        PaystackHelpers::userLocation('Registeration');
+        // PaystackHelpers::userLocation('Registeration');
         return redirect('/home');
     }
 
@@ -163,31 +163,26 @@ class RegisterController extends Controller
             $user->save();
         }
         
-
-        
-        // if($user->is_blacklisted){
-        //     return view('blocked');
-        // }
-        
         if(Hash::check($request->password, $user->password)){
-            if($user->role != 'admin'){
-                $location = PaystackHelpers::getLocation(); //get user specific location
-                if($location == "United States"){ //check if the person is in Nigeria
-                    if($user->is_wallet_transfered == false){
-                        //activate sendmonny wallet and fund wallet
-                        if(walletHandler() == 'sendmonny'){ 
-                            if($user->is_wallet_transfered == false){
-                                activateSendmonnyWallet($user, $request->password); //hand sendmonny 
-                            }
-                        }
-                    }
-                }
-            }
+            // if($user->role != 'admin'){
+            //     $location = PaystackHelpers::getLocation(); //get user specific location
+            //     if($location == "United States"){ //check if the person is in Nigeria
+            //         if($user->is_wallet_transfered == false){
+            //             //activate sendmonny wallet and fund wallet
+            //             if(walletHandler() == 'sendmonny'){ 
+            //                 if($user->is_wallet_transfered == false){
+            //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny 
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
             Auth::login($user); //log user in
             $wall = Wallet::where('user_id', auth()->user()->id)->first();
             $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
             $wall->save();
-            PaystackHelpers::userLocation('Login');
+            // PaystackHelpers::userLocation('Login');
             SystemActivities::loginPoints($user);
             return redirect('home'); //redirect to home
         }else{
