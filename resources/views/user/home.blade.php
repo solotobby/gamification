@@ -132,7 +132,7 @@
       <div class="d-flex justify-content-center align-items-center">
         <div class="px-2 px-sm-5">
 
-          @if(auth()->user()->base_currency == "Naira")
+          @if(auth()->user()->wallet->base_currency == "Naira")
           <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
           @else
           <p class="fs-3 text-dark mb-0">${{ number_format(auth()->user()->wallet->usd_balance) }}</p>

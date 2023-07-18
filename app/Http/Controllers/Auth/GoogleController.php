@@ -42,9 +42,9 @@ class GoogleController extends Controller
                     $get->save();
                 }
                 $location = PaystackHelpers::getLocation(); //get user location dynamically
-                //$user = User::where('email', $get->email)->first();
-                $get->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar'; //update user base_currency
-                $get->save();
+               
+                $wallet->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                $wallet->save();
                 if($get->phone == '')
                 {
                     return view('phone');
@@ -70,7 +70,7 @@ class GoogleController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'google_id'=> $user->id,
-                    'password' => encrypt('123456dummy'), 
+                    'password' => encrypt('123456dummy09293'), 
                     'avatar' => $user->avatar
                 ]);
                 $newUser->referral_code = Str::random(7);
@@ -82,9 +82,11 @@ class GoogleController extends Controller
                 PaystackHelpers::userLocation('Google_Registeration');
 
                 $location = PaystackHelpers::getLocation(); //get user location dynamically
-                $user = User::where('email', $newUser->email)->first();
-                $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar'; //update user base_currency
-                $user->save();
+               
+                $wall = Wallet::where('user_id',$newUser->id)->first();
+                $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                $wall->save();
+
                 if($get->phone == '')
                 {
                     return view('phone');
