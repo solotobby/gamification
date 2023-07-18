@@ -131,10 +131,11 @@ class WalletController extends Controller
         }else{
             $percent = 5/100 * $request->balance;
             $am = $request->balance + $percent + 1;
-            $result = paypalPayment($am, '/paypal/return');
+             $result = paypalPayment($am, '/paypal/return');
              if($result['status'] == 'CREATED'){
+                $url = $result['links'][1]['href'];
                 PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
-                return redirect('https://www.sandbox.paypal.com/checkoutnow?token='.$result['id']);
+                return redirect($url);
              }
            
         }
