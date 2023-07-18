@@ -50,15 +50,6 @@
                         @else
                             <i class="fa fa-fw fa-check-circle text-success"></i>
                         @endif
-                        
-                        {{-- @if($notify->category == 'error')
-                          <i class="fa fa-fw fa-times-circle text-danger"></i>
-                        @elseif($notify->category == 'success')
-                          <i class="fa fa-fw fa-check-circle text-success"></i>
-                        @elseif($notify->category == 'info')
-                          <i class="fa fa-fw fa-exclamation-circle text-warning"></i>
-                        @endif --}}
-                     {{-- {{ $notify->category}} --}}
                     </td>
                     <td>
                         {{ $notify->title}}
