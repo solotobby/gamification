@@ -118,7 +118,7 @@ class WalletController extends Controller
     public function storeFund(Request $request)
     {
         // $location = PaystackHelpers::getLocation();
-        if(auth()->user()->base_currency == 'Naira'){
+        if(auth()->user()->wallet->base_currency == 'Naira'){
             $ref = time();
 
             $percent = 3/100 * $request->balance;
@@ -228,7 +228,7 @@ class WalletController extends Controller
 
     public function storeWithdraw(Request $request)
     {
-        if(auth()->user()->base_currency == 'Naira' ){
+        if(auth()->user()->wallet->base_currency == 'Naira' ){
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             if($wallet->balance < $request->balance)

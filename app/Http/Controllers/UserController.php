@@ -39,7 +39,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         
-        if(auth()->user()->base_currency == 'Naira'){
+        if(auth()->user()->wallet->base_currency == 'Naira'){
             $ref = time();
             $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
