@@ -51,11 +51,11 @@
                 <tr>
                     <td>
                         @if($list->is_usd == true)
-                        $
+                        ${{ number_format($list->amount) }}
                         @else
-                        &#8358;
+                        &#8358;{{ number_format($list->amount) }}
                         @endif
-                        {{ number_format($list->amount) }}
+                        
                     </td>
                     <td>
                         {{ $list->next_payment_date }}
