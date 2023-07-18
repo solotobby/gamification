@@ -116,7 +116,7 @@ class RegisterController extends Controller
         ]);
         $user->referral_code = Str::random(7);
         // $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-        // $user->save();
+        $user->save();
         Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
@@ -158,7 +158,12 @@ class RegisterController extends Controller
         ]);
         $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
-       
+        if($user->referral_code == null){
+            $user->referral_code = Str::random(7);
+            $user->save();
+        }
+        
+
         
         // if($user->is_blacklisted){
         //     return view('blocked');
