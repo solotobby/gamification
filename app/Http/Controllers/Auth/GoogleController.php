@@ -41,9 +41,9 @@ class GoogleController extends Controller
                     $get->referral_code = Str::random(7);
                     $get->save();
                 }
-                $location = PaystackHelpers::getLocation(); //get user location dynamically
+                // $location = PaystackHelpers::getLocation(); //get user location dynamically
                
-                $wallet->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                $wallet->base_currency = 'Naira'; //$location == "Nigeria" ? 'Naira' : 'Dollar';
                 $wallet->save();
                 if($get->phone == '')
                 {
@@ -79,12 +79,12 @@ class GoogleController extends Controller
     
                 Auth::login($newUser);
                 $get = User::where('id',  $newUser->id)->first();
-                PaystackHelpers::userLocation('Google_Registeration');
+                // PaystackHelpers::userLocation('Google_Registeration');
 
-                $location = PaystackHelpers::getLocation(); //get user location dynamically
+                // $location = PaystackHelpers::getLocation(); //get user location dynamically
                
                 $wall = Wallet::where('user_id',$newUser->id)->first();
-                $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                $wall->base_currency = 'Naira'; //$location == "Nigeria" ? 'Naira' : 'Dollar';
                 $wall->save();
 
                 if($get->phone == '')

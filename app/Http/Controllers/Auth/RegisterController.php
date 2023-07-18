@@ -98,7 +98,7 @@ class RegisterController extends Controller
             }
         }
         Auth::login($user);
-        // PaystackHelpers::userLocation('Registeration');
+        PaystackHelpers::userLocation('Registeration');
         return redirect('/home');
     }
 
@@ -121,9 +121,9 @@ class RegisterController extends Controller
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
-        $location = PaystackHelpers::getLocation(); //get user location dynamically
+        // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $wall = Wallet::where('user_id', $user->id)->first();
-        $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+        $wall->base_currency = 'Naira'; //$location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
         return $user;
     }
@@ -156,7 +156,7 @@ class RegisterController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
-        $location = PaystackHelpers::getLocation(); //get user location dynamically
+        // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
         if($user->referral_code == null){
             $user->referral_code = Str::random(7);
@@ -180,10 +180,10 @@ class RegisterController extends Controller
 
             Auth::login($user); //log user in
             $wall = Wallet::where('user_id', auth()->user()->id)->first();
-            $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+            $wall->base_currency = 'Naira';//$location == "Nigeria" ? 'Naira' : 'Dollar';
             $wall->save();
             // PaystackHelpers::userLocation('Login');
-            SystemActivities::loginPoints($user);
+            // SystemActivities::loginPoints($user);
             return redirect('home'); //redirect to home
         }else{
             return back()->with('error', 'Email or Password is incorrect');
