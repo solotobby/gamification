@@ -34,10 +34,10 @@
             User Options
           </div>
           <div class="p-2">
-            {{-- <a class="dropdown-item" href="be_pages_generic_profile.html">
+             {{-- <a class="dropdown-item" href="{{url('profile')}}">
               <i class="far fa-fw fa-user me-1"></i> Profile
-            </a>
-            <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
+            </a> --}}
+            {{--<a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
               <span><i class="far fa-fw fa-envelope me-1"></i> Inbox</span>
               <span class="badge bg-primary rounded-pill">3</span>
             </a>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
@@ -82,6 +83,18 @@ if(!function_exists('isBlacklisted')){
 if(!function_exists('walletHandler')){
     function walletHandler(){
         return Settings::where('status', true)->first()->name;
+    }
+}
+
+if(!function_exists('setWalletBaseCurrency')){
+    function setWalletBaseCurrency(){
+        $wall = Wallet::where('user_id', auth()->user()->id)->first();
+        if($wall->base_currency == null){
+            $location = PaystackHelpers::getLocation();
+            $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+            $wall->save();
+        }
+       return $wall;
     }
 }
 
