@@ -41,10 +41,10 @@ class GoogleController extends Controller
                     $get->referral_code = Str::random(7);
                     $get->save();
                 }
-                $location = PaystackHelpers::getLocation(); //get user location dynamically
+                // $location = PaystackHelpers::getLocation(); //get user location dynamically
                
-                $wallet->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-                $wallet->save();
+                // $wallet->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                // $wallet->save();
                 if($get->phone == '')
                 {
                     return view('phone');

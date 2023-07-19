@@ -162,6 +162,25 @@
         {{-- <br> --}}
         Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! 
       </div>
+      @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+            @endif
+      <center>
+      <form action="{{ url('switch/wallet') }}" method="POST">
+        @csrf
+          @if(auth()->user()->wallet->base_currency == 'Naira')
+          <input type="hidden" name="currency" value="Dollar">
+          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currecy to Dollar</button>
+          @else
+          <input type="hidden" name="currency" value="Naira">
+          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
+          @endif
+      
+      </form>
+       
+      </center>
       {{-- <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
@@ -171,15 +190,16 @@
       </marquee> --}}
     </div>
   </div>
+ 
   <!-- END Hero Section -->
   
         <!-- Page Content -->
         <div class="content content-boxed content-full">
-          @if (session('success'))
+          {{-- @if (session('success'))
           <div class="alert alert-success" role="alert">
               {{ session('success') }}
           </div>
-          @endif
+          @endif --}}
 
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available jobs

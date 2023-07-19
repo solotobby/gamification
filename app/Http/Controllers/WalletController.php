@@ -336,4 +336,9 @@ class WalletController extends Controller
 
         return $withdrawal;
     }
+
+    public function switchWallet(Request $request){
+        auth()->user()->wallet()->update(['base_currency' => $request->currency]);
+        return back()->with('success', 'Currency Changed successfully');
+    }
 }
