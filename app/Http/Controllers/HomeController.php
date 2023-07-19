@@ -79,7 +79,7 @@ class HomeController extends Controller
         }
 
         ///set User currency
-        
+
     
         $activity_log = SystemActivities::showActivityLog();
         $available_jobs = SystemActivities::availableJobs();
@@ -112,7 +112,8 @@ class HomeController extends Controller
         //monthly visits
         $start_date = \Carbon\Carbon::today()->subDays(30);
         $end_date = \Carbon\Carbon::now()->format('Y-m-d');
-        $MonthlyVisit = Analytics::monthlyVisits($start_date, $end_date);
+
+        $MonthlyVisit = Analytics::monthlyVisits();
 
         //daily visits
         $dailyVisits = Analytics::dailyStats();
@@ -176,7 +177,7 @@ class HomeController extends Controller
         $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         $data['loginPointsValue'] = $data['loginPoints']/5;
        
-        $data['monthlyVisits'] = Analytics::monthlyVisits($start_date, $end_date);
+        $data['monthlyVisits'] = Analytics::monthlyVisits();
         return $data;
     }
         
