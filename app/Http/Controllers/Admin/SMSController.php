@@ -58,7 +58,7 @@ class SMSController extends Controller
                 $list[] = $phone;
             }
         }
-        $response = PaystackHelpers::sendBulkSMS($list, $request->message);
+        return $response = PaystackHelpers::sendBulkSMS($list, $request->message);
         if($response['code'] == 'ok'){
             return back()->with('success', 'Broadcast Sent');
         }else{
