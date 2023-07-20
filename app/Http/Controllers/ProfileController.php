@@ -8,6 +8,16 @@ use App\Models\Profile;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -82,5 +92,10 @@ class ProfileController extends Controller
     public function destroy(Profile $profile)
     {
         //
+    }
+
+    public function welcomeUser(){
+        auth()->user()->profile()->update(['is_welcome' => true]);
+        return redirect('home');
     }
 }

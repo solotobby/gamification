@@ -104,10 +104,7 @@ if(!function_exists('setProfile')){
 
         $profile = Profile::where('user_id', auth()->user()->id)->first();
         if($profile == null){
-            
-    //         $location = PaystackHelpers::getLocation();
-    //         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-    //         $wall->save();
+           $profile =  Profile::create(['user_id' => auth()->user()->id]);
         }
        return $profile;
     }

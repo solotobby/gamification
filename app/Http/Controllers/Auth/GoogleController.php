@@ -29,9 +29,10 @@ class GoogleController extends Controller
             $finduser = User::where('google_id', $user->id)->first();
      
             if($finduser){
-                Auth::login($finduser);
+                Auth::login($finduser); //login
                 $get = User::where('id', auth()->user()->id)->first();
                 $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+                setProfile();//set profile page 
                 if(!$wallet){
                     //create the wallet
                     Wallet::create(['user_id'=> $get->id, 'balance' => '0.00']);
@@ -77,7 +78,7 @@ class GoogleController extends Controller
                 $newUser->save();
                 Wallet::create(['user_id'=> $newUser->id, 'balance' => '0.00']);
     
-                Auth::login($newUser);
+                Auth::login($newUser); //login 
                 $get = User::where('id',  $newUser->id)->first();
                 PaystackHelpers::userLocation('Google_Registeration');
 
@@ -86,6 +87,9 @@ class GoogleController extends Controller
                 $wall = Wallet::where('user_id',$newUser->id)->first();
                 $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
                 $wall->save();
+
+                setProfile();//set profile page 
+
 
                 if($get->phone == '')
                 {
