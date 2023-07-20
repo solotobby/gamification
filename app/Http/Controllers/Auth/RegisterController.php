@@ -99,6 +99,7 @@ class RegisterController extends Controller
         }
         Auth::login($user);
         PaystackHelpers::userLocation('Registeration');
+        setProfile();//set profile page 
         return redirect('/home');
     }
 
@@ -184,6 +185,7 @@ class RegisterController extends Controller
             // $wall->save();
             // PaystackHelpers::userLocation('Login');
             setWalletBaseCurrency(); //set base currency if not set
+            setProfile();//set profile page 
             SystemActivities::loginPoints($user);
             return redirect('home'); //redirect to home
         }else{

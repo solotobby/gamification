@@ -341,6 +341,6 @@ class WalletController extends Controller
         auth()->user()->wallet()->update(['base_currency' => $request->currency]);
         systemNotification(Auth::user(), 'success', 'Currency Switch', 'Currency switched to '.$request->currency);
         
-        return back()->with('success', 'Currency Changed successfully');
+        return back()->with('success', 'Currency switched successfully');
     }
 }

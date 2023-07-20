@@ -156,30 +156,31 @@
         </div>
       </div>
       
-      <div class="alert alert-info mt-3">
+      {{-- <div class="alert alert-info mt-3">
         {{-- Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank) --}}
         {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
         {{-- <br> --}}
-        Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! 
-      </div>
-      @if (session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-            @endif
-      <center>
-      <form action="{{ url('switch/wallet') }}" method="POST">
-        @csrf
-          @if(auth()->user()->wallet->base_currency == 'Naira')
-          <input type="hidden" name="currency" value="Dollar">
-          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
-          @else
-          <input type="hidden" name="currency" value="Naira">
-          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
+        {{-- Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! 
+      </div>  --}}
+      <div class="mt-3">
+          @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
           @endif
-      </form>
-       
-      </center>
+          <center>
+          <form action="{{ url('switch/wallet') }}" method="POST">
+            @csrf
+              @if(auth()->user()->wallet->base_currency == 'Naira')
+              <input type="hidden" name="currency" value="Dollar">
+              <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
+              @else
+              <input type="hidden" name="currency" value="Naira">
+              <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
+              @endif
+          </form>
+          </center>
+      </div>
       {{-- <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
@@ -337,11 +338,27 @@
 
           
 
+          
+
 
     </div>
           <!-- END Call to Action -->
+          @if(auth()->user()->profile->is_welcome == 0)
+            {{-- Show welcome pop up --}}
+            @include('layouts.resources.welcome')
 
+          @elseif(auth()->user()->is_verified == 0)
           
+              @include('layouts.resources.unverified')
+
+            {{-- @else
+              @include('layouts.resources.repository') --}}
+            
+          @endif
+
+
+
+
 @endsection
 @section('script')
  <!-- jQuery (required for Slick Slider plugin) -->
