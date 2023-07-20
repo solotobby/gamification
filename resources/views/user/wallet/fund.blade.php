@@ -23,7 +23,7 @@
         </p>
         <p>Wallet Balance</p>
       </div>
-
+      
       <div class="row">
         <div class="col-lg-3"></div>
           <div class="col-lg-6">
@@ -49,17 +49,6 @@
                 </div>
             @endif
 
-            {{-- <div class="mb-4">
-              <div class="input-group">
-               <select class="form-control" name="network" required>
-                  <option value="">Select One</option>
-                  <option value="MTN">MTN</option>
-                  <option value="AIRTEL">AIRTEL</option>
-                  <option value="GLO">GLO</option>
-                  <option value="9MOBILE">9MOBILE</option>
-               </select>
-              </div>
-            </div> --}}
 
             <div class="mb-4">
               @if(auth()->user()->wallet->base_currency == 'Naira')
@@ -84,12 +73,23 @@
 
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary">
-                <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
+                <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet with card
               </button>
             </div>
           </div>
           <div class="col-lg-3"></div>
        
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8" style="color: brown">
+          Manual Wallet funding, please credit the account below: <br>
+            <b>ACCOUNT DETAILS: 4600066074 
+            <br>DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
+            <br>
+            <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i>
+        </div>
+        <div class="col-lg-2"></div>
       </div>
       <!-- END Text -->
     </form>

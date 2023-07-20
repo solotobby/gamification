@@ -3,13 +3,6 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content rounded overflow-hidden bg-image bg-image-bottom border-0" style="background-image: url({{asset('src/assets/media/photos/photo23.jpg')}});">
         <div class="row">
-          <div class="col-md-5">
-            <div class="p-3 text-end text-md-start">
-              <a class="fw-semibold text-white" href="#" data-bs-dismiss="modal" aria-label="Close">
-                Skip Intro
-              </a>
-            </div>
-          </div>
           <div class="col-md-12">
             <div class="p-3 text-end text-md-start">
               <a class="fw-semibold text-white" href="#" data-bs-dismiss="modal" aria-label="Close">
@@ -20,8 +13,6 @@
               <div class="js-slider slick-dotted-inner" data-dots="true" data-arrows="false" data-infinite="false">
                 <div class="p-5">
                  
-                  @if(auth()->user()->is_verified == '0')
-
                   <h3 class="mb-2 text-center">
                     Get Access to More Jobs
                   </h3>
@@ -47,38 +38,7 @@
                       </a>
                     </center>
                   </h4>
-                  @else
-
-                  
-                  <h3 class="mb-2 text-center">
-                    Refer friends and cashout out every Friday
-                  </h3>
-
-                  <h4 class="fw-normal text-muted text-center">
-                    We'll reward you with &#8358;500 on each verified friend and instant cash of &#8358;5,000 bonus when you reach 50 verified referrals. 
-                  </h4>
-                  <center>
-                    <div class="col-md-8 mb-2">
-                      <div class="input-group">
-                        <input type="text" value="{{url('register/'.auth()->user()->referral_code)}}" class="form-control form-control-alt" id="myInput">
-                        <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
-                          <i class="fa fa-copy"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </center>
-                  {{-- <center>{{url('register/'.auth()->user()->referral_code)}}</center> --}}
-                </div>
-
-                 {{-- <div class="slick-slide p-5">
-                  <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                  
-                  <button type="button" class="btn btn-primary mb-4" data-bs-dismiss="modal" aria-label="Close">
-                    Close <i class="fa fa-times opacity-50 ms-1"></i>
-                  </button> --}}
-                </div>
-
-                @endif
 
                 {{-- <div class="slick-slide p-5">
                   <i class="fa fa-award fa-3x text-muted my-4"></i>

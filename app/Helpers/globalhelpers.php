@@ -7,6 +7,7 @@ use App\Models\AccountInformation;
 use App\Models\Category;
 use App\Models\ConversionRate;
 use App\Models\Notification;
+use App\Models\Profile;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\Wallet;
@@ -95,6 +96,20 @@ if(!function_exists('setWalletBaseCurrency')){
             $wall->save();
         }
        return $wall;
+    }
+}
+
+if(!function_exists('setProfile')){
+    function setProfile(){
+
+        $profile = Profile::where('user_id', auth()->user()->id)->first();
+        if($profile == null){
+            
+    //         $location = PaystackHelpers::getLocation();
+    //         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+    //         $wall->save();
+        }
+       return $profile;
     }
 }
 

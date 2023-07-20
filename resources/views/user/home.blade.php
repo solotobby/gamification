@@ -337,11 +337,18 @@
 
           
 
+          
+
 
     </div>
           <!-- END Call to Action -->
+          @if(auth()->user()->is_verified == 0)
+            @include('layouts.resources.unverified')
+          {{-- @else
+            @include('layouts.resources.repository') --}}
+          @endif
 
-          
+
 @endsection
 @section('script')
  <!-- jQuery (required for Slick Slider plugin) -->
