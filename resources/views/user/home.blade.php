@@ -172,12 +172,11 @@
         @csrf
           @if(auth()->user()->wallet->base_currency == 'Naira')
           <input type="hidden" name="currency" value="Dollar">
-          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currecy to Dollar</button>
+          <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
           @else
           <input type="hidden" name="currency" value="Naira">
           <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
           @endif
-      
       </form>
        
       </center>
