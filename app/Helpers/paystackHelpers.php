@@ -301,7 +301,7 @@ class PaystackHelpers{
             "sms"=> $message,
             "type"=> "plain",
             "channel"=> "generic",
-            "api_key"=> env('TERMI_KEY')
+            "api_key"=> 'TLwlskUMrXpdMvM592JRKzu3B2tM4BWH4TfdJsc091VqE4ZtIUv5XhrBaVJi0g'//env('TERMI_KEY')
         ]);
 
         return json_decode($res->getBody()->getContents(), true);
