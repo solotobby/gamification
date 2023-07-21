@@ -23,12 +23,7 @@ class SMSController extends Controller
     }
 
     public function send_massSMS(Request $request){
-        // $type = $request->type;
-        // if($type == 'unverified'){
-        //     $contacts = User::where('role', 'regular')->where('is_verified', false)->where('country', 'Nigeria')->select(['phone'])->get();
-        // }elseif($type == 'verified'){
-        //     $contacts = User::where('role', 'regular')->where('is_verified', true)->where('country', 'Nigeria')->select(['phone'])->get();
-        // }
+
         $type = $request->type;
         if($type == 'unverified'){
             $contacts = $this->filter($request, false);
@@ -36,38 +31,47 @@ class SMSController extends Controller
            $contacts = $this->filter($request, true);
         }
 
-        return $contacts;
-
         $list = [];
         foreach($contacts as $key=>$value){
-            
-            $initials = SystemActivities::getInitials($value->phone);
-            $phone = '';
+            $formatedPhone = '';
+            $initials = $this->getInitials($value->phone); 
+
             if($initials == 0){
-                $phone = '234'.substr($value->phone, 1);
+                $formatedPhone = '234'.substr($value->phone, 1);
             }elseif($initials == '+'){
-                $phone = substr($value->phone, 1);
+                $formatedPhone = substr($value->phone, 1);
             }elseif($initials == 2){
-                $phone = $value->phone;
+                $formatedPhone = $value->phone;
+            }else{
+                $formatedPhone = '';
             }
 
-            $firstThreeChars = substr($phone, 0, 3);
-            if($firstThreeChars == 234){
-                $phone = substr($phone, 3);
-            }
+            // $firstThreeChars = substr($phone, 0, 3);
+            // if($firstThreeChars == 234){
+            //     $phone = substr($phone, 3);
+            // }
 
-            if ($phone) {
-                $list[] = $phone;
-            }
+            $list[] = $formatedPhone;
         }
 
-        return $list;
+       
+
         $response = PaystackHelpers::sendBulkSMS($list, $request->message);
         if($response['code'] == 'ok'){
             return back()->with('success', 'Broadcast Sent');
         }else{
             return back()->with('error', 'An erro occour, broadcast not sent');
         }
+    }
+
+    public static function getInitials($phoneNumber){
+        
+        // $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+    
+        // Get the first digit
+        $firstDigit = $phoneNumber[0];
+    
+        return $firstDigit; 
     }
 
     public function massSMSPreview(Request $request){
