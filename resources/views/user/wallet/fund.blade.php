@@ -73,24 +73,26 @@
 
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary">
-                <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet with card
+                <i class="si si-paper-plane opacity-50 me-1"></i> Fund wallet with card
               </button>
             </div>
           </div>
           <div class="col-lg-3"></div>
        
       </div>
-      <div class="row mb-3">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8" style="color: brown">
-          Manual Wallet funding, please credit the account below: <br>
-            <b>ACCOUNT DETAILS: 4600066074 
-            <br>DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-            <br>
-            <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i>
-        </div>
-        <div class="col-lg-2"></div>
+      @if(auth()->user()->wallet->base_currency == 'Naira')
+        <div class="row mb-3">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-8" style="color: brown">
+            Manual Wallet funding, please credit the account below: <br>
+              <b>ACCOUNT DETAILS: 4600066074 
+              <br>DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
+              <br>
+              <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i>
+          </div>
+          <div class="col-lg-2"></div>
       </div>
+      @endif
       <!-- END Text -->
     </form>
   </div>

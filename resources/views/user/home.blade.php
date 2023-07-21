@@ -156,12 +156,13 @@
         </div>
       </div>
       
-      {{-- <div class="alert alert-info mt-3">
+      <div class="alert alert-info mt-3">
+        Announcement: You can now withdraw, top up and verify your account in dollars. To get started, switch your currency to dollars and then select 'Fund Wallet'
         {{-- Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank) --}}
         {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
         {{-- <br> --}}
-        {{-- Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! 
-      </div>  --}}
+        {{-- Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! --}}
+      </div> 
       <div class="mt-3">
           @if (session('success'))
                 <div class="alert alert-success" role="alert">
