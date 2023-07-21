@@ -36,6 +36,8 @@ class SMSController extends Controller
            $contacts = $this->filter($request, true);
         }
 
+        return $contacts;
+
         $list = [];
         foreach($contacts as $key=>$value){
             
@@ -58,7 +60,9 @@ class SMSController extends Controller
                 $list[] = $phone;
             }
         }
-        return $response = PaystackHelpers::sendBulkSMS($list, $request->message);
+
+        return $list;
+        $response = PaystackHelpers::sendBulkSMS($list, $request->message);
         if($response['code'] == 'ok'){
             return back()->with('success', 'Broadcast Sent');
         }else{
