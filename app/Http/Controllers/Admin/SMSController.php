@@ -66,8 +66,6 @@ class SMSController extends Controller
 
     public static function getInitials($phoneNumber){
         
-        // $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-    
         // Get the first digit
         $firstDigit = $phoneNumber[0];
     

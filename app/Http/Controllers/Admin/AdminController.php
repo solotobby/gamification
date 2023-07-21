@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Str;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
@@ -324,6 +325,8 @@ class AdminController extends Controller
         ]);
        
        }
+       systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+       
        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
        return back()->with('success', 'Upgrade Successful');
     }
