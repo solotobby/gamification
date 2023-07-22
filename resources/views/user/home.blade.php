@@ -335,13 +335,7 @@
                 </a>
                 @endif
               </div>
-          </div>
-
-          
-
-          
-
-
+            </div>
     </div>
           <!-- END Call to Action -->
           @if(auth()->user()->profile->is_welcome == 0)
