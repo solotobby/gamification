@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
+use App\Models\Announcement;
 use App\Models\Notification;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -21,9 +24,26 @@ class NotificationController extends Controller
         return view('user.notification.index', ['notifications' => $notifications]);
     }
 
+    public function adminNotifications(){
+        $notifications = Announcement::orderBy('created_at', 'DESC')->get();
+        return view('admin.notifications.index', ['notifications' => $notifications]);
+    }
+
     public function markAsRead(Notification $notification)
     {
         $notification->update(['is_read' => true]);
+    }
+
+    public function changeNotificationStatus($id){
+        $anouncement = Announcement::where('id', $id)->first();
+        if($anouncement->status == true){
+            $anouncement->status = false;
+            $anouncement->save();
+        }else{
+            $anouncement->status = true;
+            $anouncement->save();
+        }
+        return back()->with('success', 'Announcement status changed');
     }
 
     /**
@@ -90,5 +110,18 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+    }
+
+    public function storeNotification(Request $request){
+        Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+        $users = User::where('role', 'regular')->get();
+        $content = $request->content;
+        // $users->each(function ($user, $content) {
+        //     systemNotification($user, 'success', 'Announcement', $content);
+        // });
+        foreach($users as $user){
+            systemNotification($user, 'success', 'Announcement', $content);
+        }
+        return back()->with('success', 'Announcement posted successfully');
     }
 }

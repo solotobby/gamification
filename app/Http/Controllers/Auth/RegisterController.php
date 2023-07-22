@@ -157,12 +157,12 @@ class RegisterController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
-        $location = PaystackHelpers::getLocation(); //get user location dynamically
+        // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
-        if($user->referral_code == null){
-            $user->referral_code = Str::random(7);
-            $user->save();
-        }
+        // if($user->referral_code == null){
+        //     $user->referral_code = Str::random(7);
+        //     $user->save();
+        // }
         
         if(Hash::check($request->password, $user->password)){
             // if($user->role != 'admin'){

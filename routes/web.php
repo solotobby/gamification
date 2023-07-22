@@ -175,6 +175,9 @@ Route::post('edit/staff', [\App\Http\Controllers\Admin\StaffController::class, '
 Route::get('user/api', [\App\Http\Controllers\HomeController::class, 'userApi']);
 Route::get('how/to', [\App\Http\Controllers\HomeController::class, 'howTo'])->name('howto');
 
+Route::get('admin/notifications', [\App\Http\Controllers\NotificationController::class, 'adminNotifications']);
+Route::post('store/notification', [\App\Http\Controllers\NotificationController::class, 'storeNotification']);
+Route::get('change/notification/status/{id}', [\App\Http\Controllers\NotificationController::class, 'changeNotificationStatus']);
 Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
