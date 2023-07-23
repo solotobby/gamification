@@ -57,7 +57,6 @@
         <a class="nav-main-link" href="{{ url('preferences') }}">
           <i class="nav-main-link-icon fa fa-star-of-life"></i>
           <span class="nav-main-link-name">Preferences</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
         </a>
       </li>
 
@@ -65,7 +64,12 @@
         <a class="nav-main-link" href="{{ url('admin/notifications') }}">
           <i class="nav-main-link-icon fa fa-bell"></i>
           <span class="nav-main-link-name">Notifications</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('conversions') }}">
+          <i class="nav-main-link-icon fa fa-money-bill-wave"></i>
+          <span class="nav-main-link-name">Rate</span>
         </a>
       </li>
 
