@@ -16,6 +16,7 @@
 // use Illuminate\Support\Facades\App;
 
 use App\Http\Controllers\Admin\PreferenceController;
+use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\NotificationController;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
@@ -267,6 +268,7 @@ Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store
 
 Route::resource('preferences', PreferenceController::class);
 
+Route::resource('conversions', ConversionRateController::class);
 //Campaign metrics
 Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);
