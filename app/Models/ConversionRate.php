@@ -9,5 +9,5 @@ class ConversionRate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['from', 'to', 'rate', 'status'];
+    protected $fillable = ['from', 'to', 'rate', 'amount', 'status'];
 }

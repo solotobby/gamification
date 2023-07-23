@@ -72,7 +72,7 @@ class ConversionRateController extends Controller
     public function update(UpdateConversionRateRequest $request, ConversionRate $conversionRate)
     {
         $conversionRate = ConversionRate::find($request->id);
-        $conversionRate->update(['rate' => $request->rate]);
+        $conversionRate->update(['amount' => $request->rate]);
         return back()->with('success', 'Rate updated!');
     }
 

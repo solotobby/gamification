@@ -38,7 +38,7 @@
                 <td>{{ $i++ }}.</td>
                 <td>{{ $s->from }}</td>
                 <td>{{ $s->to }}</td>
-                <td>{{ $s->rate }}</td>
+                <td>{{ $s->amount }}</td>
                 <td>{{ $s->status == 1 ? 'Active' : 'Inactive' }}</td>
                 <td>{{ $s->created_at->diffForHumans() }}</td>
                 <td>
@@ -64,7 +64,7 @@
                                 <div class="col-lg-12">
                                     <div class="mb-4">
                                     <label class="form-label" for="example-text-input">Rate</label>
-                                    <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->rate }}">
+                                    <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->amount }}">
                                     </div>
                                     <input type="hidden" name="id" value="{{ $s->id}}" required>
                                     <div class="mb-4">
