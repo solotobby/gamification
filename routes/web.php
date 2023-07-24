@@ -203,6 +203,8 @@ Route::post('update/amount', [\App\Http\Controllers\Admin\AdminController::class
 Route::get('create/category', [\App\Http\Controllers\CategoryController::class, 'create'])->name('create.category');
 Route::post('post/category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('store');
 Route::post('post/subcategory', [\App\Http\Controllers\CategoryController::class, 'storeSubcategory'])->name('store.subcategory');
+Route::post('edit/subcategories', [\App\Http\Controllers\CategoryController::class, 'updateSubcategory']);
+
 //User List
 Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 'userSearch'])->name('user.search');
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');

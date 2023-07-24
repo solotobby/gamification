@@ -159,35 +159,39 @@ class RegisterController extends Controller
         ]);
         // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
-        // if($user->referral_code == null){
-        //     $user->referral_code = Str::random(7);
-        //     $user->save();
-        // }
-        
-        if(Hash::check($request->password, $user->password)){
-            // if($user->role != 'admin'){
-            //     $location = PaystackHelpers::getLocation(); //get user specific location
-            //     if($location == "United States"){ //check if the person is in Nigeria
-            //         if($user->is_wallet_transfered == false){
-            //             //activate sendmonny wallet and fund wallet
-            //             if(walletHandler() == 'sendmonny'){ 
-            //                 if($user->is_wallet_transfered == false){
-            //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny 
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+       
+        if($user){
+             if($user->referral_code == null){
+                $user->referral_code = Str::random(7);
+                $user->save();
+             }
+            if(Hash::check($request->password, $user->password)){
+                // if($user->role != 'admin'){
+                //     $location = PaystackHelpers::getLocation(); //get user specific location
+                //     if($location == "United States"){ //check if the person is in Nigeria
+                //         if($user->is_wallet_transfered == false){
+                //             //activate sendmonny wallet and fund wallet
+                //             if(walletHandler() == 'sendmonny'){ 
+                //                 if($user->is_wallet_transfered == false){
+                //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny 
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
 
-            Auth::login($user); //log user in
-            // $wall = Wallet::where('user_id', auth()->user()->id)->first();
-            // $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-            // $wall->save();
-            // PaystackHelpers::userLocation('Login');
-            setWalletBaseCurrency(); //set base currency if not set
-            setProfile();//set profile page 
-            SystemActivities::loginPoints($user);
-            return redirect('home'); //redirect to home
+                Auth::login($user); //log user in
+                // $wall = Wallet::where('user_id', auth()->user()->id)->first();
+                // $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+                // $wall->save();
+                // PaystackHelpers::userLocation('Login');
+                setWalletBaseCurrency(); //set base currency if not set
+                setProfile();//set profile page 
+                SystemActivities::loginPoints($user);
+                return redirect('home'); //redirect to home
+            }else{
+                return back()->with('error', 'Email or Password is incorrect');
+            }
         }else{
             return back()->with('error', 'Email or Password is incorrect');
         }
