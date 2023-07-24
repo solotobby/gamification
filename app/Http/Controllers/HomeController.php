@@ -307,7 +307,7 @@ class HomeController extends Controller
 
         if(count($userScore) > 0)
         {
-            return view('completed', ['score' => $percentage]);
+            return view('user.completed', ['score' => $percentage]);
         }
         UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
         return view('user.completed', ['score' => $percentage]);
