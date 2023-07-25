@@ -128,12 +128,12 @@
             @endif
           @endif
 
-          <hr>
+          {{-- <hr>
           <h3 class="h4 fw-light text-muted push text-center mt-3">Can't pay in Naira, Click the Link Button Below</h3>
 
           <a href="https://flutterwave.com/pay/payfreebyz" target="_blank" class="btn btn-hero btn-secondary" data-toggle="click-ripple">
             <i class="fa fa-link opacity-50 me-1"></i> Verify Using USD 
-          </a>
+          </a> --}}
 
           @else
           <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">

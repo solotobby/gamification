@@ -30,12 +30,12 @@
                       <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
                         Get Verified Now!
                       </a>
-                      <br> <br> 
-                      Can't pay in Naira, Click the Link Button Below
+                      <br> 
+                      {{-- Can't pay in Naira, Click the Link Button Below
                       <br>
                       <a class="btn btn-hero btn-secondary" href="https://flutterwave.com/pay/payfreebyz" target="_blank" data-toggle="click-ripple">
                         Get Verified with USD!
-                      </a>
+                      </a> --}}
                     </center>
                   </h4>
                  
