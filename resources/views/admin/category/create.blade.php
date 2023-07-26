@@ -180,10 +180,10 @@
                                   <form action="{{ url('edit/subcategories') }}" method="POST">
                                     @csrf
                                   <ul class="list-group push">
-                                      <?php $i = 1; ?>
+                                      
                                       @foreach ($s->subCate as $n)
                                       <li class="list-group-item d-flex justify-content-between align-items-center">
-                                          {{ $i++ }} - {{$n->name}}
+                                          {{$n->name}}
                                           <span class="badge rounded-pill bg-info">&#8358;{{ number_format($n->amount) }}</span>
                                         </li>
                                         <div class="mb-4">
