@@ -136,7 +136,7 @@
                                   </div>
                                   <div class="block-content">
                                     <ul class="list-group push">
-                                        <?php $i = 1; ?>
+                                        {{--  --}}
                                         @foreach ($s->subCate as $n)
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                            {{$n->name}}
