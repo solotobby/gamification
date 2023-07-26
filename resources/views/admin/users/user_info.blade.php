@@ -10,7 +10,7 @@
     <div class="p-3 bg-body-extra-light rounded push">
       <form action="be_pages_generic_search.html" method="POST">
         <div class="input-group input-group-lg">
-          {{$info->name}} - {{$info->email}} | &#8358;{{number_format(@$info->wallet->balance,2)}} - ${{number_format(@$info->wallet->usd_balance,2)}} | {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}} | {{ $info->phone }} | {{ $info->country }}
+          {{$info->name}} - {{$info->email}} | &#8358;{{number_format(@$info->wallet->balance,2)}} - ${{number_format(@$info->wallet->usd_balance,2)}} | {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}} | {{ $info->phone }} | {{ $info->country }} | {{ $info->wallet->base_currency }}
         </div>
       </form>
     </div>
