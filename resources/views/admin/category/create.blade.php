@@ -139,7 +139,7 @@
                                         <?php $i = 1; ?>
                                         @foreach ($s->subCate as $n)
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            {{ $i++ }} - {{$n->name}}
+                                           {{$n->name}}
                                             <span class="badge rounded-pill bg-info">&#8358;{{ number_format($n->amount) }} - ${{ ($n->usd) }}</span>
                                           </li>
                                         @endforeach
@@ -191,6 +191,7 @@
                                           <input type="text" name="usd[]" class="form-control" size="5" value="{{ $n->usd }}" required>
                                       </div>
                                       <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
+                                      <hr>
                                       @endforeach
                                      
                                   </ul>
