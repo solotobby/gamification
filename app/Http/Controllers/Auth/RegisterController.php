@@ -161,6 +161,9 @@ class RegisterController extends Controller
         $user = User::where('email', $request->email)->first();
        
         if($user){
+            if($user->is_blacklisted == true){
+                return view('blocked');
+            }
              if($user->referral_code == null){
                 $user->referral_code = Str::random(7);
                 $user->save();
