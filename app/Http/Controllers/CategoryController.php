@@ -96,64 +96,15 @@ class CategoryController extends Controller
     }
 
     public function updateSubcategory(Request $request){
-        // return $request;
-        $subCate = SubCategory::where('category_id', $request->id)->get();
-        $usds = $request->usd;
-
-        // $data['usd'] = $usds;
-        // $data['ids'] = $request->id;//$subCate['id'];
-    //  $data =[
-    //         ['usd' => $usds],
-    //         ['id' => $request->id]
-    //     ];
-
-        $data = [
-            "usd" => ["1", "2", "4.5"],
-            "id" => ["3","3","3"]
-        ];
-
-                // Get the single "id" value
-        $id = $data['id'][0];
-
-        foreach ($data['usd'] as $key => $usdValue) {
-            $id = $data['id'][$key];
-        
-            // Update the record in the database
-            SubCategory::where('category_id', $id)->update(['usd' => $usdValue]);
+        for ($i = 0; $i < count($request->id); $i++) {
+            $id = $request->id[$i];
+            $usd = $request->usd[$i];
+            $record = SubCategory::find($id); 
+            if ($record) {
+                $record->usd = $usd;
+                $record->save();
+            }
         }
-
-        // Loop through the "usd" array and update all the records in the database
-        // foreach ($data['usd'] as $usdValue) {
-        //     // Update the record in the database
-        //     SubCategory::where('category_id', $id)->update(['usd' => $usdValue]);
-        //     //CurrencyData::where('id', $id)->update(['usd' => $usdValue]);
-        // }
-
-        // $count = count($data['usd']);
-
-        // $countId = count($data['id']);
-
-        // // Ensure both arrays have the same number of elements
-        // if ($count !== $countId) {
-        //     throw new \InvalidArgumentException('The "usd" and "id" arrays must have the same number of elements.');
-        // }
-        // for ($i = 0; $i < $count; $i++) {
-        //     $usdValue = $data['usd'][$i];
-        //     $id = $data['id'][$i];
-        
-        //     // Update the record in the database
-        //     SubCategory::where('category_id', $id)->update(['usd' => $usdValue]);
-        // }
-
-        // foreach ($data['usd'] as $key => $usd) {
-        //     $id = $data['id'];
-    
-        //     \DB::table('sub_categories')
-        //         ->where('category_id', $id)
-        //         ->update(['usd' => $usd]);
-        // }
-
-        
         return back()->with('success', 'SubCategory created successfully');
     }
 }

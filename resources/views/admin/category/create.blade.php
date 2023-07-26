@@ -190,7 +190,7 @@
                                           <label class="form-label" for="example-text-input">Unit Price (USD)</label>
                                           <input type="text" name="usd[]" class="form-control" size="5" value="{{ $n->usd }}" required>
                                       </div>
-                                      <input type="hidden" name="id[]"  value="{{ $s->id }}" required>
+                                      <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
                                       @endforeach
                                      
                                   </ul>
