@@ -105,40 +105,54 @@
           Getting verified can help you expand your business reach and acquire much more customers!
         </h3>
         <span class="m-2 d-inline-block">
-          @if(auth()->user()->is_verified == '0')
-
-          <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
-          </a>
-          
-          <br><br>
-
-          {{-- <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i> Verify 
-          </a> --}}
           @if(auth()->user()->wallet->base_currency == 'Naira')
-            @if(auth()->user()->wallet->balance >= 1050)
-            <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-              <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-            </a>
-            @else
-            <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-              <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-            </a>
-            @endif
-          @endif
+              @if(auth()->user()->is_verified == '0')
 
-          {{-- <hr>
-          <h3 class="h4 fw-light text-muted push text-center mt-3">Can't pay in Naira, Click the Link Button Below</h3>
+                  <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                    <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
+                  </a>
+                  
+                  <br><br>
 
-          <a href="https://flutterwave.com/pay/payfreebyz" target="_blank" class="btn btn-hero btn-secondary" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i> Verify Using USD 
-          </a> --}}
+                  {{-- <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                    <i class="fa fa-link opacity-50 me-1"></i> Verify 
+                  </a> --}}
+                
+                      @if(auth()->user()->wallet->balance >= 1050)
+                      <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                        <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                      </a>
+                      @else
+                      <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                        <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                      </a>
+                      @endif
+                  
 
+              {{-- <hr>
+              <h3 class="h4 fw-light text-muted push text-center mt-3">Can't pay in Naira, Click the Link Button Below</h3>
+
+              <a href="https://flutterwave.com/pay/payfreebyz" target="_blank" class="btn btn-hero btn-secondary" data-toggle="click-ripple">
+                <i class="fa fa-link opacity-50 me-1"></i> Verify Using USD 
+              </a> --}}
+
+              @else
+              <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">
+                <i class="fa fa-link opacity-50 me-1"></i> Verification Completed
+              </a>
+              @endif
           @else
-          <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">
-            <i class="fa fa-link opacity-50 me-1"></i> Verification Completed
-          </a>
+          
+              @if(!auth()->user()->USD_verified)
+                <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Card 
+                </a>
+              @else
+                  <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">
+                    <i class="fa fa-link opacity-50 me-1"></i> Verification Completed
+                  </a>
+              @endif
+
           @endif
         </span>
       </div>

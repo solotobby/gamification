@@ -89,7 +89,8 @@ class SystemActivities{
                 'attempts' => $attempts,
                 'completed' => $completed,
                 'is_completed' => $completed >= $value->number_of_staff ? true : false,
-                'progress' => $progress 
+                'progress' => $progress,
+                'currency' => $value->currency
             ];
         }
 

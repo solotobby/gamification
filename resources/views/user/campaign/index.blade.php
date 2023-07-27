@@ -1,8 +1,6 @@
 
 @extends('layouts.main.master')
 
-@section('title', 'Winner List')
-
 @section('content')
 
 <div class="bg-body-light">
@@ -25,7 +23,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Job List</h3>
+        <h3 class="block-title">Campaign List</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -66,10 +64,18 @@
                         {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }}
                      </td>
                     <td>
-                        &#8358; {{ $list->campaign_amount }}
-                      </td>
+                      @if($list->currency == 'NGN')
+                        &#8358;{{ $list->campaign_amount }}
+                        @else
+                         ${{ $list->campaign_amount }}
+                        @endif
+                    </td>
                       <td>
-                        &#8358; {{ number_format($list->total_amount) }}
+                        @if($list->currency == 'NGN')
+                        &#8358;{{ number_format($list->total_amount) }}
+                        @else
+                        ${{ number_format($list->total_amount, 2) }}
+                        @endif
                       </td>
                      
                    
@@ -99,8 +105,13 @@
 
                         <div class="modal-body pb-1">
                           Current Number of Workers - {{ $list->number_of_staff }} <br>
+                          @if($list->currency == 'NGN')
                           Value per Job  - &#8358;{{ number_format($list->campaign_amount) }} <br>
                           Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
+                          @else
+                          Value per Job  - ${{ number_format($list->campaign_amount, 2) }} <br>
+                          Total Value of Job  - ${{ number_format($list->total_amount, 2) }} <br>
+                          @endif
                           <hr>
                           <form action="{{ route('addmore.workers') }}" method="POST">
                             @csrf

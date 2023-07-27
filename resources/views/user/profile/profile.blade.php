@@ -16,14 +16,28 @@
           <h2 class="h4 fw-bold text-white-75">
             @ {{auth()->user()->referral_code}}
           </h2>
-          @if(auth()->user()->is_verified == true)
-            <a class="btn btn-alt-info btn-sm" href="#">
-              <i class="fa fa-fw fa-check opacity-50"></i> Verified
-            </a>
+          @if(auth()->user()->wallet->base_currency == 'Naira')
+              @if(auth()->user()->is_verified == true)
+                <a class="btn btn-alt-info btn-sm" href="#">
+                  <i class="fa fa-fw fa-check opacity-50"></i> Verified
+                </a>
+              @else
+              <a class="btn btn-alt-danger btn-sm" href="#">
+                <i class="fa fa-fw fa-times opacity-50"></i> Unverified
+              </a>
+              @endif
           @else
-          <a class="btn btn-alt-danger btn-sm" href="#">
-            <i class="fa fa-fw fa-times opacity-50"></i> Unverified
-          </a>
+
+                @if(auth()->user()->USD_verified)
+                <a class="btn btn-alt-info btn-sm" href="#">
+                  <i class="fa fa-fw fa-check opacity-50"></i> Verified
+                </a>
+              @else
+              <a class="btn btn-alt-danger btn-sm" href="#">
+                <i class="fa fa-fw fa-times opacity-50"></i> Unverified
+              </a>
+              
+              @endif
           @endif
         </div>
       </div>

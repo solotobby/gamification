@@ -77,10 +77,7 @@ class HomeController extends Controller
         if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
             $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         }
-
         ///set User currency
-
-    
         $activity_log = SystemActivities::showActivityLog();
         $available_jobs = SystemActivities::availableJobs();
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();

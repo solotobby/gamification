@@ -25,7 +25,11 @@
         <div class="d-sm-flex">
           <div class="ms-sm-2 me-sm-4 py-2">
             <a class="item item-rounded bg-body-dark text-dark fs-4 mb-2 mx-auto" href="{{ url('campaign/'.$work->campaign->job_id) }}">
-                &#8358;{{$work->amount}}
+              @if($work->campaign->currency == 'NGN')  
+              &#8358;{{$work->amount}}
+              @else
+              ${{$work->amount}}
+              @endif
             </a>
           </div>
           <div class="py-2">
@@ -51,7 +55,11 @@
 
     <!-- Apply form -->
     <h2 class="content-heading">
-      <i class="fa fa-arrow-right text-info me-1"></i> You will get &#8358; {{$work->amount}}
+      @if($work->campaign->currency == 'NGN')  
+          <i class="fa fa-arrow-right text-info me-1"></i> You will get &#8358;{{$work->amount}}
+      @else
+      <i class="fa fa-arrow-right text-info me-1"></i> You will get ${{$work->amount}}
+      @endif
     </h2>
     <form action="#" method="POST">
       <div class="block block-rounded">

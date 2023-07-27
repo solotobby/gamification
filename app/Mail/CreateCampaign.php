@@ -37,7 +37,7 @@ class CreateCampaign extends Mailable
             'job_id' => $this->campaign->job_id,
             'type' => $this->campaign->campaignType->name,
             'category' => $this->campaign->campaignCategory->name,
-            'poster' => $this->campaign->user->name 
+            'poster' => $this->campaign->user->name
         ]);
     }
 }

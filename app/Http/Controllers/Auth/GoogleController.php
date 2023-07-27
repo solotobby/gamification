@@ -63,7 +63,7 @@ class GoogleController extends Controller
                 //         }
                 //     }
                 // }
-               
+                PaystackHelpers::userLocation('Login');
                 return redirect('/home');
      
             }else{
