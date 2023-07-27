@@ -21,10 +21,14 @@
             </div>
           </div>
           <div class="col-md-4 d-flex align-items-center">
-            <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="#">
+            <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="">
               <div class="block-content block-content-full px-5 py-4">
                 <div class="fs-2 fw-semibold text-white">
-                    &#8358; {{$campaign['campaign_amount']}}<span class="text-white-50"></span>
+                  @if($campaign['currency'] == 'NGN')
+                    &#8358;{{$campaign['campaign_amount']}}<span class="text-white-50"></span>
+                    @else
+                    ${{$campaign['campaign_amount']}}<span class="text-white-50"></span>
+                  @endif
                 </div>
                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Job</div>
                 {{-- <span class="btn btn-hero btn-primary">
@@ -76,7 +80,11 @@
                   <i class="fa fa-money-check-alt"></i>
                 </span>
                 <div class="fw-semibold">Amount per Campaign</div>
-                <div class="text-muted">&#8358; {{$campaign['campaign_amount']}}</div>
+                @if($campaign['currency'] == 'NGN')
+                <div class="text-muted">&#8358;{{$campaign['campaign_amount']}}</div>
+                @else
+                <div class="text-muted">${{$campaign['campaign_amount']}}</div>
+                @endif
               </li>
               <li>
                 <span class="fa-li text-primary">
@@ -105,7 +113,11 @@
               <div class="modal-body pb-1">
                 Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
                 Current Value per Job  - {{ number_format($campaign['campaign_amount']) }} <br>
+                @if($campaign['currency'] == 'NGN')
                 Current Value  - &#8358;{{ number_format($campaign['total_amount']) }} <br>
+                @else
+                Current Value  - ${{ number_format($campaign['total_amount'],2) }} <br>
+                @endif
                 <hr>
                 <form action="{{ route('addmore.workers') }}" method="POST">
                   @csrf

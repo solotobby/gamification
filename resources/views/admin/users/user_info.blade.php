@@ -10,7 +10,15 @@
     <div class="p-3 bg-body-extra-light rounded push">
       <form action="be_pages_generic_search.html" method="POST">
         <div class="input-group input-group-lg">
-          {{$info->name}} - {{$info->email}} | &#8358;{{number_format(@$info->wallet->balance,2)}} - ${{number_format(@$info->wallet->usd_balance,2)}} | {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}} | {{ $info->phone }} | {{ $info->country }} | {{ $info->wallet->base_currency }}
+          Name: {{$info->name}} <br>
+          Email: {{$info->email}} <br>
+          Naira Balance: &#8358;{{number_format(@$info->wallet->balance,2)}} <br>
+          USD Balance: ${{number_format(@$info->wallet->usd_balance,2)}} <br>
+          Naira Verified: {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}}<br>
+          USD Verified: {{ $info->USD_verified == true ? 'Verified' : 'Unverified'}} <br>
+          Phone Number: {{ $info->phone }} <br>
+          Country: {{ $info->country }}<br>
+          Base Currency: {{ $info->wallet->base_currency }} 
         </div>
       </form>
     </div>
@@ -82,7 +90,11 @@
                           {{ $inf->phone}}
                       </td>
                       <td>
+                        @if($inf->wallet->base_currency == 'Naira')
                         &#8358;{{ number_format($inf->wallet->balance) }}
+                        @else
+                        ${{ number_format($inf->wallet->balance,2) }}
+                        @endif
                       </td>
                       <td>
                           {{ $inf->is_verified == '1' ? 'Verified' : 'Unverified' }}
@@ -126,7 +138,11 @@
                         {{ $list->reference }}
                       </td>
                       <td>
+                        @if($list->currency == 'NGN')
                           &#8358;{{ number_format($list->amount) }}
+                          @else
+                          ${{ number_format($list->amount,2) }}
+                          @endif
                       </td>
                       <td>
                           {{ $list->currency }}
@@ -175,7 +191,11 @@
                           {{ $job->campaign->post_title }}
                         </td>
                         <td>
+                          @if($job->campaign->currency == 'NGN')
                             &#8358;{{ number_format($job->amount) }}
+                            @else
+                            ${{ number_format($job->amount,2) }}
+                            @endif
                         </td>
                         <td>
                             {{ $job->status }}
@@ -259,10 +279,20 @@
                 @csrf
                 <div class="form-row align-items-center">
                   <div class="col-auto">
-                   
+                    <div class="input-group mb-4">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">*</div>
+                      </div>
+                      <select name="currency" class="form-control" required>
+                        <option value="">Select Currency</option>
+                        <option value="USD">Dollar</option>
+                        <option value="NGN">Naira</option>
+                      </select>
+                      {{-- <input type="number" class="form-control" name="amount" placeholder="Amount" required> --}}
+                    </div>
                     <div class="input-group mb-2">
                       <div class="input-group-prepend">
-                        <div class="input-group-text">&#8358;</div>
+                        <div class="input-group-text">&#8358;/$</div>
                       </div>
                       <input type="number" class="form-control" name="amount" placeholder="Amount" required>
                     </div>

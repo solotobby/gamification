@@ -89,13 +89,20 @@
                   <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="15" value="15" required>
                 </div>
                 <div class="col-6">
-                    <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
+                  @if(auth()->user()->wallet->base_currency == "Naira")
+                      <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
+                    @else
+                      <label class="form-label" for="post-salary-min">Cost per Campaign($)</label>
+                    @endif
                     <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
                 </div>
               </div>
               <hr>
-            
+              @if(auth()->user()->wallet->base_currency == "Naira")
               <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
+              @else
+              <h4>Estimated Cost: $<span id="demo"></span></h4>
+              @endif
               
             </div>
           </div>
@@ -120,7 +127,7 @@
 
             <div class="mb-4">
                 <label class="form-label" for="post-title">External Link</label>
-                <input type="url" class="form-control" id="post-title" name="post_link" value="{{ old('url') }}" required>
+                <input type="url" class="form-control" id="post-title" name="post_link" value="{{ old('post_link') }}" required>
                 <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
             </div>
 
@@ -262,18 +269,18 @@
                 
        
 
-        $('#number-of-staff').change(function(){
-            var y = document.getElementById("number-of-staff").value;
-            var z = document.getElementById("amount_per_campaign").value;
-            var x = Number(y) * Number(z);
-            // document.getElementById("demo").innerHTML = x;
+                  $('#number-of-staff').change(function(){
+                      var y = document.getElementById("number-of-staff").value;
+                      var z = document.getElementById("amount_per_campaign").value;
+                      var x = Number(y) * Number(z);
+                      // document.getElementById("demo").innerHTML = x;
 
-            var percentToGet = 50;
-            var percent = (percentToGet / 100) * x;
+                      var percentToGet = 50;
+                      var percent = (percentToGet / 100) * x;
 
-            document.getElementById("demo").innerHTML = x + percent;
-            // alert(x);
-        });
+                      document.getElementById("demo").innerHTML = x + percent;
+                      // alert(x);
+                  });
 
     });
 

@@ -61,7 +61,12 @@
                       {{ $list->campaign->post_title }}
                     </td>
                     <td>
-                        &#8358; {{ $list->amount }}
+                      @if($list->campaign->currency == 'NGN')
+                      &#8358;{{ $list->amount }}
+                      @else
+                      ${{ $list->amount }}
+                    @endif
+                     
                      </td>
                     <td>
                          {{ $list->user->name }}

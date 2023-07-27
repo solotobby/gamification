@@ -10,6 +10,7 @@ use App\Mail\UpgradeUser;
 use App\Models\DataBundle;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
+use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
@@ -76,6 +77,7 @@ class UserController extends Controller
             $user = User::where('id', auth()->user()->id)->first();
             $user->is_verified = true;
             $user->save();
+            Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
 

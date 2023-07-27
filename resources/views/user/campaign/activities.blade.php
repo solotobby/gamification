@@ -35,7 +35,12 @@
         <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
           | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
           | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
-          | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }} </h3>
+          @if($lists->currency == 'NGN')
+          | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }}
+          @else
+          | Amount Spent -   ${{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount,2) }}/${{ number_format($lists->campaign_amount * $lists->number_of_staff, 2) }}
+          @endif
+        </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -75,7 +80,11 @@
                         {{ @$list->campaign->post_title }}
                         </td>
                         <td>
-                            &#8358; {{ $list->amount }}
+                          @if($list->campaign->currency == 'NGN')
+                            &#8358;{{ $list->amount }}
+                            @else
+                            ${{ $list->amount }}
+                            @endif
                         </td>
                         <td>{{ $list->status }}</td>
                         <td>

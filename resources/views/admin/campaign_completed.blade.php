@@ -64,8 +64,20 @@
                         <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
                         <td>{{ $camp->user->name }}</td>
                         <td>{{ $camp->number_of_staff }}</td>
-                        <td>&#8358;{{ number_format($camp->campaign_amount) }}</td>
-                        <td>&#8358;{{ number_format($camp->total_amount) }}</td>
+                        <td>
+                          @if($camp->currency == 'NGN')
+                          &#8358;{{ number_format($camp->campaign_amount) }}
+                          @else
+                          ${{ $camp->campaign_amount }}
+                          @endif
+                        </td>
+                        <td>
+                          @if($camp->currency == 'NGN')
+                          &#8358;{{ number_format($camp->total_amount) }}
+                          @else
+                          ${{ $camp->total_amount }}
+                          @endif
+                        </td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                     @endif

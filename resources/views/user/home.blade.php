@@ -135,7 +135,7 @@
           @if(auth()->user()->wallet->base_currency == "Naira")
           <p class="fs-3 text-dark mb-0">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</p>
           @else
-          <p class="fs-3 text-dark mb-0">${{ number_format(auth()->user()->wallet->usd_balance) }}</p>
+          <p class="fs-3 text-dark mb-0">${{ number_format(auth()->user()->wallet->usd_balance,2) }}</p>
           @endif
 
           <p class="text-muted mb-0">
@@ -252,30 +252,44 @@
 
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
-                          @if(auth()->user()->is_verified)
-                              @if($job['is_completed'] == true)
-                                <a href="#">
-                              @else
-                                <a href="{{ url('campaign/'.$job['job_id']) }}">
-                              @endif
-                              
-                            @elseif(!auth()->user()->is_verified && $job['campaign_amount'] <= 10)
-                              @if($job['is_completed'] == true)
+                          @if(auth()->user()->wallet->base_currency == 'Naira')
+                            @if(auth()->user()->is_verified)
+                                @if($job['is_completed'] == true)
                                   <a href="#">
-                              @else
+                                @else
                                   <a href="{{ url('campaign/'.$job['job_id']) }}">
+                                @endif
+                                
+                              @elseif(!auth()->user()->is_verified && $job['campaign_amount'] <= 10)
+                                @if($job['is_completed'] == true)
+                                    <a href="#">
+                                @else
+                                    <a href="{{ url('campaign/'.$job['job_id']) }}">
+                                @endif
+                              @else
+                                <a href="{{ url('info') }}">
                               @endif
                             @else
-                              <a href="{{ url('info') }}">
+                                  {{-- if base_currency is dollar --}}
+                                @if(auth()->user()->USD_verified)
+                                  <a href="{{ url('campaign/'.$job['job_id']) }}">  
+                                @else
+                                  <a href="{{ url('info') }}">
+                                @endif
+
                             @endif
+
+
                                 <div class="card p-3 mb-2">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex flex-row align-items-center">
                                             <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                                             <div class="ms-2 c-details" style="color:#191918">
-                                              
-                                                <h6 class="mb-0">&#8358;{{ $job['campaign_amount']}}</h6> 
-                                                
+                                              @if($job['currency'] == 'NGN')
+                                                <h6 class="mb-0">&#8358;{{ number_format($job['campaign_amount'],2)}}</h6>   
+                                              @else
+                                              <h6 class="mb-0">${{ $job['campaign_amount']}}</h6> 
+                                              @endif
                                                 <span>{{  @$job['type'] }}</span>
                                             </div>
                                         </div>

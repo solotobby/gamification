@@ -67,7 +67,7 @@
           @if(auth()->user()->wallet->base_currency == "Naira")
           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ @number_format(auth()->user()->wallet->balance) }}</span>
           @else
-          <span class="nav-main-link-badge badge rounded-pill bg-default">${{ number_format(auth()->user()->wallet->usd_balance) }}</span>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">${{ number_format(auth()->user()->wallet->usd_balance,2) }}</span>
           @endif
            
         </a>

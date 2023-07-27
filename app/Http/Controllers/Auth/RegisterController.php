@@ -184,10 +184,8 @@ class RegisterController extends Controller
                 // }
 
                 Auth::login($user); //log user in
-                // $wall = Wallet::where('user_id', auth()->user()->id)->first();
-                // $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-                // $wall->save();
-                // PaystackHelpers::userLocation('Login');
+               
+                PaystackHelpers::userLocation('Login');
                 setWalletBaseCurrency(); //set base currency if not set
                 setProfile();//set profile page 
                 SystemActivities::loginPoints($user);
