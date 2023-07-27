@@ -23,7 +23,7 @@
                     <br>Got Payment Issues, transfer to 
                     {{-- 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank) --}}
                     4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-                    (Please add your Freebyz name, email address and date of transaction in the description while sending payment proof
+                    (Please add your persnal name example: Verification from Samuel Mark) 
                     then upload proof of evidence via our <b>Talk To Us</b> panel
                     <br>
                     <center>

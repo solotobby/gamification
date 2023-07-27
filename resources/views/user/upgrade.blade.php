@@ -86,7 +86,7 @@
                 {{-- <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i> --}}
               </b>
               <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-                <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i>
+                <i>(Please add your persnal name example: Verification from Samuel Mark)</i>
               </b>
             </p>
           </div>

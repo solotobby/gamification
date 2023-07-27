@@ -22,7 +22,7 @@
                   <i class="fa fa-fw fa-check opacity-50"></i> Verified
                 </a>
               @else
-              <a class="btn btn-alt-danger btn-sm" href="#">
+              <a class="btn btn-alt-danger btn-sm" href="{{ url('upgrade') }}">
                 <i class="fa fa-fw fa-times opacity-50"></i> Unverified
               </a>
               @endif
@@ -33,7 +33,7 @@
                   <i class="fa fa-fw fa-check opacity-50"></i> Verified
                 </a>
               @else
-              <a class="btn btn-alt-danger btn-sm" href="#">
+              <a class="btn btn-alt-danger btn-sm" href="{{ url('upgrade') }}">
                 <i class="fa fa-fw fa-times opacity-50"></i> Unverified
               </a>
               
