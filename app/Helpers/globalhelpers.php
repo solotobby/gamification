@@ -277,3 +277,72 @@ if(!function_exists('systemNotification')){
         return $notification;
     }
 }
+
+if(!function_exists('checkWalletBalance')){
+    function checkWalletBalance($user, $type, $amount){
+        
+       if($type == 'Naira'){
+        $wallet =  Wallet::where('user_id', $user->id)->first();
+            if((int) $wallet->balance >= $amount){
+                return true;
+            }else{
+                return false;
+            }
+       }elseif($type == 'Dollar'){
+        
+        $wallet =  Wallet::where('user_id', $user->id)->first();
+        
+            if((int) $wallet->usd_balance >= $amount){
+                return true;
+            }else{
+                return false;
+            }
+
+       }else{
+        return 'invalid';
+       }
+       
+    }
+}
+
+if(!function_exists('creditWallet')){
+    function creditWallet($user, $type, $amount){
+        
+       if($type == 'Naira'){
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->balance += $amount;
+            $wallet->save();
+            return $wallet;
+       }elseif($type == 'Dollar'){
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->usd_balance += $amount;
+            $wallet->save();
+            return $wallet;
+
+       }else{
+        return 'invalid';
+       }
+       
+    }
+}
+
+if(!function_exists('debitWallet')){
+    function debitWallet($user, $type, $amount){
+        
+       if($type == 'Naira'){
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->balance -= $amount;
+            $wallet->save();
+            return $wallet;
+       }elseif($type == 'Dollar'){
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->usd_balance -= $amount;
+            $wallet->save();
+            return $wallet;
+
+       }else{
+        return 'invalid';
+       }
+       
+    }
+}
