@@ -218,11 +218,13 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
+        
         $request->validate([
             'description' => 'required|string',
             'proof' => 'required|string',
             'post_title' => 'required|string',
-            'number_of_staff' => 'required'
+            'number_of_staff' => 'required',
+            'campaign_amount' => 'required'
         ]);
 
         $est_amount = $request->number_of_staff * $request->campaign_amount;
@@ -702,8 +704,6 @@ class CampaignController extends Controller
                         'tx_type' => 'Credit',
                         'user_type' => 'admin'
                     ]);
-
-
 
                 $content = "You have successfully increased the number of your workers.";
                 $subject = "Add More Worker";
