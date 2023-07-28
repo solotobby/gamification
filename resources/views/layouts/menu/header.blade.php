@@ -17,7 +17,8 @@
       @endif
 
       <!-- END Open Search Section -->
-     <strong> Welcome {{ auth()->user()->name }}!</strong>
+     
+      {{-- <strong> Welcome {{ auth()->user()->name }}!</strong> --}}
     </div>
     <!-- END Left Section -->
 
