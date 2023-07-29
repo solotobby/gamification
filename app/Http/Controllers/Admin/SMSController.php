@@ -78,9 +78,9 @@ class SMSController extends Controller
             $contacts = $this->filter($request, false);
         }elseif($type == 'verified'){
            $contacts = $this->filter($request, true);
+        }elseif($type == 'survey'){
+            $contacts = $this->filtersurvey($request, 'survey');
         }
-        
-       // Alert::success('Success Title', 'Success Message');
         return $contacts;
     }
 
@@ -95,5 +95,19 @@ class SMSController extends Controller
             }]
         ])->select(['phone'])->get();
         return $users;
+    }
+
+    public function filtersurvey($request, $value){
+        $users = User::where([
+            [function ($query) use ($request, $value) {
+                $query->where('role', 'regular')
+                        ->whereBetween('created_at', [$request->start_date, $request->end_date])
+                        ->where('age_range', null)
+                        ->where('country', 'Nigeria')
+                        ->get();
+            }]
+        ])->select(['phone'])->get();
+        return $users;
+
     }
 }

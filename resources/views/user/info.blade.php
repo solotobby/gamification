@@ -28,7 +28,7 @@
               </div>
               <div class="fs-4 fw-semibold pt-3 mb-0">Opps</div>
               <p> You are not verified yet. Please click the button below to get Verified!</p>
-              <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a>
+              <a href="{{ url('upgrade') }}" class="btn btn-primary"> <li class="fa fa-link"> </li> Get Verified! </a>
             </div>
           
           </div>

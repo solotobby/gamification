@@ -99,6 +99,11 @@ Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::
 Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 'paystackCallback']);
 
 Route::get('upgrade', [\App\Http\Controllers\UserController::class, 'upgrade'])->name('upgrade');
+Route::get('upgrade/part', [\App\Http\Controllers\UserController::class, 'upgradePart']);
+Route::get('upgrade/full', [\App\Http\Controllers\UserController::class, 'upgradeFull']);
+
+Route::get('complete/upgrade', [\App\Http\Controllers\UserController::class, 'completeUpgrade']);
+
 Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePayment'])->name('make.payment');
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
 Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
@@ -111,6 +116,7 @@ Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'index'])
 Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
 
 Route::get('info', [\App\Http\Controllers\UserController::class, 'info']);
+Route::get('conversion', [\App\Http\Controllers\UserController::class, 'conversion']);
 Route::get('success', [\App\Http\Controllers\UserController::class, 'success']);
 Route::get('error', [\App\Http\Controllers\UserController::class, 'error']);
 Route::get('transactions', [\App\Http\Controllers\UserController::class, 'transactions'])->name('transactions');

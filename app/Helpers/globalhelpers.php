@@ -346,3 +346,16 @@ if(!function_exists('debitWallet')){
        
     }
 }
+
+if(!function_exists('dollar_naira')){
+    function dollar_naira(){
+       return ConversionRate::where('from', 'Dollar')->first()->amount;
+    }
+}
+
+
+if(!function_exists('naira_dollar')){
+    function naira_dollar(){
+        return ConversionRate::where('from', 'Naira')->first()->amount;
+    }
+}
