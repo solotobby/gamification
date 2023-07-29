@@ -74,6 +74,7 @@
                     <option value="">Select One</option>
                     <option value="unverified">Unverified Users</option>
                     <option value="verified">Verified Users</option>
+                    <option value="survey">Unsurveyed</option>
                     </select>
                 </div>
 

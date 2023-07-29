@@ -254,6 +254,7 @@
                         <div class="row mt-2">
                           @if(auth()->user()->wallet->base_currency == 'Naira')
                             @if(auth()->user()->is_verified)
+                                {{-- If job is in Naira --}}
                                 @if($job['is_completed'] == true)
                                   <a href="#">
                                 @else
@@ -269,12 +270,14 @@
                               @else
                                 <a href="{{ url('info') }}">
                               @endif
+
                             @else
+                            
                                   {{-- if base_currency is dollar --}}
                                 @if(auth()->user()->USD_verified)
                                   <a href="{{ url('campaign/'.$job['job_id']) }}">  
                                 @else
-                                  <a href="{{ url('info') }}">
+                                  <a href="{{ url('conversion') }}">
                                 @endif
 
                             @endif
