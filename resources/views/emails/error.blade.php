@@ -1,4 +1,7 @@
+<b>Error Trace</b>
+{{ $errorTrace }}
+<hr> 
 
 <b>Error Message:</b>
-<hr> 
 <code> {{ $errorMessage }}</code>
+

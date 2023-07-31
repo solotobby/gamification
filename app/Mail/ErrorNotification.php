@@ -17,9 +17,11 @@ class ErrorNotification extends Mailable
      * @return void
      */
     public $errorMessage;
-    public function __construct($errorMessage)
+    public $errorTrace;
+    public function __construct($errorMessage, $errorTrace)
     {
         $this->errorMessage = $errorMessage;
+        $this->errorTrace = $errorTrace;
     }
 
     /**
@@ -31,7 +33,8 @@ class ErrorNotification extends Mailable
     {
         return $this->subject('Freebyz Error Notification')
                 ->view('emails.error')->with([
-                    'errorMessage' => $this->errorMessage
+                    'errorMessage' => $this->errorMessage,
+                    'errorTrace' => $this->errorTrace
                 ]);
         //return $this->view('view.name');
     }

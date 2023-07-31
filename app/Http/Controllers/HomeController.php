@@ -78,11 +78,11 @@ class HomeController extends Controller
             $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         }
         ///set User currency
-        $activity_log = SystemActivities::showActivityLog();
+        // $activity_log = SystemActivities::showActivityLog(); 'activity_log' => $activity_log,
         $available_jobs = SystemActivities::availableJobs();
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
 
-        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed, 'activity_log' => $activity_log, 'user'=>auth()->user(), 'balance' => $balance]);
+        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance]);
     }
 
     public function howTo(){

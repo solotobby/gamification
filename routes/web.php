@@ -112,6 +112,7 @@ Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 
 Route::get('survey', [\App\Http\Controllers\SurveyController::class, 'survey'])->name('survey');
 Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurvey'])->name('store.survey');
 Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'index']);
+
 //virtual account routes
 Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
 
