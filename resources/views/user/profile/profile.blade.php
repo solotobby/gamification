@@ -108,8 +108,42 @@
           </div>
           <!-- END User Profile -->
 
+           <!-- Change Password -->
+           <h2 class="content-heading pt-0">
+            <i class="fa fa-fw fa-briefcase text-muted me-1"></i> Account Information
+          </h2>
+          <div class="row push">
+            <div class="col-lg-4">
+              <p class="text-muted">
+                Make a transfer to this account to fund your wallet
+              </p>
+            </div>
+            <div class="col-lg-8 col-xl-5">
+              <div class="mb-4">
+                <label class="form-label" for="dm-profile-edit-password">Account Name</label>
+                <p>{{ auth()->user()->virtualAccount->account_name }}</p>
+                {{-- <input type="password" class="form-control" id="d /m-profile-edit-password" name="dm-profile-edit-password"> --}}
+              </div>
+              <div class="row mb-4">
+                <div class="col-12">
+                  <label class="form-label" for="dm-profile-edit-password-new">Account Number</label>
+                  <p>{{ auth()->user()->virtualAccount->account_number }}</p>
+                  {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new" name="dm-profile-edit-password-new"> --}}
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-12">
+                  <label class="form-label" for="dm-profile-edit-password-new-confirm">Bank Name</label>
+                  <p>{{ auth()->user()->virtualAccount->bank_name }}</p>
+                  {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new-confirm" name="dm-profile-edit-password-new-confirm"> --}}
+                </div>
+              </div>
+            </div>
+          </div> 
+          <!-- END Change Password -->
+
           <!-- Change Password -->
-          {{-- <h2 class="content-heading pt-0">
+           {{-- <h2 class="content-heading pt-0">
             <i class="fa fa-fw fa-asterisk text-muted me-1"></i> Change Password
           </h2>
           <div class="row push">
@@ -136,7 +170,7 @@
                 </div>
               </div>
             </div>
-          </div> --}}
+          </div>  --}}
           <!-- END Change Password -->
 
           <!-- Connections -->
@@ -153,35 +187,6 @@
               </p>
             </div>
             <div class="col-lg-8 col-xl-7">
-              {{-- <div class="row mb-4">
-                <div class="col-sm-10 col-md-8 col-xl-6">
-                  <a class="btn w-100 btn-alt-danger text-start" href="javascript:void(0)">
-                    <i class="fab fa-fw fa-google opacity-50 me-1"></i> Connect to Google
-                  </a>
-                </div>
-              </div> --}}
-              {{-- <div class="row mb-4">
-                <div class="col-sm-10 col-md-8 col-xl-6">
-                  <a class="btn w-100 btn-alt-info text-start" href="javascript:void(0)">
-                    <i class="fab fa-fw fa-twitter opacity-50 me-1"></i> Connect to Twitter
-                  </a>
-                </div>
-              </div> --}}
-              {{-- <div class="row mb-4">
-                <div class="col-sm-10 col-md-8 col-xl-6">
-                  <a class="btn w-100 btn-alt-primary bg-white d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                    <span>
-                      <i class="fab fa-fw fa-facebook me-1"></i> John Doe
-                    </span>
-                    <i class="fa fa-fw fa-check me-1"></i>
-                  </a>
-                </div>
-                <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm">
-                  <a class="btn btn-sm btn-alt-secondary rounded-pill" href="javascript:void(0)">
-                    <i class="fa fa-fw fa-pencil-alt opacity-50 me-1"></i> Edit Facebook Connection
-                  </a>
-                </div>
-              </div> --}}
               <div class="row mb-4">
                 @foreach (auth()->user()->interests as $interest)
                   <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">

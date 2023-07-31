@@ -129,6 +129,9 @@ class User extends Authenticatable
     public function USD_verified(){
         return $this->hasOne(Usdverified::class, 'user_id');
     }
+    public function virtualAccount(){
+        return $this->hasOne(VirtualAccount::class, 'user_id');
+    }
 
     
 }

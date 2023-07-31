@@ -359,3 +359,10 @@ if(!function_exists('naira_dollar')){
         return ConversionRate::where('from', 'Naira')->first()->amount;
     }
 }
+
+if(!function_exists('short_name')){
+    function short_name($name){
+        $name = explode(" ", $name);
+        return $name['0'];
+    }
+}

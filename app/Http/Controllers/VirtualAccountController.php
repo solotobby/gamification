@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Models\VirtualAccount;
 use Illuminate\Http\Request;
 
 class VirtualAccountController extends Controller
@@ -13,16 +14,35 @@ class VirtualAccountController extends Controller
     }
 
     public function index(){
-        $data = [
+        $name = explode(" ", auth()->user()->name);
+        $payload = [
             "email"=> auth()->user()->email,
-            "first_name"=>auth()->user()->name,
-            "middle_name"=> "Freebyz",
-            "last_name"=> "Technology",
-            "phone"=> auth()->user()->phone,
-            "preferred_bank"=> "test-bank",
-            "country"=> "NG"
+            "first_name"=> $name[0],
+            "last_name"=> isset($names[1]) ? $names[1] : 'Freebyz',
+            "phone"=> auth()->user()->phone
         ];
-       
-       return PaystackHelpers::virtualAccount($data);
+        $res = PaystackHelpers::createCustomer($payload);
+
+        if($res['status'] == true){
+            $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
+            $data = [
+                    "customer"=> $res['data']['customer_code'], 
+                    "preferred_bank"=>"test-bank"
+                ];
+            
+            $response = PaystackHelpers::virtualAccount($data);
+
+            $VirtualAccount->bank_name = $response['data']['bank']['name'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->account_number = $response['data']['account_number'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->currency = 'NGN';
+            $VirtualAccount->save();
+
+            return back()->with('success', 'Account Created Succesfully');
+        }else{
+            return back()->with('error', 'Error occured while processing');
+        }
+  
     }
 }
