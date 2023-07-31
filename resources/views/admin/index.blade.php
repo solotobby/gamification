@@ -43,12 +43,10 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Welcome, {{ auth()->user()->name }}! Total Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{$wallet->sum('balance')}} - ${{$wallet->sum('usd_balance')}}</a>.
+          Welcome, {{ auth()->user()->name }}! Total Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}}</a>.
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
-
-       
       <div class="mt-4 mt-md-0">
         <a class="btn btn-sm btn-alt-primary" href="javascript:void(0)">
           <i class="fa fa-cog"></i>
