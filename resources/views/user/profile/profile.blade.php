@@ -109,7 +109,7 @@
           <!-- END User Profile -->
 
            <!-- Change Password -->
-           <h2 class="content-heading pt-0">
+           {{-- <h2 class="content-heading pt-0">
             <i class="fa fa-fw fa-briefcase text-muted me-1"></i> Account Information
           </h2>
           <div class="row push">
@@ -122,24 +122,24 @@
               <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-password">Account Name</label>
                 <p>{{ @auth()->user()->virtualAccount->account_name }}</p>
-                {{-- <input type="password" class="form-control" id="d /m-profile-edit-password" name="dm-profile-edit-password"> --}}
+                <input type="password" class="form-control" id="d /m-profile-edit-password" name="dm-profile-edit-password">
               </div>
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label" for="dm-profile-edit-password-new">Account Number</label>
                   <p>{{ @auth()->user()->virtualAccount->account_number }}</p>
-                  {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new" name="dm-profile-edit-password-new"> --}}
+                  <input type="password" class="form-control" id="dm-profile-edit-password-new" name="dm-profile-edit-password-new">
                 </div>
               </div>
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label" for="dm-profile-edit-password-new-confirm">Bank Name</label>
                   <p>{{ @auth()->user()->virtualAccount->bank_name }}</p>
-                  {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new-confirm" name="dm-profile-edit-password-new-confirm"> --}}
+                  <input type="password" class="form-control" id="dm-profile-edit-password-new-confirm" name="dm-profile-edit-password-new-confirm">
                 </div>
               </div>
             </div>
-          </div> 
+          </div>  --}}
           <!-- END Change Password -->
 
           <!-- Change Password -->
