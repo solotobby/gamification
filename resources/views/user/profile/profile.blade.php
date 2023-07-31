@@ -121,20 +121,20 @@
             <div class="col-lg-8 col-xl-5">
               <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-password">Account Name</label>
-                <p>{{ auth()->user()->virtualAccount->account_name }}</p>
+                <p>{{ @auth()->user()->virtualAccount->account_name }}</p>
                 {{-- <input type="password" class="form-control" id="d /m-profile-edit-password" name="dm-profile-edit-password"> --}}
               </div>
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label" for="dm-profile-edit-password-new">Account Number</label>
-                  <p>{{ auth()->user()->virtualAccount->account_number }}</p>
+                  <p>{{ @auth()->user()->virtualAccount->account_number }}</p>
                   {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new" name="dm-profile-edit-password-new"> --}}
                 </div>
               </div>
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label" for="dm-profile-edit-password-new-confirm">Bank Name</label>
-                  <p>{{ auth()->user()->virtualAccount->bank_name }}</p>
+                  <p>{{ @auth()->user()->virtualAccount->bank_name }}</p>
                   {{-- <input type="password" class="form-control" id="dm-profile-edit-password-new-confirm" name="dm-profile-edit-password-new-confirm"> --}}
                 </div>
               </div>
