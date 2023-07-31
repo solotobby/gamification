@@ -180,6 +180,8 @@
               <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
               @endif
           </form>
+
+          {{-- <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a> --}}
           </center>
       </div>
       {{-- <marquee>
@@ -272,7 +274,7 @@
                               @endif
 
                             @else
-                            
+
                                   {{-- if base_currency is dollar --}}
                                 @if(auth()->user()->USD_verified)
                                   <a href="{{ url('campaign/'.$job['job_id']) }}">  

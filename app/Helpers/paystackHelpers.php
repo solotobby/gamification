@@ -124,6 +124,16 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    public static function createCustomer($data){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/customer', $data);
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
     //fluterwave apis
     public static function listFlutterwaveTransaction(){
         $res = Http::withHeaders([
