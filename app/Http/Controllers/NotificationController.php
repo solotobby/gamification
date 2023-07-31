@@ -18,9 +18,8 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        Notification::where('user_id', auth()->user()->id)->update(['is_read' => true]);
+        // Notification::where('user_id', auth()->user()->id)->update(['is_read' => true]);
         $notifications = auth()->user()->notifications()->latest()->paginate(20);
-
         return view('user.notification.index', ['notifications' => $notifications]);
     }
 
@@ -113,15 +112,16 @@ class NotificationController extends Controller
     }
 
     public function storeNotification(Request $request){
+
         Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+
         $users = User::where('role', 'regular')->get();
         $content = $request->content;
-        // $users->each(function ($user, $content) {
-        //     systemNotification($user, 'success', 'Announcement', $content);
-        // });
+
         foreach($users as $user){
             systemNotification($user, 'success', 'Announcement', $content);
         }
+        
         return back()->with('success', 'Announcement posted successfully');
     }
 }
