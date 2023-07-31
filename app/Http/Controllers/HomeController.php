@@ -96,7 +96,7 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-        $wallet = Wallet::all()->sum('balance');
+        $wallet = Wallet::where('user_id', '!=', '1')->get();
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();

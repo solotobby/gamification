@@ -53,9 +53,7 @@ class SMSController extends Controller
 
             $list[] = $formatedPhone;
         }
-
-       
-
+        
         $response = PaystackHelpers::sendBulkSMS($list, $request->message);
         if($response['code'] == 'ok'){
             return back()->with('success', 'Broadcast Sent');
@@ -65,7 +63,6 @@ class SMSController extends Controller
     }
 
     public static function getInitials($phoneNumber){
-        
         // Get the first digit
         $firstDigit = $phoneNumber[0];
     
@@ -108,6 +105,5 @@ class SMSController extends Controller
             }]
         ])->select(['phone'])->get();
         return $users;
-
     }
 }
