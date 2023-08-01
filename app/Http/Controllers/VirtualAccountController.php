@@ -38,7 +38,9 @@ class VirtualAccountController extends Controller
             "country"=> "NG"
         ];
     
-       return $response = PaystackHelpers::virtualAccount($data);
+      $response = PaystackHelpers::virtualAccount($data);
+
+      return back()->with('success', 'Account Created Succesfully');
 
        
 

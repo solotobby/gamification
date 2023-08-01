@@ -12,15 +12,23 @@ class WebhookController extends Controller
 
         switch ($event) {
             case 'customeridentification.success':
-                // Handle success event here
-                $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'Webhook-Success']);
+               
+                VirtualAccount::create(['user_id' =>1, 'channel' => 'Webhook-Success']);
                 break;
             case 'customeridentification.failed':
-                $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'Webhook-failed']);
-                // Handle failed event here
+                VirtualAccount::create(['user_id' => 1, 'channel' => 'Webhook-failed']);
+              
+                break;
+            case 'dedicatedaccount.assign.failed':
+                VirtualAccount::create(['user_id' => 1, 'channel' => 'Webhook-assign-failed']);
+               
+                break;
+            case 'dedicatedaccount.assign.success':
+                VirtualAccount::create(['user_id' => 1, 'channel' => 'Webhook-assign-success']);
+               
                 break;
             default:
-                // Handle unrecognized event here (optional)
+            VirtualAccount::create(['user_id' => 1, 'channel' => 'nothing']);
                 break;
         }
 

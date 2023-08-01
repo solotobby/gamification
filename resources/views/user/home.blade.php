@@ -181,7 +181,7 @@
               @endif
           </form>
 
-          <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a>
+          {{-- <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a> --}}
           </center>
       </div>
       {{-- <marquee>
