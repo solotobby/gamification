@@ -23,6 +23,18 @@ class VirtualAccountController extends Controller
         ];
         $res = PaystackHelpers::createCustomer($payload);
 
+        $data = [
+            "customer"=> $res['data']['customer_code'], 
+            "preferred_bank"=>"wema-bank"
+        ];
+    
+        $response = PaystackHelpers::virtualAccount($data);
+
+        $data['customer'] = $res;
+        $data['virtualAccount'] = $response;
+
+        return $data;
+
         if($res['status'] == true){
             // $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
             $data = [
