@@ -21,7 +21,7 @@ class VirtualAccountController extends Controller
             "last_name"=> isset($names[1]) ? $names[1] : 'Freebyz',
             "phone"=> auth()->user()->phone
         ];
-        $res = PaystackHelpers::createCustomer($payload);
+        return $res = PaystackHelpers::createCustomer($payload);
 
         if($res['status'] == true){
             $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
