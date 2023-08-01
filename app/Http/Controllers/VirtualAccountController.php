@@ -21,23 +21,23 @@ class VirtualAccountController extends Controller
             "last_name"=> isset($names[1]) ? $names[1] : 'Freebyz',
             "phone"=> auth()->user()->phone
         ];
-        return $res = PaystackHelpers::createCustomer($payload);
+        $res = PaystackHelpers::createCustomer($payload);
 
         if($res['status'] == true){
-            $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
+            // $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
             $data = [
                     "customer"=> $res['data']['customer_code'], 
                     "preferred_bank"=>"wema-bank"
                 ];
             
-            $response = PaystackHelpers::virtualAccount($data);
+            return $response = PaystackHelpers::virtualAccount($data);
 
-            $VirtualAccount->bank_name = $response['data']['bank']['name'];
-            $VirtualAccount->account_name = $response['data']['account_name'];
-            $VirtualAccount->account_number = $response['data']['account_number'];
-            $VirtualAccount->account_name = $response['data']['account_name'];
-            $VirtualAccount->currency = 'NGN';
-            $VirtualAccount->save();
+            // $VirtualAccount->bank_name = $response['data']['bank']['name'];
+            // $VirtualAccount->account_name = $response['data']['account_name'];
+            // $VirtualAccount->account_number = $response['data']['account_number'];
+            // $VirtualAccount->account_name = $response['data']['account_name'];
+            // $VirtualAccount->currency = 'NGN';
+            // $VirtualAccount->save();
 
             return back()->with('success', 'Account Created Succesfully');
         }else{
