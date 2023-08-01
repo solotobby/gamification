@@ -119,7 +119,7 @@ class PaystackHelpers{
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->post('https://api.paystack.co/dedicated_account', $data);
+        ])->post('https://api.paystack.co/dedicated_account/assign', $data);
 
         return json_decode($res->getBody()->getContents(), true);
     }
