@@ -161,6 +161,9 @@ Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackControl
 //notification
 Route::resource('notifications', NotificationController::class);
 
+//webhook handling
+Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
+
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
