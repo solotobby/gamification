@@ -218,7 +218,6 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
-        
         $request->validate([
             'description' => 'required|string',
             'proof' => 'required|string',
