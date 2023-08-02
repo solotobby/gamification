@@ -366,3 +366,18 @@ if(!function_exists('short_name')){
         return $name['0'];
     }
 }
+
+if(!function_exists('flutterwaveVirtualAccount')){
+    function flutterwaveVirtualAccount($payload){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/virtual-account-numbers', $payload)->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+        
+    }
+}
+

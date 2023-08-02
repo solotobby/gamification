@@ -180,10 +180,44 @@
               <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
               @endif
           </form>
-
+          <br>
+          {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout">Get bank Account</button> --}}
           {{-- <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a> --}}
+
           </center>
       </div>
+
+        <!-- Pop Out Default Modal -->
+        <div class="modal fade" id="modal-default-popout" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-popout" role="document">
+          <div class="modal-content">
+            <form action="{{ url('assign/virtual/account')}}" method="POST">
+               @csrf
+              <div class="modal-header">
+              <h5 class="modal-title"> Create Account Number </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body pb-1">
+                 
+                  <div class="mb-4">
+                    <label class="form-label" for="post-files">Please Enter your BVN</small></label>
+                        <input class="form-control" name="bvn" type="text" max="10" required>
+                  </div>
+                  <div class="mb-4">
+                    {{-- <button class="btn btn-primary" type="submit">Get Account</button> --}}
+                  </div>
+                 
+              </div>
+              
+              <div class="modal-footer">
+              {{-- <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button> --}}
+              <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Submit</button>
+              </div>
+            </form>
+          </div>
+          </div>
+      </div>
+
       {{-- <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
