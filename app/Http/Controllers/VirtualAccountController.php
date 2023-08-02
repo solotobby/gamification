@@ -13,8 +13,24 @@ class VirtualAccountController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index(Request $request){
+        $request->validate([
+            'bvn' => 'required|numeric|digits:10'
+        ]);
+        return $request;
         $name = explode(" ", auth()->user()->name);
+        $payload = [
+            "email"=> auth()->user()->email,
+            "is_permanent"=> true,
+            "bvn"=> $request->bvn,
+            "tx_ref"=> $this->RandomString(20),
+            "phonenumber" => auth()->user()->phone,
+            "firstname"=> $name[0],
+            "lastname"=> isset($name[1]) ? $name[1] : 'Freebyz',
+            "narration"=> $name[0]." ".isset($name[1]) ? $name[1] : 'Freebyz'
+        ];
+       return flutterwaveVirtualAccount($payload);
+
         // $payload = [
         //     "email"=> auth()->user()->email,
         //     "first_name"=> $name[0],
@@ -28,17 +44,20 @@ class VirtualAccountController extends Controller
         //     "preferred_bank"=>"wema-bank"
         // ];
 
-        $data = [
-            "email"=> auth()->user()->email,
-            "first_name"=> $name[0],
-            "middle_name"=> isset($name[1]) ? $name[1] : 'Dominahl',
-            "last_name"=> isset($name[2]) ? $name[2] : 'Technologies',
-            "phone"=> auth()->user()->phone,
-            "preferred_bank"=> "test-bank",
-            "country"=> "NG"
-        ];
+        // $payload = [
+            // "email"=> auth()->user()->email,
+            // "first_name"=> $name[0],
+            // "middle_name"=> isset($name[1]) ? $name[1] : 'Dominahl',
+            // "last_name"=> isset($name[2]) ? $name[2] : 'Technologies',
+            // "phone"=> auth()->user()->phone,
+            // "preferred_bank"=> "test-bank",
+            // "country"=> "NG"
+        // ];
+
+
+     
     
-      $response = PaystackHelpers::virtualAccount($data);
+      //$response = PaystackHelpers::virtualAccount($data);
 
       return back()->with('success', 'Account Created Succesfully');
 
@@ -66,4 +85,16 @@ class VirtualAccountController extends Controller
         // }
   
     }
+
+    function RandomString($n) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+     
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+        return $randomString;
+    }
+
 }

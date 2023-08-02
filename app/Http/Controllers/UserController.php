@@ -144,8 +144,9 @@ class UserController extends Controller
             $am = 5 + $percent + 1;
             $result = paypalPayment($am, '/capture/upgrade');
              if($result['status'] == 'CREATED'){
+                $url = $result['links'][1]['href'];
                 PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
-                return redirect('https://www.sandbox.paypal.com/checkoutnow?token='.$result['id']);
+                return redirect($url);
              }
         } 
     }
