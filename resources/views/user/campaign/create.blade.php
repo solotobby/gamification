@@ -13,7 +13,7 @@
 @section('content')
 
  <!-- Hero Section -->
- <div class="bg-image" style="background-image: ('src/assets/media/photos/photo21@2x.jpg')">
+ <div class="bg-image" style="background-image: ('src/assets/media/photos/photo21@2x.jpg');">
     <div class="bg-black-75">
       <div class="content content-boxed text-center py-5">
         <h1 class="h2 text-white mb-2">
@@ -27,9 +27,9 @@
   <!-- Page Content -->
   <div class="content content-boxed">
     <!-- Post Job form -->
-    <h2 class="content-heading">
+    {{-- <h2 class="content-heading">
       <i class="fa fa-plus text-success me-1"></i> Create Campaign
-    </h2>
+    </h2> --}}
     @if (session('success'))
         <div class="alert alert-success" role="alert">
             {{ session('success') }}
@@ -62,12 +62,12 @@
         <div class="block-content block-content-full">
           <h2 class="content-heading">Campaign Information</h2>
           <div class="row items-push">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
               <p class="text-muted">
               Please provide detailed information about your campaign
               </p>
             </div>
-            <div class="col-lg-6 offset-lg-1">
+            <div class="col-lg-9">
                
               <div class="mb-4">
                 <label class="form-label" for="post-type">Category</label>
@@ -113,12 +113,12 @@
         <div class="block-content">
           <h2 class="content-heading">Campaign Description</h2>
           <div class="row items-push">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
               <p class="text-muted">
                 Give detailed decription of the campaign
               </p>
             </div>
-            <div class="col-lg-6 offset-lg-1">
+            <div class="col-lg-9">
               <div class="mb-4">
                 <label class="form-label" for="post-title">Title</label>
                 <input type="text" class="form-control" id="post-title" name="post_title" value="{{ old('post_title') }}" required>
@@ -157,7 +157,9 @@
         <!-- Submit Form -->
         <div class="block-content block-content-full pt-0">
           <div class="row mb-4">
-            <div class="col-lg-6 offset-lg-5">
+            {{-- offset-lg-5 --}}
+            <div class="col-lg-3"></div>
+            <div class="col-lg-9">
               <button type="submit" class="btn btn-alt-primary">
                 <i class="fa fa-plus opacity-50 me-1"></i> Post Campaign
               </button>
