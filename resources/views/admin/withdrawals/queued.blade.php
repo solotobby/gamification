@@ -50,7 +50,7 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>USD</th>
+                    {{-- <th>USD</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -65,7 +65,7 @@
                 <?php $i = 1; ?>
                 @foreach ($withdrawals as $with)
                     <tr>
-                        <td>{{ $with->user->is_usd == true ? 'USD' : 'Naira' }} - {{ $with->paypal_email }}</td>
+                        {{-- <td>{{ $with->user->is_usd == true ? 'USD' : 'Naira' }} - {{ $with->paypal_email }}</td> --}}
                         <td class="fw-semibold"> <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}"> {{$with->user->name }}</a></td>
                         <td>{{ $with->user->email }}</td>
                         <td>{{ $with->user->phone }}</td>
@@ -125,6 +125,8 @@
                                 @else
                                   <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
                                 @endif
+
+                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
                               
                           @else
                           <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
