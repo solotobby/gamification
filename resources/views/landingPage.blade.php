@@ -37,6 +37,7 @@
 			<div class="container">
 				<div class="area-title text-center">
 					<h2>Welcome to Freebyz</h2>
+					<div class="alert alert-info">Hi, we are aware of the downtime. We are working on it and we will be back shortly</div>
 					<p>
 						Freebyz was created for you to make cool cash everyday by doing simple social media jobs on Youtube, Facebook, TikTok, Instagram and other social media platforms. <br>
 						Use Freebyz to answer survey questions, play games and install applications to make money online daily.
