@@ -184,7 +184,7 @@ class RegisterController extends Controller
                 // }
 
                 Auth::login($user); //log user in
-                PaystackHelpers::userLocation('Login');
+                // PaystackHelpers::userLocation('Login');
                 setWalletBaseCurrency(); //set base currency if not set
                 setProfile();//set profile page 
                 // SystemActivities::loginPoints($user);
