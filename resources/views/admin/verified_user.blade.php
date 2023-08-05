@@ -43,9 +43,9 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    {{-- <th>Balance</th>
-                    <th>Ref. No</th> --}}
-                    <th>Status</th>
+                    {{-- <th>Balance</th>--}}
+                    <th>Ref. No</th> 
+                    {{-- <th>Status</th> --}}
                     <th>Reg. Channel</th>
                     <th>When Created</th>
                 </tr>
@@ -58,9 +58,9 @@
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
-                        {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td>
-                        <td>{{ @$user->referees->count() }}</td> --}}
-                        <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
+                        {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
+                        <td>{{ @$user->referees->count() }}</td> 
+                        {{-- <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td> --}}
                         <td>{{ $user->source }}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
