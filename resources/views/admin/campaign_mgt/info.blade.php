@@ -167,13 +167,13 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <h2 class="content-heading">Campaign Activities 
-                {{-- {{ $campaign->completed()->count() }} --}}
+                {{ $activities->count() }}
             
             </h2>
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    {{-- <th scope="col">#</th> --}}
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
@@ -183,13 +183,13 @@
                 <tbody>
                  @foreach ($activities as $list )
                     <tr>
-                        <th scope="row">1</th>
+                        {{-- <th scope="row">1</th> --}}
                         <td>{{ $list->user->name }}</td>
                         <td>{{ $list->user->email }}</td>
                         <td>{{ $list->user->phone }}</td>
                         <td>{{ $list->status }}</td>
                     </tr>
-                @endif
+                @endforeach
                 </tbody>
             </table>
         </div>
