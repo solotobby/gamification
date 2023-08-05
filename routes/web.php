@@ -74,6 +74,9 @@ Route::get('api/get/sub/categories/{id}', [\App\Http\Controllers\CampaignControl
 Route::get('api/get/sub/categories/info/{id}', [\App\Http\Controllers\CampaignController::class, 'getSubcategoriesInfo']);
 Route::post('post/campaign', [\App\Http\Controllers\CampaignController::class, 'postCampaign'])->name('post.campaign');
 Route::post('edit/campaign', [\App\Http\Controllers\CampaignController::class, 'update'])->name('edit.campaign');
+
+Route::get('decline/campaign/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'declineCampaign']);
+
 Route::get('extend/payment', [\App\Http\Controllers\CampaignController::class, 'campaign_extension_payment']);
 Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign']);
 Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'postCampaignWork'])->name('post.campaign.work');
@@ -233,6 +236,8 @@ Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'ca
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
 Route::get('campaigns/completed', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCompleted'])->name('campaign.completed');
 Route::get('campaigns/denied', [\App\Http\Controllers\Admin\AdminController::class, 'deniedCampaigns']);
+Route::get('campaign/info/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignInfo']);
+
 // Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::post('campaign/status', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus'])->name('campaign.status');
 Route::get('mass/mail', [\App\Http\Controllers\Admin\AdminController::class, 'massMail'])->name('mass.mail');

@@ -35,6 +35,10 @@ class Campaign extends Model
             return $this->hasMany(CampaignWorker::class, 'campaign_id');
         }
 
+        public function attempts(){
+            return $this->hasMany(CampaignWorker::class);
+        }
+
         // public function completedAll()
         // {
         //     return $this->hasMany(CampaignWorker::class, 'campaign_id');

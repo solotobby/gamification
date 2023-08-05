@@ -62,8 +62,8 @@
                 @foreach ($campaigns as $camp)
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
-                        <td class="fw-semibold"><a href="{{ url('user/'.$camp->id.'/info') }}" target="_blank"> {{$camp->post_title }}</a></td>
-                        <td>{{ $camp->user->name }}</td>
+                        <td class="fw-semibold"><a href="{{ url('user/'.$camp->user->id.'/info') }}" target="_blank"> {{$camp->user->name }}</a> </td>
+                        <td>{{$camp->post_title }}</td>
                         <td>{{ $camp->number_of_staff }}</td>
                         <td> 
                           @if($camp->currency == 'NGN')
@@ -82,11 +82,12 @@
                         <td>{{ $camp->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>
-                          <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}">View</button>
+                          <a href="{{ url('campaign/info/'.$camp->id) }}" class="btn btn-alt-primary btn-sm" target="_blank">View</a>
+                          {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}">View</button> --}}
                         </td>
                     </tr>
 
-                    <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                    {{-- <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-popout" role="document">
                       <div class="modal-content">
                           <div class="modal-header">
@@ -148,11 +149,11 @@
                           
                           <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                          {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                          <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button>
                           </div>
                       </div>
                       </div>
-                  </div>
+                  </div> --}}
                 @endforeach
               
             </tbody>

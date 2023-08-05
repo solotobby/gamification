@@ -216,6 +216,7 @@ class AdminController extends Controller
         return view('admin.users.search_result', ['users' => $users]);
     }
 
+
     public function verifiedUserList(){
         $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
@@ -368,6 +369,53 @@ class AdminController extends Controller
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
+    public function campaignInfo($id){
+        $campaign = Campaign::find($id);
+        $activities = $campaign->attempts;
+        return view('admin.campaign_mgt/info', ['campaign' => $campaign, 'activities' => $activities]);
+    }
+
+   
+
+    public function declineCampaign($id){
+        $camp = Campaign::find($id);
+
+        $amount = $camp->total_amount;
+            $camp->status = 'Decline';//$request->status;
+            $camp->save();
+
+            //reverse the money
+            $userWallet = Wallet::where('user_id', $camp->user_id)->first();
+            $userWallet->balance += $amount;
+            $userWallet->save(); 
+
+            $est_amount = $camp->number_of_staff * $camp->campaign_amount;
+            $percent = (50 / 100) * $est_amount;
+            $adminCom = $est_amount - $percent;
+
+            $adminWallet = Wallet::where('user_id', '1')->first();
+            $adminWallet->balance -= $adminCom;
+            $adminWallet->save(); 
+            
+            PaymentTransaction::create([
+                'user_id' => $camp->user_id,
+                'campaign_id' => $camp->id,
+                'reference' => time(),
+                'amount' => $amount,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'campaign_reversal',
+                'description' => 'Campaign Reversal for '.$camp->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]); 
+            $user = User::where('id', $camp->user_id)->first();
+            $content = 'Reason: '.$request->reason.'.';
+            $subject = 'Campaign Declined';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+    }
+
     public function approvedJobs(){
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->paginate(200);
         return view('admin.approved_list', ['campaigns' => $list]); 
@@ -511,8 +559,8 @@ class AdminController extends Controller
     }
 
     public function campaignStatus(Request $request){
-        // return $request;
-        $camp = Campaign::find($request->id);
+        
+         $camp = Campaign::where('id', $request->id)->first();//find($request->id);
 
         if($request->status == 'Decline'){
             // return $status;
@@ -551,13 +599,17 @@ class AdminController extends Controller
             $subject = 'Campaign Declined';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));     
         }else{
-            // return $status;
+            return $request;
             $camp->status = $request->status;
+            $camp->post_title = $request->post_title;
+            $camp->post_link = $request->post_link;
+            $camp->description = $request->description;
+            $camp->proof = $request->proof;
             $camp->save();
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Live!!!';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            //Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
         }
         return back()->with('success', 'Campaign Successfully '.$request->status);
     }
