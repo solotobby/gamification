@@ -166,9 +166,7 @@
   <div class="content content-boxed">
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <h2 class="content-heading">Campaign Activities 
-                {{ $activities->count() }}
-            
+            <h2 class="content-heading">Campaign Activities - {{ $activities->count() }}
             </h2>
             <table class="table table-hover">
                 <thead>
@@ -178,6 +176,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Status</th>
+                    <th scope="col">When</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -188,6 +187,7 @@
                         <td>{{ $list->user->email }}</td>
                         <td>{{ $list->user->phone }}</td>
                         <td>{{ $list->status }}</td>
+                        <td>{{ $list->created_at }}</td>
                     </tr>
                 @endforeach
                 </tbody>
