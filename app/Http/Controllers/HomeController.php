@@ -415,7 +415,9 @@ class HomeController extends Controller
                     'recipient_code' => $recipientCode['data']['recipient_code'],
                     'currency' => 'NGN'
                 ]);
-                return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
+
+                return back()->with('success', 'Account Details Added');
+                //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
         }else{
             return back()->with('error', 'Your bank account is not valid');
         }

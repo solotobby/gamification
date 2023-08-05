@@ -236,15 +236,19 @@ class WalletController extends Controller
                 return back()->with('error', 'Insufficient balance');
             }
        
-            $this->processWithdrawals($request, 'NGN', 'paystack');
+           
 
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
-            if($bankInformation == null){
-                 $bankList = PaystackHelpers::bankList();
-                 return view('user.bank_information', ['bankList' => $bankList]);
+            if($bankInformation){
+                $this->processWithdrawals($request, 'NGN', 'paystack');
+                return back()->with('success', 'Withdrawal Successfully queued');
+                //  $bankList = PaystackHelpers::bankList();
+                //  return view('user.bank_information', ['bankList' => $bankList]);
+            }else{
+                return redirect('profile')->with('info', 'Please enter Account Details to make withdrawals');
             }
 
-            return back()->with('success', 'Withdrawal Successfully queued');
+           
      
         }else{
 

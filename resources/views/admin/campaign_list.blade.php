@@ -58,7 +58,6 @@
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $camp)
-                
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->post_title }}</a></td>
@@ -81,82 +80,6 @@
                         </td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
-
-                    {{-- <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                          <h5 class="modal-title">Info</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-  
-                          <div class="modal-body pb-1">
-                              <div class="col-xl-12">
-                                 
-                                  <div class="block block-rounded">
-                                    <div class="block-header block-header-default">
-                                      <h3 class="block-title">{{ $camp->post_title }}</h3>
-                                    </div>
-
-                                    <p>
-                                      <h5>Description</h5>
-                                      {!! $camp->description !!}
-                                    </p>
-
-                                    <p>
-                                      <h5>Proof</h5>
-                                      {!! $camp->proof !!}
-                                    </p>
-
-                                    <ul class="list-group push">
-                                      
-                                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                                          Category 
-                                          <span class="badge rounded-pill bg-info">{{$camp->campaignType->name}}</span>
-                                      </li>
-
-                                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Sub Category 
-                                        <span class="badge rounded-pill bg-info">{{$camp->campaignCategory->name}}</span>
-                                     </li>
-
-                                     <div class="mb-4 mt-4">
-                                      <hr>
-                                      <h5>List of Workers - {{ $camp->completed()->count() }}</h5>
-                                      @foreach ($camp->completed as $list )
-                                      <ul class="list-group push">
-                                      
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                          Name
-                                          <span class="badge rounded-pill bg-info">{{$list->user->name}}</span> 
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                          Status <span class="badge rounded-pill bg-primary">{{$list->status}}</span>
-                                        </li>
-                    
-                                      </ul>
-                                      <hr>
-                                      @endforeach
-                                     </div>
-                                  </ul>
-                                 
-
-                                    
-
-
-                                  </div>
-                                  <!-- END With Badges -->
-                                </div>
-                              
-                          </div>
-                          
-                          <div class="modal-footer">
-                          <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button>
-                          </div>
-                      </div>
-                      </div>
-                  </div> --}}
                 @endforeach
               
             </tbody>
