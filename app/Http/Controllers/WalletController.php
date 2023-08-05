@@ -245,7 +245,7 @@ class WalletController extends Controller
                 //  $bankList = PaystackHelpers::bankList();
                 //  return view('user.bank_information', ['bankList' => $bankList]);
             }else{
-                return redirect('profile')->with('info', 'Please enter Account Details to make withdrawals');
+                return redirect('profile')->with('info', 'Please scroll down to Bank Account Details to update your information');
             }
 
            
