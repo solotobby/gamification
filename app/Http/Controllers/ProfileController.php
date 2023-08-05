@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Models\BankInformation;
 use App\Models\Profile;
 
 class ProfileController extends Controller
@@ -26,7 +28,9 @@ class ProfileController extends Controller
     public function index()
     {
         
-        return view('user.profile.profile');
+        $bankList = PaystackHelpers::bankList();
+        @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
+        return view('user.profile.profile', ['bankList' => $bankList, 'bankInfo' => $bankInfo]);
     }
 
     /**

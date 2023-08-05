@@ -65,6 +65,7 @@ Route::post('save/bank/information', [\App\Http\Controllers\HomeController::clas
 Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 
+
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');
 ////Campaign
