@@ -61,8 +61,8 @@
                 
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
-                        <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
-                        <td>{{ $camp->user->name }}</td>
+                        <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->post_title }}</a></td>
+                        <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
                         <td>{{ $camp->completed()->count() }}/{{ $camp->number_of_staff }} </td>
                         <td>{{ $camp->completed()->where('status', 'Approved')->count() }}/{{ $camp->number_of_staff }} </td>
                         <td>
@@ -82,7 +82,7 @@
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
 
-                    <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                    {{-- <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
                       <div class="modal-content">
                           <div class="modal-header">
@@ -92,7 +92,7 @@
   
                           <div class="modal-body pb-1">
                               <div class="col-xl-12">
-                                  <!-- With Badges -->
+                                 
                                   <div class="block block-rounded">
                                     <div class="block-header block-header-default">
                                       <h3 class="block-title">{{ $camp->post_title }}</h3>
@@ -152,11 +152,11 @@
                           
                           <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                          {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                          <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button>
                           </div>
                       </div>
                       </div>
-                  </div>
+                  </div> --}}
                 @endforeach
               
             </tbody>
