@@ -12,7 +12,7 @@
       <!-- Text -->
 
       <div class="mb-2 text-center content-heading mb-4">
-        <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
+        {{-- <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p> --}}
         <p class="link-fx fw-bold fs-1">
           @if(auth()->user()->wallet->base_currency == "Naira")
           &#8358;{{ number_format(auth()->user()->wallet->balance) }}
@@ -56,7 +56,7 @@
                 <span class="input-group-text">
                   &#8358;
                 </span>
-                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="200" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
               </div>
               @else
@@ -73,7 +73,7 @@
 
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary">
-                <i class="si si-paper-plane opacity-50 me-1"></i> Fund wallet with card
+                <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
               </button>
             </div>
           </div>
@@ -84,11 +84,19 @@
         <div class="row mb-3">
           <div class="col-lg-2"></div>
           <div class="col-lg-8" style="color: brown">
-            Manual Wallet funding, please credit the account below: <br>
-              <b>ACCOUNT DETAILS: 4600066074 
+            You can now fund your wallet Card or Bank Transfer. 
+            Once wallet top up is successful, click the button below to verify your account.
+            <center>
+                <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-3" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                </a>
+            </center>
+
+             {{-- Manual Wallet funding, please credit the account below:
+               <b>ACCOUNT DETAILS: 4600066074 
               <br>DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
               <br>
-              <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i>
+              <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i> --}}
           </div>
           <div class="col-lg-2"></div>
       </div>

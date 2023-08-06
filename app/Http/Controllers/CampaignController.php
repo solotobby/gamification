@@ -412,6 +412,13 @@ class CampaignController extends Controller
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
+        $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
+        $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
+
+        if($campCount >= $campaignInfo->number_of_staff){
+            return back()->with('error', 'This campaign has reach its maximum workers');
+        }
+
         $campaign = Campaign::where('id', $request->campaign_id)->first();
         if($request->hasFile('proof')){
          

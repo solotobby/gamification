@@ -220,13 +220,13 @@
                               <?php 
                               $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
                               ?>
-                              @if($completed_count == $campaign->number_of_staff)
+                              @if($completed_count >= $campaign->number_of_staff)
                                 <div class="block-content">
                                   <div class="row">
                                     <div class="col-md-12">
                                         
                                         <h4 class="fw-normal text-muted text-center">
-                                            This campaign has reached maximum worker.
+                                            This campaign has reached its maximum number of worker.
                                         </h4>
                                       
                                     </div>

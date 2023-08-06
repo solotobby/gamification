@@ -381,3 +381,31 @@ if(!function_exists('flutterwaveVirtualAccount')){
     }
 }
 
+if(!function_exists('flutterwavePaymentInitiation')){
+    function flutterwavePaymentInitiation($payload){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/payments', $payload)->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+        
+    }
+}
+
+if(!function_exists('flutterwaveVeryTransaction')){
+    function flutterwaveVeryTransaction($id){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/transactions/'.$id.'/verify')->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+        
+    }
+}
+

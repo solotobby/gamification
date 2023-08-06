@@ -59,7 +59,7 @@
                     <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->campaign->post_title }}</a></td>
                     <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
                     <td>  
-                        @if($camp->currency == 'NGN')
+                        @if($camp->campaign->currency == 'NGN')
                             &#8358;{{ number_format($camp->campaign->campaign_amount) }}
                         @else
                             ${{ $camp->campaign->campaign_amount }}
@@ -72,6 +72,9 @@
                 @endforeach
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $disputes->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>
