@@ -148,8 +148,10 @@
             {{-- offset-lg-5 --}}
             <div class="col-lg-3"></div>
             <div class="col-lg-9">
+                @if($campaign->status == 'In-dispute')
                 <button type="submit"  class="btn btn-alt-primary" name="status" value="Approved"> <i class="fa fa-save opacity-50 me-1"></i>Approve Disputed Job</button>
                 <button type="submit" class="btn btn-alt-danger" name="status" value="Denied"><i class="fa fa-times opacity-50 me-1"></i> Deny Job Abruptly</button>
+                @endif
             </div>
         </div>
         </div>

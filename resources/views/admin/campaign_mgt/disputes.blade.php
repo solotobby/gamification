@@ -43,7 +43,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Creator</th>
+                    <th>Campaign</th>
                     <th>Worker</th>
                     <th>Amount</th>
                     <th>Status</th>
