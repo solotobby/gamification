@@ -146,9 +146,9 @@
             <div class="col-lg-3"></div>
             <div class="col-lg-9">
                 <button type="submit"  class="btn btn-alt-primary" name="status" value="Live"> <i class="fa fa-save opacity-50 me-1"></i> Update & Approve Campaign</button>
-                @if($campaign->status == 'Live')
+               
                 <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i class="fa fa-times opacity-50 me-1"></i> Decline Campaign Abruptly</button>
-                @endif
+              
             </div>
           </div>
         </div>
