@@ -167,7 +167,8 @@ Route::resource('notifications', NotificationController::class);
 
 //webhook handling
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
-
+//Flutterwave Top up
+Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes

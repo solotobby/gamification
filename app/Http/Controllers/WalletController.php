@@ -123,9 +123,32 @@ class WalletController extends Controller
 
             $percent = 3/100 * $request->balance;
             $amount = $request->balance + $percent;
+
+            $payload = [
+                'tx_ref' => time(),
+                'amount'=> $amount,
+                'currency'=> "NGN",
+                'redirect_url'=> url('flutterwave/wallet/top'),
+                'meta'=> [
+                    'consumer_id' => auth()->user()->id,
+                    'consumer_mac'=> ''
+                ],
+                'customer'=> [
+                    'email'=> auth()->user()->email,
+                    'phonenumber'=> auth()->user()->phone,
+                    'name'=> auth()->user()->name,
+                ],
+                'customizations'=>[
+                    'title'=> "Freebyz - Wallet Top Up",
+                    'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
+                ] 
+            ];
+            $url = flutterwavePaymentInitiation($payload)['data']['link'];
     
-            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+            // $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+            
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
+            
             return redirect($url);
         
         }else{
@@ -154,7 +177,7 @@ class WalletController extends Controller
           $user = Auth::user();
         if($response['status'] == 'COMPLETED'){
 
-            $ref = $response['purchase_units'][0]['reference_id'];
+            //$ref = $response['purchase_units'][0]['reference_id'];
          
             // $sellerReceivableBreakdown = $response['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 
@@ -220,10 +243,38 @@ class WalletController extends Controller
             
             systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
 
-            return redirect('success');
+            return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
        }else{
         return redirect('error');
        }
+    }
+
+    public function flutterwaveWalletTopUp(){
+       
+        $url = request()->fullUrl();
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+        $tx_id = $params['transaction_id'];
+        $ref = $params['tx_ref'];
+
+        $res = flutterwaveVeryTransaction($tx_id);
+
+        if($res['status'] == 'success'){
+            $ver = PaystackHelpers::paymentUpdate($ref, 'successful');
+
+            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+            $wallet->balance += $ver->amount;
+            $wallet->save();
+            
+            $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+            
+            systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN'.$ver->amount.' Wallet Topup Successful');
+            
+            return back()->with('success', 'Wallet Topup Successful'); 
+        }
+       
+
     }
 
     public function storeWithdraw(Request $request)

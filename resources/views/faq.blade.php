@@ -59,7 +59,7 @@
                             <h4>I have issues with my card. How can I fund my wallet or verify my account without using my debit can?
                             </h4>
                             <p>You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. Kindly attach a receipt of payment to info@dominahl.com after payment. 
-                                <br><b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)</b>
+                                {{-- <br><b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank)</b> --}}
                             </p>
                             <h4> How much can I withdraw from FREEBYZ</h4>
                             <p>

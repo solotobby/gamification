@@ -75,19 +75,21 @@
               <i class="fa fa-2x fa-hand-paper text-xinspire"></i>
             </div>
             <h4 class="h5 mb-2">
-              Manual Withdrawals
+             Bank Transfer
             </h4>
             <p class="mb-0 text-muted">
-              You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. 
-              Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard.
+              You can fund your wallet and verify your account with your wallet balance. 
+              Click <a href="{{ url('wallet/fund')}}"> Here </a> to fund your wallet. 
+              {{-- You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. 
+              Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard. --}}
               <br>
               <b>
                 {{-- Account Details: 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank) --}}
                 {{-- <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i> --}}
               </b>
-              <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
+              {{-- <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
                 <i>(Please add your persnal name example: Verification from Samuel Mark)</i>
-              </b>
+              </b> --}}
             </p>
           </div>
         </div>

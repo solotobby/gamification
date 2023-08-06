@@ -195,7 +195,7 @@ class AdminController extends Controller
     }
 
     public function campaignDisputes(){
-         $disputes = CampaignWorker::where('status', 'In-dispute')->orderBy('created_at', 'DESC')->get();
+         $disputes = CampaignWorker::where('status', 'In-dispute')->orderBy('created_at', 'DESC')->paginate(100);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
@@ -205,9 +205,16 @@ class AdminController extends Controller
     }
 
     public function campaignDisputesDecision(Request $request){
+        
         $workDone = CampaignWorker::where('id', $request->id)->first();
         $workDone->status = $request->status;
         $workDone->save();
+
+        if($request->status == 'Approved'){
+            $wallet = Wallet::where('user_id', $workDone->user_id)->first();
+            $wallet->balance += $workDone->amount;
+            $wallet->save();
+        }
 
         $subject = 'Job '.$request->status;
         $status = $request->status;

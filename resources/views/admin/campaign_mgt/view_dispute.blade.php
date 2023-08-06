@@ -17,9 +17,6 @@
   </div>
   <div class="content content-boxed">
     <!-- Post Job form -->
-    {{-- <h2 class="content-heading">
-      <i class="fa fa-plus text-success me-1"></i> Create Campaign
-    </h2> --}}
     @if (session('success'))
         <div class="alert alert-success" role="alert">
             {{ session('success') }}
@@ -107,22 +104,18 @@
             <div class="mb-4">
                 <label class="form-label" for="post-title">Title</label>
                 {{ $campaign->campaign->post_title }}
-                {{-- <input type="text" class="form-control" id="post-title" name="post_title" value="" required> --}}
-                {{-- <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small> --}}
             </div>
 
             <div class="mb-4">
                 <label class="form-label" for="post-title">External Link</label><br>
-                {{ $campaign->campaign->post_link }}
-                {{-- <input type="url" class="form-control" id="post-title" name="post_link" value="" required> --}}
-                {{-- <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small> --}}
+                <a href="{{$campaign->campaign->post_link }}" target="_blank"> {{$campaign->campaign->post_link }}</a>
             </div>
 
             <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description </label><br>
-                    {{-- <small>(Ensure you provide simple and clear instruction on task to be done)</small></label> --}}
+                   
                 {!! $campaign->campaign->description !!}
-                {{-- <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> </textarea> --}}
+               
             </div>
             <div class="mb-4">
                 <label class="form-label" for="post-files">Expected Campaign Proof
@@ -163,10 +156,6 @@
         <!-- END Submit Form -->
     </div>
   </form>
-
-
-  
-
   </div>
 
 @endsection
