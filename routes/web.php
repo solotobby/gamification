@@ -223,6 +223,7 @@ Route::post('edit/subcategories', [\App\Http\Controllers\CategoryController::cla
 Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 'userSearch'])->name('user.search');
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
 Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'verifiedUserList'])->name('verified.user.list');
+Route::get('usd/verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'usdVerifiedUserList'])->name('usd.verified.user.list');
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
 Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'userTransaction'])->name('user.transaction');
 
