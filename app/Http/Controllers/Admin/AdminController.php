@@ -194,6 +194,33 @@ class AdminController extends Controller
         return view('admin.campaign_metric.index', ['metrics' => $metrics]);
     }
 
+    public function campaignDisputes(){
+         $disputes = CampaignWorker::where('status', 'In-dispute')->orderBy('created_at', 'DESC')->get();
+        return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
+    }
+
+    public function campaignDisputesView($id){
+        $workdisputed = CampaignWorker::where('id', $id)->first();
+        return view('admin.campaign_mgt.view_dispute', ['campaign' => $workdisputed]);
+    }
+
+    public function campaignDisputesDecision(Request $request){
+        $workDone = CampaignWorker::where('id', $request->id)->first();
+        $workDone->status = $request->status;
+        $workDone->save();
+
+        $subject = 'Job '.$request->status;
+        $status = $request->status;
+        Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+        return back()->with('success', 'Campaign Dispute Successful');
+        // SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
+            
+        // $subject = 'Job Approved';
+        // $status = 'Approved';
+        // Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+
+    }
+
     public function userList(){
         $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(500);
         return view('admin.users.list', ['users' => $users]);

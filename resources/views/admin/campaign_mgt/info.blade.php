@@ -6,7 +6,7 @@
     <div class="bg-black-75">
       <div class="content content-boxed text-center py-5">
         <h1 class="h2 text-white mb-2">
-        Edit {{ $campaign->post_title }}
+        Edit - {{ $campaign->post_title }}
         </h1>
       </div>
     </div>
@@ -43,10 +43,6 @@
     <form action="{{ route('campaign.status') }}" method="POST">
         @csrf
       <div class="block block-rounded">
-
-        <!-- Job Meta section -->
-        <!-- Select2 (.js-select2 class is initialized in Helpers.jqSelect2()) -->
-        <!-- For more info and examples you can check out https://github.com/select2/select2 -->
         <div class="block-content block-content-full">
           <h2 class="content-heading">Campaign Information</h2>
           <div class="row items-push">
@@ -132,7 +128,7 @@
               @if($campaign->status == 'Pending')
               <div class="mb-2">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Enter Reason for deline or aparroval</label>
+                    <label for="exampleInputEmail1">Enter Reason for decline or aparroval</label>
                     <textarea class="form-control" id="exampleInputEmail1" name="reason" required></textarea>
                   </div>
               </div>
