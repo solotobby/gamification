@@ -131,39 +131,6 @@ class CampaignController extends Controller
 
     }
 
-    
-
-    public function campaign_extension_payment(){
-    //     $url = request()->fullUrl();
-    //     $url_components = parse_url($url);
-    //     parse_str($url_components['query'], $params);
-    //     $ref = $params['trxref'];
-        
-    //     $res = Http::withHeaders([
-    //         'Accept' => 'application/json',
-    //         'Content-Type' => 'application/json',
-    //         'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-    //     ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
-    //    $meta = $res['data']['metadata'];
-    //    //$meata['number_of_staff'];
-    //    $status = $res['data']['status'];
-    //    if($status == 'success'){
-    //         $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
-    //         $fetchPaymentTransaction->status = 'successful';
-    //         $fetchPaymentTransaction->save();
-
-    //         $camp = Campaign::where('extension_references', $ref)->first();
-    //         $camp->extension_references = null;
-    //         $camp->number_of_staff += $meta['number_of_staff'];
-    //         $camp->total_amount += $meta['total_amount'];
-    //         $camp->save();
-
-    //         return redirect('my/campaigns')->with('success', 'Campaign Successfully Edited');
-
-    //    }
-    //    return redirect('my/campaigns')->with('error', 'An Error occoured while editing campaign');
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -400,6 +367,26 @@ class CampaignController extends Controller
             }else{
                 return redirect('conversion');
             }
+         }else{
+
+            if(auth()->user()->is_verified){
+                if($getCampaign['is_completed'] == true){
+                    return redirect('#');
+                }else{
+                    $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+                }
+            }elseif(!auth()->user()->is_verified && $getCampaign['campaign_amount'] <= 10){
+                if($getCampaign['is_completed'] == true){
+                    return redirect('#');
+                }else{
+                    $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+                }
+            }else{
+                return redirect('info');
+            }
+
          }
 
         // $getCampaign = Campaign::where('job_id', $job_id)->first();
@@ -445,6 +432,7 @@ class CampaignController extends Controller
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
+            
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
             $campaign = Campaign::where('id', $request->campaign_id)->first();
@@ -452,6 +440,7 @@ class CampaignController extends Controller
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
             return back()->with('success', 'Job Submitted Successfully');
         }else{
             return back()->with('error', 'Upload an image');
@@ -572,13 +561,13 @@ class CampaignController extends Controller
             return back()->with('success', 'Campaign Approve Successfully');
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
-            $deny->status = 'Denied';
+            $deny->status = 'In-dispute';
             $deny->reason = $request->reason;;
             $deny->save();
-            $subject = 'Job Denied';
-            $status = 'Denied';
+            $subject = 'Job in dispute';
+            $status = 'In-dispute';
             Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
-            return back()->with('error', 'Campaign Denied Successfully');
+            return back()->with('success', 'Campaign has been placed on dispute');
         }
     }
 

@@ -30,6 +30,9 @@
             <a class="nav-main-link" href="{{ url('admin/campaign/metrics') }}">
               <span class="nav-main-link-name">Metrics</span>
             </a>
+            <a class="nav-main-link" href="{{ url('admin/campaign/disputes') }}">
+              <span class="nav-main-link-name">In Dispute</span>
+            </a>
           </li>
         </ul>
       </li>

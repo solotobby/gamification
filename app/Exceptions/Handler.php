@@ -43,12 +43,13 @@ class Handler extends ExceptionHandler
 
 
     public function report(Throwable $exception){
-        if ($this->shouldReport($exception)) {
-            $errorMessage = $exception->getMessage();
-            $errorTrace = $exception->getTraceAsString();
-            Mail::to('solotobz5@gmail.com')->send(new ErrorNotification($errorMessage, $errorTrace));
+        if(env('APP_ENV') == 'production' || env('APP_ENV') == 'local'){
+            if ($this->shouldReport($exception)) {
+                $errorMessage = $exception->getMessage();
+                $errorTrace = $exception->getTraceAsString();
+                Mail::to('solotobz5@gmail.com')->send(new ErrorNotification($errorMessage, $errorTrace));
+            }
         }
-
         parent::report($exception);
     }
 }
