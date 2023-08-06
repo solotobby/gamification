@@ -44,7 +44,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     {{-- <th>Balance</th>--}}
-                    <th>Ref. No</th> 
+                    {{-- <th>Ref. No</th>  --}}
                     {{-- <th>Status</th> --}}
                     <th>Reg. Channel</th>
                     <th>When Created</th>
@@ -59,7 +59,7 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
                         {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
-                        <td>{{ @$user->referees->count() }}</td> 
+                        {{-- <td>{{ @$user->referees->count() }}</td>  --}}
                         {{-- <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td> --}}
                         <td>{{ $user->source }}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
