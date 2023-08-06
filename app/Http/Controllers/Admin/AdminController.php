@@ -248,6 +248,10 @@ class AdminController extends Controller
         $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
+    public function usdVerifiedUserList(){
+        $verifiedUsers = Usdverified::all(); //User::with(['USD_verifiedList'])->get(); //User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
+        return view('admin.users.usd_verified', ['verifiedUsers' => $verifiedUsers]);
+    }
 
     public function adminTransaction(){
         $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
