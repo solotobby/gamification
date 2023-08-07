@@ -84,7 +84,7 @@
         <div class="row mb-3">
           <div class="col-lg-2"></div>
           <div class="col-lg-8" style="color: brown">
-            You can now fund your wallet Card or Bank Transfer. 
+            You can now fund your wallet via Card or Bank Transfer. 
             Once wallet top up is successful, click the button below to verify your account.
             <center>
                 <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-3" data-toggle="click-ripple">
