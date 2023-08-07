@@ -254,9 +254,12 @@ class WalletController extends Controller
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
+        $status = $params['status'];
+        if($status == 'cancelled'){
+            return back()->with('error', 'Transaction terminated');
+        }
         $tx_id = $params['transaction_id'];
         $ref = $params['tx_ref'];
-
         $res = flutterwaveVeryTransaction($tx_id);
 
         if($res['status'] == 'success'){
@@ -270,7 +273,7 @@ class WalletController extends Controller
             SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
             systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN'.$ver->amount.' Wallet Topup Successful');
-            
+
             return back()->with('success', 'Wallet Topup Successful'); 
         }
        
