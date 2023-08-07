@@ -32,7 +32,7 @@ class GoogleController extends Controller
                 Auth::login($finduser); //login
                 $get = User::where('id', auth()->user()->id)->first();
                 $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-                setProfile();//set profile page 
+                setProfile($get);//set profile page 
                 if(!$wallet){
                     //create the wallet
                     Wallet::create(['user_id'=> $get->id, 'balance' => '0.00']);
@@ -88,7 +88,7 @@ class GoogleController extends Controller
                 $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
                 $wall->save();
 
-                setProfile();//set profile page 
+                setProfile($newUser);//set profile page 
 
 
                 if($get->phone == '')

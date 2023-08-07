@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             RewardSeeder::class,
-            ConversionRateSeeder::class
+            ConversionRateSeeder::class,
+            SettingsSeeder::class
             // GamesSeeder::class
         ]);
     }
