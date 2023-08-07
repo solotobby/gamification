@@ -90,6 +90,9 @@ if(!function_exists('walletHandler')){
 if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
+        // if(!$wall){
+        //     Wallet::create(['user_id' => auth()->user()->id]);
+        // }
         if($wall->base_currency == null){
             $location = PaystackHelpers::getLocation();
             $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
@@ -100,11 +103,10 @@ if(!function_exists('setWalletBaseCurrency')){
 }
 
 if(!function_exists('setProfile')){
-    function setProfile(){
-
-        $profile = Profile::where('user_id', auth()->user()->id)->first();
-        if($profile == null){
-           $profile =  Profile::create(['user_id' => auth()->user()->id]);
+    function setProfile($user){
+        $profile = Profile::where('user_id', $user->id)->first();
+        if(!$profile){
+           $profile =  Profile::create(['user_id' => $user->id]);
         }
        return $profile;
     }
