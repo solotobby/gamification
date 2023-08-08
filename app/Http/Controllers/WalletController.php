@@ -105,8 +105,8 @@ class WalletController extends Controller
         if(walletHandler() == 'sendmonny'){
             $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         }
-        $location = PaystackHelpers::getLocation();
-        return  view('user.wallet.fund', ['location' => $location]);
+        // $location = PaystackHelpers::getLocation();
+        return  view('user.wallet.fund');
     }
 
 

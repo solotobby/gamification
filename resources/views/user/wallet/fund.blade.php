@@ -84,8 +84,8 @@
         <div class="row mb-3">
           <div class="col-lg-2"></div>
           <div class="col-lg-8" style="color: brown">
-            You can now fund your wallet via Card or Bank Transfer. 
-            Once wallet top up is successful, click the button below to verify your account.
+            You can now fund your wallet via Card or Bank Transfer. Once wallet top up is successful, click the button below to verify your account.
+             Verification fee is N1050 (Naira account) and $5 (Dollar account).
             <center>
                 <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-3" data-toggle="click-ripple">
                   <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
