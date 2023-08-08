@@ -98,9 +98,11 @@ class RegisterController extends Controller
             }
         }
         Auth::login($user);
-        
+
         PaystackHelpers::userLocation('Registeration');
-        setProfile($user);//set profile page 
+
+        setProfile($user);//set profile page
+        
         return redirect('/home');
     }
 
@@ -185,7 +187,7 @@ class RegisterController extends Controller
                 // }
 
                 Auth::login($user); //log user in
-                
+
                 setProfile($user);//set profile page 
 
                 // PaystackHelpers::userLocation('Login');
@@ -193,6 +195,7 @@ class RegisterController extends Controller
                 setWalletBaseCurrency(); //set base currency if not set
 
                 // SystemActivities::loginPoints($user);
+
                 return redirect('home'); //redirect to home
             }else{
                 return back()->with('error', 'Email or Password is incorrect');

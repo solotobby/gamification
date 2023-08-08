@@ -30,20 +30,20 @@ class SystemActivities{
     }
 
     public static function loginPoints($user){
-        $date = \Carbon\Carbon::today()->toDateString();
-        $check = LoginPoints::where('user_id', $user->id)->where('date', $date)->first();
+        // $date = \Carbon\Carbon::today()->toDateString();
+        // $check = LoginPoints::where('user_id', $user->id)->where('date', $date)->first();
         
-        if(!$check)
-        {
-            $names = explode(' ', $user->name);
-            $initials = '';
-            foreach ($names as $name) {
-                $initials .= isset($name[0]) . '.';
-            }
-            $initials = rtrim($initials, '.');
-            ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' earned 50 points for log in', 'user_type' => 'regular']);
-            LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
-        }
+        // if(!$check)
+        // {
+        //     $names = explode(' ', $user->name);
+        //     $initials = '';
+        //     foreach ($names as $name) {
+        //         $initials .= isset($name[0]) . '.';
+        //     }
+        //     $initials = rtrim($initials, '.');
+        //     ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' earned 50 points for log in', 'user_type' => 'regular']);
+        //     LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
+        // }
 
     }
 

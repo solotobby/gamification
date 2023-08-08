@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\PaystackHelpers;
 use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMassEmail;
+use App\Mail\GeneralMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -23,39 +26,65 @@ class SMSController extends Controller
     }
 
     public function send_massSMS(Request $request){
+        return $request;
+        $channel = $request->channel;
+        if($channel == 'sms'){
 
-        $type = $request->type;
-        if($type == 'unverified'){
-            $contacts = $this->filter($request, false);
-        }elseif($type == 'verified'){
-           $contacts = $this->filter($request, true);
-        }
+            $usersEmail = User::where([
+                [function ($query) use ($request) {
+                    $query->where('role', 'regular')
+                            ->whereBetween('created_at', [$request->start_date, $request->end_date])
+                            ->get();
+                }]
+            ])->get();
+            return $usersEmail;
+            
+            foreach($usersEmail as $user){
+                    dispatch(new SendMassEmail($user, $request->message, 'Freebyz'));
+             }
 
-        $list = [];
-        foreach($contacts as $key=>$value){
-            $formatedPhone = '';
-            $initials = $this->getInitials($value->phone); 
+            // Mail::to($usersEmail->email)->send(new GeneralMail($usersEmail, $request->message, 'Freebyz', ''));
 
-            if($initials == 0){
-                $formatedPhone = '234'.substr($value->phone, 1);
-            }elseif($initials == '+'){
-                $formatedPhone = substr($value->phone, 1);
-            }elseif($initials == 2){
-                $formatedPhone = $value->phone;
-            }else{
-                $formatedPhone = '';
+
+        }else{
+            $type = $request->type;
+            if($type == 'unverified'){
+                $contacts = $this->filter($request, false);
+            }elseif($type == 'verified'){
+                $contacts = $this->filter($request, true);
+            }elseif($type == 'survey'){
+                $contacts = $this->filtersurvey($request, true);
             }
 
-            $list[] = $formatedPhone;
+            $list = [];
+            foreach($contacts as $key=>$value){
+                $formatedPhone = '';
+                $initials = $this->getInitials($value->phone); 
+
+                if($initials == 0){
+                    $formatedPhone = '234'.substr($value->phone, 1);
+                }elseif($initials == '+'){
+                    $formatedPhone = substr($value->phone, 1);
+                }elseif($initials == 2){
+                    $formatedPhone = $value->phone;
+                }else{
+                    $formatedPhone = '';
+                }
+
+                $list[] = $formatedPhone;
+            }
+            
+            $response = PaystackHelpers::sendBulkSMS($list, $request->message);
+            if($response['code'] == 'ok'){
+                return back()->with('success', 'Broadcast Sent');
+            }else{
+                return back()->with('error', 'An erro occour, broadcast not sent');
+            }
         }
         
-        $response = PaystackHelpers::sendBulkSMS($list, $request->message);
-        if($response['code'] == 'ok'){
-            return back()->with('success', 'Broadcast Sent');
-        }else{
-            return back()->with('error', 'An erro occour, broadcast not sent');
-        }
     }
+
+   
 
     public static function getInitials($phoneNumber){
         // Get the first digit

@@ -20,11 +20,11 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Send Broadcast SMS</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Send Broadcast SMS/Mail</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Dashboard</li>
-            <li class="breadcrumb-item active" aria-current="page">Broadcast SMS</li>
+            <li class="breadcrumb-item active" aria-current="page">Broadcast SMS/Mail</li>
           </ol>
         </nav>
       </div>
@@ -36,7 +36,7 @@
 <div class="content">
     <div class="block block-rounded">
         <div class="block-header block-header-default">
-        <h3 class="block-title">Send Broadcast SMS</h3>
+        <h3 class="block-title">Send Broadcast SMS/Mail</h3>
             <div class="block-options">
                 <button type="button" class="btn-block-option">
                 <i class="si si-settings"></i>
@@ -59,6 +59,14 @@
             <form action="{{ route('send.mass.sms') }}" method="POST">
                 @csrf
                 <div class="mb-4">
+                    <label>Select Channel</label>
+                    <select class="form-control" name="channel" required>
+                    <option value="">Select One</option>
+                    <option value="mail">Mail</option>
+                    <option value="sms">SMS</option>
+                    </select>
+                </div>
+                <div class="mb-4">
                     <label>Select Date Range</label>
                     <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
                     <input type="date" class="form-control" id="start" name="start_date" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true">
@@ -77,9 +85,6 @@
                     <option value="survey">Unsurveyed</option>
                     </select>
                 </div>
-
-                
-               
                 <div class="mb-4">
                     <label>Enter Message</label>
                     <div class="form-floating mb-4">
