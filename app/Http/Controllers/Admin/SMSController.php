@@ -26,10 +26,8 @@ class SMSController extends Controller
     }
 
     public function send_massSMS(Request $request){
-        return $request;
         $channel = $request->channel;
         if($channel == 'sms'){
-
             $usersEmail = User::where([
                 [function ($query) use ($request) {
                     $query->where('role', 'regular')
@@ -37,14 +35,11 @@ class SMSController extends Controller
                             ->get();
                 }]
             ])->get();
-            return $usersEmail;
             
             foreach($usersEmail as $user){
                     dispatch(new SendMassEmail($user, $request->message, 'Freebyz'));
              }
-
-            // Mail::to($usersEmail->email)->send(new GeneralMail($usersEmail, $request->message, 'Freebyz', ''));
-
+             return back()->with('success', 'Email Broadcast Sent');
 
         }else{
             $type = $request->type;
@@ -76,7 +71,7 @@ class SMSController extends Controller
             
             $response = PaystackHelpers::sendBulkSMS($list, $request->message);
             if($response['code'] == 'ok'){
-                return back()->with('success', 'Broadcast Sent');
+                return back()->with('success', 'Sms Broadcast Sent');
             }else{
                 return back()->with('error', 'An erro occour, broadcast not sent');
             }
