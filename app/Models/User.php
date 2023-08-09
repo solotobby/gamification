@@ -141,5 +141,9 @@ class User extends Authenticatable
         return $this->hasMany(CampaignWorker::class, 'user_id');
     }
 
+    public function myRating(){
+        return $this->hasMany(Rating::class, 'campaign_id');
+    }
+
     
 }

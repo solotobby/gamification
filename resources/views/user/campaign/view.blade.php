@@ -1,5 +1,97 @@
 @extends('layouts.main.master')
-
+@section('style')
+<style>
+  .rate {
+      float: left;
+      height: 46px;
+      padding: 0 10px;
+      }
+      .rate:not(:checked) > input {
+      position:absolute;
+      display: none;
+      }
+      .rate:not(:checked) > label {
+      float:right;
+      width:1em;
+      overflow:hidden;
+      white-space:nowrap;
+      cursor:pointer;
+      font-size:30px;
+      color:#ccc;
+      }
+      .rated:not(:checked) > label {
+      float:right;
+      width:1em;
+      overflow:hidden;
+      white-space:nowrap;
+      cursor:pointer;
+      font-size:30px;
+      color:#ccc;
+      }
+      .rate:not(:checked) > label:before {
+      content: '★ ';
+      }
+      .rate > input:checked ~ label {
+      color: #ffc700;
+      }
+      .rate:not(:checked) > label:hover,
+      .rate:not(:checked) > label:hover ~ label {
+      color: #deb217;
+      }
+      .rate > input:checked + label:hover,
+      .rate > input:checked + label:hover ~ label,
+      .rate > input:checked ~ label:hover,
+      .rate > input:checked ~ label:hover ~ label,
+      .rate > label:hover ~ input:checked ~ label {
+      color: #c59b08;
+      }
+      .star-rating-complete{
+         color: #c59b08;
+      }
+      .rating-container .form-control:hover, .rating-container .form-control:focus{
+      background: #fff;
+      border: 1px solid #ced4da;
+      }
+      .rating-container textarea:focus, .rating-container input:focus {
+      color: #000;
+      }
+      .rated {
+      float: left;
+      height: 46px;
+      padding: 0 10px;
+      }
+      .rated:not(:checked) > input {
+      position:absolute;
+      display: none;
+      }
+      .rated:not(:checked) > label {
+      float:right;
+      width:1em;
+      overflow:hidden;
+      white-space:nowrap;
+      cursor:pointer;
+      font-size:30px;
+      color:#ffc700;
+      }
+      .rated:not(:checked) > label:before {
+      content: '★ ';
+      }
+      .rated > input:checked ~ label {
+      color: #ffc700;
+      }
+      .rated:not(:checked) > label:hover,
+      .rated:not(:checked) > label:hover ~ label {
+      color: #deb217;
+      }
+      .rated > input:checked + label:hover,
+      .rated > input:checked + label:hover ~ label,
+      .rated > input:checked ~ label:hover,
+      .rated > input:checked ~ label:hover ~ label,
+      .rated > label:hover ~ input:checked ~ label {
+      color: #c59b08;
+      }
+</style>
+@endsection
 @section('content')
 
  <!-- Hero Section -->
@@ -149,19 +241,18 @@
           <li class="fa fa-info"></li> Please note that this job must be approved before payment. 
           We'll automatically approve it if it is not approved by poster after 5days.
         </div>
+        @if (session('success'))
+          <div class="alert alert-success" role="alert">
+              {{ session('success') }}
+          </div>
+        @endif
         <!-- Job Description -->
         <div class="block block-rounded">
-           
-          
           <div class="block-header block-header-default">
             <h3 class="block-title">Campaign Description</h3>
           </div>
             <div class="block-content">
-              @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-              @endif
+              
 
               @if($campaign->post_link != '')
               Link: <a href="{{ $campaign->post_link }}" target="_blank" class="">{{ $campaign->post_link }}</a>
@@ -207,6 +298,73 @@
                                     <h4 class="fw-normal text-muted text-center">
                                         Opps!! You have completed this campaign
                                     </h4>
+                                    @if(!$is_rated)
+                                    <!-- Onboarding Modal -->
+                                        <div class="modal fade" id="modal-onboarding" tabindex="-1" role="dialog" aria-labelledby="modal-onboarding" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                            <div class="modal-content rounded overflow-hidden bg-image bg-image-bottom border-0" style="background-image: url({{asset('src/assets/media/photos/photo23.jpg')}});">
+                                              <div class="row">
+                                                <div class="col-md-12">
+                                                
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                          <h5 class="modal-title">Kindly rate your experience</h5> 
+                                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                      
+                                                    <div class="modal-body pb-1">
+                                            
+                                                        <form action="{{ route('job.rating') }}" method="POST">
+                                                          @csrf
+                                                          <div class="col-md-6">
+                                      
+                                                            <label for="input-1" class="control-label">Select Rating</label>
+                                                            
+                                                            <div class="form-group row">
+                                                              <div class="col">
+                                                                <div class="rate">
+                                                                    <input type="radio" id="star5" class="rate" name="rating" value="5"/>
+                                                                    <label for="star5" title="text">5 stars</label>
+                                                                    <input type="radio" id="star4" class="rate" name="rating" value="4"/>
+                                                                    <label for="star4" title="text">4 stars</label>
+                                                                    <input type="radio" id="star3" class="rate" name="rating" value="3"/>
+                                                                    <label for="star3" title="text">3 stars</label>
+                                                                    <input type="radio" id="star2" class="rate" name="rating" value="2">
+                                                                    <label for="star2" title="text">2 stars</label>
+                                                                    <input type="radio" id="star1" class="rate" name="rating" value="1"/>
+                                                                    <label for="star1" title="text">1 star</label>
+                                                                </div>
+                                                              </div>
+                                                          </div>
+              
+                                                          </div>
+                                                          <br>
+                                                          <div class="mb-3">
+                                                            <label class="form-label" for="post-files">Comment(optional)</small></label>
+                                                                <textarea class="form-control" name="comment" id="js-ckeditor5-classic" required> {{ old('comment') }}</textarea>
+                                                          </div>
+                                                          <input type="hidden" name="campaign_id" value="{{$campaign['id']}}" required>
+
+                                                          <div class="mb-4">
+                                                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                                                          </div>
+                                                        </form>
+                                                        
+                                                    </div>
+                                                    
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                                                    {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                                                    </div>
+                                                </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    <!-- END Onboarding Modal -->
+                                    @endif
                                     {{-- <center>
                                         <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
                                         View Work
@@ -297,7 +455,8 @@
 
 
 @section('script')
-
+ <!-- Page JS Code -->
+<script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Page JS Helpers (CKEditor 5 plugins) -->

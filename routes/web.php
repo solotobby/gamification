@@ -89,6 +89,9 @@ Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignCont
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
 Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 'welcomeUser']);
+
+Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
+
 ///paystack payment 
 Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
@@ -164,6 +167,8 @@ Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 
 Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
 //notification
 Route::resource('notifications', NotificationController::class);
+
+
 
 //webhook handling
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);

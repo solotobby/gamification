@@ -13,6 +13,7 @@ use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
 use App\Models\PaymentTransaction;
+use App\Models\Rating;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Wallet;
@@ -373,15 +374,20 @@ class CampaignController extends Controller
                 if($getCampaign['is_completed'] == true){
                     return redirect('#');
                 }else{
+
                     $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+                    $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                    $checkRating = isset($rating) ? true : false;
+                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
                 }
             }elseif(!auth()->user()->is_verified && $getCampaign['campaign_amount'] <= 10){
                 if($getCampaign['is_completed'] == true){
                     return redirect('#');
                 }else{
                     $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+                    $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                    $checkRating = isset($rating) ? true : false;
+                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
                 }
             }else{
                 return redirect('info');
@@ -397,8 +403,10 @@ class CampaignController extends Controller
         //     }
         // }
 
-        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+        // $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+        
+        
+        // return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
     }
 
     public function postCampaignWork(Request $request)
