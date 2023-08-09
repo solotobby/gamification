@@ -68,7 +68,7 @@ class SystemActivities{
     }
 
     public static function availableJobs(){
-        $campaigns = Campaign::where('status', 'Live')->where('is_completed', 0)->orderBy('created_at', 'DESC')->get();
+        $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         $list = [];
         foreach($campaigns as $key => $value){
             $data['pending'] = 'Pending';
@@ -80,6 +80,7 @@ class SystemActivities{
             $div = $completed / $value->number_of_staff;
             $progress = $div * 100;
             $list[] = [ 
+                'id' => $value->id, 
                 'job_id' => $value->job_id, 
                 'campaign_amount' => $value->campaign_amount,
                 'post_title' => $value->post_title, 

@@ -29,21 +29,6 @@ class GeneralController extends Controller
             if($completed >= $value->number_of_staff){
                 Campaign::where('id', $value->id)->update(['is_completed' => true]);
             }
-            
-            // $div = $completed / $value->number_of_staff;
-            // $progress = $div * 100;
-            // $list[] = [ 
-            //     // 'job_id' => $value->job_id, 
-            //     // 'campaign_amount' => $value->campaign_amount,
-            //     // 'post_title' => $value->post_title, 
-            //     'number_of_staff' => $value->number_of_staff, 
-            //     // 'type' => $value->campaignType->name, 
-            //     // 'category' => $value->campaignCategory->name,
-            //     // 'attempts' => $attempts,
-            //     'completed' => $completed,
-            //     'is_completed' => $completed >= $value->number_of_staff ? true : false,
-            //     // 'progress' => $progress 
-            // ];
         }
 
         // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
