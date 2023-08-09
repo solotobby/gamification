@@ -43,8 +43,9 @@
             @endif
             
         <div class="alert alert-info">
+          Hi, Login point is not longer active.
             {{-- <li class="fa fa-info"></li>  --}}
-            You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;50 
+            {{-- You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;50  --}}
         </div>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
@@ -72,7 +73,7 @@
               
             </tbody>
           </table>
-          <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3">Redeem Points</a>
+          <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3 disabled">Redeem Points</a>
         </div>
       </div>
     </div>
