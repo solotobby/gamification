@@ -26,12 +26,17 @@ class RatingController extends Controller
     //    if($workDone){
     //         return back()->with('error', 'You haven not completed this job, you can only rate the job done');
     //    }
-
+        $rating = '';
+        if($request->rating == null){
+            $rating = 0;
+        }else{
+            $rating = $request->rating;
+        }
         $rating = new Rating();
         $rating->user_id = auth()->user()->id;
         $rating->campaign_id = $request->campaign_id;
         $rating->campaign_worker_id = $workDone->id;
-        $rating->rating = $request->rating;
+        $rating->rating = $rating;
         $rating->comment = $request->comment;
         $rating->type = 'job';
         $rating->save();
