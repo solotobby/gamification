@@ -95,9 +95,15 @@ class SystemActivities{
             ];
         }
 
-        $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
-        return $sortedList;
+        // Remove objects where 'is_completed' is true
+        $filteredArray = array_filter($list, function ($item) {
+            return $item['is_completed'] !== true;
+        });
+        // Convert the filtered array back to JSON
+        // $filteredJsonData = array_values($filteredArray);
+        return $filteredArray;
     }
 
     public static function viewCampaign($campaign_id){
