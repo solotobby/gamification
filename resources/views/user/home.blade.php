@@ -149,7 +149,7 @@
           </p>
         </div>
         <div class="px-2 px-sm-5 border-start">
-          <p class="fs-3 text-dark mb-0">{{ $completed }}</p>
+          <p class="fs-3 text-dark mb-0">{{ auth()->user()->myAttemptedJobs()->where('status', 'Approved')->count() }}</p>
           <p class="text-muted mb-0">
             Completed Jobs
           </p>
@@ -332,7 +332,7 @@
                                               @if($job['currency'] == 'NGN')
                                                 <h6 class="mb-0">&#8358;{{ number_format($job['campaign_amount'],2)}}</h6>   
                                               @else
-                                              <h6 class="mb-0">${{ $job['campaign_amount']}}</h6> 
+                                                <h6 class="mb-0">${{ $job['campaign_amount']}}</h6> 
                                               @endif
                                                 <span>{{  @$job['type'] }}</span>
                                             </div>

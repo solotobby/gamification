@@ -73,7 +73,7 @@ class SystemActivities{
         foreach($campaigns as $key => $value){
             $data['pending'] = 'Pending';
             $data['approve'] = 'Approved';
-            $attempts = $value->completed->count();
+            // $attempts = $value->completed->count();
             $completed = $value->completed()->where('status', '!=', 'Denied')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
             
@@ -86,7 +86,7 @@ class SystemActivities{
                 'number_of_staff' => $value->number_of_staff, 
                 'type' => $value->campaignType->name, 
                 'category' => $value->campaignCategory->name,
-                'attempts' => $attempts,
+                //'attempts' => $attempts,
                 'completed' => $completed,
                 'is_completed' => $completed >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
