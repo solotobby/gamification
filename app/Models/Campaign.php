@@ -48,4 +48,8 @@ class Campaign extends Model
         {
             return $this->hasOne(CampaignWorker::class, 'campaign_id');
         }
+
+        public function rating(){
+            return $this->hasOne(Rating::class, 'campaign_id');
+        }
 }
