@@ -137,5 +137,9 @@ class User extends Authenticatable
         return $this->hasOne(VirtualAccount::class, 'user_id');
     }
 
+    public function myAttemptedJobs(){
+        return $this->hasMany(CampaignWorker::class, 'user_id');
+    }
+
     
 }
