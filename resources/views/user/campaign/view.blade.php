@@ -317,9 +317,7 @@
                                                         <form action="{{ route('job.rating') }}" method="POST">
                                                           @csrf
                                                           <div class="col-md-6">
-                                      
                                                             <label for="input-1" class="control-label">Select Rating</label>
-                                                            
                                                             <div class="form-group row">
                                                               <div class="col">
                                                                 <div class="rate">
