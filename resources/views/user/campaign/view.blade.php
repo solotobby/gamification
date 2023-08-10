@@ -307,7 +307,7 @@
                                     <h4 class="fw-normal text-muted text-center">
                                         Opps!! You have completed this campaign
                                     </h4>
-                                    @if(!$is_rated)
+                                    @if(@!$is_rated)
                                     <!-- Onboarding Modal -->
                                         <div class="modal fade" id="modal-onboarding" tabindex="-1" role="dialog" aria-labelledby="modal-onboarding" aria-hidden="true">
                                           <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
