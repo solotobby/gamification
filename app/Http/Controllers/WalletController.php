@@ -139,7 +139,7 @@ class WalletController extends Controller
                     'name'=> auth()->user()->name,
                 ],
                 'customizations'=>[
-                    'title'=> "Freebyz - Wallet Top Up",
+                    'title'=> "Wallet Top Up",
                     'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
                 ] 
             ];
@@ -289,9 +289,6 @@ class WalletController extends Controller
             {
                 return back()->with('error', 'Insufficient balance');
             }
-       
-           
-
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             if($bankInformation){
                 $this->processWithdrawals($request, 'NGN', 'paystack');
@@ -301,11 +298,8 @@ class WalletController extends Controller
             }else{
                 return redirect('profile')->with('info', 'Please scroll down to Bank Account Details to update your information');
             }
-
-           
-     
         }else{
-
+            
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             if($wallet->usd_balance < $request->balance)
             {
