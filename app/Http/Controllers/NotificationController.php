@@ -121,17 +121,18 @@ class NotificationController extends Controller
 
         switch ($request->type) {
             case 'announcement':
-                    Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+                    Announcement::orderBy('id', 'DESC')->update(['status' => false]);
+                    Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content, 'status' => true]);
                 break;
             case 'notification':
                     $users = User::where('role', 'regular')->get();
                     $content = $request->content;
-
                     foreach($users as $user){
                         systemNotification($user, 'success', 'Announcement', $content);
                     }
                 break;
             case 'both':
+                    Announcement::orderBy('id', 'DESC')->update(['status' => false]);
                     Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
                     $users = User::where('role', 'regular')->get();
                     $content = $request->content;
