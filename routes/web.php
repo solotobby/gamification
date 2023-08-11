@@ -294,6 +294,9 @@ Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store
 Route::resource('preferences', PreferenceController::class);
 
 Route::resource('conversions', ConversionRateController::class);
+
+Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::class, 'index']);
+
 //Campaign metrics
 Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/campaign/disputes', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputes']);
