@@ -8,6 +8,7 @@ use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\Announcement;
 use App\Models\Answer;
 use App\Models\BankInformation;
 use App\Models\Games;
@@ -79,10 +80,11 @@ class HomeController extends Controller
         }
         ///set User currency
         // $activity_log = SystemActivities::showActivityLog(); 'activity_log' => $activity_log,
+
         $available_jobs = SystemActivities::availableJobs();
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
-
-        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance]);
+        $announcement = Announcement::where('status', true)->first();
+        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement]);
     }
 
     public function howTo(){
