@@ -27,7 +27,7 @@ class SMSController extends Controller
 
     public function send_massSMS(Request $request){
         $channel = $request->channel;
-        if($channel == 'sms'){
+        if($channel == 'mail'){
             $usersEmail = User::where([
                 [function ($query) use ($request) {
                     $query->where('role', 'regular')

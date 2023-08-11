@@ -157,11 +157,7 @@
       </div>
       
       <div class="alert alert-info mt-3">
-        Smash your Financial goals on Freebyz this month!<br>
-        Earn extra bonus in addition to your referral bonus<br>
-        Earn extra N1000 in (If you Refer 10 verified users this month)<br>
-        Earn extra N2500   (If you Refer 20 verified users this month)<br>
-        Earn extra N5000  (If you Refer more than 50 verified users this month)
+        Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more.
         {{-- Announcement: You can now withdraw, top up and verify your account in dollars. To get started, switch your currency to dollars and then select 'Fund Wallet' --}}
         {{-- Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank) --}}
         {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
