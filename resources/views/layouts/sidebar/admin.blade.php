@@ -241,12 +241,12 @@
         </a>
       </li>
      
-      {{-- <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('create.databundles') }}">
-          <i class="nav-main-link-icon fa fa-tty"></i>
-          <span class="nav-main-link-name">Create DataBundles</span>
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('audit/trail') }}">
+          <i class="nav-main-link-icon fa fa-th"></i>
+          <span class="nav-main-link-name">Audit Trail</span>
         </a>
-      </li> --}}
+      </li>
 
        <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('settings') }}">
