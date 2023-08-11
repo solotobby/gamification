@@ -364,7 +364,9 @@ class CampaignController extends Controller
          if($getCampaign->currency == 'USD'){
             if(auth()->user()->USD_verified){
                 $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed]);
+                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                $checkRating = isset($rating) ? true : false;
+                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
             }else{
                 return redirect('conversion');
             }
@@ -374,7 +376,6 @@ class CampaignController extends Controller
                 if($getCampaign['is_completed'] == true){
                     return redirect('#');
                 }else{
-
                     $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
                     $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
                     $checkRating = isset($rating) ? true : false;
