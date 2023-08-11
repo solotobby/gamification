@@ -55,7 +55,7 @@
                         {{ $notify->title}}
                     </td>
                     <td>
-                        {{ $notify->message}}
+                        {!! $notify->message !!}
                     </td>
                     <td>
                         {{ $notify->created_at->diffForHumans() }}

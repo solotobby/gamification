@@ -155,15 +155,13 @@
           </p>
         </div>
       </div>
-      
+      @if($announcement)
       <div class="alert alert-info mt-3">
-        Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more.
-        {{-- Announcement: You can now withdraw, top up and verify your account in dollars. To get started, switch your currency to dollars and then select 'Fund Wallet' --}}
-        {{-- Important Notice: There is a scheduled maintenance from our Card payments partner on Saturday 17th June, 2023. Please use manual payment (4600066074 - DOMINAHL TECH SERVICES -VFD Microfinance Bank) --}}
-        {{-- Login Points: You'll get 50 points on daily login! You can redeem the points to win cash and amazing prizes!! --}}
-        {{-- <br> --}}
-        {{-- Attention please, we are aware of the difficulty in accessing Freebyz, we are on it and it will be fixed ASAP! Thank you for your understanding! --}}
-      </div> 
+        {!! @$announcement->content !!}
+        {{-- Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more. --}}
+      </div>
+      @endif
+       
       <div class="mt-3">
           @if (session('success'))
                 <div class="alert alert-success" role="alert">
@@ -182,6 +180,7 @@
               @endif
           </form>
           <br>
+
           {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout">Get bank Account</button> --}}
           {{-- <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a> --}}
 

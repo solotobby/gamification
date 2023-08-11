@@ -1,5 +1,12 @@
 @extends('layouts.main.master')
-
+@section('style')
+<script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
+@endsection
 @section('content')
 <div class="bg-body-light">
     <div class="content content-full">
@@ -43,25 +50,29 @@
                 <div class="row push">
                     <div class="col-lg-4">
                         <p class="text-muted">
-                        {{-- Create The Categories here --}}
+                        <div class="alert alert-info">
+                            <strong>Announcement</strong>: Only displays at the user dashboard and pop up.<br>
+                            <strong>Notification</strong>: Sent to all user notification<br>
+                            <strong>Both</strong>: Shows on dashboard and sent to all users notification
+                        </div>
                         </p>
                     </div>
-                    <div class="col-lg-8 col-xl-5">
-                        {{-- <div class="mb-4">
-                            <label class="form-label" for="example-text-input">Name</label>
-                            <select name="name" class="form-control" required>
+                    <div class="col-lg-8 col-xl-6">
+                        <div class="mb-4">
+                            <label class="form-label" for="example-text-input">Type</label>
+                            <select name="type" class="form-control" required>
                                 <option value="">Select one</option>
-                                <option value="login">Login</option>
-                                <option value="referral">Referral</option>
-                                <option value="post_job">Post Job</option>
-                                <option value="complete_job">Complete Job</option>
+                                <option value="announcement">Only Announcement</option>
+                                <option value="notification">Only Notification</option>
+                                <option value="both">Announncement & Notification</option>
                             </select>
-                        </div> --}}
+                        </div>
                         <div class="mb-4">
                             <label class="form-label" for="example-text-input">Content</label>
                             <div class="form-floating mb-4">
-                                <input type="text" class="form-control" id="example-text-input-floating" name="content" required>
-                                <label class="form-label" for="example-text-input-floating">Enter Content</label>
+                                {{-- <input type="text" class="form-control" id="example-text-input-floating" name="content" required> --}}
+                                <textarea class="form-control" name="content" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
+                                {{-- <label class="form-label" for="example-text-input-floating">Enter Content</label> --}}
                             </div>
                             {{-- <input type="number" class="form-control" id="example-text-input" name="point" placeholder="Point"> --}}
                         </div>
@@ -95,7 +106,7 @@
                 @foreach ($notifications as $s)
                 <tr>
                     {{-- <td>{{ $i++ }}</td> --}}
-                    <td>{{ $s->content }}</td>
+                    <td>{!! $s->content !!}</td>
                     <td>{{ $s->status == 1 ? 'Active' : 'Inactive' }}</td>
                     <td>{{ $s->created_at->diffForHumans() }}</td>
                     <td>
@@ -145,3 +156,13 @@
  </div>
 
 @endsection
+@section('script')
+
+ <!-- Page JS Plugins -->
+ <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+ {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
+ {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <!-- Page JS Helpers (CKEditor 5 plugins) -->
+ <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
+ @endsection

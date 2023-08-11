@@ -119,15 +119,28 @@ class NotificationController extends Controller
 
     public function storeNotification(Request $request){
 
-        Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+        switch ($request->type) {
+            case 'announcement':
+                    Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+                break;
+            case 'notification':
+                    $users = User::where('role', 'regular')->get();
+                    $content = $request->content;
 
-        $users = User::where('role', 'regular')->get();
-        $content = $request->content;
+                    foreach($users as $user){
+                        systemNotification($user, 'success', 'Announcement', $content);
+                    }
+                break;
+            case 'both':
+                    Announcement::create(['user_id' => auth()->user()->id, 'content' => $request->content]);
+                    $users = User::where('role', 'regular')->get();
+                    $content = $request->content;
 
-        foreach($users as $user){
-            systemNotification($user, 'success', 'Announcement', $content);
+                    foreach($users as $user){
+                        systemNotification($user, 'success', 'Announcement', $content);
+                    }
+                break;
         }
-        
         return back()->with('success', 'Announcement posted successfully');
     }
 }
