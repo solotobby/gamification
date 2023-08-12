@@ -21,7 +21,7 @@
 		<div class="single-slider"  style="background-image: url({{ asset('asset/img/cup.jpg') }});">
 			<div class="container">
 				<div class="slider-content">
-					<h2 style="color: aliceblue">Earn &#8358;10,000+ Daily on Social Media Jobs...
+					<h2 style="color: aliceblue">Work online and earn daily in Dollar & Naira!
 						{{-- <span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span> --}}

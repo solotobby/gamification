@@ -147,6 +147,10 @@
                       <input type="checkbox" name="validate" required class="">
                       <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it. </small></span>
               </div>
+
+              <div class="alert alert-info">
+                From 18th August, Post will now be automatically approved after 24hrs if you don't approve it.
+              </div>
               
 
             </div>
