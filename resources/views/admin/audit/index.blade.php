@@ -35,9 +35,34 @@
         </div>
       </div>
       <div class="block-content">
-        <form action="{{ url('users') }}" method="GET">
-          <div class="mb-4">
-            
+        <form action="{{ url('audit/trail') }}" method="GET">
+          <div class="mb-2 row">
+            <div class="col-md-3">
+                <label>Activity Type</label>
+                <select name="activity_type" class="form-control" required>
+                    <option value="wallet_topup">wallet topup</option>
+                    <option value="campaign_submission">campaign submission</option>
+                    <option value="account_verification">account verification</option>
+                    <option value="campaign_payment">campaign payment</option>
+                    <option value="withdrawal_request">withdrawal request</option>
+                    <option value="survey_points">survey points</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>User Type</label>
+                <select name="user_type" class="form-control" required>
+                    <option value="regular">Regular</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Start Date</label>
+                <input type="date" class="form-control" id="example-group3-input1" name="start" value="{{ old('start') }}" required>
+            </div>
+            <div class="col-md-3">
+                <label>End Date</label>
+                <input type="date" class="form-control" id="example-group3-input1" name="end" value="{{ old('end') }}" required>
+            </div>
             {{-- <div class="input-group">
               <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
               <button type="submit" class="btn btn-primary">
@@ -45,6 +70,9 @@
               </button>
             </div> --}}
           </div>
+          <button type="submit" class="btn btn-primary mb-3">
+            <i class="fa fa-search me-1"></i> Search
+          </button>
         </form>
         <div class="table-responsive">
           {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
