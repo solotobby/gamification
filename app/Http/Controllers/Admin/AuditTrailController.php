@@ -26,7 +26,7 @@ class AuditTrailController extends Controller
                           ->get();
 
                 }]
-            ])->paginate(100);
+            ])->paginate(1000);
             
             return view('admin.audit.index', ['audits' => $audit]);
 
