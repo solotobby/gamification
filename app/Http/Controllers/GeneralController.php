@@ -23,7 +23,7 @@ class GeneralController extends Controller
          $list = [];
          foreach($users as $user){
             $formattedNumber = '';
-            $number = strlen(strval($user));
+            $number = $user;//strlen(strval($user));
             
             $list[] =$number;
          }
