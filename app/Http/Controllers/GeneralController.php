@@ -19,31 +19,31 @@ class GeneralController extends Controller
 
     public function fix(){
 
-         $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
-         $list = [];
-         foreach($users as $user){
-            $formattedNumber = '';
-            $number = $user;//strlen(strval($user));
+        //  $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
+        //  $list = [];
+        //  foreach($users as $user){
+        //     $formattedNumber = '';
+        //     $number = $user;//strlen(strval($user));
             
-            $list[] =$number;
-         }
-         return $list;
+        //     $list[] =$number;
+        //  }
+        //  return $list;
 
         
-        // $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
-        // $list = [];
-        // foreach($campaigns as $key => $value){
-        //     $data['pending'] = 'Pending';
-        //     $data['approve'] = 'Approved';
-        //     // $attempts = $value->completed->count();
-        //     $completed = $value->completed()->where('status', '=', 'Approved')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
-        //     if($completed >= $value->number_of_staff){
-        //         Campaign::where('id', $value->id)->update(['is_completed' => true]);
-        //     }
-        // }
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $list = [];
+        foreach($campaigns as $key => $value){
+            $data['pending'] = 'Pending';
+            $data['approve'] = 'Approved';
+            // $attempts = $value->completed->count();
+            $completed = $value->completed()->where('status', '=', 'Approved')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
+            if($completed >= $value->number_of_staff){
+                Campaign::where('id', $value->id)->update(['is_completed' => true]);
+            }
+        }
 
-        // // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
-        // return 'okay';
+        // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+        return 'okay';
     }
 
 
