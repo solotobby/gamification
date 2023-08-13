@@ -162,7 +162,7 @@
   <div class="content content-boxed">
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <h2 class="content-heading">Campaign Activities - {{ $campaign->completed()->count() }}
+            <h2 class="content-heading">Campaign Activities - {{ $activities->count() }}
             </h2>
             <table class="table table-hover">
                 <thead>
@@ -176,7 +176,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                 @foreach ($campaign->completed as $list )
+                 @foreach ($activities as $list )
                     <tr>
                         {{-- <th scope="row">1</th> --}}
                         <td>{{ $list->user->name }}</td>
