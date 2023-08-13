@@ -56,7 +56,7 @@
                 @foreach ($disputes as $camp)
                 <tr>
                     <th scope="row">{{ $i++ }}.</th>
-                    <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->campaign->post_title }}</a></td>
+                    <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->campaign->id) }}" target="_blank"> {{$camp->campaign->post_title }}</a></td>
                     <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
                     <td>  
                         @if($camp->campaign->currency == 'NGN')
