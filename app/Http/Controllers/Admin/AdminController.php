@@ -409,8 +409,8 @@ class AdminController extends Controller
 
     public function campaignInfo($id){
         $campaign = Campaign::where('id',$id)->first();
-        $activities = $campaign->attempts;
-        return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
+        ///$activities = $campaign->attempts;
+        return view('admin.campaign_mgt.info', ['campaign' => $campaign]);
     }
 
 
