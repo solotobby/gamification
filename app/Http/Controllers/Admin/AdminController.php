@@ -208,6 +208,7 @@ class AdminController extends Controller
         
         $workDone = CampaignWorker::where('id', $request->id)->first();
         $workDone->status = $request->status;
+        $workDone->reason = $request->reason;
         $workDone->save();
 
         if($request->status == 'Approved'){
