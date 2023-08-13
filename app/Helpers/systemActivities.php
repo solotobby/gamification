@@ -74,7 +74,7 @@ class SystemActivities{
             $data['pending'] = 'Pending';
             $data['approve'] = 'Approved';
             // $attempts = $value->completed->count();
-            $completed = $value->completed()->where('status', '!=', 'Denied')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
+            $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
             
             $div = $completed / $value->number_of_staff;

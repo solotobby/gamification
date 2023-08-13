@@ -190,10 +190,10 @@ class RegisterController extends Controller
 
                 setProfile($user);//set profile page 
 
-                PaystackHelpers::userLocation('Login');
+               
 
                 setWalletBaseCurrency(); //set base currency if not set
-
+                // PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
 
                 return redirect('home'); //redirect to home
