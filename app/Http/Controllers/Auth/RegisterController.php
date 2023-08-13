@@ -81,9 +81,9 @@ class RegisterController extends Controller
 
             if($user){
                 $location = PaystackHelpers::getLocation(); //get user location dynamically
-                if($location == 'Nigeria'){
+                // if($location == 'Nigeria'){
 
-                }
+                // }
                 if($location == 'United States'){
                     $sendMonnyApi = $this->sendMonny($payload);
                     if($sendMonnyApi['status'] == true){
@@ -190,7 +190,7 @@ class RegisterController extends Controller
 
                 setProfile($user);//set profile page 
 
-                // PaystackHelpers::userLocation('Login');
+                PaystackHelpers::userLocation('Login');
 
                 setWalletBaseCurrency(); //set base currency if not set
 

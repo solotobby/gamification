@@ -2,7 +2,8 @@
 
 @section('title', 'Winner List')
 @section('style')
-<script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+{{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}
+<script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
       selector: '#mytextarea'
@@ -55,10 +56,6 @@
     <form action="{{ route('post.campaign') }}" method="POST" >
         @csrf
       <div class="block block-rounded">
-
-        <!-- Job Meta section -->
-        <!-- Select2 (.js-select2 class is initialized in Helpers.jqSelect2()) -->
-        <!-- For more info and examples you can check out https://github.com/select2/select2 -->
         <div class="block-content block-content-full">
           <h2 class="content-heading">Campaign Information</h2>
           <div class="row items-push">
@@ -128,31 +125,28 @@
             <div class="mb-4">
                 <label class="form-label" for="post-title">External Link</label>
                 <input type="url" class="form-control" id="post-title" name="post_link" value="{{ old('post_link') }}" required>
-                <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc </i></small>
+                <small><i>Please provide an external link for your campaign e.g https://myhotjobz.com or https://youtube.com/abc</i></small>
             </div>
 
-              <div class="mb-4">
+            <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description <small>(Ensure you provide simple and clear instruction on task to be done)</small></label>
-                        <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
-                    </div>
-              <div class="mb-4">
+                <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
+            </div>
+            <div class="mb-2">
                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request for social 
                     media handle, email or other means of identifying the worker)</small></label>
-                    <iframe name="server_answer" style="display:none"></iframe>
-                    <textarea id="mytextareas" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
-              </div>
-
+                    {{-- <iframe name="server_answer" style="display:none"></iframe> --}}
+                <textarea id="mytextareao" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
+            </div>
               
-              <div class="mb-4">
-                      <input type="checkbox" name="validate" required class="">
-                      <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it. </small></span>
-              </div>
+            <div class="mb-2">
+                <input type="checkbox" name="validate" required class="">
+                <span><small> I agree that this campaign will be automatically approved after five (5) days if i fail to approve it. </small></span>
+            </div>
 
               <div class="alert alert-info">
                 From 18th August, Post will now be automatically approved after 24hrs if you don't approve it.
               </div>
-              
-
             </div>
           </div>
         </div>
@@ -160,8 +154,7 @@
 
         <!-- Submit Form -->
         <div class="block-content block-content-full pt-0">
-          <div class="row mb-4">
-            {{-- offset-lg-5 --}}
+          <div class="row mb-2">
             <div class="col-lg-3"></div>
             <div class="col-lg-9">
               <button type="submit" class="btn btn-alt-primary">
