@@ -507,10 +507,10 @@ class CampaignController extends Controller
                 return back()->with('error', 'Campaign has been attended to');
            }
 
-            $campaign = Campaign::where('id', $approve->campaign_id)->first();//->number_of_staff;
+           $campaign = Campaign::where('id', $approve->campaign_id)->first();//->number_of_staff;
            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
            if($completed_campaign >= $campaign->number_of_staff){
-            return back()->with('error', 'Campaign has reached its maximum capacity');
+                return back()->with('error', 'Campaign has reached its maximum capacity');
            }
     
             if(walletHandler() == 'sendmonny'){ 
@@ -578,7 +578,7 @@ class CampaignController extends Controller
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'In-dispute';
-            $deny->reason = $request->reason;;
+            $deny->reason = $request->reason;
             $deny->save();
             $subject = 'Job in dispute';
             $status = 'In-dispute';
