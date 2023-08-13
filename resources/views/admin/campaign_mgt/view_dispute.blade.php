@@ -131,12 +131,27 @@
                 {!! $campaign->comment !!}
             </div>
 
-            <div class="mb-4">
-                <label class="form-label" for="post-files"> Proof Uploaded
-                </label>
-                <br>
-                <img src="{{ $campaign->proof_url }}" class="img-thumbnail img-responsive">
-            </div>
+                <div class="mb-4">
+                    <label class="form-label" for="post-files"> Proof Uploaded
+                    </label>
+                    <br>
+                    <img src="{{ $campaign->proof_url }}" class="img-thumbnail img-responsive">
+                </div>
+                @if($campaign->status == 'In-dispute')
+                    <div class="mb-2">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Enter Reason for decline or aparroval</label>
+                            <textarea class="form-control" id="exampleInputEmail1" name="reason" required></textarea>
+                        </div>
+                    </div>
+                @else
+                <div class="mb-2">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Enter Reason for decline or aparroval(posted)</label>
+                        <textarea class="form-control" readonly>{{ $campaign->reason }}</textarea>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
         </div>
