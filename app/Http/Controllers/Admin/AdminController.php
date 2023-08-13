@@ -205,28 +205,34 @@ class AdminController extends Controller
     }
 
     public function campaignDisputesDecision(Request $request){
-        
         $workDone = CampaignWorker::where('id', $request->id)->first();
-        $workDone->status = $request->status;
-        $workDone->reason = $request->reason;
-        $workDone->save();
 
         if($request->status == 'Approved'){
+            $campaignInfo = Campaign::where('id', $workDone->campaign_id)->first();
+            $approvedJob = $campaignInfo->completed()->where('status', 'Approved')->count();
+
+            if($approvedJob >= $campaignInfo->number_of_staff){
+                return back()->with('error', 'Job has reached its maximum number of staff');
+            }
+
             $wallet = Wallet::where('user_id', $workDone->user_id)->first();
             $wallet->balance += $workDone->amount;
             $wallet->save();
+
+            $workDone->status = $request->status;
+            $workDone->reason = $request->reason;
+            $workDone->save();
+
+        }else{
+            $workDone->status = $request->status;
+            $workDone->reason = $request->reason;
+            $workDone->save();
         }
 
         $subject = 'Job '.$request->status;
         $status = $request->status;
         Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
         return back()->with('success', 'Campaign Dispute Successful');
-        // SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
-            
-        // $subject = 'Job Approved';
-        // $status = 'Approved';
-        // Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
-
     }
 
     public function userList(){

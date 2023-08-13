@@ -42,7 +42,7 @@
     @csrf
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-        <h2 class="content-heading">Campaign Information</h2>
+        <h2 class="content-heading">Campaign Information - <li class="badge badge-info"> {{$campaign->status }}</li></h2>
         <div class="row items-push">
             <div class="col-lg-3">
             <p class="text-muted">
@@ -102,7 +102,7 @@
             </div>
             <div class="col-lg-9">
             <div class="mb-4">
-                <label class="form-label" for="post-title">Title</label>
+                <label class="form-label" for="post-title">Title</label><br>
                 {{ $campaign->campaign->post_title }}
             </div>
 
