@@ -125,14 +125,14 @@
                     <iframe name="server_answer" style="display:none"></iframe>
                     <textarea id="mytextareas" class="form-control" name="proof" required>{{ $campaign->proof }}</textarea>
               </div>
-              @if($campaign->status == 'Pending')
+             
               <div class="mb-2">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Enter Reason for decline or aparroval</label>
-                    <textarea class="form-control" id="exampleInputEmail1" name="reason" required></textarea>
+                    <textarea class="form-control" id="exampleInputEmail1" name="reason" required>{{ $campaign->reason }}</textarea>
                   </div>
               </div>
-              @endif
+             
 
             </div>
           </div>
