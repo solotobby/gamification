@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FacebookHelper;
 use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
@@ -361,6 +362,14 @@ class CampaignController extends Controller
     public function viewCampaign($job_id)
     {
          $getCampaign =SystemActivities::viewCampaign($job_id);
+        // return $getCampaign->campaignType->name;
+            // if($getCampaign->campaignType->name == 'Facebook Influencer'){
+            //     if(auth()->user()->facebook_id == null){
+            //        $token = FacebookHelper::generateAccessToken();
+            //         return FacebookHelper::getPosts($token);
+            //         // return redirect('auth/facebook');
+            //     }
+            // }
          if($getCampaign->currency == 'USD'){
             if(auth()->user()->USD_verified){
                 $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();

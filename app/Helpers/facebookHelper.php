@@ -11,15 +11,22 @@ class FacebookHelper{
     }
 
     public static function generateAccessToken(){
-        
+        $url = "https://graph.facebook.com/oauth/access_token?client_id=272122624271485&client_secret=6a6f874f71c3b19271a9cd2418972dc1&grant_type=client_credentials";
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->get($url);
+        return json_decode($res->getBody()->getContents(), true)['access_token'];
+
     }
 
 
-    public static function getPosts(){
+    public static function getPosts($token){
         // 267978826632355
         
         $post_id = '267978826632355';//{post-id}';
-        $access_token = 'EAAD3fnxa5H0BAPZCjkMSCIUr1PG7o6Tvz2KBl7bZCixTZCCfOwoJYMi3n71G2XGtu9yQRtrEqTx1aRKuaHaBvggDQ9tTgxnRZAaqnVxvcpxXMCWlh8ez0faZCoVo05PplkV3EIQfYxZBslP8fatnAZCALIfR0zAsHvo0nxOrokIuYOFRcO97drBWZAHXWfVcKvZA4PH204YX4LgZDZD';
+        $access_token = $token; //$this->generateAccessToken(); //'EAAD3fnxa5H0BOzgreKA0TSivonYvIZC8NWZAPHZBuAkYs5OPls8pNm7R4NDS5Kci6agesy5yzGV797qcp42uOuAegiJUZC9FZBIF7VSBCYmRhjsMxLbbUSuQjUZCoM68XPuwdFbr8bWvr7oOJwTMP2gahsDj4ddKcNKZBoxCl6ZCI35MEfoWE8uCzWqQDmj5u2Kte8SZAGeGCWJ8WZCQZDZD';
 
         $response = Http::withToken($access_token)
             ->get("https://graph.facebook.com/{$post_id}/likes");
