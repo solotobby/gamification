@@ -41,26 +41,35 @@
 
     
 
-          <!-- Google tag (gtag.js) - Google Analytics -->
-          {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
-          </script>
-          <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-      
-            gtag('config', 'UA-238432357-1');
-          </script> --}}
+    <!-- Google tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-238432357-1');
+    </script>
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7C4X8TR6T"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7C4X8TR6T"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-G7C4X8TR6T');
-    </script> --}}
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2YM3K06L8">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Y2YM3K06L8');
+    </script>
 
   
     @yield('style')
