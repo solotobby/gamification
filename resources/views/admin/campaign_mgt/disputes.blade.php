@@ -45,6 +45,7 @@
                     <th>#</th>
                     <th>Campaign</th>
                     <th>Worker</th>
+                    <th>Poster Name</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th>When Created</th>
@@ -58,6 +59,7 @@
                     <th scope="row">{{ $i++ }}.</th>
                     <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->campaign->id) }}" target="_blank"> {{$camp->campaign->post_title }}</a></td>
                     <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
+                    <td><a href="{{ url('user/'.$camp->campaign->user->id.'/info') }}"> {{ $camp->campaign->user->name }} </td>
                     <td>  
                         @if($camp->campaign->currency == 'NGN')
                             &#8358;{{ number_format($camp->campaign->campaign_amount) }}
