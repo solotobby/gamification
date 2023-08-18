@@ -141,7 +141,7 @@ class UserController extends Controller
             return redirect($url);
         }else{
             $percent = 5/100 * 2;
-            $am = 2 + $percent + 1;
+            $am = 5 + $percent + 1;
            
             $result = paypalPayment($am, '/capture/upgrade');
              if($result['status'] == 'CREATED'){
