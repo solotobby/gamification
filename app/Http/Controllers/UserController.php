@@ -289,7 +289,7 @@ class UserController extends Controller
         $ref = time();
         $userWallet = Wallet::where('user_id', auth()->user()->id)->first();
          //debit  User wallet first
-         $userWallet->balance -= '1050';
+         $userWallet->balance -= '500';
          $userWallet->save();
 
          $name = SystemActivities::getInitials(auth()->user()->name);
