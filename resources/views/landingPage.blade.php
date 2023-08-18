@@ -314,6 +314,18 @@
                             <p>
                                 To hire workers on Freebyz, sign up or login to your account and select ‘post campaign’. You will be able to select the available job categories and then hire the workers.
                             </p>
+							<h4>How long does a Job gets approved. </h4>
+							<p>
+								For Job approval, the Job poster has a maximum of 24hrs  to approve a post after which it will be automatically approved
+							</p>
+							<h4>What is the advantage of having a Verified Dollar Wallet? </h4>
+							<p>
+								A verified dollar wallet allows users to work and earn in dollars. As a new user, if your primary wallet is in dollars, verification with $5 gives you an automatic verified naira wallet.
+							</p>
+							<h4>How do I withdraw my funds </h4>
+							<p>
+								You can withdraw your funds in Naira or in Dollars. To Withdraw your funds, Login to your dashboard and click on wallet, select 'Withdraw', enter the amount you want to withdraw and select Local bank withdrawal or Paypal withdraw. Your funds will be processed immediately or latest on Friday of that week. Please note that the minimum withdrawal is N500 (for naira wallets) and $5 (for dollar wallets). Should you have further questions, feel free to get across to us.
+							</p>
 						</div>
 					</div>
 				</div>
