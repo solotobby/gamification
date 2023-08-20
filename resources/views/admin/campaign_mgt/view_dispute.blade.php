@@ -147,7 +147,7 @@
                 @else
                 <div class="mb-2">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Enter Reason for decline or aparroval(posted)</label>
+                        <label for="exampleInputEmail1">Enter Reason for decline or approval(posted)</label>
                         <textarea class="form-control" readonly>{{ $campaign->reason }}</textarea>
                     </div>
                 </div>

@@ -278,7 +278,7 @@ class CampaignController extends Controller
                         if($debitWallet){
                             $campaign = $this->processCampaign($total,$request,$job_id,$percent);
                             Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
-                            return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campagin in less than 24 hours.');
+                            return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                         }else{
                             return back()->with('error', 'You do not have suficient funds in your wallet');
                         }
@@ -584,7 +584,6 @@ class CampaignController extends Controller
             $status = 'Approved';
             Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
             return back()->with('success', 'Campaign Approve Successfully');
-            
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'Denied';
