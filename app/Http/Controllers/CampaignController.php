@@ -584,15 +584,16 @@ class CampaignController extends Controller
             $status = 'Approved';
             Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
             return back()->with('success', 'Campaign Approve Successfully');
+            
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
-            $deny->status = 'In-dispute';
+            $deny->status = 'Denied';
             $deny->reason = $request->reason;
             $deny->save();
-            $subject = 'Job in dispute';
-            $status = 'In-dispute';
+            $subject = 'Job Denied';
+            $status = 'Denied';
             Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
-            return back()->with('success', 'Campaign has been placed on dispute');
+            return back()->with('success', 'Campaign has been denied');
         }
     }
 
