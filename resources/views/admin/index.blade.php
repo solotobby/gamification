@@ -341,8 +341,8 @@
                 document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                 document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
-                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
-                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
+                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
+                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
 
@@ -384,8 +384,8 @@
                 document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                 document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
-                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue);
-                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker);
+                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
+                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                 // document.getElementById("monthly").innerHTML = monthly.toFixed(2);
@@ -427,8 +427,8 @@
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                           document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
                           document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
-                          document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
-                          document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
+                          document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
+                          document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                           // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                           // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                          
