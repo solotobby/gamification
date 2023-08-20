@@ -337,13 +337,13 @@
                
                 //  var amount = length*2;
 
-                document.getElementById("totalUsers").innerHTML = totalUsers.toPrecision(2);
-                document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toPrecision(2);
-                document.getElementById("campaigns").innerHTML = campaigns.toPrecision(2);
-                document.getElementById("campaignValue").innerHTML = campaignValue.toPrecision();
-                document.getElementById("campaignWorker").innerHTML = campaignWorker.toPrecision(2);
-                document.getElementById("loginPoints").innerHTML = loginPoints.toPrecision(2)
-                document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toPrecision(2);
+                document.getElementById("totalUsers").innerHTML = totalUsers;
+                document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                document.getElementById("campaigns").innerHTML = campaigns;
+                document.getElementById("campaignValue").innerHTML = campaignValue;
+                document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                document.getElementById("loginPoints").innerHTML = loginPoints;
+                document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
 
               },
               error: function(xhr, status, error) {
@@ -380,14 +380,14 @@
                 var monthly = response.monthlyVisits;
                 //  var amount = length*2;
 
-                document.getElementById("totalUsers").innerHTML = totalUsers.toPrecision(2);
-                document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toPrecision(2);
-                document.getElementById("campaigns").innerHTML = campaigns.toPrecision(2);
-                document.getElementById("campaignValue").innerHTML = campaignValue.toPrecision();
-                document.getElementById("campaignWorker").innerHTML = campaignWorker.toPrecision(2);
-                document.getElementById("loginPoints").innerHTML = loginPoints.toPrecision(2);
-                document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toPrecision(2);
-                document.getElementById("monthly").innerHTML = monthly.toPrecision(2);
+                document.getElementById("totalUsers").innerHTML = totalUsers;
+                document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                document.getElementById("campaigns").innerHTML = campaigns;
+                document.getElementById("campaignValue").innerHTML = campaignValue;
+                document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                document.getElementById("loginPoints").innerHTML = loginPoints;
+                document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                document.getElementById("monthly").innerHTML = monthly;
               },
               error: function(xhr, status, error) {
                   console.error(status);
@@ -423,13 +423,13 @@
                           var loginPointsValue = response.loginPointsValue;
                         
 
-                          document.getElementById("totalUsers").innerHTML = totalUsers.toPrecision(2);
-                          document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toPrecision(2);
-                          document.getElementById("campaigns").innerHTML = campaigns.toPrecision(2);
-                          document.getElementById("campaignValue").innerHTML = campaignValue.toPrecision(2);
-                          document.getElementById("campaignWorker").innerHTML = campaignWorker.toPrecision(2);
-                          document.getElementById("loginPoints").innerHTML = loginPoints.toPrecision(2);
-                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toPrecision(2);
+                          document.getElementById("totalUsers").innerHTML = totalUsers;
+                          document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
+                          document.getElementById("campaigns").innerHTML = campaigns;
+                          document.getElementById("campaignValue").innerHTML = campaignValue;
+                          document.getElementById("campaignWorker").innerHTML = campaignWorker;
+                          document.getElementById("loginPoints").innerHTML = loginPoints;
+                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
                          
                         },
                         error: function(xhr, status, error) {
