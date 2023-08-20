@@ -337,13 +337,13 @@
                
                 //  var amount = length*2;
 
-                document.getElementById("totalUsers").innerHTML = totalUsers;
-                document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
-                document.getElementById("campaigns").innerHTML = campaigns;
-                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue);
-                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker);
-                document.getElementById("loginPoints").innerHTML = loginPoints;
-                document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
+                document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
+                document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
+                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
+                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
+                document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
+                document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
 
               },
               error: function(xhr, status, error) {
@@ -423,13 +423,13 @@
                           var loginPointsValue = response.loginPointsValue;
                         
 
-                          document.getElementById("totalUsers").innerHTML = totalUsers;
-                          document.getElementById("verifiedUsers").innerHTML = verifiedUsers;
-                          document.getElementById("campaigns").innerHTML = campaigns;
-                          document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue);
-                          document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker);
-                          document.getElementById("loginPoints").innerHTML = loginPoints;
-                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue;
+                          document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
+                          document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
+                          document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
+                          document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
+                          document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
+                          document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
+                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                          
                         },
                         error: function(xhr, status, error) {
