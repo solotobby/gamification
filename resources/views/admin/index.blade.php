@@ -83,7 +83,7 @@
 
     <!-- Overview -->
     <div class="row items-push">
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -107,7 +107,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -128,7 +128,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -154,14 +154,15 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xl-3">
+
+      {{--<div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
-              {{--{{ App\Helpers\SystemActivities::numberFormat($loginPoints->sum('point')) }} --}} 
+             
               <span id="loginPoints"></span>
               </div>
             <div class="text-muted mb-3">Login Points</div>
@@ -169,7 +170,7 @@
               <i class="fa fa-caret-up me-1"></i>
 
               &#8358; <span id="loginPointsValue"></span>
-              {{-- {{$loginPoints->sum('point') / 5 }} --}}
+             
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -182,7 +183,7 @@
       </div>
       
 
-      {{--<div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -332,8 +333,8 @@
                 var campaigns = response.campaigns;
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
-                var loginPoints = response.loginPoints;
-                var loginPointsValue = response.loginPointsValue;
+                // var loginPoints = response.loginPoints;
+                // var loginPointsValue = response.loginPointsValue;
                
                 //  var amount = length*2;
 
@@ -342,8 +343,8 @@
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                 document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
-                document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
-                document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
+                // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
+                // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
 
               },
               error: function(xhr, status, error) {
@@ -375,9 +376,9 @@
                 var campaigns = response.campaigns;
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
-                var loginPoints = response.loginPoints;
-                var loginPointsValue = response.loginPointsValue;
-                var monthly = response.monthlyVisits;
+                // var loginPoints = response.loginPoints;
+                // var loginPointsValue = response.loginPointsValue;
+                // var monthly = response.monthlyVisits;
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
@@ -385,9 +386,9 @@
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                 document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue);
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker);
-                document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
-                document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
-                document.getElementById("monthly").innerHTML = monthly.toFixed(2);
+                // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
+                // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
+                // document.getElementById("monthly").innerHTML = monthly.toFixed(2);
               },
               error: function(xhr, status, error) {
                   console.error(status);
@@ -419,8 +420,8 @@
                           var campaigns = response.campaigns;
                           var campaignValue = response.campaignValue;
                           var campaignWorker = response.campaignWorker;
-                          var loginPoints = response.loginPoints;
-                          var loginPointsValue = response.loginPointsValue;
+                          // var loginPoints = response.loginPoints;
+                          // var loginPointsValue = response.loginPointsValue;
                         
 
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
@@ -428,8 +429,8 @@
                           document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                           document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(2));
                           document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(2));
-                          document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
-                          document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
+                          // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
+                          // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                          
                         },
                         error: function(xhr, status, error) {
