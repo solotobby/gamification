@@ -152,8 +152,8 @@ class HomeController extends Controller
             $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
             $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
             $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
-            $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
-            $data['loginPointsValue'] = $data['loginPoints']/5;
+            // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
+            // $data['loginPointsValue'] = $data['loginPoints']/5;
         
         return $data;
     }
@@ -173,10 +173,10 @@ class HomeController extends Controller
         $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at','>=',$date)->sum('amount');
         $data['registeredUser'] = User::where('role', 'regular')->where('created_at','>=',$date)->count();
         $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at','>=',$date)->count();
-        $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
-        $data['loginPointsValue'] = $data['loginPoints']/5;
+        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
+        // $data['loginPointsValue'] = $data['loginPoints']/5;
        
-        $data['monthlyVisits'] = Analytics::monthlyVisits();
+        // $data['monthlyVisits'] = Analytics::monthlyVisits();
         return $data;
     }
         
