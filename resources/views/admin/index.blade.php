@@ -117,7 +117,7 @@
             <div class="text-muted mb-3">Total Campaigns</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              5
+              
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
