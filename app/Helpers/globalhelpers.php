@@ -411,3 +411,14 @@ if(!function_exists('flutterwaveVeryTransaction')){
     }
 }
 
+if(!function_exists('sendGridEmails')){
+    function sendGridEmails($payload){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('SENDGRID_API_KEY')
+        ])->post('https://api.sendgrid.com/v3/mail/send', $payload)->throw();
+
+    }
+}
+

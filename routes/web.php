@@ -167,6 +167,7 @@ Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 
 Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
 //notification
 Route::resource('notifications', NotificationController::class);
+Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
 
 
 
