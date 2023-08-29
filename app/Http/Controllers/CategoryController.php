@@ -105,6 +105,19 @@ class CategoryController extends Controller
                 $record->save();
             }
         }
-        return back()->with('success', 'SubCategory created successfully');
+        return back()->with('success', 'SubCategory updated successfully');
+    }
+
+    public function updateSubcategoryNaira(Request $request){
+        for ($i = 0; $i < count($request->id); $i++) {
+            $id = $request->id[$i];
+            $amount = $request->amount[$i];
+            $record = SubCategory::find($id); 
+            if ($record) {
+                $record->amount = $amount;
+                $record->save();
+            }
+        }
+        return back()->with('success', 'SubCategory updated successfully');
     }
 }

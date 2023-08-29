@@ -2,8 +2,6 @@
 @section('title', 'Frequently Asked Questions')
 
 @section('content')
-
-
     <!-- basic-breadcrumb start -->
     <div class="basic-breadcrumb-area gray-bg ptb-70">
         <div class="container">
