@@ -225,6 +225,7 @@ Route::get('create/category', [\App\Http\Controllers\CategoryController::class, 
 Route::post('post/category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('store');
 Route::post('post/subcategory', [\App\Http\Controllers\CategoryController::class, 'storeSubcategory'])->name('store.subcategory');
 Route::post('edit/subcategories', [\App\Http\Controllers\CategoryController::class, 'updateSubcategory']);
+Route::post('edit/subcategories/naira', [\App\Http\Controllers\CategoryController::class, 'updateSubcategoryNaira']);
 
 //User List
 Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 'userSearch'])->name('user.search');
