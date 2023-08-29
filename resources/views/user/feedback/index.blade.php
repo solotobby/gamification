@@ -27,7 +27,7 @@
             </div>
             <div class="fs-4 fw-semibold pt-3 mb-0">Click the button below to contact Freebyz Customer Center</div>
             <br>
-            <a href="https://api.whatsapp.com/send/?phone=13074170027&text&type=phone_number&app_absent=0" class="btn btn-primary btn-sm" target="_blank"> <li class="fab fa-whatsapp"> </li> Contact Freebyz </a>
+            <a href="https://wa.me/18562237212" class="btn btn-primary btn-sm" target="_blank"> <li class="fab fa-whatsapp"> </li> Contact Freebyz </a>
           </div>
         </div>
       </div>
