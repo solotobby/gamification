@@ -8,7 +8,7 @@
     </div>
   <div class="block-content">
  
-    <form class="js-validation-reminder" action="{{ route('buy.databundle') }}" method="POST">
+    <form class="js-validation-reminder" action="{{ route('make.conversion') }}" method="POST">
         @csrf
       <!-- Text -->
 
@@ -23,6 +23,11 @@
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
         <p>Wallet Balance</p>
+
+        &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+        -
+        ${{ number_format(auth()->user()->wallet->usd_balance) }}
+
       </div>
 
       
@@ -58,13 +63,12 @@
                         <span class="input-group-text">
                             &#8358;
                         </span>
-                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}" placeholder="Enter amount to convert" required>
-                  
+                        <input type="text" class="form-control @error('amount') is-invalid @enderror" id="naira" name="amount" value="{{ old('amount') }}"  placeholder="Enter amount to convert" required>
                 @else
                         <span class="input-group-text">
                         $
                         </span>
-                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}" placeholder="Enter amount to convert" required>
+                        <input type="text" class="form-control @error('usd') is-invalid @enderror" id="usd" name="usd" value="{{ old('usd') }}" placeholder="Enter amount to convert" required>
                 @endif
 
                 {{-- <select class="form-control" required name="network" id="network">
@@ -97,12 +101,14 @@
                     <span class="input-group-text">
                         $
                     </span>
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}"  required readonly>
+                    <input type="number" class="form-control @error('usd') is-invalid @enderror" id="usd_amount" name="usd" value="{{ old('usd') }}"  required readonly>
+                    <input type="hidden" name="label" value="naira">
                @else
                     <span class="input-group-text">
                         &#8358;
                     </span>
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}"  required readonly>
+                    <input type="number" class="form-control @error('naira') is-invalid @enderror" id="naira_amount" name="naira" value="{{ old('naira') }}"  required readonly>
+                    <input type="hidden" name="label" value="usd">
                @endif
               </div>
             </div>
@@ -132,34 +138,70 @@
 
 <script>
 $(document).ready(function(){
-    $('#network').change(function(){
-        var network = this.value + 'DATA';
-        //alert(network)
-        $("#bundle").html('');
+  $('#naira').keyup(function(){
+    var naira_amount = this.value;
+    // console.log(naira_amount);
+      $.ajax({
+        url: '{{ url("naira/dollar") }}',
+        type: "GET",
+        dataType: 'json',
+        success: function(result){
+          var dollar_amount = result*naira_amount;
 
-        $.ajax({
-            url: '{{ url("load/network") }}/' + encodeURI(network),
-            type: "GET",
-            data: {
-                //  country_id: country_id,
-                _token: '{{csrf_token()}}'
-            },
-            dataType: 'json',
-            success: function(result) {
-              // console.log(result)
-              $('#bundle').html('<option value="">Select Bundle</option>');
-              $.each(result, function(key, value) {
-                    if(network == 'MTNDATA'){
-                      $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.duration + ' @ ' + value.amount+'</option>');
-                    }else{
-                      $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.value + ' for ' +value.duration+ ' @ ' + value.amount+'</option>');
-                    }
-                      
-              });
-            }
-          });
-        
+         // console.log(dollar_amount);
+
+          document.getElementById("usd_amount").value = dollar_amount;
+        }
+      });
     });
-  });
+
+    $('#usd').keyup(function(){
+        var dollar_amount = this.value;
+        console.log(dollar_amount);
+        $.ajax({
+          url: '{{ url("dollar/naira") }}',
+          type: "GET",
+          dataType: 'json',
+          success: function(result){
+            var naira_amount = result*dollar_amount;
+
+            console.log(naira_amount);
+
+            document.getElementById("naira_amount").value = naira_amount;
+          }
+      });
+    });
+
+});
+    // $('#naira').onkeyup(function(){
+      
+        // var network = this.value + 'DATA';
+        //alert(network)
+        // $("#bundle").html('');
+
+        // $.ajax({
+        //     url: '{{ url("load/network") }}/' + encodeURI(network),
+        //     type: "GET",
+        //     data: {
+               
+        //         _token: '{{csrf_token()}}'
+        //     },
+        //     dataType: 'json',
+        //     success: function(result) {
+              
+        //       $('#bundle').html('<option value="">Select Bundle</option>');
+        //       $.each(result, function(key, value) {
+        //             if(network == 'MTNDATA'){
+        //               $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.duration + ' @ ' + value.amount+'</option>');
+        //             }else{
+        //               $("#bundle").append('<option value="'+value.code+':'+value.amount+'">' + value.value + ' for ' +value.duration+ ' @ ' + value.amount+'</option>');
+        //             }
+                      
+        //       });
+        //     }
+        //   });
+        
+    // });
+ 
 </script>
 @endsection

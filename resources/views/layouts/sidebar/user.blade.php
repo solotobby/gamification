@@ -147,12 +147,12 @@
         </a>
       </li> --}}
 
-        {{-- <li class="nav-main-item">
+        <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('converter') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
           <span class="nav-main-link-name">Currency Converter</span>
         </a>
-      </li> --}}
+      </li>
       
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">

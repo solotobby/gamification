@@ -50,7 +50,11 @@
             </thead>
             <tbody>
                 @foreach ($lists as $list)
-                <tr>
+                    @if($list->tx_type == 'Credit')
+                      <tr style="color: forestgreen">
+                    @else
+                      <tr style="color: chocolate">
+                    @endif
                     <td>
                       {{ $list->reference }}
                     </td>
