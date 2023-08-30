@@ -168,6 +168,9 @@ Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackControl
 //notification
 Route::resource('notifications', NotificationController::class);
 Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
+Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);
+Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);
+Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterController::class, 'makeConversion'])->name('make.conversion');
 
 
 
