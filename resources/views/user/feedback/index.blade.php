@@ -5,17 +5,14 @@
     <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
       <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Feedback</h1>
       <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
-        {{-- <ol class="breadcrumb">
-          <li class="breadcrumb-item">Feedback</li>
-          <li class="breadcrumb-item active" aria-current="page"></li>
-        </ol> --}}
+       
       </nav>
     </div>
   </div>
 </div>
 
-<div class="content">
-  {{-- <h2 class="content-heading">Basic <small>Animate elements and make them visible on scrolling</small></h2> --}}
+{{-- <div class="content">
+ 
   <div class="row">
   
     <div class="col-sm-12">
@@ -35,10 +32,10 @@
     
   </div>
 
-</div>
+</div> --}}
 
   <!-- Page Content -->
-  {{-- <div class="row g-0 flex-md-grow-1">
+   <div class="row g-0 flex-md-grow-1">
     <div class="col-md-12 col-lg-12 col-xl-12">
         <div class="content">
           <a href="{{ url('feedback/create')}}" type="button" class="btn w-35 btn-alt-primary mb-3">
@@ -63,7 +60,7 @@
             </div>
         </div>
     </div>
-  </div> --}}
+  </div> 
    
   <!-- END Page Content -->
 @endsection

@@ -13,33 +13,6 @@ use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
-// use SendGrid\Mail\To;
-// use SendGrid\Mail\Cc;
-// use SendGrid\Mail\Bcc;
-// use SendGrid\Mail\From;
-// use SendGrid\Mail\Content;
-// use SendGrid\Mail\Mail;
-// use SendGrid\Mail\Personalization;
-// use SendGrid\Mail\Subject;
-// use SendGrid\Mail\Header;
-// use SendGrid\Mail\CustomArg;
-// use SendGrid\Mail\SendAt;
-// use SendGrid\Mail\Attachment;
-// use SendGrid\Mail\Asm;
-// use SendGrid\Mail\MailSettings;
-// use SendGrid\Mail\BccSettings;
-// use SendGrid\Mail\SandBoxMode;
-// use SendGrid\Mail\BypassListManagement;
-// use SendGrid\Mail\Footer;
-// use SendGrid\Mail\SpamCheck;
-// use SendGrid\Mail\TrackingSettings;
-// use SendGrid\Mail\ClickTracking;
-// use SendGrid\Mail\OpenTracking;
-// use SendGrid\Mail\SubscriptionTracking;
-// use SendGrid\Mail\Ganalytics;
-// use SendGrid\Mail\ReplyTo;
-
-
 
 class SMSController extends Controller
 {
@@ -68,21 +41,26 @@ class SMSController extends Controller
 
             // $list =[];
             foreach($usersEmail as  $key => $value){
-                $list[] = [$value];
+                $lists[] = $value;
             }
 
-            // return $list;
+            foreach ($lists as $item) {
+                $transformedData[] = [$item->email];
+            }
+
+            return  $transformedData;
+
+            
 
             $payload = [
                 'personalizations' => [
                     [
-                       'to' => $list
-                       
+                       'to' => $transformedData
                     //    [
-                        
-                    //         // ['email' => 'solotobby@gmail.com'],
-                    //         // ['email' => 'solotobz5@gmail.com'],
-                    //     ]
+                                //$lists
+                            // ['email' => 'solotobby@gmail.com'],
+                            // ['email' => 'solotobz5@gmail.com'],
+                        // ]
                     ]
                 ],
                 'from' => [
