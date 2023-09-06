@@ -124,28 +124,28 @@ class WalletController extends Controller
             $percent = 3/100 * $request->balance;
             $amount = $request->balance + $percent;
 
-            $payload = [
-                'tx_ref' => time(),
-                'amount'=> $amount,
-                'currency'=> "NGN",
-                'redirect_url'=> url('flutterwave/wallet/top'),
-                'meta'=> [
-                    'consumer_id' => auth()->user()->id,
-                    'consumer_mac'=> ''
-                ],
-                'customer'=> [
-                    'email'=> auth()->user()->email,
-                    'phonenumber'=> auth()->user()->phone,
-                    'name'=> auth()->user()->name,
-                ],
-                'customizations'=>[
-                    'title'=> "Wallet Top Up",
-                    'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
-                ] 
-            ];
-            $url = flutterwavePaymentInitiation($payload)['data']['link'];
+        //     $payload = [
+        //         'tx_ref' => time(),
+        //         'amount'=> $amount,
+        //         'currency'=> "NGN",
+        //         'redirect_url'=> url('flutterwave/wallet/top'),
+        //         'meta'=> [
+        //             'consumer_id' => auth()->user()->id,
+        //             'consumer_mac'=> ''
+        //         ],
+        //         'customer'=> [
+        //             'email'=> auth()->user()->email,
+        //             'phonenumber'=> auth()->user()->phone,
+        //             'name'=> auth()->user()->name,
+        //         ],
+        //         'customizations'=>[
+        //             'title'=> "Wallet Top Up",
+        //             'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
+        //         ] 
+        //     ];
+            // $url = flutterwavePaymentInitiation($payload)['data']['link'];
     
-            // $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
             
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
             
