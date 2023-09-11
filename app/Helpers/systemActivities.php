@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\LoginPoints;
+use App\Models\Referral;
 use Carbon\Carbon;
 
 class SystemActivities{
@@ -104,6 +105,14 @@ class SystemActivities{
         // Convert the filtered array back to JSON
         // $filteredJsonData = array_values($filteredArray);
         return $filteredArray;
+    }
+
+    public static function badgeCount(){
+        $currentDate = Carbon::now();
+        return Referral::where('referee_id', auth()->user()->id)
+                ->whereMonth('updated_at', $currentDate->month)
+        // ->whereDate('updated_at', today())
+                ->count();
     }
 
     public static function viewCampaign($campaign_id){
