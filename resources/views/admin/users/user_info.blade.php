@@ -18,7 +18,7 @@
           USD Verified: {{ $info->USD_verified == true ? 'Verified' : 'Unverified'}} <br>
           Phone Number: {{ $info->phone }} <br>
           Country: {{ $info->country }}<br>
-          Base Currency: {{ $info->wallet->base_currency }} 
+          Base Currency: {{ $info->wallet->base_currency }} <br>
           GoogleID: {{ @$info->google_id }} 
         </div>
       </form>
