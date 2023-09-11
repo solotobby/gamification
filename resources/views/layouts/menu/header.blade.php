@@ -102,7 +102,11 @@
                         @endif
                       </div>
                       <div class="flex-grow-1 fs-sm pe-2">
-                        <div class="fw-semibold">{!! $notify->message  !!} </div>
+                        <div class="fw-semibold">
+                          {{-- {!! $notify->message  !!}  --}}
+                          {!! Illuminate\Support\Str::words($notify->message, 4) !!}
+                        
+                        </div>
                         <div class="text-muted">{{ $notify->created_at->diffForHumans() }}</div>
                       </div>
                     </a>
