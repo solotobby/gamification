@@ -12,4 +12,8 @@ class Referral extends Model
     protected $table = 'referral';
 
     protected $fillable = ['user_id', 'referee_id', 'is_paid'];
+
+    public function referrer(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

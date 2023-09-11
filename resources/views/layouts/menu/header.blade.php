@@ -87,10 +87,10 @@
           <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
             Notifications
           </div>
-          <ul class="nav-items my-2" id="notifications">
+          <ul class="nav-items my-2" id="notifications" style="max-height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; list-style-type: none;">
             @if(auth()->user()->notifications()->where('is_read', false)->count() > 0)
-                @foreach (auth()->user()->notifications()->where('is_read', false)->latest()->take(5)->get() as $notify)
-                  <li class="notification{{ $notify->is_read ? '' : ' unread' }}">
+                @foreach (auth()->user()->notifications()->where('is_read', false)->latest()->take(15)->get() as $notify)
+                  <li class="notification{{ $notify->is_read ? '' : ' unread' }}"style="padding: 5px 0; border-bottom: 1px solid #eee;">
                     <a class="d-flex text-dark py-2" href="{{url('notifications')}}">
                       <div class="flex-shrink-0 mx-3">
                         @if($notify->category == 'error')

@@ -80,11 +80,11 @@ class HomeController extends Controller
         }
         ///set User currency
         // $activity_log = SystemActivities::showActivityLog(); 'activity_log' => $activity_log,
-
+        $badgeCount = SystemActivities::badgeCount();
         $available_jobs = SystemActivities::availableJobs();
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
         $announcement = Announcement::where('status', true)->first();
-        return view('user.home', ['available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement]);
+        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement]);
     }
 
     public function howTo(){
