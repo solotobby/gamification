@@ -19,6 +19,7 @@
           Phone Number: {{ $info->phone }} <br>
           Country: {{ $info->country }}<br>
           Base Currency: {{ $info->wallet->base_currency }} 
+          GoogleID: {{ @$info->google_id }} 
         </div>
       </form>
     </div>
