@@ -49,42 +49,24 @@
         {{-- </div> --}}
         <div class="table-responsive">
             <ul class="list-group push">  
-                <?php 
-                    $count = App\Helpers\SystemActivities::badgeCount();
-                    $color = '';
-                    $membership = '';
-                    if($count == 10){
-                        $color = 'blue';
-                        $membership = 'Platinum';
-                    }elseif($count >= 11 && $count <= 20){
-                        $color = 'silver';
-                        $membership = 'Silver';
-                    }elseif($count >= 21 && $count <= 50){
-                        $color = 'gold';
-                        $membership = 'Gold';
-                    }else{
-                        $color = 'antiquewhite';
-                        $membership = 'Standard';
-                    }
-                ?>
-                <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star" aria-hidden="true" style="color: {{$color}}"></i> </span>
-
+               
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     Current Badge
-                    <span class="nav-main-link-badge badge rounded-pill "><span style="color: black; font-size:15px">{{ $membership }}</span> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$color}}"></i> </span>
+                    <span class="nav-main-link-badge badge rounded-pill "><span style="color: black; font-size:15px">{{ $badge['badge'] }}</span> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$badge['color']}}"></i> </span>
                 </li>
 
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                    Number of Paid Referrals
-                   <span class="badge rounded-pill bg-info">{{ $count }}</span>
+                   <span class="badge rounded-pill bg-info">{{ $badge['count'] }}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     Date 
-                    <span class=" rounded-pill ">{{ $date }}</span>
+                    <span class=" rounded-pill ">{{ $badge['duration'] }}</span>
                  </li>
+                 {{-- <span class="" style="color:gr">{{ $count }}</span> --}}
                   
             </ul>
-            <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3">Redeem</a>
+            <a href="{{ route('redeem.badge') }}" class="btn btn-secondary mb-3">Redeem</a>
           {{-- <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>

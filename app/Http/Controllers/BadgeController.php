@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SystemActivities;
+use App\Models\MembershipBadge;
+use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,15 +17,44 @@ class BadgeController extends Controller
     }
 
     public function index(){
-        //return auth()->user()->id;
-        //$currentDate =  //last month
-        $date = Carbon::now()->subMonth()->format('M, Y');
-        // $count = Referral::where('referee_id', auth()->user()->id)
-        // ->whereMonth('updated_at', Carbon::now()->subMonth()->month)->count();
-        return view('user.badge.index', ['date' => $date]); 
+        $badge = SystemActivities::badge();
+        return view('user.badge.index', ['badge' => $badge]); 
     }
 
     public function redeemBadge(){
+         $badge = SystemActivities::badge();
+        $date = Carbon::now()->subMonth()->format('M, Y');
+        if($badge['count'] < 10){
+            return back()->with('error', 'You do not have up to 10 paid referral in '.$date);
+        }
+
+        $check = MembershipBadge::where('user_id', auth()->user()->id)->where('duration', $badge['duration'])->first();
         
+        if($check){
+            return back()->with('error', 'You already redeem membership badge bonus for '.$date);
+        }
+        creditWallet(auth()->user(), 'Naira', $badge['amount']);
+        
+        PaymentTransaction::create([
+            'user_id' => auth()->user()->id,
+            'campaign_id' => '1',
+            'reference' => time(),
+            'amount' => $badge['amount'],
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'membership_badge_bonus',
+            'description' => $badge['badge'].' membership badge bonus',
+            'tx_type' => 'Credit',
+            'user_type' => 'regular'
+        ]);
+
+        MembershipBadge::create([
+            'user_id' => auth()->user()->id,
+            'amount' => $badge['amount'],
+            'badge' => $badge['badge'],
+            'duration' => $badge['duration']
+        ]);
+        return back()->with('success', $badge['badge'].' membership badge redeemed successfully');
     }
 }

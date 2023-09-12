@@ -6,25 +6,15 @@
           <i class="nav-main-link-icon fa fa-location-arrow"></i>
           <span class="nav-main-link-name">Dashboard</span>
           <?php 
-          $count = App\Helpers\SystemActivities::badgeCount();
-          $color = '';
-            if($count == 10){
-              $color = 'blue';
-            }elseif($count >= 11 && $count <= 20){
-              $color = 'silver';
-            }elseif($count >= 21 && $count <= 50){
-              $color = 'gold';
-            }else{
-              $color = 'antiquewhite';
-            }
+          $badge = App\Helpers\SystemActivities::badge();
           ?>
-          {{-- <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$color}}"></i> </span> --}}
+          <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$badge['color']}}"></i> </span>
         </a>
       </li>
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-list"></i>
-          <span class="nav-main-link-name">Jobs</span>
+          <span class="nav-main-link-name" style="color:gr">Jobs</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
@@ -156,14 +146,14 @@
       </li> --}}
 
 
-       {{-- <li class="nav-main-item">
+       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('badge') }}">
           <i class="nav-main-link-icon si si-badge"></i>
           <span class="nav-main-link-name">Badge</span>
         </a>
-      </li> --}}
+      </li>
 
-      
+
       {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('databundle') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
