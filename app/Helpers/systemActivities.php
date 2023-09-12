@@ -115,6 +115,40 @@ class SystemActivities{
                 ->count();
     }
 
+    public static function badge(){
+        $currentDate = Carbon::now();
+        $count = Referral::where('referee_id', auth()->user()->id)->whereMonth('updated_at', $currentDate->month)->count();
+
+        $color = '';
+        $membership = '';
+        $amount = '';
+        if($count >= 10 && $count <= 20){
+            $color = '#E5E4E2';
+            $membership = 'Platinum';
+            $amount = 500;
+        }elseif($count >= 21 && $count <= 49){
+            $color = 'silver';
+            $membership = 'Silver';
+            $amount = 1500;
+        }elseif($count >= 50){
+            $color = 'gold';
+            $membership = 'Gold';
+            $amount = 500;
+        }else{
+            $color = 'grey';
+            $membership = 'Standard';
+            $amount = 0;
+        }
+        $data['count'] = $count;
+        $data['color'] = $color;
+        $data['badge'] = $membership;
+        $data['amount'] = $amount;
+        $data['duration'] = Carbon::now()->subMonth()->format('M, Y');
+
+        return $data;
+
+    }
+
     public static function viewCampaign($campaign_id){
        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
 
