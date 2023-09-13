@@ -76,6 +76,7 @@ class RegisterController extends Controller
 
         if(walletHandler() == 'local'){
             $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+
         }else{
             $user = $this->createUser($request); //CREATE USER ON FREEBYZ
 
@@ -129,6 +130,8 @@ class RegisterController extends Controller
         $wall = Wallet::where('user_id', $user->id)->first();
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
+
+        SystemActivities::activityLog(auth()->user(), 'account_creation', auth()->user()->name .' Registered ', 'regular');
         return $user;
     }
 
@@ -195,6 +198,7 @@ class RegisterController extends Controller
                 setWalletBaseCurrency(); //set base currency if not set
                 // PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
+                 SystemActivities::activityLog($user, 'login', $user->name .' Logged In', 'regular');
 
                 return redirect('home'); //redirect to home
             }else{

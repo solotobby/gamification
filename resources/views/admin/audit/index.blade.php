@@ -40,12 +40,16 @@
             <div class="col-md-3">
                 <label>Activity Type</label>
                 <select name="activity_type" class="form-control" required>
+                    <option value="login">account login</option>
+                    <option value="account_creation">account creation</option>
+                    <option value="google_account_creation">google account creation</option>
                     <option value="wallet_topup">wallet topup</option>
                     <option value="campaign_submission">campaign submission</option>
                     <option value="account_verification">account verification</option>
                     <option value="campaign_payment">campaign payment</option>
                     <option value="withdrawal_request">withdrawal request</option>
                     <option value="survey_points">survey points</option>
+                    
                 </select>
             </div>
             <div class="col-md-3">
