@@ -27,7 +27,7 @@
             <th>To</th>
             <th>Rate</th>
             <th>Status</th>
-            <th>When</th>
+            <th>Last Updated</th>
             <th></th>
           </tr>
         </thead>
@@ -40,7 +40,7 @@
                 <td>{{ $s->to }}</td>
                 <td>{{ $s->amount }}</td>
                 <td>{{ $s->status == 1 ? 'Active' : 'Inactive' }}</td>
-                <td>{{ $s->created_at->diffForHumans() }}</td>
+                <td>{{ $s->updated_at->diffForHumans() }}</td>
                 <td>
                     {{-- <a href="{{ url('change/notification/status/'.$s->id) }}" class="btn btn-alt-primary btn-sm">Change Status</a> --}}
                     <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">Change</button>

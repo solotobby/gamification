@@ -30,7 +30,7 @@ class CurrencyConverterController extends Controller
         if($label == 'naira'){
             $balance =auth()->user()->wallet->balance;
             if($request->amount > $balance){
-                return back()->with('error', 'Insurficient fund');
+                return back()->with('error', 'Insufficient fund');
             }
 
             debitWallet(auth()->user(), 'Naira', $request->amount); //debit naira wallet
@@ -66,13 +66,13 @@ class CurrencyConverterController extends Controller
             ]);
            
  
-            return back()->with('success', 'Conversioin Successful');
+            return back()->with('success', 'Conversion Successful');
 
 
         }else{
             $balance =auth()->user()->wallet->usd_balance;
             if($request->usd > $balance){
-                return back()->with('error', 'Insurficient fund');
+                return back()->with('error', 'Insufficient fund');
             }
 
             debitWallet(auth()->user(), 'Dollar', $request->usd); //debit dollar wallet
