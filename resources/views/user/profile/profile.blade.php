@@ -9,13 +9,17 @@
           <a class="img-link" href="{{url('profile')}}">
             <img class="img-avatar img-avatar96 img-avatar-thumb" src="{{ asset('src/assets/media/avatars/avatar10.jpg')}}" alt="">
           </a>
-          <h1 class="fw-bold my-2 text-white">{{auth()->user()->name}}</h1>
+          <h1 class="fw-bold my-2 text-white">{{auth()->user()->name}}  <i class="fa fa-star" aria-hidden="true" style="color: {{$badge['color']}}"></i> </h1>
+         
           {{-- <h2 class="h4 fw-bold text-white-75">
             {{auth()->user()->email}}
           </h2> --}}
           <h2 class="h4 fw-bold text-white-75">
-            @ {{auth()->user()->referral_code}}
+            {{$badge['badge']}}
+            {{-- @ {{auth()->user()->referral_code}} --}}
           </h2>
+          
+          
           @if(auth()->user()->wallet->base_currency == 'Naira')
               @if(auth()->user()->is_verified == true)
                 <a class="btn btn-alt-info btn-sm" href="#">
@@ -76,8 +80,12 @@
               <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-username">Email Address</label>
                 <p>{{ auth()->user()->email }}</p>
-                
               </div>
+              <div class="mb-4">
+                <label class="form-label" for="dm-profile-edit-username">Referral Code</label>
+                <p> @ {{auth()->user()->referral_code}}</p>
+              </div>
+             
               <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-username">Gender</label>
                 <p>{{ auth()->user()->gender }}</p>
