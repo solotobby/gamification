@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\BankInformation;
@@ -30,7 +31,8 @@ class ProfileController extends Controller
         
         $bankList = PaystackHelpers::bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
-        return view('user.profile.profile', ['bankList' => $bankList, 'bankInfo' => $bankInfo]);
+        $badge = SystemActivities::badge();
+        return view('user.profile.profile', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'badge' => $badge]);
     }
 
     /**
