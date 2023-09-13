@@ -131,7 +131,7 @@ class RegisterController extends Controller
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
 
-        SystemActivities::activityLog(auth()->user(), 'account_creation', auth()->user()->name .' Registered ', 'regular');
+        SystemActivities::activityLog($user, 'account_creation', $user->name .' Registered ', 'regular');
         return $user;
     }
 
