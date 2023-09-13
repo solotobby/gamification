@@ -19,7 +19,11 @@
           Phone Number: {{ $info->phone }} <br>
           Country: {{ $info->country }}<br>
           Base Currency: {{ $info->wallet->base_currency }} <br>
-          GoogleID: {{ @$info->google_id }} 
+          GoogleID: {{ @$info->google_id }}<br>
+          Account Name: {{ @$info->accountDetails->account_name }} <br>
+          Bank Name: {{ @$info->accountDetails->bank_name }} <br>
+          Account Number:{{ @$info->accountDetails->account_number }}
+         
         </div>
       </form>
     </div>
