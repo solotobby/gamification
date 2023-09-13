@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Helpers\PaystackHelpers;
+use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wallet;
@@ -27,9 +28,9 @@ class GoogleController extends Controller
             $user = Socialite::driver('google')->user();
 
             $finduser = User::where('google_id', $user->id)->first();
-            if($finduser->is_blacklisted == true){
-                return view('blocked');
-            }
+            // if($finduser->is_blacklisted){
+            //     return view('blocked');
+            // }
             if($finduser){
                 Auth::login($finduser); //login
                 $get = User::where('id', auth()->user()->id)->first();
@@ -65,6 +66,8 @@ class GoogleController extends Controller
                 //         }
                 //     }
                 // }
+
+                SystemActivities::activityLog($get, 'login', $get->name .' Logged In', 'regular');
                 PaystackHelpers::userLocation('Login');
                 return redirect('/home');
      
@@ -98,6 +101,7 @@ class GoogleController extends Controller
                     return view('phone');
                 }
                 // PaystackHelpers::loginPoints($newUser);
+                SystemActivities::activityLog($get, 'google_account_creation', $get->name .' Registered', 'regular');
                 return redirect('/home');
             }
     

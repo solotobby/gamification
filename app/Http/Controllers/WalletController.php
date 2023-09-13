@@ -202,6 +202,8 @@ class WalletController extends Controller
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             $wallet->usd_balance += $update->amount;
             $wallet->save();
+            // $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
 
             systemNotification($user, 'success', 'Wallet Topup', '$'.$update->amount.' Wallet Topup Successful');
 
