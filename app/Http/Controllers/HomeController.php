@@ -67,6 +67,9 @@ class HomeController extends Controller
     {
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
+        // if(auth()->user()->is_blacklisted){
+
+        // }
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }

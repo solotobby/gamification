@@ -22,7 +22,8 @@
           GoogleID: {{ @$info->google_id }}<br>
           Account Name: {{ @$info->accountDetails->account_name }} <br>
           Bank Name: {{ @$info->accountDetails->bank_name }} <br>
-          Account Number:{{ @$info->accountDetails->account_number }}
+          Account Number:{{ @$info->accountDetails->account_number }}<br>
+          Blocked:{{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}
          
         </div>
       </form>
