@@ -146,7 +146,7 @@ class UserController extends Controller
             $result = paypalPayment($am, '/capture/upgrade');
              if($result['status'] == 'CREATED'){
                 $url = $result['links'][1]['href'];
-                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 2, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
+                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
                 return redirect($url);
              }
         } 

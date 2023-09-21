@@ -420,6 +420,13 @@ class AdminController extends Controller
         return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
     }
 
+    public function campaignDelete($id){
+        Campaign::where('id', $id)->delete();
+        return redirect('campaigns/pending'); //redirect()->with('success', 'Campaign Deleted Successfully');
+        
+       // return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
+    }
+
 
     public function approvedJobs(){
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->paginate(200);

@@ -150,6 +150,10 @@
                 <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i class="fa fa-times opacity-50 me-1"></i> Decline Campaign Abruptly</button>
               
             </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-9 mt-3">
+                <a href="{{ url('campaign/delete/'.$campaign->id) }}" class="btn btn-danger">Delete Campaign Completely</a>
+            </div>
           </div>
         </div>
         <!-- END Submit Form -->
