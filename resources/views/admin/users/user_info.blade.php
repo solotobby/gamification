@@ -199,21 +199,21 @@
                     @foreach ($info->myJobs as $job)
                     <tr>
                         <td>
-                          {{ $job->campaign->post_title }}
+                          {{ @$job->campaign->post_title }}
                         </td>
                         <td>
-                          @if($job->campaign->currency == 'NGN')
+                          @if(@$job->campaign->currency == 'NGN')
                             &#8358;{{ number_format($job->amount) }}
                             @else
                             ${{ number_format($job->amount,2) }}
                             @endif
                         </td>
                         <td>
-                            {{ $job->status }}
+                            {{ @$job->status }}
                         </td>
                         
                         <td>
-                            {{ $job->created_at }}
+                            {{ @$job->created_at }}
                         </td>
                       </tr>
                     @endforeach
@@ -245,20 +245,20 @@
                     @foreach ($info->myCampaigns as $campaign)
                     <tr>
                         <td>
-                          {{ $campaign->post_title }}
+                          {{ @$campaign->post_title }}
                         </td>
                         <td>
-                            &#8358;{{ number_format($campaign->campaign_amount) }}
+                            &#8358;{{ number_format(@$campaign->campaign_amount) }}
                         </td>
                         <td>
-                            {{ $campaign->number_of_staff }}
+                            {{ @$campaign->number_of_staff }}
                         </td>
                         <td>
-                            &#8358;{{ number_format($campaign->total_amount) }}
+                            &#8358;{{ number_format(@$campaign->total_amount) }}
                         </td>
                         
                         <td>
-                            {{ $campaign->created_at }}
+                            {{ @$campaign->created_at }}
                         </td>
                       </tr>
                     @endforeach
