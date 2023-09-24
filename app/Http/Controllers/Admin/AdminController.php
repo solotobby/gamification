@@ -281,6 +281,12 @@ class AdminController extends Controller
         return view('admin.users.user_info', ['info' => $info]);
     }
 
+    public function adminUserReferrals($id){
+        $user = User::where('id', $id)->first();
+        $ref = $user->referees()->paginate(50);
+        return view('admin.users.referrals', ['ref' => $ref, 'user' => $user]);
+    }
+
     public function withdrawalRequest(){
         $withdrawal = Withrawal::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.withdrawals.sent', ['withdrawals' => $withdrawal]);

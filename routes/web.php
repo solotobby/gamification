@@ -239,6 +239,7 @@ Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class
 Route::get('usd/verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'usdVerifiedUserList'])->name('usd.verified.user.list');
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
 Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'userTransaction'])->name('user.transaction');
+Route::get('admin/user/referral/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserReferrals']);
 
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');

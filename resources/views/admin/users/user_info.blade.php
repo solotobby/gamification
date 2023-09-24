@@ -23,8 +23,7 @@
           Account Name: {{ @$info->accountDetails->account_name }} <br>
           Bank Name: {{ @$info->accountDetails->bank_name }} <br>
           Account Number:{{ @$info->accountDetails->account_number }}<br>
-          Blocked:{{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}
-         
+          Blocked:{{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
         </div>
       </form>
     </div>
@@ -33,13 +32,13 @@
     <!-- Results -->
     <div class="block block-rounded">
       <ul class="nav nav-tabs nav-tabs-block" role="tablist">
-        <li class="nav-item">
+        {{-- <li class="nav-item">
           <button class="nav-link active" id="search-classic-tab" data-bs-toggle="tab" data-bs-target="#search-classic" role="tab" aria-controls="search-classic" aria-selected="true">
             Referees({{$info->referees->count()}})
           </button>
-        </li>
+        </li> --}}
         <li class="nav-item">
-          <button class="nav-link" id="search-photos-tab" data-bs-toggle="tab" data-bs-target="#search-photos" role="tab" aria-controls="search-photos" aria-selected="false">
+          <button class="nav-link active" id="search-photos-tab" data-bs-toggle="tab" data-bs-target="#search-photos" role="tab" aria-controls="search-photos" aria-selected="false">
             Transactions({{ $info->transactions()->where('status', 'successful')->count() }})
           </button>
         </li>
@@ -58,10 +57,15 @@
               User Management 
             </button>
           </li>
+          <li class="nav-item">
+            <a href="{{ url('admin/user/referral/'.$info->id) }}" target="_blank" class="nav-link" >
+             Refferee List ({{$info->referees->count()}})
+            </a>
+          </li>
       </ul>
       <div class="block-content tab-content overflow-hidden">
         <!-- Classic -->
-        <div class="tab-pane fade show active" id="search-classic" role="tabpanel" aria-labelledby="search-classic-tab">
+        {{-- <div class="tab-pane fade show active" id="search-classic" role="tabpanel" aria-labelledby="search-classic-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
             <span class="text-primary fw-bold">{{$info->referees()->where('is_verified', true)->count()}} - {{ $info->referees()->where('is_verified', true)->count() * 250 }}</span> Verified  
             |
@@ -97,7 +101,7 @@
                       </td>
                       <td>
                         @if($inf->wallet->base_currency == 'Naira')
-                        &#8358;{{ number_format($inf->wallet->balance) }}
+                        &#8358;{{ number_format($inf->wallet->balance,2) }}
                         @else
                         ${{ number_format($inf->wallet->balance,2) }}
                         @endif
@@ -115,7 +119,7 @@
             </table>
           </div>
 
-        </div>
+        </div> --}}
         <!-- END Classic -->
 
        
@@ -150,7 +154,7 @@
                       </td>
                       <td>
                         @if($list->currency == 'NGN')
-                          &#8358;{{ number_format($list->amount) }}
+                          &#8358;{{ number_format($list->amount,2) }}
                           @else
                           ${{ number_format($list->amount,2) }}
                           @endif
@@ -203,7 +207,7 @@
                         </td>
                         <td>
                           @if(@$job->campaign->currency == 'NGN')
-                            &#8358;{{ number_format($job->amount) }}
+                            &#8358;{{ number_format($job->amount,2) }}
                             @else
                             ${{ number_format($job->amount,2) }}
                             @endif
@@ -248,13 +252,13 @@
                           {{ @$campaign->post_title }}
                         </td>
                         <td>
-                            &#8358;{{ number_format(@$campaign->campaign_amount) }}
+                            &#8358;{{ number_format(@$campaign->campaign_amount,2) }}
                         </td>
                         <td>
                             {{ @$campaign->number_of_staff }}
                         </td>
                         <td>
-                            &#8358;{{ number_format(@$campaign->total_amount) }}
+                            &#8358;{{ number_format(@$campaign->total_amount,2) }}
                         </td>
                         
                         <td>
