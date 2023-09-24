@@ -37,7 +37,8 @@
       <div class="block-content">
         
         <div class="table-responsive">
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <table class="table table-bordered table-striped table-vcenter">
+            {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination"> --}}
               <thead>
                 <tr>
                   <th>Name</th>
