@@ -764,42 +764,77 @@ class AdminController extends Controller
     }
 
     public function adminWalletTopUp(Request $request){
-        $currency = '';
-        $channel = '';
-        if($request->currency == 'NGN'){
-            $currency = 'NGN';
-            $channel = 'paystack';
-            $wallet = Wallet::where('user_id', $request->user_id)->first(); 
-            $wallet->balance += $request->amount;
-            $wallet->save();
-        }else{
-            $currency = 'USD';
-            $channel = 'paypal';
-            $wallet = Wallet::where('user_id', $request->user_id)->first(); 
-            $wallet->usd_balance += $request->amount;
-            $wallet->save();
-        }
-       
-        PaymentTransaction::create([
-            'user_id' => $request->user_id,
-            'campaign_id' => '1',
-            'reference' => time(),
-            'amount' => $request->amount,
-            'status' => 'successful',
-            'currency' => $currency,
-            'channel' => $channel,
-            'type' => 'wallet_topup',
-            'description' => 'Manual Wallet Topup',
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
 
-        // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
-        $content = 'Your walet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
-        $subject = 'Wallet Topup';
-        $user = User::where('id', $request->user_id)->first();
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-        return back()->with('success', 'Wallet Successfully Funded');
+        if($request->type == 'credit'){
+                $currency = '';
+                $channel = '';
+                if($request->currency == 'NGN'){
+                    $currency = 'NGN';
+                    $channel = 'paystack';
+                    $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                    $wallet->balance += $request->amount;
+                    $wallet->save();
+                }else{
+                    $currency = 'USD';
+                    $channel = 'paypal';
+                    $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                    $wallet->usd_balance += $request->amount;
+                    $wallet->save();
+                }
+            
+                PaymentTransaction::create([
+                    'user_id' => $request->user_id,
+                    'campaign_id' => '1',
+                    'reference' => time(),
+                    'amount' => $request->amount,
+                    'status' => 'successful',
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => 'wallet_topup',
+                    'description' => 'Manual Wallet Topup',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+
+                // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
+                $content = 'Your walet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
+                $subject = 'Wallet Topup';
+                $user = User::where('id', $request->user_id)->first();
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                return back()->with('success', 'Wallet Successfully Funded');
+        }else{
+                $currency = '';
+                $channel = '';
+                if($request->currency == 'NGN'){
+                    $currency = 'NGN';
+                    $channel = 'paystack';
+                    $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                    $wallet->balance -= $request->amount;
+                    $wallet->save();
+                }else{
+                    $currency = 'USD';
+                    $channel = 'paypal';
+                    $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                    $wallet->usd_balance -= $request->amount;
+                    $wallet->save();
+                }
+            
+                PaymentTransaction::create([
+                    'user_id' => $request->user_id,
+                    'campaign_id' => '1',
+                    'reference' => time(),
+                    'amount' => $request->amount,
+                    'status' => 'successful',
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => 'wallet_debit',
+                    'description' => 'Admin manual Wallet Debit',
+                    'tx_type' => 'Debit',
+                    'user_type' => 'regular'
+                ]);
+                 return back()->with('success', 'Wallet Successfully Debitted');
+        } 
+        
     }
 
     public function campaignCompleted(){
