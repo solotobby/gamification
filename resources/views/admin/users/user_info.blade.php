@@ -20,7 +20,7 @@
           Country: {{ $info->country }}<br>
           Base Currency: {{ $info->wallet->base_currency }} <br>
           GoogleID: {{ @$info->google_id }}<br>
-          Account Name: {{ @$info->accountDetails->account_name }} <br>
+          Account Name: {{ @$info->accountDetails->name }} <br>
           Bank Name: {{ @$info->accountDetails->bank_name }} <br>
           Account Number:{{ @$info->accountDetails->account_number }}<br>
           Blocked: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
@@ -124,7 +124,7 @@
 
        
         <!-- Photos -->
-        <div class="tab-pane fade" id="search-photos" role="tabpanel" aria-labelledby="search-photos-tab">
+        <div class="tab-pane fade show active" id="search-photos" role="tabpanel" aria-labelledby="search-photos-tab">
           <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
             &#8358;<span class="text-primary fw-bold">{{ number_format($info->transactions->where('status', 'successful')->sum('amount')) }}</span> Transaction Value
           </div>
