@@ -23,7 +23,7 @@
           Account Name: {{ @$info->accountDetails->account_name }} <br>
           Bank Name: {{ @$info->accountDetails->bank_name }} <br>
           Account Number:{{ @$info->accountDetails->account_number }}<br>
-          Blocked:{{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
+          Blocked: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
         </div>
       </form>
     </div>
@@ -298,12 +298,22 @@
                       <div class="input-group-prepend">
                         <div class="input-group-text">*</div>
                       </div>
+                      <select name="type" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="credit">Credit</option>
+                        <option value="debit">Debit</option>
+                      </select>
+                      {{-- <input type="number" class="form-control" name="amount" placeholder="Amount" required> --}}
+                    </div>
+                    <div class="input-group mb-4">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">*</div>
+                      </div>
                       <select name="currency" class="form-control" required>
                         <option value="">Select Currency</option>
                         <option value="USD">Dollar</option>
                         <option value="NGN">Naira</option>
                       </select>
-                      {{-- <input type="number" class="form-control" name="amount" placeholder="Amount" required> --}}
                     </div>
                     <div class="input-group mb-2">
                       <div class="input-group-prepend">
@@ -315,7 +325,7 @@
                   <input type="hidden" name="user_id" value="{{ $info->id }}">
                  
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-2">Fund...</button>
+                    <button type="submit" class="btn btn-primary mb-2">Process...</button>
                   </div>
                 </div>
               </form>
