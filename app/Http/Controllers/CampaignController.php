@@ -690,6 +690,7 @@ class CampaignController extends Controller
                 $campaign = Campaign::where('job_id', $request->id)->first();
                 $campaign->number_of_staff += $request->new_number;
                 $campaign->total_amount += $est_amount;
+                $campaign->is_completed = false;
                 $campaign->save();
 
                 $currency = 'NGN';

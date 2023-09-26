@@ -304,6 +304,7 @@ Route::resource('preferences', PreferenceController::class);
 
 Route::resource('conversions', ConversionRateController::class);
 
+Route::get('change/completed/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'changeCompleted']);
 Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::class, 'index']);
 
 //Campaign metrics
