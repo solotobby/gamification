@@ -103,10 +103,9 @@
                       </div>
                       <div class="flex-grow-1 fs-sm pe-2">
                         <div class="fw-semibold">
-                          {{-- {!! $notify->message  !!}  --}}
-                          {!! Illuminate\Support\Str::words($notify->message, 5) !!}
-                        
+                          {{$notify->title}}
                         </div>
+                        {!! Illuminate\Support\Str::words($notify->message, 5) !!}
                         <div class="text-muted">{{ $notify->created_at->diffForHumans() }}</div>
                       </div>
                     </a>

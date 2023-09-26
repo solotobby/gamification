@@ -58,6 +58,10 @@
                         </p>
                     </div>
                     <div class="col-lg-8 col-xl-6">
+                      <div class="mb-4">
+                        <label class="form-label" for="example-text-input">Title</label>
+                        <input type="text" class="form-control" id="example-text-input-floating" name="title" required>
+                    </div>
                         <div class="mb-4">
                             <label class="form-label" for="example-text-input">Type</label>
                             <select name="type" class="form-control" required>
@@ -70,7 +74,7 @@
                         <div class="mb-4">
                             <label class="form-label" for="example-text-input">Content</label>
                             <div class="form-floating mb-4">
-                                {{-- <input type="text" class="form-control" id="example-text-input-floating" name="content" required> --}}
+                                
                                 <textarea class="form-control" name="content" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
                                 {{-- <label class="form-label" for="example-text-input-floating">Enter Content</label> --}}
                             </div>
