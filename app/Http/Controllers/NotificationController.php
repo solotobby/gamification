@@ -118,7 +118,7 @@ class NotificationController extends Controller
     }
 
     public function storeNotification(Request $request){
-
+        
         switch ($request->type) {
             case 'announcement':
                     Announcement::orderBy('id', 'DESC')->update(['status' => false]);
@@ -128,7 +128,7 @@ class NotificationController extends Controller
                     $users = User::where('role', 'regular')->get();
                     $content = $request->content;
                     foreach($users as $user){
-                        systemNotification($user, 'success', 'Announcement', $content);
+                        systemNotification($user, 'success', $request->title, $content);
                     }
                 break;
             case 'both':
@@ -138,10 +138,10 @@ class NotificationController extends Controller
                     $content = $request->content;
 
                     foreach($users as $user){
-                        systemNotification($user, 'success', 'Announcement', $content);
+                        systemNotification($user, 'success', $request->title, $content);
                     }
                 break;
         }
-        return back()->with('success', 'Announcement posted successfully');
+        return back()->with('success', 'Posted successfully');
     }
 }
