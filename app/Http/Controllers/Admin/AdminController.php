@@ -496,6 +496,18 @@ class AdminController extends Controller
         return back()->with('success', 'Reversal Successful');
     }
 
+    public function changeCompleted($id){
+        $camp = Campaign::where('id', $id)->first();
+        if($camp->is_completed == true){
+            $camp->is_completed = false;
+            $camp->save();
+        }else{
+            $camp->is_completed = true;
+            $camp->save();
+        }
+        return back()->with('success', 'Completed status changed!');
+    }
+
 
     public function massApproval(Request $request){
        $ids = $request->id;

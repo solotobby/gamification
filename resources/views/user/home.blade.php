@@ -342,7 +342,7 @@
                                             @if($job['is_completed'] == true)
                                             <div class="mt-3" style="color:#191918"> <span class="text1">Completed <li class="fa fa-check"></li></span> </div>
                                             @else
-                                            <div class="mt-3" style="color:#191918"> <span class="text1">{{  $job['completed'] }} completed <span class="text2">out of {{ $job['number_of_staff'] }} capacity</span></span> </div>
+                                            <div class="mt-3" style="color:#191918"> <span class="text1">{{  $job['completed'] }} completed <span class="text2">out of {{ $job['number_of_staff'] }} workers</span></span> </div>
                                             @endif
                                         </div>
                                     </div>
