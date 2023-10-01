@@ -20,6 +20,8 @@
   <!-- Page Content -->
   <div class="content">
     <!-- Full Table -->
+    {{-- <a href="{{ route('ref.usd') }}" class="btn btn-primary mb-3">Redeem USD Referral Bonus</a> --}}
+    
     <div class="block block-rounded">
       <div class="block-header block-header-default">
         <h3 class="block-title">People I Refer - {{ $lists->count() }} | Verified - {{ $verified }} | Cummulative Revenue - &#8358;{{ $verified*250 }} </h3>

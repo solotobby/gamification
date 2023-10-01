@@ -68,6 +68,8 @@ Route::post('save/phone/information', [\App\Http\Controllers\HomeController::cla
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');
+Route::get('referral/view/usd', [\App\Http\Controllers\ReferralController::class, 'usdReferee'])->name('ref.usd');
+
 ////Campaign
 Route::get('campaign/create', [\App\Http\Controllers\CampaignController::class, 'create'])->name('campaign.create');
 Route::get('api/get/categories', [\App\Http\Controllers\CampaignController::class, 'getCategories']);

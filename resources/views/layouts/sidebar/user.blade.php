@@ -130,6 +130,11 @@
               <span class="nav-main-link-name">View All</span>
             </a>
           </li>
+          {{-- <li class="nav-main-item">
+            <a class="nav-main-link" href="{{route('ref.usd')}}">
+              <span class="nav-main-link-name">View Usd</span>
+            </a>
+          </li> --}}
         </ul>
       </li>
       {{-- <li class="nav-main-item">
