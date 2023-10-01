@@ -27,7 +27,7 @@
                 <i class="fa fa-2x fa-check"></i>
               </div>
               <div class="fs-4 fw-semibold pt-3 mb-0">Survey Successfully Completed</div>
-              <p>Thank you for completing this survey. You have been award 100 points for taking this survey</p>
+              <p>Thank you for completing this survey.</p>
               <br>
               <a href="{{ url('home') }}" class="btn btn-primary btn-sm"> <li class="fa fa-home"> </li> Home </a>
             </div>

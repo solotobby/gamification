@@ -75,6 +75,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'referral', 'referee_id');
     }
+    public function usd_referees()
+    {
+        return $this->belongsToMany(User::class, 'usdverifieds', 'referral_id');
+    }
 
     public function myWorks()
     {
