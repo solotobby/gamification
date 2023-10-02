@@ -32,6 +32,7 @@ use App\Models\UserLocation;
 use App\Models\UserScore;
 use App\Models\Wallet;
 use App\Models\Withrawal;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -416,7 +417,14 @@ class AdminController extends Controller
     }
 
     public function unapprovedJobs(){
-        $list = CampaignWorker::where('status', 'Pending')->orderBy('created_at', 'DESC')->paginate(200);
+        
+        $currentTime = Carbon::now();
+        $twentyFourHoursAgo = $currentTime->subHours(24);
+
+        $list = CampaignWorker::where('status', 'Pending')
+        ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
+        // ->orderBy('created_at', 'DESC')->paginate(200);
+
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
 
