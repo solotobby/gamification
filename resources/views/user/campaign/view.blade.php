@@ -239,7 +239,7 @@
       <div class="col-md-8 order-md-0">
         <div class="alert alert-info">
           <li class="fa fa-info"></li> Please note that this job must be approved before payment. 
-          We'll automatically approve it if it is not approved by poster after 5days.
+          We'll automatically approve it if it is not approved by poster after 24hours.
         </div>
         @if (session('success'))
           <div class="alert alert-success" role="alert">
