@@ -539,9 +539,9 @@ class AdminController extends Controller
             'user_type' => 'regular'
         ]);
 
-       $subject = 'Job Approved';
-       $status = 'Approved';
-       Mail::to($ca->user->email)->send(new ApproveCampaign($ca, $subject, $status));
+    //    $subject = 'Job Approved';
+    //    $status = 'Approved';
+    //    Mail::to($ca->user->email)->send(new ApproveCampaign($ca, $subject, $status));
 
        }
        return back()->with('success', 'Mass Approval Successful');
