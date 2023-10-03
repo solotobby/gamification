@@ -61,7 +61,7 @@
                 <?php $i = 1; ?>
                 @foreach ($campaigns as $camp)
                     <tr>
-                        <th scope="row">{{ $i++ }}.</th>
+                        <th scope="row">{{ $camp->job_id }}.</th>
                         <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->post_title }}</a></td>
                         <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
                         <td>{{ $camp->completed()->count() }}/{{ $camp->number_of_staff }} </td>
