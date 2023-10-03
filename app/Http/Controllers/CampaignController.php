@@ -361,7 +361,7 @@ class CampaignController extends Controller
 
     public function viewCampaign($job_id)
     {
-         $getCampaign =SystemActivities::viewCampaign($job_id);
+         $getCampaign = SystemActivities::viewCampaign($job_id);
         // return $getCampaign->campaignType->name;
             // if($getCampaign->campaignType->name == 'Facebook Influencer'){
             //     if(auth()->user()->facebook_id == null){
