@@ -59,20 +59,20 @@
                 @foreach ($lists as $list)
                   <tr>
                     <td>
-                      {{ $list->campaign->post_title }}
+                      {{ @$list->campaign->post_title }}
                     </td>
                     <td>
-                      @if($list->campaign->currency == 'NGN')
-                        &#8358;{{ $list->amount }}
+                      @if(@$list->campaign->currency == 'NGN')
+                        &#8358;{{ @$list->amount }}
                         @else
-                        ${{ $list->amount }}
+                        ${{ @$list->amount }}
                       @endif
                      </td>
                       <td>
-                         {{ $list->status }}
+                         {{ @$list->status }}
                       </td>
                       <td>
-                        <code>{{ $list->reason }}</code>
+                        <code>{{ @$list->reason }}</code>
                      </td>
                   </tr>
                 @endforeach
