@@ -204,7 +204,7 @@
 								<div class="blog-desc">
 									<div class="blog-content">
 										<h2 class="blog-title">
-											<center>See some payouts...</>
+											<center>See some payouts...</center>
 										</h2>
 										
 										<div class="table-responsive">
