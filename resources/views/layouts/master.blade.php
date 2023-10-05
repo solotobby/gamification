@@ -27,6 +27,15 @@
 
         {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> --}}
         
+            <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11361481559"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-11361481559');
+            </script>
+
               <!-- Google tag (gtag.js) - Google Analytics -->
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
             </script>
