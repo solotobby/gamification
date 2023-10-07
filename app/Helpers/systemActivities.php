@@ -77,9 +77,11 @@ class SystemActivities{
             // $attempts = $value->completed->count();
             // $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
-            
-            $div = $value->completed_count / $value->number_of_staff;
+            $c = $value->completed_count+$value->pending_count;
+            $div = $c / $value->number_of_staff;
             $progress = $div * 100;
+
+
             $list[] = [ 
                 'id' => $value->id, 
                 'job_id' => $value->job_id, 
@@ -89,8 +91,8 @@ class SystemActivities{
                 'type' => $value->campaignType->name, 
                 'category' => $value->campaignCategory->name,
                 //'attempts' => $attempts,
-                'completed' => $value->completed_count,
-                'is_completed' => $value->completed_count >= $value->number_of_staff ? true : false,
+                'completed' => $c,//$value->completed_count+$value->pending_count,
+                'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency
             ];
