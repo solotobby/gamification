@@ -35,14 +35,18 @@ class GeneralController extends Controller
         foreach($campaigns as $key => $value){
             $data['pending'] = 'Pending';
             $data['approve'] = 'Approved';
-            // $attempts = $value->completed->count();
-            $completed = $value->completed()->where('status', '=', 'Approved')->count();//->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
-            if($completed >= $value->number_of_staff){
-                Campaign::where('id', $value->id)->update(['is_completed' => true]);
-            }
+            $lisCamp = Campaign::where('id', $value->id)->first();
+            $lisCamp->pending_count = $value->completed->count();
+            $lisCamp->completed_count = $value->completed()->where('status', '=', 'Approved')->count();
+            $lisCamp->save();
+
+            setIsComplete($value->id);
+
+            // if($completed >= $value->number_of_staff){
+            //     Campaign::where('id', $value->id)->update(['is_completed' => true]);
+            // }
         }
 
-        // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
         return 'okay';
     }
 

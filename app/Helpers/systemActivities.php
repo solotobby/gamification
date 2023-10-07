@@ -151,6 +151,8 @@ class SystemActivities{
 
     public static function viewCampaign($campaign_id){
        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
+       $campaign->impressions += 1;
+       $campaign->save();
 
        $data = $campaign;
        $data['current_user_id'] = auth()->user()->id;

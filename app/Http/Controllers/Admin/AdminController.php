@@ -527,11 +527,17 @@ class AdminController extends Controller
         $ca = CampaignWorker::where('id', $id)->first();
         $ca->status = 'Approved';
         $ca->save();
+
+        $camp = Campaign::where('id', $ca->campaign_id)->first();
+        $camp->completed_count += 1;
+        $camp->save();
         
         $wallet = Wallet::where('user_id', $ca->user_id)->first();
         $wallet->balance += $ca->amount;
         $wallet->save();
         $ref = time();
+
+        setIsComplete($ca->campaign_id);
 
         PaymentTransaction::create([
             'user_id' => $ca->user_id,
