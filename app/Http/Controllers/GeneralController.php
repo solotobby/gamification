@@ -30,17 +30,17 @@ class GeneralController extends Controller
         //  return $list;
 
         
-        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        return $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         $list = [];
         foreach($campaigns as $key => $value){
-            $data['pending'] = 'Pending';
-            $data['approve'] = 'Approved';
-            $lisCamp = Campaign::where('id', $value->id)->first();
-            $lisCamp->pending_count = $value->completed->count();
-            $lisCamp->completed_count = $value->completed()->where('status', '=', 'Approved')->count();
-            $lisCamp->save();
+            // $data['pending'] = 'Pending';
+            // $data['approve'] = 'Approved';
+            // $lisCamp = Campaign::where('id', $value->id)->first();
+            // $lisCamp->pending_count = $value->completed->count();
+            // $lisCamp->completed_count = $value->completed()->where('status', '=', 'Approved')->count();
+            // $lisCamp->save();
 
-            setIsComplete($value->id);
+            // setIsComplete($value->id);
 
             // if($completed >= $value->number_of_staff){
             //     Campaign::where('id', $value->id)->update(['is_completed' => true]);

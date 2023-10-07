@@ -72,13 +72,13 @@ class SystemActivities{
         $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         $list = [];
         foreach($campaigns as $key => $value){
-            $data['pending'] = 'Pending';
-            $data['approve'] = 'Approved';
+            // $data['pending'] = 'Pending';
+            // $data['approve'] = 'Approved';
             // $attempts = $value->completed->count();
-            $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
+            // $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
             
-            $div = $completed / $value->number_of_staff;
+            $div = $value->completed_count / $value->number_of_staff;
             $progress = $div * 100;
             $list[] = [ 
                 'id' => $value->id, 
@@ -89,8 +89,8 @@ class SystemActivities{
                 'type' => $value->campaignType->name, 
                 'category' => $value->campaignCategory->name,
                 //'attempts' => $attempts,
-                'completed' => $completed,
-                'is_completed' => $completed >= $value->number_of_staff ? true : false,
+                'completed' => $value->completed_count,
+                'is_completed' => $value->completed_count >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency
             ];
