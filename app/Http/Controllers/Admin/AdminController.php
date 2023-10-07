@@ -530,6 +530,7 @@ class AdminController extends Controller
 
         $camp = Campaign::where('id', $ca->campaign_id)->first();
         $camp->completed_count += 1;
+        $camp->pending_count -= 1;
         $camp->save();
         
         $wallet = Wallet::where('user_id', $ca->user_id)->first();
