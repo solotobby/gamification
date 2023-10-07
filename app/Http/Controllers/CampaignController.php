@@ -553,6 +553,7 @@ class CampaignController extends Controller
 
                 //update completed action
                 $campaign->completed_count += 1;
+                $campaign->pending_count -= 1;
                 $campaign->save();
 
                 setIsComplete($approve->campaign_id);
