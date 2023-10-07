@@ -362,6 +362,7 @@ class CampaignController extends Controller
     public function viewCampaign($job_id)
     {
          $getCampaign = SystemActivities::viewCampaign($job_id);
+        
         // return $getCampaign->campaignType->name;
             // if($getCampaign->campaignType->name == 'Facebook Influencer'){
             //     if(auth()->user()->facebook_id == null){
@@ -454,6 +455,9 @@ class CampaignController extends Controller
             $campaignWorker['proof_url'] = $proofUrl;
             $campaignWork = CampaignWorker::create($campaignWorker);
             //activity log
+
+            $campaignInfo->pending_count += 1;
+            $campaignInfo->save();
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
@@ -517,6 +521,7 @@ class CampaignController extends Controller
            }
 
            $campaign = Campaign::where('id', $approve->campaign_id)->first();//->number_of_staff;
+          
            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
            if($completed_campaign >= $campaign->number_of_staff){
                 return back()->with('error', 'Campaign has reached its maximum capacity');
@@ -546,6 +551,13 @@ class CampaignController extends Controller
                 $approve->reason = $request->reason;
                 $approve->save();
 
+                //update completed action
+                $campaign->completed_count += 1;
+                $campaign->save();
+
+                setIsComplete($approve->campaign_id);
+
+
                 if($approve->campaign->currency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
@@ -559,6 +571,8 @@ class CampaignController extends Controller
                     $wallet->usd_balance += $approve->amount;
                     $wallet->save();
                 }
+
+
 
             }
             
@@ -588,6 +602,7 @@ class CampaignController extends Controller
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'Denied';
             $deny->reason = $request->reason;
+            // $deny->pending_count -= 1;
             $deny->save();
             $subject = 'Job Denied';
             $status = 'Denied';

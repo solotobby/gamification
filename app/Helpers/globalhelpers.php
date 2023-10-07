@@ -4,6 +4,7 @@ use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\ConversionRate;
 use App\Models\Notification;
@@ -422,3 +423,19 @@ if(!function_exists('sendGridEmails')){
     }
 }
 
+
+///campaign handler
+
+if(!function_exists('setIsComplete')){
+    function setIsComplete($id){
+        $cam = Campaign::where('id', $id)->first();
+        $cam->number_of_staff;
+        if($cam->completed_count == $cam->number_of_staff){
+            $cam->is_completed = true;
+            $cam->save();
+            return 'OK';
+        }else{
+            return 'NOT OK';
+        }
+    }
+}
