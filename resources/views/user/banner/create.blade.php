@@ -215,6 +215,9 @@
                     <label class="form-label" for="post-title">Duration of Ad</label>
                     <select class="form-control" id="duration" name="duration" required>
                         <option value="">Select One</option>
+                        <option value="3">3 Days</option>
+                        <option value="7">7 Days</option>
+                        <option value="14">14 Days</option>
                         <option value="30">30 Days</option>
                         <option value="60">60 Days</option>
                         <option value="90">90 Days</option>
