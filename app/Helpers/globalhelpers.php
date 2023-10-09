@@ -450,7 +450,7 @@ if(!function_exists('listPreferences')){
         foreach($lists as $list){
             $count = $list->users()->count();
             $percentage = ($count / $totalInterest) * 100;
-            $lis[] = ['id' => $list->id, 'name' => $list->name, 'count' => $count, 'percentage' => $percentage];
+            $lis[] = ['id' => $list->id, 'name' => $list->name, 'count' => $count, 'percentage' => number_format($percentage)];
         }
 
         // const sumOfPercentages = data.reduce((total, item) => total + item.percentage, 0);
@@ -461,7 +461,14 @@ if(!function_exists('listPreferences')){
         // }
         // $data['data'] = $lis;
         // $data['sumpercentage'] = $totalPercentage;
-        
+
         return $lis;
+    }
+}
+
+if(!function_exists('countryList')){
+    function countryList(){
+        $users = User::select('country', \DB::raw('COUNT(*) as total'))->where('role', 'regular')->groupBy('country')->get();
+        return $users;
     }
 }

@@ -196,7 +196,7 @@
                                     <input type="hidden" name="id" value="{{ $pref['id'] }}">
                                     <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}" id="count" name="count[]">
                                     <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
-                                    <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }} - {{ $pref['percentage'] }}</span>
+                                    <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
                                 </div>
                             </div>
                             
@@ -222,7 +222,29 @@
                         <option value="60">60 Days</option>
                         <option value="90">90 Days</option>
                     </select>
-                    <small><i>Your Banner ad goes Live immediately it is approved</i></small>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="post-title">Select Age Bracket</label>
+                    <select class="form-control" id="age_bracket" name="age_bracket" required>
+                        <option value="">Select One</option>
+                        <option value="1">15-20</option>
+                        <option value="2">21-25</option>
+                        <option value="3">26-30</option>
+                        <option value="4">31-40</option>
+                        <option value="5">40-50</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="post-title">Select Country</label>
+                    <select class="form-control" id="country" name="country" required>
+                        <option value="">Select One</option>
+                        @foreach ($countryLists as $list)
+                        <option value="{{ $list['total'] }}">{{ $list['country'] }}</option>
+                        @endforeach
+                    </select>
+                    <small><i>Your Banner ad goes Live immediately it get approved</i></small>
                 </div>
                 Duration: <span id="durationss">0</span>
                 <hr>
@@ -269,6 +291,36 @@
  {{-- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
  <script>
     $(document).ready(function(){ 
+
+
+        // Get references to the select elements and the total span element
+        // const durationSelect = document.getElementById('duration');
+        // const ageBracketSelect = document.getElementById('age_bracket');
+        // const totalSpan = document.getElementById('totalValue');
+
+        // // Initialize the total
+        // let total = 0;
+
+        // // Add event listeners to both select elements
+        // durationSelect.addEventListener('change', updateTotal);
+        // ageBracketSelect.addEventListener('change', updateTotal);
+
+        // // Function to update the total based on selected values
+        // function updateTotal() {
+        //     const durationValue = parseInt(durationSelect.value) || 0; // Convert to integer, default to 0 if not a valid number
+        //     const ageBracketValue = parseInt(ageBracketSelect.value) || 0; // Convert to integer, default to 0 if not a valid number
+
+        //     // Calculate the total
+        //     total = durationValue + ageBracketValue;
+
+        //     console.log(total);
+
+        //     // Update the total displayed in the span
+        //     // totalSpan.textContent = total;
+        // }
+
+
+
         const checkboxes = document.querySelectorAll('input[name="count[]"]');
         const radio = document.querySelectorAll('input[name="adplacement"]');
         const totalSpan = document.getElementById('estimated_reach');
