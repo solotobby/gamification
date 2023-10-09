@@ -223,6 +223,7 @@
                         <option value="90">90 Days</option>
                     </select>
                 </div>
+                Duration: <span id="durationss">0</span>
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Select Age Bracket</label>
@@ -235,18 +236,20 @@
                         <option value="5">40-50</option>
                     </select>
                 </div>
+                ageBracket: <span id="ageBracket">0</span>
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Select Country</label>
                     <select class="form-control" id="country" name="country" required>
                         <option value="">Select One</option>
                         @foreach ($countryLists as $list)
-                        <option value="{{ $list['total'] }}">{{ $list['country'] }}</option>
+                        <option value="{{ $list['total'] }}">{{ $list['country'] }} | {{ $list['total'] }}</option>
                         @endforeach
                     </select>
                     <small><i>Your Banner ad goes Live immediately it get approved</i></small>
                 </div>
-                Duration: <span id="durationss">0</span>
+                Country: <span id="country">0</span>
+                
                 <hr>
                 <h4>Estimated Cost: &#8358;<span id="demo">0</span></h4>
     
@@ -332,6 +335,22 @@
 
             var ad_placements = $(this).val();
         });
+
+        // $('#age_bracket').change(function(){
+        //     document.getElementById("age_bracket").innerHTML = $(this).val();  
+
+        //     var age_bracket = $(this).val();
+
+        //     alert(age_bracket);
+        // });
+
+        // $('#country').change(function(){
+        //     document.getElementById("country").innerHTML = $(this).val();  
+
+        //     var country = $(this).val();
+
+        //     alert(country);
+        // });
 
        
 
