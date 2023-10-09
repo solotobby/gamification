@@ -13,7 +13,7 @@ class Campaign extends Model
 
     protected $fillable = ['user_id', 'post_title', 'post_link', 
         'campaign_type', 'campaign_subcategory', 'number_of_staff', 
-        'campaign_amount', 'description', 'proof', 'total_amount', 'is_paid', 'approved', 'status', 'job_id', 'extension_references', 'is_completed', 'currency'];
+        'campaign_amount', 'description', 'proof', 'total_amount', 'is_paid', 'approved', 'status', 'job_id', 'extension_references', 'is_completed', 'currency', 'pending_count', 'impressions', 'completed_count'];
 
     
         public function user(){

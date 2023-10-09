@@ -16,6 +16,7 @@
 // use Illuminate\Support\Facades\App;
 
 use App\Http\Controllers\Admin\PreferenceController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\NotificationController;
 
@@ -169,6 +170,10 @@ Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 
 Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
 //notification
 Route::resource('notifications', NotificationController::class);
+
+// banner 
+Route::resource('banner', BannerController::class);
+
 Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
 Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);
 Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);

@@ -75,7 +75,7 @@ class SystemActivities{
             // $data['pending'] = 'Pending';
             // $data['approve'] = 'Approved';
             // $attempts = $value->completed->count();
-            // $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
+            //  $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
             $c = $value->completed_count+$value->pending_count;
             $div = $c / $value->number_of_staff;
@@ -91,7 +91,7 @@ class SystemActivities{
                 'type' => $value->campaignType->name, 
                 'category' => $value->campaignCategory->name,
                 //'attempts' => $attempts,
-                'completed' => $c,//$value->completed_count+$value->pending_count,
+                'completed' => $c, //$value->completed_count+$value->pending_count,
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency
