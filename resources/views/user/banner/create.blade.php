@@ -309,7 +309,7 @@
 
                 totalParameters = Number(adPlacement)+Number(estimatedReach)+Number(adDuration);
 
-                document.getElementById("demo").innerHTML = totalParameters;
+                document.getElementById("demo").innerHTML = totalParameters * 500;
                 console.log(totalParameters);
 
             });
