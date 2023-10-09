@@ -30,7 +30,7 @@ class GeneralController extends Controller
         //  return $list;
 
         
-        return $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
         $list = [];
         foreach($campaigns as $key => $value){
             // $data['pending'] = 'Pending';

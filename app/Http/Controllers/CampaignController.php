@@ -316,7 +316,7 @@ class CampaignController extends Controller
             $currency = 'USD';
             $channel = 'paypal';
         }
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency]);
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0]);
         $campaign = Campaign::create($request->all());
 
         $ref = time();

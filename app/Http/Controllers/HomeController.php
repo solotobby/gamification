@@ -109,6 +109,7 @@ class HomeController extends Controller
     
         // return $campaignMetric = Analytics::campaignMetrics();
         //users registered
+
         $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits

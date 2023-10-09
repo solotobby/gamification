@@ -29,11 +29,12 @@ class Analytics{
     }
 
     public static function dailyActivities(){
-        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), \DB::raw('SUM(is_verified) as verified'))
+        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), 
+        \DB::raw('SUM(is_verified) as verified'))
         ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
-       
+
         $result[] = ['Year','Registered','Verified'];
         foreach ($data as $key => $value) {
             $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
