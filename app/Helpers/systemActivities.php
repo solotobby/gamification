@@ -81,7 +81,6 @@ class SystemActivities{
             $div = $c / $value->number_of_staff;
             $progress = $div * 100;
 
-
             $list[] = [ 
                 'id' => $value->id, 
                 'job_id' => $value->job_id, 
@@ -101,12 +100,11 @@ class SystemActivities{
         //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         // Remove objects where 'is_completed' is true
-        $filteredArray = array_filter($list, function ($item) {
-            return $item['is_completed'] !== true;
-        });
-        // Convert the filtered array back to JSON
-        // $filteredJsonData = array_values($filteredArray);
-        return $filteredArray;
+        // $filteredArray = array_filter($list, function ($item) {
+        //     return $item['is_completed'] !== true;
+        // });
+      
+        return $list;
     }
 
     public static function badgeCount(){
