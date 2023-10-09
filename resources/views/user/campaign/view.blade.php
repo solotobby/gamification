@@ -383,7 +383,8 @@
 
                           @else
                               <?php 
-                              $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
+                              // $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
+                              $completed_count = $campaign->completed()->where('status', 'Approved')->count();
                               ?>
                               @if($completed_count >= $campaign->number_of_staff)
                                 <div class="block-content">
