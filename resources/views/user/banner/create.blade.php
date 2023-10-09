@@ -165,25 +165,54 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Choose Audience</label>
-                    <div class="space-x-2">
-                    <div class="form-check form-switch form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="example-switch-inline1" name="example-switch-inline1" checked>
-                        <label class="form-check-label" for="example-switch-inline1">Option 1</label>
+                    <label class="form-label">Ad Placement</label>
+                    <div class="space-y-2">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="ad_placement1" name="ad_placement" value="15">
+                        <input type="hidden" name="adplacement" value="top">
+                        <label class="form-check-label" for="ad_placement1">Dashboard - Top only</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="ad_placement2" name="ad_placement" value="10">
+                        <input type="hidden" name="adplacement" value="bottom">
+                        <label class="form-check-label" for="ad_placement2">Dashboard - Bottom only</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="ad_placement3" name="ad_placement" value="20">
+                        <input type="hidden" name="adplacement" value="both">
+                        <label class="form-check-label" for="ad_placement3">Dashboard - Top & Bottom </label>
+                      </div>
                     </div>
-                    <div class="form-check form-switch form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="example-switch-inline2" name="example-switch-inline2">
-                        <label class="form-check-label" for="example-switch-inline2">Option 2</label>
-                    </div>
-                    <div class="form-check form-switch form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="example-switch-inline3" name="example-switch-inline3">
-                        <label class="form-check-label" for="example-switch-inline3">Option 3</label>
-                    </div>
-                    </div>
+                   
+                    adPl: <span id="adPlacement">0</span>
                 </div>
 
+                <div class="col-lg-12 col-xl-12">
+                    <div class="row mb-4">
+                        <label class="form-label">Choose Audience Interest</label>
+                        @foreach ($preferences as $pref)
+                            <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">
+                                <div class="form-check form-switch form-check-inline">
+                                    <input type="hidden" name="id" value="{{ $pref['id'] }}">
+                                    <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}" id="count" name="count[]">
+                                    <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
+                                    <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }} - {{ $pref['percentage'] }}</span>
+                                </div>
+                            </div>
+                            
+                        @endforeach
+                        
+                    </div>
+                    Estimated Audience Reach -  <span id="estimated_reach">0</span>
+                    <br>
+
+                    
+                </div>
+
+                
+
                 <div class="mb-4">
-                    <label class="form-label" for="post-title">Duration</label>
+                    <label class="form-label" for="post-title">Duration of Ad</label>
                     <select class="form-control" id="duration" name="duration" required>
                         <option value="">Select One</option>
                         <option value="30">30 Days</option>
@@ -192,9 +221,9 @@
                     </select>
                     <small><i>Your Banner ad goes Live immediately it is approved</i></small>
                 </div>
-
+                Duration: <span id="durationss">0</span>
                 <hr>
-                <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
+                <h4>Estimated Cost: &#8358;<span id="demo">0</span></h4>
     
                 {{-- <div class="mb-4">
                     <label class="form-label" for="post-files">Banner Description <small></small></label>
@@ -211,7 +240,7 @@
             <div class="row mb-2">
               <div class="col-lg-3"></div>
               <div class="col-lg-9">
-                <button type="submit" class="btn btn-alt-primary">
+                <button type="submit" class="btn btn-alt-primary" id="submitButton">
                   <i class="fa fa-plus opacity-50 me-1"></i> Post Banner
                 </button>
               </div>
@@ -229,12 +258,63 @@
   @section('script')
 
  <!-- Page JS Plugins -->
- <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+ {{-- <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script> --}}
  {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
  {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
  <!-- Page JS Helpers (CKEditor 5 plugins) -->
- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
+ {{-- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
+ <script>
+    $(document).ready(function(){ 
+        const checkboxes = document.querySelectorAll('input[name="count[]"]');
+        const radio = document.querySelectorAll('input[name="adplacement"]');
+        const totalSpan = document.getElementById('estimated_reach');
 
+        // Initialize the estimated_reach to 0
+
+        $('input[type="radio"]').change(function(){
+            document.getElementById("adPlacement").innerHTML = $(this).val();  
+
+            var ad_placements = $(this).val();
+        });
+
+       
+
+
+        let estimated_reach = 0;
+
+            // Add event listeners to checkboxes to update the total
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        // If the checkbox is checked, add its value to the total
+                        estimated_reach += parseFloat(this.value);
+                    } else {
+                        // If the checkbox is unchecked, subtract its value from the total
+                        estimated_reach -= parseFloat(this.value);
+                    }
+                        // console.log(estimated_reach);
+                        document.getElementById("estimated_reach").innerHTML = estimated_reach;
+                });
+            });
+
+
+            $('#duration').change(function(){
+            
+                // alert();
+                var adPlacement = document.getElementById("adPlacement").innerHTML;
+                var estimatedReach = document.getElementById("estimated_reach").innerHTML;
+                var adDuration = $(this).val();
+                document.getElementById("durationss").innerHTML = $(this).val();
+
+                totalParameters = Number(adPlacement)+Number(estimatedReach)+Number(adDuration);
+
+                document.getElementById("demo").innerHTML = totalParameters;
+                console.log(totalParameters);
+
+            });
+
+    });
+</script>
 
  @endsection

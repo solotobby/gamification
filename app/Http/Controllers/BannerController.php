@@ -28,7 +28,8 @@ class BannerController extends Controller
      */
     public function create()
     {
-        return view('user.banner.create');
+        $preferences = listPreferences();
+        return view('user.banner.create', ['preferences' => $preferences]);
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\ConversionRate;
 use App\Models\Notification;
+use App\Models\Preference;
 use App\Models\Profile;
 use App\Models\Settings;
 use App\Models\User;
@@ -437,5 +438,30 @@ if(!function_exists('setIsComplete')){
         }else{
             return 'NOT OK';
         }
+    }
+}
+
+
+if(!function_exists('listPreferences')){
+    function listPreferences(){
+        $lists = Preference::all();
+        $totalInterest = \DB::table('user_interest')->count();
+        $lis = [];
+        foreach($lists as $list){
+            $count = $list->users()->count();
+            $percentage = ($count / $totalInterest) * 100;
+            $lis[] = ['id' => $list->id, 'name' => $list->name, 'count' => $count, 'percentage' => $percentage];
+        }
+
+        // const sumOfPercentages = data.reduce((total, item) => total + item.percentage, 0);
+        // $totalPercentage = 0;
+
+        // foreach ($lis as $item) {
+        //     $totalPercentage += $item['percentage'];
+        // }
+        // $data['data'] = $lis;
+        // $data['sumpercentage'] = $totalPercentage;
+        
+        return $lis;
     }
 }
