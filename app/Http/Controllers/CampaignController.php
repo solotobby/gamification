@@ -435,10 +435,12 @@ class CampaignController extends Controller
        
         $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
         $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
-        return 'undergoing test....';
+        
         if($campCount >= $campaignInfo->number_of_staff){
             return back()->with('error', 'This campaign has reach its maximum workers');
         }
+
+        return 'undergoing test....';
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
 
