@@ -431,6 +431,8 @@ class CampaignController extends Controller
         if($check){
             return back()->with('error', 'You have comppleted this campaign before');
         }
+
+        return 'ok';
         $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
         $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
 
@@ -443,7 +445,7 @@ class CampaignController extends Controller
          $data['info'] = $campaignInfo;
          $data['campaign'] = $campaign;
 
-         return $data;
+        
         // if($request->hasFile('proof')){
          
         //     $fileBanner = $request->file('proof');
