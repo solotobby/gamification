@@ -439,41 +439,46 @@ class CampaignController extends Controller
         }
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
-        if($request->hasFile('proof')){
+
+         $data['info'] = $campaignInfo;
+         $data['campaign'] = $campaign;
+
+         return $data;
+        // if($request->hasFile('proof')){
          
-            $fileBanner = $request->file('proof');
-            $Bannername = time() . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'proofs/' . $Bannername;
+        //     $fileBanner = $request->file('proof');
+        //     $Bannername = time() . $fileBanner->getClientOriginalName();
+        //     $filePathBanner = 'proofs/' . $Bannername;
     
-            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+        //     Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+        //     $proofUrl = Storage::disk('s3')->url($filePathBanner);
 
-            $campaignWorker['user_id'] = auth()->user()->id;
-            $campaignWorker['campaign_id'] = $request->campaign_id;
-            $campaignWorker['comment'] = $request->comment;
-            $campaignWorker['amount'] = $request->amount;
-            $campaignWorker['proof_url'] = $proofUrl;
-            $campaignWork = CampaignWorker::create($campaignWorker);
-            //activity log
+        //     $campaignWorker['user_id'] = auth()->user()->id;
+        //     $campaignWorker['campaign_id'] = $request->campaign_id;
+        //     $campaignWorker['comment'] = $request->comment;
+        //     $campaignWorker['amount'] = $request->amount;
+        //     $campaignWorker['proof_url'] = $proofUrl;
+        //     $campaignWork = CampaignWorker::create($campaignWorker);
+        //     //activity log
 
-            $campaignInfo->pending_count += 1;
-            $campaignInfo->save();
+        //     $campaignInfo->pending_count += 1;
+        //     $campaignInfo->save();
             
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
+        //     $name = SystemActivities::getInitials(auth()->user()->name);
+        //     SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
             
-            Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+        //     Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
-            $campaign = Campaign::where('id', $request->campaign_id)->first();
-            $user = User::where('id', $campaign->user->id)->first();
-            $subject = 'Job Submission';
-            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        //     $campaign = Campaign::where('id', $request->campaign_id)->first();
+        //     $user = User::where('id', $campaign->user->id)->first();
+        //     $subject = 'Job Submission';
+        //     $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+        //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-            return back()->with('success', 'Job Submitted Successfully');
-        }else{
-            return back()->with('error', 'Upload an image');
-        }
+        //     return back()->with('success', 'Job Submitted Successfully');
+        // }else{
+        //     return back()->with('error', 'Upload an image');
+        // }
     }
 
     public function postCampaignWork(Request $request)
