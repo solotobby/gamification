@@ -421,10 +421,11 @@ class CampaignController extends Controller
     }
 
     public function submitWork(Request $request){
-        $this->validate($request, [
-            'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
-            'comment' => 'required|string',
-        ]);
+        return $request;
+        // $this->validate($request, [
+        //     'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
+        //     'comment' => 'required|string',
+        // ]);
 
         $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
         if($check){
