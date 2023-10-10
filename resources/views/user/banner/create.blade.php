@@ -2,12 +2,12 @@
 
 @section('style')
 {{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}
-<script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+{{-- <script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
       selector: '#mytextarea'
     });
-  </script>
+  </script> --}}
 @endsection
 
 @section('content')
@@ -49,7 +49,7 @@
     @endif
 
 
-    <form action="{{ url('banner.store') }}" method="POST" >
+    <form action="{{ url('banner') }}" method="POST" >
         @csrf
         <div class="block block-rounded">
         <!-- Files section -->
@@ -58,100 +58,11 @@
                 <div class="row items-push">
                 <div class="col-lg-3">
                     <p class="text-muted">
-                    Give detailed decription of the banner
+                    Give detailed description of the banner
                     </p>
                 </div>
 
                 <div class="col-lg-9">
-                   
-                        {{-- <div class="mb-4">
-                          <label class="form-label">Checkboxes</label>
-                          <div class="space-y-2">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-default1" name="example-checkbox-default1" checked>
-                              <label class="form-check-label" for="example-checkbox-default1">Option 1</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-default2" name="example-checkbox-default2">
-                              <label class="form-check-label" for="example-checkbox-default2">Option 2</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-default3" name="example-checkbox-default3" disabled>
-                              <label class="form-check-label" for="example-checkbox-default3">Option 3</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label">Inline Checkboxes</label>
-                          <div class="space-x-2">
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-inline1" name="example-checkbox-inline1" checked>
-                              <label class="form-check-label" for="example-checkbox-inline1">Option 1</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-inline2" name="example-checkbox-inline2">
-                              <label class="form-check-label" for="example-checkbox-inline2">Option 2</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" value="" id="example-checkbox-inline3" name="example-checkbox-inline3" disabled>
-                              <label class="form-check-label" for="example-checkbox-inline3">Option 3</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label">Radios</label>
-                          <div class="space-y-2">
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" id="example-radios-default1" name="example-radios-default" value="option1" checked>
-                              <label class="form-check-label" for="example-radios-default1">Option 1</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" id="example-radios-default2" name="example-radios-default" value="option2">
-                              <label class="form-check-label" for="example-radios-default2">Option 2</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" id="example-radios-default3" name="example-radios-default" value="option2" disabled>
-                              <label class="form-check-label" for="example-radios-default3">Option 3</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label">Inline Radios</label>
-                          <div class="space-x-2">
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" id="example-radios-inline1" name="example-radios-inline" value="option1" checked>
-                              <label class="form-check-label" for="example-radios-inline1">Option 1</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" id="example-radios-inline2" name="example-radios-inline" value="option2">
-                              <label class="form-check-label" for="example-radios-inline2">Option 2</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" id="example-radios-inline3" name="example-radios-inline" value="option2" disabled>
-                              <label class="form-check-label" for="example-radios-inline3">Option 3</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label">Switches</label>
-                          <div class="space-y-2">
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" value="" id="example-switch-default1" name="example-switch-default1" checked>
-                              <label class="form-check-label" for="example-switch-default1">Option 1</label>
-                            </div>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" value="" id="example-switch-default2" name="example-switch-default2">
-                              <label class="form-check-label" for="example-switch-default2">Option 2</label>
-                            </div>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" value="" id="example-switch-default3" name="example-switch-default3" disabled>
-                              <label class="form-check-label" for="example-switch-default3">Option 3</label>
-                            </div>
-                          </div>
-                        </div> --}}
-                
-                    
-
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Upload Image of your banner</label>
                     <input type="file" class="form-control" id="post-title" name="banner_url" required>
@@ -183,8 +94,6 @@
                         <label class="form-check-label" for="ad_placement3">Dashboard - Top & Bottom </label>
                       </div>
                     </div>
-                   
-                    adPl: <span id="adPlacement">0</span>
                 </div>
 
                 <div class="col-lg-12 col-xl-12">
@@ -198,18 +107,10 @@
                                     <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
                                     <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
                                 </div>
-                            </div>
-                            
+                            </div>  
                         @endforeach
-                        
                     </div>
-                    Estimated Audience Reach -  <span id="estimated_reach">0</span>
-                    <br>
-
-                    
                 </div>
-
-                
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Duration of Ad</label>
@@ -223,20 +124,20 @@
                         <option value="90">90 Days</option>
                     </select>
                 </div>
-                Duration: <span id="durationss">0</span>
+                
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Select Age Bracket</label>
                     <select class="form-control" id="age_bracket" name="age_bracket" required>
                         <option value="">Select One</option>
-                        <option value="1">15-20</option>
-                        <option value="2">21-25</option>
+                        <option value="5">15-20</option>
+                        <option value="4">21-25</option>
                         <option value="3">26-30</option>
-                        <option value="4">31-40</option>
-                        <option value="5">40-50</option>
+                        <option value="2">31-40</option>
+                        <option value="1">40-50</option>
                     </select>
                 </div>
-                ageBracket: <span id="ageBracket">0</span>
+               
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Select Country</label>
@@ -248,16 +149,10 @@
                     </select>
                     <small><i>Your Banner ad goes Live immediately it get approved</i></small>
                 </div>
-                Country: <span id="country">0</span>
                 
                 <hr>
-                <h4>Estimated Cost: &#8358;<span id="demo">0</span></h4>
-    
-                {{-- <div class="mb-4">
-                    <label class="form-label" for="post-files">Banner Description <small></small></label>
-                    <textarea class="form-control" name="description" id="js-ckeditor5-classic" required> {{ old('description') }}</textarea>
-                </div> --}}
-            
+                <h4>Estimated Cost: &#8358;<span id="totalValue">0</span></h4>
+        
                 </div>
                 </div>
             </div>
@@ -294,99 +189,78 @@
  {{-- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
  <script>
     $(document).ready(function(){ 
+        // const submitButton = document.getElementById("submitButton");
+        // submitButton.disabled = true;
+
+        
+
+        function calculateTotal() {
+
+            // Initialize the total
+            let total = 0;
+
+            // Calculate the total based on the selected radio button value
+            const selectedAdPlacementValue = parseFloat(document.querySelector('input[name="ad_placement"]:checked').value);
+            if (!isNaN(selectedAdPlacementValue)) {
+                total += selectedAdPlacementValue;
+
+            }
+
+            // Calculate the total based on the selected duration value
+            const selectedDurationValue = parseFloat(document.getElementById('duration').value);
+            if (!isNaN(selectedDurationValue)) {
+                total += selectedDurationValue;
+            }
+
+            // Calculate the total based on the selected age bracket value
+            const selectedAgeBracketValue = parseFloat(document.getElementById('age_bracket').value);
+            if (!isNaN(selectedAgeBracketValue)) {
+                total += selectedAgeBracketValue;
+            }
+
+            // Calculate the total based on the selected country value
+            const selectedCountryValue = parseFloat(document.getElementById('country').value);
+            if (!isNaN(selectedCountryValue)) {
+                total += selectedCountryValue;
+            }
+
+            // Calculate the total based on the selected checkbox values
+            const selectedCheckboxValues = Array.from(document.querySelectorAll('input[name="count[]"]:checked')).map(checkbox => parseFloat(checkbox.value));
+            if (selectedCheckboxValues.length > 0) {
+                total += selectedCheckboxValues.reduce((a, b) => a + b, 0);
+            }
+
+            // console.log(total);
+
+            var finalTotal = total * 500;
+            const submitButton = document.getElementById("submitButton");
+            const calculated = finalTotal;
+            const walletBalance = 10000;
+            
+            if (walletBalance < calculated) {
+                submitButton.disabled = false;
+            }else{
+                submitButton.disabled = true;
+            }
+
+            // Display the total in the "totalValue" span
+            document.getElementById('totalValue').textContent = finalTotal.toFixed(2);
+        }
 
 
-        // Get references to the select elements and the total span element
-        // const durationSelect = document.getElementById('duration');
-        // const ageBracketSelect = document.getElementById('age_bracket');
-        // const totalSpan = document.getElementById('totalValue');
-
-        // // Initialize the total
-        // let total = 0;
-
-        // // Add event listeners to both select elements
-        // durationSelect.addEventListener('change', updateTotal);
-        // ageBracketSelect.addEventListener('change', updateTotal);
-
-        // // Function to update the total based on selected values
-        // function updateTotal() {
-        //     const durationValue = parseInt(durationSelect.value) || 0; // Convert to integer, default to 0 if not a valid number
-        //     const ageBracketValue = parseInt(ageBracketSelect.value) || 0; // Convert to integer, default to 0 if not a valid number
-
-        //     // Calculate the total
-        //     total = durationValue + ageBracketValue;
-
-        //     console.log(total);
-
-        //     // Update the total displayed in the span
-        //     // totalSpan.textContent = total;
-        // }
-
-
-
-        const checkboxes = document.querySelectorAll('input[name="count[]"]');
-        const radio = document.querySelectorAll('input[name="adplacement"]');
-        const totalSpan = document.getElementById('estimated_reach');
-
-        // Initialize the estimated_reach to 0
-
-        $('input[type="radio"]').change(function(){
-            document.getElementById("adPlacement").innerHTML = $(this).val();  
-
-            var ad_placements = $(this).val();
+        // Add change event listeners to the relevant elements
+        document.querySelectorAll('input[name="ad_placement"]').forEach(radio => {
+            radio.addEventListener('change', calculateTotal);
+        });
+        document.getElementById('duration').addEventListener('change', calculateTotal);
+        document.getElementById('age_bracket').addEventListener('change', calculateTotal);
+        document.getElementById('country').addEventListener('change', calculateTotal);
+        document.querySelectorAll('input[name="count[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', calculateTotal);
         });
 
-        // $('#age_bracket').change(function(){
-        //     document.getElementById("age_bracket").innerHTML = $(this).val();  
-
-        //     var age_bracket = $(this).val();
-
-        //     alert(age_bracket);
-        // });
-
-        // $('#country').change(function(){
-        //     document.getElementById("country").innerHTML = $(this).val();  
-
-        //     var country = $(this).val();
-
-        //     alert(country);
-        // });
-
-       
-
-
-        let estimated_reach = 0;
-
-            // Add event listeners to checkboxes to update the total
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    if (this.checked) {
-                        // If the checkbox is checked, add its value to the total
-                        estimated_reach += parseFloat(this.value);
-                    } else {
-                        // If the checkbox is unchecked, subtract its value from the total
-                        estimated_reach -= parseFloat(this.value);
-                    }
-                        // console.log(estimated_reach);
-                        document.getElementById("estimated_reach").innerHTML = estimated_reach;
-                });
-            });
-
-
-            $('#duration').change(function(){
-            
-                // alert();
-                var adPlacement = document.getElementById("adPlacement").innerHTML;
-                var estimatedReach = document.getElementById("estimated_reach").innerHTML;
-                var adDuration = $(this).val();
-                document.getElementById("durationss").innerHTML = $(this).val();
-
-                totalParameters = Number(adPlacement)+Number(estimatedReach)+Number(adDuration);
-
-                document.getElementById("demo").innerHTML = totalParameters * 500;
-                console.log(totalParameters);
-
-            });
+        // Initial calculation
+       calculateTotal();
 
     });
 </script>
