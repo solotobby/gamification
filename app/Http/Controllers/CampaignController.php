@@ -432,10 +432,10 @@ class CampaignController extends Controller
             return back()->with('error', 'You have comppleted this campaign before');
         }
 
-        return 'ok';
+       
         $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
         $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
-
+        return 'ok';
         if($campCount >= $campaignInfo->number_of_staff){
             return back()->with('error', 'This campaign has reach its maximum workers');
         }
