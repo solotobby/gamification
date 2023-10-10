@@ -421,7 +421,7 @@ class CampaignController extends Controller
     }
 
     public function submitWork(Request $request){
-        return $request;
+        // return $request;
         // $this->validate($request, [
         //     'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
         //     'comment' => 'required|string',
