@@ -49,7 +49,7 @@
     @endif
 
 
-    <form action="{{ url('banner') }}" method="POST" >
+    <form action="{{ url('banner') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="block block-rounded">
         <!-- Files section -->
@@ -65,7 +65,7 @@
                 <div class="col-lg-9">
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Upload Image of your banner</label>
-                    <input type="file" class="form-control" id="post-title" name="banner_url" required>
+                    <input type="file" class="form-control" id="banner-url" name="banner_url" required>
                     <small><i>Upload an image. Must be of high quality.</i></small>
                 </div>
 
@@ -102,8 +102,8 @@
                         @foreach ($preferences as $pref)
                             <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">
                                 <div class="form-check form-switch form-check-inline">
-                                    <input type="hidden" name="id" value="{{ $pref['id'] }}">
-                                    <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}" id="count" name="count[]">
+                                    {{-- <input type="hidden" name="id[]" value="{{ $pref['id'] }}"> --}}
+                                    <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}|{{ $pref['id'] }}" id="count" name="count[]">
                                     <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
                                     <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
                                 </div>
@@ -192,7 +192,7 @@
         // const submitButton = document.getElementById("submitButton");
         // submitButton.disabled = true;
 
-        
+
 
         function calculateTotal() {
 
