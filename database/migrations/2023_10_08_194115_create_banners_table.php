@@ -26,6 +26,7 @@ class CreateBannersTable extends Migration
             $table->string('country');
             $table->decimal('amount', 10, 2);
             $table->boolean('status')->default(false);
+            $table->bigInteger('impression');
             $table->timestamps();
         });
     }

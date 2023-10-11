@@ -432,15 +432,12 @@ class CampaignController extends Controller
             return back()->with('error', 'You have comppleted this campaign before');
         }
 
-       
         // $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
         // $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
         
         // if($campCount >= $campaignInfo->number_of_staff){
         //     return back()->with('error', 'This campaign has reach its maximum workers');
         // }
-
-      
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
 
@@ -467,63 +464,6 @@ class CampaignController extends Controller
 
             $campaign->pending_count += 1;
             $campaign->save();
-            
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
-            
-            Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
-        
-            $campaign = Campaign::where('id', $request->campaign_id)->first();
-            $user = User::where('id', $campaign->user->id)->first();
-            $subject = 'Job Submission';
-            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-
-            return back()->with('success', 'Job Submitted Successfully');
-        }else{
-            return back()->with('error', 'Upload an image');
-        }
-    }
-
-    public function postCampaignWork(Request $request)
-    {
-        //return $request;
-       $this->validate($request, [
-            'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
-            'comment' => 'required|string',
-        ]);
-
-        $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
-        if($check){
-            return back()->with('error', 'You have comppleted this campaign before');
-        }
-        $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
-        $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
-
-        if($campCount >= $campaignInfo->number_of_staff){
-            return back()->with('error', 'This campaign has reach its maximum workers');
-        }
-
-        $campaign = Campaign::where('id', $request->campaign_id)->first();
-        if($request->hasFile('proof')){
-         
-            $fileBanner = $request->file('proof');
-            $Bannername = time() . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'proofs/' . $Bannername;
-    
-            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            $proofUrl = Storage::disk('s3')->url($filePathBanner);
-
-            $campaignWorker['user_id'] = auth()->user()->id;
-            $campaignWorker['campaign_id'] = $request->campaign_id;
-            $campaignWorker['comment'] = $request->comment;
-            $campaignWorker['amount'] = $request->amount;
-            $campaignWorker['proof_url'] = $proofUrl;
-            $campaignWork = CampaignWorker::create($campaignWorker);
-            //activity log
-
-            $campaignInfo->pending_count += 1;
-            $campaignInfo->save();
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
