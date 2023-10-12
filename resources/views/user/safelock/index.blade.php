@@ -5,11 +5,11 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">SafeLock Funds</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Safelock Funds</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Dashboard</li>
-            <li class="breadcrumb-item active" aria-current="page">SafeLock Funds</li>
+            <li class="breadcrumb-item active" aria-current="page">Safelock Funds</li>
           </ol>
         </nav>
       </div>
@@ -30,18 +30,22 @@
                     {{ session('error') }}
                 </div>
             @endif
+            <div class="alert alert-info">
+              Lock funds to earn up to 5% interest in 3-6 months.
+              Your funds are 100% safe  and secure. Your interest and capital will be paid to your local bank account at maturity.
+            </div>
         <form action="{{ url('safelock') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row push">
                 <div class="col-lg-4">
                     <p class="text-muted">
-                    Safelock minimum of &#8358;1,000 with an interest of 5% between 3 to 6 months
+                    Lock minimum of &#8358;1,000 with an interest of 5% between 3 to 6 months
                     </p>
                 </div>
                 <div class="col-lg-8 col-xl-5">
                     <div class="mb-4">
                         <label class="form-label" for="example-text-input">Amount</label>
-                        <input type="text" class="form-control" id="example-text-input" min="1000" name="amount" placeholder="1000">
+                        <input type="number" class="form-control" min="1000" name="amount" placeholder="1000">
                     </div>
                     <div class="mb-4">
                       <label class="form-label" for="example-text-input">Duration</label>
@@ -53,8 +57,8 @@
                     <div class="mb-4">
                       <label class="form-label" for="example-text-input">Source of Fund</label>
                       <select name="source" class="form-control" required>
-                        <option value="wallet">Wallet</option>
-                        <option value="paystack">Paystack</option>
+                        <option value="wallet">Wallet Balance</option>
+                        {{-- <option value="paystack">Paystack</option> --}}
                       </select>
                     </div>
                     <div class="mb-4">
