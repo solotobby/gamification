@@ -64,6 +64,7 @@
                     <div class="mb-4">
                         <button class="btn btn-primary" type="submit">SafeLock Funds</button>
                     </div>
+                    <p style="color: brown" >Locked funds can only be withdrawn at maturity!</p>
                 </div>
             </div>
         </form>
