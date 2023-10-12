@@ -45,6 +45,14 @@
 						<br>Our workers will engage your post real time to drive massive sales for you.
 						When you tell your friends about Freebyz, We will reward you with N500 on each friend and instant bonus of N5,000 when you reach 50 verified referral limit. 
 					</p>
+					<br><br><br>
+					<p style="font-weight: bolder">
+						<marquee class="mt-4" style="width: 100%;" behavior="sliding" direction="left">
+							Lock funds to earn up to 5% interest in 3-6 months.
+							  Your funds are 100% safe  and secure. Your interest and capital will be paid to your local bank account at maturity.
+						</marquee>
+					</p>
+					
 					{{-- <p>
 						Freebyz was created for you to make cool cash everyday by doing simple social media jobs 
 						or increasing your business visibility and organic growth through engagements on your
