@@ -288,36 +288,6 @@
 
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
-                          {{-- @if(auth()->user()->wallet->base_currency == 'Naira')
-                            @if(auth()->user()->is_verified)
-                                
-                                @if($job['is_completed'] == true)
-                                  <a href="#">
-                                @else
-                                  <a href="{{ url('campaign/'.$job['job_id']) }}">
-                                @endif
-                                
-                              @elseif(!auth()->user()->is_verified && $job['campaign_amount'] <= 10)
-                                @if($job['is_completed'] == true)
-                                    <a href="#">
-                                @else
-                                    <a href="{{ url('campaign/'.$job['job_id']) }}">
-                                @endif
-                              @else
-                                <a href="{{ url('info') }}">
-                            @endif
-
-                            @else
-
-                                  
-                                @if(auth()->user()->USD_verified)
-                                  <a href="{{ url('campaign/'.$job['job_id']) }}">  
-                                @else
-                                  <a href="{{ url('conversion') }}">
-                                @endif
-
-                          @endif --}}
-
                             <a href="{{ url('campaign/'.$job['job_id']) }}"> 
                                 <div class="card p-3 mb-2">
                                     <div class="d-flex justify-content-between">
@@ -392,23 +362,21 @@
               </div>
             </div>
     </div>
-          <!-- END Call to Action -->
-          @if(auth()->user()->profile->is_welcome == 0)
-            {{-- Show welcome pop up --}}
-            @include('layouts.resources.welcome')
 
-          @elseif(auth()->user()->is_verified == 0)
-          
-              @include('layouts.resources.unverified')
+    <!-- END Call to Action -->
+    @if(auth()->user()->profile->is_welcome == 0)
+      {{-- Show welcome pop up --}}
+      @include('layouts.resources.welcome')
 
-            {{-- @else
-              @include('layouts.resources.repository') --}}
-            
-          @endif
+    @elseif(auth()->user()->is_verified == 0)
+    
+        @include('layouts.resources.unverified')
 
-
-
-
+      {{-- @else
+        @include('layouts.resources.repository') --}}
+      
+    @endif
+    
 @endsection
 @section('script')
  <!-- jQuery (required for Slick Slider plugin) -->

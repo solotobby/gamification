@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,8 @@ class BannerController extends Controller
      */
     public function index()
     {
-        return view('user.banner.index');
+        $banners = Banner::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+        return view('user.banner.index', ['banners' => $banners]);
     }
 
     /**
@@ -56,16 +58,35 @@ class BannerController extends Controller
             'duration' => 'required|string',
         ]);
 
+       
+
         //return explode("|",$request->count);
 
         $lissy = [];
         foreach($request->count as $res){
-            $lissy[] = $res;
+            $lissy[] = explode("|",$res);
         }
 
-        return $lissy;
+        // $newlissy = [];
+        foreach($lissy as $lis)
+        {
+            $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
+        }
+
+        foreach($counts as $id)
+        {
+            $unit[] = $id['unit'];
+        }
+
+        $parameters =  array_sum($unit) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
+        $finalTotal = $parameters * 25;
+
+        if($finalTotal > auth()->user()->wallet->balance){
+            return back()->with('error', 'Insurficient Balance');
+        }
 
         if($request->hasFile('banner_url')){
+
 
             $fileBanner = $request->file('banner_url');
             $Bannername = time() . $fileBanner->getClientOriginalName();
@@ -74,9 +95,10 @@ class BannerController extends Controller
             Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
             
-            $parameters =  array_sum($request->count) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
+            
+
             $banner['user_id'] = auth()->user()->id; 
-            $banner['banner_id'] = Str::random(16);
+            $banner['banner_id'] = Str::random(7);
             $banner['external_link'] = $request->external_link; 
             $banner['ad_placement_point'] = $request->ad_placement;
             $banner['adplacement_position'] = $request->adplacement;
@@ -84,17 +106,40 @@ class BannerController extends Controller
             $banner['duration'] = $request->duration; 
             $banner['country'] = $request->country;
             $banner['status'] = false;
-            $banner['amount'] = $parameters * 500;
+            $banner['amount'] = $finalTotal;
             $banner['banner_url'] = $bannerUrl;
             $banner['impression'] = 0;
+            $banner['clicks'] = 0;
 
             $createdBanner = Banner::create($banner);
 
-            $interests = $request->count;
+            if($createdBanner){
+                debitWallet(auth()->user(),'Naira', $finalTotal);
+                //transaction log 
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => $createdBanner->id,
+                    'reference' => time(),
+                    'amount' => $finalTotal,
+                    'status' => 'successful',
+                    'currency' => 'NGN',
+                    'channel' => 'internal',
+                    'type' => 'ad_banner',
+                    'description' => 'Ad Banner Placement by '.auth()->user()->name,
+                    'tx_type' => 'Debit',
+                    'user_type' => 'regular'
+                ]);
 
-            foreach($interests as $interest){
-                \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $interest]);
+                foreach($counts as $id)
+                {
+                    \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
+                }
+
+
             }
+
+            
+          
             return back()->with('success', 'Banner ad Created Successfully');
 
         }else{
@@ -145,5 +190,9 @@ class BannerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function bannerResources(){
+        return auth()->user()->wallet->balance;
     }
 }

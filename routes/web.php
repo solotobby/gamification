@@ -18,7 +18,9 @@
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ConversionRateController;
+use App\Http\Controllers\FundsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SafeLockController;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
@@ -173,6 +175,10 @@ Route::resource('notifications', NotificationController::class);
 
 // banner 
 Route::resource('banner', BannerController::class);
+Route::get('api/banner/resources', [\App\Http\Controllers\BannerController::class, 'bannerResources']);
+
+Route::resource('safelock', SafeLockController::class);
+
 
 Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
 Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);

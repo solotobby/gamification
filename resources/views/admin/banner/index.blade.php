@@ -9,7 +9,7 @@
         <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Banners</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">Banner</li>
+            <li class="breadcrumb-item">Ad Banner</li>
             <li class="breadcrumb-item active" aria-current="page">List</li>
           </ol>
         </nav>
@@ -23,7 +23,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">My Banners</h3>
+        <h3 class="block-title">Banners</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -100,7 +100,4 @@
     <!-- END Full Table -->
 
   </div>
-
-
-
   @endsection

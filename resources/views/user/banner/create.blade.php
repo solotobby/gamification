@@ -49,6 +49,8 @@
     @endif
 
 
+
+
     <form action="{{ url('banner') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="block block-rounded">
@@ -58,7 +60,9 @@
                 <div class="row items-push">
                 <div class="col-lg-3">
                     <p class="text-muted">
-                    Give detailed description of the banner
+                    Give detailed description of the banner 
+
+                    <?php $wallet = auth()->user()->wallet->balance; ?>
                     </p>
                 </div>
 
@@ -166,12 +170,14 @@
                 <button type="submit" class="btn btn-alt-primary" id="submitButton">
                   <i class="fa fa-plus opacity-50 me-1"></i> Post Banner
                 </button>
+                {{-- <span id="message"></span> --}}
               </div>
             </div>
           </div>
 
         </div>
     </form>
+    <input type="hidden" id="walletBalance" value="{{ auth()->user()->wallet->balance }}">
 
   </div>
 
@@ -191,11 +197,7 @@
     $(document).ready(function(){ 
         // const submitButton = document.getElementById("submitButton");
         // submitButton.disabled = true;
-
-
-
         function calculateTotal() {
-
             // Initialize the total
             let total = 0;
 
@@ -232,16 +234,21 @@
 
             // console.log(total);
 
-            var finalTotal = total * 500;
-            const submitButton = document.getElementById("submitButton");
-            const calculated = finalTotal;
-            const walletBalance = 10000;
-            
-            if (walletBalance < calculated) {
-                submitButton.disabled = false;
-            }else{
-                submitButton.disabled = true;
-            }
+
+                var finalTotal = total * 25;
+                const submitButton = document.getElementById("submitButton");
+                // const message = document.getElementById("message").innerHTML;
+                const calculated = finalTotal;
+                const walletBalance = document.getElementById("walletBalance").value;
+
+                console.log(walletBalance);
+                
+                if(calculated > walletBalance){
+                    submitButton.disabled = true;
+                }else{
+                    submitButton.disabled = false;
+                    // message = 'you do not have surficient balance';
+                }
 
             // Display the total in the "totalValue" span
             document.getElementById('totalValue').textContent = finalTotal.toFixed(2);
