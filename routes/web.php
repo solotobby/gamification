@@ -18,7 +18,6 @@
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ConversionRateController;
-use App\Http\Controllers\FundsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SafeLockController;
 
