@@ -45,8 +45,6 @@ class SafeLockController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-
         $interest_rate = 5;
         $amount_locked = $request->amount;
         $duration = $request->duration;
@@ -57,7 +55,8 @@ class SafeLockController extends Controller
         if($request->source == 'wallet'){
 
             if(auth()->user()->wallet->balance < $amount_locked){
-                return back()->with('error', 'Insurficent balance, please top up wallet or use the paystack option');
+                return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
+                // or use the paystack option
             }
             
             debitWallet(auth()->user(), 'Naira', $amount_locked);
@@ -75,10 +74,8 @@ class SafeLockController extends Controller
                     'description' => 'Created a SafeLock'
                 ]);
 
-                return back()->with('success', 'SafeLock Created Successfully');
+                return back()->with('success', 'Safelock Created Successfully');
             }
-
-           
         }else{
 
         }
