@@ -16,6 +16,7 @@
 // use Illuminate\Support\Facades\App;
 
 use App\Http\Controllers\Admin\PreferenceController;
+use App\Http\Controllers\Admin\SafeLockController as AdminSafeLockController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\NotificationController;
@@ -319,6 +320,7 @@ Route::resource('conversions', ConversionRateController::class);
 Route::get('change/completed/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'changeCompleted']);
 Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::class, 'index']);
 
+
 //Campaign metrics
 Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/campaign/disputes', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputes']);
@@ -331,3 +333,6 @@ Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 
 Route::get('admin/dashboard/api', [\App\Http\Controllers\HomeController::class, 'adminApi']);
 Route::get('admin/dashboard/api/default', [\App\Http\Controllers\HomeController::class, 'adminApiDefault']);
 Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
+
+
+Route::resource('admin/safelock', AdminSafeLockController::class);

@@ -9,6 +9,14 @@
       </li> 
 
       <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/safelock') }}">
+          <i class="nav-main-link-icon fa fa-th"></i>
+          <span class="nav-main-link-name">Safelock Mgt</span>
+          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li> 
+
+      <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-star"></i>
           <span class="nav-main-link-name">Campaigns</span>
@@ -147,6 +155,7 @@
           </li>
         </ul>
       </li>
+      
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
