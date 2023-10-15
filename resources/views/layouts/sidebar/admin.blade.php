@@ -56,11 +56,11 @@
               <span class="nav-main-link-name">Approved</span>
             </a>
           </li>
-          <li class="nav-main-item">
+          {{-- <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('unapproved') }}">
               <span class="nav-main-link-name">Unapproved</span>
             </a>
-          </li>
+          </li> --}}
         </ul>
       </li>
 
