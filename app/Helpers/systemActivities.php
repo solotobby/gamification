@@ -93,7 +93,8 @@ class SystemActivities{
                 'completed' => $c, //$value->completed_count+$value->pending_count,
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
-                'currency' => $value->currency
+                'currency' => $value->currency,
+                'created_at' => $value->created_at
             ];
         }
 

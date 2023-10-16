@@ -4,6 +4,7 @@ use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\Banner;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\ConversionRate;
@@ -472,3 +473,18 @@ if(!function_exists('countryList')){
         return $users;
     }
 }
+
+
+if(!function_exists('adBanner')){
+    function adBanner(){
+       $banners =  Banner::where('status', false)->get(['banner_id', 'banner_url', 'external_link']);
+        $list = [];
+       
+        foreach($banners as $ban){
+            $explodes = explode("/", $ban->banner_url);
+            $list[] = ['banner_id' => $ban->banner_id, 'banner_url' => $ban->banner_url, 'external_link' => $ban->external_link, 'img' =>$explodes[4]];
+        }
+       return $list;
+    }
+}
+

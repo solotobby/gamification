@@ -94,6 +94,22 @@
   .text2 {
       color: #a5aec0
   }
+
+
+  /*  */
+
+  .slideshows {
+    width: 100%;
+    /* margin: auto; */
+    position: relative;
+    /* object-fit: scale-down; */
+  }
+
+  .slides {
+    display: none;
+  }
+
+
   </style>
 @endsection
 
@@ -239,22 +255,16 @@
           @endif --}}
 
             <h2 class="content-heading">
-                <i class="fa fa-briefcase text-muted me-1"></i> Available jobs
+                <i class="fa fa-briefcase text-muted me-1"></i> Available Jobs
             </h2>
               <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+              
               {{-- Campaign list --}}
               <div class="col-lg-12">
                   <ul class="nav nav-tabs nav-tabs-block align-items-center" role="tablist">
                     <li class="nav-item">
                       <button class="nav-link active" id="btabswo-static-home-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-home" role="tab" aria-controls="btabswo-static-home" aria-selected="true">Available Jobs</button>
                     </li>
-                    {{-- 
-                      <li class="nav-item">
-                      <button class="nav-link" id="btabswo-static-profile-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-profile" role="tab" aria-controls="btabswo-static-profile" aria-selected="false">Profile</button>
-                      </li> 
-                    --}}
-                    
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="btabswo-static-home" role="tabpanel" aria-labelledby="btabswo-static-home-tab">
@@ -391,6 +401,7 @@
  
 
  <script>
+
   function myFunction() {
     var copyText = document.getElementById("myInput");
     copyText.select();
@@ -405,6 +416,41 @@
     var tooltip = document.getElementById("myTooltip");
     tooltip.innerHTML = "Copy to clipboard";
   }
+
+
+  // set index and transition delay
+    let index = 0;
+    let transitionDelay = 5000;
+
+    // get div containing the slides
+    let slideContainer = document.querySelector(".slideshow");
+    // get the slides
+    let slides = slideContainer.querySelectorAll(".slide");
+
+    // set transition delay for slides
+    for (let slide of slides) {
+      slide.style.transition = `all ${transitionDelay/1000}s linear`;
+    }
+
+    // show the first slide
+    showSlide(index);
+
+    // show a specific slide
+    function showSlide(slideNumber) {
+      slides.forEach((slide, i) => {
+        slide.style.display = i == slideNumber ? "block" : "none";
+      });
+      // next index
+      index++;
+      // go back to 0 if at the end of slides
+      if (index >= slides.length) {
+        index = 0;
+      }
+    }
+
+    // transition to next slide every x seconds
+    setInterval (() => showSlide(index), transitionDelay);
+  
   </script>
 
 @endsection

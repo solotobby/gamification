@@ -179,6 +179,7 @@ Route::get('api/banner/resources', [\App\Http\Controllers\BannerController::clas
 
 Route::resource('safelock', SafeLockController::class);
 
+Route::get('ad/{id}/view', [\App\Http\Controllers\BannerController::class, 'adView']);
 
 Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
 Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);

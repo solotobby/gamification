@@ -418,12 +418,14 @@ class AdminController extends Controller
 
     public function unapprovedJobs(){
         
-        $currentTime = Carbon::now();
-        $twentyFourHoursAgo = $currentTime->subHours(24);
+        // $currentTime = Carbon::now();
+        // $twentyFourHoursAgo = $currentTime->subHours(24);
 
-        $list = CampaignWorker::where('status', 'Pending')
-        ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
+        // $list = CampaignWorker::where('status', 'Pending')
+        // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
         // ->orderBy('created_at', 'DESC')->paginate(200);
+
+         $list = SystemActivities::availableJobs();
 
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
