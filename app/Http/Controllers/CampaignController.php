@@ -496,26 +496,23 @@ class CampaignController extends Controller
     {
         if(auth()->user()->hasRole('admin')){
             
-            $camss = Campaign::where('job_id', $id)->first();
+            $cam = Campaign::where('job_id', $id)->first();
             
-            $approved = $camss->completed()->where('status', 'Approved')->count();
+            $approved = $cam->completed()->where('status', 'Approved')->count();
 
-            $remainingNumber = $camss->number_of_staff - $approved; 
+            $remainingNumber = $cam->number_of_staff - $approved; 
 
-            $data['completed'] =  $approved;
-            $data['staffs'] =  $camss->number_of_staff;
-             $data['remaining'] = $remainingNumber;
-
-             return $data;
+            $count =  $remainingNumber;
 
         }else{
             $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
             if(!$cam){
                 return redirect('home');
             }
+            $count = 0;
         }
        
-       return view('user.campaign.activities', ['lists' => $cam]);
+       return view('user.campaign.activities', ['lists' => $cam, 'count' => $count]);
     }
 
     public function pauseCampaign($id){
