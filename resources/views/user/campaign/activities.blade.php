@@ -78,7 +78,7 @@
                 
             @if(auth()->user()->hasRole('admin'))
 
-                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->take($count)->get() as $list)
+                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->where('status', 'Pending')->take($count)->get() as $list)
                       <tr>
                         <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
                         <td>
