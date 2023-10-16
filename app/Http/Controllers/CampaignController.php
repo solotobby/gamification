@@ -494,10 +494,16 @@ class CampaignController extends Controller
 
     public function activities($id)
     {
-       $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
-        if(!$cam){
-            return redirect('home');
+        if(auth()->user()->hasRole('admin')){
+            
+            $cam = Campaign::where('job_id', $id)->first();
+        }else{
+            $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
+            if(!$cam){
+                return redirect('home');
+            }
         }
+       
        return view('user.campaign.activities', ['lists' => $cam]);
     }
 

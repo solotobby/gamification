@@ -195,4 +195,12 @@ class BannerController extends Controller
     public function bannerResources(){
         return auth()->user()->wallet->balance;
     }
+
+    public function adView($bannerId){
+        $ban = Banner::where('banner_id', $bannerId)->first();
+        $ban->impression += 1;
+        $ban->clicks += 1;
+        $ban->save();
+        return redirect($ban->external_link);
+    }
 }

@@ -197,6 +197,7 @@
                     <th>Amount</th>
                     <th>Status</th>
                     <th>When Done</th>
+                    {{-- <th></th> --}}
                   </tr>
                 </thead>
                 <tbody>
@@ -219,6 +220,7 @@
                         <td>
                             {{ @$job->created_at }}
                         </td>
+                        
                       </tr>
                     @endforeach
                   
@@ -243,6 +245,7 @@
                     <th>No. of Worker</th>
                     <th>Total Value</th>
                     <th>When Done</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -264,6 +267,9 @@
                         <td>
                             {{ @$campaign->created_at }}
                         </td>
+                        <td>
+                          <a href="{{ url('campaign/activities/'.$campaign->job_id)  }}" class="btn btn-primary btn-sm">View Activities</a>
+                      </td>
                       </tr>
                     @endforeach
                   

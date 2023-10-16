@@ -67,9 +67,7 @@ class HomeController extends Controller
     {
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
-        // if(auth()->user()->is_blacklisted){
-
-        // }
+        
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }
@@ -77,17 +75,25 @@ class HomeController extends Controller
         if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
             return redirect('survey');
         }
+        
         $balance = '';
         if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
             $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         }
         ///set User currency
-        // $activity_log = SystemActivities::showActivityLog(); 'activity_log' => $activity_log,
+        //$activity_log = SystemActivities::showActivityLog();
+
         $badgeCount = SystemActivities::badgeCount();
+        
         $available_jobs = SystemActivities::availableJobs();
+        
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
+        
         $announcement = Announcement::where('status', true)->first();
-        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement]);
+        
+        $ads = adBanner();
+        
+        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement, 'ads' => $ads]);
     }
 
     public function howTo(){
