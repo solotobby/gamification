@@ -32,7 +32,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'pending')->count() }} 
           | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
           | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
           @if($lists->currency == 'NGN')
@@ -60,6 +60,8 @@
         @endif
 
         <div class="table-responsive">
+          <form action="{{ url('mass/approval') }}" method="POST">
+            @csrf 
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
@@ -70,8 +72,33 @@
                 <th>Action</th>
               </tr>
             </thead>
+            
             <tbody>
+              
                 @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
+                @if(auth()->user()->hasRole('admin'))
+                    <tr>
+                      <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
+                      <td>
+                          {{ @$list->user->name }}
+                          </td>
+                      <td>
+                      {{ @$list->campaign->post_title }}
+                      </td>
+                      <td>
+                        @if($list->campaign->currency == 'NGN')
+                          &#8358;{{ $list->amount }}
+                          @else
+                          ${{ $list->amount }}
+                          @endif
+                      </td>
+                      <td>{{ $list->status }}</td>
+                      
+                  </tr>
+
+
+                @else
+
                     <tr>
                         <td>
                             {{ @$list->user->name }}
@@ -146,11 +173,17 @@
                           </div>
                         </div>
                     </div>
+                    @endif
 
              @endforeach
               
             </tbody>
+            
           </table>
+            @if(auth()->user()->hasRole('admin'))
+                <button class="btn btn-primary mb-2" type="submit">Approve All</button>
+              @endif
+        </form>
         </div>
       </div>
     </div>
