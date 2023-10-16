@@ -75,31 +75,12 @@
             
             <tbody>
               
-                @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
-                @if(auth()->user()->hasRole('admin'))
-                    <tr>
-                      <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
-                      <td>
-                          {{ @$list->user->name }}
-                          </td>
-                      <td>
-                      {{ @$list->campaign->post_title }}
-                      </td>
-                      <td>
-                        @if($list->campaign->currency == 'NGN')
-                          &#8358;{{ $list->amount }}
-                          @else
-                          ${{ $list->amount }}
-                          @endif
-                      </td>
-                      <td>{{ $list->status }}</td>
-                      
-                  </tr>
+                
+            @if(auth()->user()->hasRole('admin'))
 
-
-                @else
-
-                    <tr>
+                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->take($count)->get() as $list)
+                      <tr>
+                        <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
                         <td>
                             {{ @$list->user->name }}
                             </td>
@@ -114,69 +95,93 @@
                             @endif
                         </td>
                         <td>{{ $list->status }}</td>
-                        <td>
-                            @if($list->status == 'Pending')
-                            
-                                @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
-                                    <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
-                                @else
-                                    <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>
-                                @endif
-
-                              @else
-                                <a href="#" class="btn btn-alt-info btn-sm disabled">Completed</a>
-                            @endif
-                        </td>
+                        <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
+                        
                     </tr>
+                  @endforeach
 
-                     <!-- Pop Out Default Modal -->
-                    <div class="modal fade" id="modal-default-popout-{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                              <h5 class="modal-title">Respond to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
+            @else
 
-                              <div class="modal-body pb-1">
-                                  {!! $list->comment !!}
-
-                                  @if($list->proof_url != null)
-                                    <hr>
-                                    <h5>Proof of work Image</h5>
-                                    <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
-                                    @else
-                                    <div class="alert alert-warning text-small">
-                                      No Image attached
-                                    </div>
-                                  @endif
-                                  <hr>
-                                  <form action="{{ route('campaign.decision') }}" method="POST">
-                                    @csrf
-                                    <div class="mb-4">
-                                      <label class="form-label" for="post-files">Reason</small></label>
-                                          <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
-                                    </div>
-                                    <input type="hidden" name="id" value="{{ $list->id }}">
-                                    <div class="mb-4">
-                                      <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
-                                      <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button>
-                                    </div>
-                                  </form>
-                                  <br>
-                              </div>
+                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
+                      <tr>
+                          <td>
+                              {{ @$list->user->name }}
+                              </td>
+                          <td>
+                          {{ @$list->campaign->post_title }}
+                          </td>
+                          <td>
+                            @if($list->campaign->currency == 'NGN')
+                              &#8358;{{ $list->amount }}
+                              @else
+                              ${{ $list->amount }}
+                              @endif
+                          </td>
+                          <td>{{ $list->status }}</td>
+                          <td>
+                              @if($list->status == 'Pending')
                               
-                              <div class="modal-footer">
-                              <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                              {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                    @endif
+                                  @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
+                                      <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
+                                  @else
+                                      <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button>
+                                  @endif
 
-             @endforeach
-              
+                                @else
+                                  <a href="#" class="btn btn-alt-info btn-sm disabled">Completed</a>
+                              @endif
+                          </td>
+                      </tr>
+
+                      <!-- Pop Out Default Modal -->
+                      <div class="modal fade" id="modal-default-popout-{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-popout modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title">Respond to <i>{{$list->campaign->post_title}}</i> </h5> |  &#8358; {{ $list->amount }}
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body pb-1">
+                                    {!! $list->comment !!}
+
+                                    @if($list->proof_url != null)
+                                      <hr>
+                                      <h5>Proof of work Image</h5>
+                                      <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+                                      @else
+                                      <div class="alert alert-warning text-small">
+                                        No Image attached
+                                      </div>
+                                    @endif
+                                    <hr>
+                                    <form action="{{ route('campaign.decision') }}" method="POST">
+                                      @csrf
+                                      <div class="mb-4">
+                                        <label class="form-label" for="post-files">Reason</small></label>
+                                            <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+                                      </div>
+                                      <input type="hidden" name="id" value="{{ $list->id }}">
+                                      <div class="mb-4">
+                                        <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
+                                        <button type="submit" name="action" value="deny" class="btn btn-danger"><i class="fa fa-times"></i> Deny</button>
+                                      </div>
+                                    </form>
+                                    <br>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                                {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                    
+
+                  @endforeach
+
+            @endif
             </tbody>
             
           </table>
