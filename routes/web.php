@@ -126,7 +126,7 @@ Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurv
 Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'index']);
 
 //virtual account routes
-Route::post('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
+Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
 
 Route::get('info', [\App\Http\Controllers\UserController::class, 'info']);
 Route::get('conversion', [\App\Http\Controllers\UserController::class, 'conversion']);
