@@ -16,7 +16,7 @@
         <a class="nav-main-link" href="{{ url('safelock') }}">
           <i class="nav-main-link-icon fa fa-snowflake"></i>
           <span class="nav-main-link-name">Safelock Funds</span>   
-          <span class="nav-main-link-badge badge rounded-pill bg-default">5%</span>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
         </a>
       </li>
 
