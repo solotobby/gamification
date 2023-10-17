@@ -23,6 +23,7 @@ use App\Models\Games;
 use App\Models\MarketPlaceProduct;
 use App\Models\PaymentTransaction;
 use App\Models\ProductType;
+use App\Models\Profile;
 use App\Models\Question;
 use App\Models\Referral;
 use App\Models\Reward;
@@ -324,6 +325,11 @@ class AdminController extends Controller
                     $referee = Referral::where('user_id',  $getUser->id)->first();
                     
                     if($referee){
+
+                        $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
+
+                        if(!$refereeInfo){
+                        
                             $wallet = Wallet::where('user_id', $referee->referee_id)->first();
                             $wallet->balance += 500;
                             $wallet->save();
@@ -363,6 +369,12 @@ class AdminController extends Controller
                                 'tx_type' => 'Credit',
                                 'user_type' => 'admin'
                             ]);
+                            
+                        }else{
+                            $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                            $refereeUpdate->is_paid = true;
+                            $refereeUpdate->save();
+                        }
 
                     }else{
 
@@ -870,6 +882,16 @@ class AdminController extends Controller
             echo "You are not suppose to be doing this!";
         }
         
+    }
+
+    public function adminCelebrity(Request $request){
+        
+        $userInfor = User::where('id', $request->user_id)->first();
+        $userInfor->referral_code = $request->referral_code;
+        $userInfor->save();
+
+        $userInfor->profile()->update(['is_celebrity' => true]);
+        return back()->with('success', 'User Updated to Celebrity Successfully');
     }
 
     public function campaignCompleted(){

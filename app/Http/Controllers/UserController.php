@@ -9,6 +9,7 @@ use App\Helpers\SystemActivities;
 use App\Mail\UpgradeUser;
 use App\Models\DataBundle;
 use App\Models\PaymentTransaction;
+use App\Models\Profile;
 use App\Models\Referral;
 use App\Models\Usdverified;
 use App\Models\User;
@@ -132,12 +133,20 @@ class UserController extends Controller
 
     public function makePayment()
     {
-        $user = Auth::user();
+       $user = Auth::user();
+        $referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        $profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        $amount = 0;
+        if($profile_celebrity){
+            $amount = 920;
+        }else{
+            $amount = 1050;
+        }
         
         if(auth()->user()->wallet->base_currency == 'Naira'){
             $ref = time();
-            $url = PaystackHelpers::initiateTrasaction($ref, 1050, '/upgrade/payment');
-            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
+            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/upgrade/payment');
+            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
             return redirect($url);
         }else{
             $percent = 5/100 * 2;
@@ -210,35 +219,46 @@ class UserController extends Controller
     
                if($referee){
 
-                $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                $wallet->balance += 500;
-                $wallet->save();
-               
-                $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                $refereeUpdate->is_paid = true;
-                $refereeUpdate->save();
+                    $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
 
-                ///Transactions
-                $description = 'Referer Bonus from '.auth()->user()->name;
-                PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
-  
-                $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 500;
-                $adminWallet->save();
+                    if(!$refereeInfo){
+                        $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                        $wallet->balance += 500;
+                        $wallet->save();
+                    
+                        $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                        $refereeUpdate->is_paid = true;
+                        $refereeUpdate->save();
+        
+                        ///Transactions
+                        $description = 'Referer Bonus from '.auth()->user()->name;
+                        PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+        
+                        $adminWallet = Wallet::where('user_id', '1')->first();
+                        $adminWallet->balance += 500;
+                        $adminWallet->save();
+        
+                        //Admin Transaction Table
+                        $description = 'Referer Bonus from '.auth()->user()->name;
+                        PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+                    
+                    }else{
+                        $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                        $refereeUpdate->is_paid = true;
+                        $refereeUpdate->save();
+                    }
 
-                //Admin Transaction Table
-                $description = 'Referer Bonus from '.auth()->user()->name;
-                 PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
-               }else{
-                $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 1000;
-                $adminWallet->save();
-                 //Admin Transaction Tablw
-                $description = 'Direct Referer Bonus from '.auth()->user()->name;
-                PaystackHelpers::paymentTrasanction(1, '1', time(), 1000, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
+
+                }else{
+                    $adminWallet = Wallet::where('user_id', '1')->first();
+                    $adminWallet->balance += 1000;
+                    $adminWallet->save();
+                    //Admin Transaction Tablw
+                    $description = 'Direct Referer Bonus from '.auth()->user()->name;
+                    PaystackHelpers::paymentTrasanction(1, '1', time(), 1000, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
                }
-               Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-               return redirect('success');
+                    Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+                    return redirect('success');
 
             }else{
                 return redirect('upgrade');
@@ -283,20 +303,29 @@ class UserController extends Controller
         //     return back()->with('error', 'Your balance is too low');
         // }
 
-
-        if(auth()->user()->wallet->balance >= 500){
+        $user = Auth::user();
+        $referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        $profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        $amount = 0;
+        if($profile_celebrity){
+            $amount = 920;
+        }else{
+            $amount = 1050;
+        }
+        
+        if(auth()->user()->wallet->balance >= $amount){
 
         
         $ref = time();
         $userWallet = Wallet::where('user_id', auth()->user()->id)->first();
          //debit  User wallet firs
-         $userWallet->balance -= 1050;
+         $userWallet->balance -= $amount;
          $userWallet->save();
 
          $name = SystemActivities::getInitials(auth()->user()->name);
          SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
          
-         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, 1000, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
         
            $user = User::where('id', auth()->user()->id)->first();
            $user->is_verified = true;
@@ -305,27 +334,36 @@ class UserController extends Controller
            $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
            
            if($referee){
-            $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-            $wallet->balance += 500;
-            $wallet->save();
+            $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
 
-            $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-            $refereeUpdate->is_paid = true;
-            $refereeUpdate->save();
+                if(!$refereeInfo){
+                    $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                    $wallet->balance += 500;
+                    $wallet->save();
+                
+                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                    $refereeUpdate->is_paid = true;
+                    $refereeUpdate->save();
+    
+                    ///Transactions
+                    $description = 'Referer Bonus from '.auth()->user()->name;
+                    PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+    
+                    $adminWallet = Wallet::where('user_id', '1')->first();
+                    $adminWallet->balance += 500;
+                    $adminWallet->save();
+    
+                    //Admin Transaction Table
+                    $description = 'Referer Bonus from '.auth()->user()->name;
+                    PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+                
+                }else{
+                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                    $refereeUpdate->is_paid = true;
+                    $refereeUpdate->save();
+                }
 
-            ///Transactions
-            $description = 'Referer Bonus from '.auth()->user()->name;
-            PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
-
-
-            $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += 500;
-            $adminWallet->save();
-
-            //Admin Transaction Table
-            $description = 'Referer Bonus from '.auth()->user()->name;
-            PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
-
+            
            }else{
             $adminWallet = Wallet::where('user_id', '1')->first();
             $adminWallet->balance += 1000;
