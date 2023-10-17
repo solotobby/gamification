@@ -23,7 +23,7 @@ class VirtualAccountController extends Controller
             // "first_name"=> $name[0],
             // "last_name"=> isset($name[1]) ? $name[1] : 'Freebyz',
             // "phone"=> auth()->user()->phone
-            
+
             "email"=> "solotobz5@gmail.com",
             "first_name"=> "Oluwatobi",
             "last_name"=> "Solomon",
@@ -33,7 +33,7 @@ class VirtualAccountController extends Controller
 
         $data = [
             "customer"=> $res['data']['customer_code'], 
-            "preferred_bank"=>"test-bank"
+            "preferred_bank"=>"wema-bank"
         ];
 
         // $payload = [
