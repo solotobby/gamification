@@ -378,13 +378,15 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
+    {{-- @elseif(!auth()->user()->accountDetails)
+      
+      @include('layouts.resources.account_details') --}}
+
+
     @elseif(auth()->user()->is_verified == 0)
     
         @include('layouts.resources.unverified')
 
-      {{-- @else
-        @include('layouts.resources.repository') --}}
-      
     @endif
     
 @endsection
