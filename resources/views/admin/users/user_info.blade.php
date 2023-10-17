@@ -11,6 +11,7 @@
       <form action="be_pages_generic_search.html" method="POST">
         <div class="input-group input-group-lg">
           Name: {{$info->name}} <br>
+          Rferred By: {{@$referredBy->name}} <br>
           Email: {{$info->email}} <br>
           Naira Balance: &#8358;{{number_format(@$info->wallet->balance,2)}} <br>
           USD Balance: ${{number_format(@$info->wallet->usd_balance,2)}} <br>

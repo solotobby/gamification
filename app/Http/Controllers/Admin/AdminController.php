@@ -279,7 +279,9 @@ class AdminController extends Controller
 
     public function userInfo($id){
         $info = User::where('id', $id)->first();
-        return view('admin.users.user_info', ['info' => $info]);
+        @$user = Referral::where('user_id', $id)->first()->referee_id;
+        @$referredBy = User::where('id', $user)->first();
+        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy]);
     }
 
     public function adminUserReferrals($id){
