@@ -11,7 +11,8 @@
       <form action="be_pages_generic_search.html" method="POST">
         <div class="input-group input-group-lg">
           Name: {{$info->name}} <br>
-          Rferred By: {{@$referredBy->name}} <br>
+          Referred By: {{@$referredBy->name}} <br>
+          Referral Code: {{@$info->referral_code}} <br>
           Email: {{$info->email}} <br>
           Naira Balance: &#8358;{{number_format(@$info->wallet->balance,2)}} <br>
           USD Balance: ${{number_format(@$info->wallet->usd_balance,2)}} <br>
@@ -25,6 +26,7 @@
           Bank Name: {{ @$info->accountDetails->bank_name }} <br>
           Account Number:{{ @$info->accountDetails->account_number }}<br>
           Blocked: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
+          Celebrity Status: {{ @$info->profile->is_celebrity == true ? 'Yes' : 'No' }}<br>
         </div>
       </form>
     </div>
@@ -336,6 +338,32 @@
                   </div>
                 </div>
               </form>
+
+              <hr>
+                      <h4 class="fw-normal text-muted text-center">
+                        Turn a User to Celebrity account. (They will not benefit from referral bonuses and there will bw a 10% discount on verification)
+                      </h4>
+
+                      <form action="{{ route('admin.celebrity') }}" method="POST">
+                        @csrf
+                        <div class="form-row align-items-center">
+                          <div class="col-auto">
+                            <div class="input-group mb-4">
+                              <div class="input-group-prepend">
+                                <div class="input-group-text">*</div>
+                              </div>
+                              <input type="text" class="form-control" name="referral_code" placeholder="Enter Code" required>
+                            </div>
+                            <input type="hidden" name="user_id" value="{{ $info->id }}">
+                 
+                            <div class="col-auto">
+                              <button type="submit" class="btn btn-primary mb-2">Update</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+
+
             </div>
             <hr>
             <div class="bg-body-dark mb-5">
@@ -359,7 +387,6 @@
                           </a>
                           @endif
                       @else
-
                           @if(!$info->USD_verified)
                           <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
                             Verify User (USD) Now!
@@ -371,7 +398,7 @@
                           @endif
                       @endif
 
-
+                      
                       <hr>
                       <h5 class="fw-normal text-muted text-center mt-2">
                         Dead-end for this User!!!!
