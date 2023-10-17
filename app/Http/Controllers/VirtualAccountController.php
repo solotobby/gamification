@@ -33,7 +33,7 @@ class VirtualAccountController extends Controller
 
         $data = [
             "customer"=> $res['data']['customer_code'], 
-            "preferred_bank"=>"wema-bank"
+            "preferred_bank"=>"test-bank"
         ];
 
         // $payload = [

@@ -134,8 +134,8 @@ class UserController extends Controller
     public function makePayment()
     {
        $user = Auth::user();
-        $referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
-        $profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
         $amount = 0;
         if($profile_celebrity){
             $amount = 920;
@@ -304,8 +304,8 @@ class UserController extends Controller
         // }
 
         $user = Auth::user();
-        $referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
-        $profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
         $amount = 0;
         if($profile_celebrity){
             $amount = 920;
