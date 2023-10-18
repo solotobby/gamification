@@ -98,8 +98,7 @@
             <br>
             <center>
                 For manual funding, you can make transfers to 4600066074 (VFD BANK- Dominahltech services). 
-                Drop your evidence of payment and Freebyz email here within a maximum of 30 mins after payment 
-                then wait to be credited.
+                Drop your evidence of payment and Freebyz email via Talk to Us button on the menu bar. Thank you.
             </center>
              {{-- Manual Wallet funding, please credit the account below:
                <b>ACCOUNT DETAILS: 4600066074 
