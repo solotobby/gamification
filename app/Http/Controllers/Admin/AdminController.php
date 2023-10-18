@@ -369,7 +369,7 @@ class AdminController extends Controller
                                 'tx_type' => 'Credit',
                                 'user_type' => 'admin'
                             ]);
-                            
+
                         }else{
                             $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
                             $refereeUpdate->is_paid = true;
@@ -432,14 +432,14 @@ class AdminController extends Controller
 
     public function unapprovedJobs(){
         
-        // $currentTime = Carbon::now();
-        // $twentyFourHoursAgo = $currentTime->subHours(24);
+        $currentTime = Carbon::now();
+        $twentyFourHoursAgo = $currentTime->subHours(24);
 
-        // $list = CampaignWorker::where('status', 'Pending')
-        // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
+        $list = CampaignWorker::where('status', 'Pending')
+        ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
         // ->orderBy('created_at', 'DESC')->paginate(200);
 
-         $list = SystemActivities::availableJobs();
+        //  $list = SystemActivities::availableJobs();
 
         return view('admin.unapproved_list', ['campaigns' => $list]); 
     }
@@ -534,6 +534,7 @@ class AdminController extends Controller
 
 
     public function massApproval(Request $request){
+
        $ids = $request->id;
        if(empty($ids)){
         return back()->with('error', 'Please select at least one item');

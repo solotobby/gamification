@@ -64,7 +64,10 @@ Route::get('submit/answers', [\App\Http\Controllers\HomeController::class, 'subm
 Route::post('store/asnwer', [\App\Http\Controllers\HomeController::class, 'storeAnswer'])->name('store.answer');
 Route::get('score/list', [\App\Http\Controllers\HomeController::class, 'scores'])->name('score.list');
 Route::get('redeem/reward/{id}', [\App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
+
 Route::post('save/bank/information', [\App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
+Route::get('bank/information', [\App\Http\Controllers\HomeController::class, 'selectBankInformation']);
+
 Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
 
@@ -90,6 +93,7 @@ Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
 Route::get('campaign/my/submitted/{id}', [\App\Http\Controllers\CampaignController::class, 'mySubmittedCampaign']);
 Route::get('campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'activities']);
+Route::get('admin/campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'adminActivities']);
 Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);

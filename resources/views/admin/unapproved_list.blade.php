@@ -51,35 +51,33 @@
             @endif
 
 
-            {{-- <form action="{{ url('mass/approval') }}" method="POST">
-                @csrf --}}
+        <form action="{{ url('mass/approval') }}" method="POST">
+                @csrf
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Camp. Name</th>
-                   
                     <th>Amount</th>
                     <th>Currency</th>
-                    
-                    {{-- <th>When Created</th> --}}
+                    <th>When Created</th>
                     <th></th>
                     </tr>
             </thead>
             <tbody>
               <?php $i = 1; ?>
-              @foreach ($campaigns as $list)
+
+              {{-- @foreach ($campaigns as $list) 
               <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{ $list['post_title'] }}</td>
                 <td>{{ $list['campaign_amount'] }}</td>
                 <td>{{ $list['currency'] }}</td>
-                {{-- <td>{{ \Carbon\Carbon::parse($list['created_at'])->diffForHumans() }}</td> --}}
-                <td><a href="{{ url('campaign/activities/'.$list['job_id'])  }}" class="btn btn-primary btn-sm">View</a></td>
+                {{-- <td>{{ \Carbon\Carbon::parse($list['created_at'])->diffForHumans() }}</td> 
+                <td><a href="{{ url('admin/campaign/activities/'.$list['job_id'])  }}" class="btn btn-primary btn-sm">View</a></td>
               </tr>
-              @endforeach
+              @endforeach --}}
                 
-                {{-- 
                 @foreach ($campaigns as $list)
                     <tr>
                         <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
@@ -90,16 +88,16 @@
                         <td>{{ $list->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
                     </tr>
-                @endforeach --}}
+                @endforeach
               
             </tbody>
           </table>
-          {{-- <button class="btn btn-primary mb-2" type="submit">Approve All</button>
-            </form> --}}
+          <button class="btn btn-primary mb-2" type="submit">Approve All</button>
+            </form>
         </div>
-        {{-- <div class="d-flex">
+        <div class="d-flex">
           {!! $campaigns->links('pagination::bootstrap-4') !!}
-        </div> --}}
+        </div>
       </div>
     </div>
     <!-- END Full Table -->

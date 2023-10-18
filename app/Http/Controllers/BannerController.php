@@ -46,7 +46,9 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+       
+
         $request->validate([
             'banner_url' => 'required|image|mimes:png,jpeg,gif,jpg',
             'count' => 'required|array|min:5',
@@ -57,10 +59,6 @@ class BannerController extends Controller
             'external_link' => 'required|string',
             'duration' => 'required|string',
         ]);
-
-       
-
-        //return explode("|",$request->count);
 
         $lissy = [];
         foreach($request->count as $res){
@@ -87,15 +85,22 @@ class BannerController extends Controller
 
         if($request->hasFile('banner_url')){
 
-
+            //s3 bucket processing
             $fileBanner = $request->file('banner_url');
-            $Bannername = time() . $fileBanner->getClientOriginalName();
+            $Bannername = time();// . $fileBanner->getClientOriginalName();
             $filePathBanner = 'adBanners/' . $Bannername;
-    
+            
             Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
             
-            
+
+            $fileBanner = $request->file('banner_url');
+            //process local storage
+            $imgName = time();
+            $Bannername =  $imgName.'.'.$request->banner_url->extension();//time();// . $fileBanner->getClientOriginalName();
+            $request->banner_url->move(public_path('banners'), $Bannername); //store in local storage
+
+        
 
             $banner['user_id'] = auth()->user()->id; 
             $banner['banner_id'] = Str::random(7);
@@ -107,7 +112,7 @@ class BannerController extends Controller
             $banner['country'] = $request->country;
             $banner['status'] = false;
             $banner['amount'] = $finalTotal;
-            $banner['banner_url'] = $bannerUrl;
+            $banner['banner_url'] = $Bannername; //;
             $banner['impression'] = 0;
             $banner['clicks'] = 0;
 

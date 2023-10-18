@@ -6,11 +6,10 @@
       <h3 class="block-title">Fund Wallet</h3>
     </div>
   <div class="block-content">
- 
+
     <form class="js-validation-reminder" action="{{ route('store.funds') }}" method="POST">
         @csrf
       <!-- Text -->
-
       <div class="mb-2 text-center content-heading mb-4">
         {{-- <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p> --}}
         <p class="link-fx fw-bold fs-1">
@@ -49,11 +48,11 @@
                 </div>
             @endif
 
-                <div class="col-md-12">
-                  <div class="alert alert-warning">
-                    <li class="fa fa-info"></li> Attention!! Please ensure you transfer the <strong>EXACT</strong> amount displayed on the transaction page, failure to do so may lead to loss of funds.
-                  </div>
-                </div>
+            <div class="col-md-12">
+              <div class="alert alert-warning">
+                <li class="fa fa-info"></li> Attention!! Please ensure you transfer the <strong>EXACT</strong> amount displayed on the transaction page, failure to do so may lead to loss of funds.
+              </div>
+            </div>
             <div class="mb-4">
               @if(auth()->user()->wallet->base_currency == 'Naira')
               <div class="input-group">

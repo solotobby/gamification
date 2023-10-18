@@ -7,7 +7,9 @@
     });
   </script>
 @endsection
+
 @section('content')
+
 
 <div class="bg-body-light">
     <div class="content content-full">
@@ -20,9 +22,10 @@
           </ol>
         </nav>
       </div>
+     </div>
     </div>
-  </div>
-  <!-- Page Content -->
+
+
   <div class="content">
     <!-- Full Table -->
     <div class="block block-rounded">
@@ -55,6 +58,8 @@
         @endif
 
         <div class="table-responsive">
+          <form action="{{ url('mass/approval') }}" method="POST">
+            @csrf 
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
@@ -66,6 +71,32 @@
               </tr>
             </thead>
             <tbody>
+                
+            @if(auth()->user()->hasRole('admin'))
+
+                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->where('status', 'Pending')->take($count)->get() as $list)
+                      <tr>
+                        <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
+                        <td>
+                            {{ @$list->user->name }}
+                            </td>
+                        <td>
+                        {{ @$list->campaign->post_title }}
+                        </td>
+                        <td>
+                          @if($list->campaign->currency == 'NGN')
+                            &#8358;{{ $list->amount }}
+                            @else
+                            ${{ $list->amount }}
+                          @endif
+                        </td>
+                        <td>{{ $list->status }}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
+                        
+                    </tr>
+                  @endforeach
+
+            @else
 
                   @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
                       <tr>
@@ -142,20 +173,23 @@
                             </div>
                           </div>
                       </div>
+                    
+
                   @endforeach
+
+            @endif
             </tbody>
+            
           </table>
+            @if(auth()->user()->hasRole('admin'))
+                <button class="btn btn-primary mb-2" type="submit">Approve All</button>
+              @endif
         </form>
         </div>
       </div>
     </div>
     <!-- END Full Table -->
   </div>
-@endsection
 
 
-@section('script')
-<script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
 @endsection

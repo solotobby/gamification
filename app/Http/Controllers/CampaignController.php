@@ -494,25 +494,14 @@ class CampaignController extends Controller
 
     public function activities($id)
     {
-        if(auth()->user()->hasRole('admin')){
-            
-            $cam = Campaign::where('job_id', $id)->first();
-            
-            $approved = $cam->completed()->where('status', 'Approved')->count();
-
-            $remainingNumber = $cam->number_of_staff - $approved; 
-
-            $count =  $remainingNumber;
-
-        }else{
+        
             $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
             if(!$cam){
                 return redirect('home');
             }
-            $count = 0;
-        }
        
-       return view('user.campaign.activities', ['lists' => $cam, 'count' => $count]);
+       
+       return view('user.campaign.activities', ['lists' => $cam]);
     }
 
     public function pauseCampaign($id){
@@ -578,7 +567,6 @@ class CampaignController extends Controller
 
                 setIsComplete($approve->campaign_id);
 
-
                 if($approve->campaign->currency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
@@ -619,6 +607,7 @@ class CampaignController extends Controller
             $status = 'Approved';
             Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
             return back()->with('success', 'Campaign Approve Successfully');
+
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'Denied';
@@ -833,5 +822,19 @@ class CampaignController extends Controller
 
         }
            
-    }    
+    } 
+    
+    public function adminActivities($id){
+
+        $cam = Campaign::where('job_id', $id)->first();
+            
+        $approved = $cam->completed()->where('status', 'Approved')->count();
+
+        $remainingNumber = $cam->number_of_staff - $approved;
+
+        $count =  $remainingNumber;
+
+        return view('admin.campaign_mgt.admin_activities', ['lists' => $cam, 'count' => $count]);
+
+    }
 }

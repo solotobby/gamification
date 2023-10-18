@@ -259,6 +259,10 @@
             </h2>
               <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               
+              {{-- <a href="">
+                  <img src="">
+              </a> --}}
+
               {{-- Campaign list --}}
               <div class="col-lg-12">
                   <ul class="nav nav-tabs nav-tabs-block align-items-center" role="tablist">
