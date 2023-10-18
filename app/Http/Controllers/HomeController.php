@@ -408,17 +408,25 @@ class HomeController extends Controller
 
     }
 
+    public function selectBankInformation(){
+        $bankList = PaystackHelpers::bankList();
+        return view('user.bank_information', ['bankList' => $bankList]);
+    }
+
     public function saveBankInformation(Request $request)
     {
+       return  $this->virtualAccountGeneration('Oluwatobi Daniel Solomon');
+
+
         $this->validate($request, [
-            'account_number' => 'numeric|required'
+            'account_number' => 'numeric|required|digits:10'
         ]);
         $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
 
         if($accountInformation['status'] == 'true')
         {
-             $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
-                BankInformation::create([
+            $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
+            $bankInfor = BankInformation::create([
                     'user_id' => auth()->user()->id,
                     'name' => $accountInformation['data']['account_name'],
                     'bank_name' => $recipientCode['data']['details']['bank_name'],
@@ -428,12 +436,44 @@ class HomeController extends Controller
                     'currency' => 'NGN'
                 ]);
 
+                $this->virtualAccountGeneration($accountInformation['data']['account_name']);
+
                 return back()->with('success', 'Account Details Added');
                 //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
         }else{
             return back()->with('error', 'Your bank account is not valid');
         }
        
+    }
+
+    public function virtualAccountGeneration($name){
+        
+       $splitedName = explode(" ", $name);
+       
+       
+       return  $payload = [
+            "email"=> auth()->user()->email,
+            "first_name"=> $splitedName[0],
+            "last_name"=> $splitedName[1],
+            "phone"=> "+2348137331282"
+        ];
+    //     $res = PaystackHelpers::createCustomer($payload);
+
+    //     $data = [
+    //         "customer"=> $res['data']['customer_code'], 
+    //         "preferred_bank"=>"test-bank"
+    //     ];
+
+    //   $response = PaystackHelpers::virtualAccount($data);
+
+    //   $datas['res'] = $res;
+    //   $datas['response'] = $response;
+
+    //   return $datas;
+
+    //   return back()->with('success', 'Account Created Succesfully');
+
+  
     }
 
     public function transferFund($amount, $recipient)

@@ -18,11 +18,10 @@
                   </h3>
 
                   <h4 class="fw-normal text-muted text-center">
-                    verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
-                    you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
+                    Click the button below to enter your bank details for fast and easy withdrawal
                    
                     <center>
-                      <a class="btn btn-hero btn-primary mt-3" href="{{route('upgrade')}}" data-toggle="click-ripple">
+                      <a class="btn btn-hero btn-primary mt-3" href="{{url('bank/information')}}" data-toggle="click-ripple">
                         Get Verified Now!
                       </a>
                       <br> 

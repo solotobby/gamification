@@ -19,20 +19,20 @@ class GeneralController extends Controller
 
     public function fix(){
 
-        //  $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
-        //  $list = [];
-        //  foreach($users as $user){
-        //     $formattedNumber = '';
-        //     $number = $user;//strlen(strval($user));
+         $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
+         $list = [];
+         foreach($users as $user){
+            $formattedNumber = '';
+            $number = $user;//strlen(strval($user));
             
-        //     $list[] =$number;
-        //  }
-        //  return $list;
+            $list[] =$number;
+         }
+         return $list;
 
         
-        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
-        $list = [];
-        foreach($campaigns as $key => $value){
+        // $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        // $list = [];
+        // foreach($campaigns as $key => $value){
             // $data['pending'] = 'Pending';
             // $data['approve'] = 'Approved';
             // $lisCamp = Campaign::where('id', $value->id)->first();
@@ -45,9 +45,9 @@ class GeneralController extends Controller
             // if($completed >= $value->number_of_staff){
             //     Campaign::where('id', $value->id)->update(['is_completed' => true]);
             // }
-        }
+        // }
 
-        return 'okay';
+        // return 'okay';
     }
 
 
