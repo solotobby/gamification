@@ -67,7 +67,7 @@
             </h4>
             <p class="mb-0 text-muted">
               Access to withdraw all your earnings and other juicy offers coming up shortly. 
-              You'll earn &#8358;12,500 on the friends you refer and we'll reward you with &#8358;5,000 extra.
+              You'll earn &#8358;25,000 on the friends you refer and we'll reward you with &#8358;5,000 extra.
             </p>
           </div>
           <div class="col-sm-6 col-md-6 mb-5">

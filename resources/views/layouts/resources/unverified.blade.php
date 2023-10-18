@@ -19,7 +19,7 @@
 
                   <h4 class="fw-normal text-muted text-center">
                     verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
-                    you will earn &#8358;12,500 plus &#8358;5,000 extra bonus from us. 
+                    you will earn &#8358;25,000 plus &#8358;5,000 extra bonus from us. 
                     {{-- <br>Got Payment Issues, transfer to 
                     {{-- 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
                     4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
