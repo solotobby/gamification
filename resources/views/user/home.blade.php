@@ -248,19 +248,19 @@
   
         <!-- Page Content -->
         <div class="content content-boxed content-full">
-          {{-- @if (session('success'))
+          @if (session('success'))
           <div class="alert alert-success" role="alert">
               {{ session('success') }}
           </div>
-          @endif --}}
+          @endif
 
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available Jobs
             </h2>
               <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               
-              {{-- <a href="">
-                  <img src="">
+              {{-- <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
+                  <img src="{{ url($ads->banner_url)  }}" width="100%" height="250" class="img-responsive">
               </a> --}}
 
               {{-- Campaign list --}}

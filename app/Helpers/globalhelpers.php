@@ -442,6 +442,20 @@ if(!function_exists('setIsComplete')){
         }
     }
 }
+if(!function_exists('setPendingCount')){
+    function setPendingCount($id){
+        $campaign = Campaign::where('id', $id)->first();
+        $campaign->number_of_staff;
+        if($campaign->pending_count == $campaign->number_of_staff){
+            $campaign->is_completed = true;
+            $campaign->save();
+            return 'OK';
+        }else{
+            return 'NOT OK';
+        }
+    }
+}
+
 
 
 if(!function_exists('listPreferences')){
@@ -481,7 +495,7 @@ if(!function_exists('adBanner')){
         $banner = Banner::inRandomOrder()->limit(1)->where('status', false)->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
         $banner->impression += 1;
         $banner->save();
-        
+
         //enter the impression infor
         BannerImpression::create(['user_id' => auth()->user()->id, 'banner_id' => $banner->id]);
         return $banner;
