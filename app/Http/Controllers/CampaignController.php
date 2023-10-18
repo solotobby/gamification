@@ -440,11 +440,7 @@ class CampaignController extends Controller
         // }
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
-
-         
-         $data['campaign'] = $campaign;
-
-        
+        $data['campaign'] = $campaign;
         if($request->hasFile('proof')){
          
             $fileBanner = $request->file('proof');
@@ -464,6 +460,9 @@ class CampaignController extends Controller
 
             $campaign->pending_count += 1;
             $campaign->save();
+
+           setPendingCount($campaign->id);
+
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
@@ -494,13 +493,10 @@ class CampaignController extends Controller
 
     public function activities($id)
     {
-        
-            $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
-            if(!$cam){
-                return redirect('home');
-            }
-       
-       
+        $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
+        if(!$cam){
+            return redirect('home');
+        }  
        return view('user.campaign.activities', ['lists' => $cam]);
     }
 
@@ -580,8 +576,6 @@ class CampaignController extends Controller
                     $wallet->usd_balance += $approve->amount;
                     $wallet->save();
                 }
-
-
 
             }
             

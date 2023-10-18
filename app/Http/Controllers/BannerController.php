@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\BannerClick;
 use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -94,11 +95,11 @@ class BannerController extends Controller
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
             
 
-            $fileBanner = $request->file('banner_url');
-            //process local storage
-            $imgName = time();
-            $Bannername =  $imgName.'.'.$request->banner_url->extension();//time();// . $fileBanner->getClientOriginalName();
-            $request->banner_url->move(public_path('banners'), $Bannername); //store in local storage
+            // $fileBanner = $request->file('banner_url');
+            // //process local storage
+            // $imgName = time();
+            // $Bannername =  $imgName.'.'.$request->banner_url->extension();//time();// . $fileBanner->getClientOriginalName();
+            // $request->banner_url->move(public_path('banners'), $Bannername); //store in local storage
 
         
 
@@ -112,7 +113,7 @@ class BannerController extends Controller
             $banner['country'] = $request->country;
             $banner['status'] = false;
             $banner['amount'] = $finalTotal;
-            $banner['banner_url'] = $Bannername; //;
+            $banner['banner_url'] =  $bannerUrl; //;
             $banner['impression'] = 0;
             $banner['clicks'] = 0;
 
@@ -206,6 +207,8 @@ class BannerController extends Controller
         $ban->impression += 1;
         $ban->clicks += 1;
         $ban->save();
+
+        BannerClick::create(['user_id' => auth()->user()->id, 'banner_id' => $ban->id]);
         return redirect($ban->external_link);
     }
 }
