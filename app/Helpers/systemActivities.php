@@ -101,11 +101,11 @@ class SystemActivities{
         //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         // Remove objects where 'is_completed' is true
-        // $filteredArray = array_filter($list, function ($item) {
-        //     return $item['is_completed'] !== true;
-        // });
+        $filteredArray = array_filter($list, function ($item) {
+            return $item['is_completed'] !== true;
+        });
       
-        return $list;
+        return $filteredArray;
     }
 
     public static function badgeCount(){
