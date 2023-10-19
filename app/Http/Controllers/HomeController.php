@@ -91,9 +91,9 @@ class HomeController extends Controller
         
         $announcement = Announcement::where('status', true)->first();
         
-        $ads = adBanner();
+        //$ads = adBanner();
         
-        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement, 'ads' => $ads]);
+        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement]);
     }
 
     public function howTo(){
