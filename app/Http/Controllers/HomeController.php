@@ -415,7 +415,7 @@ class HomeController extends Controller
 
     public function saveBankInformation(Request $request)
     {
-       return  $this->virtualAccountGeneration('Oluwatobi Daniel Solomon');
+       //return  $this->virtualAccountGeneration('Oluwatobi Daniel Solomon');
 
 
         $this->validate($request, [
