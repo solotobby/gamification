@@ -38,6 +38,7 @@ class PaystackHelpers{
 
     public static function recipientCode($name, $account_number, $bank_code)
     {
+
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -79,9 +80,6 @@ class PaystackHelpers{
             "currency"=> "NGN",
             "source"=> "balance", 
             "transfers"=> $transfers
-            // "amount"=> $amount, 
-            // "recipient"=> $recipient, 
-            // "reason"=> "Freebyz Withdrawal" 
         ]);
 
          return json_decode($res->getBody()->getContents(), true);

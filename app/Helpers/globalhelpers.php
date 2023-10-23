@@ -492,13 +492,18 @@ if(!function_exists('countryList')){
 
 if(!function_exists('adBanner')){
     function adBanner(){
-        $banner = Banner::inRandomOrder()->limit(1)->where('status', false)->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
-        $banner->impression += 1;
-        $banner->save();
+        $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
+       if(!$banner){
+            return '';
+       }else{
+            @$banner->impression += 1;
+            @$banner->save();
 
-        //enter the impression infor
-        BannerImpression::create(['user_id' => auth()->user()->id, 'banner_id' => $banner->id]);
-        return $banner;
+            //enter the impression infor
+            BannerImpression::create(['user_id' => auth()->user()->id, 'banner_id' => $banner->id]);
+            return $banner;
+       }
+       
     }
 }
 
