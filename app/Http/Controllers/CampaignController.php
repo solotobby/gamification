@@ -606,7 +606,7 @@ class CampaignController extends Controller
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'Denied';
             $deny->reason = $request->reason;
-            // $deny->pending_count -= 1;
+            $deny->pending_count -= 1;
             $deny->save();
             $subject = 'Job Denied';
             $status = 'Denied';
