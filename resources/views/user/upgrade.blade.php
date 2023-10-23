@@ -120,15 +120,15 @@
                     <i class="fa fa-link opacity-50 me-1"></i> Verify 
                   </a> --}}
                 
-                      @if(auth()->user()->wallet->balance >= 1050)
-                      <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-                        <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-                      </a>
-                      @else
-                      <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
-                        <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-                      </a>
-                      @endif
+                @if(auth()->user()->wallet->balance >= 1050)
+                <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                </a>
+                @else
+                <a href="#" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                </a>
+                @endif
                   
 
               {{-- <hr>

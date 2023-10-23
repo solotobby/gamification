@@ -606,13 +606,23 @@ class CampaignController extends Controller
             $deny = CampaignWorker::where('id', $request->id)->first();
             $deny->status = 'Denied';
             $deny->reason = $request->reason;
-            $deny->pending_count -= 1;
+           // $deny->pending_count -= 1;
             $deny->save();
+
+          
+            $this->removePendingCountAfterDenial($deny->campaign_id);
+
             $subject = 'Job Denied';
             $status = 'Denied';
             Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
             return back()->with('success', 'Campaign has been denied');
         }
+    }
+
+    public function removePendingCountAfterDenial($id){
+        $campaign = Campaign::where('id', $id)->first();
+        $campaign->pending_count -= 1;
+        $campaign->save();
     }
 
     public function approveCampaign($id)

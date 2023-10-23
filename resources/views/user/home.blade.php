@@ -257,11 +257,13 @@
             <h2 class="content-heading">
                 <i class="fa fa-briefcase text-muted me-1"></i> Available Jobs
             </h2>
-              <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              
-              {{-- <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
-                  <img src="{{ url($ads->banner_url)  }}" width="100%" height="250" class="img-responsive">
-              </a> --}}
+              {{-- <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
+              {{-- @if($ads)
+                  <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
+                    <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+                    <img src="{{ url('https://freebyz.s3.us-east-1.amazonaws.com/adBanners/'.'1697645090pexels-pixabay-460672.jpg') }}" width="100%" height="300" class="img-responsive">
+                  </a> 
+              @endif --}}
 
               {{-- Campaign list --}}
               <div class="col-lg-12">
