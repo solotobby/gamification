@@ -15,6 +15,7 @@ use App\Models\Profile;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 
@@ -492,13 +493,22 @@ if(!function_exists('countryList')){
 
 if(!function_exists('adBanner')){
     function adBanner(){
-        $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
-       if(!$banner){
+        $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->where('live_state', 'Started')->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
+        
+        
+      
+        if(!$banner){
             return '';
        }else{
-            @$banner->impression += 1;
-            @$banner->save();
+            ///check if current date and time is equal of greater than banner_end_date, then deactivate the banner
+            // $currentTime = Carbon::now()->format('Y-m-d h:i:s');
+            // if($currentTime > $banner->banner_end_date){
+            //     $banner->live_state = 'Ended';
+            //     $banner->save();
+            // }
 
+            $banner->impression += 1;
+            $banner->save();
             //enter the impression infor
             BannerImpression::create(['user_id' => auth()->user()->id, 'banner_id' => $banner->id]);
             return $banner;

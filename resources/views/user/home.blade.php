@@ -255,21 +255,20 @@
           @endif
 
             <h2 class="content-heading">
-                <i class="fa fa-briefcase text-muted me-1"></i> Available Jobs
+              Ads
             </h2>
-              {{-- <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
+              <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               {{-- @if($ads)
-                  <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
-                    <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
-                    <img src="{{ url('https://freebyz.s3.us-east-1.amazonaws.com/adBanners/'.'1697645090pexels-pixabay-460672.jpg') }}" width="100%" height="300" class="img-responsive">
-                  </a> 
+                <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
+                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                </a>
               @endif --}}
 
               {{-- Campaign list --}}
               <div class="col-lg-12">
                   <ul class="nav nav-tabs nav-tabs-block align-items-center" role="tablist">
                     <li class="nav-item">
-                      <button class="nav-link active" id="btabswo-static-home-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-home" role="tab" aria-controls="btabswo-static-home" aria-selected="true">Available Jobs</button>
+                      <button class="nav-link active" id="btabswo-static-home-tab" data-bs-toggle="tab" data-bs-target="#btabswo-static-home" role="tab" aria-controls="btabswo-static-home" aria-selected="true"><i class="fa fa-briefcase text-muted me-1"></i>Available Jobs</button>
                     </li>
                   </ul>
                   <div class="tab-content">
