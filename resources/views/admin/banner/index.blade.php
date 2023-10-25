@@ -53,19 +53,19 @@
               <tr>
                 <th>ID</th>
                 <th>Amount Spent</th>
-                <th>Impresions</th>
-                <th>Clicks</th>
+                <th>Duration</th>
                 <th>Status</th>
                 <th>Date Created</th>
+                <th>End Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-                @foreach ($banners as $banner)
+                @foreach ($bannerList as $banner)
                 <tr>
                     <td>
                         {{ $banner->banner_id}}
-                     {{-- {{ \Carbon\Carbon::parse($point->date)->format('d F, Y') }} --}}
-                    </td>
+                    </td>  
                     <td>
                         @if($banner->currency == 'NGN')
                         &#8358;{{ number_format($banner->amount,2) }}
@@ -74,16 +74,24 @@
                         @endif
                     </td>
                     <td>
-                       100000
+                      {{ $banner->duration}}
                     </td>
+                    
                     <td>
-                        1000
-                     </td>
-                    <td>
-                        {{ $banner->is_redeemed == true ? 'Live' : 'Under Review' }}
+                        {{ $banner->status == true ? 'Live' : 'Under Review' }}
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
+                    </td>
+                    <td>
+                      {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                    </td>
+                    <td>
+                      @if($banner->status == true)
+                          <button class="btn btn-secondary btn-sm disabled"> {{ $banner->live_state}}</button>
+                      @else
+                          <a href="{{ url('admin/banner/activate/'.$banner->id) }}" class="btn btn-secondary btn-sm">Take Live</a>
+                      @endif
                     </td>
                 </tr>
                 @endforeach

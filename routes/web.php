@@ -37,6 +37,9 @@ Route::get('about', [\App\Http\Controllers\GeneralController::class, 'about'])->
 Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
+Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
+
+
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
 Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
@@ -195,7 +198,6 @@ Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->na
 Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
 
 //webhook handling
-Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
 //Flutterwave Top up
 Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
 
@@ -340,5 +342,7 @@ Route::get('admin/dashboard/api', [\App\Http\Controllers\HomeController::class, 
 Route::get('admin/dashboard/api/default', [\App\Http\Controllers\HomeController::class, 'adminApiDefault']);
 Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
 
-
+//Banner Ad
+Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index']);
+Route::get('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner']);
 Route::resource('admin/safelock', AdminSafeLockController::class);

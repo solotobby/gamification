@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\GeneralMail;
 use App\Models\Banner;
 use App\Models\BannerClick;
 use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,7 +91,7 @@ class BannerController extends Controller
             //s3 bucket processing
             $fileBanner = $request->file('banner_url');
             $Bannername = time();// . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'adBanners/' . $Bannername;
+            $filePathBanner = 'ad/' . $Bannername.'.'.$fileBanner->extension();
             
             Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
@@ -102,7 +104,6 @@ class BannerController extends Controller
             // $request->banner_url->move(public_path('banners'), $Bannername); //store in local storage
 
         
-
             $banner['user_id'] = auth()->user()->id; 
             $banner['banner_id'] = Str::random(7);
             $banner['external_link'] = $request->external_link; 
@@ -113,7 +114,7 @@ class BannerController extends Controller
             $banner['country'] = $request->country;
             $banner['status'] = false;
             $banner['amount'] = $finalTotal;
-            $banner['banner_url'] =  $bannerUrl; //;
+            $banner['banner_url'] = $bannerUrl;
             $banner['impression'] = 0;
             $banner['clicks'] = 0;
 
@@ -140,12 +141,11 @@ class BannerController extends Controller
                 {
                     \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
                 }
-
-
             }
-
-            
           
+            $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
+            $subject = 'Ad Banner Placement - Under Review';
+            Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
             return back()->with('success', 'Banner ad Created Successfully');
 
         }else{

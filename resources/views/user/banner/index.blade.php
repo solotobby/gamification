@@ -51,7 +51,6 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Amount Spent</th>
                 <th>Impresions</th>
                 <th>Clicks</th>
@@ -62,10 +61,7 @@
             <tbody>
                 @foreach ($banners as $banner)
                 <tr>
-                    <td>
-                        {{ $banner->banner_id}}
-                     {{-- {{ \Carbon\Carbon::parse($point->date)->format('d F, Y') }} --}}
-                    </td>
+                    
                     <td>
                         @if($banner->currency == 'NGN')
                         &#8358;{{ number_format($banner->amount,2) }}
@@ -74,13 +70,13 @@
                         @endif
                     </td>
                     <td>
-                       100000
+                       {{$banner->impression}}
                     </td>
                     <td>
-                        1000
+                      {{$banner->clicks}}
                      </td>
                     <td>
-                        {{ $banner->is_redeemed == true ? 'Live' : 'Under Review' }}
+                        {{ $banner->status == true ? 'Live' : 'Under Review' }}
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}

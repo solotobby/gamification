@@ -222,6 +222,18 @@
           <span class="nav-main-link-badge badge rounded-pill bg-default">8</span>
         </a>
       </li> --}}
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/banner/list') }}">
+          <i class="nav-main-link-icon fa fa-envelopes"></i>
+          <span class="nav-main-link-name">Banner Ad</span>
+          <?php 
+            $count = \App\Models\Banner::where('status', false)->count();
+          ?>
+          <span class="nav-main-link-badge badge rounded-pill bg-default">{{ $count }}</span>
+        </a>
+      </li>
+
+      
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
