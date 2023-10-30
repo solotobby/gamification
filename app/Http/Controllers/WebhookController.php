@@ -25,7 +25,7 @@ class WebhookController extends Controller
             $email = $request['data']['customer']['email'];
             $customer_code = $request['data']['customer']['customer_code'];
 
-            $virtualAccount = VirtualAccount::where('customer_code', $customer_code)->first();
+            $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
 
             $user = User::where('id', $virtualAccount->user_id)->first();
 

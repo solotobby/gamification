@@ -437,9 +437,9 @@ class HomeController extends Controller
                 'currency' => 'NGN'
             ]);
 
-            if(auth()->user()->profile->phone_verified == true && $bankInfor){
-                $this->virtualAccountGeneration($accountInformation['data']['account_name']);
-            }
+            // if(auth()->user()->profile->phone_verified == true && $bankInfor){
+            //     $this->virtualAccountGeneration($accountInformation['data']['account_name']);
+            // }
                
                 return back()->with('success', 'Account Details Added');
                 //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
@@ -457,7 +457,7 @@ class HomeController extends Controller
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
-            "phone"=> "+2348137331293"
+            "phone"=> "+2348136331293"
         ];
         $res = PaystackHelpers::createCustomer($payload);
 
