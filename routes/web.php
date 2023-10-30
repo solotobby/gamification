@@ -69,10 +69,12 @@ Route::get('score/list', [\App\Http\Controllers\HomeController::class, 'scores']
 Route::get('redeem/reward/{id}', [\App\Http\Controllers\HomeController::class, 'redeemReward'])->name('redeem.reward');
 
 Route::post('save/bank/information', [\App\Http\Controllers\HomeController::class, 'saveBankInformation'])->name('save.bank.information');
+
 Route::get('bank/information', [\App\Http\Controllers\HomeController::class, 'selectBankInformation']);
 
 Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
+Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'sendPhoneOTP'])->name('send.phone.otp');
 
 
 ////Referral Routes
