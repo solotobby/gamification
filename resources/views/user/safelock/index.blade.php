@@ -30,6 +30,7 @@
                     {{ session('error') }}
                 </div>
             @endif
+            
             <div class="alert alert-info">
               Lock funds to earn up to 5% interest in 3-6 months.
               Your funds are 100% safe  and secure. Your interest and capital will be paid to your local bank account at maturity.
@@ -45,7 +46,7 @@
                 <div class="col-lg-8 col-xl-5">
                     <div class="mb-4">
                         <label class="form-label" for="example-text-input">Amount</label>
-                        <input type="number" class="form-control" min="1000" name="amount" placeholder="1000" required>
+                        <input type="number" class="form-control" name="amount" placeholder="100000" required>
                     </div>
                     <div class="mb-4">
                       <label class="form-label" for="example-text-input">Duration</label>
@@ -70,6 +71,7 @@
         </form>
         </div>
     </div>
+
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">

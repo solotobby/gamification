@@ -45,6 +45,10 @@ class SafeLockController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'amount' => 'required|numeric|min:1000'
+        ]);
+
         $interest_rate = 5;
         $amount_locked = $request->amount;
         $duration = $request->duration;

@@ -25,6 +25,7 @@ use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Statistics;
 use App\Models\UserLocation;
+use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -409,14 +410,14 @@ class HomeController extends Controller
     }
 
     public function selectBankInformation(){
+
         $bankList = PaystackHelpers::bankList();
-        return view('user.bank_information', ['bankList' => $bankList]);
+        @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
+        return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo]);
     }
 
     public function saveBankInformation(Request $request)
     {
-       //return  $this->virtualAccountGeneration('Oluwatobi Daniel Solomon');
-
 
         $this->validate($request, [
             'account_number' => 'numeric|required|digits:10'
@@ -427,23 +428,24 @@ class HomeController extends Controller
         {
             $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
             $bankInfor = BankInformation::create([
-                    'user_id' => auth()->user()->id,
-                    'name' => $accountInformation['data']['account_name'],
-                    'bank_name' => $recipientCode['data']['details']['bank_name'],
-                    'account_number' => $request->account_number,
-                    'bank_code' => $request->bank_code,
-                    'recipient_code' => $recipientCode['data']['recipient_code'],
-                    'currency' => 'NGN'
-                ]);
+                'user_id' => auth()->user()->id,
+                'name' => $accountInformation['data']['account_name'],
+                'bank_name' => $recipientCode['data']['details']['bank_name'],
+                'account_number' => $request->account_number,
+                'bank_code' => $request->bank_code,
+                'recipient_code' => $recipientCode['data']['recipient_code'],
+                'currency' => 'NGN'
+            ]);
 
-                $this->virtualAccountGeneration($accountInformation['data']['account_name']);
-
+            if(auth()->user()->profile->phone_verified == true && $bankInfor){
+                return $this->virtualAccountGeneration($accountInformation['data']['account_name']);
+            }
+               
                 return back()->with('success', 'Account Details Added');
                 //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
         }else{
             return back()->with('error', 'Your bank account is not valid');
-        }
-       
+        }  
     }
 
     public function virtualAccountGeneration($name){
@@ -451,27 +453,40 @@ class HomeController extends Controller
        $splitedName = explode(" ", $name);
        
        
-       return  $payload = [
+        $payload = [
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
             "phone"=> "+2348137331282"
         ];
-    //     $res = PaystackHelpers::createCustomer($payload);
+        $res = PaystackHelpers::createCustomer($payload);
 
-    //     $data = [
-    //         "customer"=> $res['data']['customer_code'], 
-    //         "preferred_bank"=>"test-bank"
-    //     ];
+       
+        //$response = PaystackHelpers::virtualAccount($data);
 
-    //   $response = PaystackHelpers::virtualAccount($data);
+        if($res['status'] == true){
+            
+            $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
+            
+            $data = [
+                "customer"=> $res['data']['customer_code'], 
+                "preferred_bank"=>"wema-bank"
+            ];
+        
+            
+            $response = PaystackHelpers::virtualAccount($data);
 
-    //   $datas['res'] = $res;
-    //   $datas['response'] = $response;
+            $VirtualAccount->bank_name = $response['data']['bank']['name'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->account_number = $response['data']['account_number'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->currency = 'NGN';
+            $VirtualAccount->save();
 
-    //   return $datas;
-
-    //   return back()->with('success', 'Account Created Succesfully');
+            return back()->with('success', 'Account Created Succesfully');
+        }else{
+            return back()->with('error', 'Error occured while processing');
+        }
 
   
     }

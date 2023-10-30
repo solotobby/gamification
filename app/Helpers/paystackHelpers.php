@@ -203,10 +203,6 @@ class PaystackHelpers{
             ]);
 
        }
-        // '48.188.144.248';
-       
-
-        // return auth()->user();
 
     }
 
