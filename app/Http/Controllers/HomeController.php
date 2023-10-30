@@ -457,13 +457,11 @@ class HomeController extends Controller
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
-            "phone"=> "+2348137331282"
+            "phone"=> "+2348137331293"
         ];
         $res = PaystackHelpers::createCustomer($payload);
 
        
-        //$response = PaystackHelpers::virtualAccount($data);
-
         if($res['status'] == true){
             
             $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
