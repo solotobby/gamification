@@ -438,7 +438,7 @@ class HomeController extends Controller
             ]);
 
             if(auth()->user()->profile->phone_verified == true && $bankInfor){
-                return $this->virtualAccountGeneration($accountInformation['data']['account_name']);
+                $this->virtualAccountGeneration($accountInformation['data']['account_name']);
             }
                
                 return back()->with('success', 'Account Details Added');
@@ -472,7 +472,7 @@ class HomeController extends Controller
             ];
         
             
-            return $response = PaystackHelpers::virtualAccount($data);
+            $response = PaystackHelpers::virtualAccount($data);
 
             $VirtualAccount->bank_name = $response['data']['bank']['name'];
             $VirtualAccount->account_name = $response['data']['account_name'];
