@@ -41,7 +41,7 @@ class OTPController extends Controller
        
         $chekOtp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();
 
-        return $response = OTPVerify($chekOtp->pin_id, $request->otp);
+        $response = OTPVerify($chekOtp->pinId, $request->otp);
 
         if($response['verified'] == 'True'){
 
