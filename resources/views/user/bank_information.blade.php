@@ -97,6 +97,7 @@
           </div>
 
           @else
+          
           <div class="block block-rounded">
             <div class="block-header block-header-default">
               <h3 class="block-title">Account Setup Completed</h3>
@@ -134,56 +135,108 @@
     </div>
     <!-- Hero -->
     <div class="block-content">
-
-      <form id="contact-form" action="{{ route('send.phone.otp') }}" method="post">
-          @csrf
-        <!-- Text -->
-        <div class="row">
-          <div class="col-lg-3"></div>
-            <div class="col-lg-6">
-              @if (session('success'))
-              <div class="alert alert-success" role="alert">
-                  {{ session('success') }}
-              </div>
-              @endif
-  
-              @if (session('error'))
-              <div class="alert alert-danger" role="alert">
-                  {{ session('error') }}
-              </div>
-              @endif
-  
-              @if ($errors->any())
-                  <div class="alert alert-danger">
-                      <ul>
-                          @foreach ($errors->all() as $error)
-                              <li>{{ $error }}</li>
-                          @endforeach
-                      </ul>
+      @if(!$otp)
+        <form id="contact-form" action="{{ route('send.phone.otp') }}" method="post">
+            @csrf
+          <!-- Text -->
+          <div class="row">
+            <div class="col-lg-3"></div>
+              <div class="col-lg-6">
+                @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+                @endif
+    
+                @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+                @endif
+    
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                
+                <div class="mb-4">
+                    <label>Enter Phone Number</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <li class="fa fa-phone"></li>
+                    </span>
+                    <input type="text" class="form-control @error('phone_number') is-invalid @enderror" id="reminder-credential" name="phone_number" placeholder="e.g 080xxxx" required value="{{ old('phone_number') }}">
                   </div>
-              @endif
-              
-              <div class="mb-4">
-                  <label>Enter Phone Number</label>
-                <div class="input-group">
-                  <span class="input-group-text">
-                    <li class="fa fa-phone"></li>
-                  </span>
-                  <input type="text" class="form-control @error('phone_number') is-invalid @enderror" id="reminder-credential" name="phone_number" placeholder="e.g 080xxxx" required value="{{ old('phone_number') }}">
+                </div>
+                
+                <div class="text-center mb-4">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-fw fa-save opacity-50 me-1"></i> Send OTP
+                  </button>
                 </div>
               </div>
-              
-              <div class="text-center mb-4">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fa fa-fw fa-save opacity-50 me-1"></i> Send OTP
-                </button>
+              <div class="col-lg-3"></div>
+          
+          </div>
+          <!-- END Text -->
+        </form>
+      @else
+
+      <form id="contact-form" action="{{ route('verify.phone.otp') }}" method="post">
+        @csrf
+      <!-- Text -->
+      <div class="row">
+        <div class="col-lg-3"></div>
+          <div class="col-lg-6">
+            @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            
+            <div class="mb-4">
+                <label>Enter OTP</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <li class="fa fa-phone"></li>
+                </span>
+                <input type="text" class="form-control @error('otp') is-invalid @enderror" id="reminder-credential" name="otp" required value="{{ old('otp') }}">
               </div>
             </div>
-            <div class="col-lg-3"></div>
-        
-        </div>
-        <!-- END Text -->
-      </form>
+            
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-fw fa-save opacity-50 me-1"></i> Send OTP
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-3"></div>
+      
+      </div>
+      <!-- END Text -->
+    </form>
+      @endif
 
   </div>
 

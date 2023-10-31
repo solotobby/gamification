@@ -440,7 +440,9 @@ class CampaignController extends Controller
         // }
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
+
         $data['campaign'] = $campaign;
+
         if($request->hasFile('proof')){
          
             $fileBanner = $request->file('proof');
@@ -456,12 +458,12 @@ class CampaignController extends Controller
             $campaignWorker['amount'] = $request->amount;
             $campaignWorker['proof_url'] = $proofUrl;
             $campaignWork = CampaignWorker::create($campaignWorker);
+            
             //activity log
-
             $campaign->pending_count += 1;
             $campaign->save();
 
-           setPendingCount($campaign->id);
+            setPendingCount($campaign->id);
 
             
             $name = SystemActivities::getInitials(auth()->user()->name);

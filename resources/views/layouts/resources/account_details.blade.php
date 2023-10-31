@@ -22,7 +22,7 @@
                    
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('bank/information')}}" data-toggle="click-ripple">
-                        Get Verified Now!
+                        Get Started Now!
                       </a>
                       <br> 
                     </center>
