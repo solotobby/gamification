@@ -495,29 +495,29 @@ if(!function_exists('sendOTP')){
     function sendOTP($phone){
         
         $payload = [
-            "api_key" => env('TERMI_KEY'),
-                "pin_type" => "NUMERIC",
-                "phone_number" => $phone,
-                "pin_attempts" => 3,
-                "pin_time_to_live" => 60,
-                "pin_length" => 6
             // "api_key" => env('TERMI_KEY'),
-            //  "message_type" => "NUMERIC",
-            //  "to" => $phone,
-            //  "from" => "FREEBYZ",
-            //  "channel" => "dnd",
-            //  "pin_attempts" => 3,
-            //  "pin_time_to_live" =>  5,
-            //  "pin_length" => 6,
-            //  "pin_placeholder" => "< 1234 >",
-            //  "message_text" => "Your Freebyz OTP pin is < 1234 >",
-            //  "pin_type" => "NUMERIC"
+            //     "pin_type" => "NUMERIC",
+            //     "phone_number" => $phone,
+            //     "pin_attempts" => 3,
+            //     "pin_time_to_live" => 60,
+            //     "pin_length" => 6
+            "api_key" => env('TERMI_KEY'),
+             "message_type" => "NUMERIC",
+             "to" => $phone,
+             "from" => "FREEBYZ",
+             "channel" => "dnd",
+             "pin_attempts" => 3,
+             "pin_time_to_live" =>  5,
+             "pin_length" => 6,
+             "pin_placeholder" => "< 1234 >",
+             "message_text" => "Your Freebyz OTP pin is < 1234 >",
+             "pin_type" => "NUMERIC"
         ];
         
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->post('https://termii.com/api/sms/otp/generate', $payload);
+        ])->post('https://api.ng.termii.com/api/sms/otp/send', $payload);
         
          return json_decode($res->getBody()->getContents(), true);
 
