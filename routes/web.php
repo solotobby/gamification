@@ -76,6 +76,8 @@ Route::post('save/phone/information', [\App\Http\Controllers\HomeController::cla
 
 Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'sendPhoneOTP'])->name('send.phone.otp');
 
+Route::post('verify/phone/otp', [\App\Http\Controllers\OTPController::class, 'verifyPhoneOTP'])->name('verify.phone.otp');
+
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');

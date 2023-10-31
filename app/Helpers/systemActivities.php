@@ -77,7 +77,7 @@ class SystemActivities{
             // $attempts = $value->completed->count();
             // $completed = $value->completed()->where('status', '!=', 'Denied')->count(); //->where('status', 'Pending')->orWhere('status', 'Approved')->count();//->where('status', '!=', 'Denied')->count();//->orWhere('status', 'Pending')->orWhere('status', 'Approved')->count();//count();   //->where('status', '!=', 'Denied')->count();
 
-            $c = $value->pending_count; //$value->completed_count;//
+            $c = $value->pending_count + $value->completed_count;//
             $div = $c / $value->number_of_staff;
             $progress = $div * 100;
 

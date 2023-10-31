@@ -14,6 +14,7 @@ use App\Models\Preference;
 use App\Models\Profile;
 use App\Models\Settings;
 use App\Models\User;
+use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -490,13 +491,51 @@ if(!function_exists('countryList')){
     }
 }
 
+if(!function_exists('sendOTP')){
+    function sendOTP($phone){
+        
+        $payload = [
+            "api_key" => env('TERMI_KEY'),
+                "pin_type" => "NUMERIC",
+                "phone_number" => $phone,
+                "pin_attempts" => 3,
+                "pin_time_to_live" => 60,
+                "pin_length" => 6
+            // "api_key" => env('TERMI_KEY'),
+            //  "message_type" => "NUMERIC",
+            //  "to" => $phone,
+            //  "from" => "FREEBYZ",
+            //  "channel" => "dnd",
+            //  "pin_attempts" => 3,
+            //  "pin_time_to_live" =>  5,
+            //  "pin_length" => 6,
+            //  "pin_placeholder" => "< 1234 >",
+            //  "message_text" => "Your Freebyz OTP pin is < 1234 >",
+            //  "pin_type" => "NUMERIC"
+        ];
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post('https://termii.com/api/sms/otp/generate', $payload);
+        
+         return json_decode($res->getBody()->getContents(), true);
+
+        
+    }
+}
+
+if(!function_exists('OTPVerify')){
+    function OTPVerify($phone){
+
+        return 'verify';
+
+    }
+}
 
 if(!function_exists('adBanner')){
     function adBanner(){
         $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->where('live_state', 'Started')->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
-        
-        
-      
         if(!$banner){
             return '';
        }else{
@@ -517,3 +556,44 @@ if(!function_exists('adBanner')){
     }
 }
 
+
+
+if(!function_exists('generateVirtualAccount')){
+    function generateVirtualAccount($name, $phone_number){
+        $splitedName = explode(" ", $name);
+       
+       
+        $payload = [
+            "email"=> auth()->user()->email,
+            "first_name"=> $splitedName[0],
+            "last_name"=> $splitedName[1],
+            "phone"=> $phone_number //"+2348136331293"
+        ];
+        $res = PaystackHelpers::createCustomer($payload);
+
+       
+        if($res['status'] == true){
+            
+            $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
+            
+            $data = [
+                "customer"=> $res['data']['customer_code'], 
+                "preferred_bank"=>"test-bank"
+            ];
+        
+            
+            $response = PaystackHelpers::virtualAccount($data);
+
+            $VirtualAccount->bank_name = $response['data']['bank']['name'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->account_number = $response['data']['account_number'];
+            $VirtualAccount->account_name = $response['data']['account_name'];
+            $VirtualAccount->currency = 'NGN';
+            $VirtualAccount->save();
+
+            return $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+        }else{
+            return back()->with('error', 'Error occured while processing');
+        }
+    }
+}

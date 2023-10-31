@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\LoginPoints;
+use App\Models\OTP;
 use App\Models\PaymentTransaction;
 use App\Models\Referral;
 use App\Models\Reward;
@@ -413,7 +414,8 @@ class HomeController extends Controller
 
         $bankList = PaystackHelpers::bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
-        return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo]);
+        $otp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();
+        return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'otp' => $otp]);
     }
 
     public function saveBankInformation(Request $request)
@@ -437,56 +439,15 @@ class HomeController extends Controller
                 'currency' => 'NGN'
             ]);
 
-            // if(auth()->user()->profile->phone_verified == true && $bankInfor){
-            //     $this->virtualAccountGeneration($accountInformation['data']['account_name']);
-            // }
+            if(auth()->user()->profile->phone_verified == true && $bankInfor){
+                generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
+            }
                
-                return back()->with('success', 'Account Details Added');
+            return back()->with('success', 'Account Details Added');
                 //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
         }else{
             return back()->with('error', 'Your bank account is not valid');
         }  
-    }
-
-    public function virtualAccountGeneration($name){
-        
-       $splitedName = explode(" ", $name);
-       
-       
-        $payload = [
-            "email"=> auth()->user()->email,
-            "first_name"=> $splitedName[0],
-            "last_name"=> $splitedName[1],
-            "phone"=> "+2348136331293"
-        ];
-        $res = PaystackHelpers::createCustomer($payload);
-
-       
-        if($res['status'] == true){
-            
-            $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
-            
-            $data = [
-                "customer"=> $res['data']['customer_code'], 
-                "preferred_bank"=>"wema-bank"
-            ];
-        
-            
-            $response = PaystackHelpers::virtualAccount($data);
-
-            $VirtualAccount->bank_name = $response['data']['bank']['name'];
-            $VirtualAccount->account_name = $response['data']['account_name'];
-            $VirtualAccount->account_number = $response['data']['account_number'];
-            $VirtualAccount->account_name = $response['data']['account_name'];
-            $VirtualAccount->currency = 'NGN';
-            $VirtualAccount->save();
-
-            return back()->with('success', 'Account Created Succesfully');
-        }else{
-            return back()->with('error', 'Error occured while processing');
-        }
-
-  
     }
 
     public function transferFund($amount, $recipient)

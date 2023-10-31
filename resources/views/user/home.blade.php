@@ -384,7 +384,12 @@
       @include('layouts.resources.welcome')
 
     {{-- @elseif(!auth()->user()->accountDetails)
+
       
+      @include('layouts.resources.account_details')
+
+    @elseif(!auth()->user()->profile->phone_verified)
+
       @include('layouts.resources.account_details') --}}
 
     @elseif(auth()->user()->is_verified == 0)
