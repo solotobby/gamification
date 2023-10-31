@@ -569,7 +569,7 @@ if(!function_exists('generateVirtualAccount')){
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
-            "phone"=> $phone_number //"+2348136331293"
+            "phone"=> "+2347039149150"
         ];
         $res = PaystackHelpers::createCustomer($payload);
 
@@ -584,7 +584,7 @@ if(!function_exists('generateVirtualAccount')){
             ];
         
             
-           return $response = PaystackHelpers::virtualAccount($data);
+            $response = PaystackHelpers::virtualAccount($data);
 
             $VirtualAccount->bank_name = $response['data']['bank']['name'];
             $VirtualAccount->account_name = $response['data']['account_name'];
@@ -592,8 +592,9 @@ if(!function_exists('generateVirtualAccount')){
             $VirtualAccount->account_name = $response['data']['account_name'];
             $VirtualAccount->currency = 'NGN';
             $VirtualAccount->save();
-
-            return $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+            $data['res']=$response;
+            $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+            return $data;
         }else{
             return back()->with('error', 'Error occured while processing');
         }
