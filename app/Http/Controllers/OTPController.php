@@ -22,10 +22,12 @@ class OTPController extends Controller
 
         $phone_number = '234'.substr($request->phone_number, 1);
          
-        return $response =  sendOTP($phone_number);
+        $response =  sendOTP($phone_number);
 
-        OTP::create(['user_id' => auth()->user()->id, 'pinId' => $response['pin_id'], 'otp' => '11111', 'phone_number' => $response['to'], 'is_verified' => false]);
-
+        if($response['status'] == 200){
+            OTP::create(['user_id' => auth()->user()->id, 'pinId' => $response['pinId'], 'otp' => '11111', 'phone_number' => $response['to'], 'is_verified' => false]);
+        }
+        
         return back()->with('success', 'OTP sent to the phone number supplied!');
         //$this->sendOTP($request->phone_number);
     }
@@ -35,15 +37,19 @@ class OTPController extends Controller
             'otp' => 'numeric|required|digits:6'
         ]);
 
+
+       
         $chekOtp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();
 
-        if($request->otp == $chekOtp->otp){
+        $response = OTPVerify($chekOtp->pin_id, $request->otp);
+
+        if($response['verified'] == 'True'){
 
             $chekOtp->is_verified = true;
             $chekOtp->save();
 
             $user = User::where('id', auth()->user()->id)->first();
-            $user->phone = $chekOtp->phone_number;
+            $user->phone = $response['msisdn'];//$chekOtp->phone_number;
             $user->save();
 
             $profile = Profile::where('user_id', $user->id)->first();
