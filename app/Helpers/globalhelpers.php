@@ -584,7 +584,7 @@ if(!function_exists('generateVirtualAccount')){
             ];
         
             
-            $response = PaystackHelpers::virtualAccount($data);
+           return $response = PaystackHelpers::virtualAccount($data);
 
             $VirtualAccount->bank_name = $response['data']['bank']['name'];
             $VirtualAccount->account_name = $response['data']['account_name'];
