@@ -41,12 +41,12 @@ class WebhookController extends Controller
             //     'currency' => $currency,
             //     'channel' => $channel,
             //     'type' => 'cash_transfer_top',
-            //     'description' => 'Cash Withdrawal from '.auth()->user()->name,
+            //     'description' => 'Cash transfer from '.$user->name,
             //     'tx_type' => 'Credit',
             //     'user_type' => 'regular'
             // ]);
 
-            return response()->json(['status' => 'success']);
+            // return response()->json(['status' => 'success']);
 
         }else{
             return response()->json(['status' => 'error']);
