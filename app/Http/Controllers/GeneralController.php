@@ -53,8 +53,7 @@ class GeneralController extends Controller
 
 
     public function landingPage()
-    {
-        
+    {  
         Analytics::dailyVisit();
         $users = User::where('role', 'regular')->count();
         $workers = CampaignWorker::all()->count();
