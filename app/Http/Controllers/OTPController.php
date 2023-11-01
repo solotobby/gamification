@@ -22,7 +22,7 @@ class OTPController extends Controller
 
         $phone_number = '234'.substr($request->phone_number, 1);
          
-        return $response =  sendOTP($phone_number);
+        $response =  sendOTP($phone_number);
 
         if($response['status'] == 200){
             OTP::create(['user_id' => auth()->user()->id, 'pinId' => $response['pinId'], 'otp' => '11111', 'phone_number' => $response['to'], 'is_verified' => false]);
