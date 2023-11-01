@@ -440,7 +440,7 @@ class HomeController extends Controller
             ]);
 
             if(auth()->user()->profile->phone_verified == true && $bankInfor){
-               generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
+               return generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
             }
                
             return back()->with('success', 'Account Details Added');
