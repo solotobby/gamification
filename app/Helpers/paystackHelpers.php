@@ -132,6 +132,28 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    public static function fetchCustomer($email){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/customer/', $email);
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
+    public static function updateCustomer($email, $payload){
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->put('https://api.paystack.co/customer/', $email, $payload);
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
+
     //fluterwave apis
     public static function listFlutterwaveTransaction(){
         $res = Http::withHeaders([
