@@ -32,7 +32,7 @@ class WebhookController extends Controller
             PaymentTransaction::create([
                 'user_id' => $user->id,
                 'campaign_id' => '1',
-                'reference' => $reference,
+                'reference' => time(), //$reference,
                 'amount' => $amount,
                 'status' => $status,
                 'currency' => $currency,
@@ -42,7 +42,7 @@ class WebhookController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
-            
+
             creditWallet($user, 'Naira', $amount);
 
             
