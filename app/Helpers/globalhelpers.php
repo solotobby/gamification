@@ -588,9 +588,8 @@ if(!function_exists('generateVirtualAccount')){
                 "customer"=> $res['data']['customer_code'], 
                 "preferred_bank"=>"wema-bank"
             ];
-        
-            
-            return $response = PaystackHelpers::virtualAccount($data);
+                    
+            $response = PaystackHelpers::virtualAccount($data);
 
             $VirtualAccount->bank_name = $response['data']['bank']['name'];
             $VirtualAccount->account_name = $response['data']['account_name'];
