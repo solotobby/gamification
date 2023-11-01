@@ -29,9 +29,6 @@ class WebhookController extends Controller
 
             $user = User::where('id', $virtualAccount->user_id)->first();
 
-            creditWallet($user, 'Naira', $amount);
-
-            
             PaymentTransaction::create([
                 'user_id' => $user->id,
                 'campaign_id' => '1',
@@ -45,6 +42,11 @@ class WebhookController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
+            
+            creditWallet($user, 'Naira', $amount);
+
+            
+            
 
             return response()->json(['status' => 'success'], 200);
 
