@@ -573,7 +573,7 @@ if(!function_exists('generateVirtualAccount')){
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
-            "phone"=> "+2347039149150"
+            "phone"=> "+".$phone_number
         ];
         $res = PaystackHelpers::createCustomer($payload);
 

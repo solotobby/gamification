@@ -439,9 +439,9 @@ class HomeController extends Controller
                 'currency' => 'NGN'
             ]);
 
-            // if(auth()->user()->profile->phone_verified == true && $bankInfor){
-            //    return generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
-            // }
+            if(auth()->user()->profile->phone_verified == true && $bankInfor){
+               generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
+            }
                
             return back()->with('success', 'Account Details Added');
                 //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
