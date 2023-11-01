@@ -7,6 +7,7 @@ use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Models\Answer;
 use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\Games;
 use App\Models\PaymentTransaction;
 use App\Models\Transaction;
@@ -55,9 +56,10 @@ class GeneralController extends Controller
     {
         
         Analytics::dailyVisit();
-        //$users = User::where('role', 'regular')->count();
+        $users = User::where('role', 'regular')->count();
+        $workers = CampaignWorker::all()->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
-        return view('landingPage', ['transactions' => $transactions]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        return view('landingPage', ['transactions' => $transactions, 'users' => $users, 'workers' => $workers ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 
     public function contact()

@@ -166,7 +166,7 @@
 								<span class=" icon-trophy"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">14500</h1>
+								<h1 class="counter">64500</h1>
 								<span>Available Jobs</span>
 							</div>
 						</div>
@@ -177,7 +177,7 @@
 								<span class="icon-alarmclock"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">41890</h1>
+								<h1 class="counter">{{$users}}</h1>
 								<span>Users</span>
 							</div>
 						</div>
@@ -199,7 +199,7 @@
 								<span class="icon-megaphone"></span>
 							</div> --}}
 							<div class="counter-text">
-								<h1 class="counter">34791</h1>
+								<h1 class="counter">{{$workers}}</h1>
 								<span>Completed Jobs</span>
 							</div>
 						</div>
