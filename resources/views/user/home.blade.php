@@ -171,20 +171,14 @@
           </p>
         </div>
       </div>
-      @if($announcement)
-      <div class="alert alert-info mt-3">
-        {!! @$announcement->content !!}
-        {{-- Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more. --}}
-      </div>
-      @endif
-       
+
       <div class="mt-3">
-          @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-          @endif
-          <center>
+        @if (session('success'))
+              <div class="alert alert-success" role="alert">
+                  {{ session('success') }}
+              </div>
+        @endif
+        <center>
           <form action="{{ url('switch/wallet') }}" method="POST">
             @csrf
               @if(auth()->user()->wallet->base_currency == 'Naira')
@@ -195,14 +189,18 @@
               <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
               @endif
           </form>
-          <br>
+        </center>
+    </div>
 
-          {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout">Get bank Account</button> --}}
-          {{-- <a href="{{ url('assign/virtual/account')}}" class="btn btn-info btn-sm">Virtual account</a> --}}
 
-          </center>
+      @if($announcement)
+      <div class="alert alert-info mt-3">
+        {!! @$announcement->content !!}
+        {{-- Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more. --}}
       </div>
-
+      @endif
+       
+      
         <!-- Pop Out Default Modal -->
         <div class="modal fade" id="modal-default-popout" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
           <div class="modal-dialog modal-dialog-popout" role="document">
@@ -248,12 +246,6 @@
   
         <!-- Page Content -->
         <div class="content content-boxed content-full">
-          @if (session('success'))
-          <div class="alert alert-success" role="alert">
-              {{ session('success') }}
-          </div>
-          @endif
-
             <h2 class="content-heading">
               Ads
             </h2>

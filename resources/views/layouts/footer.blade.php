@@ -9,7 +9,7 @@
 						{{-- <a href="#"><i class="ion-social-googleplus"></i></a> --}}
 						<a href="https://www.instagram.com/freebyzjobs" target="_blank"><i class="ion-social-instagram"></i></a>
 						<a href="https://twitter.com/FreebyzHQ?t=DxsnTp0_sOdDSb08G_z45Q&s=09" target="_blank"><i class="ion-social-twitter"></i></a>
-						{{-- <a href="#"><i class="ion-social-dribbble"></i></a> --}}
+						{{-- <a href="https://www.tiktok.com/@freebyzjobs" target="_blank"><i class="fa-brands fa-tiktok"></i></a> --}}
 					</div>
 					<div class="footer-menu mt-30">
 						<nav>
