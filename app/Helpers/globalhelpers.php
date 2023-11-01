@@ -570,6 +570,7 @@ if(!function_exists('generateVirtualAccount')){
 
         //check if user exist, if yes, update informatioon
         $fetchCustomer = PaystackHelpers::fetchCustomer(auth()->user()->email);
+
         if($fetchCustomer['status'] == true){
            
             //update customer
@@ -581,6 +582,11 @@ if(!function_exists('generateVirtualAccount')){
 
             $updateCustomer = PaystackHelpers::updateCustomer(auth()->user()->email, $customerPayload);
 
+
+            $list['fetchedCustomer'] = $fetchCustomer;
+            $list['updatedCustomer'] = $updateCustomer;
+
+            return $list;
             if($updateCustomer['status'] == true){
                 
                 $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$updateCustomer['data']['customer_code'], 'customer_intgration'=> $updateCustomer['data']['integration']]);
