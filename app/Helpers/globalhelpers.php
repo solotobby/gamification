@@ -569,15 +569,15 @@ if(!function_exists('generateVirtualAccount')){
         $splitedName = explode(" ", $name);
        
        
-        return $payload = [
+        $payload = [
             "email"=> auth()->user()->email,
             "first_name"=> $splitedName[0],
             "last_name"=> $splitedName[1],
             "phone"=> "+".$phone_number
         ];
 
-        
-        $res = PaystackHelpers::createCustomer($payload);
+
+        return $res = PaystackHelpers::createCustomer($payload);
 
        
         if($res['status'] == true){
