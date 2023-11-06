@@ -57,27 +57,97 @@
                     <th>customerCode</th>
                     <th>When Created</th>
                     <th></th>
+                    <th></th>
                     </tr>
             </thead>
             <tbody>
                 {{-- <?php $i = 1; ?> --}}
                 @foreach ($virtual as $user)
                     <tr>
-                        
                         <td>{{ $user->user->name }}</td>
                         <td>{{ $user->user->phone }}</td>
                         <td>{{ $user->account_number }}</td>
                         <td>{{ $user->customer_id}}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }}</td>
-                         <td class="fw-semibold">
+                        <td>
                             @if($user->account_number == null)
-                            <a href="{{ url('reactivate/virtual/account/'.$user->user_id) }}" class="btn btn-success btn-sm"> Activate VA</a>
+                            <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $user->id }}">Actvate VA</button>
+                            {{-- <a href="{{ url('remove/virtual/account/'.$user->id) }}" class="btn btn-danger btn-sm"> Remove VA</a> --}}
                             @else
                             <a href="#" @disabled(true)> Okay</a>
                             @endif
                         </td>
+                         <td class="fw-semibold">
+                            @if($user->account_number == null)
+                            {{-- <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $user->id }}">Actvate VA</button> --}}
+                            <a href="{{ url('remove/virtual/account/'.$user->id) }}" class="btn btn-danger btn-sm"> Remove VA</a>
+                            @else
+                            <a href="#" @disabled(true)> Okay</a>
+                            @endif
+                           
+                        </td>
                     
                     </tr>
+
+
+                    <div class="modal fade" id="modal-default-popout-edit-naira-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-popout" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title">Edit SubCategories(Naira)</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+        
+                            <div class="modal-body pb-1">
+                                <div class="col-xl-12">
+                                    <!-- With Badges -->
+                                    <div class="block block-rounded">
+                                      <div class="block-header block-header-default">
+                                        <h3 class="block-title">{{ $user->name }}</h3>
+                                      </div>
+                                      <div class="block-content">
+                                        <form action="{{ url('reactivate/virtual/account') }}" method="POST">
+                                          @csrf
+                                           
+
+                                            <?php 
+                                            @$name = $user->bankInformation->name;
+                                            @$splitedName = explode(" ", $name);
+                                            @$fname = $splitedName[0];
+                                            @$lname = $splitedName[1];
+                                            
+                                            ?>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="example-text-input">First Name</label>
+                                                <input type="text" name="first_name" class="form-control" value="{{  @$fname = $splitedName[0] }}" required>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="example-text-input">Last Name</label>
+                                                <input type="text" name="last_name" class="form-control" value="{{  @$lname = $splitedName[1] }}" required>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label" for="example-text-input">Number</label>
+                                                <input type="text" name="phone_number" class="form-control" value="{{ $user->user->phone }}" required>
+                                            </div>
+                                            <input type="hidden" name="user_id" value="{{ $user->user_id }}">
+                                           
+                                      
+                                        <button class="btn btn-primary" type="submit">Update VA</button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                    <!-- END With Badges -->
+                                  </div>
+                                
+                            </div>
+                            
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                            {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 @endforeach
             </tbody>
           </table>
