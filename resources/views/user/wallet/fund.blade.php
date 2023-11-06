@@ -56,7 +56,7 @@
               <div class="alert alert-info">
                 <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
               </div>
-
+              @if(auth()->user()->virtualAccount)
               Bank Name: {{ @auth()->user()->virtualAccount->bank_name }}<br>
          
               Account Number:  {{ @auth()->user()->virtualAccount->account_number }}
@@ -66,6 +66,11 @@
                   <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
                 </a>
             </center>
+            @else
+
+            <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
+
+            @endif
 
               {{-- <div class="input-group">
                 <span class="input-group-text">
