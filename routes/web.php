@@ -131,6 +131,7 @@ Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePa
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
 Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
 
+Route::get('resend/otp', [\App\Http\Controllers\OTPController::class, 'resendOTP']);
 // survey
 Route::get('survey', [\App\Http\Controllers\SurveyController::class, 'survey'])->name('survey');
 Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurvey'])->name('store.survey');

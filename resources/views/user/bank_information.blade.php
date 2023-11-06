@@ -227,8 +227,9 @@
             
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary">
-                <i class="fa fa-fw fa-save opacity-50 me-1"></i> Send OTP
-              </button>
+                <i class="fa fa-fw fa-save opacity-50 me-1"></i> Verify OTP
+              </button><br><br>
+              <a href="{{ url('resend/otp') }}">Rectify OTP (If you did not receive OTP)<a>
             </div>
           </div>
           <div class="col-lg-3"></div>
