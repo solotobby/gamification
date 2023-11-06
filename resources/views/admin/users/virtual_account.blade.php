@@ -35,16 +35,11 @@
         </div>
       </div>
       <div class="block-content">
-        {{-- <form action="{{ url('users') }}" method="GET">
-          <div class="mb-4">
-            <div class="input-group">
-              <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
-              <button type="submit" class="btn btn-primary">
-                <i class="fa fa-search me-1"></i> Search
-              </button>
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
             </div>
-          </div>
-        </form> --}}
+        @endif
         <div class="table-responsive">
           {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
           <table class="table table-bordered table-striped table-vcenter">
@@ -64,7 +59,7 @@
                 {{-- <?php $i = 1; ?> --}}
                 @foreach ($virtual as $user)
                     <tr>
-                        <td>{{ $user->user->name }}</td>
+                        <td><a href="{{ url('user/'.$user->user_id.'/info') }}" target="_blank"> {{ $user->user->name }} </a></td>
                         <td>{{ $user->user->phone }}</td>
                         <td>{{ $user->account_number }}</td>
                         <td>{{ $user->customer_id}}</td>
