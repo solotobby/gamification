@@ -68,7 +68,7 @@
             </center>
             @else 
 
-            <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a> --}}
+            <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
             @endif
 
