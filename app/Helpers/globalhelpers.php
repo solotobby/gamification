@@ -609,8 +609,8 @@ if(!function_exists('generateVirtualAccount')){
 
             $payload = [
                 "email"=> auth()->user()->email,
-                "first_name"=> $splitedName[0],
-                "last_name"=> $splitedName[1],
+                "first_name"=> auth()->user()->name,
+                "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
             $res = PaystackHelpers::createCustomer($payload);
@@ -655,8 +655,8 @@ if(!function_exists('reGenerateVirtualAccount')){
            
             //update customer
             $customerPayload = [
-                "first_name"=> $first_name,
-                "last_name"=> $last_name,
+                "first_name"=> $user->name,
+                "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
 
