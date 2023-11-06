@@ -18,7 +18,7 @@
           USD Balance: ${{number_format(@$info->wallet->usd_balance,2)}} <br>
           Naira Verified: {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}}<br>
           USD Verified: {{ $info->USD_verified == true ? 'Verified' : 'Unverified'}} <br>
-          Phone Number: {{ $info->phone }} <br>
+          Phone Number: {{ $info->phone }}<br>
           Country: {{ $info->country }}<br>
           Base Currency: {{ $info->wallet->base_currency }} <br>
           GoogleID: {{ @$info->google_id }}<br>
@@ -27,6 +27,10 @@
           Account Number:{{ @$info->accountDetails->account_number }}<br>
           Blocked: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
           Celebrity Status: {{ @$info->profile->is_celebrity == true ? 'Yes' : 'No' }}<br>
+          Phone Number Verified: {{ @$info->profile->phone_verified == true ? 'Yes' : 'No' }}<br>
+          <hr>
+          Virtual Account Number: {{ @$info->virtualAccount->account_number }}<br>
+
         </div>
       </form>
     </div>
