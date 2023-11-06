@@ -354,3 +354,6 @@ Route::resource('admin/safelock', AdminSafeLockController::class);
 //update users account details
 
 Route::post('admin/update/account/details', [\App\Http\Controllers\Admin\AdminController::class, 'updateUserAccountDetails'])->name('admin.update.account.details');
+Route::get('admin/virtual/list', [\App\Http\Controllers\Admin\AdminController::class, 'virtualAccountList']);
+Route::get('reactivate/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'reactivateVA']);
+
