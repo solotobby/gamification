@@ -67,7 +67,7 @@
                         <td>
                             @if($user->account_number == null)
                             {{-- <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $user->id }}">Actvate VA</button> --}}
-                            <a href="{{ url('reactivate/virtual/account/'.$user->id) }}" class="btn btn-success btn-sm">Activate VA</a>
+                            <a href="{{ url('reactivate/virtual/account/'.$user->user_id) }}" class="btn btn-success btn-sm">Activate VA</a>
                             @else
                             <a href="#" @disabled(true)> Okay</a>
                             @endif
