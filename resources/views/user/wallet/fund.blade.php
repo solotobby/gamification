@@ -49,19 +49,31 @@
             @endif
 
             <div class="col-md-12">
-              <div class="alert alert-warning">
-                <li class="fa fa-info"></li> Attention!! Please ensure you transfer the <strong>EXACT</strong> amount displayed on the transaction page, failure to do so may lead to loss of funds.
-              </div>
+             
             </div>
             <div class="mb-4">
               @if(auth()->user()->wallet->base_currency == 'Naira')
-              <div class="input-group">
+              <div class="alert alert-info">
+                <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
+              </div>
+
+              Bank Name: {{ auth()->user()->virtualAccount->bank_name }}<br>
+         
+              Account Number:  {{ auth()->user()->virtualAccount->account_number }}
+              <hr>
+              <center>
+                <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                </a>
+            </center>
+
+              {{-- <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
                 </span>
                 <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
-              </div>
+              </div> --}}
               @else
               <div class="input-group">
                 <span class="input-group-text">
@@ -70,7 +82,6 @@
                 <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
               </div>
-              @endif
 
             </div>
 
@@ -79,35 +90,11 @@
                 <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
               </button>
             </div>
+            @endif
           </div>
           <div class="col-lg-3"></div>
        
       </div>
-      @if(auth()->user()->wallet->base_currency == 'Naira')
-        <div class="row mb-3">
-          <div class="col-lg-2"></div>
-          <div class="col-lg-8" style="color: brown">
-            You can now fund your wallet via Card or Bank Transfer. Once wallet top up is successful, click the button below to verify your account.
-             Verification fee is N1050 (Naira account) and $5 (Dollar account).
-            <center>
-                <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-3" data-toggle="click-ripple">
-                  <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-                </a>
-            </center>
-            <br>
-            <center>
-                For manual funding, you can make transfers to 4600066074 (VFD BANK- Dominahltech services). 
-                Drop your evidence of payment and Freebyz email via Talk to Us button on the menu bar. Thank you.
-            </center>
-             {{-- Manual Wallet funding, please credit the account below:
-               <b>ACCOUNT DETAILS: 4600066074 
-              <br>DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-              <br>
-              <i>(Add <b><i>wallet funding</i></b> in the transfer description)</i> --}}
-          </div>
-          <div class="col-lg-2"></div>
-      </div>
-      @endif
       <!-- END Text -->
     </form>
   </div>

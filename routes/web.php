@@ -350,3 +350,7 @@ Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test'])
 Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index']);
 Route::get('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner']);
 Route::resource('admin/safelock', AdminSafeLockController::class);
+
+//update users account details
+
+Route::post('admin/update/account/details', [\App\Http\Controllers\Admin\AdminController::class, 'updateUserAccountDetails'])->name('admin.update.account.details');

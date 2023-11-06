@@ -144,8 +144,16 @@
           </p>
         </div>
       </div>
+      @if(auth()->user()->virtualAccount)
+        <div class="">
+          <b>Fund your wallet by crediting your account details below</b><br>
+          Bank Name: {{ auth()->user()->virtualAccount->bank_name }}<br>
+          Account Number: {{ auth()->user()->virtualAccount->account_number }}
+        </div>
+      @endif
       
       <div class="d-flex justify-content-center align-items-center">
+        
         <div class="px-2 px-sm-5">
 
           @if(auth()->user()->wallet->base_currency == "Naira")
@@ -194,44 +202,11 @@
 
 
       @if($announcement)
-      <div class="alert alert-info mt-3">
-        {!! @$announcement->content !!}
-        {{-- Dear user, Our Anniversary is here! Click <a href="https://bit.ly/freebyzhng" target="_blank">https://bit.ly/freebyzhng</a> to sign up for our VIRTUAL HANGOUT (6pm/18thAug). You'll enjoy free airtime,data &lots more. --}}
-      </div>
+        <div class="alert alert-info mt-3">
+          {!! @$announcement->content !!}
+        </div>
       @endif
-       
       
-        <!-- Pop Out Default Modal -->
-        <div class="modal fade" id="modal-default-popout" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-popout" role="document">
-          <div class="modal-content">
-            <form action="{{ url('assign/virtual/account')}}" method="POST">
-               @csrf
-              <div class="modal-header">
-              <h5 class="modal-title"> Create Account Number </h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body pb-1">
-                 
-                  <div class="mb-4">
-                    <label class="form-label" for="post-files">Please Enter your BVN</small></label>
-                        <input class="form-control" name="bvn" type="text" max="10" required>
-                  </div>
-                  <div class="mb-4">
-                    {{-- <button class="btn btn-primary" type="submit">Get Account</button> --}}
-                  </div>
-                 
-              </div>
-              
-              <div class="modal-footer">
-              {{-- <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button> --}}
-              <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Submit</button>
-              </div>
-            </form>
-          </div>
-          </div>
-      </div>
-
       {{-- <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
@@ -375,17 +350,17 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    {{-- @elseif(!auth()->user()->accountDetails)
+    @elseif(!auth()->user()->accountDetails)
 
       @include('layouts.resources.account_details')
 
     @elseif(!auth()->user()->profile->phone_verified)
 
-      @include('layouts.resources.account_details')  --}}
+      @include('layouts.resources.account_details')
 
     @elseif(auth()->user()->is_verified == 0)
     
-        @include('layouts.resources.unverified')
+      @include('layouts.resources.unverified')
 
     @endif
     
