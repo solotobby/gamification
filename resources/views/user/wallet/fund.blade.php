@@ -57,9 +57,9 @@
                 <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
               </div>
 
-              Bank Name: {{ auth()->user()->virtualAccount->bank_name }}<br>
+              Bank Name: {{ @auth()->user()->virtualAccount->bank_name }}<br>
          
-              Account Number:  {{ auth()->user()->virtualAccount->account_number }}
+              Account Number:  {{ @auth()->user()->virtualAccount->account_number }}
               <hr>
               <center>
                 <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
