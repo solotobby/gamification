@@ -28,8 +28,12 @@
           Blocked: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
           Celebrity Status: {{ @$info->profile->is_celebrity == true ? 'Yes' : 'No' }}<br>
           Phone Number Verified: {{ @$info->profile->phone_verified == true ? 'Yes' : 'No' }}<br>
-          <hr>
-          Virtual Account Number: {{ @$info->virtualAccount->account_number }}<br>
+         @if($info->virtualAccount)
+         Virtual Account Name: {{ @$info->virtualAccount->account_name }} <br>
+         Virtual Account Number: {{ @$info->virtualAccount->account_number }}<br>
+         @else
+          Virtual Account Number: Not Created<br>
+        @endif
 
         </div>
       </form>
@@ -349,9 +353,9 @@
                        Update User Account Information
                       </h4>
 
-                      Account Number: {{ $info->accountDetails->account_number }} <br>
-                      Bank Name: {{ $info->accountDetails->bank_name }} <br>
-                      Account Name: {{ $info->accountDetails->name}} <br><br>
+                      Account Number: {{ @$info->accountDetails->account_number }} <br>
+                      Bank Name: {{ @$info->accountDetails->bank_name }} <br>
+                      Account Name: {{ @$info->accountDetails->name}} <br><br>
 
                       <form action="{{ route('admin.update.account.details') }}" method="POST">
                         @csrf
