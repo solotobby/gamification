@@ -282,7 +282,8 @@ class AdminController extends Controller
         $info = User::where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
-        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy]);
+        $bankList = PaystackHelpers::bankList();
+        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy, 'bankList' => $bankList]);
     }
 
     public function adminUserReferrals($id){
@@ -908,6 +909,30 @@ class AdminController extends Controller
     public function blacklist($id){
         User::where('id', $id)->update(['is_blacklisted' => 1]);
         return back()->with('success', 'User Blacklisted');
+    }
+
+    public function updateUserAccountDetails(Request $request){
+
+            $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
+
+            if($accountInformation['status'] == 'true')
+            {
+                $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
+                $bankInfor = BankInformation::where('user_id', $request->user_id)->first();
+                $bankInfor->name = $accountInformation['data']['account_name'];
+                $bankInfor->bank_name = $recipientCode['data']['details']['bank_name'];
+                $bankInfor->account_number = $request->account_number;
+                $bankInfor->bank_code = $request->bank_code;
+                $bankInfor->recipient_code = $recipientCode['data']['recipient_code'];
+                $bankInfor->save();
+            }
+
+            $user = User::where('id', $request->user_id)->first();
+            $subject = 'Account Details Updated';
+            $content = 'Congratulations, your account details has been updated on Freebyz.';
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+            return back()->with('success', 'Account Details Upated');
     }
 
     public function listFlutterwaveTrf(){

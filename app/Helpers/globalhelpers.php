@@ -588,7 +588,7 @@ if(!function_exists('generateVirtualAccount')){
 
                 $data = [
                     "customer"=> $updateCustomer['data']['customer_code'], 
-                    "preferred_bank"=>"wema-bank"
+                    "preferred_bank"=>env('PAYSTACK_BANK')
                 ];
                         
                 $response = PaystackHelpers::virtualAccount($data);
@@ -619,9 +619,9 @@ if(!function_exists('generateVirtualAccount')){
             
                 $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
                 
-                $data = [
+               $data = [
                     "customer"=> $res['data']['customer_code'], 
-                    "preferred_bank"=>"wema-bank"
+                    "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
                 $response = PaystackHelpers::virtualAccount($data);

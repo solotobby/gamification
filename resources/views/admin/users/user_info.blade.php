@@ -32,6 +32,12 @@
     </div>
     <!-- END Search -->
 
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <!-- Results -->
     <div class="block block-rounded">
       <ul class="nav nav-tabs nav-tabs-block" role="tablist">
@@ -290,11 +296,7 @@
               <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
             </div>
             <div class="container">
-              @if (session('success'))
-                  <div class="alert alert-success" role="alert">
-                      {{ session('success') }}
-                  </div>
-              @endif
+            
 
                     <h4 class="fw-normal text-muted text-center">
                       Manual Wallet TopUp
@@ -338,6 +340,55 @@
                   </div>
                 </div>
               </form>
+              <hr>
+                      <h4 class="fw-normal text-muted text-center">
+                       Update User Account Information
+                      </h4>
+
+                      Account Number: {{ $info->accountDetails->account_number }} <br>
+                      Bank Name: {{ $info->accountDetails->bank_name }} <br>
+                      Account Name: {{ $info->accountDetails->name}} <br><br>
+
+                      <form action="{{ route('admin.update.account.details') }}" method="POST">
+                        @csrf
+                        <div class="form-row align-items-center">
+                          <div class="col-auto">
+                            <div class="mb-4">
+                              <label>Select Bank Name</label>
+                              <div class="input-group">
+                                  
+                              <select class="form-control" name="bank_code" required>
+                                  <option value="">Select Bank</option>
+                                  @foreach ($bankList as $bank)
+                                      <option value="{{ $bank['code'] }}"> {{ $bank['name'] }}</option>
+                                      {{--  <input type="hidden" name="bank_name" value="{{ $bank['name'] }}">  --}}
+                                  @endforeach    
+                                  </select> 
+                              </div>
+                          </div>
+                          <input type="hidden" name="user_id" value="{{$info->id}}">
+                          <div class="mb-4">
+                              <label>Enter Account Number</label>
+                            <div class="input-group">
+                              <span class="input-group-text">
+                                
+                              </span>
+                              {{-- <input type="text" class="form-control text-center" id="example-group1-input3" name="example-group1-input3" placeholder="00"> --}}
+                              <input type="text" class="form-control @error('account_number') is-invalid @enderror" id="reminder-credential" name="account_number" placeholder="Enter Account Number" required value="{{ old('account_number') }}">
+                              {{-- <span class="input-group-text">,00</span> --}}
+                            </div>
+                          </div>
+                          
+                          <div class="text-center mb-4">
+                            <button type="submit" class="btn btn-primary">
+                              <i class="fa fa-fw fa-save opacity-50 me-1"></i> Save & Continue
+                            </button>
+                          </div>
+                          </div>
+                        </div>
+                      </form>
+
+
 
               <hr>
                       <h4 class="fw-normal text-muted text-center">

@@ -1,5 +1,5 @@
 <!-- Onboarding Modal -->
-<div class="modal fade" id="modal-onboarding" tabindex="-1" role="dialog" aria-labelledby="modal-onboarding" aria-hidden="true">
+<div class="modal fade" id="modal-onboarding" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="modal-onboarding" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content rounded overflow-hidden bg-image bg-image-bottom border-0" style="background-image: url({{asset('src/assets/media/photos/photo23.jpg')}});">
         <div class="row">
@@ -14,15 +14,14 @@
                 <div class="p-5">
                  
                   <h3 class="mb-2 text-center">
-                    Get Paid fast
+                   Activate your virtual Account Number
                   </h3>
 
                   <h4 class="fw-normal text-muted text-center">
-                    Click the button below to enter your bank details for fast and easy withdrawal
-                   
+                    We have created a virtual account for easy top-up of your wallet.
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('bank/information')}}" data-toggle="click-ripple">
-                        Get Started Now!
+                        Activate Now
                       </a>
                       <br> 
                     </center>
