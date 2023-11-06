@@ -941,11 +941,11 @@ class AdminController extends Controller
         return view('admin.users.virtual_account', ['virtual' => $virtual]);
     }
 
-    public function reactivateVA(Request $request){
+    public function reactivateVA($id){
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
-        $userPhone = User::where('id', $request->user_id)->first();
-        $data['VA'] = reGenerateVirtualAccount($request->first_name, $request->last_name, $userPhone, $userPhone);
+        $userPhone = User::where('id', $id)->first();
+        $data['VA'] = reGenerateVirtualAccount($userPhone);
        
         return back()->with('success', 'VA regenerated');
     }
