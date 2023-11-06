@@ -944,7 +944,7 @@ class AdminController extends Controller
     public function reactivateVA($id){
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
-        $userPhone = User::where('id', $id)->first();
+       $userPhone = User::where('id', $id)->first();
         $data['VA'] = reGenerateVirtualAccount($userPhone);
        
         return back()->with('success', 'VA regenerated');
