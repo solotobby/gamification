@@ -12,7 +12,7 @@ class WebhookController extends Controller
 {
     public function handle(Request $request){
 
-        // Question::create(['content' => $request]);
+        Question::create(['content' => $request]);
 
         $event = $request['event'];
 
