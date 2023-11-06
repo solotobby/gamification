@@ -937,7 +937,7 @@ class AdminController extends Controller
     }
 
     public function virtualAccountList(){
-        $virtual = VirtualAccount::where('account_number', '')->orderBy('created_at', 'DESC')->get();
+        $virtual = VirtualAccount::where('account_number', null)->orderBy('created_at', 'DESC')->get();
         return view('admin.users.virtual_account', ['virtual' => $virtual]);
     }
 
