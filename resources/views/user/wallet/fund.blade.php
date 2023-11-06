@@ -57,18 +57,18 @@
                 <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
               </div>
               @if(auth()->user()->virtualAccount)
-              Bank Name: {{ @auth()->user()->virtualAccount->bank_name }}<br>
+              Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
          
-              Account Number:  {{ @auth()->user()->virtualAccount->account_number }}
+              Account Number:  {{ auth()->user()->virtualAccount->account_number }}
               <hr>
               <center>
                 <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
                   <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
                 </a>
             </center>
-            @else
+            @else 
 
-            <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
+            <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a> --}}
 
             @endif
 

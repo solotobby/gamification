@@ -165,7 +165,7 @@
                 @endif
                 
                 <div class="mb-4">
-                    <label>Enter Phone Number</label>
+                    <label>Enter Phone Number (do not use a 'DND' number)</label>
                   <div class="input-group">
                     <span class="input-group-text">
                       <li class="fa fa-phone"></li>
