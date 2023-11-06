@@ -690,8 +690,8 @@ if(!function_exists('reGenerateVirtualAccount')){
 
             $payload = [
                 "email"=> $user->email,
-                "first_name"=> $first_name,
-                "last_name"=> $last_name,
+                "first_name"=>$user->name,
+                "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
             $res = PaystackHelpers::createCustomer($payload);
