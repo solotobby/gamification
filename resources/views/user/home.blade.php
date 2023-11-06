@@ -138,10 +138,6 @@
               </div>
             </div>
           </center>
-         
-          <p style="color:brown">
-            We'll reward you with ₦55,000($78) when you refer 100 verified users and ₦510,000 ($728) when you refer 1,000 verified users.
-          </p>
         </div>
       </div>
       @if(auth()->user()->virtualAccount)
@@ -191,10 +187,10 @@
             @csrf
               @if(auth()->user()->wallet->base_currency == 'Naira')
               <input type="hidden" name="currency" value="Dollar">
-              <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
+              <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
               @else
               <input type="hidden" name="currency" value="Naira">
-              <button class="btn btn-secondary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
+              <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
               @endif
           </form>
         </center>
