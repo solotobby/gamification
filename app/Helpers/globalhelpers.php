@@ -575,8 +575,8 @@ if(!function_exists('generateVirtualAccount')){
            
             //update customer
             $customerPayload = [
-                "first_name"=> $splitedName[0],
-                "last_name"=> $splitedName[1],
+                "first_name"=> auth()->user()->name,
+                "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
 
