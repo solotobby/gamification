@@ -645,18 +645,18 @@ if(!function_exists('generateVirtualAccount')){
 
 
 if(!function_exists('reGenerateVirtualAccount')){
-    function reGenerateVirtualAccount($name, $phone_number, $user){
-        $splitedName = explode(" ", $name);
+    function reGenerateVirtualAccount($first_name, $last_name, $phone_number, $user){
+        // $splitedName = explode(" ", $name);
 
         //check if user exist, if yes, update informatioon
-        $fetchCustomer = PaystackHelpers::fetchCustomer($user->email);
+       $fetchCustomer = PaystackHelpers::fetchCustomer($user->email);
 
         if($fetchCustomer['status'] == true){
            
             //update customer
             $customerPayload = [
-                "first_name"=> $splitedName[0],
-                "last_name"=> $splitedName[1],
+                "first_name"=> $first_name,
+                "last_name"=> $last_name,
                 "phone"=> "+".$phone_number
             ];
 
@@ -671,7 +671,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                     "preferred_bank"=>env('PAYSTACK_BANK')
                 ];
                         
-              return $response = PaystackHelpers::virtualAccount($data);
+              $response = PaystackHelpers::virtualAccount($data);
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];
@@ -690,8 +690,8 @@ if(!function_exists('reGenerateVirtualAccount')){
 
             $payload = [
                 "email"=> $user->email,
-                "first_name"=> $splitedName[0],
-                "last_name"=> $splitedName[1],
+                "first_name"=> $first_name,
+                "last_name"=> $last_name,
                 "phone"=> "+".$phone_number
             ];
             $res = PaystackHelpers::createCustomer($payload);
@@ -705,7 +705,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                     "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
-                return $response = PaystackHelpers::virtualAccount($data);
+                 $response = PaystackHelpers::virtualAccount($data);
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];

@@ -356,5 +356,5 @@ Route::resource('admin/safelock', AdminSafeLockController::class);
 
 Route::post('admin/update/account/details', [\App\Http\Controllers\Admin\AdminController::class, 'updateUserAccountDetails'])->name('admin.update.account.details');
 Route::get('admin/virtual/list', [\App\Http\Controllers\Admin\AdminController::class, 'virtualAccountList']);
-Route::get('reactivate/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'reactivateVA']);
-
+Route::post('reactivate/virtual/account', [\App\Http\Controllers\Admin\AdminController::class, 'reactivateVA']);
+Route::get('remove/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeVirtualAccount']);

@@ -15,4 +15,10 @@ class VirtualAccount extends Model
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function bankInformation()
+    {
+        return $this->belongsTo(BankInformation::class,  'user_id');
+    }
+
 }

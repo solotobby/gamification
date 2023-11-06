@@ -937,17 +937,22 @@ class AdminController extends Controller
     }
 
     public function virtualAccountList(){
-        $virtual = VirtualAccount::orderBy('created_at', 'DESC')->get();
+        $virtual = VirtualAccount::where('account_number', '')->orderBy('created_at', 'DESC')->get();
         return view('admin.users.virtual_account', ['virtual' => $virtual]);
     }
 
-    public function reactivateVA($id){
-        $bankInfor = BankInformation::where('user_id', $id)->first()->name;
-        $userPhone = User::where('id', $id)->first();
-        $data['VA'] = reGenerateVirtualAccount($bankInfor, $userPhone, $userPhone);
-        $data['user'] = $userPhone;
-        return $data;
+    public function reactivateVA(Request $request){
+        // return $request;
+        // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
+        $userPhone = User::where('id', $request->user_id)->first();
+        $data['VA'] = reGenerateVirtualAccount($request->first_name, $request->last_name, $userPhone, $userPhone);
+       
         return back()->with('success', 'VA regenerated');
+    }
+
+    public function removeVirtualAccount($id){
+        VirtualAccount::where('id', $id)->delete();
+        return back()->with('success', 'VA removed');
     }
 
     public function listFlutterwaveTrf(){
