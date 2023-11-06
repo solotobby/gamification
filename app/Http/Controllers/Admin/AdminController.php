@@ -31,6 +31,7 @@ use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\UserLocation;
 use App\Models\UserScore;
+use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
@@ -933,6 +934,18 @@ class AdminController extends Controller
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             return back()->with('success', 'Account Details Upated');
+    }
+
+    public function virtualAccountList(){
+        $virtual = VirtualAccount::orderBy('created_at', 'DESC')->get();
+        return view('admin.users.virtual_account', ['virtual' => $virtual]);
+    }
+
+    public function reactivateVA($id){
+        $bankInfor = BankInformation::where('user_id', $id)->first()->name;
+        $userPhone = User::where('id', $id)->first();
+        reGenerateVirtualAccount($bankInfor, $userPhone, $userPhone);
+        return back()->with('success', 'VA regenerated');
     }
 
     public function listFlutterwaveTrf(){

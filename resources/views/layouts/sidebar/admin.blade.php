@@ -296,6 +296,15 @@
         </ul>
       </li>
 
+      
+
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/virtual/list') }}">
+          <i class="nav-main-link-icon fa fa-th"></i>
+          <span class="nav-main-link-name">Virtual Accounts</span>
+        </a>
+      </li>
+
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('user.tracker') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
