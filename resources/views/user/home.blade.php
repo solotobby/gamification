@@ -227,11 +227,20 @@
 
     @elseif(!auth()->user()->accountDetails)
 
-      @include('layouts.resources.account_details')
+
+    @if(auth()->user()->wallet->base_currency == "Naira")
+        @include('layouts.resources.account_details') 
+    @endif
+
+     
 
     @elseif(!auth()->user()->profile->phone_verified)
 
-      @include('layouts.resources.account_details')
+        @if(auth()->user()->wallet->base_currency == "Naira")
+            @include('layouts.resources.account_details')      
+        @endif
+
+      
 
     @elseif(auth()->user()->is_verified == 0)
     
