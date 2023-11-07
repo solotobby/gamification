@@ -243,6 +243,12 @@
 @endsection
 
 @section('script')
+ <!-- jQuery (required for Slick Slider plugin) -->
+ <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
+
+ <!-- Page JS Plugins -->
+ <script src="{{asset('src/assets/js/plugins/slick-carousel/slick.min.js')}}"></script>
+
 <!-- Page JS Code -->
 <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 
