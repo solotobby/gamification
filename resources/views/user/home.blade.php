@@ -217,9 +217,33 @@
       </a>
       @endforeach
    </div>
+
+
+
+   <!-- END Call to Action -->
+    @if(auth()->user()->profile->is_welcome == 0)
+      {{-- Show welcome pop up --}}
+      @include('layouts.resources.welcome')
+
+    @elseif(!auth()->user()->accountDetails)
+
+      @include('layouts.resources.account_details')
+
+    @elseif(!auth()->user()->profile->phone_verified)
+
+      @include('layouts.resources.account_details')
+
+    @elseif(auth()->user()->is_verified == 0)
+    
+      @include('layouts.resources.unverified')
+
+    @endif
+
+
 @endsection
 
 @section('script')
-
+<!-- Page JS Code -->
+<script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 
 @endsection

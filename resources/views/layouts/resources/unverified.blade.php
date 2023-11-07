@@ -19,23 +19,12 @@
 
                   <h4 class="fw-normal text-muted text-center">
                     verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
-                    you will earn &#8358;25,000 plus &#8358;5,000 extra bonus from us. 
-                    {{-- <br>Got Payment Issues, transfer to 
-                    {{-- 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank)
-                    4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-                    (Please add your persnal name example: Verification from Samuel Mark) 
-                    then upload proof of evidence via our <b>Talk To Us</b> panel
-                    <br> --}}
+                    you will earn &#8358;50,000 plus &#8358;5,000 extra bonus from us. 
+                   
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{route('upgrade')}}" data-toggle="click-ripple">
                         Get Verified Now!
                       </a>
-                      <br> 
-                      {{-- Can't pay in Naira, Click the Link Button Below
-                      <br>
-                      <a class="btn btn-hero btn-secondary" href="https://flutterwave.com/pay/payfreebyz" target="_blank" data-toggle="click-ripple">
-                        Get Verified with USD!
-                      </a> --}}
                     </center>
                   </h4>
                  
