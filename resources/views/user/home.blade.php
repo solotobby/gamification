@@ -86,7 +86,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <h5 class="fw-light mb-2">Your Funding Account</h5>
+        <h5 class="fw-light mb-2">Your Funding Account(to fund your wallet)</h5>
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
             <tr>
