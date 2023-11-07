@@ -95,6 +95,8 @@
                 <td class="js-task-content fw-semibold ps-0">
                     @if(auth()->user()->virtualAccount)
                         {{ auth()->user()->virtualAccount->bank_name }} | {{ auth()->user()->virtualAccount->account_number }}
+                    @else
+                        Not yet created
                     @endif
                 </td>
                 <td class="text-end" style="width: 100px;">
