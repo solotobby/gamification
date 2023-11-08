@@ -56,7 +56,7 @@
               <div class="alert alert-info">
                 <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
               </div>
-              @if(auth()->user()->virtualAccount)
+              {{-- @if(auth()->user()->virtualAccount)
               Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
          
               Account Number:  {{ auth()->user()->virtualAccount->account_number }}
@@ -78,15 +78,23 @@
 
                   <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
-            @endif
+            @endif --}}
 
-              {{-- <div class="input-group">
+              <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
                 </span>
                 <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
-              </div> --}}
+              </div>
+
+              <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">
+                  <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
+                </button>
+              </div>
+
+
               @else
               <div class="input-group">
                 <span class="input-group-text">
