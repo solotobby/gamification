@@ -672,6 +672,11 @@ if(!function_exists('reGenerateVirtualAccount')){
                 ];
                         
               $response = PaystackHelpers::virtualAccount($data);
+
+                $data['res']=$response;
+                $data['va']=$VirtualAccount;
+
+                return $data;
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];
@@ -681,6 +686,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 $VirtualAccount->save();
                 $data['res']=$response;
                 $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+               
                 return $data;
 
             }
@@ -706,6 +712,11 @@ if(!function_exists('reGenerateVirtualAccount')){
                 ];
                         
                  $response = PaystackHelpers::virtualAccount($data);
+
+                $data['res']=$response;
+                $data['va']=$VirtualAccount;
+
+                return $data;
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];
