@@ -61,7 +61,14 @@
 
    <!-- Page Content -->
    <div class="content content-full">
-   
+   <div class="row">
+    <div class="col-12">
+      <div class="alert alert-info">
+        Hello, we are having issues generating Funding Account at the moment. For the mean time please make use of fund wallet: <a href="{{ url('wallet/fund')}}">Here to fund your wallet</a>.
+        Please bear with us!
+      </div>
+    </div>
+   </div>
 <div class="row">
 
     <div class="col-md-6">
@@ -82,14 +89,16 @@
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
                 <div class="input-group">
-                  @if(auth()->user()->virtualAccount)
+                 
+                  <span class="form-control form-control-alt">Coming soon!</span>
+                  {{-- @if(auth()->user()->virtualAccount)
                     <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
                     <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                       <i class="fa fa-copy"></i>
                     </button>
                     @else
                       No account created
-                    @endif
+                    @endif --}}
                 </div>
             </table>
         </div>
@@ -210,7 +219,8 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    @elseif(!auth()->user()->accountDetails)
+
+    {{-- @elseif(!auth()->user()->accountDetails)
 
 
     @if(auth()->user()->wallet->base_currency == "Naira")
@@ -223,7 +233,7 @@
 
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details')      
-        @endif
+        @endif --}}
 
       
 
