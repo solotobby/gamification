@@ -68,20 +68,12 @@
         <h5 class="fw-light mb-2">Referral Link</h5>
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
-            <tr>
-                <td class="text-center pe-0" style="width: 38px;">
-                   
-                </td>
-                <td class="js-task-content fw-semibold ps-0">
-                    {{url('register/'.auth()->user()->referral_code)}}
-                </td>
-                <td class="text-end" style="width: 100px;">
-                {{-- <button type="button" class="js-task-star btn btn-sm btn-link text-warning">
-                    <i class="far fa-copy fa-fw"></i>
-                </button> --}}
-                
-                </td>
-            </tr>
+                <div class="input-group">
+                    <input type="text" value="{{url('register/'.auth()->user()->referral_code)}}" class="form-control form-control-alt" id="myInput" readonly>
+                    <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
+                        <i class="fa fa-copy"></i>
+                    </button>
+                </div>
             </table>
         </div>
     </div>
@@ -89,23 +81,12 @@
         <h5 class="fw-light mb-2">Your Funding Account(to fund your wallet)</h5>
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
-            <tr>
-                <td class="text-center pe-0" style="width: 38px;">
-                </td>
-                <td class="js-task-content fw-semibold ps-0">
-                    @if(auth()->user()->virtualAccount)
-                        {{ auth()->user()->virtualAccount->bank_name }} | {{ auth()->user()->virtualAccount->account_number }}
-                    @else
-                        Not yet created
-                    @endif
-                </td>
-                <td class="text-end" style="width: 100px;">
-                {{-- <button type="button" class="js-task-star btn btn-sm btn-link text-warning">
-                    <i class="far fa-copy fa-fw"></i>
-                </button> --}}
-               
-                </td>
-            </tr>
+                <div class="input-group">
+                    <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
+                    <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
+                      <i class="fa fa-copy"></i>
+                    </button>
+                </div>
             </table>
         </div>
     </div>
@@ -261,4 +242,27 @@
 <!-- Page JS Code -->
 <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 
+
+<script>
+function myFunction() {
+    var copyText = document.getElementById("myInput");
+    
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+
+    console.log(navigator.clipboard.writeText(copyText.value));
+    
+    // var tooltip = document.getElementById("myTooltip");
+    // tooltip.innerHTML = "Copied: " + copyText.value;
+  }
+
+  function myFunction2(){
+    var copyText = document.getElementById("myInput-2");
+    
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+
+    console.log(navigator.clipboard.writeText(copyText.value));
+  }
+</script>
 @endsection
