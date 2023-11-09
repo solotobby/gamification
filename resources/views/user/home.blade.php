@@ -63,9 +63,11 @@
    <div class="content content-full">
    <div class="row">
     <div class="col-12">
-      <div class="alert alert-info">
-        Hello, the virtual account service is back now. Thank you for your patience!
-      </div>
+      @if($announcement)
+        <div class="alert alert-info">
+          {!! @$announcement->content !!}
+        </div>
+      @endif
     </div>
    </div>
 <div class="row">
