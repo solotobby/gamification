@@ -90,9 +90,10 @@
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
                 <div class="input-group">
+                  <span class="form-control form-control-alt">Coming Soon!</span> 
+                    
                  
-                 
-                  @if(auth()->user()->virtualAccount)
+                  {{-- @if(auth()->user()->virtualAccount)
                     <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
                     <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                       <i class="fa fa-copy"></i>
@@ -100,7 +101,7 @@
                         @else
                           No account created
                         @endif
-                    </div>
+                    </div> --}}
 
                 </table>
             </div>
@@ -218,9 +219,7 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-     @elseif(!auth()->user()->accountDetails)
-
-
+     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details') 
         @endif
@@ -229,7 +228,7 @@
 
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details')      
-        @endif
+        @endif --}}
 
     @elseif(auth()->user()->is_verified == 0)
     
