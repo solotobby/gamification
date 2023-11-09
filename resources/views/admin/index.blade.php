@@ -43,7 +43,7 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Welcome, {{ auth()->user()->name }}! Total Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}}</a>.
+          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}} </a> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>.
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
