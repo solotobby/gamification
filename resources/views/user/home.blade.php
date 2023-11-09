@@ -64,8 +64,7 @@
    <div class="row">
     <div class="col-12">
       <div class="alert alert-info">
-        Hello, we are having issues generating Funding Account at the moment. For the mean time please make use of fund wallet: <a href="{{ url('wallet/fund')}}">Here to fund your wallet</a>.
-        Please bear with us!
+        Hello, the virtual account service is back now. Thank you for your patience!
       </div>
     </div>
    </div>
@@ -96,23 +95,21 @@
                     <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                       <i class="fa fa-copy"></i>
                     </button>
-                    @else
-                      No account created
-                    @endif
-                </div>
-            </table>
+                        @else
+                          No account created
+                        @endif
+                    </div>
+
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 
     <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
         {{-- <h4 class="fw-light mb-0">Ad</h4><br> --}}
         <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-
-
-
 
     <!-- VPS -->
     <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
@@ -218,7 +215,7 @@
     @if(auth()->user()->profile->is_welcome == 0)
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
-      
+
      @elseif(!auth()->user()->accountDetails)
 
 
