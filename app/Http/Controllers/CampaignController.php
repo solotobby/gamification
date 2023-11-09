@@ -713,6 +713,7 @@ class CampaignController extends Controller
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if(auth()->user()->wallet->base_currency == 'Naira'){
             if($wallet->balance >= $total){
+                
                 $wallet->balance -= $total;
                 $wallet->save();
                 
@@ -774,6 +775,7 @@ class CampaignController extends Controller
                 $campaign = Campaign::where('job_id', $request->id)->first();
                 $campaign->number_of_staff += $request->new_number;
                 $campaign->total_amount += $est_amount;
+                $campaign->is_completed = false;
                 $campaign->save();
 
 
