@@ -945,14 +945,14 @@ class AdminController extends Controller
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
        $userPhone = User::where('id', $id)->first();
-         return  reGenerateVirtualAccount($userPhone);
+        reGenerateVirtualAccount($userPhone);
        
-        return back()->with('success', 'VA regenerated');
+        return back()->with('success', 'VA regenerated Successfully');
     }
 
     public function removeVirtualAccount($id){
         VirtualAccount::where('id', $id)->delete();
-        return back()->with('success', 'VA removed');
+        return back()->with('success', 'VA removed - ');
     }
 
     public function listFlutterwaveTrf(){
