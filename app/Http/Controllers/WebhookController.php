@@ -47,11 +47,11 @@ class WebhookController extends Controller
 
             
 
-            return response()->json(['status' => 'success'], 200);
+        //     return response()->json(['status' => 'success'], 200);
 
-        }else{
-            return response()->json(['status' => 'error'], 500);
-        }
+        // }else{
+        //     return response()->json(['status' => 'error'], 500);
+        // }
 
     }
 }
