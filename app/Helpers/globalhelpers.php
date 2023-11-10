@@ -714,7 +714,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 $data['res']=$response;
                 $data['va']=$VirtualAccount;
 
-                return $data;
+               
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];
@@ -754,7 +754,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 $data['res']=$response;
                 $data['va']=$VirtualAccount;
 
-                return $data;
+                
     
                 $VirtualAccount->bank_name = $response['data']['bank']['name'];
                 $VirtualAccount->account_name = $response['data']['account_name'];
