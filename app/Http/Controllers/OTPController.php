@@ -73,24 +73,28 @@ class OTPController extends Controller
         // $response = OTPVerify($chekOtp->pinId, $request->otp);
 
         // if($response['verified'] == 'True'){
-
-            $chekOtp->is_verified = true;
-            $chekOtp->save();
-
-            $user = User::where('id', auth()->user()->id)->first();
-            $user->phone = $chekOtp->phone_number;
-            $user->save();
-
-            $profile = Profile::where('user_id', $user->id)->first();
-            $profile->phone_verified = true;
-            $profile->save();
-
-            $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
-            if($bankInformation){
-                generateVirtualAccount($bankInformation->name, $chekOtp->phone_number);
+            if($chekOtp){
+                $chekOtp->is_verified = true;
+                $chekOtp->save();
+    
+                $user = User::where('id', auth()->user()->id)->first();
+                $user->phone = $chekOtp->phone_number;
+                $user->save();
+    
+                $profile = Profile::where('user_id', $user->id)->first();
+                $profile->phone_verified = true;
+                $profile->save();
+    
+                $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
+                if($bankInformation){
+                    generateVirtualAccount($bankInformation->name, $chekOtp->phone_number);
+                }
+    
+               
+            }else{
+                return back()->with('error', 'An error orrcoured while verifying your number!');
             }
-
-            return back()->with('success', 'Phone Number Verified!');
+            
 
         // }else{
         //     return back()->with('error', 'An error ocoured while verifying your number');
