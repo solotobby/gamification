@@ -457,8 +457,14 @@
                           @endif
                       @endif
 
-                      
                       <hr>
+                      <h5 class="fw-normal text-muted text-center mt-2">
+                        Generate Virtual Account
+                        </h5>
+                        <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-success btn-sm">Activate VA</a>
+
+                      <hr>
+                      
                       <h5 class="fw-normal text-muted text-center mt-2">
                         Dead-end for this User!!!!
                         </h5>
