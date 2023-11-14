@@ -1,4 +1,15 @@
 @extends('layouts.main.master')
+
+@section('style')
+{{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}
+{{-- <script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script> --}}
+@endsection
+
 @section('content')
 
  <!-- Hero Section -->
@@ -6,12 +17,11 @@
     <div class="bg-black-75">
       <div class="content content-boxed text-center py-5">
         <h1 class="h2 text-white mb-2">
-            Create Banner Ad
+            Create Banner
         </h1>
       </div>
     </div>
   </div>
-
 
   <!-- Page Content -->
   <div class="content content-boxed">
@@ -37,6 +47,8 @@
           </ul>
       </div>
     @endif
+
+
 
 
     <form action="{{ url('banner') }}" method="POST" enctype="multipart/form-data">
@@ -68,14 +80,6 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label" for="post-title">Enter Budget</label>
-                    <input type="number" class="form-control" id="budget" name="budget" value="{{ old('budget') }}" required>
-                    <small><i>The total amount you want to spend</i></small>
-                </div>
-
-
-
-                {{-- <div class="mb-4">
                     <label class="form-label">Ad Placement</label>
                     <div class="space-y-2">
                       <div class="form-check">
@@ -94,15 +98,15 @@
                         <label class="form-check-label" for="ad_placement3">Dashboard - Top & Bottom </label>
                       </div>
                     </div>
-                </div> --}}
+                </div>
 
-                {{-- <div class="col-lg-12 col-xl-12">
+                <div class="col-lg-12 col-xl-12">
                     <div class="row mb-4">
                         <label class="form-label">Choose Audience Interest</label>
                         @foreach ($preferences as $pref)
                             <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">
                                 <div class="form-check form-switch form-check-inline">
-                                    
+                                    {{-- <input type="hidden" name="id[]" value="{{ $pref['id'] }}"> --}}
                                     <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}|{{ $pref['id'] }}" id="count" name="count[]">
                                     <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
                                     <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
@@ -110,9 +114,9 @@
                             </div>  
                         @endforeach
                     </div>
-                </div> --}}
+                </div>
 
-                {{-- <div class="mb-4">
+                <div class="mb-4">
                     <label class="form-label" for="post-title">Duration of Ad</label>
                     <select class="form-control" id="duration" name="duration" required>
                         <option value="">Select One</option>
@@ -123,10 +127,10 @@
                         <option value="60">60 Days</option>
                         <option value="90">90 Days</option>
                     </select>
-                </div> --}}
+                </div>
                 
 
-                {{-- <div class="mb-4">
+                <div class="mb-4">
                     <label class="form-label" for="post-title">Select Age Bracket</label>
                     <select class="form-control" id="age_bracket" name="age_bracket" required>
                         <option value="">Select One</option>
@@ -136,10 +140,10 @@
                         <option value="2">31-40</option>
                         <option value="1">40-50</option>
                     </select>
-                </div> --}}
+                </div>
                
 
-                {{-- <div class="mb-4">
+                <div class="mb-4">
                     <label class="form-label" for="post-title">Select Country</label>
                     <select class="form-control" id="country" name="country" required>
                         <option value="">Select One</option>
@@ -148,10 +152,10 @@
                         @endforeach
                     </select>
                     <small><i>Your Banner ad goes Live immediately it get approved</i></small>
-                </div> --}}
+                </div>
                 
                 <hr>
-                <h6>Estimated Impressions: <span id="impressionCost">0</span></h6>
+                <h4>Estimated Cost: &#8358;<span id="totalValue">0</span></h4>
         
                 </div>
                 </div>
@@ -177,26 +181,95 @@
 
   </div>
 
+
   @endsection
 
   @section('script')
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-  <script>
+ <!-- Page JS Plugins -->
+ {{-- <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script> --}}
+ {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
+ {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <!-- Page JS Helpers (CKEditor 5 plugins) -->
+ {{-- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
+ <script>
     $(document).ready(function(){ 
-        $('#budget').keyup(function(){
-            const budget = this.value; //document.getElementById("budget").value;
-            
-            var impressions = budget / 5;
-            var clicks = budget / 25;
+        // const submitButton = document.getElementById("submitButton");
+        // submitButton.disabled = true;
+        function calculateTotal() {
+            // Initialize the total
+            let total = 0;
 
-            document.getElementById('impressionCost').textContent = impressions.toFixed(0);
+            // Calculate the total based on the selected radio button value
+            const selectedAdPlacementValue = parseFloat(document.querySelector('input[name="ad_placement"]:checked').value);
+            if (!isNaN(selectedAdPlacementValue)) {
+                total += selectedAdPlacementValue;
 
-            
+            }
+
+            // Calculate the total based on the selected duration value
+            const selectedDurationValue = parseFloat(document.getElementById('duration').value);
+            if (!isNaN(selectedDurationValue)) {
+                total += selectedDurationValue;
+            }
+
+            // Calculate the total based on the selected age bracket value
+            const selectedAgeBracketValue = parseFloat(document.getElementById('age_bracket').value);
+            if (!isNaN(selectedAgeBracketValue)) {
+                total += selectedAgeBracketValue;
+            }
+
+            // Calculate the total based on the selected country value
+            const selectedCountryValue = parseFloat(document.getElementById('country').value);
+            if (!isNaN(selectedCountryValue)) {
+                total += selectedCountryValue;
+            }
+
+            // Calculate the total based on the selected checkbox values
+            const selectedCheckboxValues = Array.from(document.querySelectorAll('input[name="count[]"]:checked')).map(checkbox => parseFloat(checkbox.value));
+            if (selectedCheckboxValues.length > 0) {
+                total += selectedCheckboxValues.reduce((a, b) => a + b, 0);
+            }
+
+            // console.log(total);
+
+
+                var finalTotal = total * 25;
+                const submitButton = document.getElementById("submitButton");
+                // const message = document.getElementById("message").innerHTML;
+                const calculated = finalTotal;
+                const walletBalance = document.getElementById("walletBalance").value;
+
+                console.log(walletBalance);
+                
+                if(calculated > walletBalance){
+                    submitButton.disabled = true;
+                }else{
+                    submitButton.disabled = false;
+                    // message = 'you do not have surficient balance';
+                }
+
+            // Display the total in the "totalValue" span
+            document.getElementById('totalValue').textContent = finalTotal.toFixed(2);
+        }
+
+
+        // Add change event listeners to the relevant elements
+        document.querySelectorAll('input[name="ad_placement"]').forEach(radio => {
+            radio.addEventListener('change', calculateTotal);
         });
-       
-     });
+        document.getElementById('duration').addEventListener('change', calculateTotal);
+        document.getElementById('age_bracket').addEventListener('change', calculateTotal);
+        document.getElementById('country').addEventListener('change', calculateTotal);
+        document.querySelectorAll('input[name="count[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', calculateTotal);
+        });
 
-  </script>
+        // Initial calculation
+       calculateTotal();
 
-  @endsection
+    });
+</script>
+
+ @endsection

@@ -49,18 +49,17 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-
-       
-
+        return $request;
         $request->validate([
             'banner_url' => 'required|image|mimes:png,jpeg,gif,jpg',
-            'count' => 'required|array|min:5',
-            'country' => 'required|string',
-            'age_bracket' => 'required|string',
-            'ad_placement' => 'required|string',
-            'adplacement' => 'required|string',
+            // 'count' => 'required|array|min:5',
             'external_link' => 'required|string',
-            'duration' => 'required|string',
+            'budget' => 'required|numeric',
+            // 'country' => 'required|string',
+            // 'age_bracket' => 'required|string',
+            // 'ad_placement' => 'required|string',
+            // 'adplacement' => 'required|string',
+            // 'duration' => 'required|string',
         ]);
 
         $lissy = [];
