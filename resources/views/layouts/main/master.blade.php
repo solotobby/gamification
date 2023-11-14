@@ -39,7 +39,15 @@
     {{-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4211954660767269"
     crossorigin="anonymous"></script> --}}
 
-    
+    <!-- Google tag (gtag.js) current Active google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11361481559"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-11361481559');
+    </script>
 
     <!-- Google tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-238432357-1">
@@ -70,6 +78,9 @@
       gtag('js', new Date());
       gtag('config', 'G-Y2YM3K06L8');
     </script>
+
+
+    
 
   
     @yield('style')

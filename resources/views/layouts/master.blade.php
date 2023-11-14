@@ -27,6 +27,19 @@
 
         {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"> --}}
         
+        
+            <!-- Google tag (gtag.js) current Active google tag -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11361481559"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-11361481559');
+            </script>
+
+
+
             <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11361481559"></script>
             <script>
             window.dataLayer = window.dataLayer || [];
@@ -68,6 +81,9 @@
 
             gtag('config', 'G-Y2YM3K06L8');
             </script>
+
+
+           
         
         @yield('script')
         @yield('style')
