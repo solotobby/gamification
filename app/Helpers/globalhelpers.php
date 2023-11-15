@@ -10,6 +10,7 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\ConversionRate;
 use App\Models\Notification;
+use App\Models\PaymentTransaction;
 use App\Models\Preference;
 use App\Models\Profile;
 use App\Models\Settings;
@@ -776,5 +777,25 @@ if(!function_exists('reGenerateVirtualAccount')){
             }
         }
        
+    }
+}
+
+
+if(!function_exists('transactionProcessor')){
+    function transactionProcessor($user,$reference, $amount, $status, $currency, $channel, $type, $description, $tx_type, $user_type){ 
+        
+        return PaymentTransaction::create([
+                    'user_id' => $user->id,
+                    'campaign_id' => '1',
+                    'reference' => $reference,
+                    'amount' => $amount,
+                    'status' => $status,
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => $type,//'cash_transfer_top',
+                    'description' => $description,//'Cash transfer from '.$user->name,
+                    'tx_type' => $tx_type,//'Credit',
+                    'user_type' => $user_type//'regular'
+                ]);
     }
 }
