@@ -53,16 +53,34 @@
             <div class="alert alert-info">
                 The sms is sent only to Nigerian contact
                 <br>
-                
             </div>
-            {{-- send.mass.sms --}}
+            {{-- <div class="col-12">
+
+                <div class="block-content">
+                    <ul class="list-group push">
+                      @foreach ($emails->chunk(5) as $chunk)
+                          @foreach ($chunk as $ch)
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                          
+                            <span class="badge rounded-pill bg-info">{{ $ch->name }} - {{ $ch->email }}</span>
+                          </li>
+                          @endforeach
+                      @endforeach
+                        
+                        
+                    </ul>
+                  </div>
+
+            </div> --}}
+
+            
             <form action="{{ route('send.mass.sms') }}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label>Select Channel</label>
                     <select class="form-control" name="channel" required>
                     <option value="">Select One</option>
-                    <option value="mail">Mail</option>
+                    {{-- <option value="mail">Mail</option> --}}
                     <option value="sms">SMS</option>
                     </select>
                 </div>
