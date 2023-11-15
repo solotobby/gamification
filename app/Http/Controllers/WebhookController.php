@@ -34,7 +34,7 @@ class WebhookController extends Controller
             $creditUser = creditWallet($user, 'Naira', $amount);
             if($creditUser){
 
-                $transaction = transactionProcessor($user, $reference, $amount, $status, $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
+                $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
                 
                 if($transaction){
                     $subject = 'Wallet Credited';
