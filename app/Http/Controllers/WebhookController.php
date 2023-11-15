@@ -16,10 +16,6 @@ class WebhookController extends Controller
 
         Question::create(['content' => $request]);
 
-        
-
-       
-
         $event = $request['event'];
 
         if($event == 'charge.success'){

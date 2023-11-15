@@ -415,7 +415,7 @@ class UserController extends Controller
 
     public function transactions()
     {
-        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('status', 'successful')->where('user_type', 'regular')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('status', 'successful')->where('status', 'success')->where('user_type', 'regular')->orderBy('created_at', 'DESC')->get();
         return view('user.transactions', ['lists' => $list]);
     }
 
