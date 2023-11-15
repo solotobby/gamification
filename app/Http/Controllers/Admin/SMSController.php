@@ -22,7 +22,24 @@ class SMSController extends Controller
     }
 
     public function massSMS(){
-        return view('admin.broadcast_sms.index');
+    //     $emails = [];
+    //    User::where('country', 'Nigeria')->chunk(10, function($users){
+    //         foreach($users as $user){
+    //             $emails[] = $user;
+    //         }
+    //     });
+    //     return $user;
+        //pluck('name', 'email');
+    //    $emails = User::where('country', 'Nigeria')->select(['name', 'email'])->get();
+    $emails = [];
+        $email = User::orderBy('id', 'DESC')->chunk(10, function($users) use(&$emails) {
+          
+            foreach($users as $user){
+                array_push($emails, $user);
+            }
+        });
+        return  $emails;
+        return view('admin.broadcast_sms.index', ['emails' => $email]);
     }
 
     public function send_massSMS(Request $request){
@@ -322,4 +339,6 @@ class SMSController extends Controller
         ])->select(['phone'])->get();
         return $users;
     }
+
+    
 }

@@ -198,9 +198,10 @@ Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::c
 Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);
 Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterController::class, 'makeConversion'])->name('make.conversion');
 
-//badde
+//badge
 Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->name('badge');
 Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
+Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
 
 //webhook handling
 //Flutterwave Top up

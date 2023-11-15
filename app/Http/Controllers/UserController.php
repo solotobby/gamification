@@ -424,6 +424,10 @@ class UserController extends Controller
         $list = Withrawal::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         return view('user.wallet.withdrawal_requests', ['lists' => $list]);
     }
+
+    public function christmasBundle(){
+        return view('user.christmas');
+    }
     
     public function airtimePurchase()
     {

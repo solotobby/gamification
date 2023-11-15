@@ -71,6 +71,8 @@ class HomeController extends Controller
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
         
+        setProfile(auth()->user());
+        
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }

@@ -14,16 +14,14 @@
                 <div class="p-5">
                  
                   <h3 class="mb-2 text-center">
-                    Get Access to More Jobs
+                    Christmas Bonus
                   </h3>
 
                   <h4 class="fw-normal text-muted text-center">
-                    verify your account and have unlimited access to withdraw funds. When you refer up to 50 friends, 
-                    you will earn &#8358;50,000 plus &#8358;5,000 extra bonus from us. 
-                   
+                    Freebyz is giving out 100 chickens this December....
                     <center>
-                      <a class="btn btn-hero btn-primary mt-3" href="{{route('upgrade')}}" data-toggle="click-ripple">
-                        Get Verified Now!
+                      <a class="btn btn-hero btn-primary mt-3" href="{{url('christmas/bonus')}}" data-toggle="click-ripple">
+                        Get Enrolled Now
                       </a>
                     </center>
                   </h4>

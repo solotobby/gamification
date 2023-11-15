@@ -99,7 +99,7 @@
                       <i class="fa fa-copy"></i>
                     </button>
                         @else
-                        <span class="form-control form-control-alt">No account created</span>
+                        <span class="form-control form-control-alt">No account created yet</span>
                         @endif
                     </div>
 
@@ -233,6 +233,9 @@
     @elseif(auth()->user()->is_verified == 0)
     
       @include('layouts.resources.unverified')
+
+    {{-- @else
+      @include('layouts.resources.xmas') --}}
 
     @endif
 
