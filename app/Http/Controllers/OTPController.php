@@ -89,7 +89,7 @@ class OTPController extends Controller
                 if($bankInformation){
                     generateVirtualAccount($bankInformation->name, $chekOtp->phone_number);
                 }
-    
+                return back()->with('success', 'Phone verification successful');
                
             }else{
                 return back()->with('error', 'An error orrcoured while verifying your number!');
