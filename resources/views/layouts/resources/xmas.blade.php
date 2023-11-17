@@ -21,7 +21,7 @@
                     Freebyz is giving out 100 chickens this December....
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('christmas/bonus')}}" data-toggle="click-ripple">
-                        Get Enrolled Now
+                        Claim Yours
                       </a>
                     </center>
                   </h4>
