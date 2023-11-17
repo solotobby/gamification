@@ -428,6 +428,20 @@ class UserController extends Controller
     public function christmasBundle(){
         return view('user.christmas');
     }
+
+    public function storeChristmasBundle(Request $request){
+        $request->validate([
+            'phone' => 'required|digits:11|numeric',
+            'address' => 'required',
+        ]);
+
+        $profile = Profile::where('user_id', auth()->user()->id)->first();
+        $profile->address = $request->address;
+        $profile->is_xmas = true;
+        $profile->save();
+
+        return  back()->with('success', 'Info. created successfully');
+    }
     
     public function airtimePurchase()
     {

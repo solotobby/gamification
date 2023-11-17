@@ -13,6 +13,15 @@
 	}
 	</style>
 @endsection
+@section('script')
+
+<script>
+    $(document).ready(function(){
+        $("#myModal").modal('show');
+    });
+</script>
+
+@endsection
 @section('content')
 <!-- basic-slider start -->
 <div class="slider-section">
@@ -33,6 +42,33 @@
 		</div>
 		
 </div>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Freebyz Christmas Giveaway</h5>
+                {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+            </div>
+            <div class="modal-body">
+                {{-- <p>Subscribe to our mailing list to get the latest updates straight in your inbox.</p> --}}
+                
+				<img src="{{asset('xmas.jpg') }}" class="img-responsive img-thumbnail">
+				<a href="{{ url('promo') }}" class="btn btn-primary">Claim yours Now</a>
+				{{-- <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email Address">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form> --}}
+            </div>
+        </div>
+    </div>
+</div>
+
         <div class="basic-service-area white-bg pt-90 pb-50">
 			<div class="container">
 				<div class="area-title text-center">
@@ -53,19 +89,7 @@
 						</marquee>
 					</p>
 					
-					{{-- <p>
-						Freebyz was created for you to make cool cash everyday by doing simple social media jobs 
-						or increasing your business visibility and organic growth through engagements on your
-						 posts on Facebook, Instagram, YouTube, TikTok, WhatsApp and Twitter.<br>
-						On top of that, we reward you with 250 NGN everytime you referral a friend. 
-						We just want to reward you for every minute you spend on Freebyz!
-					</p> --}}
-					 {{-- <p>The platform is created to help build your mind, educate you and then sprinkle a bit of love 
-						 and smile on your faces. No matter how small it is, you are rewarded with airtime, data bundles 
-						 and cash for playing our weekly games. <br>This might look a bit off, but it is what it is! Just play
-						  games that are available, perform exceptionally well and earn a little more. We hope to do more, 
-						  change the world and spread a little kindness across! :) 
-					</p>  --}}
+					
 				</div>
 
 			</div>

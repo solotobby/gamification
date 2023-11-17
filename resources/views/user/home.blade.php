@@ -234,8 +234,9 @@
     
       @include('layouts.resources.unverified')
 
-    {{-- @else
-      @include('layouts.resources.xmas') --}}
+    @else
+    
+      @include('layouts.resources.xmas')
 
     @endif
 

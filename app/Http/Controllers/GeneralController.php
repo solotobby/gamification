@@ -51,6 +51,10 @@ class GeneralController extends Controller
         return 'okay';
     }
 
+    public function promo(){
+        return view('promo');
+    }
+
 
     public function landingPage()
     {  
