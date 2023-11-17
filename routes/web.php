@@ -38,7 +38,7 @@ Route::get('download', [\App\Http\Controllers\GeneralController::class, 'downloa
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
-
+Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
@@ -202,7 +202,7 @@ Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterControlle
 Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->name('badge');
 Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
 Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
-
+Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
 //webhook handling
 //Flutterwave Top up
 Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
