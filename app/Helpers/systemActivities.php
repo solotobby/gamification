@@ -117,12 +117,13 @@ class SystemActivities{
     }
 
     public static function badge(){
-        $currentDate = Carbon::now();
+        $currentDate = Carbon::now()->subMonth();
         $count = Referral::where('referee_id', auth()->user()->id)->whereMonth('updated_at', $currentDate->month)->count();
 
         $color = '';
         $membership = '';
         $amount = '';
+        
         if($count >= 10 && $count <= 20){
             $color = '#E5E4E2';
             $membership = 'Platinum';

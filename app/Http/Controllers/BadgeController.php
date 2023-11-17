@@ -22,7 +22,7 @@ class BadgeController extends Controller
     }
 
     public function redeemBadge(){
-         $badge = SystemActivities::badge();
+        $badge = SystemActivities::badge();
         $date = Carbon::now()->subMonth()->format('M, Y');
         if($badge['count'] < 10){
             return back()->with('error', 'You do not have up to 10 paid referral in '.$date);
