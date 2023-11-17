@@ -31,9 +31,8 @@
         <h3>CHRISTMAS GIVEAWAY</h3>
 
         <p>
-            We are giving out <strong> 100 LIVE chickens and 50 Bags of Rice</strong> for Christmas, claim yours here
             As part of our dreams to put smiles on the faces of our numerous users, we are giving out
-             <strong>100 LIVE CHICKENS and 50 Bags of Rice</strong> to very active Users.
+            <strong>100 LIVE CHICKENS and 50 Bags of Rice</strong> to very active users this christmas.
          </p>
 
          <p>
