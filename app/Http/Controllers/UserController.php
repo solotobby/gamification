@@ -149,15 +149,17 @@ class UserController extends Controller
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
             return redirect($url);
         }else{
-            $percent = 5/100 * 2;
-            $am = 5 + $percent + 1;
+
+            return redirect('https://flutterwave.com/pay/topuponfreebyz');
+            // $percent = 5/100 * 2;
+            // $am = 5 + $percent + 1;
            
-            $result = paypalPayment($am, '/capture/upgrade');
-             if($result['status'] == 'CREATED'){
-                $url = $result['links'][1]['href'];
-                PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
-                return redirect($url);
-             }
+            // $result = paypalPayment($am, '/capture/upgrade');
+            //  if($result['status'] == 'CREATED'){
+            //     $url = $result['links'][1]['href'];
+            //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
+            //     return redirect($url);
+            //  }
         } 
     }
 
@@ -455,7 +457,7 @@ class UserController extends Controller
     }
 
     public function loadData($network){
-        //$network;
+        //$net;
         $access_token = PaystackHelpers::access_token();
         return PaystackHelpers::loadNetworkData($access_token, $network);
     }
@@ -475,8 +477,8 @@ class UserController extends Controller
         if($occurence >= 200){
             return back()->with('error', 'You have reached your airtime limit today. Try again tomorrow');
         }
+
         $ref = time();
-        
         $balance = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json-patch+json',
@@ -533,8 +535,6 @@ class UserController extends Controller
         }else{
             return back()->with('error', 'An error occoured while processing your airtime');
         }
-
-
     }
 
     public function buyDatabundle(Request $request){

@@ -70,7 +70,7 @@ class HomeController extends Controller
     {
         //Sendmonny::accessToken();
         Analytics::dailyVisit();
-        
+
         setProfile(auth()->user());
         
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
@@ -157,6 +157,7 @@ class HomeController extends Controller
         ->with('revenue', json_encode($revenueChannel))
         ->with('country', json_encode($countryDistribution))
         ->with('age', json_encode($ageDistribution));
+
     }
 
     public function adminApi(Request $request){
@@ -202,6 +203,7 @@ class HomeController extends Controller
         
 
     public function staffHome(){
+
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
         $user = User::where('role', 'regular')->get();
@@ -223,17 +225,17 @@ class HomeController extends Controller
         $registrationChannel = Analytics::registrationChannel();
 
         return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-                ->with('visitor',json_encode($dailyActivity))
-                ->with('daily',json_encode($dailyVisits))
-                ->with('monthly', json_encode($MonthlyVisit))
-                ->with('channel', json_encode($registrationChannel));
+                    ->with('visitor',json_encode($dailyActivity))
+                    ->with('daily',json_encode($dailyVisits))
+                    ->with('monthly', json_encode($MonthlyVisit))
+                    ->with('channel', json_encode($registrationChannel));
 
     }
 
     public function savePhoneInformation(Request $request)
     {
         // $this->validate($request, [
-        //     // 'phone' => 'numeric|required|digits:11|unique:users'
+        //     'phone' => 'numeric|required|digits:11|unique:users'
         // ]);
         
         $user = User::where('id', auth()->user()->id)->first();

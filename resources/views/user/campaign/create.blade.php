@@ -1,6 +1,7 @@
 @extends('layouts.main.master')
 
 @section('title', 'Winner List')
+
 @section('style')
 {{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}
 <script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
@@ -12,13 +13,12 @@
 @endsection
 
 @section('content')
-
  <!-- Hero Section -->
  <div class="bg-image" style="background-image: ('src/assets/media/photos/photo21@2x.jpg');">
     <div class="bg-black-75">
       <div class="content content-boxed text-center py-5">
         <h1 class="h2 text-white mb-2">
-        Create Campaign
+            Create Campaign
         </h1>
       </div>
     </div>
@@ -53,7 +53,7 @@
       </div>
     @endif
 
-    <form action="{{ route('post.campaign') }}" method="POST" >
+    <form action="{{ route('post.campaign') }}" method="POST">
         @csrf
       <div class="block block-rounded">
         <div class="block-content block-content-full">
@@ -181,8 +181,6 @@
 
  <script>
     $(document).ready(function(){
-        // alert('cool');
-        
             $.ajax({
                     url: '{{ url("api/get/categories") }}',
                     type: "GET",
@@ -223,8 +221,7 @@
                                 $('#post-category').html('<option value="">Select Category</option>');
                                 $.each(new_result, function(key, value) {
                                     document.getElementById("number-of-staff").value = value.amount;
-                                    $("#post-category").append('<option value="' + value.id + '">' + value.name + '</option>');
-                                    
+                                    $("#post-category").append('<option value="' + value.id + '">' + value.name + '</option>');  
                                 });
                                 // $('#city-dropdown').html('<option value="">Select Region/State First</option>');
                             }
@@ -256,31 +253,21 @@
                             var percent = (percentToGet / 100) * total_amount;
 
                             document.getElementById("demo").innerHTML = total_amount + percent;
-
-
                         }
                     });
                 });
 
-                
-       
+                $('#number-of-staff').change(function(){
+                    var y = document.getElementById("number-of-staff").value;
+                    var z = document.getElementById("amount_per_campaign").value;
+                    var x = Number(y) * Number(z);
+                    // document.getElementById("demo").innerHTML = x;
+                    var percentToGet = 50;
+                    var percent = (percentToGet / 100) * x;
 
-                  $('#number-of-staff').change(function(){
-                      var y = document.getElementById("number-of-staff").value;
-                      var z = document.getElementById("amount_per_campaign").value;
-                      var x = Number(y) * Number(z);
-                      // document.getElementById("demo").innerHTML = x;
-
-                      var percentToGet = 50;
-                      var percent = (percentToGet / 100) * x;
-
-                      document.getElementById("demo").innerHTML = x + percent;
-                      // alert(x);
-                  });
-
+                    document.getElementById("demo").innerHTML = x + percent;
+                    // alert(x);
+                });
     });
-
-
-
  </script>
 @endsection
