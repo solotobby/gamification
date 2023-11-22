@@ -90,15 +90,15 @@
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
             <table class="table table-borderless table-vcenter mb-0">
                 <div class="input-group">
-                  <span class="form-control form-control-alt">Coming Soon!</span> 
-                  {{-- @if(auth()->user()->virtualAccount)
+                  {{-- <span class="form-control form-control-alt">Coming Soon!</span>  --}}
+                  @if(auth()->user()->virtualAccount)
                     <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
                     <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                       <i class="fa fa-copy"></i>
                     </button>
                         @else
                         <span class="form-control form-control-alt">No account created yet</span>
-                        @endif --}}
+                        @endif
                 </div>
 
                 </table>
