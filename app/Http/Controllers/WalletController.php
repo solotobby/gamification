@@ -286,8 +286,11 @@ class WalletController extends Controller
 
     public function storeWithdraw(Request $request)
     {
+       
         if(auth()->user()->wallet->base_currency == 'Naira' ){
-
+            $request->validate([
+                'balance' => 'required',
+            ]);
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             if($wallet->balance < $request->balance)
             {
@@ -381,14 +384,14 @@ class WalletController extends Controller
                 'user_type' => 'admin'
             ]);
             SystemActivities::activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
-        // $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
-        $cur = $currency == 'USD' ? '$' : 'NGN';
-        systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
+            // $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
+            $cur = $currency == 'USD' ? '$' : 'NGN';
+            systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
         
-        $user = User::where('id', '1')->first();
-        $subject = 'Withdrawal Request Queued!!';
-        $content = 'A withdrwal request has been made and it being queued';
-        Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+        // $user = User::where('id', '1')->first();
+        // $subject = 'Withdrawal Request Queued!!';
+        // $content = 'A withdrwal request has been made and it being queued';
+        // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
         return $withdrawal;
     }
