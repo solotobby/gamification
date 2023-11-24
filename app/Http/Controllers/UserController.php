@@ -75,8 +75,8 @@ class UserController extends Controller
                
                 Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
 
-                $description = 'Direct Referer Bonus from '.auth()->user()->name;
-                PaystackHelpers::paymentTrasanction(1, '1', time(), $statusAmount, 'successful', 'direct_referer_bonus_naira_usd', $description, 'Credit', 'admin');
+                // $description = 'Direct Referer Bonus from '.auth()->user()->name;
+                // PaystackHelpers::paymentTrasanction(1, '1', time(), $statusAmount, 'successful', 'direct_referer_bonus_naira_usd', $description, 'Credit', 'admin');
 
                 $name = SystemActivities::getInitials(auth()->user()->name);
                 SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
