@@ -78,7 +78,7 @@ class Analytics{
     }
 
     public static function revenueChannel(){
-       $revenue = PaymentTransaction::select('type', \DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->get();
+       $revenue = PaymentTransaction::select('type', \DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->where('status',  'successful')->get();
        $list[] = ['Revenue Channel', 'Total'];
          foreach($revenue as $key => $value){
             $list[++$key] = [$value->type, (int)$value->amount ];
