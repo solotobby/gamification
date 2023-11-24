@@ -116,8 +116,9 @@ class HomeController extends Controller
         //this wwee
         $start_week = Carbon::now()->startOfWeek();//->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
         $end_week = Carbon::now()->endOfWeek();
-        $thisWeekPayment = Withrawal::where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');//Date('')
-
+        $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']);//Date('')
+        $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
+        $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
@@ -149,7 +150,7 @@ class HomeController extends Controller
         //age distribution
         $ageDistribution = Analytics::ageDistribution();
         
-        return view('admin.index', ['wallet' => $wallet, 'weekPayment' => $thisWeekPayment]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index', ['wallet' => $wallet, 'weekPayment' => $thisWeekPayment, 'totalPayout' => $totalPayout]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))

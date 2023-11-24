@@ -39,6 +39,7 @@ class SurveyController extends Controller
         $user->age_range = $request->age_range;
         $user->gender = $request->gender;
         $user->save();
+        
         foreach($request->interest as $int){
             \DB::table('user_interest')->insert(['user_id'=>$user->id, 'preference_id' => $int, 'created_at' => now(), 'updated_at' => now()]);
         }
