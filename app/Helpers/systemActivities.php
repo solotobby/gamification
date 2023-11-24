@@ -109,7 +109,7 @@ class SystemActivities{
     }
 
     public static function badgeCount(){
-        $currentDate = Carbon::now();
+        $currentDate = Carbon::now()->subMonth();
         return Referral::where('referee_id', auth()->user()->id)
                 ->whereMonth('updated_at', $currentDate->month)
         // ->whereDate('updated_at', today())
