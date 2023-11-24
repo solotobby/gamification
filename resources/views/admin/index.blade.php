@@ -43,7 +43,9 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}} </a> TotalPayout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>.
+          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}} </a> TotalPayout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
+          <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>.
+          <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>.
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
