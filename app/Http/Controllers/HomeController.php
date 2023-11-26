@@ -119,7 +119,7 @@ class HomeController extends Controller
         $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']);//Date('')
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
-        $transactions = PaymentTransaction::sum('amount');
+        $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
