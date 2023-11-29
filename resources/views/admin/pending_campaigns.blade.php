@@ -82,7 +82,7 @@
                         <td>{{ $camp->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>
-                          <a href="{{ url('campaign/info/'.$camp->id) }}" class="" target="_blank">View</a>
+                          <a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank">View</a>
                           {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}">View</button> --}}
                         </td>
                     </tr>
