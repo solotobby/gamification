@@ -170,7 +170,7 @@
 @section('script')
 
 <!-- jQuery (required for DataTables plugin) -->
-<script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
 
 <!-- Page JS Plugins -->
 {{-- <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
