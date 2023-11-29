@@ -256,7 +256,8 @@
       <!-- END Footer -->
     </div>
     <!-- END Page Container -->
-    <script src="{{ asset('src/assets/js/lib/jquery.min.js')}}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    {{-- <script src="{{ asset('src/assets/js/lib/jquery.min.js')}}"></script> --}}
     <script src="{{ asset('src/assets/js/dashmix.app.min.js') }}"></script>
 
     @yield('script')
