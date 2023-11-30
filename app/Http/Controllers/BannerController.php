@@ -6,6 +6,7 @@ use App\Mail\GeneralMail;
 use App\Models\Banner;
 use App\Models\BannerClick;
 use App\Models\PaymentTransaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -36,9 +37,10 @@ class BannerController extends Controller
      */
     public function create()
     {
-        $countryList = countryList();
-        $preferences = listPreferences();
-        return view('user.banner.create', ['preferences' => $preferences, 'countryLists' => $countryList]);
+        // $countryList = countryList();
+        // $preferences = listPreferences();
+        return view('user.banner.create');
+        // ['preferences' => $preferences, 'countryLists' => $countryList]
     }
 
     /**
@@ -49,7 +51,7 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        
         $request->validate([
             'banner_url' => 'required|image|mimes:png,jpeg,gif,jpg',
             // 'count' => 'required|array|min:5',
@@ -62,26 +64,26 @@ class BannerController extends Controller
             // 'duration' => 'required|string',
         ]);
 
-        $lissy = [];
-        foreach($request->count as $res){
-            $lissy[] = explode("|",$res);
-        }
+        // $lissy = [];
+        // foreach($request->count as $res){
+        //     $lissy[] = explode("|",$res);
+        // }
 
-        // $newlissy = [];
-        foreach($lissy as $lis)
-        {
-            $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
-        }
+        // // $newlissy = [];
+        // foreach($lissy as $lis)
+        // {
+        //     $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
+        // }
 
-        foreach($counts as $id)
-        {
-            $unit[] = $id['unit'];
-        }
+        // foreach($counts as $id)
+        // {
+        //     $unit[] = $id['unit'];
+        // }
 
-        $parameters =  array_sum($unit) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
-        $finalTotal = $parameters * 25;
+        // $parameters =  array_sum($unit) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
+        // $finalTotal = $parameters * 25;
 
-        if($finalTotal > auth()->user()->wallet->balance){
+        if($request->budget > auth()->user()->wallet->balance){
             return back()->with('error', 'Insurficient Balance');
         }
 
@@ -106,27 +108,31 @@ class BannerController extends Controller
             $banner['user_id'] = auth()->user()->id; 
             $banner['banner_id'] = Str::random(7);
             $banner['external_link'] = $request->external_link; 
-            $banner['ad_placement_point'] = $request->ad_placement;
-            $banner['adplacement_position'] = $request->adplacement;
-            $banner['age_bracket'] = $request->age_bracket;
-            $banner['duration'] = $request->duration; 
-            $banner['country'] = $request->country;
+            $banner['ad_placement_point'] = 0; //$request->ad_placement;
+            $banner['adplacement_position'] = 'top'; //$request->adplacement;
+            $banner['age_bracket'] = '18'; //$request->age_bracket;
+            $banner['duration'] = '1';//$request->duration; 
+            $banner['country'] = 'all';//$request->country;
             $banner['status'] = false;
-            $banner['amount'] = $finalTotal;
+            $banner['amount'] = $request->budget; //$finalTotal;
             $banner['banner_url'] = $bannerUrl;
             $banner['impression'] = 0;
-            $banner['clicks'] = 0;
+            $banner['impression_count'] = 0;
+            $banner['clicks'] = $request->budget / 11.5;
+            $banner['click_count'] = 0;
+            
+
 
             $createdBanner = Banner::create($banner);
 
             if($createdBanner){
-                debitWallet(auth()->user(),'Naira', $finalTotal);
+                debitWallet(auth()->user(),'Naira', $request->budget);
                 //transaction log 
                 PaymentTransaction::create([
                     'user_id' => auth()->user()->id,
                     'campaign_id' => $createdBanner->id,
                     'reference' => time(),
-                    'amount' => $finalTotal,
+                    'amount' => $request->budget,
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'internal',
@@ -136,15 +142,16 @@ class BannerController extends Controller
                     'user_type' => 'regular'
                 ]);
 
-                foreach($counts as $id)
-                {
-                    \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
-                }
+                // foreach($counts as $id)
+                // {
+                //     \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
+                // }
             }
           
-            $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
-            $subject = 'Ad Banner Placement - Under Review';
-            Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
+            // $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
+            // $subject = 'Ad Banner Placement - Under Review';
+
+            // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
             return back()->with('success', 'Banner ad Created Successfully');
 
         }else{
@@ -203,9 +210,16 @@ class BannerController extends Controller
 
     public function adView($bannerId){
         $ban = Banner::where('banner_id', $bannerId)->first();
-        $ban->impression += 1;
-        $ban->clicks += 1;
+        // $ban->impression += 1;
+        // $ban->clicks -= 1;
+        $ban->click_count += 1;
         $ban->save();
+
+        if($ban->click_count >= $ban->clicks){
+            $ban->live_state = 'Ended';
+            $ban->banner_end_date = Carbon::now();
+            $ban->save();
+        }
 
         BannerClick::create(['user_id' => auth()->user()->id, 'banner_id' => $ban->id]);
         return redirect($ban->external_link);

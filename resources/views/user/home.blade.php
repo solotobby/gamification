@@ -62,13 +62,13 @@
    <!-- Page Content -->
    <div class="content content-full">
    <div class="row">
-    <div class="col-12">
-      @if($announcement)
-        <div class="alert alert-info">
-          {!! @$announcement->content !!}
-        </div>
-      @endif
-    </div>
+      <div class="col-12">
+        @if($announcement)
+          <div class="alert alert-info">
+            {!! @$announcement->content !!}
+          </div>
+        @endif
+      </div>
    </div>
 <div class="row">
 
@@ -109,7 +109,13 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
         {{-- <h4 class="fw-light mb-0">Ad</h4><br> --}}
+        @if($ads)
+                <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
+                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                </a>
+        @else
         <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        @endif
     </div>
 
     <!-- VPS -->

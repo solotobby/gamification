@@ -7,15 +7,15 @@
     <title>Freebyz.com</title>
 
     <meta name="description" content="Freebyz.com">
-    <meta name="author" content="pixelcave">
+    <meta name="author" content="freebyz">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Freebyz.comk">
-    <meta property="og:site_name" content="Freebyz.com">
-    <meta property="og:description" content="Freebyz.com">
+    <meta property="og:title" content="Freebyz">
+    <meta property="og:site_name" content="Freebyz">
+    <meta property="og:description" content="Freebyz">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="">
+    <meta property="og:url" content="freebyz.com">
     <meta property="og:image" content="">
 
     <!-- Icons -->
@@ -92,7 +92,7 @@
     s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
-  </script>
+</script>
   <!--End of Tawk.to Script-->
 
   </head>
