@@ -542,7 +542,7 @@ if(!function_exists('OTPVerify')){
 
 if(!function_exists('adBanner')){
     function adBanner(){
-        $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->where('live_state', 'Started')->first(['id', 'banner_id', 'banner_url', 'impression', 'user_id', 'external_link']);
+        $banner = Banner::inRandomOrder()->limit(1)->where('status', true)->where('live_state', 'Started')->first(['id', 'banner_id', 'banner_url', 'status', 'live_state', 'click_count', 'clicks', 'impression', 'user_id', 'external_link']);
         if(!$banner){
             return '';
        }else{

@@ -69,7 +69,7 @@
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Enter Budget</label>
-                    <input type="number" class="form-control" id="budget" name="budget" value="{{ old('budget') }}" required>
+                    <input type="number" class="form-control" id="budget" name="budget" min="1000" value="{{ old('budget') }}" required>
                     <small><i>The total amount you want to spend</i></small>
                 </div>
 
@@ -151,7 +151,7 @@
                 </div> --}}
                 
                 <hr>
-                <h6>Estimated Impressions: <span id="impressionCost">0</span></h6>
+                <h6>Estimated Clicks: <span id="clicks">0</span></h6>
         
                 </div>
                 </div>
@@ -187,11 +187,9 @@
         $('#budget').keyup(function(){
             const budget = this.value; //document.getElementById("budget").value;
             
-            var impressions = budget / 5;
-            var clicks = budget / 25;
-
-            document.getElementById('impressionCost').textContent = impressions.toFixed(0);
-
+            // var impressions = budget / 5;
+            var clicks = budget / 11.5;
+            document.getElementById('clicks').textContent = clicks.toFixed(0);
             
         });
        

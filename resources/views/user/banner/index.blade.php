@@ -51,8 +51,8 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
-                <th>Amount Spent</th>
-                <th>Impresions</th>
+                <th>Budget</th>
+                {{-- <th>Impresions</th> --}}
                 <th>Clicks</th>
                 <th>Status</th>
                 <th>Date Created</th>
@@ -69,11 +69,11 @@
                             {{ number_format($banner->amount,2) }}
                         @endif
                     </td>
-                    <td>
+                    {{-- <td>
                        {{$banner->impression}}
-                    </td>
+                    </td> --}}
                     <td>
-                      {{$banner->clicks}}
+                      {{$banner->click_count == null ? '0' : $banner->click_count}}
                      </td>
                     <td>
                         {{ $banner->status == true ? 'Live' : 'Under Review' }}
