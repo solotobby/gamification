@@ -1,4 +1,3 @@
-
 @extends('layouts.main.master')
 
 @section('content')
@@ -51,6 +50,7 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
+                <th>#</th>
                 <th>Budget</th>
                 {{-- <th>Impresions</th> --}}
                 <th>Clicks</th>
@@ -61,7 +61,9 @@
             <tbody>
                 @foreach ($banners as $banner)
                 <tr>
-                    
+                    <td>
+                      {{ $banner->banner_id }}
+                    </td>
                     <td>
                         @if($banner->currency == 'NGN')
                         &#8358;{{ number_format($banner->amount,2) }}
@@ -73,10 +75,10 @@
                        {{$banner->impression}}
                     </td> --}}
                     <td>
-                      {{$banner->click_count == null ? '0' : $banner->click_count}}
+                      {{$banner->click_count == null ? '0' : $banner->click_count}}/{{$banner->clicks}}
                      </td>
                     <td>
-                        {{ $banner->status == true ? 'Live' : 'Under Review' }}
+                        {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
@@ -90,13 +92,12 @@
         </div>
       </div>
     </div>
+
     <div class="d-flex">
       {{-- {!! $loginpoints->links('pagination::bootstrap-4') !!} --}}
     </div>
     <!-- END Full Table -->
 
   </div>
-
-
 
   @endsection

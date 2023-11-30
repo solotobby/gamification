@@ -48,7 +48,7 @@
                 <div class="row items-push">
                 <div class="col-lg-3">
                     <p class="text-muted">
-                    Give detailed description of the banner 
+                    Give detailed description of your banner ads 
 
                     <?php $wallet = auth()->user()->wallet->balance; ?>
                     </p>
@@ -58,7 +58,7 @@
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Upload Image of your banner</label>
                     <input type="file" class="form-control" id="banner-url" name="banner_url" required>
-                    <small><i>Upload an image. Must be of high quality.</i></small>
+                    <small><i>Upload an image. Must be of high quality with a dimension width: 1024, height: 250 </i></small>
                 </div>
 
                 <div class="mb-4">
@@ -66,6 +66,22 @@
                     <input type="url" class="form-control" id="post-title" name="external_link" value="{{ old('post_link') }}" required>
                     <small><i>The url you want to redirect users to</i></small>
                 </div>
+
+                <div class="col-lg-12 col-xl-12">
+                    <div class="row mb-4">
+                        <label class="form-label">Choose Target Audience</label><small>Check atleast 5</small>
+                        @foreach ($preferences as $pref)
+                            <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">
+                                <div class="form-check form-switch form-check-inline">
+                                    
+                                    <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}|{{ $pref['id'] }}" id="count" name="count[]">
+                                    <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
+                                    <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
+                                </div>
+                            </div>  
+                        @endforeach
+                    </div>
+                </div> 
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Enter Budget</label>
@@ -96,21 +112,7 @@
                     </div>
                 </div> --}}
 
-                {{-- <div class="col-lg-12 col-xl-12">
-                    <div class="row mb-4">
-                        <label class="form-label">Choose Audience Interest</label>
-                        @foreach ($preferences as $pref)
-                            <div class="col-sm-12 col-md-4 col-xl-6 mt-1 d-md-flex align-items-md-center fs-sm mb-2">
-                                <div class="form-check form-switch form-check-inline">
-                                    
-                                    <input class="form-check-input" type="checkbox" value="{{ $pref['percentage'] }}|{{ $pref['id'] }}" id="count" name="count[]">
-                                    <label class="form-check-label" for="example-switch-inline1">{{ $pref['name'] }} </label>
-                                    <span class="nav-main-link-badge badge rounded-pill bg-primary">{{ $pref['count'] }}</span>
-                                </div>
-                            </div>  
-                        @endforeach
-                    </div>
-                </div> --}}
+               
 
                 {{-- <div class="mb-4">
                     <label class="form-label" for="post-title">Duration of Ad</label>
@@ -188,7 +190,7 @@
             const budget = this.value; //document.getElementById("budget").value;
             
             // var impressions = budget / 5;
-            var clicks = budget / 11.5;
+            var clicks = budget / 40.5;
             document.getElementById('clicks').textContent = clicks.toFixed(0);
             
         });

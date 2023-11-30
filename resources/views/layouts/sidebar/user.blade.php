@@ -3,7 +3,7 @@
       <li class="nav-main-heading">Main Menu</li>
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('home') }}">
-          <i class="nav-main-link-icon fa fa-location-arrow"></i>
+          <i class="nav-main-link-icon fa fa-home"></i>
           <span class="nav-main-link-name">Dashboard</span>
           <?php 
           $badge = App\Helpers\SystemActivities::badge();
@@ -19,6 +19,24 @@
           <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
         </a>
       </li>
+
+      <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-star"></i>
+          <span class="nav-main-link-name">Create Banner Ads</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{url('banner/create')}}">
+              <span class="nav-main-link-name">Create</span>
+            </a>
+            <a class="nav-main-link" href="{{url('banner')}}">
+              <span class="nav-main-link-name">List</span>
+            </a>
+           
+          </li>
+        </ul>
+      </li> 
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -129,22 +147,7 @@
         </ul>
       </li> --}}
 
-       {{-- <li class="nav-main-item">
-        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-          <i class="nav-main-link-icon fa fa-star"></i>
-          <span class="nav-main-link-name">Banner Ad</span>
-        </a>
-        <ul class="nav-main-submenu">
-          <li class="nav-main-item">
-            <a class="nav-main-link" href="{{url('banner')}}">
-              <span class="nav-main-link-name">List</span>
-            </a>
-            <a class="nav-main-link" href="{{url('banner/create')}}">
-              <span class="nav-main-link-name">Create</span>
-            </a>
-          </li>
-        </ul>
-      </li>  --}}
+     
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -202,17 +205,28 @@
           <span class="nav-main-link-name">Transactions List</span>
         </a>
       </li>
-      <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('howto') }}">
-          <i class="nav-main-link-icon fa fa-grip-vertical"></i>
-          <span class="nav-main-link-name">How to Approve Jobs</span>
+
+
+      
+       <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-ring"></i>
+          <span class="nav-main-link-name">Tutorials</span>
+           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</span> --}}
         </a>
-      </li>
-      <li class="nav-main-item">
-        <a class="nav-main-link" href="https://vm.tiktok.com/ZM2v58wXg/" target="_blank">
-          <i class="nav-main-link-icon fa fa-grip-vertical"></i>
-          <span class="nav-main-link-name">How to Complete Tasks</span>
-        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('howto') }}">
+              <span class="nav-main-link-name">How to Approve Jobs</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="https://vm.tiktok.com/ZM2v58wXg/">
+              <span class="nav-main-link-name">How to Complete Tasks</span>
+            </a>
+          </li>
+          
+        </ul>
       </li>
 
       {{-- <li class="nav-main-item">
@@ -226,7 +240,6 @@
         <a class="nav-main-link" href="{{ route('feedback') }}">
           <i class="nav-main-link-icon fa fa-paper-plane"></i>
           <span class="nav-main-link-name">Talk to Us</span>
-          
         </a>
       </li>
     </ul>
