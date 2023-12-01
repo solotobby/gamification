@@ -54,7 +54,7 @@
                 <th>ID</th>
                 <th>User</th>
                 <th>Budget</th>
-                <th>Duration</th>
+                <th>Clicks</th>
                 <th>Status</th>
                 <th>Date Created</th>
                 {{-- <th>End Date</th> --}}
@@ -72,7 +72,7 @@
                   </td>  
                     <td>
                         @if($banner->currency == 'NGN')
-                        &#8358;{{ number_format($banner->amount,2) }}
+                            &#8358;{{ number_format($banner->amount,2) }}
                         @else
                             {{ number_format($banner->amount,2) }}
                         @endif
@@ -88,9 +88,7 @@
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
                     </td>
-                    {{-- <td>
-                      {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
-                    </td> --}}
+                   
                     <td>
                       @if($banner->status == true)
                           <button class="btn btn-secondary btn-sm disabled"> {{ $banner->live_state}}</button>
