@@ -52,11 +52,12 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Amount Spent</th>
+                <th>User</th>
+                <th>Budget</th>
                 <th>Duration</th>
                 <th>Status</th>
                 <th>Date Created</th>
-                <th>End Date</th>
+                {{-- <th>End Date</th> --}}
                 <th></th>
               </tr>
             </thead>
@@ -64,8 +65,11 @@
                 @foreach ($bannerList as $banner)
                 <tr>
                     <td>
-                        {{ $banner->banner_id}}
+                       {{$banner->banner_id}}
                     </td>  
+                    <td>
+                      <a href="{{ url('user/'.$banner->user->id.'/info') }}" target="_blank"> {{ $banner->user->name}} </a>
+                  </td>  
                     <td>
                         @if($banner->currency == 'NGN')
                         &#8358;{{ number_format($banner->amount,2) }}
@@ -74,18 +78,19 @@
                         @endif
                     </td>
                     <td>
-                      {{ $banner->duration}}
+                      {{$banner->click_count == null ? '0' : $banner->click_count}}/{{$banner->clicks}}
                     </td>
                     
                     <td>
-                        {{ $banner->status == true ? 'Live' : 'Under Review' }}
+                      {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                        
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
                     </td>
-                    <td>
+                    {{-- <td>
                       {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
-                    </td>
+                    </td> --}}
                     <td>
                       @if($banner->status == true)
                           <button class="btn btn-secondary btn-sm disabled"> {{ $banner->live_state}}</button>
