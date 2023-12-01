@@ -82,8 +82,14 @@
                     </td>
                     
                     <td>
-                      {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
-                        
+                      {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
+                      @if($banner->live_state == null)
+                       Under Review
+                    @elseif($banner->live_state == 'Started')
+                      {{ $banner->live_state }}
+                    @else
+                      Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                    @endif
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
@@ -141,8 +147,17 @@
                                      </li>
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                                      Status -   {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
-                                     </li>
+                                       {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
+                                     
+                                      @if($banner->live_state == null)
+                                        Status -  Under Review
+                                      @elseif($banner->live_state == 'Started')
+                                        Status - {{ $banner->live_state }}
+                                      @else
+                                        Status - Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                                      @endif
+
+                                    </li>
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
                                      Date Created -   {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
