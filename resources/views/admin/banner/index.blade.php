@@ -129,6 +129,9 @@
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
                                       Creator - {{ $banner->user->name}}
                                      </li>
+                                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                                      External Link - <a href="{{ url($banner->external_link) }}" target="_blank"> {{$banner->external_link}} </a>
+                                     </li>
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
                                       Clicks -  {{$banner->click_count == null ? '0' : $banner->click_count}}/{{$banner->clicks}}
