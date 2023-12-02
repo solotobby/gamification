@@ -37,21 +37,55 @@ class UserController extends Controller
         return view('user.upgrade');
     }
 
-    public function upgradePart(){
+    // public function upgradePart($amount){
 
-        $ref = time();
-        $amount = dollar_naira() * 4; 
-        $url = PaystackHelpers::initiateTrasaction($ref, $amount+50, '/complete/upgrade');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount+50, 'unsuccessful', 'upgrade_payment_naira_dollar', 'Dollar Upgrade Payment-Paystack(Naira)', 'Payment_Initiation', 'regular');
-        return redirect($url);
-    }
+    //     //$ref = time();
+    //     //$amount = dollar_naira() * 4; 
+    //     //$url = PaystackHelpers::initiateTrasaction($ref, $amount+50, '/complete/upgrade');
+    //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount+50, 'unsuccessful', 'upgrade_payment_naira_dollar', 'Dollar Upgrade Payment-Paystack(Naira)', 'Payment_Initiation', 'regular');
+    //     //return redirect($url);
+    // }
 
-    public function upgradeFull(){
+    public function upgradeFull($amount){
+
+        if(auth()->user()->wallet->balance < $amount+5){
+
+            return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
+            
+        }
+        
         $ref = time();
-        $amount = dollar_naira() * 5;
-        $url = PaystackHelpers::initiateTrasaction($ref, $amount+50, '/complete/upgrade');
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount+50, 'unsuccessful', 'upgrade_payment_naira_dollar', 'Dollar Upgrade Payment-Paystack(Naira)', 'Payment_Initiation', 'regular');
-        return redirect($url);
+        debitWallet(auth()->user(), 'Naira', $amount+5);
+
+        $user = User::where('id', auth()->user()->id)->first();
+        $user->is_verified = true;
+        $user->save(); //naira verification
+       
+        Usdverified::create(['user_id' => auth()->user()->id]);
+
+        $name = SystemActivities::getInitials(auth()->user()->name);
+        SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+                
+        systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
+
+        Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+    
+        PaymentTransaction::create([
+            'user_id' => auth()->user()->id,
+            'campaign_id' => '1',
+            'reference' => $ref,
+            'amount' => $amount+50,
+            'status' => 'successful',
+            'currency' => 'NGN',
+            'channel' => 'paystack',
+            'type' => 'upgrade_payment_naira_dollar',
+            'description' => 'Dollar Upgrade Payment-Paystack(Naira)',
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+
+        return redirect('success');
+      
     }
 
     public function completeUpgrade(){
@@ -319,19 +353,16 @@ class UserController extends Controller
 
         
         $ref = time();
-        $userWallet = Wallet::where('user_id', auth()->user()->id)->first();
-         //debit  User wallet firs
-         $userWallet->balance -= $amount;
-         $userWallet->save();
+       
+         debitWallet(auth()->user(), 'Naira', $amount);
 
-         $name = SystemActivities::getInitials(auth()->user()->name);
-         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
-         
-         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Payment_Initiation', 'regular');
+         $user = User::where('id', auth()->user()->id)->first();
+         $user->is_verified = true;
+         $user->save();
+
         
-           $user = User::where('id', auth()->user()->id)->first();
-           $user->is_verified = true;
-           $user->save();
+         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Debit', 'regular');
+          
 
            $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
            
@@ -385,6 +416,10 @@ class UserController extends Controller
                 'user_type' => 'admin'
             ]);
            }
+
+           $name = SystemActivities::getInitials(auth()->user()->name);
+           SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+           
            Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
            return redirect('success');
         }else{

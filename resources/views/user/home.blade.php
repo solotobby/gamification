@@ -94,16 +94,17 @@
                   @if(auth()->user()->wallet->base_currency == "Naira")
       
                       @if(auth()->user()->virtualAccount)
+
                         <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
                         <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                           <i class="fa fa-copy"></i>
                         </button>
-                            @else
+                        
+                      @else
                             <span class="form-control form-control-alt">No account created yet</span>
                       @endif
 
                   @else
-
                         <span class="form-control form-control-alt">https://flutterwave.com/pay/topuponfreebyz</span>   
                   @endif
                 </div>
