@@ -122,8 +122,8 @@ Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::
 Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 'paystackCallback']);
 
 Route::get('upgrade', [\App\Http\Controllers\UserController::class, 'upgrade'])->name('upgrade');
-Route::get('upgrade/part', [\App\Http\Controllers\UserController::class, 'upgradePart']);
-Route::get('upgrade/full', [\App\Http\Controllers\UserController::class, 'upgradeFull']);
+Route::get('upgrade/part/{amount}', [\App\Http\Controllers\UserController::class, 'upgradePart']);
+Route::get('upgrade/full/{amount}', [\App\Http\Controllers\UserController::class, 'upgradeFull']);
 
 Route::get('complete/upgrade', [\App\Http\Controllers\UserController::class, 'completeUpgrade']);
 
