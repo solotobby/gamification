@@ -134,7 +134,7 @@ class HomeController extends Controller
         $start_date = \Carbon\Carbon::today()->subDays(30);
         $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
-        $MonthlyVisit = Analytics::monthlyVisits();
+       $MonthlyVisit = Analytics::monthlyVisits();
 
         //daily visits
         $dailyVisits = Analytics::dailyStats();
