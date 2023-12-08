@@ -54,10 +54,10 @@
             <div class="mb-4">
               @if(auth()->user()->wallet->base_currency == 'Naira')
               <div class="alert alert-info">
-                <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 5mins
+                <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 1min
               </div>
               
-              @if(auth()->user()->virtualAccount)
+              {{-- @if(auth()->user()->virtualAccount)
               Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
          
               Account Number:  {{ auth()->user()->virtualAccount->account_number }}
@@ -79,9 +79,9 @@
 
                   <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
-            @endif
+            @endif --}}
 
-              {{-- <div class="input-group">
+              <div class="input-group">
                 <span class="input-group-text">
                   &#8358;
                 </span>
@@ -93,7 +93,7 @@
                 <button type="submit" class="btn btn-primary">
                   <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
                 </button>
-              </div> --}}
+              </div>
 
 
               @else
