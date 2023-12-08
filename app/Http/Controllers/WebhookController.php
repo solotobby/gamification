@@ -18,36 +18,36 @@ class WebhookController extends Controller
 
         $event = $request['event'];
 
-        if($event == 'charge.success'){
-            $amount = $request['data']['amount']/100;
-            $status = $request['data']['status'];
-            $reference = $request['data']['reference'];
-            $channel = $request['data']['channel'];
-            $currency = $request['data']['currency'];
-            $email = $request['data']['customer']['email'];
-            $customer_code = $request['data']['customer']['customer_code'];
+        // if($event == 'charge.success'){
+        //     $amount = $request['data']['amount']/100;
+        //     $status = $request['data']['status'];
+        //     $reference = $request['data']['reference'];
+        //     $channel = $request['data']['channel'];
+        //     $currency = $request['data']['currency'];
+        //     $email = $request['data']['customer']['email'];
+        //     $customer_code = $request['data']['customer']['customer_code'];
 
-            $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
+        //     $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
 
-            $user = User::where('id', $virtualAccount->user_id)->first();
+        //     $user = User::where('id', $virtualAccount->user_id)->first();
 
-            $creditUser = creditWallet($user, 'Naira', $amount);
-            if($creditUser){
+        //     $creditUser = creditWallet($user, 'Naira', $amount);
+        //     if($creditUser){
 
-                $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
+        //         $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
                 
-                if($transaction){
-                    $subject = 'Wallet Credited';
-                    $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
-                    Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
-                }
+        //         if($transaction){
+        //             $subject = 'Wallet Credited';
+        //             $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
+        //             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
+        //         }
                 
-            }
-            return response()->json(['status' => 'success'], 200);
+        //     }
+        //     return response()->json(['status' => 'success'], 200);
 
-        }else{
-            return response()->json(['status' => 'error'], 500);
-        }
+        // }else{
+        //     return response()->json(['status' => 'error'], 500);
+        // }
 
     }
 }
