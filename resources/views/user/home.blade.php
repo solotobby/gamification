@@ -95,15 +95,10 @@
       
                       @if(auth()->user()->virtualAccount)
 
-                      <span class="form-control form-control-alt">VFD</span> <input type="text" value="46000066074" class="form-control form-control-alt" id="myInput-2" readonly>
+                        <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
                         <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                           <i class="fa fa-copy"></i>
                         </button>
-
-                        {{-- <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
-                        <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
-                          <i class="fa fa-copy"></i>
-                        </button> --}}
                         
                       @else
                       <span class="form-control form-control-alt">VFD</span> <input type="text" value="4600066074" class="form-control form-control-alt" id="myInput-2" readonly>
