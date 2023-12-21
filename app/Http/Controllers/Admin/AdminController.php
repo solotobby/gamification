@@ -562,7 +562,7 @@ class AdminController extends Controller
             $currency = 'USD';
             $channel = 'paypal';
             $wallet = Wallet::where('user_id', $ca->user_id)->first();
-            $wallet->usd_balance += $$ca->amount;
+            $wallet->usd_balance += $ca->amount;
             $wallet->save();
         }
 
