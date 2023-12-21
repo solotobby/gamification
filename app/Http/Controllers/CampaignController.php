@@ -414,7 +414,7 @@ class CampaignController extends Controller
     }
 
     public function submitWork(Request $request){
-        // return $request;
+       // return $request;
         $this->validate($request, [
             'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
             'comment' => 'required|string',
@@ -450,6 +450,7 @@ class CampaignController extends Controller
             $campaignWorker['comment'] = $request->comment;
             $campaignWorker['amount'] = $request->amount;
             $campaignWorker['proof_url'] = $proofUrl;
+            $campaignWorker['currency'] = $campaign->currency;
             $campaignWork = CampaignWorker::create($campaignWorker);
             
             //activity log
@@ -457,7 +458,6 @@ class CampaignController extends Controller
             $campaign->save();
 
             setPendingCount($campaign->id);
-
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
@@ -526,76 +526,82 @@ class CampaignController extends Controller
            if($completed_campaign >= $campaign->number_of_staff){
                 return back()->with('error', 'Campaign has reached its maximum capacity');
            }
+
+           $user = User::where('id', $approve->user_id)->first();
+           $approve->status = 'Approved';
+           $approve->reason = $request->reason;
+           $approve->save();
+
+           //update completed action
+           $campaign->completed_count += 1;
+           $campaign->pending_count -= 1;
+           $campaign->save();
+
+           setIsComplete($approve->campaign_id);
+
+           if($campaign->currency == 'NGN'){
+               $currency = 'NGN';
+               $channel = 'paystack';
+               $wallet = Wallet::where('user_id', $approve->user_id)->first();
+               $wallet->balance += $approve->amount;
+               $wallet->save();
+           }else{
+               $currency = 'USD';
+               $channel = 'paypal';
+               $wallet = Wallet::where('user_id', $approve->user_id)->first();
+               $wallet->usd_balance += $approve->amount;
+               $wallet->save();
+           }
+
+
+           $ref = time();
+
+           PaymentTransaction::create([
+               'user_id' => $approve->user_id,
+               'campaign_id' => $approve->campaign->id,
+               'reference' => $ref,
+               'amount' => $approve->amount,
+               'status' => 'successful',
+               'currency' => $currency,
+               'channel' => $channel,
+               'type' => 'campaign_payment',
+               'description' => 'Campaign Payment for '.$approve->campaign->post_title,
+               'tx_type' => 'Credit',
+               'user_type' => 'regular'
+           ]);
+           
+           SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
+           
+           $subject = 'Job Approved';
+           $status = 'Approved';
+           Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+           return back()->with('success', 'Campaign Approve Successfully');
+
+
     
-            if(walletHandler() == 'sendmonny'){ 
-                $user = User::where('id', $approve->user_id)->first();
-                $approve->status = 'Approved';
-                $approve->reason = $request->reason;
-                $approve->save();
-              ///sendmonny integration - sending money from freebyz collection account
-                $payload = [
-                    "sender_wallet_id" => adminCollection()['wallet_id'], //freebyz admin wallet id
-                    "sender_user_id" => adminCollection()['user_id'], //freebyzadmin sendmonny userid
-                    "amount" => $approve->amount,
-                    "pin"=> "2222",
-                    "narration" => "Freebyz Campaign",
-                    "islocal" => true,
-                    "reciever_wallet_id" => userWalletId($approve->user_id)
-                ];
+            // if(walletHandler() == 'sendmonny'){ 
+            //     $user = User::where('id', $approve->user_id)->first();
+            //     $approve->status = 'Approved';
+            //     $approve->reason = $request->reason;
+            //     $approve->save();
+            //   ///sendmonny integration - sending money from freebyz collection account
+            //     $payload = [
+            //         "sender_wallet_id" => adminCollection()['wallet_id'], //freebyz admin wallet id
+            //         "sender_user_id" => adminCollection()['user_id'], //freebyzadmin sendmonny userid
+            //         "amount" => $approve->amount,
+            //         "pin"=> "2222",
+            //         "narration" => "Freebyz Campaign",
+            //         "islocal" => true,
+            //         "reciever_wallet_id" => userWalletId($approve->user_id)
+            //     ];
             
-                $res = Sendmonny::transfer($payload, accessToken());
-            }else{
+            //     $res = Sendmonny::transfer($payload, accessToken());
+            // }else{
                 
-                $user = User::where('id', $approve->user_id)->first();
-                $approve->status = 'Approved';
-                $approve->reason = $request->reason;
-                $approve->save();
+               
 
-                //update completed action
-                $campaign->completed_count += 1;
-                $campaign->pending_count -= 1;
-                $campaign->save();
-
-                setIsComplete($approve->campaign_id);
-
-                if($approve->campaign->currency == 'NGN'){
-                    $currency = 'NGN';
-                    $channel = 'paystack';
-                    $wallet = Wallet::where('user_id', $approve->user_id)->first();
-                    $wallet->balance += $approve->amount;
-                    $wallet->save();
-                }else{
-                    $currency = 'USD';
-                    $channel = 'paypal';
-                    $wallet = Wallet::where('user_id', $approve->user_id)->first();
-                    $wallet->usd_balance += $approve->amount;
-                    $wallet->save();
-                }
-
-            }
+            // }
             
-            $ref = time();
-
-            PaymentTransaction::create([
-                'user_id' => $approve->user_id,
-                'campaign_id' => $approve->campaign->id,
-                'reference' => $ref,
-                'amount' => $approve->amount,
-                'status' => 'successful',
-                'currency' => $currency,
-                'channel' => $channel,
-                'type' => 'campaign_payment',
-                'description' => 'Campaign Payment for '.$approve->campaign->post_title,
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
-            
-            SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
-            
-            $subject = 'Job Approved';
-            $status = 'Approved';
-            Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
-            return back()->with('success', 'Campaign Approve Successfully');
 
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
