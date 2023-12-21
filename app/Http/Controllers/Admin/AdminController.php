@@ -552,9 +552,21 @@ class AdminController extends Controller
         $camp->pending_count -= 1;
         $camp->save();
         
-        $wallet = Wallet::where('user_id', $ca->user_id)->first();
-        $wallet->balance += $ca->amount;
-        $wallet->save();
+        if($camp->currency == 'NGN'){
+            $currency = 'NGN';
+            $channel = 'paystack';
+            $wallet = Wallet::where('user_id', $ca->user_id)->first();
+            $wallet->balance += $ca->amount;
+            $wallet->save();
+        }else{
+            $currency = 'USD';
+            $channel = 'paypal';
+            $wallet = Wallet::where('user_id', $ca->user_id)->first();
+            $wallet->usd_balance += $$ca->amount;
+            $wallet->save();
+        }
+
+       
         $ref = time();
 
         setIsComplete($ca->campaign_id);
@@ -565,8 +577,8 @@ class AdminController extends Controller
             'reference' => $ref,
             'amount' => $ca->amount,
             'status' => 'successful',
-            'currency' => 'NGN',
-            'channel' => 'paystack',
+            'currency' => $currency,
+            'channel' => $channel,
             'type' => 'campaign_payment',
             'description' => 'Campaign Payment for '.$ca->campaign->post_title,
             'tx_type' => 'Credit',
