@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
  <!-- Hero -->
  <div class="bg-image" style="background-image: url('https://i.natgeofe.com/n/9e7c6381-8205-4a0c-a3a6-e744bf86a751/climbing-8000-meters-first-winter-ascents-everest.jpg');">
  
@@ -255,9 +254,9 @@
     
       @include('layouts.resources.unverified')
 
-    @else
+    {{-- @else
     
-      @include('layouts.resources.xmas')
+      @include('layouts.resources.xmas') --}}
 
     @endif
 

@@ -15,11 +15,11 @@
 @endsection
 @section('script')
 
-<script>
+{{-- <script>
     $(document).ready(function(){
         $("#myModal").modal('show');
     });
-</script>
+</script> --}}
 
 @endsection
 @section('content')
@@ -43,31 +43,19 @@
 		
 </div>
 
-<div id="myModal" class="modal fade">
+{{-- <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Freebyz Christmas Giveaway</h5>
-                {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
             </div>
             <div class="modal-body">
-                {{-- <p>Subscribe to our mailing list to get the latest updates straight in your inbox.</p> --}}
-                
 				<img src="{{asset('xmas.jpg') }}" class="img-responsive img-thumbnail">
 				<a href="{{ url('promo') }}" class="btn btn-primary">Claim yours Now</a>
-				{{-- <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Name">
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Email Address">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Subscribe</button>
-                </form> --}}
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
         <div class="basic-service-area white-bg pt-90 pb-50">
 			<div class="container">
