@@ -200,7 +200,7 @@ class RegisterController extends Controller
                 setWalletBaseCurrency(); //set base currency if not set
                 // PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
-                dispatch(new SendMassEmail($user, 'Test Queue', 'This is a test msg'));
+                // dispatch(new SendMassEmail($user, 'Test Queue', 'This is a test msg'));
                  SystemActivities::activityLog($user, 'login', $user->name .' Logged In', 'regular');
 
                 return redirect('home'); //redirect to home
