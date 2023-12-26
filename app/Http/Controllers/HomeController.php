@@ -22,6 +22,7 @@ use App\Models\CampaignWorker;
 use App\Models\LoginPoints;
 use App\Models\OTP;
 use App\Models\PaymentTransaction;
+use App\Models\Profile;
 use App\Models\Referral;
 use App\Models\Reward;
 use App\Models\Statistics;
@@ -82,9 +83,9 @@ class HomeController extends Controller
         }
         
         $balance = '';
-        if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
-            $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
-        }
+        // if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
+        //     $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
+        // }
         ///set User currency
         //$activity_log = SystemActivities::showActivityLog();
 
@@ -120,6 +121,7 @@ class HomeController extends Controller
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
+
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
@@ -150,8 +152,15 @@ class HomeController extends Controller
 
         //age distribution
         $ageDistribution = Analytics::ageDistribution();
+
+        $christmas = Profile::where('is_xmas', true)->count();
         
-        return view('admin.index', ['wallet' => $wallet, 'weekPayment' => $thisWeekPayment, 'totalPayout' => $totalPayout, 'transactions' => $transactions]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+        return view('admin.index', [
+            'wallet' => $wallet, 
+            'weekPayment' => $thisWeekPayment, 
+            'totalPayout' => $totalPayout, 
+            'transactions' => $transactions,
+            'xmas' => $christmas]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
