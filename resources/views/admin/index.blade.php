@@ -47,6 +47,7 @@
           <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>.
           <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>.
           <br> xmas count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>.
+          <br> Total jobs av - {{ $av_count }}
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
