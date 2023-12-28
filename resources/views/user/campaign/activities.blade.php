@@ -27,7 +27,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'pending')->count() }} 
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
           | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
           | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
           @if($lists->currency == 'NGN')
