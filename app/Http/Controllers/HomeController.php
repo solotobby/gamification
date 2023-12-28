@@ -121,6 +121,7 @@ class HomeController extends Controller
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
+        $available_jobsCount = count(SystemActivities::availableJobs());
 
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -160,7 +161,8 @@ class HomeController extends Controller
             'weekPayment' => $thisWeekPayment, 
             'totalPayout' => $totalPayout, 
             'transactions' => $transactions,
-            'xmas' => $christmas]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+            'xmas' => $christmas,
+            'av_count' => $available_jobsCount]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
         ->with('visitor',json_encode($dailyActivity))
         ->with('daily',json_encode($dailyVisits))
         ->with('monthly', json_encode($MonthlyVisit))
