@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
 use App\Mail\GeneralMail;
+use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
 use App\Models\SafeLock;
 use Carbon\Carbon;
@@ -62,7 +64,7 @@ class SafeLockController extends Controller
                 return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
                 // or use the paystack option
             }
-            
+        
             debitWallet(auth()->user(), 'Naira', $amount_locked);
             $created = $this->createSafeLock($request, $interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date);
             if($created){
@@ -88,7 +90,7 @@ class SafeLockController extends Controller
     public function createSafeLock($request,$interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date){
         $request->request->add(['user_id' => auth()->user()->id,'amount_locked' => $amount_locked, 'interest_rate' => $interest_rate, '$duration' => $duration, 'interest_accrued' => $interest_accrued, 'total_payment' => $total_payment, 'start_date' => $start_date, 'maturity_date' => $maturity_date]);
         $safeLockCreated = SafeLock::create($request->all());
-        $subject = 'SafeLock Created';
+        $subject = 'Freebyz SafeLock Created';
         $content = 'Your SafeLock has been created successfully with a total amount of NGN'.$amount_locked.' which span for a period of '. $duration.' months at an interest of '.$interest_rate.'% giving a total pay out of NGN'.$total_payment.' on '.$maturity_date.'.'; //auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
         Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
         return $safeLockCreated; 
@@ -137,5 +139,46 @@ class SafeLockController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function redeemSafelock(Request $request){
+         $getSafeLock = SafeLock::where('id', $request->id)->first();
+        //get user bank information
+        $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
+        if($bankInfo){   
+            $transfter = PaystackHelpers::transferFund((int)$getSafeLock->total_payment, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
+            if($transfter['status'] == true){
+
+                $getSafeLock->status = 'Redeemed';
+                $getSafeLock->save();
+
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => 1,
+                    'reference' => time(),
+                    'amount' =>$getSafeLock->total_payment,
+                    'status' => 'successful',
+                    'currency' => 'NGN',
+                    'channel' => 'paystack',
+                    'type' => 'safelock_redeemed',
+                    'tx_type' => 'Debit',
+                    'description' => 'Redeemed SafeLock'
+                ]);
+
+                $subject = 'Freebyz SafeLock Redeemed';
+                $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
+                Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+
+                return back()->with('success', 'Safelock redeemed, and your account has been funded.');
+
+            }else{
+                return back()->with('error', 'An error occoured, please try again');
+            }
+
+        }else{
+
+            return redirect('profile');
+
+        }
     }
 }

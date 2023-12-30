@@ -55,7 +55,7 @@ class PaystackHelpers{
 
     }
 
-    public static function transferFund($amount, $recipient)
+    public static function transferFund($amount, $recipient, $reason)
     {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
@@ -65,7 +65,7 @@ class PaystackHelpers{
             "source"=> "balance", 
             "amount"=> $amount, 
             "recipient"=> $recipient, 
-            "reason"=> "Freebyz Withdrawal" 
+            "reason"=> $reason
         ]);
 
          return json_decode($res->getBody()->getContents(), true);
