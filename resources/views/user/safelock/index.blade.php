@@ -163,7 +163,25 @@
                                           <span class="badge rounded-pill bg-info">{{ $lock->status }}</span>
                                         </li>    
                                     </ul>
-                                    <button class="btn btn-primary" disabled>Withdraw to Account</button>
+                                    <?php 
+                                       $maturity = $lock->maturity_date;
+                                       $current = now();
+                                    ?>
+                                    @if($current >= $maturity)
+
+                                        @if($lock->status == 'Redeemed')
+                                            <button class="btn btn-success" disabled>Safelock Redeemed</button>
+                                        @else
+                                            <form action="{{ url('redeem/safelock') }}" method="POST">
+                                              @csrf()
+                                            <input type="hidden" name="id" value="{{ $lock->id }}">
+                                            <button class="btn btn-primary" type="submit">Withdraw to Account</button>
+                                            </form>
+                                        @endif
+
+                                    @else
+                                        <button class="btn btn-primary" disabled>Withdraw to Account</button>
+                                    @endif
                                   </div>
                                 </div>
                               </div>

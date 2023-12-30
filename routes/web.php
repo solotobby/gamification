@@ -190,6 +190,7 @@ Route::resource('banner', BannerController::class);
 Route::get('api/banner/resources', [\App\Http\Controllers\BannerController::class, 'bannerResources']);
 
 Route::resource('safelock', SafeLockController::class);
+Route::post('redeem/safelock', [\App\Http\Controllers\SafeLockController::class, 'redeemSafelock']);
 
 Route::get('ad/{id}/view', [\App\Http\Controllers\BannerController::class, 'adView']);
 

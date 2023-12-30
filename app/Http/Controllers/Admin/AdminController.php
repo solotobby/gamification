@@ -754,7 +754,7 @@ class AdminController extends Controller
        if($withdrawals->status == '0'){
             $user = User::where('id', $withdrawals->user->id)->first();
             $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
-            $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code);
+            $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code, 'Freebyz Withdrawal');
             if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
                 $withdrawals->status = true;
                 $withdrawals->save();
@@ -795,9 +795,9 @@ class AdminController extends Controller
     }
 
 
-    public function transferFund($amount, $recipient)
+    public function transferFund($amount, $recipient, $reason)
     {
-           return PaystackHelpers::transferFund($amount, $recipient);
+           return PaystackHelpers::transferFund($amount, $recipient, $reason);
     }
 
     public function removeMarketplaceProduct($product_id){

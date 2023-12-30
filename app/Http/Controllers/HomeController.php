@@ -367,7 +367,7 @@ class HomeController extends Controller
                 $parameters = Reward::where('name', 'CASH')->first();
                 $amount = $parameters->amount * 100;
                 //transfer the fund
-                $transfer = $this->transferFund($amount, $bankInformation->recipient_code);
+                $transfer = $this->transferFund($amount, $bankInformation->recipient_code, 'Redeem Reward');
 
 
                if($transfer['status'] == 'false'){
@@ -475,7 +475,7 @@ class HomeController extends Controller
 
     public function transferFund($amount, $recipient)
     {
-           return PaystackHelpers::transferFund($amount, $recipient);
+           return PaystackHelpers::transferFund($amount, $recipient, 'Freebyz Withdrawal');
     }
 
     public function sendAirtime($phone, $amount)

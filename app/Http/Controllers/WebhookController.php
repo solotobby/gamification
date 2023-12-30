@@ -41,6 +41,8 @@ class WebhookController extends Controller
                     $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
                     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
                 }
+
+                //check wallet stat
                 
             }
             return response()->json(['status' => 'success'], 200);
