@@ -564,9 +564,124 @@ if(!function_exists('adBanner')){
 }
 
 
+if(!function_exists('generateVirtualAccountOnboarding')){
+    function generateVirtualAccountOnboarding($user, $phone_number){
+        // $splitedName = explode(" ", $name);
 
+        //check if user exist, if yes, update informatioon
+        $fetchCustomer = PaystackHelpers::fetchCustomer($user->email);
+
+        if($fetchCustomer['status'] == true){
+           
+            //update customer
+            $customerPayload = [
+                "first_name"=> $user->name,//auth()->user()->name,
+                "last_name"=> 'Freebyz',
+                "phone"=> "+".$phone_number
+            ];
+
+            $updateCustomer = PaystackHelpers::updateCustomer($user->email, $customerPayload);
+
+            if($updateCustomer['status'] == true){
+
+                $data = [
+                    "customer"=> $updateCustomer['data']['customer_code'], 
+                    "preferred_bank"=>env('PAYSTACK_BANK')
+                ];
+                        
+                $response = PaystackHelpers::virtualAccount($data);
+
+                $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
+                if($VirtualAccount){
+
+                    $VirtualAccount->bank_name = $response['data']['bank']['name'];
+                    $VirtualAccount->account_name = $response['data']['account_name'];
+                    $VirtualAccount->account_number = $response['data']['account_number'];
+                    $VirtualAccount->account_name = $response['data']['account_name'];
+                    $VirtualAccount->currency = 'NGN';
+                    $VirtualAccount->save();
+
+                }else{
+
+                    
+                    $VirtualAccount = VirtualAccount::create([
+                        'user_id' => $user->id, 
+                        'channel' => 'paystack', 
+                        'customer_id'=>$updateCustomer['data']['customer_code'], 
+                        'customer_intgration'=> $updateCustomer['data']['integration'],
+                        'bank_name' => $response['data']['bank']['name'],
+                        'account_name' => $response['data']['account_name'],
+                        'account_number' => $response['data']['account_number'],
+                        'account_name' => $response['data']['account_name'],
+                        'currency' => 'NGN'
+                    ]);
+
+                }
+
+                $data['res']=$response;
+                $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                return $data;
+            }
+
+
+        }else{
+
+            $payload = [
+                "email"=> $user->email,
+                "first_name"=> $user->name,
+                "last_name"=> 'Freebyz',
+                "phone"=> "+".$phone_number
+            ];
+            $res = PaystackHelpers::createCustomer($payload);
+
+            if($res['status'] == true){
+            
+                $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
+               
+                $data = [
+                    "customer"=> $res['data']['customer_code'], 
+                    "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
+                ];
+                        
+                $response = PaystackHelpers::virtualAccount($data);
+    
+                if($VirtualAccount){
+                    
+                    $VirtualAccount->bank_name = $response['data']['bank']['name'];
+                    $VirtualAccount->account_name = $response['data']['account_name'];
+                    $VirtualAccount->account_number = $response['data']['account_number'];
+                    $VirtualAccount->account_name = $response['data']['account_name'];
+                    $VirtualAccount->currency = 'NGN';
+                    $VirtualAccount->save();
+
+                }else{
+
+                    $VirtualAccount = VirtualAccount::create([
+                        'user_id' => $user->id, 
+                        'channel' => 'paystack', 
+                        'customer_id'=>$res['data']['customer_code'], 
+                        'customer_intgration'=> $res['data']['integration'],
+                        'bank_name' => $response['data']['bank']['name'],
+                        'account_name' => $response['data']['account_name'],
+                        'account_number' => $response['data']['account_number'],
+                        'account_name' => $response['data']['account_name'],
+                        'currency' => 'NGN'
+                    ]);
+                
+                }
+                
+                $data['res']=$response;
+                $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                return $data;
+            }else{
+                return back()->with('error', 'Error occured while processing');
+            }
+        }
+       
+    }
+}
 if(!function_exists('generateVirtualAccount')){
-    function generateVirtualAccount($name, $phone_number){
+    function generateVirtualAccount($name,  $phone_number){
         $splitedName = explode(" ", $name);
 
         //check if user exist, if yes, update informatioon

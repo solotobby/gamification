@@ -145,7 +145,7 @@ class RegisterController extends Controller
 
         if($location == 'Nigeria'){
             $phone = '234'.substr($request->phone, 1);
-            generateVirtualAccount($name, $phone);
+            generateVirtualAccountOnboarding($user, $phone);
         }
 
         // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
