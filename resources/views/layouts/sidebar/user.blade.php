@@ -221,7 +221,7 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="https://vm.tiktok.com/ZM2v58wXg/">
+            <a class="nav-main-link" href="https://vm.tiktok.com/ZM6f5mU2a/">
               <span class="nav-main-link-name">How to Complete Tasks</span>
             </a>
           </li>
