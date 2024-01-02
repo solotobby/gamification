@@ -163,13 +163,13 @@ class HomeController extends Controller
             'transactions' => $transactions,
             'xmas' => $christmas,
             'av_count' => $available_jobsCount]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-        ->with('visitor',json_encode($dailyActivity))
-        ->with('daily',json_encode($dailyVisits))
-        ->with('monthly', json_encode($MonthlyVisit))
-        ->with('channel', json_encode($registrationChannel))
-        ->with('revenue', json_encode($revenueChannel))
-        ->with('country', json_encode($countryDistribution))
-        ->with('age', json_encode($ageDistribution));
+            ->with('visitor',json_encode($dailyActivity))
+            ->with('daily',json_encode($dailyVisits))
+            ->with('monthly', json_encode($MonthlyVisit))
+            ->with('channel', json_encode($registrationChannel))
+            ->with('revenue', json_encode($revenueChannel))
+            ->with('country', json_encode($countryDistribution))
+            ->with('age', json_encode($ageDistribution));
 
     }
 

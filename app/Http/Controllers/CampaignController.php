@@ -365,7 +365,7 @@ class CampaignController extends Controller
         if($job_id == null){
             abort(400);
         }
-        
+
          $getCampaign = SystemActivities::viewCampaign($job_id);
         
        
@@ -518,6 +518,8 @@ class CampaignController extends Controller
         $request->validate([
             'reason' => 'required|string',
         ]);
+        
+
 
         if($request->action == 'approve'){
             $approve = CampaignWorker::where('id', $request->id)->first();
@@ -525,8 +527,8 @@ class CampaignController extends Controller
                 return back()->with('error', 'Campaign has been attended to');
            }
 
-           $campaign = Campaign::where('id', $approve->campaign_id)->first();//->number_of_staff;
-          
+          //->number_of_staff;
+          $campaign = Campaign::where('id', $approve->campaign_id)->first();
            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
            if($completed_campaign >= $campaign->number_of_staff){
                 return back()->with('error', 'Campaign has reached its maximum capacity');
@@ -615,6 +617,35 @@ class CampaignController extends Controller
             $deny->save();
           
             $this->removePendingCountAfterDenial($deny->campaign_id);
+
+            $campaign = Campaign::where('id', $deny->campaign_id)->first();
+            $campaingOwner = User::where('id', $deny->campaign->user_id)->first();
+
+            if($campaign->currency == 'NGN'){
+                $currency = 'Naira';
+                $channel = 'paystack';
+            }else{
+                $currency = 'Dollar';
+                $channel = 'paypal';
+            }
+
+            creditWallet($campaingOwner, $currency, $deny->amount);
+
+            $ref = time();
+
+            PaymentTransaction::create([
+                'user_id' => $deny->campaign->user_id,
+                'campaign_id' => $deny->campaign->id,
+                'reference' => $ref,
+                'amount' => $deny->amount,
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => $channel,
+                'type' => 'campaign_payment_refund',
+                'description' => 'Campaign Payment Refund for '.$deny->campaign->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
 
             $subject = 'Job Denied';
             $status = 'Denied';
