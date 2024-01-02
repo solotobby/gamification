@@ -239,16 +239,16 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    @elseif(!auth()->user()->accountDetails)
+    {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details') 
-        @endif
+        @endif --}}
 
-    @elseif(!auth()->user()->profile->phone_verified)
+    {{-- @elseif(!auth()->user()->profile->phone_verified)
 
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details')      
-        @endif 
+        @endif  --}}
 
     @elseif(auth()->user()->is_verified == 0)
     

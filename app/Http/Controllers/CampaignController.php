@@ -361,6 +361,11 @@ class CampaignController extends Controller
 
     public function viewCampaign($job_id)
     {
+
+        if($job_id == null){
+            abort(400);
+        }
+        
          $getCampaign = SystemActivities::viewCampaign($job_id);
         
        

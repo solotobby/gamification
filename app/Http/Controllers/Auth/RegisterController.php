@@ -7,6 +7,8 @@ use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMassEmail;
+use App\Mail\GeneralMail;
+use App\Mail\Welcome;
 use App\Models\AccountInformation;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -62,54 +65,58 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-       $payload = [
-            'first_name' =>  $request->first_name,
-            'last_name' =>  $request->last_name,
-            'password' => $request->password,
-            'password_confirmation' => $request->password,
-            'email' => $request->email,
-            'username' => Str::random(7),
-            'phone_number' => '234'.substr($request->phone, 1), //substr($request->phone_number['full'], 1),
-            'user_type' =>"CUSTOMER",
-            'mobile_token' => Str::random(7),
-            'source' => 'Freebyz'
-        ];
-
-        if(walletHandler() == 'local'){
-            $user = $this->createUser($request); //CREATE USER ON FREEBYZ
-
-        }else{
-            $user = $this->createUser($request); //CREATE USER ON FREEBYZ
-
-            if($user){
-                $location = PaystackHelpers::getLocation(); //get user location dynamically
-                // if($location == 'Nigeria'){
-
-                // }
-                if($location == 'United States'){
-                    $sendMonnyApi = $this->sendMonny($payload);
-                    if($sendMonnyApi['status'] == true){
-                    $this->processAccountInformation($sendMonnyApi,$user);
-                    }
-                }else{
-                    AccountInformation::create([
-                        'user_id' => $user->id,
-                        'wallet_id' => '1234567890'
-                    ]);
-                }
-            }
+        $user = $this->createUser($request);
+        if($user){
+            Auth::login($user);
+            PaystackHelpers::userLocation('Registeration');
+            setProfile($user);//set profile page
+            return redirect('/home');
         }
-        Auth::login($user);
+       
 
-        PaystackHelpers::userLocation('Registeration');
+    //    $payload = [
+    //         'first_name' =>  $request->first_name,
+    //         'last_name' =>  $request->last_name,
+    //         'password' => $request->password,
+    //         'password_confirmation' => $request->password,
+    //         'email' => $request->email,
+    //         'username' => Str::random(7),
+    //         'phone_number' => '234'.substr($request->phone, 1), //substr($request->phone_number['full'], 1),
+    //         'user_type' =>"CUSTOMER",
+    //         'mobile_token' => Str::random(7),
+    //         'source' => 'Freebyz'
+    //     ];
 
-        setProfile($user);//set profile page
+        // if(walletHandler() == 'local'){
+        //     //CREATE USER ON FREEBYZ
+
+        // }else{
+        //     $user = $this->createUser($request); //CREATE USER ON FREEBYZ
+
+        //     if($user){
+        //         $location = PaystackHelpers::getLocation(); //get user location dynamically
+        //         // if($location == 'Nigeria'){
+
+        //         // }
+        //         if($location == 'United States'){
+        //             $sendMonnyApi = $this->sendMonny($payload);
+        //             if($sendMonnyApi['status'] == true){
+        //             $this->processAccountInformation($sendMonnyApi,$user);
+        //             }
+        //         }else{
+        //             AccountInformation::create([
+        //                 'user_id' => $user->id,
+        //                 'wallet_id' => '1234567890'
+        //             ]);
+        //         }
+        //     }
+        // }
+
         
-        return redirect('/home');
     }
 
     public function createUser($request){
-        
+
         $ref_id = $request->ref_id;
         $name = $request->first_name.' '.$request->last_name;
         $user = User::create([
@@ -124,15 +131,28 @@ class RegisterController extends Controller
         // $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $user->save();
         Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
+
         if($ref_id != 'null'){
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
+
         $location = PaystackHelpers::getLocation(); //get user location dynamically
         $wall = Wallet::where('user_id', $user->id)->first();
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
 
         SystemActivities::activityLog($user, 'account_creation', $user->name .' Registered ', 'regular');
+
+        if($location == 'Nigeria'){
+            $phone = '234'.substr($request->phone, 1);
+            generateVirtualAccount($name, $phone);
+        }
+
+        // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+        $subject = 'Welcome to Freebyz';
+    
+        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+
         return $user;
     }
 
