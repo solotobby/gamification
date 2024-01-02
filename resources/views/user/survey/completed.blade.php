@@ -29,7 +29,7 @@
               <div class="fs-4 fw-semibold pt-3 mb-0">Survey Successfully Completed</div>
               <p>Thank you for completing this survey.</p>
               <br>
-              <a href="{{ url('home') }}" class="btn btn-primary btn-sm"> <li class="fa fa-home"> </li> Home </a>
+              <a href="{{ url('home') }}" class="btn btn-primary btn-sm"> <li class="fa fa-home"> </li> Continue </a>
             </div>
           </div>
         </div>

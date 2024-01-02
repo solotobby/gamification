@@ -212,7 +212,6 @@
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-ring"></i>
           <span class="nav-main-link-name">Tutorials</span>
-           {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ number_format(auth()->user()->wallet->balance) }}</span> --}}
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
@@ -221,7 +220,7 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="https://vm.tiktok.com/ZM2v58wXg/">
+            <a class="nav-main-link" href="https://vm.tiktok.com/ZM6f5mU2a/">
               <span class="nav-main-link-name">How to Complete Tasks</span>
             </a>
           </li>
