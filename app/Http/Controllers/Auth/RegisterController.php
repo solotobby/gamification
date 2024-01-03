@@ -215,15 +215,13 @@ class RegisterController extends Controller
 
                 setProfile($user);//set profile page 
 
-               
-
                 setWalletBaseCurrency(); //set base currency if not set
-                // PaystackHelpers::userLocation('Login');
+                PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
                 // dispatch(new SendMassEmail($user, 'Test Queue', 'This is a test msg'));
                  SystemActivities::activityLog($user, 'login', $user->name .' Logged In', 'regular');
-
                 return redirect('home'); //redirect to home
+                
             }else{
                 return back()->with('error', 'Email or Password is incorrect');
             }

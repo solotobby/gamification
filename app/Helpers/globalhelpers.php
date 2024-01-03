@@ -807,11 +807,13 @@ if(!function_exists('reGenerateVirtualAccount')){
 
         if($fetchCustomer['status'] == true){
            
+           
+            $phone = '234'.substr($user->phone, 1);
             //update customer
             $customerPayload = [
                 "first_name"=> $user->name,
                 "last_name"=> 'Freebyz',
-                "phone"=> "+".$user->email
+                "phone"=> "+".$phone
             ];
 
             $updateCustomer = PaystackHelpers::updateCustomer($user->email, $customerPayload);
@@ -849,12 +851,12 @@ if(!function_exists('reGenerateVirtualAccount')){
 
 
         }else{
-
+            $phone = '234'.substr($user->phone, 1);
             $payload = [
                 "email"=> $user->email,
                 "first_name"=> $user->name,
                 "last_name"=> 'Freebyz',
-                "phone"=> "+".$user->email
+                "phone"=> "+".$phone
             ];
             $res = PaystackHelpers::createCustomer($payload);
 
