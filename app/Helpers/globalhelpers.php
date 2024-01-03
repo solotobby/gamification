@@ -871,6 +871,9 @@ if(!function_exists('reGenerateVirtualAccount')){
                         
                 $response = PaystackHelpers::virtualAccount($data);
 
+               
+
+                
                 $VirtualAccount = VirtualAccount::create(['user_id' => $user->id, 
                     'channel' => 'paystack', 
                     'customer_id'=>$res['data']['customer_code'], 
