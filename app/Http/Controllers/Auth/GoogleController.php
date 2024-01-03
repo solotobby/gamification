@@ -95,7 +95,6 @@ class GoogleController extends Controller
 
                 setProfile($newUser);//set profile page 
 
-
                 if($get->phone == '')
                 {
                     return view('phone');
