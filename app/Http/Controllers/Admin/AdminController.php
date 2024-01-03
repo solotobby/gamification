@@ -957,7 +957,7 @@ class AdminController extends Controller
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
        $userPhone = User::where('id', $id)->first();
-        reGenerateVirtualAccount($userPhone);
+        return reGenerateVirtualAccount($userPhone);
         return back()->with('success', 'VA regenerated Successfully');
     }
 
