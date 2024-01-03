@@ -869,7 +869,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                     "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
-                 $response = PaystackHelpers::virtualAccount($data);
+                return  $response = PaystackHelpers::virtualAccount($data);
 
                
 
