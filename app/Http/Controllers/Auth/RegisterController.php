@@ -217,8 +217,10 @@ class RegisterController extends Controller
                         null;
                 }else{
                     setWalletBaseCurrency();
-                    setProfile($user);//set profile page 
+                   
                 }
+
+                setProfile($user);//set profile page 
                
 
                  //set base currency if not set
