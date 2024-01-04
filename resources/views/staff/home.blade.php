@@ -72,7 +72,7 @@
           Staff Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Welcome, {{ auth()->name }}.
+          Welcome, {{ auth()->user()->name }}.
         </p>
       </div>
       <div class="mt-4 mt-md-0">
