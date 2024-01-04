@@ -212,14 +212,7 @@ class RegisterController extends Controller
                 // }
 
                 Auth::login($user); //log user in
-
-                if($user->role == 'staff'){
-                        null;
-                }else{
-                    setProfile($user);//set profile page 
-                }
-               
-
+            
                 setWalletBaseCurrency(); //set base currency if not set
                 PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
