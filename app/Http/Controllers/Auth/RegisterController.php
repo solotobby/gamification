@@ -212,8 +212,16 @@ class RegisterController extends Controller
                 // }
 
                 Auth::login($user); //log user in
-            
-                setWalletBaseCurrency(); //set base currency if not set
+
+                if($user->role == 'staff'){
+                        null;
+                }else{
+                    setWalletBaseCurrency();
+                    setProfile($user);//set profile page 
+                }
+               
+
+                 //set base currency if not set
                 PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
                 // dispatch(new SendMassEmail($user, 'Test Queue', 'This is a test msg'));
