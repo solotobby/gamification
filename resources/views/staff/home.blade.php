@@ -69,10 +69,10 @@
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
       <div>
         <h1 class="h3 mb-1">
-          Dashboard
+          Staff Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Welcome, admin! You have <a class="fw-medium" href="javascript:void(0)">8 new notifications</a>.
+          Welcome, {{ auth()->name }}.
         </p>
       </div>
       <div class="mt-4 mt-md-0">
