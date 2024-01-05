@@ -53,10 +53,11 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  All Campaigns
+                  Reg. Today
                 </p>
                 <p class="fs-3 mb-0">
-                  {{ $metrics['all_campaigns'] }}
+                
+                  {{ $analytics['registered_today'] }}
                 </p>
               </div>
               <div>
@@ -84,10 +85,10 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Live Campaigns
+                  Reg. this Week
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['live_campaigns'] }}
+                  {{ $analytics['registered_this_week'] }}
                 </p>
               </div>
               <div>
@@ -115,10 +116,10 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Pending Campaigns
+                  Reg. this Month
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['pending_campaigns'] }}
+                  {{ $analytics['registered_this_month'] }}
                 </p>
               </div>
               <div>
@@ -146,10 +147,10 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Denied Campaigns
+                  Logins today
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['denied_campaigns'] }}
+                  {{ $analytics['login_today'] }}
                 </p>
               </div>
               <div>
@@ -177,10 +178,10 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Completed Campaigns
+                  Logins this week
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['completedSum'] }}
+                  {{ $analytics['login_this_week'] }}
                 </p>
               </div>
               <div>
@@ -208,10 +209,10 @@
             <div class="d-flex align-items-center justify-content-between p-1">
               <div class="me-3">
                 <p class="text-muted mb-0">
-                  Incomplete Jobs
+                  Logins this month
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['incompleteSum'] }}
+                  {{ $analytics['login_this_month'] }}
                 </p>
               </div>
               <div>
@@ -242,7 +243,8 @@
                   Total Staff
                 </p>
                 <p class="fs-3 mb-0">
-                    {{ $metrics['staffSum'] }}
+                  0
+                    {{-- {{ $metrics['staffSum'] }} --}}
                 </p>
               </div>
               <div>

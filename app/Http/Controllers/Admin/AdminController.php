@@ -193,8 +193,9 @@ class AdminController extends Controller
     }
 
     public function campaignMetrics(){
-        $metrics = Analytics::campaignMetrics();
-        return view('admin.campaign_metric.index', ['metrics' => $metrics]);
+        //  $metrics = Analytics::campaignMetrics();
+        $dashbordMetrics = Analytics::dashboardAnalytics();
+        return view('admin.campaign_metric.index', ['analytics' => $dashbordMetrics]);
     }
 
     public function campaignDisputes(){
