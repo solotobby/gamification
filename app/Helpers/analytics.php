@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\ActivityLog;
 use App\Models\Campaign;
 use App\Models\PaymentTransaction;
 use App\Models\Statistics;
@@ -130,6 +131,30 @@ class Analytics{
         $data['pending_campaigns'] = $campaigns->where('status', 'Offline')->count();
         $data['denied_campaigns'] = $campaigns->where('status', 'Declined')->count();
     
+        return $data;
+    }
+
+    public static function dashboardAnalytics(){
+        $logs = ActivityLog::get(['activity_type', 'user_type', 'created_at']);
+        
+        $startoftoday = Carbon::now()->startOfDay();
+        $currently = Carbon::now();
+
+//        $today = Carbon::today()->toDateString();
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $startofMonth = Carbon::now()->startOfMonth();
+        
+  //      $endOfWeek = Carbon::now()->endOfWeek();
+
+        $data['registered_today'] = $logs->whereIn('activity_type', ['account_creation','google_account_creation'])->whereBetween('created_at', [$startoftoday, $currently])->count();
+        $data['registered_this_week'] = $logs->whereIn('activity_type', ['account_creation','google_account_creation'])->whereBetween('created_at', [$startOfWeek, $currently])->count();
+        $data['registered_this_month'] = $logs->whereIn('activity_type', ['account_creation','google_account_creation'])->whereBetween('created_at', [$startofMonth, $currently])->count();
+
+        $data['login_today'] = $logs->whereIn('activity_type', ['login',])->whereBetween('created_at', [$startoftoday, $currently])->count();
+        $data['login_this_week'] = $logs->whereIn('activity_type', ['login'])->whereBetween('created_at', [$startOfWeek, $currently])->count();
+        $data['login_this_month'] = $logs->whereIn('activity_type', ['login'])->whereBetween('created_at', [$startofMonth, $currently])->count();
+
         return $data;
     }
 
