@@ -11,7 +11,7 @@
         <div class="row my-3">
           <div class="col-md-6 d-md-flex align-items-md-center">
             <div class="py-4 py-md-0 text-center text-md-start">
-              <h1 class="fs-2 text-white mb-2">Campaign Metrics</h1>
+              <h1 class="fs-2 text-white mb-2">Freebyz Analytics</h1>
               <h2 class="fs-lg fw-normal text-white-75 mb-0">Welcome to your overview</h2>
             </div>
           </div>
@@ -22,7 +22,7 @@
                   860
                 </p>
                 <p class="fs-sm fw-semibold text-white-75 text-uppercase mb-0">
-                  <i class="far fa-chart-bar opacity-75 me-1"></i> Sales
+                  <i class="far fa-chart-bar opacity-75 me-1"></i> Total Users
                 </p>
               </div>
               <div class="col-6 col-xl-4">
@@ -30,7 +30,7 @@
                   $8.960
                 </p>
                 <p class="fs-sm fw-semibold text-white-75 text-uppercase mb-0">
-                  <i class="far fa-chart-bar opacity-75 me-1"></i> Earnings
+                  <i class="far fa-chart-bar opacity-75 me-1"></i> Total Earnings
                 </p>
               </div>
             </div>
@@ -51,29 +51,15 @@
         <a class="block block-rounded block-link-pop" href="javascript:void(0)">
           <div class="block-content block-content-full">
             <div class="d-flex align-items-center justify-content-between p-1">
-              <div class="me-3">
-                <p class="text-muted mb-0">
-                  Reg. Today
-                </p>
-                <p class="fs-3 mb-0">
-                
-                  {{ $analytics['registered_today'] }}
-                </p>
-              </div>
-              <div>
-                <!-- Sparkline Dashboard Users Container -->
-                {{-- <span class="js-sparkline" data-type="line"
-                      data-points="[640,630,660,640,660,650,670,680]"
-                      data-width="70px"
-                      data-height="40px"
-                      data-line-color="#82b54b"
-                      data-fill-color="transparent"
-                      data-spot-color="transparent"
-                      data-min-spot-color="transparent"
-                      data-max-spot-color="transparent"
-                      data-highlight-spot-color="#82b54b"
-                      data-highlight-line-color="#82b54b"
-                      data-tooltip-suffix="Users"></span> --}}
+                <div class="me-3">
+                  <p class="text-muted mb-0">
+                    Reg. Today
+                  </p>
+                  <p class="fs-3 mb-0">
+                    {{ $analytics['registered_today'] }} 
+                  </p>
+                </div>
+              <div>     
               </div>
             </div>
           </div>

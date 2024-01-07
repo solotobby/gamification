@@ -624,9 +624,12 @@ class CampaignController extends Controller
             if($campaign->currency == 'NGN'){
                 $currency = 'Naira';
                 $channel = 'paystack';
-            }else{
+            }elseif($campaign->currency == 'USD'){
                 $currency = 'Dollar';
                 $channel = 'paypal';
+            }else{
+                $currency = 'Naira';
+                $channel = 'paystack';
             }
 
             creditWallet($campaingOwner, $currency, $deny->amount);
