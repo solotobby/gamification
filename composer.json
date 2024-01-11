@@ -40,7 +40,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/globalhelpers.php"
+            "app/Helpers/globalhelpers.php",
+            "app/Helpers/wellahealthApiIntegration.php"
         ]
     },
     "autoload-dev": {

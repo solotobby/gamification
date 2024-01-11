@@ -972,8 +972,9 @@ class AdminController extends Controller
     }
 
     public function test(){
-        $html =  Sendmonny::index();
+        return listWellaHealthScriptions();
+        // $html =  Sendmonny::index();
 
-        return view('welcome', ['html' => $html]);
+        // return view('welcome', ['html' => $html]);
     }
 }

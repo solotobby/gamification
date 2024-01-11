@@ -120,7 +120,6 @@ Route::get('points/redeem', [\App\Http\Controllers\LoginPointCountroller::class,
 ///payment routes
 Route::get('golive/{job_id}', [\App\Http\Controllers\PaystackPaymentController::class, 'goLive']);
 Route::get('callback', [\App\Http\Controllers\PaystackPaymentController::class, 'paystackCallback']);
-
 Route::get('upgrade', [\App\Http\Controllers\UserController::class, 'upgrade'])->name('upgrade');
 Route::get('upgrade/part/{amount}', [\App\Http\Controllers\UserController::class, 'upgradePart']);
 Route::get('upgrade/full/{amount}', [\App\Http\Controllers\UserController::class, 'upgradeFull']);
@@ -130,8 +129,11 @@ Route::get('complete/upgrade', [\App\Http\Controllers\UserController::class, 'co
 Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePayment'])->name('make.payment');
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
 Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
-
+//otp
 Route::get('resend/otp', [\App\Http\Controllers\OTPController::class, 'resendOTP']);
+//wellahealth
+Route::get('agent/wellahealth', [\App\Http\Controllers\WellaHealthController::class, 'index'])->name('agent.wellahealth');
+Route::post('agent/create/wellahealth', [\App\Http\Controllers\WellaHealthController::class, 'create'])->name('agent.create.wellahealth');
 // survey
 Route::get('survey', [\App\Http\Controllers\SurveyController::class, 'survey'])->name('survey');
 Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurvey'])->name('store.survey');
