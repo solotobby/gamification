@@ -23,8 +23,8 @@ class WellaHealthController extends Controller
         $mysubscriptions = PartnerSubscription::where('user_id', auth()->user()->id)->first();//pluck('plan_code')->toArray();
         $display[] = [
             'data'=> $list, 
-            'is_subscribed' => $list['planCode'] == $mysubscriptions->plan_code ? true : false, 
-            'subscriptionCode' => $list['planCode'] == $mysubscriptions->plan_code ? $mysubscriptions->subscription_code : null, 
+            'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
+            'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
         ];
        }
        
