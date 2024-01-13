@@ -18,6 +18,7 @@ use App\Models\Rating;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -612,6 +613,11 @@ class CampaignController extends Controller
 
         }else{
             $deny = CampaignWorker::where('id', $request->id)->first();
+            //check if the 
+            $chckCount = PaymentTransaction::where('user_id', $deny->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
+            if($chckCount >= 3){
+                return back()->with('error', 'You cannot deny more than 3 jobs in a day');
+            }
             $deny->status = 'Denied';
             $deny->reason = $request->reason;
             $deny->save();

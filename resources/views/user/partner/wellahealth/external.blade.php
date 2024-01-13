@@ -1,11 +1,10 @@
-@extends('layouts.main.master')
+@extends('layouts.main.general')
 @section('style')
 
 
 @endsection
 
 @section('content')
-
  <!-- Hero -->
  <div class="bg-image" style="background-image: url('{{ asset('src/assets/media/photos/photo11@2x.jpg') }}');">
     <div class="bg-black-75">
@@ -21,8 +20,8 @@
   </div>
   <!-- END Hero -->
 
-   <!-- Pricing Tables -->
-   <div class="content content-boxed overflow-hidden">
+
+  <div class="content content-boxed overflow-hidden">
    
     <div class="row">
       
@@ -43,103 +42,13 @@
                 show up
             </div> --}}
       </div>
-
-      <!-- Special Offer -->
-      <div class="bg-body-light">
-        <div class="content content-boxed content-full">
-          <div class="py-5">
-            <h2 class="mb-2 text-center">
-              Special Offer
-            </h2>
-            <h3 class="fw-light text-muted push text-center">
-              If you upgrade today you will also get all the following at no extra cost.
-            </h3>
-          </div>
-          <div class="row py-3">
-            <div class="col-sm-6 col-md-4 mb-5">
-              <div class="my-3">
-                <i class="fa fa-2x fa-phone text-xeco"></i>
-              </div>
-              <h4 class="h5 mb-2">
-                Lifetime Support
-              </h4>
-              <p class="mb-0 text-muted">
-                Our high quality and award winning phone support will be available 24/7 and for as long as you are using our service.
-              </p>
-            </div>
-            <div class="col-sm-6 col-md-4 mb-5">
-              <div class="my-3">
-                <i class="fa fa-2x fa-arrows-alt-v text-danger"></i>
-              </div>
-              <h4 class="h5 mb-2">
-                Unlimited Bandwidth
-              </h4>
-              <p class="mb-0 text-muted">
-                We will offer unlimited bandwidth for all your incoming and outcoming connections. You won’t have to worry about it any more.
-              </p>
-            </div>
-            <div class="col-sm-6 col-md-4 mb-5">
-              <div class="my-3">
-                <i class="fa fa-2x fa-puzzle-piece text-xinspire"></i>
-              </div>
-              <h4 class="h5 mb-2">
-                Unlimited Integrations
-              </h4>
-              <p class="mb-0 text-muted">
-                Any current or future integrations with third-party services will be available with your plan for unlimited usage.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- END Special Offer -->
-
-      <!-- Call to Action -->
-      <div class="content content-boxed text-center">
-        <div class="py-5">
-          <h2 class="mb-3 text-center">
-            Why Upgrade?
-          </h2>
-          <h3 class="h4 fw-light text-muted push text-center">
-            Upgrading can help you expand your business and acquire much more customers!
-          </h3>
-
-          <div  class="h4 fw-light text-muted push text-center">
-            {{-- <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly> --}}
-            <div class="input-group">
-                <input type="text" value="{{url('agent/'.auth()->user()->referral_code).'/wellahealth'}}" class="form-control form-control-alt" id="myInput" readonly>
-                <button type="button" class="btn btn-alt-secondary" onclick="myFunction()" onmouseout="outFunc()">
-                    <i class="fa fa-copy"></i>
-                </button>
-            </div>
-
-          </div>
-          
-        </div>
-        {{-- <span class="col-12 d-inline-block">
-            <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
-            <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
-              <i class="fa fa-copy"></i>
-            </button>
-
-            {{-- <a class="btn btn-hero btn-primary" href="javascript:void(0)" data-toggle="click-ripple">
-              <i class="fa fa-link opacity-50 me-1"></i> Learn How..
-            </a> -
-          </span> --}}
-
-          
-      </div>
-      <!-- END Call to Action -->
-
-
-
-      {{-- @foreach ($subscriptions as $subscription) --}}
-            {{-- <div class="col-md-6 col-xl-3">
+      @foreach ($subscriptions as $subscription)
+            <div class="col-md-6 col-xl-3">
                
                 <div class="block block-link-pop block-rounded text-center">
 
                 <div class="block-header">
-                    <h3 class="block-title">{{$subscription['data']['productType']}} {{ $subscription['is_subscribed'] }}</h3>
+                    <h3 class="block-title">{{$subscription['data']['productType']}}</h3>
                 </div>
                 <div class="block-content bg-body-light">
                     <div class="py-2">
@@ -169,9 +78,12 @@
                     </div>
                 @else
                     <div class="block-content block-content-full bg-body-light">
-                        <button class="btn btn-hero btn-primary px-4" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $subscription['data']['planCode'] }}">
+                        <a href="{{ url('agent/'.$ref.'/wellahealth/'.$subscription['data']['planCode'].'/'.$subscription['data']['numberOfPersons'].'/'.$subscription['data']['price'].'/'.$subscription['data']['planType']) }}" class="btn btn-hero btn-primary px-4">
                             <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
-                        </button>
+                        </a>
+                        {{-- <button class="btn btn-hero btn-primary px-4" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $subscription['data']['planCode'] }}">
+                            <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
+                        </button> --}}
                     </div>
                 @endif
                
@@ -216,14 +128,10 @@
                       </div>
                   </div>
                 </div>
-            </div> --}}
-      {{-- @endforeach --}}
-      
+            </div>
+      @endforeach
 
-     
     </div>
-  </div>
-  <!-- END Pricing Tables -->
-
+</div>
+<!-- END Pricing Tables -->
 @endsection
-
