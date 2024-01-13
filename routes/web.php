@@ -52,6 +52,12 @@ Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController
 Route::post('register/user', [\App\Http\Controllers\Auth\RegisterController::class, 'registerUser'])->name('register.user');
 Route::post('login/user', [\App\Http\Controllers\Auth\RegisterController::class, 'loginUser'])->name('login.user');
 
+
+///partner route
+Route::get('agent/{ref}/wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellahealth']);
+Route::get('agent/{ref}/wellahealth/{planCode}/{numberOfPersons}/{amount}/{type}', [\App\Http\Controllers\GeneralController::class, 'processWellaHealth']);
+Route::post('agent/store/wellahealth', [\App\Http\Controllers\GeneralController::class, 'storeWellaHealth']);
+
 Auth::routes();
 //GOOGLE AUTH
 Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);

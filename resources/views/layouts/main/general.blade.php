@@ -217,14 +217,9 @@
         <!-- Sidebar Scrolling -->
         <div class="js-sidebar-scroll">
           <!-- Side Navigation -->
-            @if(auth()->user()->hasRole('admin'))
-                @include('layouts.sidebar.admin')
-            @elseif(auth()->user()->hasRole('staff'))
-                @include('layouts.sidebar.staff')
-            @else
-                @include('layouts.sidebar.user')
-            
-            @endif
+           
+                @include('layouts.sidebar.default')
+          
           <!-- END Side Navigation -->
         </div>
         <!-- END Sidebar Scrolling -->
@@ -235,7 +230,7 @@
       <header id="page-header">
         <!-- Header Content -->
 
-        @include('layouts.menu.header')
+        @include('layouts.menu.general')
         <!-- END Header Content -->
         
         <!-- END Header Loader -->

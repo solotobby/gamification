@@ -9,6 +9,7 @@ use App\Models\Answer;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
+use App\Models\PartnerSubscription;
 use App\Models\PaymentTransaction;
 use App\Models\Transaction;
 use App\Models\User;
@@ -133,6 +134,43 @@ class GeneralController extends Controller
 
     public function download_url(Request $request)
     {
+        return $request;
+    }
+
+    public function wellahealth($ref){
+        // return $ref;
+        $user = User::where('referral_code', $ref)->first();
+        if(!$user){
+            return abort(404);
+        }
+        $display = [];
+       foreach(listWellaHealthScriptions() as $list){
+            $mysubscriptions = PartnerSubscription::where('user_id', $user->id)->first();//pluck('plan_code')->toArray();
+            $display[] = [
+                'data'=> $list, 
+                'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
+                'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
+            ];
+        }
+        return view('user.partner.wellahealth.external', ['subscriptions' => $display, 'ref' => $ref]);
+        
+        
+    }
+
+    public function processWellaHealth($ref, $planCode, $numberOfPersons, $amount, $type){
+        $referral = User::where('referral_code', $ref)->first();
+        return view('user.partner.wellahealth.process', [
+            'ref' => $ref,
+            'planCode' => $planCode,
+            'numberOfPersons' => $numberOfPersons,
+            'amount' => $amount,
+            'type' => $type,
+            'referral' => $referral
+        ]);
+        //return [$ref, $planCode, $numberOfPersons, $amount];
+    }
+
+    public function storeWellaHealth(Request $request){
         return $request;
     }
 }
