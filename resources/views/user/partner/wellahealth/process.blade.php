@@ -66,13 +66,13 @@
             
           <div class="col-md-10 col-lg-8">
                 <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-id">Referral</label>
+                    <label class="form-label" for="dm-ecom-product-id">You were Referred by</label>
                     <input type="text" class="form-control" id="dm-ecom-product-id" name="dm-ecom-product-id" value="{{$referral->name}}" readonly>
                 </div>
                 <form action="{{ url('agent/store/wellahealth')}}" method="POST">
                     @csrf
                     @for($i=1; $i<=$numberOfPersons; $i++)
-                    <strong> Enter Beneficiary {{ $i }} </strong>
+                <strong> Enter Beneficiary {{ $i }} </strong>
                 <div class="mb-4">
                     <label class="form-label" for="dm-ecom-product-name">First Name</label>
                     <input type="text" class="form-control" id="dm-ecom-product-name" name="firstName[]" value="" required>
@@ -104,7 +104,11 @@
                 </div>
                 <hr>
                 @endfor
-                
+
+                <input type="hidden" name="referral_code" value="{{ $ref }}">
+                <input type="hidden" name="amount" value="{{ $amount }}">
+                <input type="hidden" name="paymentPlan" value="{{ $type }}">
+
                 <div class="mb-4">
                     <button type="submit" class="btn btn-alt-primary">Subscribe</button>
                 </div>

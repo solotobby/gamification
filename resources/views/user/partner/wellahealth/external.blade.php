@@ -70,22 +70,20 @@
                     @endforeach
                     </div>
                 </div>
-                @if($subscription['is_subscribed'] == true)
+                <div class="block-content block-content-full bg-body-light">
+                    <a href="{{ url('agent/'.$ref.'/wellahealth/'.$subscription['data']['planCode'].'/'.$subscription['data']['numberOfPersons'].'/'.$subscription['data']['price'].'/'.$subscription['data']['planType']) }}" class="btn btn-hero btn-primary px-4">
+                        <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
+                    </a>
+                </div>
+                {{-- @if($subscription['is_subscribed'] == true)
                     <div class="block-content block-content-full bg-body-light">
                         <span class="btn btn-hero btn-secondary disabled px-4">
                         <i class="fa fa-check opacity-50 me-1"></i> Active Plan
                         </span>
                     </div>
                 @else
-                    <div class="block-content block-content-full bg-body-light">
-                        <a href="{{ url('agent/'.$ref.'/wellahealth/'.$subscription['data']['planCode'].'/'.$subscription['data']['numberOfPersons'].'/'.$subscription['data']['price'].'/'.$subscription['data']['planType']) }}" class="btn btn-hero btn-primary px-4">
-                            <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
-                        </a>
-                        {{-- <button class="btn btn-hero btn-primary px-4" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $subscription['data']['planCode'] }}">
-                            <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
-                        </button> --}}
-                    </div>
-                @endif
+                   
+                @endif --}}
                
             </div>
                

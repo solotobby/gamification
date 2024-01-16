@@ -519,61 +519,61 @@ class CampaignController extends Controller
         $request->validate([
             'reason' => 'required|string',
         ]);
-        
 
+        $workSubmitted = CampaignWorker::where('id', $request->id)->first();
+        $campaign = Campaign::where('id', $workSubmitted->campaign_id)->first();
 
         if($request->action == 'approve'){
-            $approve = CampaignWorker::where('id', $request->id)->first();
-            if($approve->reason != null){
+
+            if($workSubmitted->reason != null){
                 return back()->with('error', 'Campaign has been attended to');
            }
-
-          //->number_of_staff;
-          $campaign = Campaign::where('id', $approve->campaign_id)->first();
+          
            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
            if($completed_campaign >= $campaign->number_of_staff){
                 return back()->with('error', 'Campaign has reached its maximum capacity');
            }
 
-           $user = User::where('id', $approve->user_id)->first();
-           $approve->status = 'Approved';
-           $approve->reason = $request->reason;
-           $approve->save();
+           $user = User::where('id', $workSubmitted->user_id)->first();
+
+           $workSubmitted->status = 'Approved';
+           $workSubmitted->reason = $request->reason;
+           $workSubmitted->save();
 
            //update completed action
            $campaign->completed_count += 1;
            $campaign->pending_count -= 1;
            $campaign->save();
 
-           setIsComplete($approve->campaign_id);
+           setIsComplete($workSubmitted->campaign_id);
 
            if($campaign->currency == 'NGN'){
                $currency = 'NGN';
                $channel = 'paystack';
-               $wallet = Wallet::where('user_id', $approve->user_id)->first();
-               $wallet->balance += $approve->amount;
-               $wallet->save();
-           }else{
+               creditWallet($user, $currency, $workSubmitted->amount);
+           }elseif($campaign->currency == 'USD'){
                $currency = 'USD';
                $channel = 'paypal';
-               $wallet = Wallet::where('user_id', $approve->user_id)->first();
-               $wallet->usd_balance += $approve->amount;
-               $wallet->save();
+               creditWallet($user, $currency, $workSubmitted->amount);
+            }elseif($campaign->currency == null){
+               $currency = 'NGN';
+               $channel = 'paystack';
+               creditWallet($user, $currency, $workSubmitted->amount);
            }
 
 
            $ref = time();
 
            PaymentTransaction::create([
-               'user_id' => $approve->user_id,
-               'campaign_id' => $approve->campaign->id,
+               'user_id' =>  $workSubmitted->user_id,
+               'campaign_id' =>  $workSubmitted->campaign->id,
                'reference' => $ref,
-               'amount' => $approve->amount,
+               'amount' =>  $workSubmitted->amount,
                'status' => 'successful',
                'currency' => $currency,
                'channel' => $channel,
                'type' => 'campaign_payment',
-               'description' => 'Campaign Payment for '.$approve->campaign->post_title,
+               'description' => 'Campaign Payment for '. $workSubmitted->campaign->post_title,
                'tx_type' => 'Credit',
                'user_type' => 'regular'
            ]);
@@ -582,7 +582,7 @@ class CampaignController extends Controller
            
            $subject = 'Job Approved';
            $status = 'Approved';
-           Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
+           Mail::to( $workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
            return back()->with('success', 'Campaign Approve Successfully');
 
 
@@ -612,20 +612,20 @@ class CampaignController extends Controller
             
 
         }else{
-            $deny = CampaignWorker::where('id', $request->id)->first();
+           
             //check if the 
-            $chckCount = PaymentTransaction::where('user_id', $deny->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
+            $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
             if($chckCount >= 3){
                 return back()->with('error', 'You cannot deny more than 3 jobs in a day');
             }
-            $deny->status = 'Denied';
-            $deny->reason = $request->reason;
-            $deny->save();
+            $workSubmitted->status = 'Denied';
+            $workSubmitted->reason = $request->reason;
+            $workSubmitted->save();
           
-            $this->removePendingCountAfterDenial($deny->campaign_id);
+            $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
 
-            $campaign = Campaign::where('id', $deny->campaign_id)->first();
-            $campaingOwner = User::where('id', $deny->campaign->user_id)->first();
+            // $campaign = Campaign::where('id', $deny->campaign_id)->first();
+            $campaingOwner = User::where('id', $campaign->user_id)->first();
 
             if($campaign->currency == 'NGN'){
                 $currency = 'Naira';
@@ -633,36 +633,39 @@ class CampaignController extends Controller
             }elseif($campaign->currency == 'USD'){
                 $currency = 'Dollar';
                 $channel = 'paypal';
-            }else{
+            }elseif($campaign->currency == null){
                 $currency = 'Naira';
                 $channel = 'paystack';
             }
 
-            creditWallet($campaingOwner, $currency, $deny->amount);
+            creditWallet($campaingOwner, $currency, $workSubmitted->amount);
 
             $ref = time();
 
             PaymentTransaction::create([
-                'user_id' => $deny->campaign->user_id,
-                'campaign_id' => $deny->campaign->id,
+                'user_id' => $workSubmitted->campaign->user_id,
+                'campaign_id' => $workSubmitted->campaign->id,
                 'reference' => $ref,
-                'amount' => $deny->amount,
+                'amount' => $workSubmitted->amount,
                 'status' => 'successful',
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'campaign_payment_refund',
-                'description' => 'Campaign Payment Refund for '.$deny->campaign->post_title,
+                'description' => 'Campaign Payment Refund for '.$workSubmitted->campaign->post_title,
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
 
             $subject = 'Job Denied';
             $status = 'Denied';
-            Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
+            Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
             return back()->with('success', 'Campaign has been denied');
         }
     }
 
+    public function approveJob($workSubmitted){
+        return $workSubmitted;
+    }
     public function removePendingCountAfterDenial($id){
         $campaign = Campaign::where('id', $id)->first();
         $campaign->pending_count -= 1;
