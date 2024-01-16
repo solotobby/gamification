@@ -578,7 +578,7 @@ class CampaignController extends Controller
                'user_type' => 'regular'
            ]);
            
-           SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format($approve->amount), 'regular');
+           SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format( $workSubmitted->amount), 'regular');
            
            $subject = 'Job Approved';
            $status = 'Approved';
