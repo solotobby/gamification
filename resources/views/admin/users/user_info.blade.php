@@ -34,6 +34,7 @@
          @else
           Virtual Account Number: Not Created<br>
         @endif
+          Date Joined: {{ @$info->created_at }}<br>
 
         </div>
       </form>
@@ -151,6 +152,7 @@
               <thead>
                 <tr>
                   <th>Reference</th>
+                  <th>Type</th>
                   <th>Amount</th>
                   <th>Currency</th>
                   <th>Status</th>
@@ -168,6 +170,9 @@
                   @endif
                       <td>
                         {{ $list->reference }}
+                      </td>
+                      <td>
+                        {{ $list->type }}
                       </td>
                       <td>
                         @if($list->currency == 'NGN')

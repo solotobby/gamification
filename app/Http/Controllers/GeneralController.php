@@ -9,6 +9,7 @@ use App\Models\Answer;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
+use App\Models\PartnershipBeneficiary;
 use App\Models\PartnerSubscription;
 use App\Models\PaymentTransaction;
 use App\Models\Transaction;
@@ -138,21 +139,34 @@ class GeneralController extends Controller
     }
 
     public function wellahealth($ref){
-        // return $ref;
-        $user = User::where('referral_code', $ref)->first();
-        if(!$user){
-            return abort(404);
+        $subscription = listWellaHealthScriptions();
+        $groupedSubscriptions = [];
+        foreach($subscription as $list){
+            $planType = $list['planType'];
+            if (!array_key_exists($planType, $groupedSubscriptions)) {
+                // If not, create an empty array for the "planType"
+                $groupedSubscriptions[$planType] = [];
+            }
+
+            $groupedSubscriptions[$planType][] = $subscription;
         }
-        $display = [];
-       foreach(listWellaHealthScriptions() as $list){
-            $mysubscriptions = PartnerSubscription::where('user_id', $user->id)->first();//pluck('plan_code')->toArray();
-            $display[] = [
-                'data'=> $list, 
-                'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
-                'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
-            ];
-        }
-        return view('user.partner.wellahealth.external', ['subscriptions' => $display, 'ref' => $ref]);
+
+        return $groupedSubscriptions;
+
+    //     $user = User::where('referral_code', $ref)->first();
+    //     if(!$user){
+    //         return abort(404);
+    //     }
+    //     $display = [];
+    //    foreach(listWellaHealthScriptions() as $list){
+    //         $mysubscriptions = PartnerSubscription::where('user_id', $user->id)->first();//pluck('plan_code')->toArray();
+    //         $display[] = [
+    //             'data'=> $list, 
+    //             'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
+    //             'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
+    //         ];
+    //     }
+        // return view('user.partner.wellahealth.external', ['subscriptions' => $display, 'ref' => $ref]);
         
         
     }
@@ -171,6 +185,93 @@ class GeneralController extends Controller
     }
 
     public function storeWellaHealth(Request $request){
-        return $request;
+        // return $request;
+        $data['firstName'] = $request->firstName;
+        $data['lastName'] = $request->lastName;
+        $data['email'] = $request->email;
+        $data['phone'] = $request->phone;
+        $data['dateOfBirth'] = $request->dateOfBirth;
+        $data['gender'] = $request->gender;
+
+        // Loop through the arrays
+        $formattedData = [];
+        for ($i = 0; $i < count($data['firstName']); $i++) {
+            $formattedData[] = [
+                'firstName' => $data['firstName'][$i],
+                'lastName' => $data['lastName'][$i],
+                'phone' => $data['phone'][$i],
+                'email' => $data['email'][$i],
+                'dateOfBirth' => $data['dateOfBirth'][$i],
+                'gender' => $data['gender'][$i]
+            ];
+        }
+         $user = User::where('referral_code', $request->referral)->first();
+        $splitedName = explode(" ", $user->name);
+        $payload = [
+            'agentCode' => 'WHPXTest10076',
+            'firstName' => $splitedName[0],
+            'lastName' => isset($splitedName[1]) ? $splitedName[1] : 'Freebyz',
+            'phone' => $user->phone,
+            'email' => $user->email,
+            'amount' => $request->amount,
+            'acquisitionChannel' => 'Agent',
+            'paymentPlan' => $request->paymentPlan,
+            'gender' => $user->gender,
+            'dateOfBirth' => '1990-12-09', 
+            'beneficiaryList' => $formattedData
+        ];
+        $amount = $request->amount;
+        $ref = time();
+        $createSubscription = createWellaHealthScription($payload);
+        if($createSubscription){
+            if($request->referral){
+
+                $affiliate_commission = 0.035 * $amount;
+                $commission = 0.015 * $amount;
+               //$referral = User::where('referral_code', $request->referral)->first();
+                $affiliate_referral_id = $user->id;
+               // creditWallet($referral, 'Naira', $affiliate_commission);
+                //transactionProcessor($referral,$ref,$request->amount, 'successful', 'NGN', 'system', 'wellahealth_subscription_affiliate_commission', auth()->user()->name.' WellaHealth affiliate commission', 'Credit', 'regular');
+    
+            }else{
+
+                $affiliate_commission = 0;
+                $commission = 0.05 * $amount;
+                $affiliate_referral_id = null;
+            }
+
+                $data['user_id'] = auth()->user()->id;
+                $data['plan_code'] = $request->planCode;
+                $data['subscription_code'] = $createSubscription['subscriptionCode'];
+                $data['amount'] = $createSubscription['amount'];
+                $data['commission'] = $commission;
+                $data['affiliate_commission'] = $affiliate_commission;
+                $data['affiliate_referral_id'] =  $affiliate_referral_id;
+                $data['payment_plan'] = $createSubscription['paymentPlan'];
+                $data['numberOfSubscribers'] = $createSubscription['numberOfSubscribers'];
+                $data['nextPayment'] = $createSubscription['nextPayment'];
+                $data['product'] = $createSubscription['product'];
+                $data['partner'] = 'WELLAHEALTH';
+                $data['is_paid'] = false;
+
+                $partnership = PartnerSubscription::create($data);
+
+                foreach($formattedData as $formatted){
+                    PartnershipBeneficiary::create([
+                        'partnership_subscriptions_id' => $partnership->id,
+                        'firstName' => $formatted->firstName,
+                        'lastName' => $formatted->lastName,
+                        'email' => $formatted->email,
+                        'phone' => $formatted->phone,
+                        'dateOfBirth' => $formatted->dateOfBirth,
+                        'gender' => $formatted->gender,
+                    ]);
+                }
+                
+                return back()->with('success', 'Subscription Successful Completed');              
+
+        }
+
+        return [$payload];
     }
 }
