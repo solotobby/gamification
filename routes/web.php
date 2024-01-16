@@ -110,6 +110,7 @@ Route::get('admin/campaign/activities/{id}', [\App\Http\Controllers\CampaignCont
 Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
 Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
+
 Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 'welcomeUser']);
 
 Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
@@ -158,6 +159,8 @@ Route::get('withrawal/requests', [\App\Http\Controllers\UserController::class, '
 Route::get('approved/campaigns', [\App\Http\Controllers\CampaignController::class, 'approvedCampaigns']);
 Route::get('denied/campaigns', [\App\Http\Controllers\CampaignController::class, 'deniedCampaigns']);
 Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, 'completedJobs']);
+Route::get('disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'disputedJobs']);
+Route::post('process/disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'processDisputedJobs'])->name('dispute.job');
 
 Route::post('addmore/workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');
 

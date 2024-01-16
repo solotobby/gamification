@@ -22,6 +22,10 @@ class CampaignWorker extends Model
     {
         return $this->belongsTo(Campaign::class, 'campaign_id');
     }
+
+    public function dispute(){
+        return $this->hasOne(DisputedJobs::class, 'campaign_worker_id');
+    }
    
 
 }

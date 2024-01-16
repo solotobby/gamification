@@ -146,7 +146,7 @@ class SafeLockController extends Controller
         //get user bank information
         $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
         if($bankInfo){   
-            $transfter = PaystackHelpers::transferFund((int)$getSafeLock->total_payment, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
+            $transfter = PaystackHelpers::transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
             if($transfter['status'] == true){
 
                 $getSafeLock->status = 'Redeemed';
@@ -156,7 +156,7 @@ class SafeLockController extends Controller
                     'user_id' => auth()->user()->id,
                     'campaign_id' => 1,
                     'reference' => time(),
-                    'amount' =>$getSafeLock->total_payment,
+                    'amount' =>$getSafeLock->total_payment*100,
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',
