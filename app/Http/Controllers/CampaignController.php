@@ -615,10 +615,10 @@ class CampaignController extends Controller
         }else{
            
             //check if the 
-            $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
-            if($chckCount >= 3){
-                return back()->with('error', 'You cannot deny more than 3 jobs in a day');
-            }
+            // $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
+            // if($chckCount >= 3){
+            //     return back()->with('error', 'You cannot deny more than 3 jobs in a day');
+            // }
             $workSubmitted->status = 'Denied';
             $workSubmitted->reason = $request->reason;
             $workSubmitted->save();
@@ -626,7 +626,7 @@ class CampaignController extends Controller
             $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
 
             // $campaign = Campaign::where('id', $deny->campaign_id)->first();
-            $campaingOwner = User::where('id', $campaign->user_id)->first();
+            // $campaingOwner = User::where('id', $campaign->user_id)->first();
 
             if($campaign->currency == 'NGN'){
                 $currency = 'Naira';
