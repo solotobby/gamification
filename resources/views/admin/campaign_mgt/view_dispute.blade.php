@@ -154,13 +154,13 @@
                 @endif --}}
                 <div class="mb-2">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Reason Job was denied</label>
+                        <label for="exampleInputEmail1">Job Poster Comment : <b>{{ $campaign->campaign->user->name }} </b></label>
                         <code> {!! $campaign->reason !!} </code>
                     </div>
                 </div>
                 <div class="mb-2">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">User Dispute Message</label>
+                        <label for="exampleInputEmail1">Worker Comment: <b> {{ $campaign->user->name }} </b></label>
                         <p><i> {!! $campaign->dispute->reason !!} </i></p>
                     </div> 
                 </div>
