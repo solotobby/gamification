@@ -156,7 +156,7 @@ class SafeLockController extends Controller
                     'user_id' => auth()->user()->id,
                     'campaign_id' => 1,
                     'reference' => time(),
-                    'amount' =>$getSafeLock->total_payment,
+                    'amount' =>$getSafeLock->total_payment*100,
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',

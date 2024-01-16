@@ -12,7 +12,7 @@
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Campaign</li>
-            <li class="breadcrumb-item active" aria-current="page">Completed Campaigns</li>
+            <li class="breadcrumb-item active" aria-current="page">Disputed Campaigns</li>
           </ol>
         </nav>
       </div>
@@ -25,7 +25,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Completed Campaign</h3>
+        <h3 class="block-title">Campaigns in Dispute</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -52,7 +52,6 @@
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Reason</th>
-                <th>Dispute</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -70,30 +69,10 @@
                       @endif
                      </td>
                       <td>
-                       
-
-                         @if(@$list->status == 'Denied')
-                            {{ @$list->status }} 
-                            
-                         @else
                          {{ @$list->status }}
-                         @endif
-
-
                       </td>
                       <td>
                         <code>{!! @$list->reason !!}</code>
-                     </td>
-                     <td>
-                      @if($list->updated_at >= '2024-01-16 14:07:14')
-                        @if($list->is_dispute_resolved == false)
-                            <a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-secondary btn-sm">Dispute</a>
-                          @else
-                            <a class="btn btn-secondary btn-sm disabled">Dispute Resolved</a>
-                        @endif
-                      @else
-                        <a class="btn btn-secondary btn-sm disabled">No Dispute</a>
-                      @endif
                      </td>
                      <td>
                       {{ @$list->created_at }}

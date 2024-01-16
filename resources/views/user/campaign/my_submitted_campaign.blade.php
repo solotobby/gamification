@@ -61,46 +61,88 @@
       <i class="fa fa-arrow-right text-info me-1"></i> You will get ${{$work->amount}}
       @endif
     </h2>
-    <form action="#" method="POST">
+   
       <div class="block block-rounded">
         <!-- Personal Information section -->
         <div class="block-content block-content-full">
           <h2 class="content-heading">Your response
             @if($work->status == 'Pending')
-              <button type="button" class="btn btn-alt-warning">
+              <button type="button" class="btn btn-alt-warning btn-sm">
                 <i class="fa fa-info opacity-50 me-1"></i> {{$work->status}}
               </button> 
               @elseif($work->status == 'Approved')
-              <button type="button" class="btn btn-alt-primary">
+              <button type="button" class="btn btn-alt-primary btn-sm">
                 <i class="fa fa-check opacity-50 me-1"></i> {{$work->status}}
               </button> 
               @else
-              <button type="button" class="btn btn-alt-danger">
+              <button type="button" class="btn btn-alt-danger btn-sm">
                 <i class="fa fa-times opacity-50 me-1"></i> {{$work->status}}
               </button> 
               @endif
-        </h2> 
+          </h2> 
           
             {!! $work->comment !!}
 
             @if($work->proof_url != null)
             <hr>
-            <h5>Proof of work Image</h5>
+            <h5>Proof of your work Image</h5>
             <img src="{{ $work->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
             @else
             <div class="alert alert-warning text-small">
               No Image attached
             </div>
             @endif
+
+            @if($work->status == 'Denied' && $work->updated_at >= '2024-01-16 14:07:14')
+            <hr>
+            @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+            @endif
+            @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+            @endif
+            <h4>Dispute Job Denial</h4>
+            @if($work->is_dispute == false)
+            <form action="{{ url('process/disputed/jobs') }}" method="POST">
+              @csrf
+              <div class="mb-4">
+                <label class="form-label" for="post-files">Give reason why you feel this job shouldn't be denied</small></label>
+                    <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+              </div>
+              <input type="hidden" name="id" value="{{ $work->id }}">
+              <div class="mb-4">
+                <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Submit </button>
+              </div>
+            </form>
+
+            @else
+                <div class="alert alert-success" role="alert">
+                  Dispute submitted, expecting response
+              </div>
+            @endif
+
+            @endif
+
         </div>
         <!-- END Personal Information section -->
 
         <!-- END Submit Form -->
       </div>
-    </form>
+   
     <!-- END Apply Form -->
   </div>
   <!-- END Page Content -->
 
 
+@endsection
+
+
+@section('script')
+<script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
 @endsection

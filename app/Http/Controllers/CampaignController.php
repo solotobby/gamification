@@ -13,6 +13,7 @@ use App\Mail\SubmitJob;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Category;
+use App\Models\DisputedJobs;
 use App\Models\PaymentTransaction;
 use App\Models\Rating;
 use App\Models\SubCategory;
@@ -582,7 +583,7 @@ class CampaignController extends Controller
            
            $subject = 'Job Approved';
            $status = 'Approved';
-           Mail::to( $workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+           Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
            return back()->with('success', 'Campaign Approve Successfully');
 
 
@@ -638,23 +639,25 @@ class CampaignController extends Controller
                 $channel = 'paystack';
             }
 
-            creditWallet($campaingOwner, $currency, $workSubmitted->amount);
+            // creditWallet($campaingOwner, $currency, $workSubmitted->amount);
 
-            $ref = time();
+            // $ref = time();
 
-            PaymentTransaction::create([
-                'user_id' => $workSubmitted->campaign->user_id,
-                'campaign_id' => $workSubmitted->campaign->id,
-                'reference' => $ref,
-                'amount' => $workSubmitted->amount,
-                'status' => 'successful',
-                'currency' => $currency,
-                'channel' => $channel,
-                'type' => 'campaign_payment_refund',
-                'description' => 'Campaign Payment Refund for '.$workSubmitted->campaign->post_title,
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
+            // PaymentTransaction::create([
+            //     'user_id' => $workSubmitted->campaign->user_id,
+            //     'campaign_id' => $workSubmitted->campaign->id,
+            //     'reference' => $ref,
+            //     'amount' => $workSubmitted->amount,
+            //     'status' => 'successful',
+            //     'currency' => $currency,
+            //     'channel' => $channel,
+            //     'type' => 'campaign_payment_refund',
+            //     'description' => 'Campaign Payment Refund for '.$workSubmitted->campaign->post_title,
+            //     'tx_type' => 'Credit',
+            //     'user_type' => 'regular'
+            // ]);
+
+
 
             $subject = 'Job Denied';
             $status = 'Denied';
@@ -663,9 +666,7 @@ class CampaignController extends Controller
         }
     }
 
-    public function approveJob($workSubmitted){
-        return $workSubmitted;
-    }
+   
     public function removePendingCountAfterDenial($id){
         $campaign = Campaign::where('id', $id)->first();
         $campaign->pending_count -= 1;
@@ -750,6 +751,34 @@ class CampaignController extends Controller
     {
         $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->get();
         return view('user.campaign.completed_jobs', ['lists' => $completedJobs]);
+    }
+
+    public function disputedJobs()
+    {
+        $disputedJobs = CampaignWorker::where('user_id', auth()->user()->id)->where('is_dispute', true)->orderBy('created_at', 'ASC')->get();
+        return view('user.campaign.disputed_jobs', ['lists' => $disputedJobs]);
+    }
+
+    public function processDisputedJobs(Request $request){
+        $workDone = CampaignWorker::where('id', $request->id)->first();
+        $workDone->is_dispute = true;
+        $workDone->save();
+
+       $disputedJob = DisputedJobs::create([
+            'campaign_worker_id' => $workDone->id,
+            'campaign_id' => $workDone->campaign_id,
+            'user_id' => auth()->user()->id,
+            'reason' => $request->reason
+        ]);
+
+        
+        if($disputedJob){
+            $subject = 'New Dispute Raised';
+            $content = 'A despute has been raised by '.auth()->user()->name.' on a Job. Please follow the link below to attend to it.';
+            $url = 'admin/campaign/disputes/'.$workDone->id;
+            Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+            return back()->with('success', 'Dispute Submitted Successfully');
+        }
     }
 
     public function addMoreWorkers(Request $request){

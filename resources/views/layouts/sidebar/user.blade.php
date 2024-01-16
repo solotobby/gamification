@@ -59,6 +59,11 @@
               <span class="nav-main-link-name">Completed Job</span>
             </a>
           </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ url('disputed/jobs') }}">
+              <span class="nav-main-link-name">Disputed Jobs</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-main-item">

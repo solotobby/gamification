@@ -19,6 +19,7 @@ use App\Models\BankInformation;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\DataBundle;
+use App\Models\DisputedJobs;
 use App\Models\Games;
 use App\Models\MarketPlaceProduct;
 use App\Models\PaymentTransaction;
@@ -199,44 +200,138 @@ class AdminController extends Controller
     }
 
     public function campaignDisputes(){
-         $disputes = CampaignWorker::where('status', 'In-dispute')->orderBy('created_at', 'DESC')->paginate(100);
+         $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(100);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
     public function campaignDisputesView($id){
         $workdisputed = CampaignWorker::where('id', $id)->first();
+         
+        // return $disputedJobInfo = DisputedJobs::where('campaign_worker_id', $workdisputed->id)->first();
         return view('admin.campaign_mgt.view_dispute', ['campaign' => $workdisputed]);
     }
 
     public function campaignDisputesDecision(Request $request){
-        $workDone = CampaignWorker::where('id', $request->id)->first();
+         $workDone = CampaignWorker::where('id', $request->id)->first();
+         $workDone->status = $request->status;
+         $workDone->is_dispute_resolved = true;
+         //$workDone->reason = $request->reason;
+         $workDone->save();
+
+         $campaign = Campaign::where('id', $workDone->campaign_id)->first();
+
+          $disputeJob = DisputedJobs::where('campaign_worker_id',$workDone->id)->first();
+          $disputeJob->response = $request->reason;
+          $disputeJob->save();
 
         if($request->status == 'Approved'){
-            $campaignInfo = Campaign::where('id', $workDone->campaign_id)->first();
-            $approvedJob = $campaignInfo->completed()->where('status', 'Approved')->count();
+            
+            $approvedJob = $campaign->completed()->where('status', 'Approved')->count();
 
-            if($approvedJob >= $campaignInfo->number_of_staff){
+            if($approvedJob >= $campaign->number_of_staff){
                 return back()->with('error', 'Job has reached its maximum number of staff');
             }
 
-            $wallet = Wallet::where('user_id', $workDone->user_id)->first();
-            $wallet->balance += $workDone->amount;
-            $wallet->save();
+              //update completed action
+           $campaign->completed_count += 1;
+           $campaign->pending_count -= 1;
+           $campaign->save();
 
-            $workDone->status = $request->status;
-            $workDone->reason = $request->reason;
-            $workDone->save();
+           setIsComplete($workDone->campaign_id);
+           $user = User::where('id', $workDone->user_id)->first();
+           if($campaign->currency == 'NGN'){
+               $currency = 'NGN';
+               $channel = 'paystack';
+               creditWallet($user, $currency, $workDone->amount);
+           }elseif($campaign->currency == 'USD'){
+               $currency = 'USD';
+               $channel = 'paypal';
+               creditWallet($user, $currency, $workDone->amount);
+            }elseif($campaign->currency == null){
+               $currency = 'NGN';
+               $channel = 'paystack';
+               creditWallet($user, $currency, $workDone->amount);
+           }
+
+
+           $ref = time();
+
+           PaymentTransaction::create([
+               'user_id' =>  $workDone->user_id,
+               'campaign_id' =>  $workDone->campaign->id,
+               'reference' => $ref,
+               'amount' =>  $workDone->amount,
+               'status' => 'successful',
+               'currency' => $currency,
+               'channel' => $channel,
+               'type' => 'campaign_payment_dispute_resolved',
+               'description' => 'Campaign Payment for '. $workDone->campaign->post_title,
+               'tx_type' => 'Credit',
+               'user_type' => 'regular'
+           ]);
+
+           $subject = 'Job '.$request->status;
+            $status = $request->status;
+            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+
+
+           return back()->with('success', 'Dispute resolved Successfully');
+
+            
 
         }else{
-            $workDone->status = $request->status;
-            $workDone->reason = $request->reason;
+
+            $workDone->status = 'Denied';
             $workDone->save();
+          
+            $this->removePendingCountAfterDenial($workDone->campaign_id);
+
+            $campaingOwner = User::where('id', $campaign->user_id)->first();
+
+            if($campaign->currency == 'NGN'){
+                $currency = 'Naira';
+                $channel = 'paystack';
+            }elseif($campaign->currency == 'USD'){
+                $currency = 'Dollar';
+                $channel = 'paypal';
+            }elseif($campaign->currency == null){
+                $currency = 'Naira';
+                $channel = 'paystack';
+            }
+
+             creditWallet($campaingOwner, $currency, $workDone->amount);
+
+            $ref = time();
+
+            PaymentTransaction::create([
+                'user_id' => $workDone->campaign->user_id,
+                'campaign_id' => $workDone->campaign->id,
+                'reference' => $ref,
+                'amount' => $workDone->amount,
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => $channel,
+                'type' => 'campaign_payment_refund',
+                'description' => 'Campaign Payment Refund for '.$workDone->campaign->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+
+            $subject = 'Disputed Job '.$request->status;
+            $status = $request->status;
+            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+           
+            return back()->with('success', 'Dispute resolved Successfully');
+
         }
 
-        $subject = 'Job '.$request->status;
-        $status = $request->status;
-        Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
-        return back()->with('success', 'Campaign Dispute Successful');
+       
+    }
+
+    public function removePendingCountAfterDenial($id){
+        $campaign = Campaign::where('id', $id)->first();
+        $campaign->pending_count -= 1;
+        $campaign->save();
     }
 
     public function userList(){
