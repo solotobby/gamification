@@ -35,7 +35,36 @@
         </div>
       </div>
       <div class="block-content">
-       
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    {{-- <th>Message</th> --}}
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>When Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $i = 1; ?>
+                @foreach ($feedbacks as $feedback)
+                    <tr>
+                        <th scope="row">{{ $i++ }}.</th>
+                        <td>{{ $feedback->user->name }}</td>
+                        <td>{{ $feedback->category }}</td>
+                        <td>{{ $feedback->status == false ? 'Unread' : 'Read' }}/{{ $feedback->replies()->count() > 0 ? 'Replied' : 'Not Replied' }} </td>
+                        
+                        <td><a href="{{ url('admin/feedback/'.$feedback->id) }}" class="btn btn-primary btn-sm">View</a></td>
+                        <td>{{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y @ h:i:sa') }}</td>
+                    </tr>
+                @endforeach
+              
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- END Full Table -->
