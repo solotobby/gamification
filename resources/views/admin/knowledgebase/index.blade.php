@@ -60,6 +60,8 @@
                                     <option value="Introduction">Introduction</option>
                                     <option value="Account">Account</option>
                                     <option value="Payment">Payment</option>
+                                    <option value="Campaigns and Jobs">Campaigns and Jobs</option>
+                                    <option value="Wallets">Wallets</option>
                                    </select>
                               </div>
                               <div class="mb-4">

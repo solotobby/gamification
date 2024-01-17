@@ -27,9 +27,10 @@
 							<p>
                                 1.	You can complete tasks and earn. As a verified user, you have access to limitless jobs above N10 <br>
                                 2.	You can hire workers to engage your social media posts to earn on Youtube, TikTok, etc <br>
-                                3.	You can invite your friends using your referral link and earn N500 on each verified friend. Some users have cashed out more than 10,000 at a time by just referring friends and not completing tasks at all. <br>
+                                3.	You can invite your friends using your referral link and earn N500 on each verified friend. Some users have cashed out more than 10,000 at a time by just referring friends and not completing tasks at all.
                                 Hurry now to invite your friends and earn big time.  <br>
                                 4.	You automatically earn login points each day you login and copy your referral code to social media. These points can be used for airtime, data or even withdrawal. Feel free to use any of these methods to earn big time on Freebyz. <br>
+                                
                                 Enjoy Life with Freebyz
                                 <br>
                                 Click <a href="{{ url('register') }}">here</a> to Get started and start making cool cash.
