@@ -29,7 +29,7 @@
 
                             <h4>How can I withdraw my money on Freebyz?</h4>
 							<p>
-								You can withdraw your funds at any time in Naira or Dollars. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is ₦500 (or $5 via Paypal).  Sign up to start earning now. Click on www.freebyz.com then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with N500 on each friend you refer to Freebyz.
+								You can withdraw your funds at any time in Naira or Dollars. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is ₦2,500 (or $5 via Paypal).  Sign up to start earning now. Click on www.freebyz.com then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with N500 on each friend you refer to Freebyz.
 							</p>
 							<h4>How do I withdraw in Dollars?</h4>
 							<p>Once you place a withdrawal request to withdraw in Dollars, your earnings (funds) will be converted to dollars and then sent to the Paypal account you supplied.</p>
@@ -72,7 +72,7 @@
                             </p>
                             <h4> How much can I withdraw from FREEBYZ</h4>
                             <p>
-                                You can withdraw as low as N500 to your account. Your account number must match the name you used to register on FREEBYZ. You can also use your money to buy airtime/recharge card on FREEBYZ
+                                You can withdraw as low as N2,500 to your account. Your account number must match the name you used to register on FREEBYZ. You can also use your money to buy airtime/recharge card on FREEBYZ
                             </p>
                             <h4>
                                 Can I work and make money on Freebyz without verifying my account?
@@ -96,7 +96,7 @@
 							</p>
 							<h4>How do I withdraw my funds </h4>
 							<p>
-								You can withdraw your funds in Naira or in Dollars. To Withdraw your funds, Login to your dashboard and click on wallet, select 'Withdraw', enter the amount you want to withdraw and select Local bank withdrawal or Paypal withdraw. Your funds will be processed immediately or latest on Friday of that week. Please note that the minimum withdrawal is N500 (for naira wallets) and $5 (for dollar wallets). Should you have further questions, feel free to get across to us.
+								You can withdraw your funds in Naira or in Dollars. To Withdraw your funds, Login to your dashboard and click on wallet, select 'Withdraw', enter the amount you want to withdraw and select Local bank withdrawal or Paypal withdraw. Your funds will be processed immediately or latest on Friday of that week. Please note that the minimum withdrawal is N2,500 (for naira wallets) and $5 (for dollar wallets). Should you have further questions, feel free to get across to us.
 							</p>
 						</div>
 					</div>

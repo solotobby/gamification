@@ -26,7 +26,7 @@
               </div>
               <div class="block-content">
                 @foreach ($lists as $category=>$list)
-                    <h2 class="content-heading"><strong>2.</strong> {{ $category }}</h2>
+                    <h2 class="content-heading"> {{ $category }}</h2>
                     <div class="row items-push">
                         @foreach ($list as $l)
                             <div class="col-lg-12">
