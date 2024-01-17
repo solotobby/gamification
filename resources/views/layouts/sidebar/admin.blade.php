@@ -312,6 +312,13 @@
         </a>
       </li>
 
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/knowledgebase') }}">
+          <i class="nav-main-link-icon fa fa-tty"></i>
+          <span class="nav-main-link-name">Knowledge Base</span>
+        </a>
+      </li>
+
 
     </ul>
   </div>

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\SafeLockController as AdminSafeLockController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ConversionRateController;
+use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SafeLockController;
 
@@ -253,6 +254,8 @@ Route::get('game/status/{id}', [\App\Http\Controllers\Admin\AdminController::cla
 Route::get('view/activities/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
 Route::post('assign/reward', [\App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
 
+///knowledge_bases
+Route::resource('knowledgebase', KnowledgeBaseController::class);
 
 
 Route::get('game/create', [\App\Http\Controllers\Admin\AdminController::class, 'gameCreate'])->name('game.create');
@@ -371,3 +374,6 @@ Route::post('admin/update/account/details', [\App\Http\Controllers\Admin\AdminCo
 Route::get('admin/virtual/list', [\App\Http\Controllers\Admin\AdminController::class, 'virtualAccountList']);
 Route::get('reactivate/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'reactivateVA']);
 Route::get('remove/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'removeVirtualAccount']);
+
+//Knowledge base
+Route::get('admin/knowledgebase', [\App\Http\Controllers\KnowledgeBaseController::class, 'adminList']);
