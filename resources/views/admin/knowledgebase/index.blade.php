@@ -97,7 +97,6 @@
                       <thead>
                           <tr>
                               <th>#</th>
-                              
                               <th>Category</th>
                               <th>Question</th>
                               <th>Answer</th>

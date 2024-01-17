@@ -151,7 +151,7 @@ class Analytics{
         $data['registered_this_week'] = $logs->whereIn('activity_type', ['account_creation','google_account_creation'])->whereBetween('created_at', [$startOfWeek, $currently])->count();
         $data['registered_this_month'] = $logs->whereIn('activity_type', ['account_creation','google_account_creation'])->whereBetween('created_at', [$startofMonth, $currently])->count();
 
-        $data['login_today'] = $logs->whereIn('activity_type', ['login',])->whereBetween('created_at', [$startoftoday, $currently])->count();
+        $data['login_today'] = $logs->whereIn('activity_type', ['login'])->whereBetween('created_at', [$startoftoday, $currently])->count();
         $data['login_this_week'] = $logs->whereIn('activity_type', ['login'])->whereBetween('created_at', [$startOfWeek, $currently])->count();
         $data['login_this_month'] = $logs->whereIn('activity_type', ['login'])->whereBetween('created_at', [$startofMonth, $currently])->count();
 
