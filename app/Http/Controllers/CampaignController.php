@@ -551,15 +551,15 @@ class CampaignController extends Controller
            if($campaign->currency == 'NGN'){
                $currency = 'NGN';
                $channel = 'paystack';
-               creditWallet($user, $currency, $workSubmitted->amount);
+               creditWallet($user, 'Naira', $workSubmitted->amount);
            }elseif($campaign->currency == 'USD'){
                $currency = 'USD';
                $channel = 'paypal';
-               creditWallet($user, $currency, $workSubmitted->amount);
+               creditWallet($user, 'Dollar', $workSubmitted->amount);
             }elseif($campaign->currency == null){
                $currency = 'NGN';
                $channel = 'paystack';
-               creditWallet($user, $currency, $workSubmitted->amount);
+               creditWallet($user, 'Naira', $workSubmitted->amount);
            }
 
 

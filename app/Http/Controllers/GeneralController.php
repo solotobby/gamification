@@ -140,16 +140,19 @@ class GeneralController extends Controller
 
     public function wellahealth($ref){
         $subscription = listWellaHealthScriptions();
-        $groupedSubscriptions = [];
+        // $groupedSubscriptions = [];
         foreach($subscription as $list){
-            $planType = $list['planType'];
-            if (!array_key_exists($planType, $groupedSubscriptions)) {
-                // If not, create an empty array for the "planType"
-                $groupedSubscriptions[$planType] = [];
-            }
-
-            $groupedSubscriptions[$planType][] = $subscription;
+            $planType = $list['productType'];
+            // $groupedSubscriptions[$planType] = $list;
+            $groupedSubscriptions[$planType][] = $list;
         }
+
+        // foreach ($listKnowledgeBase as $question) {
+        //     $category = $question['category'];
+        //     $groupedQuestions[$category][] = $question;
+        // }
+
+       
 
         return $groupedSubscriptions;
 
