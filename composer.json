@@ -41,7 +41,8 @@
         },
         "files": [
             "app/Helpers/globalhelpers.php",
-            "app/Helpers/wellahealthApiIntegration.php"
+            "app/Helpers/wellahealthApiIntegration.php",
+            "app/Helpers/brails.php"
         ]
     },
     "autoload-dev": {

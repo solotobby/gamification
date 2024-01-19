@@ -17,11 +17,13 @@ class PaystackHelpers{
 
     public static function bankList()
     {
+        // country=nigeria
+        $url = 'https://api.paystack.co/bank';
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
-        ])->get('https://api.paystack.co/bank')->throw();
+        ])->get($url)->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data'];
     }

@@ -140,37 +140,28 @@ class GeneralController extends Controller
 
     public function wellahealth($ref){
         $subscription = listWellaHealthScriptions();
-        // $groupedSubscriptions = [];
-        foreach($subscription as $list){
-            $planType = $list['productType'];
-            // $groupedSubscriptions[$planType] = $list;
-            $groupedSubscriptions[$planType][] = $list;
-        }
 
-        // foreach ($listKnowledgeBase as $question) {
-        //     $category = $question['category'];
-        //     $groupedQuestions[$category][] = $question;
+        // foreach($subscription as $list){
+        //     $planType = $list['planType'];
+        //     $groupedSubscriptions[$planType][] = $list;
         // }
-
+        // return $groupedSubscriptions;
        
+        $user = User::where('referral_code', $ref)->first();
+        if(!$user){
+            return abort(404);
+        }
+        $display = [];
+       foreach(listWellaHealthScriptions() as $list){
+            $mysubscriptions = PartnerSubscription::where('user_id', $user->id)->first();//pluck('plan_code')->toArray();
+            $display[] = [
+                'data'=> $list, 
+                'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
+                'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
+            ];
+        }
+    return view('user.partner.wellahealth.external', ['subscriptions' => $display, 'ref' => $ref]);
 
-        return $groupedSubscriptions;
-
-    //     $user = User::where('referral_code', $ref)->first();
-    //     if(!$user){
-    //         return abort(404);
-    //     }
-    //     $display = [];
-    //    foreach(listWellaHealthScriptions() as $list){
-    //         $mysubscriptions = PartnerSubscription::where('user_id', $user->id)->first();//pluck('plan_code')->toArray();
-    //         $display[] = [
-    //             'data'=> $list, 
-    //             'is_subscribed' => $list['planCode'] == @$mysubscriptions->plan_code ? true : false, 
-    //             'subscriptionCode' => $list['planCode'] == @$mysubscriptions->plan_code ? @$mysubscriptions->subscription_code : null, 
-    //         ];
-    //     }
-        // return view('user.partner.wellahealth.external', ['subscriptions' => $display, 'ref' => $ref]);
-        
         
     }
 

@@ -1067,8 +1067,114 @@ class AdminController extends Controller
     }
 
     public function test(){
-        return listWellaHealthScriptions();
-        // $html =  Sendmonny::index();
+        
+        //CREATE CARD
+        $payload = [
+            'customerEmail' => 'solo@email.com',
+            'cardBrand' => 'visa',
+            'cardType' => 'virtual',
+            'reference' => Str::random(16),
+            'amount' => 500,
+            'firstName' => 'Solo',
+            'lastName' => 'Tobby'
+        ];
+        return createBrailsVirtualCard($payload);
+
+        //FINALISE PAYOUT
+        // $payload = [
+        //     'transactionId' => 'f82e8a73-19eb-4209-b95e-826896cd03ec',
+        // ];
+        // return finalizeBrailsPayout($payload);
+
+        //INITIATE BRAILS PAYOUT
+        // $payload = [
+        //     'amount' => 1000,
+        //     'country' => 'GH',
+        //     'reference' => Str::random(16),
+        //     'customerEmail' => 'solo@email.com',
+        //     'description' => 'Payout Initiation',
+        //     'beneficiaryId' => '01b753c1-b664-47f0-b311-608e7f0d5034',
+        //     'sourceWalletCurrency' => 'USD' 
+        // ];
+        // return initiateBrailsPayout($payload);
+        // "data": {
+        //     "id": "2f94631f-0c65-4ce7-acc7-e6312230defe",
+        //     "description": "Payout Initiation",
+        //     "createdAt": "2024-01-18T12:51:54.906Z",
+        //     "updatedAt": "2024-01-18T12:51:54.906Z",
+        //     "reference": "fShaYsSY6RCYQrUM",
+        //     "exchangeRate": 12.36,
+        //     "amount": 0.08,
+        //     "action": "ghs_account_payout",
+        //     "fees": 0,
+        //     "type": "debit",
+        //     "status": "initiated",
+        //     "channel": "payout",
+        //     "companyId": "31e8e24e-a332-408e-a7cc-6c39a20e3aee",
+        //     "customerId": "1ef7b7bf-50b7-4784-bf7c-c7f359963ec2",
+        //     "beneficiary": {
+        //     "type": "MOBILEMONEY",
+        //     "network": "MTN",
+        //     "accountName": "Toby Solo",
+        //     "accountNumber": "0545247030"
+        //     },
+        //     "payoutAmount": 1,
+        //     "payoutCurrency": "GHS"
+        // }
+
+        //CREATE BRAILS BENEFICIARY
+        // $payload = [
+        //     "destination"=> [
+        //         "network"=> "MTN",
+        //         "type"=> "MOBILEMONEY",
+        //         "accountName"=> "Toby Solo",
+        //         "accountNumber"=> "0545247030",
+        //     ],
+        //     'currency' => 'GHS',
+        //     'country' => 'GH',
+        //     'customerEmail' => 'solo@email.com',
+        //     'reference' => time()
+        // ];
+        // return createBrailsBeneficiary($payload);
+        // "data": {
+        //     "id": "01b753c1-b664-47f0-b311-608e7f0d5034",
+        //     "createdAt": "2024-01-18T12:37:44.607Z",
+        //     "updatedAt": "2024-01-18T12:37:44.607Z",
+        //     "currency": "GHS",
+        //     "country": "GH",
+        //     "status": "success",
+        //     "destination": {
+        //     "type": "MOBILEMONEY",
+        //     "network": "MTN",
+        //     "accountName": "Toby Solo",
+        //     "accountNumber": "0545247030"
+        //     },
+        //     "reference": 1705581464
+        //     }
+
+        // return getCountryRequirement('NG');  //error
+
+            //CREATE BRAILS CUSTOMER
+        // $payload = [
+        //     'firstName' => 'Tobby',
+        //     'lastName' => 'Solo',
+        //     'email' => 'solo@email.com'
+        //  ];
+        //  return createBrailsBasicCustomer($payload);
+
+            // "id": "1ef7b7bf-50b7-4784-bf7c-c7f359963ec2",
+            // "createdAt": "2024-01-18T12:13:04.498Z",
+            // "updatedAt": "2024-01-18T12:13:04.498Z",
+            // "firstName": "Tobby",
+            // "lastName": "Solo",
+            // "email": "solo@email.com",
+            // "phone": null,
+            // "countryCode": null,
+            // "blacklist": false
+
+        //return getCountriesSupported();
+        // return listWellaHealthScriptions();
+       
 
         // return view('welcome', ['html' => $html]);
     }

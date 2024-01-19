@@ -20,6 +20,7 @@ use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Stevebauman\Location\Facades\Location;
 
 if (!function_exists('GetSendmonnyUserId')) {  //sendmonny user idauthenticated user
     function GetSendmonnyUserId()
@@ -916,3 +917,20 @@ if(!function_exists('transactionProcessor')){
                 ]);
     }
 }
+
+if(!function_exists('currentLocation')){
+    function currentLocation(){ 
+
+        if(env('APP_ENV') == 'local'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+        }
+        
+        return $location = Location::get($ip);
+        return $location->countryName;
+    }
+
+}
+
+
