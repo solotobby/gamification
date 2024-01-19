@@ -22,7 +22,8 @@
 
 
   <div class="content content-boxed overflow-hidden">
-   
+  
+  <!-- END Hero -->
     <div class="row">
       
       <div class="col-12">
@@ -42,8 +43,10 @@
                 show up
             </div> --}}
       </div>
+      
+      
       @foreach ($subscriptions as $subscription)
-            <div class="col-md-6 col-xl-3">
+             <div class="col-md-6 col-xl-3">
                
                 <div class="block block-link-pop block-rounded text-center">
 
@@ -75,15 +78,6 @@
                         <i class="fa fa-arrow-up opacity-50 me-1"></i> Upgrade
                     </a>
                 </div>
-                {{-- @if($subscription['is_subscribed'] == true)
-                    <div class="block-content block-content-full bg-body-light">
-                        <span class="btn btn-hero btn-secondary disabled px-4">
-                        <i class="fa fa-check opacity-50 me-1"></i> Active Plan
-                        </span>
-                    </div>
-                @else
-                   
-                @endif --}}
                
             </div>
                

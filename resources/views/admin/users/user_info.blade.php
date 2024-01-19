@@ -343,7 +343,7 @@
                       <div class="input-group-prepend">
                         <div class="input-group-text">&#8358;/$</div>
                       </div>
-                      <input type="number" class="form-control" name="amount" placeholder="Amount" required>
+                      <input type="text" class="form-control" name="amount" placeholder="Amount" required>
                     </div>
                   </div>
                   <input type="hidden" name="user_id" value="{{ $info->id }}">
