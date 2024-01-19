@@ -59,6 +59,10 @@ Route::get('agent/{ref}/wellahealth', [\App\Http\Controllers\GeneralController::
 Route::get('agent/{ref}/wellahealth/{planCode}/{numberOfPersons}/{amount}/{type}', [\App\Http\Controllers\GeneralController::class, 'processWellaHealth']);
 Route::post('agent/store/wellahealth', [\App\Http\Controllers\GeneralController::class, 'storeWellaHealth']);
 
+//test urls 
+Route::get('test/api', [\App\Http\Controllers\GeneralController::class, 'testy']);
+
+
 Auth::routes();
 //GOOGLE AUTH
 Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle']);

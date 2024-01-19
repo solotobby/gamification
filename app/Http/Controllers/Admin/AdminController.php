@@ -1068,7 +1068,10 @@ class AdminController extends Controller
 
     public function test(){
         
-        return PaystackHelpers::getLocation();
+        // $bankList = PaystackHelpers::bankList();
+        
+
+
         //CREATE CARD
         // $payload = [
         //     'customerEmail' => 'solo@email.com',
