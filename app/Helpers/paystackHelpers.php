@@ -15,10 +15,9 @@ use Stevebauman\Location\Facades\Location;
 
 class PaystackHelpers{
 
-    public static function bankList()
-    {
-        // country=nigeria
-        $url = 'https://api.paystack.co/bank';
+    public static function countryList(){
+
+        $url = 'https://api.paystack.co/country';
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -26,6 +25,25 @@ class PaystackHelpers{
         ])->get($url)->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data'];
+    }
+    public static function bankList()
+    {
+       
+        // country=nigeria
+        $url = 'https://api.paystack.co/bank?country=nigeria';
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get($url)->throw();
+
+        return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
+
+        // foreach($bankList as $bank){
+        //     $group = $bank['type'];
+        //     $groupedBank[$group][] = $bank;
+        //  }        
+        //  return $groupedBank;
     }
 
     public static function resolveBankName($account_number, $bank_code)
