@@ -16,6 +16,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class GeneralController extends Controller
 {
@@ -271,6 +272,23 @@ class GeneralController extends Controller
 
 
     public function testy(){
-        return currentLocation();
+
+        $location =  currentLocation();
+
+        return $this->paystackApi($location);
+    }
+
+    public function paystackApi($location){
+        //locations can be  nigeria, ghana, kenya
+        $lowerCaseLocation = strtolower($location);
+        $url = 'https://api.paystack.co/bank?country='.$lowerCaseLocation;
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get($url)->throw();
+
+        return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
+
     }
 }
