@@ -926,11 +926,7 @@ if(!function_exists('currentLocation')){
         }else{
             $ip = request()->ip();
         }
-
-        return $ip;
-
-        
-        // return $location = Location::get($ip);
+        return $location = Location::get($ip);
         // return $location->countryName;
     }
 

@@ -268,4 +268,9 @@ class GeneralController extends Controller
 
         return [$payload];
     }
+
+
+    public function testy(){
+        return currentLocation();
+    }
 }
