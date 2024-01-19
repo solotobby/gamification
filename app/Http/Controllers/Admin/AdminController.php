@@ -1068,17 +1068,18 @@ class AdminController extends Controller
 
     public function test(){
         
+        return PaystackHelpers::getLocation();
         //CREATE CARD
-        $payload = [
-            'customerEmail' => 'solo@email.com',
-            'cardBrand' => 'visa',
-            'cardType' => 'virtual',
-            'reference' => Str::random(16),
-            'amount' => 500,
-            'firstName' => 'Solo',
-            'lastName' => 'Tobby'
-        ];
-        return createBrailsVirtualCard($payload);
+        // $payload = [
+        //     'customerEmail' => 'solo@email.com',
+        //     'cardBrand' => 'visa',
+        //     'cardType' => 'virtual',
+        //     'reference' => Str::random(16),
+        //     'amount' => 500,
+        //     'firstName' => 'Solo',
+        //     'lastName' => 'Tobby'
+        // ];
+        // return createBrailsVirtualCard($payload);
 
         //FINALISE PAYOUT
         // $payload = [

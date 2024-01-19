@@ -921,14 +921,17 @@ if(!function_exists('transactionProcessor')){
 if(!function_exists('currentLocation')){
     function currentLocation(){ 
 
-        if(env('APP_ENV') == 'local'){
+        if(env('APP_ENV') === 'local'){
             $ip = '48.188.144.248';
         }else{
             $ip = request()->ip();
         }
+
+        return $ip;
+
         
-        return $location = Location::get($ip);
-        return $location->countryName;
+        // return $location = Location::get($ip);
+        // return $location->countryName;
     }
 
 }
