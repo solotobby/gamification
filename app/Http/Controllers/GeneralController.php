@@ -273,9 +273,10 @@ class GeneralController extends Controller
 
     public function testy(){
 
-        $location =  currentLocation();
+        return $this->initiatePaystackTx();
+        // $location =  currentLocation();
 
-        return $this->paystackApi($location);
+        // return $this->paystackApi('ghana');
     }
 
     public function paystackApi($location){
@@ -290,5 +291,22 @@ class GeneralController extends Controller
 
         return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
 
+    }
+
+    public function initiatePaystackTx(){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transaction/initialize', [
+            'email' => 'solotobby@gmail.com', //auth()->user()->email,
+            'amount' => 1050*100,
+            'channels' => ['card', 'mobile_money'],
+            'currency' => 'NGN',
+            'reference' => time(),
+            'callback_url' => '/' //url($redirect_url)
+        ]);
+        return json_decode($res->getBody()->getContents(), true);
+    //    return $res['data']['authorization_url'];
     }
 }
