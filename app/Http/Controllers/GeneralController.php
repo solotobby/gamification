@@ -301,7 +301,7 @@ class GeneralController extends Controller
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => 'solotobby@gmail.com', //auth()->user()->email,
             'amount' => 1050*100,
-            'channels' => ['card', 'mobile_money', 'bank_transfer', 'ussd', 'bank', 'qr'],
+            'channels' => ['mobile_money'],
             'currency' => 'NGN',
             'reference' => time(),
             'callback_url' => '/' //url($redirect_url)
