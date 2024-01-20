@@ -112,9 +112,20 @@ if(!function_exists('setWalletBaseCurrency')){
 
 if(!function_exists('setProfile')){
     function setProfile($user){
+        if(env('APP_ENV') == 'local'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+        }
+        $location = Location::get($ip);
+
         $profile = Profile::where('user_id', $user->id)->first();
         if(!$profile){
-           $profile =  Profile::create(['user_id' => $user->id]);
+           $profile =  Profile::create(['user_id' => $user->id, 'country' => $location->countryName, 'country_code' => $location->countryCode]);
+        }else{
+            $profile->country = $location->countryName;
+            $profile->country_code = $location->countryCode;
+            $profile->save();
         }
        return $profile;
     }
