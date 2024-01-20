@@ -150,7 +150,6 @@ class RegisterController extends Controller
 
         // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Welcome to Freebyz';
-    
         Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         return $user;
@@ -217,7 +216,6 @@ class RegisterController extends Controller
                         null;
                 }else{
                     setWalletBaseCurrency();
-                   
                 }
 
                 setProfile($user);//set profile page 
@@ -226,7 +224,7 @@ class RegisterController extends Controller
                  //set base currency if not set
                 PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
-                // dispatch(new SendMassEmail($user, 'Test Queue', 'This is a test msg'));
+               
                  SystemActivities::activityLog($user, 'login', $user->name .' Logged In', 'regular');
                 return redirect('home'); //redirect to home
                 
