@@ -2,21 +2,27 @@
 @section('style')
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script>
   var visitor = <?php echo $visitor ?>
 </script>
+
 <script>
   var daily = <?php echo $daily; ?>
 </script>
+
 <script>
   var monthly = <?php echo $monthly; ?>;
 </script>
+
 <script>
   var channel = <?php echo $channel; ?>
 </script>
+
 <script>
   var revenue = <?php echo $revenue; ?>
 </script>
+
 <script>
   var country = <?php echo $country; ?>
 </script>
@@ -24,7 +30,6 @@
 <script>
   var age = <?php echo $age; ?>
 </script>
-
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -43,11 +48,13 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} - ${{number_format($wallet->sum('usd_balance'),2)}} </a> TotalPayout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
-          <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>.
-          <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>.
-          <br> xmas count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>.
-          <br> Total jobs av - {{ $av_count }}
+            Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}} 
+            <br> Dollar Wallet - ${{number_format($wallet->sum('usd_balance'),2)}} </a> 
+            <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
+            <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
+            <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
+            <br> Xmas Count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>
+            <br> Total Jobs Average - {{ $av_count }}
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
