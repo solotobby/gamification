@@ -291,7 +291,8 @@ Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminControl
 Route::get('admin/withdrawal/request/queued', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequestQueued'])->name('admin.withdrawal.queued');
 Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequest']);
 Route::get('update/withdrawal/manual/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequestManual']);
-Route::get('admin/upgrade/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUser']);//->name('admin.withdrawal');
+Route::get('admin/upgrade/{id}/dollar', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserDollar']);//->name('admin.withdrawal');
+Route::get('admin/upgrade/{id}/naira', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserNaira']);//->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');

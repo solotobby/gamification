@@ -398,108 +398,116 @@ class AdminController extends Controller
         return view('admin.withdrawals.queued', ['withdrawals' => $withdrawal]);
     }
 
-    public function upgradeUser($id){
+    public function upgradeUserNaira($id){
+        
         if(auth()->user()->hasRole('admin')){
 
-                $getUser = User::where('id', $id)->first();
-                if($getUser->wallet->base_currency == 'Naira'){
+            $getUser = User::where('id', $id)->first();
+            $getUser->is_verified = 1;
+            $getUser->save();
 
-                    $getUser->is_verified = 1;
-                    $getUser->save();
+            $ref = time();
+            PaymentTransaction::create([
+                'user_id' => $getUser->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 1000,
+                'status' => 'successful',
+                'currency' => 'NGN',
+                'channel' => 'paystack',
+                'type' => 'upgrade_payment',
+                'description' => 'Manual Ugrade Payment'
+            ]);
 
-                    $ref = time();
+            $referee = Referral::where('user_id',  $getUser->id)->first();
+            
+            if($referee){
+
+                $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
+
+                if(!$refereeInfo){
+                
+                    $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                    $wallet->balance += 500;
+                    $wallet->save();
+
+                    $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                    $refereeUpdate->is_paid = 1;
+                    $refereeUpdate->save();
+
+                    $referee_user = User::where('id', $referee->referee_id)->first();
+                    ///Transactions
                     PaymentTransaction::create([
-                        'user_id' => $getUser->id,
+                        'user_id' => $referee_user->id,///auth()->user()->id,
                         'campaign_id' => '1',
                         'reference' => $ref,
-                        'amount' => 1000,
+                        'amount' => 500,
                         'status' => 'successful',
                         'currency' => 'NGN',
                         'channel' => 'paystack',
-                        'type' => 'upgrade_payment',
-                        'description' => 'Manual Ugrade Payment'
+                        'type' => 'referer_bonus',
+                        'description' => 'Referer Bonus from '.auth()->user()->name
                     ]);
 
-                    $referee = Referral::where('user_id',  $getUser->id)->first();
-                    
-                    if($referee){
-
-                        $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
-
-                        if(!$refereeInfo){
-                        
-                            $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                            $wallet->balance += 500;
-                            $wallet->save();
-
-                            $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                            $refereeUpdate->is_paid = 1;
-                            $refereeUpdate->save();
-
-                            $referee_user = User::where('id', $referee->referee_id)->first();
-                            ///Transactions
-                            PaymentTransaction::create([
-                                'user_id' => $referee_user->id,///auth()->user()->id,
-                                'campaign_id' => '1',
-                                'reference' => $ref,
-                                'amount' => 500,
-                                'status' => 'successful',
-                                'currency' => 'NGN',
-                                'channel' => 'paystack',
-                                'type' => 'referer_bonus',
-                                'description' => 'Referer Bonus from '.auth()->user()->name
-                            ]);
-
-                            $adminWallet = Wallet::where('user_id', '1')->first();
-                            $adminWallet->balance += 500;
-                            $adminWallet->save();
-                            //Admin Transaction Table
-                            PaymentTransaction::create([
-                                'user_id' => 1,
-                                'campaign_id' => '1',
-                                'reference' => $ref,
-                                'amount' => 500,
-                                'status' => 'successful',
-                                'currency' => 'NGN',
-                                'channel' => 'paystack',
-                                'type' => 'referer_bonus',
-                                'description' => 'Referer Bonus from '.$getUser->name,
-                                'tx_type' => 'Credit',
-                                'user_type' => 'admin'
-                            ]);
-
-                        }else{
-                            $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                            $refereeUpdate->is_paid = true;
-                            $refereeUpdate->save();
-                        }
-
-                    }else{
-
-                        $adminWallet = Wallet::where('user_id', '1')->first();
-                        $adminWallet->balance += 1000;
-                        $adminWallet->save();
-                        //Admin Transaction Tablw
-                        PaymentTransaction::create([
-                            'user_id' => 1,
-                            'campaign_id' => '1',
-                            'reference' => $ref,
-                            'amount' => 1000,
-                            'status' => 'successful',
-                            'currency' => 'NGN',
-                            'channel' => 'paystack',
-                            'type' => 'direct_referer_bonus',
-                            'description' => 'Direct Referer Bonus from '.$getUser->name,
-                            'tx_type' => 'Credit',
-                            'user_type' => 'admin'
-                        ]);
-                    
-                    }
-
+                    $adminWallet = Wallet::where('user_id', '1')->first();
+                    $adminWallet->balance += 500;
+                    $adminWallet->save();
+                    //Admin Transaction Table
+                    PaymentTransaction::create([
+                        'user_id' => 1,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => 500,
+                        'status' => 'successful',
+                        'currency' => 'NGN',
+                        'channel' => 'paystack',
+                        'type' => 'referer_bonus',
+                        'description' => 'Referer Bonus from '.$getUser->name,
+                        'tx_type' => 'Credit',
+                        'user_type' => 'admin'
+                    ]);
 
                 }else{
+                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                    $refereeUpdate->is_paid = true;
+                    $refereeUpdate->save();
+                }
+
+            }else{
+
+                $adminWallet = Wallet::where('user_id', '1')->first();
+                $adminWallet->balance += 1000;
+                $adminWallet->save();
+                //Admin Transaction Tablw
+                PaymentTransaction::create([
+                    'user_id' => 1,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => 1000,
+                    'status' => 'successful',
+                    'currency' => 'NGN',
+                    'channel' => 'paystack',
+                    'type' => 'direct_referer_bonus',
+                    'description' => 'Direct Referer Bonus from '.$getUser->name,
+                    'tx_type' => 'Credit',
+                    'user_type' => 'admin'
+                ]);
+            
+            }
+
+            Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+            return back()->with('success', 'Upgrade Successful');
+
+             return back()->with('success', 'Upgrade Successful');
+        }else{
+             return back()->with('error', 'Unathorised user, only admin can upgrade people');
+        }
+    }
+    public function upgradeUserDollar($id){
+        if(auth()->user()->hasRole('admin')){
+            $getUser = User::where('id', $id)->first();
                    
-                    Usdverified::create(['user_id'=> $getUser->id]);
+            Usdverified::create(['user_id'=> $getUser->id]);
 
                     $ref = time();
                     PaymentTransaction::create([
@@ -513,8 +521,7 @@ class AdminController extends Controller
                         'type' => 'upgrade_payment',
                         'description' => 'Manual Ugrade Payment - USD'
                     ]);
-    
-                }
+                
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
