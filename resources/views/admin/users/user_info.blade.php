@@ -440,27 +440,27 @@
                       <h4 class="fw-normal text-muted text-center">
                       Please Click the Button below to Upgrade User
                       </h4>
-                      @if($info->wallet->base_currency == 'Naira')
-                          @if($info->is_verified == '0')
-                          <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
+                      @if($info->is_verified == '0')
+                          <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
                             Verify User (Naira) Now!
                           </a>
                           @else
                           <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
                             Verification Successfull (Naira)
                           </a>
-                          @endif
-                      @else
-                          @if(!$info->USD_verified)
-                          <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id)}}" data-toggle="click-ripple">
+                      @endif
+
+                      @if(!$info->USD_verified)
+                          <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
                             Verify User (USD) Now!
                           </a>
                           @else
                           <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
                             Verification Successfull (USD)
                           </a>
-                          @endif
                       @endif
+
+                     
 
                       <hr>
                       <h5 class="fw-normal text-muted text-center mt-2">
