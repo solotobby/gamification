@@ -36,7 +36,7 @@
       </div>
       <div class="block-content">
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -64,6 +64,9 @@
               
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $feedbacks->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>

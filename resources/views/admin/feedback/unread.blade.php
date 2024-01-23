@@ -1,7 +1,7 @@
 @extends('layouts.main.master')
 @section('style')
-<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
-<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}">
+{{-- <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
+<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}"> --}}
 @endsection
 
 @section('content')
@@ -42,7 +42,7 @@
         @endif
 
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
                     <th>#</th>
@@ -70,6 +70,9 @@
               
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $feedbacks->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>
@@ -84,7 +87,7 @@
 <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
 
 <!-- Page JS Plugins -->
-<script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
@@ -92,8 +95,8 @@
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
 <script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script> --}}
 
 <!-- Page JS Code -->
-<script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
+{{-- <script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script> --}}
 @endsection

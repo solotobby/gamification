@@ -141,7 +141,7 @@
               
             <div class="mb-2">
                 <input type="checkbox" name="validate" required class="">
-                <span><small> I agree that this campaign will be automatically approved after five 24 hours if i fail to approve it. </small></span>
+                <span><small> I agree that this campaign will be automatically approved after 24 hours if i fail to approve it. </small></span>
             </div>
             
             </div>
