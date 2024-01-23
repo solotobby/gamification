@@ -43,10 +43,10 @@ class SurveyController extends Controller
         foreach($request->interest as $int){
             \DB::table('user_interest')->insert(['user_id'=>$user->id, 'preference_id' => $int, 'created_at' => now(), 'updated_at' => now()]);
         }
-        $date = \Carbon\Carbon::today()->toDateString();
+        // $date = \Carbon\Carbon::today()->toDateString();
         
         ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'survey_points', 'description' =>  SystemActivities::getInitials($user->name) .' earned 100 points for taking freebyz survey', 'user_type' => 'regular']);
-        LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '100']);
+        // LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '100']);
 
         return view('user.survey.completed');
 
