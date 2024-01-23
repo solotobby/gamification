@@ -55,7 +55,7 @@
                       <th>Interest</th>
                       <th>Duration</th>
                       <th>Total PayOut</th>
-                     
+                      <th>DateCreated</th>
                       <th></th>
                   </tr>
               </thead>
@@ -74,6 +74,9 @@
                     </td>
                     <td>
                       &#8358;{{ number_format($lock->total_payment) }}
+                    </td>
+                    <td>
+                      {{$lock->created_at }}
                     </td>
                    
                     <td> <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $lock->id }}">View Info.</button></td>
