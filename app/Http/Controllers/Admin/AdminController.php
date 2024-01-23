@@ -506,21 +506,23 @@ class AdminController extends Controller
     public function upgradeUserDollar($id){
         if(auth()->user()->hasRole('admin')){
             $getUser = User::where('id', $id)->first();
-                   
+            $getUser->is_verified = 1;
+            $getUser->save();
+
             Usdverified::create(['user_id'=> $getUser->id]);
 
-                    $ref = time();
-                    PaymentTransaction::create([
-                        'user_id' => $getUser->id,
-                        'campaign_id' => '1',
-                        'reference' => $ref,
-                        'amount' => 5,
-                        'status' => 'successful',
-                        'currency' => 'USD',
-                        'channel' => 'paypal',
-                        'type' => 'upgrade_payment',
-                        'description' => 'Manual Ugrade Payment - USD'
-                    ]);
+            $ref = time();
+            PaymentTransaction::create([
+                'user_id' => $getUser->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 5,
+                'status' => 'successful',
+                'currency' => 'USD',
+                'channel' => 'paypal',
+                'type' => 'upgrade_payment',
+                'description' => 'Manual Ugrade Payment - USD'
+            ]);
                 
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
@@ -567,6 +569,7 @@ class AdminController extends Controller
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->paginate(200);
         return view('admin.approved_list', ['campaigns' => $list]); 
     }
+    
     public function deniedCampaigns(){
         $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->get();
         return view('admin.denied_list', ['campaigns' => $list]); 
