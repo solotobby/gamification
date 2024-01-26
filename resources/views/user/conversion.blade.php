@@ -40,7 +40,7 @@
                     @if(auth()->user()->is_verified)
                             <p> You are verified for naira jobs but not elligible for dollar jobs. 
                                 Please click the button below to get a verified dollar wallet!</p>
-                                <p>A dollar wallet verification fee is $5 (&#8358;{{ number_format(dollar_naira() * 5,2) }}). Since you are Naira verified, you are qualified for our 20% discount!</p>
+                                <p>A dollar wallet verification fee is $4 (&#8358;{{ number_format(dollar_naira() * 4,2) }}). Since you are Naira verified, you are qualified for our 20% discount!</p>
                             <a href="{{ url('upgrade/full/'.dollar_naira() * 4) }}" class="btn btn-primary"> <li class="fa fa-link"> </li> Get Verified for Dollar Jobs! </a>
                     @else
                             <p> You are not verified for dollar jobs. Please click the button below to get a verified dollar wallet!</p>

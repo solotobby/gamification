@@ -302,7 +302,7 @@ class GeneralController extends Controller
             'email' => 'solotobby@gmail.com', //auth()->user()->email,
             'amount' => 1050*100,
             'channels' => ['mobile_money'],
-            'currency' => 'NGN',
+            'currency' => 'GH',
             'reference' => time(),
             'callback_url' => '/' //url($redirect_url)
         ]);
