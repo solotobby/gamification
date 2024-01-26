@@ -48,28 +48,22 @@ class UserController extends Controller
 
     public function upgradeFull($amount){
 
-        if(auth()->user()->wallet->balance < $amount+5){
+        if(auth()->user()->wallet->balance < $amount){
 
             return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
             
         }
         
         $ref = time();
-        debitWallet(auth()->user(), 'Naira', $amount+5);
+        debitWallet(auth()->user(), 'Naira', $amount);
 
         $user = User::where('id', auth()->user()->id)->first();
         $user->is_verified = true;
         $user->save(); //naira verification
        
-        Usdverified::create(['user_id' => auth()->user()->id]);
+        $usd_Verified = Usdverified::create(['user_id' => auth()->user()->id]);
 
-        $name = SystemActivities::getInitials(auth()->user()->name);
-        SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
-                
-        systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
-
-        Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-    
+       
         PaymentTransaction::create([
             'user_id' => auth()->user()->id,
             'campaign_id' => '1',
@@ -79,10 +73,47 @@ class UserController extends Controller
             'currency' => 'NGN',
             'channel' => 'paystack',
             'type' => 'upgrade_payment_naira_dollar',
-            'description' => 'Dollar Upgrade Payment-Paystack(Naira)',
+            'description' => 'Dollar Upgrade Payment - Naira',
             'tx_type' => 'Debit',
             'user_type' => 'regular'
         ]);
+
+        $referee = Referral::where('user_id',  $user->id)->first();
+            if($referee){
+
+                $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                $wallet->usd_balance += 1.5;
+                $wallet->save();
+
+                $usd_Verified->referral_id = $referee->referee_id;
+                $usd_Verified->is_paid = true;
+                $usd_Verified->amount = 1.5;
+                $usd_Verified->save();
+
+                ///Transactions
+                PaymentTransaction::create([
+                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => 1.5,
+                    'status' => 'successful',
+                    'currency' => 'USD',
+                    'channel' => 'paystack',
+                    'type' => 'usd_referer_bonus',
+                    'tx_type' => 'Credit',
+                    'description' => 'USD Referral Bonus from '.$user->name
+                ]);
+            }
+
+            $name = SystemActivities::getInitials(auth()->user()->name);
+            SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+                    
+            systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
+    
+            Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+        
+
+
 
         return redirect('success');
       

@@ -28,6 +28,7 @@ use App\Models\Profile;
 use App\Models\Question;
 use App\Models\Referral;
 use App\Models\Reward;
+use App\Models\UsdReferral;
 use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\UserLocation;
@@ -467,8 +468,9 @@ class AdminController extends Controller
                         'user_type' => 'admin'
                     ]);
 
-                }else{
-                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                }
+                else{
+                    $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
                     $refereeUpdate->is_paid = true;
                     $refereeUpdate->save();
                 }
@@ -505,11 +507,12 @@ class AdminController extends Controller
     }
     public function upgradeUserDollar($id){
         if(auth()->user()->hasRole('admin')){
+
             $getUser = User::where('id', $id)->first();
             $getUser->is_verified = 1;
             $getUser->save();
 
-            Usdverified::create(['user_id'=> $getUser->id]);
+            $usd_Verified =  Usdverified::create(['user_id'=> $getUser->id]);
 
             $ref = time();
             PaymentTransaction::create([
@@ -523,7 +526,33 @@ class AdminController extends Controller
                 'type' => 'upgrade_payment',
                 'description' => 'Manual Ugrade Payment - USD'
             ]);
-                
+
+            $referee = Referral::where('user_id',  $getUser->id)->first();
+            if($referee){
+
+                $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                $wallet->usd_balance += 1.5;
+                $wallet->save();
+
+                $usd_Verified->referral_id = $referee->referee_id;
+                $usd_Verified->is_paid = true;
+                $usd_Verified->amount = 1.5;
+                $usd_Verified->save();
+
+                ///Transactions
+                PaymentTransaction::create([
+                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => 1.5,
+                    'status' => 'successful',
+                    'currency' => 'USD',
+                    'channel' => 'paystack',
+                    'type' => 'usd_referer_bonus',
+                    'tx_type' => 'Credit',
+                    'description' => 'USD Referral Bonus from '.$getUser->name
+                ]);
+            }
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
@@ -569,7 +598,7 @@ class AdminController extends Controller
         $list = CampaignWorker::where('status', 'Approved')->orderBy('created_at', 'DESC')->paginate(200);
         return view('admin.approved_list', ['campaigns' => $list]); 
     }
-    
+
     public function deniedCampaigns(){
         $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->get();
         return view('admin.denied_list', ['campaigns' => $list]); 
