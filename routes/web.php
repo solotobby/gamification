@@ -58,7 +58,7 @@ Route::post('login/user', [\App\Http\Controllers\Auth\RegisterController::class,
 Route::get('agent/{ref}/wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellahealth']);
 Route::get('agent/{ref}/wellahealth/{planCode}/{numberOfPersons}/{amount}/{type}', [\App\Http\Controllers\GeneralController::class, 'processWellaHealth']);
 Route::post('agent/store/wellahealth', [\App\Http\Controllers\GeneralController::class, 'storeWellaHealth']);
-
+Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController::class, 'agentPayment']);
 //test urls 
 Route::get('test/api', [\App\Http\Controllers\GeneralController::class, 'testy']);
 

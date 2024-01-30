@@ -111,10 +111,6 @@ class UserController extends Controller
             systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
     
             Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-        
-
-
-
         return redirect('success');
       
     }

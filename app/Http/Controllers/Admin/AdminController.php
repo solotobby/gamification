@@ -216,7 +216,7 @@ class AdminController extends Controller
          $workDone = CampaignWorker::where('id', $request->id)->first();
          $workDone->status = $request->status;
          $workDone->is_dispute_resolved = true;
-         //$workDone->reason = $request->reason;
+         $workDone->is_dispute = false;
          $workDone->save();
 
          $campaign = Campaign::where('id', $workDone->campaign_id)->first();
@@ -290,13 +290,13 @@ class AdminController extends Controller
             $campaingOwner = User::where('id', $campaign->user_id)->first();
 
             if($campaign->currency == 'NGN'){
-                $currency = 'Naira';
+                $currency = 'NGN';
                 $channel = 'paystack';
             }elseif($campaign->currency == 'USD'){
-                $currency = 'Dollar';
+                $currency = 'USD';
                 $channel = 'paypal';
             }elseif($campaign->currency == null){
-                $currency = 'Naira';
+                $currency = 'NGN';
                 $channel = 'paystack';
             }
 
