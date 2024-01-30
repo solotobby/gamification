@@ -69,7 +69,7 @@
                     </td>
                     <td>{{ $camp->status }} </td>
                     <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
-                    <td><a href="{{ url('admin/campaign/disputes/'.$camp->id) }}" class="btn btn-alt-primary btn-sm">View</a></td>
+                    <td><a href="{{ url('admin/campaign/disputes/'.$camp->id) }}" target="_blank" class="btn btn-alt-primary btn-sm">View</a></td>
                 </tr>
                 @endforeach
             </tbody>
