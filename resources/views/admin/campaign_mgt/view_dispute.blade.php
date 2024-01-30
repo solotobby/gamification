@@ -125,7 +125,7 @@
             </div>
             <hr>
             <div class="mb-4">
-                <label class="form-label" for="post-files">Worker table-responsive
+                <label class="form-label" for="post-files">Worker Comment
                 </label>
                 <br>
                 {!! $campaign->comment !!}
