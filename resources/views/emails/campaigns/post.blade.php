@@ -14,7 +14,7 @@
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $poster }},</strong></p>
                 <p style="margin-bottom: 10px;">
                     Thank you for yout interest in using this amazing feature on Freebyz.com. <br>
-                    This is to let you know that your campaign has been posted successfully. Below are the details:<br><br>
+                    This is to let you know that your campaign has been created successfully and it is under review. You will receive an update in 24hours. Below are the details:<br><br>
 
                     <b> Campaign ID:</b> {{ $job_id }} <br>
                     <b>Campaign Name:</b> {{ $campaign_name }} <br>

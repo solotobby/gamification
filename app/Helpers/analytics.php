@@ -59,7 +59,7 @@ class Analytics{
     public static function monthlyVisits(){
         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
         // ->whereBetween('created_at',[$start_date, $end_date])
-        ->where('created_at', '>=', Carbon::now()->subMonths(3))
+        ->where('created_at', '>=', Carbon::now()->subMonths(6))
         ->groupBy('month')->get(); 
         // 
         $MonthlyVisit[] = ['Month', 'Users','Verified'];
