@@ -61,7 +61,7 @@ class GeneralController extends Controller
 
     public function landingPage()
     {  
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         $users = User::where('role', 'regular')->count();
         $workers = CampaignWorker::all()->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
@@ -70,13 +70,13 @@ class GeneralController extends Controller
 
     public function contact()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('contact');
     }
 
     public function goal()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('goal');
     }
 
@@ -88,49 +88,49 @@ class GeneralController extends Controller
 
     public function gamelist()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         $games = Games::orderBy('created_at', 'desc')->get();
         return view('gamelist', ['games' => $games]);
     }
 
     public function terms()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('terms');
     }
 
     public function privacy()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('privacy');
     }
     
     public function make_money()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('make_money');
     }
 
     public function trackRecord()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('track_record');
     }
 
     public function faq()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('faq');
     }
     public function about()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('about');
     }
 
     public function download()
     {
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('LandingPage');
         return view('download');
     }
 

@@ -15,14 +15,14 @@ class Analytics{
         return 'analytics';
     }
 
-    public static function dailyVisit(){
+    public static function dailyVisit($type){
 
         $date = \Carbon\Carbon::today()->toDateString();
         
-        $check = Statistics::where('date', $date)->first();
+        $check = Statistics::where('date', $date)->where('type', $type)->first();
         if($check == null)
         {
-            Statistics::create(['type' => 'visits', 'date' => $date, 'count' => '1']);
+            Statistics::create(['type' => $type, 'date' => $date, 'count' => '1']);
         }else{
             $check->count += 1;
             $check->save();
@@ -45,13 +45,15 @@ class Analytics{
     }
 
     public static function dailyStats(){
-        $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
+         $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
+        ->selectRaw('SUM(CASE WHEN type = "LandingPage" THEN count ELSE 0 END) as landing_page_count')
+        ->selectRaw('SUM(CASE WHEN type = "Dashboard" THEN count ELSE 0 END) as dashboard_count')
+        ->where('created_at', '>=', Carbon::now()->subMonths(1))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
-        $dailyVisitresult[] = ['Year','Visits'];
+        $dailyVisitresult[] = ['Year','Visits', 'Landing Page', 'Dashboard', 'Total Visit'];
         foreach ($data as $key => $value) {
-            $dailyVisitresult[++$key] = [$value->date, (int)$value->visits];
+            $dailyVisitresult[++$key] = [$value->date, (int)$value->visits, (int)$value->landing_page_count, (int)$value->dashboard_count, (int)$value->landing_page_count+(int)$value->dashboard_count];
         }
         return $dailyVisitresult;
     }

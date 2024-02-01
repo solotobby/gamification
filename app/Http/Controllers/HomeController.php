@@ -70,7 +70,7 @@ class HomeController extends Controller
     public function userHome()
     {
         //Sendmonny::accessToken();
-        Analytics::dailyVisit();
+        Analytics::dailyVisit('Dashboard');
 
         setProfile(auth()->user());
         
@@ -131,16 +131,16 @@ class HomeController extends Controller
         // return $campaignMetric = Analytics::campaignMetrics();
         //users registered
 
-        $dailyActivity = Analytics::dailyActivities();
+       $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits
-        $start_date = \Carbon\Carbon::today()->subDays(30);
-        $end_date = \Carbon\Carbon::now()->format('Y-m-d');
+        // $start_date = \Carbon\Carbon::today()->subDays(30);
+        // $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
        $MonthlyVisit = Analytics::monthlyVisits();
 
         //daily visits
-        $dailyVisits = Analytics::dailyStats();
+         $dailyVisits = Analytics::dailyStats();
 
         //registration channel
         $registrationChannel = Analytics::registrationChannel();
