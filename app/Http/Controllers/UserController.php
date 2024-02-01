@@ -37,14 +37,6 @@ class UserController extends Controller
         return view('user.upgrade');
     }
 
-    // public function upgradePart($amount){
-
-    //     //$ref = time();
-    //     //$amount = dollar_naira() * 4; 
-    //     //$url = PaystackHelpers::initiateTrasaction($ref, $amount+50, '/complete/upgrade');
-    //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount+50, 'unsuccessful', 'upgrade_payment_naira_dollar', 'Dollar Upgrade Payment-Paystack(Naira)', 'Payment_Initiation', 'regular');
-    //     //return redirect($url);
-    // }
 
     public function upgradeFull($amount){
 
@@ -106,7 +98,7 @@ class UserController extends Controller
             }
 
             $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+            SystemActivities::activityLog(auth()->user(), 'dollar_account_verification', $name .' account verification', 'regular');
                     
             systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
     
@@ -225,111 +217,111 @@ class UserController extends Controller
     }
 
     public function captureUpgrade(){
-        $url = request()->fullUrl();
-        $url_components = parse_url($url);
-        parse_str($url_components['query'], $params);
+        // $url = request()->fullUrl();
+        // $url_components = parse_url($url);
+        // parse_str($url_components['query'], $params);
 
-        $id = $params['token'];
+        // $id = $params['token'];
 
-          $response = capturePaypalPayment($id);
+        //   $response = capturePaypalPayment($id);
 
-        if($response['status'] == 'COMPLETED'){
+        // if($response['status'] == 'COMPLETED'){
 
-            $ref = $response['purchase_units'][0]['reference_id'];
+        //     $ref = $response['purchase_units'][0]['reference_id'];
 
-            $update = PaymentTransaction::where('reference', $response['id'])->first();
-            $update->status = 'successful';
-            $update->reference = $response['purchase_units'][0]['reference_id'];
-            $update->save();
+        //     $update = PaymentTransaction::where('reference', $response['id'])->first();
+        //     $update->status = 'successful';
+        //     $update->reference = $response['purchase_units'][0]['reference_id'];
+        //     $update->save();
 
-            $user = User::where('id', auth()->user()->id)->first();
-            $user->is_verified = true;
-            $user->save();
-            Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+        //     $user = User::where('id', auth()->user()->id)->first();
+        //     $user->is_verified = true;
+        //     $user->save();
+        //     Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
+        //     $name = SystemActivities::getInitials(auth()->user()->name);
+        //     SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
 
-            systemNotification($user, 'success', 'Verification', '$'.$update->amount.' Account Verification Successful');
-            return redirect('success');
-        }else{
-            return redirect('error');
-        }
+        //     systemNotification($user, 'success', 'Verification', '$'.$update->amount.' Account Verification Successful');
+        //     return redirect('success');
+        // }else{
+        //     return redirect('error');
+        // }
     }
 
     public function upgradeCallback()
     {
-        $url = request()->fullUrl();
-        $url_components = parse_url($url);
-        parse_str($url_components['query'], $params);
+        // $url = request()->fullUrl();
+        // $url_components = parse_url($url);
+        // parse_str($url_components['query'], $params);
 
-        $ref = $params['trxref']; //paystack
-        $res = PaystackHelpers::verifyTransaction($ref);
+        // $ref = $params['trxref']; //paystack
+        // $res = PaystackHelpers::verifyTransaction($ref);
       
-        $statusVerification = $res['data']['status'];
+        // $statusVerification = $res['data']['status'];
     
-        $checkCount = PaymentTransaction::where('reference', $ref)->first();
-        if($checkCount->status == 'unsuccessful'){
-           if($statusVerification == 'success'){
-                PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
+        // $checkCount = PaymentTransaction::where('reference', $ref)->first();
+        // if($checkCount->status == 'unsuccessful'){
+        //    if($statusVerification == 'success'){
+        //         PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
                 
-                $name = SystemActivities::getInitials(auth()->user()->name);
-                SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
-                $user = User::where('id', auth()->user()->id)->first();
-                $user->is_verified = true;
-                $user->save();
+        //         $name = SystemActivities::getInitials(auth()->user()->name);
+        //         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+        //         $user = User::where('id', auth()->user()->id)->first();
+        //         $user->is_verified = true;
+        //         $user->save();
     
-                $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+        //         $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
     
-               if($referee){
+        //        if($referee){
 
-                    $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
+        //             $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
 
-                    if(!$refereeInfo){
-                        $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                        $wallet->balance += 500;
-                        $wallet->save();
+        //             if(!$refereeInfo){
+        //                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+        //                 $wallet->balance += 500;
+        //                 $wallet->save();
                     
-                        $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                        $refereeUpdate->is_paid = true;
-                        $refereeUpdate->save();
+        //                 $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+        //                 $refereeUpdate->is_paid = true;
+        //                 $refereeUpdate->save();
         
-                        ///Transactions
-                        $description = 'Referer Bonus from '.auth()->user()->name;
-                        PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+        //                 ///Transactions
+        //                 $description = 'Referer Bonus from '.auth()->user()->name;
+        //                 PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
         
-                        $adminWallet = Wallet::where('user_id', '1')->first();
-                        $adminWallet->balance += 500;
-                        $adminWallet->save();
+        //                 $adminWallet = Wallet::where('user_id', '1')->first();
+        //                 $adminWallet->balance += 500;
+        //                 $adminWallet->save();
         
-                        //Admin Transaction Table
-                        $description = 'Referer Bonus from '.auth()->user()->name;
-                        PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+        //                 //Admin Transaction Table
+        //                 $description = 'Referer Bonus from '.auth()->user()->name;
+        //                 PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
                     
-                    }else{
-                        $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                        $refereeUpdate->is_paid = true;
-                        $refereeUpdate->save();
-                    }
+        //             }else{
+        //                 $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+        //                 $refereeUpdate->is_paid = true;
+        //                 $refereeUpdate->save();
+        //             }
 
 
-                }else{
-                    $adminWallet = Wallet::where('user_id', '1')->first();
-                    $adminWallet->balance += 1000;
-                    $adminWallet->save();
-                    //Admin Transaction Tablw
-                    $description = 'Direct Referer Bonus from '.auth()->user()->name;
-                    PaystackHelpers::paymentTrasanction(1, '1', time(), 1000, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
-               }
-                    Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-                    return redirect('success');
+        //         }else{
+        //             $adminWallet = Wallet::where('user_id', '1')->first();
+        //             $adminWallet->balance += 1000;
+        //             $adminWallet->save();
+        //             //Admin Transaction Tablw
+        //             $description = 'Direct Referer Bonus from '.auth()->user()->name;
+        //             PaystackHelpers::paymentTrasanction(1, '1', time(), 1000, 'successful', 'direct_referer_bonus', $description, 'Credit', 'admin');
+        //        }
+        //             Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+        //             return redirect('success');
 
-            }else{
-                return redirect('upgrade');
-            }
+        //     }else{
+        //         return redirect('upgrade');
+        //     }
     
-        }else{
-            return redirect('success');
-        }
+        // }else{
+        //     return redirect('success');
+        // }
         
     }
 

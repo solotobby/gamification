@@ -131,7 +131,7 @@ class HomeController extends Controller
         // return $campaignMetric = Analytics::campaignMetrics();
         //users registered
 
-       $dailyActivity = Analytics::dailyActivities();
+      $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits
         // $start_date = \Carbon\Carbon::today()->subDays(30);
