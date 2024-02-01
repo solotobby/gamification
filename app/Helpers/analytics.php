@@ -53,7 +53,8 @@ class Analytics{
     }
 
     public static function dailyStats(){
-         $data = Statistics::select(\DB::raw('DATE(date) as date'), \DB::raw('sum(count) as visits'))
+         $data = Statistics::select(\DB::raw('DATE(date) as date'))
+         ->selectRaw('SUM(CASE WHEN type = "visits" THEN count ELSE 0 END) as visits')
         ->selectRaw('SUM(CASE WHEN type = "LandingPage" THEN count ELSE 0 END) as landing_page_count')
         ->selectRaw('SUM(CASE WHEN type = "Dashboard" THEN count ELSE 0 END) as dashboard_count')
         ->where('created_at', '>=', Carbon::now()->subMonths(1))->groupBy('date')
