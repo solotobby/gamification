@@ -30,15 +30,23 @@ class Analytics{
     }
 
     public static function dailyActivities(){
-        $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), 
-        \DB::raw('SUM(is_verified) as verified'))
-        ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
-        ->orderBy('date', 'ASC')
+        // $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), 
+        // \DB::raw('SUM(is_verified) as verified'))
+        // ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
+        // ->orderBy('date', 'ASC')
+        // ->get();
+        
+       $data= ActivityLog::select(
+            \DB::raw('DATE(created_at) as date'),
+            \DB::raw('SUM(CASE WHEN activity_type = "google_account_creation" THEN 1 ELSE 0 END) as google_reg_count'),
+            \DB::raw('SUM(CASE WHEN activity_type = "account_creation" THEN 1 ELSE 0 END) as reg_count'),
+            \DB::raw('SUM(CASE WHEN activity_type = "account_verification" THEN 1 ELSE 0 END) as verified_count')
+        )->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
         ->get();
 
         $result[] = ['Year','Registered','Verified'];
         foreach ($data as $key => $value) {
-            $result[++$key] = [$value->date, (int)$value->total_reg, (int)$value->verified];
+            $result[++$key] = [$value->date, (int)$value->reg_count+(int)$value->google_reg_count, (int)$value->verified_count];
         }
 
         return $result;
