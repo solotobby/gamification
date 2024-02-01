@@ -496,11 +496,14 @@ class AdminController extends Controller
                 ]);
             
             }
-
+            systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+            
+            $name = SystemActivities::getInitials($getUser->name);
+            SystemActivities::activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
 
-             return back()->with('success', 'Upgrade Successful');
+            
         }else{
              return back()->with('error', 'Unathorised user, only admin can upgrade people');
         }
@@ -554,6 +557,9 @@ class AdminController extends Controller
                 ]);
             }
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+            $name = SystemActivities::getInitials($getUser->name);
+            SystemActivities::activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
+             
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
         }else{
