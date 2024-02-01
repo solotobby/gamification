@@ -51,7 +51,7 @@ class Analytics{
         ->where('created_at', '>=', Carbon::now()->subMonths(1))->groupBy('date')
         ->orderBy('date', 'ASC')
         ->get();
-        $dailyVisitresult[] = ['Year','Visits', 'Landing Page', 'Dashboard', 'Total Visit'];
+        $dailyVisitresult[] = ['Year','Visits**', 'LandingPage', 'Dashboard', 'Total Visit'];
         foreach ($data as $key => $value) {
             $dailyVisitresult[++$key] = [$value->date, (int)$value->visits, (int)$value->landing_page_count, (int)$value->dashboard_count, (int)$value->landing_page_count+(int)$value->dashboard_count];
         }
