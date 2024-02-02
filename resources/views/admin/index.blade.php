@@ -55,6 +55,7 @@
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
             <br> Xmas Count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>
             <br> Total Jobs Average - {{ $av_count }}
+            <br> Total Virtual Account - {{ totalVirtualAccount() }} 
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
