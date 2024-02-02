@@ -1112,7 +1112,7 @@ class AdminController extends Controller
     }
 
     public function test(){
-        
+        return totalVirtualAccount();
         // $bankList = PaystackHelpers::bankList();
         
 

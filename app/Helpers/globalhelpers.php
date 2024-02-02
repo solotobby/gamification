@@ -907,8 +907,15 @@ if(!function_exists('reGenerateVirtualAccount')){
         }
        
     }
-}
 
+
+}
+if(!function_exists('totalVirtualAccount')){
+    function totalVirtualAccount(){ 
+     $res =  PaystackHelpers::virtualAccountCount();
+     return count($res);
+    }
+}
 
 if(!function_exists('transactionProcessor')){
     function transactionProcessor($user,$reference, $amount, $status, $currency, $channel, $type, $description, $tx_type, $user_type){ 

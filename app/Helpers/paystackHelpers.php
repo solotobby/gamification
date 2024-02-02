@@ -142,6 +142,17 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
+    public static function virtualAccountCount(){
+        
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/dedicated_account');
+
+        return json_decode($res->getBody()->getContents(), true);
+    }
+
     public static function createCustomer($data){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
