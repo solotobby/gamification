@@ -912,8 +912,7 @@ if(!function_exists('reGenerateVirtualAccount')){
 }
 if(!function_exists('totalVirtualAccount')){
     function totalVirtualAccount(){ 
-     $res =  PaystackHelpers::virtualAccountCount();
-     return count($res);
+        return VirtualAccount::all()->count();
     }
 }
 
