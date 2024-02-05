@@ -164,6 +164,8 @@ class GeneralController extends Controller
             return $item['data']['planType'] !== 'Monthly';
         });
 
+        
+
        return view('user.partner.wellahealth.external', ['subscriptions' => $filteredArray, 'ref' => $ref]);
         
     }
@@ -182,7 +184,7 @@ class GeneralController extends Controller
     }
 
     public function storeWellaHealth(Request $request){
-        // return $request;
+        
         $data['firstName'] = $request->firstName;
         $data['lastName'] = $request->lastName;
         $data['email'] = $request->email;
@@ -203,76 +205,79 @@ class GeneralController extends Controller
             ];
         }
         $beneficiaryCount = count($formattedData);
-        $user = User::where('referral_code', $request->referral)->first();
+        $user = User::where('referral_code', $request->referral_code)->first();
 
-        if($beneficiaryCount == 1){
-            //enter them in subscription
-         $payload = [
-                'agentCode' => 'WHPXTest10076',
-                'firstName' => $formattedData[0]['firstName'],
-                'lastName' => $formattedData[0]['lastName'],
-                'phone' => $formattedData[0]['phone'],
-                'email' => $formattedData[0]['email'],
-                'amount' => $request->amount,
-                'acquisitionChannel' => 'Agent',
-                'paymentPlan' => $request->paymentPlan,
-                'gender' => $formattedData[0]['gender'],
-                'dateOfBirth' => $formattedData[0]['dateOfBirth']
-            ];
+        if($user){
+            if($beneficiaryCount == 1){
+                //enter them in subscription
+                $payload = [
+                    'agentCode' => 'WHPXTest10076',
+                    'firstName' => $formattedData[0]['firstName'],
+                    'lastName' => $formattedData[0]['lastName'],
+                    'phone' => $formattedData[0]['phone'],
+                    'email' => $formattedData[0]['email'],
+                    'amount' => $request->amount,
+                    'acquisitionChannel' => 'Agent',
+                    'paymentPlan' => $request->paymentPlan,
+                    'gender' => $formattedData[0]['gender'],
+                    'dateOfBirth' => $formattedData[0]['dateOfBirth']
+                ];
 
-             $createSubscription = createWellaHealthScription($payload);
+                $createSubscription = createWellaHealthScription($payload);
 
-            if($createSubscription){
+                if($createSubscription){
+                    
+                    $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                    $ref = time();
+                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
+                    transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
                 
-                 $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral, $request->amount, $user, $request->planCode);
-                 
-                 return $this->initiatePayment($formattedData[0]['email'], $request->amount, $response);
-                // {
-                //     "subscriptionCode": "1391d757694",
-                //     "firstName": "Oluwatobi",
-                //     "lastName": "Daniel",
-                //     "phone": "2348123331282",
-                //     "email": null,
-                //     "status": "Active",
-                //     "amount": 600,
-                //     "paymentPlan": "Monthly",
-                //     "numberOfSubscribers": 1,
-                //     "subscriptionAccount": null,
-                //     "healthSavingsAccount": null,
-                //     "nextPayment": "2024-02-10T03:13:44.6081632Z",
-                //     "product": "Malaria"
-                // }
+                    // PaystackHelpers::paymentTrasanction($user->id, '1', $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'regular');
+                    return redirect($url);
+                }
+
+
+            }else{
+
+                $filteredData = array_slice($formattedData, 1);
+
+                $payload = [
+                    'agentCode' => 'WHPXTest10076',
+                    'firstName' => $formattedData[0]['firstName'],
+                    'lastName' => $formattedData[0]['lastName'],
+                    'phone' => $formattedData[0]['phone'],
+                    'email' => $formattedData[0]['email'],
+                    'amount' => $request->amount,
+                    'acquisitionChannel' => 'Agent',
+                    'paymentPlan' => $request->paymentPlan,
+                    'gender' => $formattedData[0]['gender'],
+                    'dateOfBirth' => $formattedData[0]['dateOfBirth'], 
+                    'beneficiaryList' => $filteredData
+                ];
+                $createSubscription = createWellaHealthScription($payload);
+                if($createSubscription){
+                    // $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                   $response =  $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                    $ref = time();
+                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
+                    
+                    // $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
+                    
+                    transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
+                
+                    // PaystackHelpers::paymentTrasanction($user->id, '1', $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'regular');
+                    return redirect($url);
+                }
+
             }
-
-
         }else{
-
-            $filteredData = array_slice($formattedData, 1);
-
-           $payload = [
-                'agentCode' => 'WHPXTest10076',
-                'firstName' => $formattedData[0]['firstName'],
-                'lastName' => $formattedData[0]['lastName'],
-                'phone' => $formattedData[0]['phone'],
-                'email' => $formattedData[0]['email'],
-                'amount' => $request->amount,
-                'acquisitionChannel' => 'Agent',
-                'paymentPlan' => $request->paymentPlan,
-                'gender' => $formattedData[0]['gender'],
-                'dateOfBirth' => $formattedData[0]['dateOfBirth'], 
-                'beneficiaryList' => $filteredData
-            ];
-            return $createSubscription = createWellaHealthScription($payload);
-            if($createSubscription){
-                return $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral, $request->amount, $user, $request->planCode);
-            }
-
-
-           
+            dd('not available');
         }
+          
     }
 
     public function completeWellaHealthSubscription($createSubscription, $formattedData, $referral, $amount, $user, $planCode){
+       
         if($referral){
             $affiliate_commission = 0.07 * $amount;
             $commission = 0.03 * $amount;
@@ -286,8 +291,6 @@ class GeneralController extends Controller
             $commission = 0.1 * $amount;
             $affiliate_referral_id = null;
         }
-
-      
 
         $data['user_id'] = $affiliate_referral_id;
         $data['plan_code'] = $planCode;
@@ -308,19 +311,20 @@ class GeneralController extends Controller
         foreach($formattedData as $formatted){
             PartnershipBeneficiary::create([
                 'partnership_subscriptions_id' => $partnership->id,
-                'firstName' => $formatted->firstName,
-                'lastName' => $formatted->lastName,
-                'email' => $formatted->email,
-                'phone' => $formatted->phone,
-                'dateOfBirth' => $formatted->dateOfBirth,
-                'gender' => $formatted->gender,
+                'firstName' => $formatted['firstName'],
+                'lastName' => $formatted['lastName'],
+                'email' => $formatted['email'],
+                'phone' => $formatted['phone'],
+                'dateOfBirth' => $formatted['dateOfBirth'],
+                'gender' => $formatted['gender'],
             ]);
         }
         return $partnership;
-
     }
 
-    public function initiatePayment($email, $amount, $response){
+    public function initiatePayment($email, $amount, $response, $ref){
+
+        return [$email, $amount, $response, $ref];
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -330,23 +334,42 @@ class GeneralController extends Controller
             'amount' => $amount*100,
             'channels' => ['card'],
             'currency' => 'NGN',
-            'reference' => time(),
-            'callback_url' => 'agent/wellahealth/payment', //url($redirect_url)
+            'reference' => $ref,
+            'callback_url' => url('agent/wellahealth/payment'),
             "metadata"=> [
                 "partnership_id"=> $response->id,
             ]
                
         ]);
-       return $res['data']['authorization_url'];
+
+        return json_decode($res->getBody()->getContents(), true)['data']['authorization_url'];
+       
     }
 
     public function agentPayment(){
-       return $url = request()->fullUrl();
+        $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
 
-        $ref = $params['trxref']; //paystack
-        // $res = PaystackHelpers::verifyTransaction($ref); //
+         $ref = $params['trxref']; //paystack
+        $res = PaystackHelpers::verifyTransaction($ref); //
+        if($res['status'] == true){
+            $partnership_id =  $res['data']['metadata']['partnership_id'];
+            $partnership = PartnerSubscription::where('id', $partnership_id)->first();
+            $partnership->is_paid = true;
+            $partnership->save();
+
+            $affiliate = User::where('id', $partnership->affiliate_referral_id)->first();
+            
+            $credit = creditWallet($affiliate, 'Naira', (int)$partnership->affiliate_commission);
+            
+            $tx = transactionProcessor($affiliate, time(), $partnership->affiliate_commission, 'successful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation Completed', 'Payment_Completed', 'Credit', 'regular');
+                
+            return view('user.partner.wellahealth.success');
+        }else{
+
+            return view('user.partner.wellahealth.success');
+        }
     }
 
 

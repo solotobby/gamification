@@ -108,6 +108,7 @@
                 <input type="hidden" name="referral_code" value="{{ $ref }}">
                 <input type="hidden" name="amount" value="{{ $amount }}">
                 <input type="hidden" name="paymentPlan" value="{{ $type }}">
+                <input type="hidden" name="planCode" value="{{ $planCode }}">
 
                 <div class="mb-4">
                     <button type="submit" class="btn btn-alt-primary">Subscribe</button>

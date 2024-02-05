@@ -38,6 +38,10 @@ Route::get('about', [\App\Http\Controllers\GeneralController::class, 'about'])->
 Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
+Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController::class, 'agentPayment']);
+
+
+
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
 Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
@@ -58,7 +62,6 @@ Route::post('login/user', [\App\Http\Controllers\Auth\RegisterController::class,
 Route::get('agent/{ref}/wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellahealth']);
 Route::get('agent/{ref}/wellahealth/{planCode}/{numberOfPersons}/{amount}/{type}', [\App\Http\Controllers\GeneralController::class, 'processWellaHealth']);
 Route::post('agent/store/wellahealth', [\App\Http\Controllers\GeneralController::class, 'storeWellaHealth']);
-Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController::class, 'agentPayment']);
 //test urls 
 Route::get('test/api', [\App\Http\Controllers\GeneralController::class, 'testy']);
 
@@ -121,8 +124,8 @@ Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 
 Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
 
 ///paystack payment 
-Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
-Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+// Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+// Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 //paypal
 Route::get('paypal/return', [\App\Http\Controllers\WalletController::class, 'capturePaypal']);
 Route::get('capture/upgrade', [\App\Http\Controllers\UserController::class, 'captureUpgrade']);
