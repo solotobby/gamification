@@ -75,7 +75,6 @@ class HomeController extends Controller
             setProfile(auth()->user());
         }
        
-        
         if(auth()->user()->phone == '' || auth()->user()->country == ''){
             return view('phone');
         }
