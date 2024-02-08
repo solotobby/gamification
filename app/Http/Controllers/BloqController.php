@@ -69,14 +69,14 @@ class BloqController extends Controller
              $payload3 = [
                 "customer_id"=> $customer['id'],
                 "preferred_bank"=> "Banc Corp",
-                "alias"=> "Freebyz"
-                // "collection_rules"=> [
-                //     "amount"=> 30000,
-                //     "frequency"=> 2
-                // ]
+                "alias"=> "Freebyz",
+                "collection_rules"=> [
+                    "amount"=> 200,
+                    "frequency"=> 2
+                ]
             ];
 
-             $bloqAccount = bloqCreateWallet($payload3)['data'];
+             $bloqAccount = bloqCreateAccount($payload3)['data'];
 
           
 
@@ -87,7 +87,7 @@ class BloqController extends Controller
                 'account_id' => $bloqAccount['id'], 
                 'balance' => $bloqAccount['balance'], 
                 'account_number' => $bloqAccount['account_number'], 
-                'bank_name' => $bloqAccount['bank_name'], 
+                'bank_name' => $bloqAccount['preferred_bank'], 
                 'currency' => 'NGN', 
                 'provider' => 'bloq'
              ]);
