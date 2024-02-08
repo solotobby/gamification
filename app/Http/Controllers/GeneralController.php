@@ -375,7 +375,96 @@ class GeneralController extends Controller
 
     public function testy(){
 
-        return $this->initiatePaystackTx();
+        // $payload = [
+        //     "customer_id"=> "65c2adf0cd5ee96c010dbec0",
+        //     "preferred_bank"=> "Banc Corp",
+        //     "alias"=> "Freebyz",
+        //     "collection_rules"=> [
+        //         "amount"=> 30000,
+        //         "frequency"=> 2
+        //     ]
+        // ];
+
+        // return bloqCreateAccount($payload);
+
+        // "id": "65c2bafdcd5ee96c010dbf1d",
+
+        // $payload = [
+        //     "customer_id"=> "65c2adf0cd5ee96c010dbec0",
+        //     'brand' => 'MasterCard'
+        // ];
+
+        // return bloqIssueCard($payload);
+
+        // $payload1 = [
+        //     'email' => 'solotobby@gmail.com',
+        //     'phone_number' => '08137331282',
+        //     'first_name' => 'Oluwatobi',
+        //     'last_name' => 'Solomon',
+        //     'customer_type' => 'Personal',
+        //     'bvn' => '1234567890'
+        //  ];
+
+        //  $res = bloqCreateCustomer($payload1);
+
+        //  $payload2 = [
+        //     'place_of_birth' => 'lagos', 
+        //     'dob' => '1992-03-30',
+        //     'gender' => 'Male',
+        //     'address' => [
+        //         'street' => '10 Lagos Way',
+        //         'city' => 'Lekki',
+        //         'state' => 'Lagos',
+        //         'country' => 'Nigeria', 
+        //         "postal_code"=>"1000101"
+        //     ],
+        //     'image' => 'image_src',
+        //  ];
+
+        //  return bloqUpgradeCustomerKYC1($payload2, "65c2adf0cd5ee96c010dbec0");
+
+
+
+
+
+        //  "id": "65c2adf0cd5ee96c010dbec0",
+
+        // $payload = [
+        //     "tx_ref"=>"MC-158523s09v505090",
+        //     "amount"=>"190",
+        //     "currency"=>"GHS",
+        //     "voucher"=>"143256743",
+        //     "network"=>"MTN",
+        //     "email"=>"solotobby@gmail.com",
+        //     "phone_number"=>"054709929220",
+        //     "fullname"=>"Yolande Aglaé Colbert",
+        //     // "client_ip":"154.123.220.1",
+        // ];
+        // return listBanks($payload);
+
+
+        // $payload = [
+        //     "currency"=> "USD",
+        //     "amount"=> 5,
+        //     "debit_currency"=> "NGN",
+        //     "billing_name"=> "Oluwatobi Solomon",
+        //     "billing_address"=> "333, Fremont Street",
+        //     "billing_city"=> "San Francisco",
+        //     "billing_state"=> "CA",
+        //     "billing_postal_code"=> "94105",
+        //     "billing_country"=> "US",
+        //     "first_name"=> "Oluwatobi",
+        //     "last_name"=> "Solomon",
+        //     "date_of_birth"=> "1996/12/30",
+        //     "email"=> "solotobby@gmail.com",
+        //     "phone"=> "08137331282",
+        //     "title"=> "MR",
+        //     "gender"=> "M",
+        //     "callback_url"=> "https://webhook.site/b67965fa-e57c-4dda-84ce-0f8d6739b8a5"
+        // ];
+
+        // return createCard($payload);
+        // return $this->initiatePaystackTx();
         // $location =  currentLocation();
 
         // return $this->paystackApi('ghana');
@@ -411,4 +500,6 @@ class GeneralController extends Controller
         return json_decode($res->getBody()->getContents(), true);
     //    return $res['data']['authorization_url'];
     }
+
+
 }

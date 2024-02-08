@@ -68,7 +68,18 @@
           </div>
         @endif
       </div>
+      
+        <a href="{{ url('setup/account') }}" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
+              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Setup Card
+        </a>
+        {{-- <button type="button" class="btn btn-primary btn-sm btn-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modal-default-popout">
+          <i class="fa fa-fw fa-share opacity-50 me-1"></i> Setup Card
+        </button> --}}
+
    </div>
+
+     
+
 <div class="row">
 
     <div class="col-md-6">
