@@ -19,7 +19,7 @@ class BloqController extends Controller
     }
 
     public function setupAccountProcess(Request $request){
-        //create custome
+        //create customer
         //upgrate customer
         //create account
         //issue card
@@ -69,14 +69,14 @@ class BloqController extends Controller
              $payload3 = [
                 "customer_id"=> $customer['id'],
                 "preferred_bank"=> "Banc Corp",
-                "alias"=> "Freebyz",
-                "collection_rules"=> [
-                    "amount"=> 30000,
-                    "frequency"=> 2
-                ]
+                "alias"=> "Freebyz"
+                // "collection_rules"=> [
+                //     "amount"=> 30000,
+                //     "frequency"=> 2
+                // ]
             ];
 
-             $bloqAccount = bloqCreateAccount($payload3)['data'];
+             $bloqAccount = bloqCreateWallet($payload3)['data'];
 
           
 
@@ -87,7 +87,7 @@ class BloqController extends Controller
                 'account_id' => $bloqAccount['id'], 
                 'balance' => $bloqAccount['balance'], 
                 'account_number' => $bloqAccount['account_number'], 
-                'bank_name' => $bloqAccount['preferred_bank'], 
+                'bank_name' => $bloqAccount['bank_name'], 
                 'currency' => 'NGN', 
                 'provider' => 'bloq'
              ]);
@@ -102,10 +102,6 @@ class BloqController extends Controller
              if($bloq){
                 return back()->with('success', 'Account Setup Completed');
              }
-    
-
-                 
-
         }
         
         // $bvnPayload = [
@@ -115,13 +111,5 @@ class BloqController extends Controller
         //     "redirect_url"=> "https://example-url.company.com"
         // ];
         // return bvnVerification($bvnPayload);
-
-       
-
-
-
-        
-
-        return 'setupAccount';
     }
 }

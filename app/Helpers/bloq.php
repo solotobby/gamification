@@ -17,18 +17,18 @@ if (!function_exists('bloqCreateCustomer')) {
     }
 }
 
-if (!function_exists('bloqCreateAccount')) {
-    function bloqCreateAccount($payload)
+if (!function_exists('bloqCreateWallet')) {
+    function bloqCreateWallet($payload)
     {
         
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('BLOQ_SECRET_KEY')
-        ])->post(env('BLOQ_URL').'accounts', $payload)->throw();
+        ])->post(env('BLOQ_URL').'wallets', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
-        
+
     }
 }
 
