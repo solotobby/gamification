@@ -227,6 +227,10 @@ Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChr
 //Flutterwave Top up
 Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
 
+//Bloq
+Route::get('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccount']);
+Route::post('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccountProcess']);
+
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
