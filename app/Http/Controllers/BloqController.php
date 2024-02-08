@@ -25,7 +25,7 @@ class BloqController extends Controller
         //issue card
 
         $request->validate([
-            'bvn' => ['required', 'numeric', 'digits:12'],
+            'bvn' => ['required', 'numeric', 'digits:11'],
             'phone' => ['required', 'numeric', 'digits:11'],
             'picture' => ['required','image', 'mimes:png,jpeg,jpg'],
         ]);
