@@ -3,6 +3,7 @@
 use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
+use App\Mail\UpgradeUser;
 use App\Models\AccountInformation;
 use App\Models\Banner;
 use App\Models\BannerImpression;
@@ -13,7 +14,9 @@ use App\Models\Notification;
 use App\Models\PaymentTransaction;
 use App\Models\Preference;
 use App\Models\Profile;
+use App\Models\Referral;
 use App\Models\Settings;
+use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\VirtualAccount;
 use App\Models\Wallet;
@@ -945,6 +948,68 @@ if(!function_exists('currentLocation')){
         }
         $location = Location::get($ip);
         return $location->countryName;
+    }
+
+}
+
+if(!function_exists('userDollaUpgrade')){
+    function userDollaUpgrade($user){ 
+
+        
+            $getUser = User::where('id', $user->id)->first();    
+            $getUser->is_verified = 1;
+            $getUser->save();
+            
+            $usd_Verified =  Usdverified::create(['user_id'=> $getUser->id]);
+
+            $ref = time();
+
+           $tx = PaymentTransaction::create([
+                'user_id' => $getUser->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => 5,
+                'status' => 'successful',
+                'currency' => 'USD',
+                'channel' => 'paypal',
+                'type' => 'upgrade_payment',
+                'tx_type' => 'Debit',
+                'description' => 'Ugrade Payment - USD'
+            ]);
+            
+            $referee = Referral::where('user_id',  $getUser->id)->first();
+            if($referee){
+
+                $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                $wallet->usd_balance += 1.5;
+                $wallet->save();
+
+                $usd_Verified->referral_id = $referee->referee_id;
+                $usd_Verified->is_paid = true;
+                $usd_Verified->amount = 1.5;
+                $usd_Verified->save();
+
+                ///Transactions
+                PaymentTransaction::create([
+                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => 1.5,
+                    'status' => 'successful',
+                    'currency' => 'USD',
+                    'channel' => 'paystack',
+                    'type' => 'usd_referer_bonus',
+                    'tx_type' => 'Credit',
+                    'description' => 'USD Referral Bonus from '.$getUser->name
+                ]);
+            }
+            systemNotification($getUser, 'success', 'User Verification',  $getUser->name.' was verified');
+            $name = SystemActivities::getInitials($getUser->name);
+            SystemActivities::activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
+             
+            return [$usd_Verified, $getUser, $tx];
+            
+
     }
 
 }

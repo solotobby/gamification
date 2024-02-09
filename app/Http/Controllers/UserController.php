@@ -202,8 +202,25 @@ class UserController extends Controller
             PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
             return redirect($url);
         }else{
+            $checkWalletBalance = checkWalletBalance(auth()->user(), 'Dollar', 5);
+            if($checkWalletBalance){
+                $debitWallet = debitWallet(auth()->user(), 'Dollar', 5);
+                if($debitWallet){
+                    $upgrade = userDollaUpgrade(auth()->user());
+                    if($upgrade){
+                        Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
+                        return back()->with('success', 'Upgrade Successful');
+                    }
+                }
+               
+            }else{
+                return back()->with('error', 'You do not have enough funds in your dollar wallet');
+            }
+           
+            
 
-            return redirect('https://flutterwave.com/pay/topuponfreebyz');
+            // return redirect('https://flutterwave.com/pay/topuponfreebyz');
+            
             // $percent = 5/100 * 2;
             // $am = 5 + $percent + 1;
            

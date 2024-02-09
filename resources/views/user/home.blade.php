@@ -69,12 +69,7 @@
         @endif
       </div>
       
-        <a href="{{ url('setup/account') }}" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
-              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Setup Card
-        </a>
-        {{-- <button type="button" class="btn btn-primary btn-sm btn-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modal-default-popout">
-          <i class="fa fa-fw fa-share opacity-50 me-1"></i> Setup Card
-        </button> --}}
+       
 
    </div>
 
@@ -122,7 +117,10 @@
                       @endif
 
                   @else
-                        <span class="form-control form-control-alt">https://flutterwave.com/pay/topuponfreebyz</span>   
+                  <span class="form-control form-control-alt">
+                    <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm"> Click Here to Fund Wallet</a>
+                  </span>
+                        {{-- <span class="form-control form-control-alt">https://flutterwave.com/pay/topuponfreebyz</span>    --}}
                   @endif
                 </div>
 
