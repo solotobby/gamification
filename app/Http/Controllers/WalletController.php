@@ -184,7 +184,7 @@ class WalletController extends Controller
                 'user_id' => auth()->user()->id,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => $percent,
+                'amount' => $amount,
                 'status' => 'successful',
                 'currency' => 'USD',
                 'channel' => 'FLUTTERWAVE',
