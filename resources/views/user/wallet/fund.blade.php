@@ -85,7 +85,7 @@
                 <span class="input-group-text">
                   &#8358;
                 </span>
-                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                 <span class="input-group-text">.00</span>
               </div>
 

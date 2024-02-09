@@ -186,8 +186,14 @@ class PaystackHelpers{
         return json_decode($res->getBody()->getContents(), true);
     }
 
-    public static function initiateFlutterwavePayment(){
-        return 'flutterwave';
+    public static function initiateFlutterwavePayment($payload){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('hhttps://api.flutterwave.com/v3/payments', $payload)->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
     }
 
     ///system functions 

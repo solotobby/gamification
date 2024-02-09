@@ -153,7 +153,52 @@ class WalletController extends Controller
         
         }else{
 
-            return redirect('https://flutterwave.com/pay/topuponfreebyz');
+
+            $percent = 5/100 * $request->balance;
+            $amount = $request->balance + $percent + 0.4;
+            $ref = time();
+                $payload = [
+                'tx_ref' => $ref,
+                'amount'=> $amount,
+                'currency'=> "USD",
+                'redirect_url'=> url('flutterwave/wallet/top'),
+                'meta'=> [
+                    'consumer_id' => auth()->user()->id,
+                    'consumer_mac'=> ''
+                ],
+                'customer'=> [
+                    'email'=> auth()->user()->email,
+                    'phonenumber'=> auth()->user()->phone,
+                    'name'=> auth()->user()->name,
+                ],
+                'customizations'=>[
+                    'title'=> "Wallet Top Up",
+                    // 'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
+                ] 
+            ];
+            $url = flutterwavePaymentInitiation($payload)['data']['link'];
+
+            // $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+             //Admin Transaction Tablw
+             PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $percent,
+                'status' => 'successful',
+                'currency' => 'USD',
+                'channel' => 'FLUTTERWAVE',
+                'type' => 'wallet_topup',
+                'description' => 'Wallet Top Up',
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+
+            //PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Credit', 'Payment_Initiation', 'regular');
+            
+            return redirect($url);
+
+           // return redirect('https://flutterwave.com/pay/topuponfreebyz');
             // $percent = 5/100 * $request->balance;
             // $am = $request->balance + $percent + 1;
             //  $result = paypalPayment($am, '/paypal/return');
@@ -269,9 +314,10 @@ class WalletController extends Controller
         if($res['status'] == 'success'){
             $ver = PaystackHelpers::paymentUpdate($ref, 'successful');
 
-            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            $wallet->balance += $ver->amount;
-            $wallet->save();
+            // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+            // $wallet->balance += $res['data']['amount_settled'];//->amount;
+            // $wallet->save();
+            creditWallet(auth()->user(), 'Dollar', $res['data']['amount_settled']);
             
             $name = SystemActivities::getInitials(auth()->user()->name);
             SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
