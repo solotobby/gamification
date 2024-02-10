@@ -403,6 +403,7 @@ class AdminController extends Controller
         
         if(auth()->user()->hasRole('admin')){
 
+            
             $getUser = User::where('id', $id)->first();
             $getUser->is_verified = 1;
             $getUser->save();
