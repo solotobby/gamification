@@ -153,6 +153,11 @@ class WalletController extends Controller
         
         }else{
 
+            $curLocation = currentLocation();
+            
+            if($curLocation == 'Nigeria'){
+                return back()->with('error', 'You are not allowed to use this feature. Kindly top up with your Virtual Account.');
+            }
 
             $percent = 5/100 * $request->balance;
             $amount = $request->balance + $percent + 0.4;
