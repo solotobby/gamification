@@ -54,7 +54,7 @@
             <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
             <br> Xmas Count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>
-            <br> Total Jobs Average - {{ $av_count }}
+            <br> Total Jobs Available - {{ $av_count }}
             <br> Total Active Virtual Account - {{ totalVirtualAccount() }} 
             <br> Location - {{ currentLocation() }}
         </p>

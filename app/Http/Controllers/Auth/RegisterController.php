@@ -54,7 +54,18 @@ class RegisterController extends Controller
     }
 
     public function registerUser(Request $request){
-       
+       $curLocation = currentLocation();
+       if($curLocation == 'Nigeria'){
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
+            'source' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'numeric', 'digits:11', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+       }else{
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -64,6 +75,8 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+       }
+     
 
         $user = $this->createUser($request);
         if($user){

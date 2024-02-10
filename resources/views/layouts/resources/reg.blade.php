@@ -33,7 +33,14 @@
 ?>
 <div class="col-md-12 form-group">
     <label>Phone Number</label>
+    <?php 
+     $curLocation = currentLocation();
+    ?>
+    @if($curLocation == 'Nigeria')
     <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="08054334321" value="{{old('phone')}}" required>
+    @else
+    <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="Enter Phone number" value="{{old('phone')}}" required>
+    @endif
     {{-- <input type="tel" name="phone_number[full]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone')}}" required size="100%"  /> --}}
     @error('phone_number')
         <span class="invalid-feedback" role="alert">
