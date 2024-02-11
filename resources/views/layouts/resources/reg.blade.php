@@ -37,7 +37,7 @@
      $curLocation = currentLocation();
     ?>
     @if($curLocation == 'Nigeria')
-    <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="08054334321" value="{{old('phone')}}" required>
+    <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="08070000000" value="{{old('phone')}}" required>
     @else
     <input type="text" name="phone" id="phone_numbers" class="form-control" placeholder="Enter Phone number" value="{{old('phone')}}" required>
     @endif

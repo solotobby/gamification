@@ -190,7 +190,7 @@ class WalletController extends Controller
                 'campaign_id' => '1',
                 'reference' => $ref,
                 'amount' => $amount,
-                'status' => 'successful',
+                'status' => 'unsuccessful',
                 'currency' => 'USD',
                 'channel' => 'FLUTTERWAVE',
                 'type' => 'wallet_topup',

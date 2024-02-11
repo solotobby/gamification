@@ -90,3 +90,18 @@ use Illuminate\Support\Facades\Http;
 //      }
 
 // }
+
+if(!function_exists('brailRates')){
+    function brailRates(){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('BRAILS_API_KEY')
+        ])->get(env('BRAILS_BASE_URL').'wallets/payout/rates');
+        return json_decode($res->getBody()->getContents(), true);
+     }
+
+}
+
+
+https://sandboxapi.onbrails.com/api/v1/wallets/payout/rates

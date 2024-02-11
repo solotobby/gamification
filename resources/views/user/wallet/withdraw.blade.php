@@ -59,11 +59,19 @@
                       <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="2500" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                       <span class="input-group-text">.00</span>
                   @else
-                      <span class="input-group-text">
-                        $
-                      </span>
-                      <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
-                      <span class="input-group-text">.00</span>
+
+                 
+                    <span class="input-group-text">
+                      $
+                    </span>
+                    <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                    <span class="input-group-text">.00</span>
+              
+
+                    
+                       
+                        
+                    
                   @endif
                 </div>
               </div>
@@ -83,23 +91,69 @@
                     </div>
                   </div>
               @else
-                  <div class="mb-4">
-                    <div class="input-group">
-                      <span class="input-group-text">
-                        <i class="fa fa-envelope"></i>
-                      </span>
-                      <input type="email" class="form-control @error('paypal_email') is-invalid @enderror" id="reminder-credential" name="paypal_email" value="{{ old('paypal_email') }}" placeholder="Enter Paypal Email Address" required>
-                      {{-- <span class="input-group-text">.00</span> --}}
-                    
-                      {{-- <select name="type" class="form-control" required>
-                        <option value="">Select An Option</option>
-                        <option value="local_withdrawal">Local Withdrawal</option>
-                        <option value="paypal_withdrawal">Paypal Withdrawal</option>
-                      </select> --}}
-                      
-                    </div>
-                  </div>
-              @endif
+              {{-- <div class="mb-4">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa fa-grip-vertical"></i>
+                  </span>
+                
+                  <select name="country" id="country-list" class="form-control" required>
+                    <option value="">Select Receipient Country</option>
+                    <option value="GH">Ghana</option>
+                    <option value="KE">Kenya</option>
+                    <option value="UG">Uganda</option>
+                    <option value="TZ">Tanzania</option>
+                    <option value="RW">Rwanda</option>
+                  </select>
+                  
+                </div>
+              </div> --}}
+
+              {{-- <div class="mb-4">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa fa-grip-vertical"></i>
+                  </span>
+                
+                  <select name="bank" id="bank-list" class="form-control" required>
+                      <option value="">Select Bank</option>
+                  </select>
+                  
+                </div>
+              </div> --}}
+
+              {{-- <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fa fa-phone"></i>
+                    </span>
+                    <input type="text" class="form-control @error('mobile') is-invalid @enderror" id="reminder-credential"  name="mobile" value="{{ old('phone') }}" placeholder="Enter Mobile number" required>
+                   
+                </div>
+              </div> --}}
+
+
+              {{-- <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text">
+                      $
+                    </span>
+                    <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                    <span class="input-group-text">.00</span>
+                </div>
+              </div> --}}
+              <div class="mb-4">
+                <div class="input-group">
+              <span class="input-group-text">
+                <i class="fa fa-envelope"></i>
+              </span>
+              <input type="email" class="form-control @error('paypal_email') is-invalid @enderror" id="reminder-credential" name="paypal_email" value="{{ old('paypal_email') }}" placeholder="Enter Paypal Email Address" required>
+                </div>
+              </div>
+
+
+             
+          @endif
               <div class="text-center mb-4">
                
                 @if(auth()->user()->is_verified == true)
@@ -131,4 +185,36 @@
 
  <!-- Page JS Code -->
  <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
+
+ <script>
+  $(document).ready(function(){ 
+    
+
+    $('#country-list').change(function(){
+      var countryCode = this.value;
+     
+      // api/brail/rates
+      $.ajax({
+            url: '{{ url("api/flutterwave/list/banks/") }}/' + encodeURI(countryCode),
+            type: "GET",
+            data: {
+                //  country_id: country_id,
+                _token: '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success: function(result) {
+               
+                // console.log(result.data)
+
+                $('#bank-list').html('<option value="">Select Bank</option>');
+                $.each(result.data, function(key, value) {
+                    $("#bank-list").append('<option value="' + value.code + '">' + value.name + '</option>');  
+                });
+            }
+      });
+
+     });
+  });
+  </script>
+
 @endsection
