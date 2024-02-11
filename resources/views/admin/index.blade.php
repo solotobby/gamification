@@ -57,9 +57,9 @@
             <br> Total Jobs Available - {{ $av_count }}
             <br> Total Active Virtual Account - {{ totalVirtualAccount() }} 
 
-              @if(env('APP_ENV') == 'production'){
+              @if(env('APP_ENV') == 'production')
                   <br> Location - {{ currentLocation() }}
-              }
+              @endif
             
         </p>
       </div>

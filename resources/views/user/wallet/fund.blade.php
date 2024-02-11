@@ -11,12 +11,12 @@
         @csrf
       <!-- Text -->
       <div class="mb-2 text-center content-heading mb-4">
-        {{-- <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p> --}}
+        <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
           @if(auth()->user()->wallet->base_currency == "Naira")
-          &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+              &#8358;{{ number_format(auth()->user()->wallet->balance) }}
           @else
-          ${{ number_format(auth()->user()->wallet->usd_balance) }}
+              ${{ number_format(auth()->user()->wallet->usd_balance) }}
           @endif
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
@@ -97,6 +97,7 @@
 
 
               @else
+
               <div class="input-group">
                 <span class="input-group-text">
                   $
@@ -129,6 +130,8 @@
  <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
  <!-- Page JS Code -->
  <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
-@endsection
+
+
+ @endsection
 
 

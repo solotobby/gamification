@@ -16,6 +16,21 @@ if (!function_exists('listBanks')) {
     }
 }
 
+if (!function_exists('flutterwaveListBanks')) {
+    function flutterwaveListBanks($countryCode)
+    {
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/banks/'.$countryCode)->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+    
+    }
+}
+
+
 if (!function_exists('createCard')) {
     function createCard($payload)
     {

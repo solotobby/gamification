@@ -231,6 +231,9 @@ Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::cl
 Route::get('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccount']);
 Route::post('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccountProcess']);
 
+Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
+Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
+
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
