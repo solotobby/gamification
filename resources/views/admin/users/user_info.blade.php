@@ -15,7 +15,7 @@
           Referral Code: {{@$info->referral_code}} <br>
           Email: {{$info->email}} <br>
           Naira Balance: &#8358;{{number_format(@$info->wallet->balance,2)}} <br>
-          USD Balance: ${{number_format(@$info->wallet->usd_balance,2)}} <br>
+          USD Balance: ${{number_format(@$info->wallet->usd_balance,3)}} <br>
           Naira Verified: {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}}<br>
           USD Verified: {{ $info->USD_verified == true ? 'Verified' : 'Unverified'}} <br>
           Phone Number: {{ $info->phone }}<br>
