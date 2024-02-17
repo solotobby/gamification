@@ -156,14 +156,19 @@ class SystemActivities{
             return false;
         }
        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
-       $campaign->impressions += 1;
-       $campaign->save();
-
-       $data = $campaign;
-       $data['current_user_id'] = auth()->user()->id;
-       $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
-       $data['attempts'] = $campaign->completed()->count();
-       return $data;
+       if($campaign){
+            $campaign->impressions += 1;
+            $campaign->save();
+    
+            $data = $campaign;
+            $data['current_user_id'] = auth()->user()->id;
+            $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
+            $data['attempts'] = $campaign->completed()->count();
+            return $data;
+       }else{
+            return false;
+       }
+      
         //$completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
     }
 

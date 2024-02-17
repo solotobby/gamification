@@ -25,7 +25,7 @@
                         @if(auth()->user()->wallet->base_currency == "Naira")
                             &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
                         @else
-                            ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
+                            ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
                         @endif
                      
                     </p>

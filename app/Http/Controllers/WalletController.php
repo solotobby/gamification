@@ -192,7 +192,7 @@ class WalletController extends Controller
                 'amount' => $amount,
                 'status' => 'unsuccessful',
                 'currency' => 'USD',
-                'channel' => 'FLUTTERWAVE',
+                'channel' => 'flutterwave',
                 'type' => 'wallet_topup',
                 'description' => 'Wallet Top Up',
                 'tx_type' => 'Credit',
@@ -357,6 +357,8 @@ class WalletController extends Controller
                 return redirect('profile')->with('info', 'Please scroll down to Bank Account Details to update your information');
             }
         }else{
+
+            return $request;
             
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             if($wallet->usd_balance < $request->balance)

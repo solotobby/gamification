@@ -33,7 +33,7 @@ class CurrencyConverterController extends Controller
                 return back()->with('error', 'Insufficient fund');
             }
 
-            debitWallet(auth()->user(), 'Naira', $request->amount); //debit naira wallet
+            $debit = debitWallet(auth()->user(), 'Naira', $request->amount); //debit naira wallet
 
             PaymentTransaction::create([
                 'user_id' => auth()->user()->id,
@@ -49,21 +49,25 @@ class CurrencyConverterController extends Controller
                 'user_type' => 'regular'
             ]);
 
-            creditWallet(auth()->user(), 'Dollar', $request->usd); //credit usd wallet
+            if($debit){
+                creditWallet(auth()->user(), 'Dollar', $request->usd); //credit usd wallet
 
-            PaymentTransaction::create([
-                'user_id' => auth()->user()->id,
-                'campaign_id' => '1',
-                'reference' => time(),
-                'amount' => $request->usd,
-                'status' => 'successful',
-                'currency' => 'USD',
-                'channel' => 'currency_conversion',
-                'type' => 'naira_dollar_exchange',
-                'description' => 'Currency exchange - USD Credit',
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => time(),
+                    'amount' => $request->usd,
+                    'status' => 'successful',
+                    'currency' => 'USD',
+                    'channel' => 'currency_conversion',
+                    'type' => 'naira_dollar_exchange',
+                    'description' => 'Currency exchange - USD Credit',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+            }
+
+            
            
  
             return back()->with('success', 'Conversion Successful');
@@ -75,7 +79,7 @@ class CurrencyConverterController extends Controller
                 return back()->with('error', 'Insufficient fund');
             }
 
-            debitWallet(auth()->user(), 'Dollar', $request->usd); //debit dollar wallet
+            $debit = debitWallet(auth()->user(), 'Dollar', $request->usd); //debit dollar wallet
             PaymentTransaction::create([
                 'user_id' => auth()->user()->id,
                 'campaign_id' => '1',
@@ -90,20 +94,24 @@ class CurrencyConverterController extends Controller
                 'user_type' => 'regular'
             ]);
 
-            creditWallet(auth()->user(), 'Naira', $request->naira); //credit naira wallet
-            PaymentTransaction::create([
-                'user_id' => auth()->user()->id,
-                'campaign_id' => '1',
-                'reference' => time(),
-                'amount' => $request->naira,
-                'status' => 'successful',
-                'currency' => 'NGN',
-                'channel' => 'currency_conversion',
-                'type' => 'naira_dollar_exchange',
-                'description' => 'Currency exchange - Naira Credit',
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
+            if($debit){
+                creditWallet(auth()->user(), 'Naira', $request->naira); //credit naira wallet
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => time(),
+                    'amount' => $request->naira,
+                    'status' => 'successful',
+                    'currency' => 'NGN',
+                    'channel' => 'currency_conversion',
+                    'type' => 'naira_dollar_exchange',
+                    'description' => 'Currency exchange - Naira Credit',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+            }
+
+            
 
            return back()->with('success', 'Conversioin Successful');
         }

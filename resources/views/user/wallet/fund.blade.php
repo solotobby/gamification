@@ -14,9 +14,9 @@
         <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
           @if(auth()->user()->wallet->base_currency == "Naira")
-              &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+              &#8358;{{ number_format(auth()->user()->wallet->balance,3) }}
           @else
-              ${{ number_format(auth()->user()->wallet->usd_balance) }}
+              ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
           @endif
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
