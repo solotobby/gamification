@@ -16,9 +16,9 @@
           {{-- <p class="text-uppercase fw-bold fs-sm text-muted">Withdraw Funds</p> --}}
           <p class="link-fx fw-bold fs-1">
             @if(auth()->user()->wallet->base_currency == "Naira")
-          &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+          &#8358;{{ number_format(auth()->user()->wallet->balance,3) }}
           @else
-          ${{ number_format(auth()->user()->wallet->usd_balance) }}
+          ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
           @endif
             {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
           </p>
@@ -61,17 +61,13 @@
                   @else
 
                  
-                    <span class="input-group-text">
+                    {{-- <span class="input-group-text">
                       $
                     </span>
                     <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                     <span class="input-group-text">.00</span>
-              
+               --}}
 
-                    
-                       
-                        
-                    
                   @endif
                 </div>
               </div>
@@ -107,7 +103,7 @@
                   </select>
                   
                 </div>
-              </div> --}}
+              </div>  --}}
 
               {{-- <div class="mb-4">
                 <div class="input-group">
@@ -120,7 +116,7 @@
                   </select>
                   
                 </div>
-              </div> --}}
+              </div>  --}}
 
               {{-- <div class="mb-4">
                 <div class="input-group">
@@ -128,12 +124,11 @@
                       <i class="fa fa-phone"></i>
                     </span>
                     <input type="text" class="form-control @error('mobile') is-invalid @enderror" id="reminder-credential"  name="mobile" value="{{ old('phone') }}" placeholder="Enter Mobile number" required>
-                   
                 </div>
-              </div> --}}
+              </div>  --}}
 
 
-              {{-- <div class="mb-4">
+              <div class="mb-4">
                 <div class="input-group">
                     <span class="input-group-text">
                       $
@@ -141,7 +136,8 @@
                     <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="5" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                     <span class="input-group-text">.00</span>
                 </div>
-              </div> --}}
+              </div> 
+
               <div class="mb-4">
                 <div class="input-group">
               <span class="input-group-text">
@@ -154,6 +150,7 @@
 
              
           @endif
+
               <div class="text-center mb-4">
                
                 @if(auth()->user()->is_verified == true)

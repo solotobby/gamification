@@ -14,14 +14,14 @@ class WithdrawalController extends Controller
     public function listBanks($countryCode){
         if($countryCode == 'GH'){
             $data = [
-                ['code' => 'MTN', 'name' => 'MTN Mobile Money'],
-                ['code' => 'AIRTELTIGO', 'name' => 'AIRTELTIGO Mobile Money'],
-                ['code' => 'VODAFONE', 'name' => 'VODAFONE Mobile Money']
+                ['code' => 'MTN', 'name' => 'MTN Mobile Money', 'currency' => 'GHS'],
+                ['code' => 'AIRTELTIGO', 'name' => 'AIRTELTIGO Mobile Money', 'currency' => 'GHS'],
+                ['code' => 'VODAFONE', 'name' => 'VODAFONE Mobile Money', 'currency' => 'GHS']
             ];
         }elseif($countryCode == 'KE'){
             $data = [
-                ['code' => 'MPS', 'name' => 'M-Pesa'],
-                ['code' => 'MPX', 'name' => 'Airtel Kenya'], 
+                ['code' => 'MPS', 'name' => 'M-Pesa', 'currency' => 'KES'],
+                ['code' => 'MPX', 'name' => 'Airtel Kenya', 'currency' => 'KES'], 
             ];
         }else{
             $data = [
