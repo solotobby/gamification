@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaystackHelpers;
 use App\Models\PaymentTransaction;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,8 @@ class CurrencyConverterController extends Controller
     public function dollarNaira(){
         return dollar_naira();
     }
+
+   
 
     public function makeConversion(Request $request){
      
