@@ -1127,13 +1127,13 @@ if(!function_exists('userNairaUpgrade')){
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-           }
+        }
 
-           $name = SystemActivities::getInitials($user->name);
-           SystemActivities::activityLog($user, 'account_verification', $name .' account verification', 'regular');
-           
+        $name = SystemActivities::getInitials($user->name);
+        SystemActivities::activityLog($user, 'account_verification', $name .' account verification', 'regular');
+        
 
-           return $transaction;
+        return $transaction;
     }
 }
 
