@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\GeneralMail;
+use App\Mail\UpgradeUser;
 use App\Models\PaymentTransaction;
 use App\Models\Question;
 use App\Models\User;
@@ -43,6 +44,25 @@ class WebhookController extends Controller
                 }
 
                 //check wallet stat
+
+                if($user->is_verified == false){
+                    if($amount >= 1050){
+                        $debitWallet = debitWallet($user, 'Naira', 1050);
+                        
+                        if($debitWallet){
+                            
+                            $upgrdate = userNairaUpgrade($user);
+
+                            if($upgrdate){
+                                Mail::to($user->email)->send(new UpgradeUser($user));
+                            }
+                            
+                        }
+                    }
+                }
+                
+                
+              
                 
             }
             return response()->json(['status' => 'success'], 200);
