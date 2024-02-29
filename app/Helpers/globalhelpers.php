@@ -1031,7 +1031,7 @@ if(!function_exists('userNairaUpgrade')){
         $userInfo->is_verified = true;
         $userInfo->save();
 
-        PaymentTransaction::create([
+       $transaction =  PaymentTransaction::create([
             'user_id' => $user->id,
             'campaign_id' => 1,
             'reference' => $ref,
@@ -1064,7 +1064,7 @@ if(!function_exists('userNairaUpgrade')){
                 $description = 'Referer Bonus from '.$user->name;
                 // PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
 
-               $transaction = PaymentTransaction::create([
+               PaymentTransaction::create([
                     'user_id' => $referee->referee_id,
                     'campaign_id' => 1,
                     'reference' => $ref,
@@ -1127,13 +1127,13 @@ if(!function_exists('userNairaUpgrade')){
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-           }
+        }
 
-           $name = SystemActivities::getInitials($user->name);
-           SystemActivities::activityLog($user, 'account_verification', $name .' account verification', 'regular');
-           
+        $name = SystemActivities::getInitials($user->name);
+        SystemActivities::activityLog($user, 'account_verification', $name .' account verification', 'regular');
+        
 
-           return $transaction;
+        return $transaction;
     }
 }
 
