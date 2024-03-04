@@ -56,6 +56,9 @@
                             <option value="Chief Product Officer">Chief Product Officer</option>
                             <option value="Chief Satisfaction Officer">Customer Satisfaction Officer</option>
                             <option value="Quality Assurance Officer">Quality Assurance Officer</option>
+                            <option value="Front End Developer">Front End Developer</option>
+                            <option value="Back End Developer">Front End Developer</option>
+                            <option value="UI/UX Designer">UI/UX Designer</option>
                         </select>
                     </div>
                     {{-- <div class="mb-2">
