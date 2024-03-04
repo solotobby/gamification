@@ -6,7 +6,7 @@ function drawChart() {
 
   var options = {
     title: 'Age Distribution',
-    pieHole: 0.3,
+    pieHole: 0.4,
   };
 
   var chart = new google.visualization.PieChart(document.getElementById('age_distribution'));
