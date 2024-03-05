@@ -30,7 +30,7 @@
            Get Verified...
           </h2>
           <h3 class="fw-light text-muted push text-center">
-            If you get verified today you will get all the following at no extra cost.
+            If you get verified today, you will get all the following at no extra cost.
           </h3>
         </div>
         <div class="row py-3">
@@ -42,7 +42,7 @@
               Lifetime access to jobs
             </h4>
             <p class="mb-0 text-muted">
-              You will get unlimited access to available jobs including premium ones.  
+              You will get unlimited access to jobs above 10 Naira (for Naira wallet) and can earn in dollars (when you verify your dollar wallet). Dollar verification fee is $5 (to access dollar jobs)
             </p>
           </div>
           <div class="col-sm-6 col-md-6 mb-5">
@@ -50,10 +50,10 @@
               <i class="fa fa-2x fa-users text-danger"></i>
             </div>
             <h4 class="h5 mb-2">
-              Hire Workers
+             Earn Referral Bonus
             </h4>
             <p class="mb-0 text-muted">
-              You will have unlimited access to hire workers to promote jobs.
+              You can invite your friends using your referral link and earn N500 (or $1.5) on each verified friend. Some users have cashed out more than N100,000 at a time by just referring friends only with extra income on tasks completed.
             </p>
           </div>
         </div>
@@ -66,8 +66,8 @@
               Unlimited Withdrawals
             </h4>
             <p class="mb-0 text-muted">
-              Access to withdraw all your earnings and other juicy offers coming up shortly. 
-              You'll earn &#8358;25,000 on the friends you refer and we'll reward you with &#8358;5,000 extra.
+              You get access to unlimited withdrawals paid to your local or paypal account, every Friday. 
+              We put smiles on ou users' faces every friday. You'll earn &#8358;25,000 on the friends you refer and we'll reward you with &#8358;5,000 extra.
             </p>
           </div>
           <div class="col-sm-6 col-md-6 mb-5">
@@ -83,16 +83,17 @@
               {{-- You can do Manual Funding by sending the Fee to our account. We will activate/verify your account from our back end. 
               Kindly attach a receipt of payment to us in <b>Talk to Us</b> panel of your dashboard. --}}
               <br>
-              <b>
-                {{-- Account Details: 1014763749 - DOMINAHL TECH SERVICES (Zenith Bank) --}}
-                {{-- <i>(Please add your Freebyz name, email address and date of transaction in the description while sending payment proof)</i> --}}
-              </b>
-              {{-- <b>ACCOUNT DETAILS: 4600066074 - DOMINAHL TECH SERVICES (VFD Microfinance Bank) 
-                <i>(Please add your persnal name example: Verification from Samuel Mark)</i>
-              </b> --}}
+             
             </p>
           </div>
         </div>
+
+        <p>
+          Apart from  N500 bonus you get on each friend you refer, We have special referral bonuses in 3 levels:
+          <br> 1. When you get 50+ verified users in a month, you earn over N25k plus extra N5000 from Freebyz
+          <br> 2. When you get 20+ verified users in a month, you earn over N10k plus extra N1500 from Freebyz
+          <br> 3. When you get 10+ verified users in a month, you earn over earn N5k plus extra N500 from Freebyz
+        </p>
       </div>
     </div>
     <!-- END Special Offer -->
@@ -102,12 +103,17 @@
       <div class="py-5">
         
         <h2 class="mb-3 text-center">
-          Why Upgrade?
+          How to get Verified
         </h2>
 
         <h3 class="h4 fw-light text-muted push text-center">
-          Getting verified can help you make more money!
+          Credit your account below with &#8358;1050 for automatic verification of Naira Wallet
         </h3>
+        <p>
+          
+          Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
+          
+        </p>
 
         <span class="m-2 d-inline-block">
           @if(auth()->user()->wallet->base_currency == 'Naira')

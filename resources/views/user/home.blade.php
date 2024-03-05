@@ -281,7 +281,7 @@
 
     @elseif(auth()->user()->is_verified == 0)
     
-      @include('layouts.resources.unverified')
+      {{-- @include('layouts.resources.unverified') --}}
 
     {{-- @else
     
