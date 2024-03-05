@@ -58,6 +58,7 @@
               </div>
               
               @if(auth()->user()->virtualAccount)
+              Account Name: {{ auth()->user()->virtualAccount->account_name }} <br>
               Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
          
               Account Number:  {{ auth()->user()->virtualAccount->account_number }}
