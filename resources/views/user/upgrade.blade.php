@@ -109,11 +109,13 @@
           <h3 class="h4 fw-light text-muted push text-center">
             Credit your account below with &#8358;1050 for automatic verification of Naira Wallet
           </h3>
-          <p>
-            
-            Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
-            
-          </p>
+          @if(auth()->user()->virtualAccount)
+              <p>
+                Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
+              </p>
+          @else
+              <a href="{{ url('reactivate/virtual/account/'.auth()->user()->id) }}" class="btn btn-success btn-sm">Activate Your Freebyz Personal Account</a>
+          @endif
         @endif
 
         <span class="m-2 d-inline-block">
