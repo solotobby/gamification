@@ -195,8 +195,9 @@ class CampaignController extends Controller
             'description' => 'required|string',
             'proof' => 'required|string',
             'post_title' => 'required|string',
-            'number_of_staff' => 'required',
-            'campaign_amount' => 'required'
+            'number_of_staff' => 'required|numeric',
+            'campaign_amount' => 'required|numeric',
+            'validate' => 'required'
         ]);
 
         $est_amount = $request->number_of_staff * $request->campaign_amount;
