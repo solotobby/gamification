@@ -413,6 +413,10 @@
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
                                           <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
+                                          <div class="mb-2">
+                                            <input type="checkbox" name="validate" required class="">
+                                            <span><small> I agree that I will wait for a maximum of 24hrs for this tasks to be approved by the advertiser. </small></span>
+                                        </div>
                                           @if(auth()->user()->is_verified)
                                           <div class="row mb-4 mt-4">
                                             <div class="col-lg-6">
