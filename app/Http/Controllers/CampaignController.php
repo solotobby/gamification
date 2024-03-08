@@ -594,89 +594,29 @@ class CampaignController extends Controller
         $campaign->save();
     }
 
-    public function approveCampaign($id)
-    {
-       $approve = CampaignWorker::where('id', $id)->first();
-       if($approve->reason != null){
-            return back()->with('error', 'Campaign has been attended to');
-       }
-            $approve->status = 'Approved';
-            $approve->reason = 'Approved by User';
-            $approve->save();
-
-            $currency = '';
-            $channel = '';
-       if($approve->currency == 'NGN'){
-            $currency = 'NGN';
-            $channel = 'paystack';
-            $wallet = Wallet::where('user_id', $approve->user_id)->first();
-            $wallet->balance += $approve->amount;
-            $wallet->save();
-       }else{
-            $currency = 'NGN';
-            $channel = 'paystack';
-            $wallet = Wallet::where('user_id', $approve->user_id)->first();
-            $wallet->usd_balance += $approve->amount;
-            $wallet->save();
-       }
-       
-       $ref = time();
-       PaymentTransaction::create([
-            'user_id' => $approve->user_id,
-            'campaign_id' => $approve->campaign->id,
-            'reference' => $ref,
-            'amount' => $approve->amount,
-            'status' => 'successful',
-            'currency' => $currency,
-            'channel' => $channel,
-            'type' => 'campaign_payment',
-            'description' => 'Campaign Payment for '.$approve->campaign->post_title,
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
-
-       $subject = 'Job Approved';
-       $status = 'Approved';
-       Mail::to($approve->user->email)->send(new ApproveCampaign($approve, $subject, $status));
-
-       return back()->with('success', 'Campaign Approve Successfully');
-
-    }
-
-    public function denyCampaign($id)
-    {
-        $deny = CampaignWorker::where('id', $id)->first();
-        $deny->status = 'Denied';
-        $deny->reason = 'Denied by User';
-        $deny->save();
-        $subject = 'Job Denied';
-        $status = 'Denied';
-        Mail::to($deny->user->email)->send(new ApproveCampaign($deny, $subject, $status));
-        return back()->with('error', 'Campaign Denied Successfully');
-    }
 
     public function approvedCampaigns()
     {
         $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
-        $approved = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Approved')->orderby('created_at', 'ASC')->get();
+        $approved = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Approved')->orderby('created_at', 'ASC')->paginate(10);
         return view('user.campaign.approved', ['lists' => $approved]);
     }
     public function deniedCampaigns()
     { 
         $mycampaigns = Campaign::where('user_id', auth()->user()->id)->pluck('id')->toArray();
-        $denied = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Denied')->orderby('created_at', 'ASC')->get();
+        $denied = CampaignWorker::whereIn('campaign_id', $mycampaigns)->where('status', 'Denied')->orderby('created_at', 'ASC')->paginate(10);
         return view('user.campaign.denied', ['lists' => $denied]);
     }
 
     public function completedJobs()
     {
-        $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->get();
+        $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->paginate(10);
         return view('user.campaign.completed_jobs', ['lists' => $completedJobs]);
     }
 
     public function disputedJobs()
     {
-        $disputedJobs = CampaignWorker::where('user_id', auth()->user()->id)->where('is_dispute', true)->orderBy('created_at', 'ASC')->get();
+        $disputedJobs = CampaignWorker::where('user_id', auth()->user()->id)->where('is_dispute', true)->orderBy('created_at', 'ASC')->paginate(10);
         return view('user.campaign.disputed_jobs', ['lists' => $disputedJobs]);
     }
 

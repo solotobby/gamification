@@ -488,13 +488,13 @@ class UserController extends Controller
 
     public function transactions()
     {
-        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('status', 'successful')->where('user_type', 'regular')->orderBy('created_at', 'DESC')->get();
+        $list = PaymentTransaction::where('user_id', auth()->user()->id)->where('status', 'successful')->where('user_type', 'regular')->orderBy('created_at', 'DESC')->paginate(10);
         return view('user.transactions', ['lists' => $list]);
     }
 
     public function withdrawal_requests()
     {
-        $list = Withrawal::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        $list = Withrawal::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(10);
         return view('user.wallet.withdrawal_requests', ['lists' => $list]);
     }
 

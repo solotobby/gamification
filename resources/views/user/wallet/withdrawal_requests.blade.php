@@ -71,6 +71,9 @@
               
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $lists->links('pagination::bootstrap-4') !!}
+          </div>
         </div>
       </div>
     </div>
