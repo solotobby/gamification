@@ -109,6 +109,7 @@ class HomeController extends Controller
 
     public function adminHome(Request $request)
     {
+        $retention = Analytics::retentionRate();
         // return PaystackHelpers::getPosts();
         // $campaigns = Campaign::where('status', 'Live')->get();
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
@@ -123,6 +124,8 @@ class HomeController extends Controller
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         $available_jobsCount = count(SystemActivities::availableJobs());
+
+
 
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -170,7 +173,8 @@ class HomeController extends Controller
             ->with('channel', json_encode($registrationChannel))
             ->with('revenue', json_encode($revenueChannel))
             ->with('country', json_encode($countryDistribution))
-            ->with('age', json_encode($ageDistribution));
+            ->with('age', json_encode($ageDistribution))
+            ->with('retention', json_encode($retention));
 
     }
 

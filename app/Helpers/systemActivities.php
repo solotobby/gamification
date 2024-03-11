@@ -48,6 +48,8 @@ class SystemActivities{
 
     }
 
+    
+
     public static function getInitials($name){
         $names = explode(' ', $name);
         $initials = '';
