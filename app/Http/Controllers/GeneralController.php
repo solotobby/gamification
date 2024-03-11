@@ -261,6 +261,7 @@ class GeneralController extends Controller
                     $ref = time();
                     $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
                     
+                    return $url;
                     // $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
                     
                     transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
@@ -342,7 +343,7 @@ class GeneralController extends Controller
                
         ]);
 
-        return json_decode($res->getBody()->getContents(), true)['data']['authorization_url'];
+        return json_decode($res->getBody()->getContents(), true)['data'];
        
     }
 
