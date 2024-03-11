@@ -16,25 +16,41 @@ class Analytics{
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
-        // $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
-        // $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+        $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+        $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
 
-       $count = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
-                ->whereIn('activity_type', ['login', 'account_creation'])
-                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                ->groupBy('activity_type')
-                ->get()
-                ->pluck('count', 'activity_type')
-                ->toArray();
+       $lastMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
+        ->whereIn('activity_type', ['login', 'account_creation'])
+        ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+        ->groupBy('activity_type')
+        ->get()
+        ->pluck('count', 'activity_type')
+        ->toArray();
 
-                $total = $count['login'] + $count['account_creation'];
-                $perLogin = ($count['login'] / $total) * 100;
-                // $data['reg'] = $count['account_creation'];
-                // $data['login'] = $count['login'];
-                // $data['total'] = $total;
-                $data['perLogin'] = number_format($perLogin);
+        $lastMonthTotal = $lastMonth['login'] + $lastMonth['account_creation'];
+        $lastperLogin = ($lastMonth['login'] / $lastMonthTotal) * 100;
+       
+        $lastMonthdata['perLogin'] = $lastperLogin;
 
-                return $perLogin;
+
+        $currentMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
+        ->whereIn('activity_type', ['login', 'account_creation'])
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('activity_type')
+        ->get()
+        ->pluck('count', 'activity_type')
+        ->toArray();
+
+        $currentMonthTotal = $currentMonth['login'] + $currentMonth['account_creation'];
+        $currentperLogin = ($currentMonth['login'] / $currentMonthTotal) * 100;
+        $currentMonthdata['perLogin'] = $currentperLogin;
+   
+
+        // return [$lastperLogin, $currentperLogin];
+
+        return  $currentperLogin - $lastperLogin;
+        
+
     }            
 
     public static function dailyVisit($type){
