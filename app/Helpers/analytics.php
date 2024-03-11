@@ -11,9 +11,31 @@ use Carbon\Carbon;
 
 class Analytics{
 
-    public static function index(){
-        return 'analytics';
-    }
+    public static function retentionRate(){
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        // $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+        // $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+
+       $count = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
+                ->whereIn('activity_type', ['login', 'account_creation'])
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->groupBy('activity_type')
+                ->get()
+                ->pluck('count', 'activity_type')
+                ->toArray();
+
+                $total = $count['login'] + $count['account_creation'];
+                $perLogin = ($count['login'] / $total) * 100;
+                // $data['reg'] = $count['account_creation'];
+                // $data['login'] = $count['login'];
+                // $data['total'] = $total;
+                $data['perLogin'] = number_format($perLogin);
+
+                return $perLogin;
+    }            
 
     public static function dailyVisit($type){
 
@@ -30,11 +52,7 @@ class Analytics{
     }
 
     public static function dailyActivities(){
-        // $data = User::select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(*) as total_reg'), 
-        // \DB::raw('SUM(is_verified) as verified'))
-        // ->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
-        // ->orderBy('date', 'ASC')
-        // ->get();
+        
         
        $data= ActivityLog::select(
             \DB::raw('DATE(created_at) as date'),
