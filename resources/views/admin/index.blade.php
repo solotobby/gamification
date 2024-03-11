@@ -56,7 +56,7 @@
             <br> Xmas Count - <a class="fw-medium" href="javascript:void(0)">{{number_format($xmas,2)}}</a>
             <br> Total Jobs Available - {{ $av_count }}
             <br> Total Active Virtual Account - {{ totalVirtualAccount() }} 
-            <br> Retention Rate - {{ number_format($retention) }}%
+            <br> Retention Rate - {{ number_format($retention) }}% 
 
               @if(env('APP_ENV') == 'production')
                   <br> Location - {{ currentLocation() }}
