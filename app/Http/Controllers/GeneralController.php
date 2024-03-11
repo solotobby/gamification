@@ -204,6 +204,7 @@ class GeneralController extends Controller
                 'gender' => $data['gender'][$i]
             ];
         }
+
         $beneficiaryCount = count($formattedData);
         $user = User::where('referral_code', $request->referral_code)->first();
 
@@ -223,13 +224,15 @@ class GeneralController extends Controller
                     'dateOfBirth' => $formattedData[0]['dateOfBirth']
                 ];
 
-                $createSubscription = createWellaHealthScription($payload);
+                
+
+               $createSubscription = createWellaHealthScription($payload);
 
                 if($createSubscription){
                     
                     $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
                     $ref = time();
-                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
+                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref)['authorization_url'];
                     transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
                 
                     // PaystackHelpers::paymentTrasanction($user->id, '1', $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'regular');
@@ -254,14 +257,17 @@ class GeneralController extends Controller
                     'dateOfBirth' => $formattedData[0]['dateOfBirth'], 
                     'beneficiaryList' => $filteredData
                 ];
+
+                
                 $createSubscription = createWellaHealthScription($payload);
                 if($createSubscription){
                     // $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
-                   $response =  $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
-                    $ref = time();
-                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
+                 $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                   
+                   $ref = time();
+                   $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref)['authorization_url'];
                     
-                    return $url;
+          
                     // $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref);
                     
                     transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
@@ -325,7 +331,7 @@ class GeneralController extends Controller
 
     public function initiatePayment($email, $amount, $response, $ref){
 
-        return [$email, $amount, $response, $ref];
+       
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -341,7 +347,7 @@ class GeneralController extends Controller
                 "partnership_id"=> $response->id,
             ]
                
-        ]);
+        ])->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data'];
        
