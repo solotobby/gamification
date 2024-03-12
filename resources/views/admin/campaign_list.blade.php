@@ -27,7 +27,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Campaign List - {{ $campaigns->count() }}</h3>
+        <h3 class="block-title">Campaign List - {{ $campaigns->count() }}</h3> <small>Same list as what users can see</small>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -42,8 +42,8 @@
         @endif
 
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter">
-          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
+          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
                 <tr>
                     <th>#</th>
@@ -87,9 +87,9 @@
               
             </tbody>
           </table>
-          <div class="d-flex">
+          {{-- <div class="d-flex">
             {!! $campaigns->links('pagination::bootstrap-4') !!}
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>

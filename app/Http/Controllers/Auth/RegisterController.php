@@ -87,44 +87,6 @@ class RegisterController extends Controller
         }
        
 
-    //    $payload = [
-    //         'first_name' =>  $request->first_name,
-    //         'last_name' =>  $request->last_name,
-    //         'password' => $request->password,
-    //         'password_confirmation' => $request->password,
-    //         'email' => $request->email,
-    //         'username' => Str::random(7),
-    //         'phone_number' => '234'.substr($request->phone, 1), //substr($request->phone_number['full'], 1),
-    //         'user_type' =>"CUSTOMER",
-    //         'mobile_token' => Str::random(7),
-    //         'source' => 'Freebyz'
-    //     ];
-
-        // if(walletHandler() == 'local'){
-        //     //CREATE USER ON FREEBYZ
-
-        // }else{
-        //     $user = $this->createUser($request); //CREATE USER ON FREEBYZ
-
-        //     if($user){
-        //         $location = PaystackHelpers::getLocation(); //get user location dynamically
-        //         // if($location == 'Nigeria'){
-
-        //         // }
-        //         if($location == 'United States'){
-        //             $sendMonnyApi = $this->sendMonny($payload);
-        //             if($sendMonnyApi['status'] == true){
-        //             $this->processAccountInformation($sendMonnyApi,$user);
-        //             }
-        //         }else{
-        //             AccountInformation::create([
-        //                 'user_id' => $user->id,
-        //                 'wallet_id' => '1234567890'
-        //             ]);
-        //         }
-        //     }
-        // }
-
         
     }
 
