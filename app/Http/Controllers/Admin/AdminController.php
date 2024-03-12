@@ -342,6 +342,7 @@ class AdminController extends Controller
 
     public function userSearch(Request $request){
 
+        
         if(isset($request)){
             $users = User::where([
                 [function ($query) use ($request) {
@@ -570,7 +571,7 @@ class AdminController extends Controller
     }
 
     public function campaignList(){
-        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->paginate(30);
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
