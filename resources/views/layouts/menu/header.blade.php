@@ -151,23 +151,6 @@
               <i class="fa fa-fw fa-times-circle"></i>
             </button>
             <input type="text" name="q" class="form-control border-0" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
-            
-            <button type="button" class="btn btn-alt-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Users
-              <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-              <a class="dropdown-item" href="javascript:void(0)" data-value="Users">
-                <i class="far fa-fw fa-bell me-1"></i> Users
-              </a>
-              <a class="dropdown-item" href="javascript:void(0)" data-value="Campaigns">
-                <i class="far fa-fw fa-envelope me-1"></i> Campaigns
-              </a>
-              <div role="separator" class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)" >
-                <i class="fa fa-fw fa-pencil-alt me-1"></i> Edit Profile
-              </a>
-            </div>
           </div>
         </form>
       </div>

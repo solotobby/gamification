@@ -53,47 +53,46 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function registerUser(Request $request){
-       $curLocation = currentLocation();
-       if($curLocation == 'Nigeria'){
-        $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'country' => ['required', 'string', 'max:255'],
-            'source' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'numeric', 'digits:11', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-       }else{
-        $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'country' => ['required', 'string', 'max:255'],
-            'source' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'numeric', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-       }
-     
+    public function registerUser(Request $request)
+    {
+        $curLocation = currentLocation();
+        if ($curLocation == 'Nigeria') {
+            $request->validate([
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
+                'country' => ['required', 'string', 'max:255'],
+                'source' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'numeric', 'digits:11', 'unique:users'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+        } else {
+            $request->validate([
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
+                'country' => ['required', 'string', 'max:255'],
+                'source' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'numeric', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:users'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+        }
+
 
         $user = $this->createUser($request);
-        if($user){
+        if ($user) {
             Auth::login($user);
             PaystackHelpers::userLocation('Registeration');
-            setProfile($user);//set profile page
+            setProfile($user); //set profile page
             return redirect('/home');
         }
-       
-
-        
     }
 
-    public function createUser($request){
+    public function createUser($request)
+    {
 
         $ref_id = $request->ref_id;
-        $name = $request->first_name.' '.$request->last_name;
+        $name = $request->first_name . ' ' . $request->last_name;
         $user = User::create([
             'name' => $name,
             'email' => $request->email,
@@ -105,9 +104,9 @@ class RegisterController extends Controller
         $user->referral_code = Str::random(7);
         // $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $user->save();
-        Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
+        Wallet::create(['user_id' => $user->id, 'balance' => '0.00']);
 
-        if($ref_id != 'null'){
+        if ($ref_id != 'null') {
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
 
@@ -116,10 +115,10 @@ class RegisterController extends Controller
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
 
-        SystemActivities::activityLog($user, 'account_creation', $user->name .' Registered ', 'regular');
+        SystemActivities::activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
 
-        if($location == 'Nigeria'){
-            $phone = '234'.substr($request->phone, 1);
+        if ($location == 'Nigeria') {
+            $phone = '234' . substr($request->phone, 1);
             generateVirtualAccountOnboarding($user, $phone);
         }
 
@@ -130,11 +129,13 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function sendMonny($payload){
+    public function sendMonny($payload)
+    {
         return Sendmonny::sendUserToSendmonny($payload);
     }
 
-    public function processAccountInformation($sendMonnyApi, $user){
+    public function processAccountInformation($sendMonnyApi, $user)
+    {
         AccountInformation::create([
             'user_id' => $user->id,
             '_user_id' => $sendMonnyApi['data']['user']['user_id'],
@@ -153,24 +154,25 @@ class RegisterController extends Controller
     }
 
 
-    public function loginUser(Request $request){
+    public function loginUser(Request $request)
+    {
         $request->validate([
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
         // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
-       
-        if($user){
-            if($user->is_blacklisted == true){
+
+        if ($user) {
+            if ($user->is_blacklisted == true) {
                 return view('blocked');
             }
-            
-             if($user->referral_code == null){
+
+            if ($user->referral_code == null) {
                 $user->referral_code = Str::random(7);
                 $user->save();
-             }
-            if(Hash::check($request->password, $user->password)){
+            }
+            if (Hash::check($request->password, $user->password)) {
                 // if($user->role != 'admin'){
                 //     $location = PaystackHelpers::getLocation(); //get user specific location
                 //     if($location == "United States"){ //check if the person is in Nigeria
@@ -187,26 +189,26 @@ class RegisterController extends Controller
 
                 Auth::login($user); //log user in
 
-                if($user->role == 'staff'){
-                        null;
-                }else{
+                if ($user->role == 'staff') {
+                    null;
+                } else {
                     setWalletBaseCurrency();
                 }
 
-                setProfile($user);//set profile page 
-               
+                setProfile($user); //set profile page 
 
-                 //set base currency if not set
+
+                //set base currency if not set
                 PaystackHelpers::userLocation('Login');
                 // SystemActivities::loginPoints($user);
-               
-                 SystemActivities::activityLog($user, 'login', $user->name .' Logged In', 'regular');
+
+                SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
                 return redirect('home'); //redirect to home
-                
-            }else{
+
+            } else {
                 return back()->with('error', 'Email or Password is incorrect');
             }
-        }else{
+        } else {
             return back()->with('error', 'Email or Password is incorrect');
         }
     }
@@ -247,22 +249,20 @@ class RegisterController extends Controller
         ]);
         $user->referral_code = Str::random(7);
         $user->save();
-        Wallet::create(['user_id'=> $user->id, 'balance' => '0.00']);
-        if($ref_id != 'null'){
+        Wallet::create(['user_id' => $user->id, 'balance' => '0.00']);
+        if ($ref_id != 'null') {
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
-       
+
         return $user;
     }
 
     public function referral_register($referral_code)
     {
         $name = User::where('referral_code', $referral_code)->first();
-        if(!$name){
+        if (!$name) {
             return view('auth.error', ['error' => 'Invalid referral code']);
         }
         return view('auth.ref_register', ['name' => $name]);
     }
-
-    
 }

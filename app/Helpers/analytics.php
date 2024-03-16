@@ -102,7 +102,7 @@ class Analytics{
     }
     
     public static function monthlyVisits(){
-        $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
+         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
         // ->whereBetween('created_at',[$start_date, $end_date])
         ->where('created_at', '>=', Carbon::now()->subMonths(3))
         ->groupBy('month')->get(); 
@@ -130,6 +130,31 @@ class Analytics{
             $list[++$key] = [$value->type, (int)$value->amount ];
          }
          return $list;
+    }
+
+    public static function monthlyRevenue(){
+
+        $monthlyRev =  PaymentTransaction::
+        select(
+            \DB::raw('DATE_FORMAT(created_at, "%b %Y") AS month'),
+            \DB::raw('SUM(CASE WHEN type = "direct_referer_bonus" THEN amount ELSE 0 END) AS direct_referer_bonus'),
+            \DB::raw('SUM(CASE WHEN type = "referer_bonus" THEN amount ELSE 0 END) AS referer_bonus'),
+            \DB::raw('SUM(CASE WHEN type = "campaign_revenue" THEN amount ELSE 0 END) AS campaign_revenue'),
+            \DB::raw('SUM(CASE WHEN type = "withdrawal_commission" THEN amount ELSE 0 END) AS withdrawal_commission'),
+            \DB::raw('SUM(CASE WHEN type = "campaign_revenue_add" THEN amount ELSE 0 END) AS campaign_revenue_add'),
+        )
+        ->where('created_at', '>', Carbon::now()->subMonths(3))
+        ->groupBy('month')
+        // ->orderBy('created_at', 'ASC')
+        ->get();
+
+
+        $rev[] = ['Month', 'Direct Referral','Referral Bonus', 'Campaign Rev', 'Campaign Rev(Added)', 'Withdrawal Commission'];
+        foreach ($monthlyRev as $key => $value) {
+            $rev[++$key] = [$value->month, (int)$value->direct_referer_bonus, (int)$value->referer_bonus, (int)$value->campaign_revenue,(int)$value->campaign_revenue_add, (int)$value->withdrawal_commission];
+        }
+        return $rev;
+    
     }
 
     public static function countryDistribution(){

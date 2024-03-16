@@ -30,6 +30,10 @@
 <script>
   var age = <?php echo $age; ?>
 </script>
+
+<script>
+  var monthlRevenue = <?php echo $monthlRevenue; ?>
+</script>
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -37,6 +41,7 @@
 <script src="{{ asset('js/admin/revenueChannel.js')}}"></script>
 <script src="{{ asset('js/admin/countryDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/ageDistribution.js')}}"></script>
+<script src="{{ asset('js/admin/monthlyRevenue.js')}}"></script>
 @endsection
 
 @section('content')
@@ -275,6 +280,10 @@
     <div class="row">
       <div class="col-xl-12">
         <div id="chart_div_monthly" style="width: 100%; height: 500px;"></div>
+      </div>
+      <hr>
+      <div class="col-xl-12">
+        <div id="chart_div_monthly_rev" style="width: 100%; height: 500px;"></div>
       </div>
       <hr>
       <div class="col-xl-12">
