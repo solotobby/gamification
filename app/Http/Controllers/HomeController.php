@@ -54,35 +54,35 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
-        if($user->hasRole('admin')){
+
+        if ($user->hasRole('admin')) {
             // return 'admin';
             return redirect()->route('admin.home');
-        }elseif($user->hasRole('staff')){
+        } elseif ($user->hasRole('staff')) {
             // return 'staff';
             return redirect()->route('staff.home');
-        }else{
+        } else {
             // return 'user';
             return redirect()->route('user.home');
-        } 
+        }
     }
 
     public function userHome()
     {
         //Sendmonny::accessToken();
         Analytics::dailyVisit('Dashboard');
-        if(env('APP_ENV') == 'production'){
+        if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
         }
-       
-        if(auth()->user()->phone == '' || auth()->user()->country == ''){
+
+        if (auth()->user()->phone == '' || auth()->user()->country == '') {
             return view('phone');
         }
 
-        if(auth()->user()->age_range == '' || auth()->user()->gender == ''){ //compell people to take survey
+        if (auth()->user()->age_range == '' || auth()->user()->gender == '') { //compell people to take survey
             return redirect('survey');
         }
-        
+
         $balance = '';
         // if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
         //     $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
@@ -91,19 +91,20 @@ class HomeController extends Controller
         //$activity_log = SystemActivities::showActivityLog();
 
         $badgeCount = SystemActivities::badgeCount();
-        
+
         $available_jobs = SystemActivities::availableJobs();
-        
+
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
-        
+
         $announcement = Announcement::where('status', true)->first();
-        
+
         $ads = adBanner();
-        
-        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user'=>auth()->user(), 'balance' => $balance, 'announcement' => $announcement, 'ads' => $ads]);
+
+        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user' => auth()->user(), 'balance' => $balance, 'announcement' => $announcement, 'ads' => $ads]);
     }
 
-    public function howTo(){
+    public function howTo()
+    {
         return view('user.documentation.how_to_approve');
     }
 
@@ -117,9 +118,9 @@ class HomeController extends Controller
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
         $wallet = Wallet::where('user_id', '!=', '1')->get();
         //this wwee
-        $start_week = Carbon::now()->startOfWeek();//->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
+        $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
         $end_week = Carbon::now()->endOfWeek();
-        $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']);//Date('')
+        $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']); //Date('')
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
@@ -131,26 +132,29 @@ class HomeController extends Controller
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
-    
+
         // return $campaignMetric = Analytics::campaignMetrics();
         //users registered
 
-      $dailyActivity = Analytics::dailyActivities();
+        $dailyActivity = Analytics::dailyActivities();
 
         //monthly visits
         // $start_date = \Carbon\Carbon::today()->subDays(30);
         // $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
-       $MonthlyVisit = Analytics::monthlyVisits();
+        $MonthlyVisit = Analytics::monthlyVisits();
 
         //daily visits
-         $dailyVisits = Analytics::dailyStats();
+        $dailyVisits = Analytics::dailyStats();
 
         //registration channel
         $registrationChannel = Analytics::registrationChannel();
 
         //revenue channel
         $revenueChannel = Analytics::revenueChannel();
+
+        //revenue 
+        $revenue = Analytics::monthlyRevenue();
 
         //country distribution
         $countryDistribution = Analytics::countryDistribution();
@@ -159,68 +163,72 @@ class HomeController extends Controller
         $ageDistribution = Analytics::ageDistribution();
 
         $christmas = Profile::where('is_xmas', true)->count();
-        
+
         return view('admin.index', [
-            'wallet' => $wallet, 
-            'weekPayment' => $thisWeekPayment, 
-            'totalPayout' => $totalPayout, 
+            'wallet' => $wallet,
+            'weekPayment' => $thisWeekPayment,
+            'totalPayout' => $totalPayout,
             'transactions' => $transactions,
             'xmas' => $christmas,
-            'av_count' => $available_jobsCount]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-            ->with('visitor',json_encode($dailyActivity))
-            ->with('daily',json_encode($dailyVisits))
+            'av_count' => $available_jobsCount
+        ]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+            ->with('visitor', json_encode($dailyActivity))
+            ->with('daily', json_encode($dailyVisits))
             ->with('monthly', json_encode($MonthlyVisit))
             ->with('channel', json_encode($registrationChannel))
             ->with('revenue', json_encode($revenueChannel))
             ->with('country', json_encode($countryDistribution))
             ->with('age', json_encode($ageDistribution))
+            ->with('monthlRevenue', json_encode($revenue))
             ->with('retention', json_encode($retention));
-
     }
 
-    public function adminApi(Request $request){
+    public function adminApi(Request $request)
+    {
         $data = [];
-            // $data['campaigns'] = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
-            // $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
-            // $data['user'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
-            // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+        // $data['campaigns'] = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+        // $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
+        // $data['user'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
 
-            $camp = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
-            $data['campaigns'] = $camp->count();
-            $data['campaignValue'] = $camp->sum('total_amount');
-            $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
-            $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
-            $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at',[$request->start_date, $request->end_date])->count();
-            // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
-            // $data['loginPointsValue'] = $data['loginPoints']/5;
-        
+        $camp = Campaign::where('status', 'Live')->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+        $data['campaigns'] = $camp->count();
+        $data['campaignValue'] = $camp->sum('total_amount');
+        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at', [$request->start_date, $request->end_date])->sum('amount');
+        $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
+        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
+        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
+        // $data['loginPointsValue'] = $data['loginPoints']/5;
+
         return $data;
     }
 
-    public function adminApiDefault(Request $request){
+    public function adminApiDefault(Request $request)
+    {
         $period = $request->period;
-        
-         $data = [];
-        
+
+        $data = [];
+
         $date = \Carbon\Carbon::today()->subDays($period);
         $start_date = \Carbon\Carbon::today()->subDays($period);
         $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
-        $camp = Campaign::where('status', 'Live')->where('created_at','>=',$date)->get();
+        $camp = Campaign::where('status', 'Live')->where('created_at', '>=', $date)->get();
         $data['campaigns'] = $camp->count();
         $data['campaignValue'] = $camp->sum('total_amount');
-        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at','>=',$date)->sum('amount');
-        $data['registeredUser'] = User::where('role', 'regular')->where('created_at','>=',$date)->count();
-        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at','>=',$date)->count();
+        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at', '>=', $date)->sum('amount');
+        $data['registeredUser'] = User::where('role', 'regular')->where('created_at', '>=', $date)->count();
+        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at', '>=', $date)->count();
         // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         // $data['loginPointsValue'] = $data['loginPoints']/5;
-       
+
         // $data['monthlyVisits'] = Analytics::monthlyVisits();
         return $data;
     }
-        
 
-    public function staffHome(){
+
+    public function staffHome()
+    {
 
         $campaigns = Campaign::where('status', 'Live')->get();
         $campaignWorker = CampaignWorker::all();
@@ -242,12 +250,11 @@ class HomeController extends Controller
         //registration channel
         $registrationChannel = Analytics::registrationChannel();
 
-        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-                    ->with('visitor',json_encode($dailyActivity))
-                    ->with('daily',json_encode($dailyVisits))
-                    ->with('monthly', json_encode($MonthlyVisit))
-                    ->with('channel', json_encode($registrationChannel));
-
+        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal' => $Wal])
+            ->with('visitor', json_encode($dailyActivity))
+            ->with('daily', json_encode($dailyVisits))
+            ->with('monthly', json_encode($MonthlyVisit))
+            ->with('channel', json_encode($registrationChannel));
     }
 
     public function savePhoneInformation(Request $request)
@@ -255,7 +262,7 @@ class HomeController extends Controller
         // $this->validate($request, [
         //     'phone' => 'numeric|required|digits:11|unique:users'
         // ]);
-        
+
         $user = User::where('id', auth()->user()->id)->first();
         $user->phone = $request->phone_number;
         $user->source = $request->source;
@@ -276,8 +283,7 @@ class HomeController extends Controller
 
         $userScore = UserScore::where('user_id', auth()->user()->id)->where('game_id', $games->id)->get();
 
-        if(count($userScore) > 0)
-        {
+        if (count($userScore) > 0) {
             return view('user.error');
         }
         $questions = Question::inRandomOrder()->limit(1)->first();
@@ -292,10 +298,9 @@ class HomeController extends Controller
         $correctAnswer = $question->correct_answer;
         $userAnswer = $request->option;
 
-        if($userAnswer == $correctAnswer)
-        {
+        if ($userAnswer == $correctAnswer) {
             $isCorrect = 1;
-        }else{
+        } else {
             $isCorrect = 0;
         }
 
@@ -309,7 +314,6 @@ class HomeController extends Controller
         ]);
 
         return redirect('next/question');
-
     }
 
     public function nextQuestion()
@@ -318,8 +322,7 @@ class HomeController extends Controller
 
         $userScore = UserScore::where('user_id', auth()->user()->id)->where('game_id', $games->id)->get();
 
-        if(count($userScore) > 0)
-        {
+        if (count($userScore) > 0) {
             return view('error');
         }
 
@@ -327,8 +330,7 @@ class HomeController extends Controller
 
         $answered = Answer::where('user_id', auth()->user()->id)->where('game_id', $games->id)->count();
         $index = $answered + 1;
-        if($answered == $games->number_of_questions)
-        {
+        if ($answered == $games->number_of_questions) {
             return redirect('submit/answers');
         }
 
@@ -344,8 +346,7 @@ class HomeController extends Controller
 
         $userScore = UserScore::where('user_id', auth()->user()->id)->where('game_id', $games->id)->get();
 
-        if(count($userScore) > 0)
-        {
+        if (count($userScore) > 0) {
             return view('user.completed', ['score' => $percentage]);
         }
         UserScore::Create(['user_id' => auth()->user()->id, 'game_id' => $games->id, 'score' => $percentage]);
@@ -361,23 +362,21 @@ class HomeController extends Controller
     public function redeemReward($id)
     {
         $reward_type = UserScore::where('id', $id)->first();
-        if($reward_type->reward_type == 'CASH' && $reward_type->is_redeem == '0')
-        {
+        if ($reward_type->reward_type == 'CASH' && $reward_type->is_redeem == '0') {
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
-            if($bankInformation == null){
+            if ($bankInformation == null) {
                 $bankList = PaystackHelpers::bankList();
                 return view('bank_information', ['bankList' => $bankList, 'id' => $id]);
             }
 
-                $parameters = Reward::where('name', 'CASH')->first();
-                $amount = $parameters->amount * 100;
-                //transfer the fund
-                $transfer = $this->transferFund($amount, $bankInformation->recipient_code, 'Redeem Reward');
+            $parameters = Reward::where('name', 'CASH')->first();
+            $amount = $parameters->amount * 100;
+            //transfer the fund
+            $transfer = $this->transferFund($amount, $bankInformation->recipient_code, 'Redeem Reward');
 
 
-               if($transfer['status'] == 'false'){
-                if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending')
-                {
+            if ($transfer['status'] == 'false') {
+                if ($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending') {
                     $userScore = UserScore::where('id', $id)->first();
                     $userScore->is_redeem = true;
                     $userScore->save();
@@ -394,21 +393,19 @@ class HomeController extends Controller
                         'currency' => $transfer['data']['currency']
                     ]);
                     return redirect('score/list')->with('status', 'Money successfully sent to your account');
-                }else{
+                } else {
                     return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later');
                 }
-
-            }else{
+            } else {
                 return redirect('score/list')->with('error', 'There was an error while sending cash, please try again later!!!');
             }
-        }elseif($reward_type->reward_type == 'AIRTIME' && $reward_type->is_redeem == '0')
-        {
-            
+        } elseif ($reward_type->reward_type == 'AIRTIME' && $reward_type->is_redeem == '0') {
+
             $parameters = Reward::where('name', 'AIRTIME')->first();
             //$phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
             $phone = auth()->user()->phone;
-            return $airtime = $this->sendAirtime($phone, $amount);//['data'];              
+            return $airtime = $this->sendAirtime($phone, $amount); //['data'];              
             // if($airtime->errorMessage == "None")
             // {
 
@@ -432,13 +429,13 @@ class HomeController extends Controller
             //    return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later'); 
             // }
 
-        }else{
+        } else {
             return 'nothing dey happen';
         }
-
     }
 
-    public function selectBankInformation(){
+    public function selectBankInformation()
+    {
 
         $bankList = PaystackHelpers::bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
@@ -454,8 +451,7 @@ class HomeController extends Controller
         ]);
         $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
 
-        if($accountInformation['status'] == 'true')
-        {
+        if ($accountInformation['status'] == 'true') {
             $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
             $bankInfor = BankInformation::create([
                 'user_id' => auth()->user()->id,
@@ -467,20 +463,20 @@ class HomeController extends Controller
                 'currency' => 'NGN'
             ]);
 
-            if(auth()->user()->profile->phone_verified == true && $bankInfor){
+            if (auth()->user()->profile->phone_verified == true && $bankInfor) {
                 generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
             }
-               
+
             return back()->with('success', 'Account Details Added');
-                //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
-        }else{
+            //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
+        } else {
             return back()->with('error', 'Your bank account is not valid');
-        }  
+        }
     }
 
     public function transferFund($amount, $recipient)
     {
-           return PaystackHelpers::transferFund($amount, $recipient, 'Freebyz Withdrawal');
+        return PaystackHelpers::transferFund($amount, $recipient, 'Freebyz Withdrawal');
     }
 
     public function sendAirtime($phone, $amount)
