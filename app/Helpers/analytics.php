@@ -143,9 +143,9 @@ class Analytics{
             \DB::raw('SUM(CASE WHEN type = "withdrawal_commission" THEN amount ELSE 0 END) AS withdrawal_commission'),
             \DB::raw('SUM(CASE WHEN type = "campaign_revenue_add" THEN amount ELSE 0 END) AS campaign_revenue_add'),
         )
-        ->where('created_at', '>', Carbon::now()->subMonths(3))
+        ->where('created_at', '>', Carbon::now()->subMonths(5))
         ->groupBy('month')
-        // ->orderBy('created_at', 'ASC')
+        
         ->get();
 
 
