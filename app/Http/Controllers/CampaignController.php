@@ -97,7 +97,7 @@ class CampaignController extends Controller
     public function update(Request $request, Campaign $campaign)
     {
         $est_amount = $request->number_of_staff * $request->campaign_amount;
-        $percent = (50 / 100) * $est_amount;
+        $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
         //$total = $request->total_amount_pay;
 
@@ -201,7 +201,7 @@ class CampaignController extends Controller
         ]);
 
         $est_amount = $request->number_of_staff * $request->campaign_amount;
-        $percent = (50 / 100) * $est_amount;
+        $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
         // [$est_amount, $percent, $total];
         $job_id = rand(10000,10000000);

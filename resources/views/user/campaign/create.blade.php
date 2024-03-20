@@ -249,7 +249,7 @@
                             
                             document.getElementById("amount_per_campaign").value = result.amount;
 
-                            var percentToGet = 50;
+                            var percentToGet = 60;
                             var percent = (percentToGet / 100) * total_amount;
 
                             document.getElementById("demo").innerHTML = total_amount + percent;
@@ -262,7 +262,7 @@
                     var z = document.getElementById("amount_per_campaign").value;
                     var x = Number(y) * Number(z);
                     // document.getElementById("demo").innerHTML = x;
-                    var percentToGet = 50;
+                    var percentToGet = 60;
                     var percent = (percentToGet / 100) * x;
 
                     document.getElementById("demo").innerHTML = x + percent;
