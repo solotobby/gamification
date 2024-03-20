@@ -13,7 +13,20 @@
         <div class="row my-3">
           <div class="col-md-6 d-md-flex align-items-md-center">
             <div class="py-4 py-md-0 text-center text-md-start">
-              <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}}</h1>
+              <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}} 
+                @if(auth()->user()->wallet->base_currency == 'Naira')
+                    @if(auth()->user()->is_verified)
+                        <i class="fa fa-check opacity-75 me-1"></i>
+                    @endif
+
+                @else
+                    @if(auth()->user()->USD_verified)
+                        <i class="fa fa-check-double opacity-75 me-1"></i>
+                    @endif
+
+                @endif
+              
+              </h1>
               <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Jobs and Get Paid!</h2>
             </div>
           </div>
