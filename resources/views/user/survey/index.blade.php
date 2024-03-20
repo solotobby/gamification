@@ -143,7 +143,7 @@
                   </div>
                   <div class="col-md-4">
                     <div class="form-check form-block">
-                      <input class="form-check-input" type="radio" value="{{ old('50+') }}" id="age-range-6" name="age_range">
+                      <input class="form-check-input" type="radio" value="50+" id="age-range-6" name="age_range">
                       <label class="form-check-label" for="age-range-6">
                         <span class="d-flex align-items-center">
                           <span class="ms-2">
