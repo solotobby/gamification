@@ -126,8 +126,6 @@ class HomeController extends Controller
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         $available_jobsCount = count(SystemActivities::availableJobs());
 
-
-
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
@@ -162,14 +160,14 @@ class HomeController extends Controller
         //age distribution
         $ageDistribution = Analytics::ageDistribution();
 
-        $christmas = Profile::where('is_xmas', true)->count();
+        // $christmas = Profile::where('is_xmas', true)->count();
 
         return view('admin.index', [
             'wallet' => $wallet,
             'weekPayment' => $thisWeekPayment,
             'totalPayout' => $totalPayout,
             'transactions' => $transactions,
-            'xmas' => $christmas,
+            // 'xmas' => $christmas,
             'av_count' => $available_jobsCount
         ]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
             ->with('visitor', json_encode($dailyActivity))
