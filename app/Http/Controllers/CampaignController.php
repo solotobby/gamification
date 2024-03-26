@@ -20,6 +20,7 @@ use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -204,7 +205,7 @@ class CampaignController extends Controller
         $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
         // [$est_amount, $percent, $total];
-        $job_id = rand(10000,10000000);
+        $job_id = Str::random(7);//rand(10000,10000000);
       
             if(auth()->user()->wallet->base_currency == "Naira"){
                 
