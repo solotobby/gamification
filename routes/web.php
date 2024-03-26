@@ -38,6 +38,8 @@ Route::get('about', [\App\Http\Controllers\GeneralController::class, 'about'])->
 Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
+Route::get('wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellaheathLanding']);
+
 Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController::class, 'agentPayment']);
 
 

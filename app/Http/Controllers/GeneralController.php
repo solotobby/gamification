@@ -139,6 +139,10 @@ class GeneralController extends Controller
         return $request;
     }
 
+    public function wellaheathLanding(){
+        return view('wellahealth');
+    }
+
     public function wellahealth($ref){
         // foreach($subscription as $list){
         //     $planType = $list['planType'];
