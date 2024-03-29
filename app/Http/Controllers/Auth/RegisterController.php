@@ -200,7 +200,7 @@ class RegisterController extends Controller
 
 
                 //set base currency if not set
-                if(env('APP_ENV') == 'Production'){
+                if(env('APP_ENV') == 'production'){
                     setProfile($user); //set profile page 
                     PaystackHelpers::userLocation('Login');
                 }
