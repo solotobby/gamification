@@ -192,14 +192,19 @@ class RegisterController extends Controller
                 if ($user->role == 'staff') {
                     null;
                 } else {
+                    
                     setWalletBaseCurrency();
                 }
 
-                setProfile($user); //set profile page 
+              
 
 
                 //set base currency if not set
-                PaystackHelpers::userLocation('Login');
+                if(env('APP_ENV') == 'Production'){
+                    setProfile($user); //set profile page 
+                    PaystackHelpers::userLocation('Login');
+                }
+              
                 // SystemActivities::loginPoints($user);
 
                 SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
