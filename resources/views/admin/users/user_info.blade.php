@@ -304,15 +304,13 @@
 
         <!-- Manage -->
         <div class="tab-pane fade" id="search-project-manage" role="tabpanel" aria-labelledby="search-project-tab-manage">
-            <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
+            {{-- <div class="fs-3 fw-semibold pt-2 pb-4 mb-4 text-center border-bottom">
               <span class="text-primary fw-bold">  &#8358;{{ number_format($info->myCampaigns->sum('total_amount')) }}</span> Campaign Values
-            </div>
+            </div> --}}
             <div class="container">
-            
-
-                    <h4 class="fw-normal text-muted text-center">
-                      Manual Wallet TopUp
-                    </h4>
+              <h4 class="fw-normal text-muted text-center">
+                Manual Wallet TopUp
+              </h4>
               <form action="{{ route('admin.wallet.topup') }}" method="POST">
                 @csrf
                 <div class="form-row align-items-center">

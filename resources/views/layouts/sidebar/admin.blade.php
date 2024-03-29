@@ -137,7 +137,7 @@
         </ul>
       </li>
 
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-snowflake"></i>
           <span class="nav-main-link-name">Market Place</span>
@@ -155,7 +155,7 @@
           </li>
         </ul>
       </li>
-      
+       --}}
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -188,6 +188,11 @@
           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Withrawal::where('status', false)->count() }}</span>
         </a>
         <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.withdrawal.queued.current') }}">
+              <span class="nav-main-link-name">Queued this Week</span>
+            </a>
+          </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('admin.withdrawal.queued') }}">
               <span class="nav-main-link-name">Queued</span>
