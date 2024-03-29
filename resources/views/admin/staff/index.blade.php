@@ -53,16 +53,18 @@
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($staffs as $staff)
-                    <tr>
-                        {{-- <th scope="row">{{ $i++ }}.</th> --}}
-                        <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
-                        <td>{{ $staff->staff->staff_id }}</td>
-                        <td>{{ $staff->email }}</td>
-                        <td>{{ $staff->phone }}</td>
-                        <td>{{ $staff->staff->role }}</td>
-                        <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
-                        {{-- <td>{{ \Carbon\Carbon::parse($staff->created_at)->format('d/m/Y') }}</td> --}}
-                    </tr>
+                    @if(@$staff->staff->basic_salary > 0)
+                        <tr>
+                            {{-- <th scope="row">{{ $i++ }}.</th> --}}
+                            <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
+                            <td>{{ $staff->staff->staff_id }}</td>
+                            <td>{{ $staff->email }}</td>
+                            <td>{{ $staff->phone }}</td>
+                            <td>{{ $staff->staff->role }}</td>
+                            <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($staff->created_at)->format('d/m/Y') }}</td> --}}
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
           </table>

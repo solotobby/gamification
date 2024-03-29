@@ -218,7 +218,7 @@
           </div>
         </div>
       </div>  --}}
-       <a href="{{ route('agent.wellahealth') }}">
+       {{-- <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
               <div class="d-md-flex justify-content-md-between align-items-md-center">
@@ -234,7 +234,7 @@
               </div>
             </div>
           </div> 
-      </a>
+      </a> --}}
 
       <!-- END VPS -->
       @foreach ($available_jobs as $job)

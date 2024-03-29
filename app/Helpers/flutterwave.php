@@ -36,9 +36,9 @@ if (!function_exists('createCard')) {
     {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
-        ])->post('https://api.flutterwave.com/v3/virtual-cards', $payload)->throw();
+            // 'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer FLWSECK-0fad0ddfd151302dd5ff88b01e4ac4ea-18e825d73favt-X'//.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/virtual-cards', $payload);//->throw();
 
         return json_decode($res->getBody()->getContents(), true);
     

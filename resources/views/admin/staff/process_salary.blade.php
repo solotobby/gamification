@@ -64,15 +64,17 @@
             <tbody>
                 <?php $i = 1; ?>
                 @foreach ($staffs as $staff)
-                    <tr>
-                        <td><input type="checkbox" name="id[]"  value="{{@$staff->staff->id}}"></td>
-                        <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
-                        <td>{{ $staff->staff->staff_id }}</td>
-                        <td>{{ $staff->staff->bank_name}} - {{ $staff->staff->account_number}}</td>
-                        <td>{{ $staff->staff->role }}</td>
-                        <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
-                        {{-- <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}"> --}}
-                    </tr>
+                    @if(@$staff->staff->basic_salary > 0)
+                        <tr>
+                            <td><input type="checkbox" name="id[]"  value="{{@$staff->staff->id}}"></td>
+                            <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td>
+                            <td>{{ $staff->staff->staff_id }}</td>
+                            <td>{{ $staff->staff->bank_name}} - {{ $staff->staff->account_number}}</td>
+                            <td>{{ $staff->staff->role }}</td>
+                            <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
+                            {{-- <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}"> --}}
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
           </table>

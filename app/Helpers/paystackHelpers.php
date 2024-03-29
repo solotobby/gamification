@@ -12,6 +12,10 @@ use App\Models\UserLocation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
+use Flutterwave\Payload;
+use Flutterwave\Service\VirtualCard;
+use Flutterwave\Util\Currency;
+
 
 class PaystackHelpers{
 
@@ -358,6 +362,27 @@ class PaystackHelpers{
         ]);
 
         return json_decode($res->getBody()->getContents(), true);
+    }
+
+    public static function flutterwaveCreateCard(){
+       
+        $payload = new Payload();
+        $service = new VirtualCard();
+        $payload->set("first_name","PHP");
+        $payload->set("last_name","SDK");
+        $payload->set("date_of_birth","1994-03-01");
+        $payload->set("title","Mr");
+        $payload->set("gender","M"); //M or F
+        $payload->set("email","developers@flutterwavego.com");
+        $payload->set("currency", Currency::NGN);
+        $payload->set("amount", "5000");
+        // $payload->set("debit_currency", Currency::NGN);
+        $payload->set("phone", "+234505394568");
+        $payload->set("billing_name", "Abraham Ola");
+        $payload->set("firstname", "Abraham");
+        $response = $service->create($payload);
+        return $response;
+        // print_r($response);
     }
 
    

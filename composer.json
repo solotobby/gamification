@@ -9,6 +9,7 @@
         "africastalking/africastalking": "^3.0",
         "doctrine/dbal": "^3.6",
         "facebook/graph-sdk": "^5.1",
+        "flutterwavedev/flutterwave-v3": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "joelbutcher/facebook-graph-sdk": "^6.0",
