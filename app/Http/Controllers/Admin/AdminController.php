@@ -401,6 +401,14 @@ class AdminController extends Controller
         return view('admin.withdrawals.queued', ['withdrawals' => $withdrawal]);
     }
 
+    public function withdrawalRequestQueuedCurrent(){
+        $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
+        $end_week = Carbon::now()->endOfWeek();
+        $withdrawal = Withrawal::where('status', false)->whereBetween('created_at', [$start_week, $end_week])->paginate(10);
+        //$withdrawal = Withrawal::where('status', '0')->orderBy('created_at', 'DESC')->paginate(50);
+        return view('admin.withdrawals.current_week', ['withdrawals' => $withdrawal]);
+    }
+
     public function upgradeUserNaira($id){
         
         if(auth()->user()->hasRole('admin')){
