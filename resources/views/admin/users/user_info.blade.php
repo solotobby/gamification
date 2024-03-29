@@ -35,7 +35,6 @@
           Virtual Account Number: Not Created<br>
         @endif
           Date Joined: {{ @$info->created_at }}<br>
-
         </div>
       </form>
     </div>
@@ -161,7 +160,7 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach ($info->transactions->where('status', 'successful') as $list)
+                  @foreach ($info->transactions->where('status', 'successful')->sortByDesc('created_at') as $list)
                   
                     @if($list->tx_type == 'Credit')
                     <tr style="color: forestgreen">
@@ -223,7 +222,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($info->myJobs as $job)
+                    @foreach ($info->myJobs->sortByDesc('created_at') as $job)
                     <tr>
                         <td>
                           {{ @$job->campaign->post_title }}
@@ -271,7 +270,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($info->myCampaigns as $campaign)
+                    @foreach ($info->myCampaigns->sortByDesc('created_at') as $campaign)
                     <tr>
                         <td>
                           {{ @$campaign->post_title }}
