@@ -26,7 +26,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Staff Salary - {{ $staffs->count() }}</h3>
+        <h3 class="block-title">Staff Salary - {{ $staffs->count() }} | Gross Payment </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -62,7 +62,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $i = 1; ?>
+                <?php $i = 1; 
+                $totalPayment = 0;
+                ?>
                 @foreach ($staffs as $staff)
                     @if(@$staff->staff->basic_salary > 0)
                         <tr>
@@ -73,11 +75,13 @@
                             <td>{{ $staff->staff->role }}</td>
                             <td>&#8358;{{ number_format(@$staff->staff->basic_salary) }}</td>
                             {{-- <input type="hidden" name="basic_salary[]" value="{{@$staff->staff->basic_salary}}"> --}}
-                        </tr>
+                            <?php $totalPayment += $staff->staff->basic_salary ?>
+                          </tr>
                     @endif
                 @endforeach
             </tbody>
           </table>
+         
           {{-- <button type="submit" class="btn btn-primary mb-2">Process Payment</button> --}}
           @if($today >= '21')
                   @if(!$check)
@@ -86,7 +90,7 @@
                       <button type="button" class="btn btn-warning mb-2 disabled">Payment Successful for {{ $check->date }}</button>
                   @endif
               @else
-                  <button type="button" class="btn btn-primary mb-2 disabled">Process Payment</button>
+                  <button type="button" class="btn btn-primary mb-2 disabled">Process Payment of {{ $totalPayment }}</button>
           @endif
           </form>
           {{-- <div class="d-flex">
