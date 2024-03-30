@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Mail\GeneralMail;
 use App\Models\OTP;
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Mail;
@@ -34,7 +35,7 @@ class Kernel extends ConsoleKernel
             ->whereRaw('Date(created_at) = CURDATE()')
             ->count();
             
-            $user['name'] = 'Oluwatobi';
+            $user = User::where('id', 1)->first();//$user['name'] = 'Oluwatobi';
             $subject = 'Today Count';
             $content = 'Total reg..'.$totalUsers;
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
