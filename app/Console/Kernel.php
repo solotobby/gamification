@@ -30,6 +30,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
+        // $schedule->call(function(){
+           
+        // })->everyMinute();
+
         $schedule->call(function(){
             $totalUsers = \DB::table('users')
             ->whereRaw('Date(created_at) = CURDATE()')
@@ -40,20 +44,7 @@ class Kernel extends ConsoleKernel
             $content = 'Total reg..'.$totalUsers;
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
             
-           // OTP::where('is_verified', 0)->delete();
-        })->everyMinute();
-
-        // $schedule->call(function(){
-        //     $totalUsers = \DB::table('users')
-        //     ->whereRaw('Date(created_at) = CURDATE()')
-        //     ->count();
-
-        //     $user['name'] = 'Oluwatobi';
-        //     $subject = 'Today Count';
-        //     $content = 'Total reg..'.$totalUsers;
-        //     Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
-            
-        // })->dailyAt('00:00');
+        })->dailyAt('00:00');
     }
 
     /**
