@@ -21,3 +21,13 @@ if(!function_exists('createWellaHealthScription')){
         return json_decode($subscriptions->getBody()->getContents(), true);
     }
 }
+
+if(!function_exists('getWellaHealthScription')){
+    function getWellaHealthScription($subscriptionCode){
+        
+       $subscriptions = Http::withBasicAuth(env('WELLAHEALTH_USER'), env('WELLAHEALTH_KEY'))
+        ->get('https://staging.wellahealth.com/public/v1/Subscriptions/code/'.$subscriptionCode)->throw();
+
+        return json_decode($subscriptions->getBody()->getContents(), true);
+    }
+}

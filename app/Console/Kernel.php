@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use App\Mail\GeneralMail;
+use App\Models\OTP;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +28,31 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
+        $schedule->call(function(){
+            $totalUsers = \DB::table('users')
+            ->whereRaw('Date(created_at) = CURDATE()')
+            ->count();
+            
+            $user['name'] = 'Oluwatobi';
+            $subject = 'Today Count';
+            $content = 'Total reg..'.$totalUsers;
+            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            
+           // OTP::where('is_verified', 0)->delete();
+        })->everyMinute();
+
+        // $schedule->call(function(){
+        //     $totalUsers = \DB::table('users')
+        //     ->whereRaw('Date(created_at) = CURDATE()')
+        //     ->count();
+
+        //     $user['name'] = 'Oluwatobi';
+        //     $subject = 'Today Count';
+        //     $content = 'Total reg..'.$totalUsers;
+        //     Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            
+        // })->dailyAt('00:00');
     }
 
     /**

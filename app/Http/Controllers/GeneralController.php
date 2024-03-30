@@ -10,6 +10,7 @@ use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
 use App\Models\PartnershipBeneficiary;
+use App\Models\PartnershipSubscriber;
 use App\Models\PartnerSubscription;
 use App\Models\PaymentTransaction;
 use App\Models\Transaction;
@@ -209,7 +210,26 @@ class GeneralController extends Controller
             ];
         }
 
+
+   
+
         $beneficiaryCount = count($formattedData);
+        $inputRequest = '';
+        if($beneficiaryCount == 1){
+            $inputRequest = $formattedData;
+        }else{
+            $inputRequest = $filteredData = array_slice($formattedData, 1);
+        }
+
+        $inputEmail= $inputRequest[0]['email'];
+        $inputPhone= $inputRequest[0]['phone'];
+
+        $checkExistence = PartnershipSubscriber::where('email', $inputEmail)->orWhere('phone', $inputPhone)->first();
+        
+        if($checkExistence){
+            return back()->with('error', 'There is an account associated with this information');
+        }
+
         $user = User::where('referral_code', $request->referral_code)->first();
 
         if($user){
@@ -228,13 +248,13 @@ class GeneralController extends Controller
                     'dateOfBirth' => $formattedData[0]['dateOfBirth']
                 ];
 
-                
-
-               $createSubscription = createWellaHealthScription($payload);
+                $createSubscription = createWellaHealthScription($payload);
+                $getWellaHealth = getWellaHealthScription($createSubscription['subscriptionCode']);
+                // return [$createSubscription, $getWellaHealth];
 
                 if($createSubscription){
                     
-                    $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                   $response = $this->completeWellaHealthSubscription($createSubscription,  $getWellaHealth, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
                     $ref = time();
                     $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref)['authorization_url'];
                     transactionProcessor($user,  $ref, $request->amount, 'unsuccessful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation by '.$formattedData[0]['firstName'].' '.$formattedData[0]['lastName'], 'Payment_Initiation', 'Credit', 'regular');
@@ -264,10 +284,12 @@ class GeneralController extends Controller
 
                 
                 $createSubscription = createWellaHealthScription($payload);
+                $getWellaHealth = getWellaHealthScription($createSubscription['subscriptionCode']);
+             
                 if($createSubscription){
                     // $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
-                 $response = $this->completeWellaHealthSubscription($createSubscription, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
-                   
+                    $response = $this->completeWellaHealthSubscription($createSubscription,  $getWellaHealth, $formattedData, $request->referral_code, $request->amount, $user, $request->planCode);
+                     
                    $ref = time();
                    $url =  $this->initiatePayment($formattedData[0]['email'], $request->amount, $response, $ref)['authorization_url'];
                     
@@ -287,7 +309,7 @@ class GeneralController extends Controller
           
     }
 
-    public function completeWellaHealthSubscription($createSubscription, $formattedData, $referral, $amount, $user, $planCode){
+    public function completeWellaHealthSubscription($createSubscription,  $getWellaHealth, $formattedData, $referral, $amount, $user, $planCode){
        
         if($referral){
             $affiliate_commission = 0.07 * $amount;
@@ -318,6 +340,20 @@ class GeneralController extends Controller
         $data['is_paid'] = false;
 
         $partnership = PartnerSubscription::create($data);
+
+        $subscriber['partnership_subscription_id'] = $partnership->id;
+        $subscriber['subscriptionCode'] =  $getWellaHealth['subscriptionCode'];
+        $subscriber['firstName'] = $getWellaHealth['firstName'];
+        $subscriber['lastName'] = $getWellaHealth['lastName'];
+        $subscriber['email'] = $getWellaHealth['email'];
+        $subscriber['phone'] = $getWellaHealth['phone'];
+        $subscriber['status'] = $getWellaHealth['status'];
+        $subscriber['amount'] = $getWellaHealth['amount'];
+        $subscriber['product'] = $getWellaHealth['product'];
+
+        $subscriberInfo = PartnershipSubscriber::create($subscriber);
+        // ['partnership_subscription_id', 'subcriptionCode', 'firstName',
+        // 'lastName', 'email', 'phone', 'status', 'amount', 'product'];
 
         foreach($formattedData as $formatted){
             PartnershipBeneficiary::create([
@@ -375,12 +411,16 @@ class GeneralController extends Controller
             $credit = creditWallet($affiliate, 'Naira', (int)$partnership->affiliate_commission);
             
             $tx = transactionProcessor($affiliate, time(), $partnership->affiliate_commission, 'successful', 'NGN', 'paystack', 'wellahealth_payment', 'WellaHealth Payment Initiation Completed', 'Payment_Completed', 'Credit', 'regular');
-                
-            return view('user.partner.wellahealth.success');
+               return redirect('wellahealthsuccess');
+           
         }else{
 
             return view('user.partner.wellahealth.success');
         }
+    }
+
+    public function wellahealthsuccess(){
+        return view('user.partner.wellahealth.success');
     }
 
 
