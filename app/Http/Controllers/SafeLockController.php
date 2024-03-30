@@ -143,6 +143,9 @@ class SafeLockController extends Controller
 
     public function redeemSafelock(Request $request){
          $getSafeLock = SafeLock::where('id', $request->id)->first();
+         if($getSafeLock->status == 'Redeemed'){
+            return back()->with('error', 'Safelock redeemed');
+         }
         //get user bank information
         $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
         if($bankInfo){   
@@ -156,7 +159,7 @@ class SafeLockController extends Controller
                     'user_id' => auth()->user()->id,
                     'campaign_id' => 1,
                     'reference' => time(),
-                    'amount' =>$getSafeLock->total_payment*100,
+                    'amount' =>$getSafeLock->total_payment,
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',
