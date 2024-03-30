@@ -65,6 +65,12 @@
         <div class="row justify-content-center">
             
           <div class="col-md-10 col-lg-8">
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+             @endif
+             
                 <div class="mb-4">
                     <label class="form-label" for="dm-ecom-product-id">You were Referred by</label>
                     <input type="text" class="form-control" id="dm-ecom-product-id" name="dm-ecom-product-id" value="{{$referral->name}}" readonly>

@@ -36,6 +36,8 @@
                     </div>
                     <div class="fs-4 fw-semibold pt-3 mb-0">Payment Successful</div>
                     <br>
+                    Your subscription to wellahealth is completed. To access this produt, contact this phone number 
+                    <br> 
                     <a href="{{ url('/') }}" class="btn btn-primary btn-sm"> <li class="fa fa-home"> </li> Home </a>
                   </div>
                 </div>
