@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
             ->whereRaw('Date(created_at) = CURDATE()')
             ->count();
             
-            $user = User::where('id', 1)->first();//$user['name'] = 'Oluwatobi';
+            $user = User::where('id', 1)->first(); //$user['name'] = 'Oluwatobi';
             $subject = 'Today Count';
             $content = 'Total reg..'.$totalUsers;
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
