@@ -172,11 +172,12 @@
                                         @if($lock->status == 'Redeemed')
                                             <button class="btn btn-success" disabled>Safelock Redeemed</button>
                                         @else
-                                            <form action="{{ url('redeem/safelock') }}" method="POST">
+                                        Matured
+                                            {{-- <form action="{{ url('redeem/safelock') }}" method="POST">
                                               @csrf()
                                             <input type="hidden" name="id" value="{{ $lock->id }}">
                                             <button class="btn btn-primary" type="submit">Withdraw to Account</button>
-                                            </form>
+                                            </form> --}}
                                         @endif
 
                                     @else

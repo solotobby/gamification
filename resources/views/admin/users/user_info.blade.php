@@ -160,13 +160,13 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach ($info->transactions->where('status', 'successful')->sortByDesc('created_at') as $list)
+                  @foreach ($info->transactions->where('status', 'successful') as $list)
                   
                     @if($list->tx_type == 'Credit')
-                    <tr style="color: forestgreen">
-                  @else
-                    <tr style="color: chocolate">
-                  @endif
+                      <tr style="color: forestgreen">
+                    @else
+                      <tr style="color: chocolate">
+                    @endif
                       <td>
                         {{ $list->reference }}
                       </td>
