@@ -74,6 +74,29 @@
    <!-- Page Content -->
    <div class="content content-full">
    <div class="row">
+  
+
+
+      <div class="col-12">
+          @if(auth()->user()->wallet->base_currency == 'Naira')
+
+            @if(auth()->user()->is_verified)
+                  <div class="alert alert-warning">
+                    Your Naira account has been <strong>Verified.</strong>
+                </div>
+            @endif
+
+          @else
+
+            @if(auth()->user()->USD_verified)
+                <div class="alert alert-warning">
+                  Your Dollar account has been <strong>Verified.</strong>
+              </div>
+            @endif
+
+          @endif
+      </div>
+
       <div class="col-12">
         @if($announcement)
           <div class="alert alert-info">
@@ -81,8 +104,6 @@
           </div>
         @endif
       </div>
-      
-       
 
    </div>
 
@@ -218,7 +239,7 @@
           </div>
         </div>
       </div>  --}}
-      
+
        {{-- <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">

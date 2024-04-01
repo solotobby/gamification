@@ -55,23 +55,21 @@ class WebhookController extends Controller
 
                             if($upgrdate){
                                 Mail::to($user->email)->send(new UpgradeUser($user));
-                                
-                                // sendSMS($phone_number);
                             }
                             
                         }
                     }
                 }
 
-                $phone_number = '';
-                $first_character = substr($user->phone, 0, 3);
-                if($first_character == '234'){
-                    $phone_number = $user->phone;
-                }else{
-                    $phone_number = '234'.substr($user->phone, 1);
-                }
+                // $phone_number = '';
+                // $first_character = substr($user->phone, 0, 3);
+                // if($first_character == '234'){
+                //     $phone_number = $user->phone;
+                // }else{
+                //     $phone_number = '234'.substr($user->phone, 1);
+                // }
                                
-                sendSMS($phone_number);
+                // sendSMS($phone_number);
                 
                 
               
