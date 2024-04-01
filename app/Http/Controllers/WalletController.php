@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class WalletController extends Controller
 {
@@ -163,7 +164,7 @@ class WalletController extends Controller
             $amount = $request->balance + $percent + 0.4;
             $ref = time();
                 $payload = [
-                'tx_ref' => $ref,
+                'tx_ref' => Str::random(16),
                 'amount'=> $amount,
                 'currency'=> "USD",
                 'redirect_url'=> url('flutterwave/wallet/top'),
