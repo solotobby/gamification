@@ -517,7 +517,7 @@ if(!function_exists('sendSMS')){
         ])->post('https://api.ng.termii.com/api/sms/send', [
             "to"=> $phone,
             "from"=> "FREEBYZ",
-            "sms"=> 'Yay! Your account is verified. Login to start working&earning.Click https://vm.tiktok.com/ZMM8PGFEN/ to learn  more. Earn up to 50k & more today',
+            "sms"=> 'Congrats! Your wallet at Freebyz is verified. Login to start working& earning.Click https://vm.tiktok.com/ZMM8PGFEN/ to learn  more. Earn up to 50k & more today',
             "type"=> "plain",
             "channel"=> "generic",
             "api_key"=> env('TERMI_KEY')
