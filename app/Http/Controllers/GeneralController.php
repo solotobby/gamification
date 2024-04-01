@@ -426,28 +426,32 @@ class GeneralController extends Controller
 
     public function testy(){
 
+        $str = '10928';
+        return $first_character = substr($str, 0, 3);
+        // $first_character = $str[0]; 
+        // echo substr($myStr, 0, 5);
         // return PaystackHelpers::flutterwaveCreateCard();
 
-        $payload = [
-            "currency"=> "USD",
-            "amount"=>5,
-            "debit_currency"=> "NGN",
-            "billing_name"=> "Example User.",
-            "billing_address"=> "333, Fremont Street",
-            "billing_city"=> "San Francisco",
-            "billing_state"=> "CA",
-            "billing_postal_code"=> "94105",
-            "billing_country"=> "US",
-            "first_name"=> "Samuel",
-            "last_name"=> "Farohunbi",
-            "date_of_birth"=> "1996/12/30",
-            "email"=> "farohunbi.st@gmail.com",
-            "phone"=> "07030000000",
-            "title"=> "MR",
-            "gender"=> "M",
-            "callback_url"=> "https://webhook.site/b67965fa-e57c-4dda-84ce-0f8d6739b8a5"
-        ];
-        return createCard($payload);
+        // $payload = [
+        //     "currency"=> "USD",
+        //     "amount"=>5,
+        //     "debit_currency"=> "NGN",
+        //     "billing_name"=> "Example User.",
+        //     "billing_address"=> "333, Fremont Street",
+        //     "billing_city"=> "San Francisco",
+        //     "billing_state"=> "CA",
+        //     "billing_postal_code"=> "94105",
+        //     "billing_country"=> "US",
+        //     "first_name"=> "Samuel",
+        //     "last_name"=> "Farohunbi",
+        //     "date_of_birth"=> "1996/12/30",
+        //     "email"=> "farohunbi.st@gmail.com",
+        //     "phone"=> "07030000000",
+        //     "title"=> "MR",
+        //     "gender"=> "M",
+        //     "callback_url"=> "https://webhook.site/b67965fa-e57c-4dda-84ce-0f8d6739b8a5"
+        // ];
+        // return createCard($payload);
         // $payload = [
         //     "customer_id"=> "65c2adf0cd5ee96c010dbec0",
         //     "preferred_bank"=> "Banc Corp",
