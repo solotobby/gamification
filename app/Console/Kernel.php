@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
             $content = 'Total reg..'.$totalUsers;
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        })->dailyAt('11:57');
+        })->dailyAt('23:58');
     }
 
     /**
