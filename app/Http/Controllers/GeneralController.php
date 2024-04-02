@@ -439,9 +439,9 @@ class GeneralController extends Controller
 
 
          $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
-        // ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+        ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
 
-        ->whereDate('created_at', '>=', $minusday)
+        // ->whereDate('created_at', '>=', $minusday)
         
         ->get();
 
