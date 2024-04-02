@@ -110,7 +110,7 @@ class HomeController extends Controller
 
     public function adminHome(Request $request)
     {
-        $retention = Analytics::retentionRate();
+        // $retention = Analytics::retentionRate();
         // return PaystackHelpers::getPosts();
         // $campaigns = Campaign::where('status', 'Live')->get();
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
@@ -177,8 +177,8 @@ class HomeController extends Controller
             ->with('revenue', json_encode($revenueChannel))
             ->with('country', json_encode($countryDistribution))
             ->with('age', json_encode($ageDistribution))
-            ->with('monthlRevenue', json_encode($revenue))
-            ->with('retention', json_encode($retention));
+            ->with('monthlyRevenue', json_encode($revenue));
+            // ->with('retention', json_encode($retention));
     }
 
     public function adminApi(Request $request)

@@ -32,8 +32,9 @@
 </script>
 
 <script>
-  var monthlRevenue = <?php echo $monthlRevenue; ?>
+  var monthlyRevenue = <?php echo $monthlyRevenue; ?>
 </script>
+
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -59,10 +60,9 @@
             <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
 
-            <br> Total Jobs Available - {{ $av_count }}
-            <br> Total Active Virtual Account - {{ totalVirtualAccount() }} 
-            <br> Retention Rate From Last Month - {{ number_format($retention) }}% 
-
+            <br> Jobs Available - {{ $av_count }}
+            <br> Active Virtual Account - {{ totalVirtualAccount() }} 
+           
               @if(env('APP_ENV') == 'production')
                   <br> Location - {{ currentLocation() }}
               @endif

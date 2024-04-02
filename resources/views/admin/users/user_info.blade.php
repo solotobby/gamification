@@ -342,6 +342,10 @@
                       </div>
                       <input type="text" class="form-control" name="amount" placeholder="Amount" required>
                     </div>
+                    <div class=" mb-2">
+                    <label>Provide reson</label>
+                      <input type="text" class="form-control" name="reason" placeholder="Provide reason" required>
+                    </div>
                   </div>
                   <input type="hidden" name="user_id" value="{{ $info->id }}">
                  
