@@ -438,10 +438,14 @@ class GeneralController extends Controller
         $minusday = Carbon::now()->subDay();
 
 
-        return $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
-        // ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+         $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
+        ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
 
-        ->whereDate('created_at', '>=', $minusday)->get();
+        // ->whereDate('created_at', '>=', $minusday)
+        
+        ->get();
+
+        return [$lists, $lists->count()];
 
         // foreach($lists as $list){
 
