@@ -112,7 +112,7 @@ class Kernel extends ConsoleKernel
             $content = 'Job Automatic Approval of '.$lists->count();
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        })->dailyAt('23:58');
+        })->dailyAt('23:59');
 
        
     }
