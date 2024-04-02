@@ -13,42 +13,42 @@ class Analytics{
 
     public static function retentionRate(){
 
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+    //     $startOfMonth = Carbon::now()->startOfMonth();
+    //     $endOfMonth = Carbon::now()->endOfMonth();
 
-        $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
-        $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+    //     $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+    //     $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
 
-       $lastMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
-        ->whereIn('activity_type', ['login', 'account_creation'])
-        ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
-        ->groupBy('activity_type')
-        ->get()
-        ->pluck('count', 'activity_type')
-        ->toArray();
+    //    $lastMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
+    //     ->whereIn('activity_type', ['login', 'account_creation'])
+    //     ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+    //     ->groupBy('activity_type')
+    //     ->get()
+    //     ->pluck('count', 'activity_type')
+    //     ->toArray();
 
-        $lastMonthTotal = $lastMonth['login'] + $lastMonth['account_creation'];
-        $lastperLogin = ($lastMonth['login'] / $lastMonthTotal) * 100;
+    //     $lastMonthTotal = $lastMonth['login'] + $lastMonth['account_creation'];
+    //     $lastperLogin = ($lastMonth['login'] / $lastMonthTotal) * 100;
        
-        $lastMonthdata['perLogin'] = $lastperLogin;
+    //     $lastMonthdata['perLogin'] = $lastperLogin;
 
 
-        $currentMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
-        ->whereIn('activity_type', ['login', 'account_creation'])
-        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-        ->groupBy('activity_type')
-        ->get()
-        ->pluck('count', 'activity_type')
-        ->toArray();
+    //     $currentMonth = ActivityLog::select('activity_type', \DB::raw('COUNT(*) as count'))
+    //     ->whereIn('activity_type', ['login', 'account_creation'])
+    //     ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    //     ->groupBy('activity_type')
+    //     ->get()
+    //     ->pluck('count', 'activity_type')
+    //     ->toArray();
 
-        $currentMonthTotal = $currentMonth['login'] + $currentMonth['account_creation'];
-        $currentperLogin = ($currentMonth['login'] / $currentMonthTotal) * 100;
-        $currentMonthdata['perLogin'] = $currentperLogin;
+    //     $currentMonthTotal = $currentMonth['login'] + $currentMonth['account_creation'];
+    //     $currentperLogin = ($currentMonth['login'] / $currentMonthTotal) * 100;
+    //     $currentMonthdata['perLogin'] = $currentperLogin;
    
 
-        // return [$lastperLogin, $currentperLogin];
+    //     // return [$lastperLogin, $currentperLogin];
 
-        return  $currentperLogin - $lastperLogin;
+    //     return  $currentperLogin - $lastperLogin;
         
 
     }            

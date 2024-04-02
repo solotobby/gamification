@@ -974,6 +974,7 @@ class AdminController extends Controller
     }
 
     public function adminWalletTopUp(Request $request){
+       
         $user = auth()->user();
         if($user->hasRole('admin')){
             if($request->type == 'credit'){
@@ -1008,7 +1009,7 @@ class AdminController extends Controller
                     ]);
 
                     // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
-                    $content = 'Your walet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
+                    $content = 'Your wallet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
                     $subject = 'Wallet Topup';
                     $user = User::where('id', $request->user_id)->first();
                     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
@@ -1043,6 +1044,10 @@ class AdminController extends Controller
                         'tx_type' => 'Debit',
                         'user_type' => 'regular'
                     ]);
+                    $content = $request->reason;
+                    $subject = 'Wallet Debit';
+                    $user = User::where('id', $request->user_id)->first();
+                    Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Wallet Successfully Debitted');
             } 
         }else{
