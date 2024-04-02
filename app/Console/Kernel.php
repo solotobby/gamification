@@ -3,8 +3,13 @@
 namespace App\Console;
 
 use App\Mail\GeneralMail;
+use App\Models\Campaign;
+use App\Models\CampaignWorker;
 use App\Models\OTP;
+use App\Models\PaymentTransaction;
 use App\Models\User;
+use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Mail;
@@ -45,6 +50,73 @@ class Kernel extends ConsoleKernel
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
         })->dailyAt('23:58');
+
+        $schedule->call(function() {
+ 
+            // $now = Carbon::now();
+            // $twentyFourHoursAgo = Carbon::now()->subHours(24);
+    
+            $minusday = Carbon::now()->subDay();
+    
+            $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', null)
+            // ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+    
+            ->whereDate('created_at', '>=', $minusday)->get();
+
+            foreach($lists as $list){
+
+                $ca = CampaignWorker::where('id', $list->id)->first();
+                $ca->status = 'Approved';
+                $ca->reason = 'Auto-approval';
+                $ca->save();
+    
+                
+                $camp = Campaign::where('id', $ca->campaign_id)->first();
+                $camp->completed_count += 1;
+                $camp->pending_count -= 1;
+                $camp->save();
+    
+                
+                if($camp->currency == 'NGN'){
+                    $currency = 'NGN';
+                    $channel = 'paystack';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    $wallet->balance += $ca->amount;
+                    $wallet->save();
+                }else{
+                    $currency = 'USD';
+                    $channel = 'paypal';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    $wallet->usd_balance += $ca->amount;
+                    $wallet->save();
+                }
+    
+                $ref = time();
+    
+                setIsComplete($ca->campaign_id);
+        
+                PaymentTransaction::create([
+                    'user_id' => $ca->user_id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $ca->amount,
+                    'status' => 'successful',
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => 'campaign_payment',
+                    'description' => 'Campaign Payment for '.$ca->campaign->post_title,
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+    
+            }
+
+            $user = User::where('id', 1)->first(); //$user['name'] = 'Oluwatobi';
+            $subject = 'Batched Job Approval - Notification';
+            $content = 'Job Automatic Approval of '.$lists->count();
+            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
+        })->everyTwoHours();
     }
 
     /**
