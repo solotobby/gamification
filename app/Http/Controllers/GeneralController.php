@@ -16,6 +16,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -433,12 +434,60 @@ class GeneralController extends Controller
         
         $now = Carbon::now();
         $twentyFourHoursAgo = Carbon::now()->subHours(24);
-        
+
         $minusday = Carbon::now()->subDay();
-        return CampaignWorker::where('status', 'Pending')//->where('reason', '')
+
+
+        return $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
         // ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
-        ->whereDate('created_at', '>=', $minusday)
-        ->orderBy('created_at', 'DESC')->take(10)->get();
+
+        ->whereDate('created_at', '>=', $minusday)->get();
+
+        // foreach($lists as $list){
+
+        //     $ca = CampaignWorker::where('id', $list->id)->first();
+        //     $ca->status = 'Approved';
+        //     $ca->reason = 'Auto-approval';
+        //     $ca->save();
+
+        //     $camp = Campaign::where('id', $ca->campaign_id)->first();
+        //     $camp->completed_count += 1;
+        //     $camp->pending_count -= 1;
+        //     $camp->save();
+
+        //     if($camp->currency == 'NGN'){
+        //         $currency = 'NGN';
+        //         $channel = 'paystack';
+        //         $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        //         $wallet->balance += $ca->amount;
+        //         $wallet->save();
+        //     }else{
+        //         $currency = 'USD';
+        //         $channel = 'paypal';
+        //         $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        //         $wallet->usd_balance += $ca->amount;
+        //         $wallet->save();
+        //     }
+
+        //     $ref = time();
+
+        //     setIsComplete($ca->campaign_id);
+    
+        //     PaymentTransaction::create([
+        //         'user_id' => $ca->user_id,
+        //         'campaign_id' => '1',
+        //         'reference' => $ref,
+        //         'amount' => $ca->amount,
+        //         'status' => 'successful',
+        //         'currency' => $currency,
+        //         'channel' => $channel,
+        //         'type' => 'campaign_payment',
+        //         'description' => 'Campaign Payment for '.$ca->campaign->post_title,
+        //         'tx_type' => 'Credit',
+        //         'user_type' => 'regular'
+        //     ]);
+
+        // }
 
 
 
