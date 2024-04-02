@@ -583,19 +583,7 @@ class AdminController extends Controller
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
-    public function unapprovedJobs(){
-        
-        // $currentTime = Carbon::now();
-        // $twentyFourHoursAgo = $currentTime->subHours(24);
-
-        $list = CampaignWorker::where('status', 'Pending')
-        // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
-        ->orderBy('created_at', 'DESC')->paginate(200);
-
-        //  $list = SystemActivities::availableJobs();
-
-        return view('admin.unapproved_list', ['campaigns' => $list]); 
-    }
+    
 
     public function campaignInfo($id){
         $campaign = Campaign::where('id', $id)->first();
@@ -686,13 +674,27 @@ class AdminController extends Controller
         return back()->with('success', 'Completed status changed!');
     }
 
+    public function unapprovedJobs(){
+        
+        // $currentTime = Carbon::now();
+        // $twentyFourHoursAgo = $currentTime->subHours(24);
+
+        $list = CampaignWorker::where('status', 'Pending')
+        // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
+        ->orderBy('created_at', 'DESC')->paginate(200);
+
+        //  $list = SystemActivities::availableJobs();
+
+        return view('admin.unapproved_list', ['campaigns' => $list]); 
+    }
+
 
     public function massApproval(Request $request){
 
-       $ids = $request->id;
-       if(empty($ids)){
-        return back()->with('error', 'Please select at least one item');
-       }
+        $ids = $request->id;
+        if(empty($ids)){
+            return back()->with('error', 'Please select at least one item');
+        }
 
        foreach($ids as $id){
         $ca = CampaignWorker::where('id', $id)->first();

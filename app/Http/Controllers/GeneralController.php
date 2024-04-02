@@ -16,6 +16,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -429,9 +430,20 @@ class GeneralController extends Controller
 
 
     public function testy(){
+        
+        $now = Carbon::now();
+        $twentyFourHoursAgo = Carbon::now()->subHours(24);
+        
+        $minusday = Carbon::now()->subDay();
+        return CampaignWorker::where('status', 'Pending')//->where('reason', '')
+        // ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+        ->whereDate('created_at', '>=', $minusday)
+        ->orderBy('created_at', 'DESC')->take(10)->get();
 
-        $str = '10928';
-        return $first_character = substr($str, 0, 3);
+
+
+        // $str = '10928';
+        // return $first_character = substr($str, 0, 3);
         // $first_character = $str[0]; 
         // echo substr($myStr, 0, 5);
         // return PaystackHelpers::flutterwaveCreateCard();

@@ -465,14 +465,12 @@ class CampaignController extends Controller
 
         if($workSubmitted->reason != null){
             return back()->with('error', 'Campaign has been attended to');
-       }
+        }
 
         $campaign = Campaign::where('id', $workSubmitted->campaign_id)->first();
 
         if($request->action == 'approve'){
 
-           
-          
            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
            if($completed_campaign >= $campaign->number_of_staff){
                 return back()->with('error', 'Campaign has reached its maximum capacity');
