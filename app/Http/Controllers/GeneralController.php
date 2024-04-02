@@ -69,6 +69,10 @@ class GeneralController extends Controller
         return view('landingPage', ['transactions' => $transactions, 'users' => $users, 'workers' => $workers ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 
+    public function ladingpageApi(){
+        return PaymentTransaction::with(['user:id,name'])->inRandomOrder()->limit(10)->where('type', 'cash_withdrawal')->select(['user_id','amount','description', 'created_at'])->get();
+    }
+
     public function contact()
     {
         Analytics::dailyVisit('LandingPage');

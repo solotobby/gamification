@@ -17,6 +17,10 @@ class PaymentTransaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function userName(){
+        return $this->belongsTo(User::class, 'user_id')->select(['name']);
+    }
+
     public function referee(){
         return $this->hasMany(User::class, 'referral', 'user_id');
     }
