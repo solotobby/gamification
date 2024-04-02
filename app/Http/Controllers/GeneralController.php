@@ -432,18 +432,21 @@ class GeneralController extends Controller
 
     public function testy(){
         
-        $now = Carbon::now();
-        $twentyFourHoursAgo = Carbon::now()->subHours(24);
+        // $now = Carbon::now();
+        // $twentyFourHoursAgo = Carbon::now()->subHours(24);
 
-        $minusday = Carbon::now()->subDay();
+        // $minusday = Carbon::now()->subDay();
 
+
+        // $startYesterday = Carbon::yesterday()->startOfDay();
+        // $endYesterday = Carbon::yesterday()->endOfDay();
+
+        $yesterday = Carbon::yesterday();
 
          $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
-        ->whereBetween('created_at', [$twentyFourHoursAgo, $now])
-
-        // ->whereDate('created_at', '>=', $minusday)
-        
-        ->get();
+            //->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+            ->whereDate('created_at', $yesterday)
+            ->get();
 
         return [$lists, $lists->count()];
 
