@@ -248,7 +248,7 @@
                   <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                   <h3 class="h4 fw-bold mb-1" style="color: #191918">WellaHealth</h3>
                   <p class="fs-sm text-muted">
-                    <i class="fa fa-heart me-1"></i> Make money with Wellahealth Insurance
+                    <i class="fa fa-heart me-1"></i> Make Money from Selling Wellahealth Insurance
                   </p>
                   
                 </div>
