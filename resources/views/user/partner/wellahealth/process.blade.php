@@ -59,7 +59,7 @@
     <!-- Info -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Kindly Provide Beneficiary information</h3>
+        <h3 class="block-title">Kindly Enter Beneficiary information</h3>
       </div>
       <div class="block-content">
         <div class="row justify-content-center">
@@ -76,39 +76,39 @@
                     <input type="text" class="form-control" id="dm-ecom-product-id" name="dm-ecom-product-id" value="{{$referral->name}}" readonly>
                 </div>
                 <form action="{{ url('agent/store/wellahealth')}}" method="POST">
-                    @csrf
-                    @for($i=1; $i<=$numberOfPersons; $i++)
-                <strong> Enter Beneficiary {{ $i }} </strong>
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-name">First Name</label>
-                    <input type="text" class="form-control" id="dm-ecom-product-name" name="firstName[]" value="" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-name">Last Name</label>
-                    <input type="text" class="form-control" id="dm-ecom-product-name" name="lastName[]" value="" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-name">Phone Number</label>
-                    <input type="text" class="form-control" id="dm-ecom-product-name" name="phone[]" value="">
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-name">Email</label>
-                    <input type="email" class="form-control" id="dm-ecom-product-name" name="email[]" value="">
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-name">Date of Birth</label>
-                    <input type="date" class="form-control" id="dm-ecom-product-name" name="dateOfBirth[]" value="" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="form-label" for="dm-ecom-product-category">Gender</label>
-                    <select class="js-select2 form-select" id="dm-ecom-product-category" name="gender[]" style="width: 100%;" required>
-                    <option value="">Select One</option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    </select>
-                </div>
-                <hr>
+                  @csrf
+                @for($i=1; $i<=$numberOfPersons; $i++)
+                    <strong> Enter Beneficiary {{ $i }} </strong>
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-name">First Name</label>
+                        <input type="text" class="form-control" id="dm-ecom-product-name" name="firstName[]" value="" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-name">Last Name</label>
+                        <input type="text" class="form-control" id="dm-ecom-product-name" name="lastName[]" value="" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-name">Phone Number</label>
+                        <input type="text" class="form-control" id="dm-ecom-product-name" name="phone[]" value="" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-name">Email</label>
+                        <input type="email" class="form-control" id="dm-ecom-product-name" name="email[]" value="" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-name">Date of Birth</label>
+                        <input type="date" class="form-control" id="dm-ecom-product-name" name="dateOfBirth[]" value="" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label" for="dm-ecom-product-category">Gender</label>
+                        <select class="js-select2 form-select" id="dm-ecom-product-category" name="gender[]" style="width: 100%;" required>
+                        <option value="">Select One</option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <hr>
                 @endfor
 
                 <input type="hidden" name="referral_code" value="{{ $ref }}">
