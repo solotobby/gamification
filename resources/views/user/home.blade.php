@@ -240,7 +240,7 @@
         </div>
       </div>  --}}
 
-       {{-- <a href="{{ route('agent.wellahealth') }}">
+        <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
               <div class="d-md-flex justify-content-md-between align-items-md-center">
@@ -248,7 +248,7 @@
                   <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                   <h3 class="h4 fw-bold mb-1" style="color: #191918">WellaHealth</h3>
                   <p class="fs-sm text-muted">
-                    <i class="fa fa-map-pin me-1"></i> Make money as you send 
+                    <i class="fa fa-heart me-1"></i> Make money with Wellahealth Insurance
                   </p>
                   
                 </div>
@@ -256,7 +256,7 @@
               </div>
             </div>
           </div> 
-      </a> --}}
+      </a> 
 
       <!-- END VPS -->
       @foreach ($available_jobs as $job)

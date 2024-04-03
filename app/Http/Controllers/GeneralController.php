@@ -174,9 +174,6 @@ class GeneralController extends Controller
         $filteredArray = array_filter($display, function ($item) {
             return $item['data']['planType'] !== 'Monthly';
         });
-
-        
-
        return view('user.partner.wellahealth.external', ['subscriptions' => $filteredArray, 'ref' => $ref]);
         
     }
@@ -215,9 +212,6 @@ class GeneralController extends Controller
                 'gender' => $data['gender'][$i]
             ];
         }
-
-
-   
 
         $beneficiaryCount = count($formattedData);
         $inputRequest = '';
@@ -421,7 +415,8 @@ class GeneralController extends Controller
            
         }else{
 
-            return view('user.partner.wellahealth.success');
+            return redirect('wellahealthsuccess');
+
         }
     }
 
