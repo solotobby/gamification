@@ -35,19 +35,20 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
+        
         // $schedule->call(function(){
            
         // })->everyMinute();
 
         $schedule->call(function(){
-            $totalUsers = \DB::table('users')
-            ->whereRaw('Date(created_at) = CURDATE()')
-            ->count();
+            // $totalUsers = \DB::table('users')
+            // ->whereRaw('Date(created_at) = CURDATE()')
+            // ->count();
             
-            $user = User::where('id', 1)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'Today Count';
-            $content = 'Total reg..'.$totalUsers;
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            // $user = User::where('id', 1)->first(); //$user['name'] = 'Oluwatobi';
+            // $subject = 'Today Count';
+            // $content = 'Total reg..'.$totalUsers;
+            // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
 
 
@@ -55,7 +56,7 @@ class Kernel extends ConsoleKernel
 
             $yesterday = Carbon::yesterday();
 
-            $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
+            $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
                ->whereDate('created_at', $yesterday)
                ->get();
 
