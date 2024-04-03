@@ -236,7 +236,7 @@ class GeneralController extends Controller
             if($beneficiaryCount == 1){
                 //enter them in subscription
                 $payload = [
-                    'agentCode' => 'WHPXTest10076',
+                    'agentCode' => env('WELLAHEALTH_AGENT_CODE'),//'WHPXTest10076',
                     'firstName' => $formattedData[0]['firstName'],
                     'lastName' => $formattedData[0]['lastName'],
                     'phone' => $formattedData[0]['phone'],
