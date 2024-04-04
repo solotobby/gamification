@@ -398,3 +398,5 @@ Route::get('remove/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminCont
 
 //Knowledge base
 Route::get('admin/knowledgebase', [\App\Http\Controllers\KnowledgeBaseController::class, 'adminList']);
+///Partnerships
+Route::get('admin/partner', [\App\Http\Controllers\Admin\PartnershipController::class, 'list']);

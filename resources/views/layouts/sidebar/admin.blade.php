@@ -12,7 +12,13 @@
         <a class="nav-main-link" href="{{ url('admin/safelock') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Safelock Mgt</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+        </a>
+      </li> 
+
+      <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/partner') }}">
+          <i class="nav-main-link-icon fa fa-th"></i>
+          <span class="nav-main-link-name">Partners</span>
         </a>
       </li> 
 
