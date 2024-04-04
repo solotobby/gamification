@@ -65,9 +65,9 @@
                         @foreach ($lists as $list)
                             <tr>
                                 <td class="fw-semibold"> <a href=""> {{ $list->subscription_code }} </a> </td>
-                                <td>{{ $list->subscriber->firstName }} {{ $list->subscriber->lastName }}</td>
-                                <td>{{ $list->subscriber->email }}</td>
-                                <td>{{ $list->subscriber->phone }}</td>
+                                <td>{{ $list->subscriber->?firstName }} {{ $list->subscriber?->lastName }}</td>
+                                <td>{{ $list->subscriber->?email }}</td>
+                                <td>{{ $list->subscriber->?phone }}</td>
                                 <td>{{ $list->amount }}</td>
                                 <td>{{ $list->product }}</td>
                                 <td>{{ $list->is_paid == true ? 'Paid' : 'Not Paid' }}</td>
