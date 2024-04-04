@@ -70,6 +70,12 @@
                     {{ session('error') }}
                 </div>
              @endif
+
+             @if (session('success'))
+             <div class="alert alert-info" role="alert">
+                 {{ session('success') }}
+             </div>
+          @endif
              
                 <div class="mb-4">
                     <label class="form-label" for="dm-ecom-product-id">You were Referred by</label>
