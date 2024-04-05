@@ -13,6 +13,7 @@
             <td style="padding: 30px 30px 20px">
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
                 <p style="margin-bottom: 10px;">
+                    {{ $campaigns }}
                    <table>
                     <thead>
                         <tr>
@@ -27,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($campaigns as $job)
+                        {{-- @foreach($campaigns as $job)
                             <tr>
                                 <td>{{ $job->id }}</td>
                                 <td>{{ $job->job_id }}</td>
@@ -38,7 +39,7 @@
                                 <td>{{ $job->is_completed ? 'Yes' : 'No' }}</td>
                                 <td>{{ $job->currency }}</td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
                    
