@@ -102,7 +102,7 @@
         }
         .job-details h2 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .job-details p {
             color: #666;
@@ -110,12 +110,12 @@
         }
         /* CTA button styles */
         .cta-button {
-            text-align: center;
-            margin-top: 20px;
+            text-align: left;
+            margin-top: 4px;
         }
         .cta-button a {
             display: inline-block;
-            padding: 10px 20px;
+            /* padding: 10px 20px; */
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
@@ -139,14 +139,15 @@
                 <h2>Job Title: {{ $job['post_title'] }}</h2>
                 <p>Amount: {{ $job['currency'] }} {{ $job['campaign_amount'] }}</p>
                 <p>Category: {{ $job['type'] }}</p> 
+                <div class="cta-button">
+                    <a href="{{  url('campaign/'.$job['job_id']) }}" target="_blank">View Campaign</a>
+                </div>
             </div>
-            <div class="cta-button">
-                <a href="{{  url('campaign/'.$job['job_id']) }}" target="_blank">View Campaign</a>
-            </div>
+            
         @endforeach
         
         <div class="footer">
-            <p>For more information, contact [Contact Information Here]</p>
+            <p>Freebyz Team</p>
         </div>
     </div>
 </body>
