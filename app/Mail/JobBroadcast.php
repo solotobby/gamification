@@ -35,7 +35,7 @@ class JobBroadcast extends Mailable
     public function build()
     {
         return $this->view('emails.job_broadcast')->subject($this->subject)->with([
-            'name' => $this->user,
+            'name' => $this->user->name,
             'campaigns' => $this->campaigns,
         ]);
     }
