@@ -630,7 +630,7 @@ class GeneralController extends Controller
 
     public function testy(){
 
-         $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+         $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(10)->get();
         
         $list = [];
         foreach($campaigns as $key => $value){
@@ -667,7 +667,6 @@ class GeneralController extends Controller
 
         $user = User::where('id', 1)->first();
         $subject = 'Fresh Campaign';
-        
         Mail::to('solotobby@gmail.com')->send(new JobBroadcast($user, $subject, $filteredArray)); 
 
         return 'okay';
