@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
+use App\Mail\GeneralMail;
+use App\Mail\JobBroadcast;
 use App\Models\Answer;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
@@ -20,6 +22,7 @@ use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class GeneralController extends Controller
 {
@@ -626,7 +629,49 @@ class GeneralController extends Controller
 
 
     public function testy(){
+
+         $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         
+        $list = [];
+        foreach($campaigns as $key => $value){
+            
+           $c = $value->pending_count + $value->completed_count;
+            //$div = $c / $value->number_of_staff;
+            // $progress = $div * 100;
+
+            $list[] = [ 
+                'id' => $value->id, 
+                'job_id' => $value->job_id, 
+                'campaign_amount' => $value->campaign_amount,
+                'post_title' => $value->post_title, 
+                //'number_of_staff' => $value->number_of_staff, 
+                'type' => $value->campaignType->name, 
+                'category' => $value->campaignCategory->name,
+                //'attempts' => $attempts,
+                //'completed' => $c, //$value->completed_count+$value->pending_count,
+                'is_completed' => $c >= $value->number_of_staff ? true : false,
+                //'progress' => $progress,
+                'currency' => $value->currency,
+                //'created_at' => $value->created_at
+            ];
+        }
+
+        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+        // Remove objects where 'is_completed' is true
+        $filteredArray = array_filter($list, function ($item) {
+            return $item['is_completed'] !== true;
+        });
+      
+        // return $filteredArray;
+
+        $user = User::where('id', 1)->first();
+        $subject = 'Fresh Campaign';
+        
+        Mail::to('solotobby@gmail.com')->send(new JobBroadcast($user, $subject, $filteredArray)); 
+
+        return 'okay';
+
         // $now = Carbon::now();
         // $twentyFourHoursAgo = Carbon::now()->subHours(24);
 
@@ -636,14 +681,14 @@ class GeneralController extends Controller
         // $startYesterday = Carbon::yesterday()->startOfDay();
         // $endYesterday = Carbon::yesterday()->endOfDay();
 
-        $yesterday = Carbon::yesterday();
+        // $yesterday = Carbon::yesterday();
 
-         $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
-            //->whereBetween('created_at', [$twentyFourHoursAgo, $now])
-            ->whereDate('created_at', $yesterday)
-            ->get();
+        //  $lists =  CampaignWorker::where('status', 'Pending')//->where('reason', '')
+        //     //->whereBetween('created_at', [$twentyFourHoursAgo, $now])
+        //     ->whereDate('created_at', $yesterday)
+        //     ->get();
 
-        return [$lists, $lists->count()];
+        // return [$lists, $lists->count()];
 
         // foreach($lists as $list){
 
