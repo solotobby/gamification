@@ -96,7 +96,7 @@
         /* Job details styles */
         .job-details {
             background-color: #fff;
-            padding: 20px;
+            padding: 10px;
             border-radius: 8px;
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
@@ -106,7 +106,7 @@
         }
         .job-details p {
             color: #666;
-            margin-bottom: 10px;
+            margin-bottom: 3px;
         }
         /* CTA button styles */
         .cta-button {
@@ -115,7 +115,7 @@
         }
         .cta-button a {
             display: inline-block;
-            /* padding: 10px 20px; */
+            padding: 5px 10px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
@@ -136,7 +136,7 @@
         </div>
         @foreach($campaigns as $job)
             <div class="job-details">
-                <h2>Job Title: {{ $job['post_title'] }}</h2>
+                <h2>{{ $job['post_title'] }}</h2>
                 <p>Amount: {{ $job['currency'] }} {{ $job['campaign_amount'] }}</p>
                 <p>Category: {{ $job['type'] }}</p> 
                 <div class="cta-button">
