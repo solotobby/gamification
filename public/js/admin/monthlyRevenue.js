@@ -4,7 +4,7 @@ google.charts.setOnLoadCallback(drawVisualization);
 
 function drawVisualization() {
   // Some raw data (not necessarily accurate)
-  var data = google.visualization.arrayToDataTable(monthlRevenue);
+  var data = google.visualization.arrayToDataTable(monthlyRevenue);
 
   var options = {
     title : 'Monthly Revenue',

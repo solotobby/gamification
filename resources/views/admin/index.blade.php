@@ -59,10 +59,8 @@
             <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
             <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
-
             <br> Jobs Available - {{ $av_count }}
             <br> Active Virtual Account - {{ totalVirtualAccount() }} 
-           
               @if(env('APP_ENV') == 'production')
                   <br> Location - {{ currentLocation() }}
               @endif
