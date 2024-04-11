@@ -1,7 +1,5 @@
 @extends('layouts.main.general')
 @section('style')
-
-
 @endsection
 
 @section('content')
