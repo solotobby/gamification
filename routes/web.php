@@ -22,6 +22,7 @@ use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SafeLockController;
+use Illuminate\Support\Facades\App;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 Route::get('landing/api', [\App\Http\Controllers\GeneralController::class, 'ladingpageApi']);
@@ -388,6 +389,7 @@ Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test'])
 Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index']);
 Route::get('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner']);
 Route::resource('admin/safelock', AdminSafeLockController::class);
+// Route::get('admin/safelock/{id}', [\App\Http\Controllers\Admin\SafeLockController::class, 'redeemSafeLock']);
 
 //update users account details
 
