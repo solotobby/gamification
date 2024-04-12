@@ -7,6 +7,7 @@ use App\Mail\GeneralMail;
 use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
 use App\Models\SafeLock;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -146,20 +147,22 @@ class SafeLockController extends Controller
          if($getSafeLock->status == 'Redeemed'){
             return back()->with('error', 'Safelock redeemed');
          }
+         $user = User::where('id', $getSafeLock->user_id)->first();
         //get user bank information
-        $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
+        return $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
         if($bankInfo){   
             $transfter = PaystackHelpers::transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
             if($transfter['status'] == true){
 
                 $getSafeLock->status = 'Redeemed';
+                $getSafeLock->is_paid = true;
                 $getSafeLock->save();
 
                 PaymentTransaction::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => $user->id,
                     'campaign_id' => 1,
                     'reference' => time(),
-                    'amount' =>$getSafeLock->total_payment,
+                    'amount' => $getSafeLock->total_payment,
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',
@@ -170,7 +173,7 @@ class SafeLockController extends Controller
 
                 $subject = 'Freebyz SafeLock Redeemed';
                 $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
-                Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
                 return back()->with('success', 'Safelock redeemed, and your account has been funded.');
 

@@ -217,6 +217,7 @@ class CampaignController extends Controller
                         Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                         return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                     }
+                    
                 }else{
                     return back()->with('error', 'You do not have suficient funds in your wallet');
                 }

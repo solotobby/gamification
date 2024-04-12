@@ -27,7 +27,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">List - {{ $safelockAll->count() }} | Total Locked Fund - &#8358;{{ number_format($safelockAll->sum('amount_locked')) }} | Total Expected Payout - &#8358;{{ number_format($safelockAll->sum('total_payment')) }}</h3>
+        <h3 class="block-title">List - {{ $safelocks->count() }} | Total Locked Fund - &#8358;{{ number_format($safelocks->sum('amount_locked')) }} | Total Expected Payout - &#8358;{{ number_format($safelocks->sum('total_payment')) }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -45,6 +45,17 @@
             </div>
           </div>
         </form> --}}
+        @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
               <thead>
@@ -139,10 +150,11 @@
                                           @if($lock->status == 'Redeemed')
                                               <button class="btn btn-success" disabled>Safelock Redeemed</button>
                                           @else
+                                          <a href="{{ url('admin/safelock/'.$lock->id) }}" class="btn btn-primary" >Initiate withdrawal </a>
                                               {{-- <form action="{{ url('redeem/safelock') }}" method="POST">
                                                 @csrf()
                                               <input type="hidden" name="id" value="{{ $lock->id }}"> --}}
-                                              <button class="btn btn-primary" type="submit">Eligible for withdrawal</button>
+                                              {{-- <button class="btn btn-primary" type="submit">Eligible for withdrawal</button> --}}
                                               {{-- </form> --}}
                                           @endif
 
