@@ -82,9 +82,32 @@
             gtag('config', 'G-Y2YM3K06L8');
             </script>
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
            
-        
+        <style>
+
+            .float{
+                position:fixed;
+                width:60px;
+                height:60px;
+                bottom:40px;
+                right:40px;
+                background-color:lightblue;
+                color:#FFF;
+                border-radius:50px;
+                text-align:center;
+                font-size:30px;
+                box-shadow: 2px 2px 3px #999;
+                z-index:100;
+            }
+
+            .my-float{
+                margin-top:16px;
+            }
+        </style>
+
+
         @yield('script')
         @yield('style')
     </head>
@@ -106,6 +129,9 @@
 
         @yield('content')
 		
+        <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" class="float" target="_blank">
+            <i class="fa fa-phone my-float"></i>
+        </a>
 		<!-- footer start -->
 		@include('layouts.footer')
 		<!-- footer end -->
