@@ -117,6 +117,7 @@ class HomeController extends Controller
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
         $wallet = Wallet::where('user_id', '!=', '1')->get();
+      
         //this wwee
         $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
         $end_week = Carbon::now()->endOfWeek();
