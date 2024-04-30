@@ -249,7 +249,14 @@ class HomeController extends Controller
         //registration channel
         $registrationChannel = Analytics::registrationChannel();
 
-        return view('staff.home', ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal' => $Wal])
+        return view('staff.home', [
+            'users' => $user, 
+            'campaigns' => $campaigns, 
+            'workers' => $campaignWorker, 
+            'wallet' => $wallet, 
+            'ref_rev' => $ref_rev, 
+            'tx' => $transactions, 
+            'wal' => $Wal])
             ->with('visitor', json_encode($dailyActivity))
             ->with('daily', json_encode($dailyVisits))
             ->with('monthly', json_encode($MonthlyVisit))
