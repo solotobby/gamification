@@ -82,8 +82,8 @@
             </tbody>
           </table>
          
-          <button type="submit" class="btn btn-primary mb-2">Process Payment</button>
-          @if($today >= '21')
+          {{-- <button type="submit" class="btn btn-primary mb-2">Process Payment</button> --}}
+          @if($today >= '30')
                   @if(!$check)
                       {{-- <button type="submit" class="btn btn-primary mb-2">Process Payment</button> --}}
                       @else
