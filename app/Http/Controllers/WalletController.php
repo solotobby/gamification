@@ -343,7 +343,19 @@ class WalletController extends Controller
             $request->validate([
                 'balance' => 'required',
             ]);
+
+            $user = User::where('id', auth()->user()->id)->first();
+
+            // $lastSevenDays = now()->subWeek();
+            $accountCreationDate = new Carbon($user->created_at);
+            
+            if($accountCreationDate->diffInDays(Carbon::now()) <= 10){
+                return back()->with('error', 'You cannot make withdrawal at the moment');
+            }
+
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+
+            
             if($wallet->balance < $request->balance)
             {
                 return back()->with('error', 'Insufficient balance');
