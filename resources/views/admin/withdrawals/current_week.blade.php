@@ -1,6 +1,5 @@
 @extends('layouts.main.master')
 
-
 @section('content')
 
  <div class="bg-body-light">
