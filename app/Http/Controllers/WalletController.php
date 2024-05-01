@@ -286,7 +286,6 @@ class WalletController extends Controller
 
        if($res['data']['status'] == 'success') //success - paystack
        {
-
             PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
             
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
@@ -336,13 +335,16 @@ class WalletController extends Controller
 
     public function storeWithdraw(Request $request)
     {
-       
         if(auth()->user()->wallet->base_currency == 'Naira' ){
             $request->validate([
                 'balance' => 'required',
             ]);
-            // return Carbon::today();
-           $check = PaymentTransaction::where('user_id', auth()->user()->id)
+
+            if($request->balance >= 50000){
+                return back()->with('error', 'This transaction is not allowed, contact customer care');
+            }
+
+            $check = PaymentTransaction::where('user_id', auth()->user()->id)
                     ->where('type', 'cash_withdrawal')
                     ->whereDate('created_at', Carbon::today())
                     ->get(['id', 'amount', 'type']);
