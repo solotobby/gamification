@@ -332,8 +332,6 @@ class WalletController extends Controller
 
             return back()->with('success', 'Wallet Topup Successful'); 
         }
-       
-
     }
 
     public function storeWithdraw(Request $request)
@@ -343,23 +341,35 @@ class WalletController extends Controller
             $request->validate([
                 'balance' => 'required',
             ]);
+            // return Carbon::today();
+           $check = PaymentTransaction::where('user_id', auth()->user()->id)
+                    ->where('type', 'cash_withdrawal')
+                    ->whereDate('created_at', Carbon::today())
+                    ->get(['id', 'amount', 'type']);
+            
+            if(count($check) > 1){
+                return back()->with('error', 'This transaction is not allowed count, contact customer care');
+            }
+            
+            if($check->sum('amount') >= '50000'){
+                return back()->with('error', 'This transaction is not allowed, contact customer care');
+            }
 
             $user = User::where('id', auth()->user()->id)->first();
 
-            // $lastSevenDays = now()->subWeek();
             $accountCreationDate = new Carbon($user->created_at);
-            
+
             if($accountCreationDate->diffInDays(Carbon::now()) <= 10){
                 return back()->with('error', 'You cannot make withdrawal at the moment');
             }
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
 
-            
             if($wallet->balance < $request->balance)
             {
                 return back()->with('error', 'Insufficient balance');
             }
+
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             if($bankInformation){
                 $this->processWithdrawals($request, 'NGN', 'paystack');
