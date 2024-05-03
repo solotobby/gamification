@@ -141,13 +141,13 @@
                         
                       @else
                      
-                      {{-- <span class="form-control form-control-alt">VFD</span> <input type="text" value="4600066074" class="form-control form-control-alt" id="myInput-2" readonly>
+                      <span class="form-control form-control-alt">VFD</span> <input type="text" value="4600066074" class="form-control form-control-alt" id="myInput-2" readonly>
                         <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                           <i class="fa fa-copy"></i>
-                        </button> --}}
-                            <span class="form-control form-control-alt">
+                        </button>
+                            {{-- <span class="form-control form-control-alt">
                               <a href="{{ url('reactivate/virtual/account/'.auth()->user()->id) }}" class="btn btn-success btn-sm">Activate Freebyz Personal Account</a>
-                            </span>
+                            </span> --}}
                       @endif
 
                   @else
