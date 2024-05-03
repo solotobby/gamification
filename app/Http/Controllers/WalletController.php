@@ -394,7 +394,6 @@ class WalletController extends Controller
             return back()->with('success', 'Withdrawal Successfully queued');
 
         }
-      
     }
 
     public function processWithdrawals($request, $currency, $channel){
@@ -406,9 +405,9 @@ class WalletController extends Controller
         $ref = time();
         
         if(Carbon::now()->format('l') == 'Friday'){
-         $nextFriday = Carbon::now()->endOfDay();
+            $nextFriday = Carbon::now()->endOfDay();
         }else{
-         $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s');
+            $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s');
         }
 
          $wallet = Wallet::where('user_id', auth()->user()->id)->first();
@@ -428,6 +427,7 @@ class WalletController extends Controller
              'paypal_email' => $currency == 'USD' ? $request->paypal_email : null,
              'is_usd' => $currency == 'USD' ? true : false,
          ]);
+
         //process dollar withdrawal
         PaymentTransaction::create([
             'user_id' => auth()->user()->id,
@@ -466,10 +466,10 @@ class WalletController extends Controller
             $cur = $currency == 'USD' ? '$' : 'NGN';
             systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
         
-        // $user = User::where('id', '1')->first();
-        // $subject = 'Withdrawal Request Queued!!';
-        // $content = 'A withdrwal request has been made and it being queued';
-        // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            // $user = User::where('id', '1')->first();
+            // $subject = 'Withdrawal Request Queued!!';
+            // $content = 'A withdrwal request has been made and it being queued';
+            // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
         return $withdrawal;
     }
