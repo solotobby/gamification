@@ -1120,7 +1120,9 @@ class AdminController extends Controller
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
        $userPhone = User::where('id', $id)->first();
-       return  reGenerateVirtualAccount($userPhone);
+       return $fetchCustomer = PaystackHelpers::fetchCustomer($userPhone->email);
+
+    //    return  reGenerateVirtualAccount($userPhone);
         // return back()->with('success', 'VA regenerated Successfully');
     }
 
