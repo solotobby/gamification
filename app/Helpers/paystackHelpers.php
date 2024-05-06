@@ -120,7 +120,10 @@ class PaystackHelpers{
             'channels' => ['card'],
             'currency' => 'NGN',
             'reference' => $ref,
-            'callback_url' => url($redirect_url)
+            'callback_url' => url($redirect_url),
+            "metadata"=> [
+                "user_id"=> auth()->user()->id,
+            ]
         ]);
        return $res['data']['authorization_url'];
     }
@@ -203,7 +206,7 @@ class PaystackHelpers{
     ///system functions 
 
     public static function getLocation(){
-        if(env('APP_ENV') == 'local'){
+        if(env('APP_ENV') == 'local_test'){
             $ip = '48.188.144.248';
         }else{
             $ip = request()->ip();
@@ -214,7 +217,7 @@ class PaystackHelpers{
 
     }
     public static function userLocation($type){
-        if(env('APP_ENV') == 'local'){
+        if(env('APP_ENV') == 'local_test'){
             $ip = '48.188.144.248';
         }else{
             $ip = request()->ip();

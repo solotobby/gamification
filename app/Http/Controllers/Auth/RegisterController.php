@@ -55,7 +55,13 @@ class RegisterController extends Controller
 
     public function registerUser(Request $request)
     {
-        $curLocation = currentLocation();
+        $curLocation = '';
+        if(env('APP_ENV')  == 'local_test'){
+            $curLocation = 'United Kingdom';
+        }else{
+            $curLocation = currentLocation();
+        }
+      
         if ($curLocation == 'Nigeria') {
             $request->validate([
                 'first_name' => ['required', 'string', 'max:255'],
@@ -123,9 +129,14 @@ class RegisterController extends Controller
         }
 
         // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-        $subject = 'Welcome to Freebyz';
-        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        if(env('APP_ENV')  == 'local_test'){
+           // $curLocation = 'United Kingdom';
+        }else{
+            $subject = 'Welcome to Freebyz';
+             Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        }
 
+        
         return $user;
     }
 
