@@ -1117,10 +1117,14 @@ class AdminController extends Controller
     }
 
     public function reactivateVA($id){
+        $user = User::where('id', $id)->first();
+        $phone = '234' . substr($user->phone, 1);
+        return generateVirtualAccountOnboarding($user, $phone);
+
         // return $request;
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
-       $userPhone = User::where('id', $id)->first();
-       return $fetchCustomer = PaystackHelpers::fetchCustomer($userPhone->email);
+    //    $userPhone = User::where('id', $id)->first();
+    //    return $fetchCustomer = PaystackHelpers::fetchCustomer($userPhone->email);
 
     //    return  reGenerateVirtualAccount($userPhone);
         // return back()->with('success', 'VA regenerated Successfully');
