@@ -948,6 +948,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 $data['res']=$response;
                 $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
                 return $data;
+
             }else{
                 return back()->with('error', 'Error occured while processing');
             }

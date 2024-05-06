@@ -206,12 +206,12 @@ class PaystackHelpers{
     ///system functions 
 
     public static function getLocation(){
-        if(env('APP_ENV') == 'local_test'){
-            $ip = '48.188.144.248';
-        }else{
-            $ip = request()->ip();
-        }
-
+        // if(env('APP_ENV') == 'local_test'){
+        //     $ip = '48.188.144.248';
+        // }else{
+           
+        // }
+        $ip = request()->ip();
          $location = Location::get($ip);
       return $location->countryName;
 
