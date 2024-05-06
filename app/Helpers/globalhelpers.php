@@ -115,7 +115,7 @@ if(!function_exists('setWalletBaseCurrency')){
 
 if(!function_exists('setProfile')){
     function setProfile($user){
-        if(env('APP_ENV') == 'local'){
+        if(env('APP_ENV') == 'local_test'){
             $ip = '48.188.144.248';
         }else{
             $ip = request()->ip();

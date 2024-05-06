@@ -76,11 +76,11 @@
                   <i class="fa fa-fw fa-share opacity-50 me-1"></i>  Get Virtual Naira Card
             </a>
 
-            
 
-            <a href="{{ url('setup/account') }}" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
+
+            {{-- <a href="{{ url('setup/account') }}" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                   <i class="fa fa-fw fa-share opacity-50 me-1"></i> Get Virtual USD Card
-            </a>
+            </a> --}}
            
           
 
