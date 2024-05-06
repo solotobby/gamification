@@ -1117,7 +1117,7 @@ class AdminController extends Controller
     }
 
     public function reactivateVA($id){
-        $user = User::where('id', $id)->first();
+        return $user = User::where('id', $id)->first();
         $phone = '234' . substr($user->phone, 1);
         return generateVirtualAccountOnboarding($user, $phone);
 
