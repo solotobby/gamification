@@ -24,13 +24,11 @@
 					<div class="col-sm-12 col-md-12 col-lg-12 mb-40">
 						<div class="contact-person">
 							<h4>Freebyz Affiliate program</h4>
-                            <h5>
+                            <p>
                                 Freebyz Affiliate program offers rewards to users as affiliate commissions 
                                 for referring friends to verify their account and use Freebyz to access remote Jobs or grow 
-                                their social media or business.
-                                <br>
-                                We currently have two types of referral programs on Freebyz
-                            </h5>
+                                their social media or business. We currently have two types of referral programs on Freebyz
+                            </p>
                             <p>
                                 1. <strong>Direct referral program:</strong> When you refer a verified user, we pay you 50% of the referral fee 
                                 (N500 for naira wallets) or $1.5 (for dollar wallets). Using this simple referral principle, 
@@ -50,9 +48,9 @@
                                2. <strong> Third Party referral program:</strong> Freebyz has partnered with Wellahealth, an healthcare provider 
                                to give you access to referral bonuses when you refer your friends to sign up for an health care (insurance) 
                                plan offered by Wellahealth. With this, you can  earn up to 200,000 Naira daily by referring your friends to Wellahealth.
-                               <a href="{{ url('wellahealth') }}" target="_blank">Wellahealth</a> access to affordable health care for access to free drugs, blood tests, medical check-ups, free calls to Doctors, etc.
+                               <a href="{{ url('wellahealth') }}" target="_blank">Wellahealth</a> provide access to affordable health care for access to free drugs, blood tests, medical check-ups, free calls to Doctors, etc.
                                You can gift the health care plan as a birthday gift. Health care will be obtained in the nearest Pharmacy or Hospital closest to the beneficiary.
-                                <br>
+                                <br><br>
                                <i> <b>
                                         Remote Job opportunities in Nigeria — use your mobile phone to work and earn legit money daily in Nigeria —
                                     </b>
