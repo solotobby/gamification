@@ -14,7 +14,7 @@
                         <nav>
                             <ul class="basic-menu clearfix">
                                 <li><a href="{{ url('/') }}">Home</a></li>
-                                <li><a href="{{ url('make-money') }}">Make Money</a></li>
+                                <li><a href="{{ url('affiliate') }}">Affiliate Program</a></li>
                                 <li><a href="{{ url('about') }}">About Us</a></li>
                                 {{-- <li><a href="{{ route('goal') }}">Goal</a></li> --}}
                                 {{-- <li><a href="{{  route('game.list') }}">Game List</a></li> --}}
