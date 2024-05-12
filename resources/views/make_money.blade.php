@@ -24,13 +24,11 @@
 					<div class="col-sm-12 col-md-12 col-lg-12 mb-40">
 						<div class="contact-person">
 							<h4>Freebyz Affiliate program</h4>
-                            <h5>
+                            <p>
                                 Freebyz Affiliate program offers rewards to users as affiliate commissions 
                                 for referring friends to verify their account and use Freebyz to access remote Jobs or grow 
-                                their social media or business.
-                                <br>
-                                We currently have two types of referral programs on Freebyz
-                            </h5>
+                                their social media or business. We currently have two types of referral programs on Freebyz
+                            </p>
                             <p>
                                 1. <strong>Direct referral program:</strong> When you refer a verified user, we pay you 50% of the referral fee 
                                 (N500 for naira wallets) or $1.5 (for dollar wallets). Using this simple referral principle, 
@@ -50,9 +48,9 @@
                                2. <strong> Third Party referral program:</strong> Freebyz has partnered with Wellahealth, an healthcare provider 
                                to give you access to referral bonuses when you refer your friends to sign up for an health care (insurance) 
                                plan offered by Wellahealth. With this, you can  earn up to 200,000 Naira daily by referring your friends to Wellahealth.
-                               <a href="{{ url('wellahealth') }}" target="_blank">Wellahealth</a> access to affordable health care for access to free drugs, blood tests, medical check-ups, free calls to Doctors, etc.
+                               <a href="{{ url('wellahealth') }}" target="_blank">Wellahealth</a> provide access to affordable health care for access to free drugs, blood tests, medical check-ups, free calls to Doctors, etc.
                                You can gift the health care plan as a birthday gift. Health care will be obtained in the nearest Pharmacy or Hospital closest to the beneficiary.
-                                <br>
+                                <br><br>
                                <i> <b>
                                         Remote Job opportunities in Nigeria — use your mobile phone to work and earn legit money daily in Nigeria —
                                     </b>
@@ -114,71 +112,7 @@ Freebyz allows you to earn in dollars and convert your earnings to naira. You ca
         
             </div>
         </div>
-        <div class="basic-service-area gray-bg pt-90 pb-50">
-            <div class="container">
-                <div class="area-title text-center">
-                    <h2>How it works</h2>
-                    {{-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi tempora veritatis nemo aut ea iusto eos est
-                        expedita, quas ab adipisci.</p> --}}
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 mb-40">
-                        <div class="service-box white-bg">
-                            {{-- <div class="service-icon">
-                                <span class="icon-pencil"></span>
-                            </div> --}}
-                            <div class="service-content">
-                                <h3>Sign Up</h3>
-                                    <p>Sign up to get your referral code and start earning 500 NGN on every referral.
-                                         Your referral code is your affiliate link to earn more money. Start Earning Now...
-                                         {{-- More referrals means fat wallet for you. We pay every Friday. --}}
-                                         </p>
-                                {{-- <p>Candidates or users that perform excellently will be eligible for our
-                                     cash rewards. The cash will be paid directly into the candidates account. 
-                                     The amount to be paid to our best performing candidates would be determined by the
-                                      Freebys administrator. We hope to see you do well!
-                                </p> --}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 mb-40">
-                        <div class="service-box white-bg">
-                            {{-- <div class="service-icon">
-                                <span class="icon-gears"></span>
-                            </div> --}}
-                            <div class="service-content">
-                                <h3>Earn and Cash out</h3>
-                                <p>
-                                    Login to your dashboard to access available jobs. You can earn as much as 
-                                    10,000 NGN daily when you like, share, comment on a post or play games.
-                                    {{-- Airtime rewards will be sent to candidates that perform well. 
-                                    This would be sent to their desired phone numbers. The candidates can redeem 
-                                    their rewards electronically. Our Airtime reward value is also determined by the Freebys Administrator --}}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 mb-40">
-                        <div class="service-box white-bg">
-                            {{-- <div class="service-icon">
-                                <span class="icon-mobile"></span>
-                            </div> --}}
-                            <div class="service-content">
-                                <h3>Hire Workers</h3>
-                                <p>
-                                    Hire social media workers to engage your posts on your blog and all 
-                                    social media channels for organic growth &  increased visibility for more sales.
-                                    {{-- We also give Data Bundles to encourage you to study more and make 
-                                    good researches. This will be processed the same way the Airtime rewards are shared. 
-                                    A minimum of 1gig data will be sent to candidates with good scores. This reward is still being 
-                                    processed at the moment! --}}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         {{-- <div class="basic-contact-area pt-90 pb-50">
 			<div class="container">
