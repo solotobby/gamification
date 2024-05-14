@@ -13,7 +13,7 @@
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item active" aria-current="page"> Queued Withdrawal Request</li>
+            <li class="breadcrumb-item active" aria-current="page">Queued Withdrawal Request</li>
           </ol>
         </nav>
       </div>
@@ -59,7 +59,7 @@
                     <th>View</th>
                     <th>Date Rquested</th>
                     <th>Liq. Date</th>
-                    </tr>
+                </tr>
             </thead>
             <tbody>
                 <?php $i = 1; ?>
@@ -123,7 +123,7 @@
                                 @if(@$with->user->accountDetails->bank_name == '')
                                   <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
                                 @else
-                                  <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
+                                  {{-- <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a> --}}
                                 @endif
 
                                 <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>

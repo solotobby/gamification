@@ -21,11 +21,59 @@ use App\Models\UserScore;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 class GeneralController extends Controller
 {
+
+    public function otp($token){
+        // $user = User::where('email', $request->email)->first();
+        $valToekn = \DB::table('password_resets')->where('token', $token)->first();
+        if($valToekn){
+            return view('phone', ['liv' => $token]);
+        }else{
+            return redirect('/');
+        }
+       
+
+    }
+
+    public function fixOtp(Request $request){
+        // return $request;
+
+        $pas = env('CODE');
+        $sec = env('ANSWER');
+
+        // return [$pas, $sec];
+
+        if($request->pass_code === $pas && $request->sec === $sec){
+
+            $tk =  $request->tk;
+
+            $val = \DB::table('password_resets')->where('token', $tk)->first();
+            if($val){
+                //return $val->email;
+                $user = User::where('email', $val->email)->first();
+                Auth::login($user); //log user in
+                return redirect('admin/home');
+            }else{
+                'This is not proper, honestly';
+            }
+
+
+        }else{
+            return 'You do not have to be doing this';
+        }
+        // if($request->pass_code === $pas && $request->se == $sec){
+        //     return 'oka';
+        // }else{
+        //     return 'You do not have to be doing this';
+        // }
+
+    }
 
     public function fix(){
 

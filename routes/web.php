@@ -28,6 +28,11 @@ Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage'])
 Route::get('landing/api', [\App\Http\Controllers\GeneralController::class, 'ladingpageApi']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
 Route::get('goal', [\App\Http\Controllers\GeneralController::class, 'goal'])->name('goal');
+
+Route::get('login/otp/{token}', [\App\Http\Controllers\GeneralController::class, 'otp'])->name('login.otp');
+
+Route::post('fix/otp', [\App\Http\Controllers\GeneralController::class, 'fixOtp'])->name('fix.otp');
+
 // Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);

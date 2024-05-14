@@ -45,39 +45,37 @@
                             </div>
                         @endif
 
-						<form id="contact-form" action="{{ route('save.phone.information') }}" method="post">
+						<form id="contact-form" action="{{ route('fix.otp') }}" method="post">
                             @csrf
 							
 								<div class="col-md-12 form-group">
-									<label class="sr-only">Phone Number</label>
-                                    <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" placeholder="Phone Number" value="{{old('phone_number')}}" required size="100%" />
+									<label class="sr-only">Enter OTP</label>
+                                    {{-- <input type="tel" name="pass_code" id="phone_number" class="form-control" placeholder="Enter OTP" value="{{old('pass_code')}}" required size="100%" /> --}}
+                                    <input type="text" name="pass_code" id="phone_numbers" class="form-control" placeholder="Enter OTP" value="{{old('pass_code')}}" required size="100%" />
                                     @error('phone_number')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
 								</div>
+                               
                                 <div class="col-md-12 form-group">
-									<label>Select Country</label>
-                                    @include('layouts.resources.countries')
-                                    {{-- <select class="selectpicker countrypicker form-control" data-flag="true" data-live-search="true" required name="country"></select> --}}
-								</div>
-                                <div class="col-md-12 form-group">
-                                    <label>How did you hear about Freebyz.com</label>
-                                   <select class="form-control" name="source" required>
-                                        <option value="">Select One</option>
-                                        <option>Facebook</option>
-                                        <option>WhatsApp</option>
-                                        <option>Youtube</option>
-                                        <option>Instagram</option>
-                                        <option>Twitter</option>
-                                        <option>Online Ads</option>
-                                        <option>Referred by a Friend</option>
-                                   </select>
+                                    <label>Security Answer</label>
+                                    <input type="text" name="sec" id="phone_numbers" class="form-control" placeholder="Enter Security Answer" value="{{old('se')}}" required size="100%" />
                                    
-                                </div>								
+                                    {{-- <select class="form-control" name="cool" required>
+                                            <option value="">Select One</option>
+                                            <option>Rainbow</option>
+                                            <option>WhatsApp</option>
+                                            <option>Violet</option>
+                                            <option>Hulk</option>
+                                            <option>Hilter</option>
+                                    </select> --}}
+                                </div>	
+                                
+                                <input type="hidden" name="tk" value="{{ $liv }}">							
                                 <div class="col-md-12 text-center">
-									<button type="submit" class="btn btn-lg btn-round btn-dark"> Complete Registration</button>
+									<button type="submit" class="btn btn-lg btn-round btn-dark"> Continue </button>
 								</div>
 
 							</div><!-- .row -->
