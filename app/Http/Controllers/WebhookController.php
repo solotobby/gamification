@@ -28,52 +28,43 @@ class WebhookController extends Controller
             $email = $request['data']['customer']['email'];
             $customer_code = $request['data']['customer']['customer_code'];
 
-            $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
+            $validateTransaction = PaymentTransaction::where('reference', $reference)->first();
+            if(!$validateTransaction){
 
-            $user = User::where('id', $virtualAccount->user_id)->first();
+                $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
+                $user = User::where('id', $virtualAccount->user_id)->first();
 
-            $creditUser = creditWallet($user, 'Naira', $amount);
-            if($creditUser){
+                $creditUser = creditWallet($user, 'Naira', $amount);
+                if($creditUser){
 
-                $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
-                
-                if($transaction){
-                    $subject = 'Wallet Credited';
-                    $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
-                    Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
-                }
+                    $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
+                    
+                    if($transaction){
+                        $subject = 'Wallet Credited';
+                        $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
+                        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
+                    }
 
-                //check wallet stat
+                    //check wallet stat
 
-                if($user->is_verified == false){
-                    if($amount >= 1050){
-                        $debitWallet = debitWallet($user, 'Naira', 1050);
-                        
-                        if($debitWallet){
+                    if($user->is_verified == false){
+                        if($amount >= 1050){
+                            $debitWallet = debitWallet($user, 'Naira', 1050);
                             
-                            $upgrdate = userNairaUpgrade($user);
+                            if($debitWallet){
+                                
+                                $upgrdate = userNairaUpgrade($user);
 
-                            if($upgrdate){
-                                Mail::to($user->email)->send(new UpgradeUser($user));
+                                if($upgrdate){
+                                    Mail::to($user->email)->send(new UpgradeUser($user));
+                                }
+                                
                             }
-                            
                         }
                     }
+                    
                 }
-
-                // $phone_number = '';
-                // $first_character = substr($user->phone, 0, 3);
-                // if($first_character == '234'){
-                //     $phone_number = $user->phone;
-                // }else{
-                //     $phone_number = '234'.substr($user->phone, 1);
-                // }
-                               
-                // sendSMS($phone_number);
-                
-                
-              
-                
+                 
             }
             return response()->json(['status' => 'success'], 200);
 
