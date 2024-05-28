@@ -373,10 +373,10 @@
                                   
                               <select class="form-control" name="bank_code" required>
                                   <option value="">Select Bank</option>
-                                  @foreach ($bankList as $bank)
+                                  {{-- @foreach ($bankList as $bank)
                                       <option value="{{ $bank['code'] }}"> {{ $bank['name'] }}</option>
-                                      {{--  <input type="hidden" name="bank_name" value="{{ $bank['name'] }}">  --}}
-                                  @endforeach    
+                                      
+                                  @endforeach     --}}
                                   </select> 
                               </div>
                           </div>

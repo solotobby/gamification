@@ -382,8 +382,10 @@ class AdminController extends Controller
         $info = User::where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
-        $bankList = PaystackHelpers::bankList();
-        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy, 'bankList' => $bankList]);
+        // $bankList = PaystackHelpers::bankList();
+        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy
+        // 'bankList' => $bankList
+        ]);
     }
 
     public function adminUserReferrals($id){
