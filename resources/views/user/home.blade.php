@@ -248,7 +248,7 @@
                   <h3 class="h4 fw-bold mb-1" style="color: #191918">Payhankey</h3>
                   <p class="fs-sm text-muted">
                     <i class="fa fa-heart me-1"></i>Monetize your Posts on Payhankey
-                          Earn up to $500 and daily. Monetize every comment, likes and views.
+                          Earn up to $500 daily. Monetize every comment, likes and views.
                   </p>
                 </div>
                 
