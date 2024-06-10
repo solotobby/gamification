@@ -407,8 +407,8 @@
                                               <textarea class="form-control" name="comment" id="js-ckeditor5-classic"></textarea>
                                           </div>
                                           <div class="col-md-12 mb-3">
-                                            <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg)</label>
-                                            <input class="form-control" type="file" name="proof" id="example-file-input-multiple" required>
+                                            <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg) - Optional</label>
+                                            <input class="form-control" type="file" name="proof" id="example-file-input-multiple">
                                           </div>
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">

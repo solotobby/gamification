@@ -357,9 +357,9 @@ class CampaignController extends Controller
     }
 
     public function submitWork(Request $request){
-       // return $request;
+       
         $this->validate($request, [
-            'proof' => 'required|image|mimes:png,jpeg,gif,jpg',
+            'proof' => 'image|mimes:png,jpeg,gif,jpg',
             'comment' => 'required|string',
         ]);
 
@@ -379,20 +379,22 @@ class CampaignController extends Controller
 
         $data['campaign'] = $campaign;
 
-        if($request->hasFile('proof')){
-         
-            $fileBanner = $request->file('proof');
-            $Bannername = time() . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'proofs/' . $Bannername;
-    
-            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+        // if($request->hasFile('proof')){
+            $proofUrl = '';
+            if($request->hasFile('proof')){
+                $fileBanner = $request->file('proof');
+                $Bannername = time() . $fileBanner->getClientOriginalName();
+                $filePathBanner = 'proofs/' . $Bannername;
+        
+                Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+                $proofUrl = Storage::disk('s3')->url($filePathBanner);
+            }
 
             $campaignWorker['user_id'] = auth()->user()->id;
             $campaignWorker['campaign_id'] = $request->campaign_id;
             $campaignWorker['comment'] = $request->comment;
             $campaignWorker['amount'] = $request->amount;
-            $campaignWorker['proof_url'] = $proofUrl;
+            $campaignWorker['proof_url'] = $proofUrl == '' ? 'no image' : $proofUrl;
             $campaignWorker['currency'] = $campaign->currency;
             $campaignWork = CampaignWorker::create($campaignWorker);
             
@@ -413,10 +415,10 @@ class CampaignController extends Controller
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-            return back()->with('success', 'Job Submitted Successfully');
-        }else{
-            return back()->with('error', 'Upload an image');
-        }
+        //     return back()->with('success', 'Job Submitted Successfully');
+        // }else{
+        //     return back()->with('error', 'Upload an image');
+        // }
     }
 
     public function mySubmittedCampaign($id)
