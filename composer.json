@@ -7,7 +7,8 @@
     "require": {
         "php": "^7.3|^8.1",
         "africastalking/africastalking": "^3.0",
-        "doctrine/dbal": "^3.6",
+        "carbonphp/carbon-doctrine-types": "^3.2",
+        "doctrine/dbal": "^4.0",
         "facebook/graph-sdk": "^5.1",
         "flutterwavedev/flutterwave-v3": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
