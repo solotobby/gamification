@@ -937,5 +937,9 @@ class GeneralController extends Controller
     //    return $res['data']['authorization_url'];
     }
 
+    public function access(){
+        return view('access');
+    }
+
 
 }

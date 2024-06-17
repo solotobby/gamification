@@ -285,9 +285,9 @@
       <main id="main-container">
         @yield('content')
 
-        <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" class="float" target="_blank">
+        {{-- <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" class="float" target="_blank">
           <i class="fab fa-rocketchat my-float"></i>
-        </a>
+        </a> --}}
 
       </main>
       <!-- END Main Container -->

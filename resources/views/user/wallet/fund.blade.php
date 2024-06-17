@@ -99,6 +99,18 @@
 
               @else
 
+              <div class="input-group mb-4">
+                <span class="input-group-text">
+                  Payment Method
+                </span>
+                <select name="method" class="form-control @error('method') is-invalid @enderror" required>
+                  <option value="">Select Payment Method</option>
+                  <option value="stripe">Stripe</option>
+                  <option value="flutterwave">Flutterwave</option>
+                </select>
+              </div>
+
+
               <div class="input-group">
                 <span class="input-group-text">
                   $
