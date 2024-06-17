@@ -189,6 +189,7 @@ Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::clas
 Route::get('wallet/fund', [\App\Http\Controllers\WalletController::class, 'fund'])->name('fund');
 Route::get('wallet/withdraw', [\App\Http\Controllers\WalletController::class, 'withdraw'])->name('withdraw');
 Route::post('store/fund', [\App\Http\Controllers\WalletController::class, 'storeFund'])->name('store.funds');
+Route::get('cancel/transaction/{ref}', [\App\Http\Controllers\WalletController::class, 'cancelUrl']);//->name('store.funds');
 Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 'storeWithdraw'])->name('store.withdraw');
 Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
 Route::post('switch/wallet', [\App\Http\Controllers\WalletController::class, 'switchWallet']);
@@ -228,12 +229,16 @@ Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::c
 Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);
 Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterController::class, 'makeConversion'])->name('make.conversion');
 
+//stripe integration
+Route::get('stripe/checkout/success', [\App\Http\Controllers\WalletController::class, 'stripeCheckoutSuccess'])->name('stripe.checkout.success');
 //badge
 Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->name('badge');
 Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
 Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
 Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
+
 //webhook handling
+
 //Flutterwave Top up
 Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
 

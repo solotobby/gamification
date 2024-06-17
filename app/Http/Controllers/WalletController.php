@@ -8,6 +8,7 @@ use App\Helpers\SystemActivities;
 use App\Mail\GeneralMail;
 use App\Models\BankInformation;
 use App\Models\PaymentTransaction;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withrawal;
@@ -154,16 +155,20 @@ class WalletController extends Controller
         
         }else{
 
-            $curLocation = currentLocation();
+            // $curLocation = currentLocation();
             
-            if($curLocation == 'Nigeria'){
-                return back()->with('error', 'You are not allowed to use this feature. Kindly top up with your Virtual Account.');
-            }
+            // if($curLocation == 'Nigeria'){
+            //     return back()->with('error', 'You are not allowed to use this feature. Kindly top up with your Virtual Account.');
+            // }
 
             $percent = 5/100 * $request->balance;
             $amount = $request->balance + $percent + 0.4;
             $ref = time();
-                $payload = [
+
+        if($request->method == 'flutterwave'){
+
+       
+            $payload = [
                 'tx_ref' => Str::random(16),
                 'amount'=> $amount,
                 'currency'=> "USD",
@@ -203,19 +208,97 @@ class WalletController extends Controller
             //PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Credit', 'Payment_Initiation', 'regular');
             
             return redirect($url);
+        }else{
 
-           // return redirect('https://flutterwave.com/pay/topuponfreebyz');
-            // $percent = 5/100 * $request->balance;
-            // $am = $request->balance + $percent + 1;
-            //  $result = paypalPayment($am, '/paypal/return');
-            //  if($result['status'] == 'CREATED'){
-            //     $url = $result['links'][1]['href'];
-            //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
-            //     return redirect($url);
-            //  }
-           
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+
+            $redirectUrl = route('stripe.checkout.success').'?session_id={CHECKOUT_SESSION_ID}';
+            $ref = time();
+            $response =  $stripe->checkout->sessions->create([
+                'success_url' => $redirectUrl,
+                'cancel_url' => url('cancel/transaction/'.$ref),
+                'customer_email' => auth()->user()->email,
+                'payment_method_types' => ['link', 'card'],
+                'locale' => 'auto',
+                'client_reference_id' => $ref,
+                'line_items' => [
+                    [
+                        'price_data'  => [
+                            'product_data' => [
+                                'name' => 'Freebyz TopUp',
+                            ],
+                            'unit_amount'  => 100 * $amount,
+                            'currency'     => 'USD',
+                        ],
+                        'quantity'    => 1
+                    ],
+                ],
+                'mode' => 'payment',
+                'allow_promotion_codes' => true,
+                'expires_at' => time() + 3600,
+                
+                // 'automatic_payment_methods' => ['enabled' => true],
+            ]);
+
+            PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $request->balance,
+                'status' => 'unsuccessful',
+                'currency' => 'USD',
+                'channel' => 'stripe',
+                'type' => 'wallet_topup',
+                'description' => 'Wallet Top Up',
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+  
+            return redirect($response['url']);
+        }  
         }
         
+    }
+
+    public function stripeCheckoutSuccess(Request $request){
+        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+  
+        $session = $stripe->checkout->sessions->retrieve($request->session_id);
+
+        if($session['payment_status'] == 'paid' && $session['status'] == 'complete'){
+            
+            // $amount = $session['amount_total']/10;
+            // $percent = 2.90/100 * $amount;
+            // $formatedAm = $percent;
+            // $newamount = $amount - $formatedAm; //verify transaction
+            // $creditAmount = $newamount / 100;
+
+            $trx = PaymentTransaction::where('reference', $session['client_reference_id'])->first();
+            if($trx){
+                $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+                $wallet->usd_balance += $trx->amount;
+                $wallet->save();
+
+                $trx->status = 'successful';
+                $trx->save();
+            }
+            return redirect()->route('fund')->with('success', 'Payment successful and you wallet credited.');
+        }else{
+            return redirect('wallet/fund');
+        }
+
+        
+    //    return info($session);
+  
+        // return redirect()->route('stripe.index')
+        //                  ->with('success', 'Payment successful.');
+    }
+
+    public function cancelUrl($ref){
+        PaymentTransaction::where('reference', $ref)->delete();
+
+        return redirect()->route('fund')
+        ->with('error', 'Payment Cancelled');
     }
 
     public function capturePaypal(){
