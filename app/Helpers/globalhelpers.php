@@ -141,6 +141,14 @@ if(!function_exists('conversionRate')){
     }
 }
 
+if(!function_exists('convertDollar')){
+    function convertDollar($amount){  
+        $rate = ConversionRate::where('from', 'Dollar')->first()->amount;
+
+        return number_format($amount/$rate, 4);
+    }
+}
+
 if(!function_exists('paypalPayment')){
     function paypalPayment($amount, $url){
 
