@@ -129,10 +129,10 @@
 
         @yield('content')
 		
-        {{-- <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" class="float" target="_blank">
+        <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" class="float" target="_blank">
             <i class="fa fa-comments fa-lg" aria-hidden="true"></i>
            
-        </a> --}}
+        </a>
 		<!-- footer start -->
 		@include('layouts.footer')
 		<!-- footer end -->

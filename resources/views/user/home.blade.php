@@ -287,9 +287,22 @@
                 <p class="fs-sm text-muted">
 
                  @if($job['currency'] == 'NGN')
-                     &#8358;{{ number_format($job['campaign_amount'],2)}}  
+
+                    @if(auth()->user()->wallet->base_currency == 'Naira')
+
+                        &#8358;{{ number_format($job['campaign_amount'],2)}}  
+
+                      @else
+                      &#8358;{{ number_format($job['campaign_amount'],2)}}  
+                        {{-- ${{ convertDollar('5') }} --}}
+
+                    @endif
+
+
                   @else
-                     ${{ $job['campaign_amount']}}
+                     
+                     ${{ $job['campaign_amount'] }}
+
                   @endif
                     
                 </p>
