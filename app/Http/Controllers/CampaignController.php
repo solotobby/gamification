@@ -192,6 +192,7 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
+        
         $request->validate([
             'description' => 'required|string',
             'proof' => 'required|string',
@@ -201,19 +202,36 @@ class CampaignController extends Controller
             'validate' => 'required'
         ]);
 
+        $iniAmount = '';
+        if($request->allow_upload == true){
+            if(auth()->user()->wallet->base_currency == "Naira"){
+                $iniAmount = $request->number_of_staff * 5;
+            }else{
+                $iniAmount = $request->number_of_staff * 0.01;
+            }
+
+            $allowUpload = true;
+        }elseif($request->allow_upload == ''){
+            $iniAmount = 0;
+            $allowUpload = false;
+        }
+
+     
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
+
+      
         // [$est_amount, $percent, $total];
         $job_id = Str::random(7);//rand(10000,10000000);
       
             if(auth()->user()->wallet->base_currency == "Naira"){
                 
-                $walletValidity = checkWalletBalance(auth()->user(), 'Naira', $total);
+                $walletValidity = checkWalletBalance(auth()->user(), 'Naira', $total+$iniAmount);
                 if($walletValidity){
-                    $debitWallet = debitWallet(auth()->user(), 'Naira', $total);
+                    $debitWallet = debitWallet(auth()->user(), 'Naira', $total+$iniAmount);
                     if($debitWallet){
-                        $campaign = $this->processCampaign($total,$request,$job_id,$percent);
+                        $campaign = $this->processCampaign($total+$iniAmount,$request,$job_id,$percent,$allowUpload);
                         Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                         return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                     }
@@ -223,11 +241,11 @@ class CampaignController extends Controller
                 }
                
             }else{
-                 $walletValidity = checkWalletBalance(auth()->user(), 'Dollar', $total);
+                 $walletValidity = checkWalletBalance(auth()->user(), 'Dollar', $total+$iniAmount);
                  if($walletValidity){
-                        $debitWallet = debitWallet(auth()->user(), 'Dollar', $total);
+                        $debitWallet = debitWallet(auth()->user(), 'Dollar', $total+$iniAmount);
                         if($debitWallet){
-                            $campaign = $this->processCampaign($total,$request,$job_id,$percent);
+                            $campaign = $this->processCampaign($total+$iniAmount,$request,$job_id,$percent,$allowUpload);
                             Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                             return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                         }else{
@@ -243,7 +261,7 @@ class CampaignController extends Controller
         // }
     }
 
-    public function processCampaign($total, $request, $job_id, $percent)
+    public function processCampaign($total, $request, $job_id, $percent,$allowUpload)
     {
         $currency = '';
         $channel = '';
@@ -267,7 +285,8 @@ class CampaignController extends Controller
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'campaign_posted',
-                'description' => $campaign->post_title.' Campaign'
+                'description' => $campaign->post_title.' Campaign',
+                'allow_upload' => $allowUpload
             ]);
 
             if(auth()->user()->wallet->base_currency == "Naira"){
