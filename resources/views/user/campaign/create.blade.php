@@ -138,7 +138,10 @@
                     {{-- <iframe name="server_answer" style="display:none"></iframe> --}}
                 <textarea id="mytextareao" class="form-control" name="proof" required>{{ old('proof') }}</textarea>
             </div>
-              
+            <div class="mb-2">
+              <input type="checkbox" name="allow_upload" value="1" class="">
+              <span><small> Allow image to be uploaded with proof at a cost of 5 Naira per worker </small></span>
+          </div>
             <div class="mb-2">
                 <input type="checkbox" name="validate" required class="">
                 <span><small> I agree that this campaign will be automatically approved after 24 hours if i fail to approve it. </small></span>

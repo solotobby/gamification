@@ -404,12 +404,14 @@
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
                                           @csrf
                                           <div class="col-md-12 mb-3">
-                                              <textarea class="form-control" name="comment" id="js-ckeditor5-classic"></textarea>
+                                              <textarea class="form-control" name="comment" id="js-ckeditor5-classic" ></textarea>
                                           </div>
+                                          @if($campaign->allow_upload == true)
                                           <div class="col-md-12 mb-3">
                                             <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg) - Optional</label>
                                             <input class="form-control" type="file" name="proof" id="example-file-input-multiple">
                                           </div>
+                                          @endif
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
                                           <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
