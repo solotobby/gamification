@@ -299,6 +299,7 @@ class CampaignController extends Controller
                 $adminWallet->save();
             }
             
+            
              //Admin Transaction Tablw
              PaymentTransaction::create([
                 'user_id' => 1,
