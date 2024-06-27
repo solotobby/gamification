@@ -42,25 +42,25 @@
                         @endif
                      
                     </p>
-                    <p class="fs-sm fw-semibold text-white-75 text-uppercase mb-0">
+                    <p class="fs-sm fw-semibold text-white-75 mb-0">
 
-                      <i class="far fa-chart-bar opacity-75 me-1"></i> balance
+                      <i class="fa fa-money-bill opacity-75 me-1"></i> Balance
                     </p>
               </div>
               <div class="col-4 col-xl-4">
                 <p class="fs-3 fw-semibold text-white mb-0">
                     {{ auth()->user()->referees()->count() }}
                 </p>
-                <p class="fs-sm fw-semibold text-white-75 text-uppercase mb-0">
-                  <i class="far fa-chart-bar opacity-75 me-1"></i> Referrals
+                <p class="fs-sm fw-semibold text-white-75 mb-0">
+                  <i class="fa fa-users opacity-75 me-1"></i> Referrals
                 </p>
               </div>
               <div class="col-4 col-xl-4">
                 <p class="fs-3 fw-semibold text-white mb-0">
                     {{ auth()->user()->myAttemptedJobs()->where('status', 'Approved')->count() }}
                 </p>
-                <p class="fs-sm fw-semibold text-white-75 text-uppercase mb-0">
-                  <i class="far fa-chart-bar opacity-75 me-1"></i> Jobs done
+                <p class="fs-sm fw-semibold text-white-75 mb-0">
+                  <i class="fa fa-briefcase opacity-75 me-1"></i> Jobs Done
                 </p>
               </div>
             </div>
