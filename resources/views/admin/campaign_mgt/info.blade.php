@@ -142,18 +142,33 @@
         <!-- Submit Form -->
         <div class="block-content block-content-full pt-0">
           <div class="row mb-4">
+           
             {{-- offset-lg-5 --}}
             <div class="col-lg-3"></div>
             <div class="col-lg-9">
+              @if($campaign->allow_upload == true)
+
+              <div class="alert alert-success">
+                <strong>Image Upload is allowed as evidence</strong>
+
+              </div>
+            @else
+            <div class="alert alert-danger">
+              <strong>Image Upload is NOT allowed as evidence</strong>
+
+            </div>
+
+            @endif
+
                 <button type="submit"  class="btn btn-alt-primary" name="status" value="Live"> <i class="fa fa-save opacity-50 me-1"></i> Update & Approve Campaign</button>
                
                 <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i class="fa fa-times opacity-50 me-1"></i> Decline Campaign Abruptly</button>
               
             </div>
-            <div class="col-lg-3"></div>
+            {{-- <div class="col-lg-3"></div>
             <div class="col-lg-9 mt-3">
                 <a href="{{ url('campaign/delete/'.$campaign->id) }}" class="btn btn-danger">Delete Campaign Completely</a>
-            </div>
+            </div> --}}
           </div>
         </div>
         <!-- END Submit Form -->

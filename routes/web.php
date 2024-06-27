@@ -237,6 +237,7 @@ Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redee
 Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
 Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
 
+Route::get('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'index']);
 //webhook handling
 
 //Flutterwave Top up
@@ -370,9 +371,9 @@ Route::get('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'v
 Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'store'])->name('account.store');
 
 ///Points
-Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
-Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed'); 
-Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
+// Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
+// Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed'); 
+// Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
 
 Route::resource('preferences', PreferenceController::class);
 
