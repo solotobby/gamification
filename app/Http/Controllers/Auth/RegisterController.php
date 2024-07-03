@@ -174,6 +174,10 @@ class RegisterController extends Controller
         // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
 
+        if($user){
+
+       
+
         $role = $user->role;
 
         switch ($role) {
@@ -252,6 +256,10 @@ class RegisterController extends Controller
         default:
             return "Not applicable";
         }
+
+    }else{
+        return back()->with('error', 'Email or Password is incorrect');
+    }
 
 
         // if ($user) {
