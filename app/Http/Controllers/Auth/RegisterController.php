@@ -175,9 +175,7 @@ class RegisterController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if($user){
-
-       
-
+            
         $role = $user->role;
 
         switch ($role) {

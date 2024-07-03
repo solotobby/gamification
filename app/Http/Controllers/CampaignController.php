@@ -325,42 +325,46 @@ class CampaignController extends Controller
         }
 
          $getCampaign = SystemActivities::viewCampaign($job_id);
-        
-       
-         if($getCampaign->currency == 'USD'){
-            if(auth()->user()->USD_verified){
-                $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $checkRating = isset($rating) ? true : false;
-                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-            }else{
-                return redirect('conversion');
-            }
-         }else{
+            if($getCampaign){
 
-            if(auth()->user()->is_verified){
-                if($getCampaign['is_completed'] == true){
-                    return redirect('home');
+                if($getCampaign->currency == 'USD'){
+                    if(auth()->user()->USD_verified){
+                        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                        $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                        $checkRating = isset($rating) ? true : false;
+                        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+                    }else{
+                        return redirect('conversion');
+                    }
                 }else{
-                    $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $checkRating = isset($rating) ? true : false;
-                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                }
-            }elseif(!auth()->user()->is_verified && $getCampaign['campaign_amount'] <= 10){
-                if($getCampaign['is_completed'] == true){
-                    return redirect('#');
-                }else{
-                    $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $checkRating = isset($rating) ? true : false;
-                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                }
-            }else{
-                return redirect('info');
-            }
 
-         }
+                    if(auth()->user()->is_verified){
+                        if($getCampaign['is_completed'] == true){
+                            return redirect('home');
+                        }else{
+                            $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                            $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                            $checkRating = isset($rating) ? true : false;
+                            return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+                        }
+                    }elseif(!auth()->user()->is_verified && $getCampaign['campaign_amount'] <= 10){
+                        if($getCampaign['is_completed'] == true){
+                            return redirect('#');
+                        }else{
+                            $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                            $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                            $checkRating = isset($rating) ? true : false;
+                            return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+                        }
+                    }else{
+                        return redirect('info');
+                    }
+
+                }
+
+            }else{
+                 return back()->with('error', 'campaign not valid');
+            }
 
         // $getCampaign = Campaign::where('job_id', $job_id)->first();
         // if($getCampaign->campaignType->name == 'Facebook Influencer'){
