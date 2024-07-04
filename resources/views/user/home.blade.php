@@ -15,6 +15,7 @@
             <div class="py-4 py-md-0 text-center text-md-start">
               <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}} 
                 @if(auth()->user()->wallet->base_currency == 'Naira')
+                
                     @if(auth()->user()->is_verified)
                         <i class="fa fa-check opacity-75 me-1"></i>
                     @endif
