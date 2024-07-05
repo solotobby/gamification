@@ -88,8 +88,9 @@ class RegisterController extends Controller
         $user = $this->createUser($request);
         if ($user) {
             Auth::login($user);
-            PaystackHelpers::userLocation('Registeration');
+            // PaystackHelpers::userLocation('Registeration');
             setProfile($user); //set profile page
+            
             return redirect('/home');
         }
     }
@@ -107,6 +108,7 @@ class RegisterController extends Controller
             'source' => $request->source,
             'password' => Hash::make($request->password),
         ]);
+
         $user->referral_code = Str::random(7);
         // $user->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $user->save();
@@ -140,29 +142,9 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function sendMonny($payload)
-    {
-        return Sendmonny::sendUserToSendmonny($payload);
-    }
+   
 
-    public function processAccountInformation($sendMonnyApi, $user)
-    {
-        AccountInformation::create([
-            'user_id' => $user->id,
-            '_user_id' => $sendMonnyApi['data']['user']['user_id'],
-            'wallet_id' => $sendMonnyApi['data']['wallet']['id'],
-            'account_name' => $sendMonnyApi['data']['wallet']['account_name'],
-            'account_number' => $sendMonnyApi['data']['wallet']['account_number'],
-            'bank_name' => $sendMonnyApi['data']['wallet']['bank'],
-            'bank_code' => $sendMonnyApi['data']['wallet']['bank_code'],
-            'provider' => 'Sendmonny - Sudo',
-            'currency' => $sendMonnyApi['data']['wallet']['currency'],
-        ]);
-
-        $activate = User::where('id', $user->id)->first();
-        $activate->is_wallet_transfered = true;
-        $activate->save();
-    }
+   
 
 
     public function loginUser(Request $request)
