@@ -1089,6 +1089,22 @@ class AdminController extends Controller
         return back()->with('success', 'User Blacklisted');
     }
 
+    public function switch(Request $request){
+        
+        $switchWallet = Wallet::where('user_id', $request->user_id)->first();
+        $switchWallet->base_currency = $request->currency;
+        $switchWallet->save();
+
+    //     if($switchWallet->base_currency == 'Dollar'){
+    //         $switchWallet->base_currency == 'Naira';
+    //         $switchWallet->save();
+    //     }elseif($switchWallet->base_currency == 'Naira'){
+    //         $switchWallet->base_currency == 'Dollar';
+    //         $switchWallet->save();
+    //     }
+        return back()->with('success', 'Currency switched successfully');
+    }
+
     public function updateUserAccountDetails(Request $request){
 
             $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
