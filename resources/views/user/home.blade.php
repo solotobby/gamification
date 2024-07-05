@@ -183,22 +183,22 @@
     <!-- VPS -->
     <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
         <h4 class="fw-light mb-0">Available Jobs</h4>
-        <form action="{{ url('switch/wallet') }}" method="POST">
+        {{-- <form action="{{ url('switch/wallet') }}" method="POST">
             @csrf
               @if(auth()->user()->wallet->base_currency == 'Naira')
               <input type="hidden" name="currency" value="Dollar">
               <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                 <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch to Dollar
               </button>
-              {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button> --}}
+              <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button>
               @else
               <input type="hidden" name="currency" value="Naira">
               <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                 <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch to Naira
               </button>
-              {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button> --}}
+              <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button>
               @endif
-          </form>
+          </form> --}}
     </div>
 
      

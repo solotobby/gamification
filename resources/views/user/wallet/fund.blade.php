@@ -106,7 +106,7 @@
                 <select name="method" class="form-control @error('method') is-invalid @enderror" required>
                   <option value="">Select Payment Method</option>
                   <option value="stripe">Stripe</option>
-                  <option value="flutterwave">Flutterwave</option>
+                  {{-- <option value="flutterwave">Flutterwave</option> --}}
                 </select>
               </div>
 

@@ -51,6 +51,7 @@
                 <th>Unit Price</th>
                 <th>Total Price</th>
                 <th>Status</th>
+                <th>Upload Allowed</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -80,6 +81,7 @@
                      
                    
                     <td>{{ $list->status }}</td>
+                    <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td>
                     <td>
                       @if($list->status == "Offline")
                         {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}

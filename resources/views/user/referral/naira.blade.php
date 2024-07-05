@@ -24,7 +24,7 @@
     
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">People I Refer - {{ $lists->count() }} | Verified - {{ $verified }} | Cummulative Revenue - &#8358;{{ $verified*250 }} </h3>
+        <h3 class="block-title">People I Refer - {{ $lists->count() }} | Verified - {{ $verified }} | Cummulative Revenue - &#8358;{{ $verified*500 }} </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>

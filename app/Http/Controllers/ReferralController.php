@@ -32,8 +32,8 @@ class ReferralController extends Controller
         // }
         //Usdverified::where('user_id', $user->id)->first();
 
-        // return $list = $user->usd_referees;
+        $list = $user->usd_referees;
         //$verified = $user->referees()->where('is_verified', true)->count();
-        //return view('user.referral.usd', ['lists' => $list, 'verified' => $verified]);
+        return view('user.referral.usd', ['lists' => $list]);
     }
 }
