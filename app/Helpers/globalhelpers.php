@@ -100,13 +100,14 @@ if(!function_exists('walletHandler')){
 
 if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
+        $location = PaystackHelpers::getLocation();
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
+        $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+        $wall->save();
 
-        if($wall->base_currency == null){
-            $location = PaystackHelpers::getLocation();
-            $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-            $wall->save();
-        }
+        // if($wall->base_currency == null){
+            
+        // }
 
        return $wall;
     }
