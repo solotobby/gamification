@@ -101,17 +101,31 @@ if(!function_exists('walletHandler')){
 if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
-        // if(!$wall){
-        //     Wallet::create(['user_id' => auth()->user()->id]);
-        // }
+
         if($wall->base_currency == null){
             $location = PaystackHelpers::getLocation();
             $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
             $wall->save();
         }
+
        return $wall;
     }
 }
+
+// if(!function_exists('updateWalletBaseCurrency')){
+//     function updateWalletBaseCurrency(){
+//         $wall = Wallet::where('user_id', auth()->user()->id)->first();
+        
+//         if($wall->base_currency == null){
+//             $location = PaystackHelpers::getLocation();
+//             $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+//             $wall->save();
+//         }
+
+//        return $wall;
+//     }
+// }
+
 
 if(!function_exists('setProfile')){
     function setProfile($user){
