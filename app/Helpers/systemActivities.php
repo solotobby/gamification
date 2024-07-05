@@ -8,6 +8,7 @@ use App\Models\CampaignWorker;
 use App\Models\LoginPoints;
 use App\Models\Referral;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SystemActivities{
     public static function numberFormat($number, $plus = true){
@@ -71,7 +72,20 @@ class SystemActivities{
     }
 
     public static function availableJobs(){
-        $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        $user = Auth::user();
+        $jobfilter = '';
+        $campaigns = '';
+
+        if($user){
+            $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
+        }
+
+        if($user->USD_verified){ //if user is usd verified, they see all jobs
+            $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }else{
+            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }
+        
         $list = [];
         foreach($campaigns as $key => $value){
             $c = $value->pending_count + $value->completed_count;//
@@ -91,7 +105,7 @@ class SystemActivities{
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency,
-                'created_at' => $value->created_at
+                // 'created_at' => $value->created_at
             ];
         }
 

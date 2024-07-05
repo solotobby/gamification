@@ -258,13 +258,15 @@ class CampaignController extends Controller
                 
             }
             
-        // }
+       
     }
 
     public function processCampaign($total, $request, $job_id, $percent,$allowUpload)
     {
+
         $currency = '';
         $channel = '';
+
         if(auth()->user()->wallet->base_currency == "Naira"){
             $currency = 'NGN';
             $channel = 'paystack';
@@ -272,7 +274,8 @@ class CampaignController extends Controller
             $currency = 'USD';
             $channel = 'paypal';
         }
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0]);
+
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload]);
         $campaign = Campaign::create($request->all());
 
         $ref = time();
@@ -285,8 +288,7 @@ class CampaignController extends Controller
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'campaign_posted',
-                'description' => $campaign->post_title.' Campaign',
-                'allow_upload' => $allowUpload
+                'description' => $campaign->post_title.' Campaign'
             ]);
 
             if(auth()->user()->wallet->base_currency == "Naira"){

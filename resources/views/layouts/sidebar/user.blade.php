@@ -19,7 +19,7 @@
           <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
         </a>
       </li> --}}
-
+      @if(auth()->user()->wallet->base_currency == 'Naira')
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('safelock') }}">
           <i class="nav-main-link-icon fa fa-snowflake"></i>
@@ -27,6 +27,7 @@
           <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
         </a>
       </li>
+     
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -45,6 +46,7 @@
           </li>
         </ul>
       </li> 
+      @endif
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -170,9 +172,15 @@
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
+            @if(auth()->user()->wallet->base_currency == 'Naira')
             <a class="nav-main-link" href="{{route('ref.all')}}">
               <span class="nav-main-link-name">View All</span>
             </a>
+            @else
+            <a class="nav-main-link" href="{{route('ref.usd')}}">
+              <span class="nav-main-link-name">View All</span>
+            </a>
+            @endif
           </li>
         </ul>
       </li>
@@ -189,7 +197,7 @@
         </a>
       </li> --}}
 
-
+      @if(auth()->user()->wallet->base_currency == 'Naira')
        <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('badge') }}">
           <i class="nav-main-link-icon si si-badge"></i>
@@ -198,12 +206,8 @@
       </li>
 
 
-      {{-- <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('databundle') }}">
-          <i class="nav-main-link-icon fa fa-tty"></i>
-          <span class="nav-main-link-name">Buy DataBundle</span>
-        </a>
-      </li> --}}
+     
+
 
         <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('converter') }}">
@@ -211,6 +215,14 @@
           <span class="nav-main-link-name">Currency Converter</span>
         </a>
       </li>
+      @endif
+
+      {{-- <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ route('databundle') }}">
+          <i class="nav-main-link-icon fa fa-tty"></i>
+          <span class="nav-main-link-name">Buy DataBundle</span>
+        </a>
+      </li> --}}
       
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">

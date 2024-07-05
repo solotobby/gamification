@@ -140,7 +140,11 @@
             </div>
             <div class="mb-2">
               <input type="checkbox" name="allow_upload" value="1" class="">
+              @if(auth()->user()->wallet->base_currency == "Naira")
               <span><small> Allow image to be uploaded with proof at a cost of 5 Naira per worker </small></span>
+              @else
+              <span><small> Allow image to be uploaded with proof at a cost of $0.01 per worker </small></span>
+              @endif
           </div>
             <div class="mb-2">
                 <input type="checkbox" name="validate" required class="">
