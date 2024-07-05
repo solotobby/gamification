@@ -390,6 +390,8 @@ Route::get('admin/campaign/disputes/{id}', [\App\Http\Controllers\Admin\AdminCon
 Route::post('admin/campaign/disputes/decision', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputesDecision'])->name('dispute.decision');
 
 Route::get('admin/blacklist/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'blacklist']);
+Route::post('admin/switch/wallet', [\App\Http\Controllers\Admin\AdminController::class, 'switch']);
+
 //User Activity
 Route::get('user/tracker', [\App\Http\Controllers\Admin\AdminController::class, 'userlocation'])->name('user.tracker');
 Route::get('admin/dashboard/api', [\App\Http\Controllers\HomeController::class, 'adminApi']);

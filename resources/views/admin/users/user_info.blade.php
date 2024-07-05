@@ -470,7 +470,45 @@
                         <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-success btn-sm">Activate VA</a>
 
                       <hr>
-                      
+                      <h5 class="fw-normal text-muted text-center mt-2">
+                        Switch User
+                        </h5>
+                        Current Base Currency : {{ $info->wallet->base_currency }}
+                        <br>
+                        {{-- @if($info->is_blacklisted == '0')
+                        <a class="btn btn-hero btn-secondary" href="{{url('admin/switch/'.$info->id)}}" data-toggle="click-ripple">
+                          Blacklist User
+                        </a>
+                        @else
+                        <a class="btn btn-hero btn-danger" href="#" data-toggle="click-ripple">
+                          User Blaklisted!!
+                        </a>
+                        @endif --}}
+
+
+                        <form action="{{ url('admin/switch/wallet') }}" method="POST">
+                          @csrf
+                          <input type="hidden" name="user_id" value="{{ $info->id }}">
+                            @if($info->wallet->base_currency == 'Naira')
+                            <input type="hidden" name="currency" value="Dollar">
+                            <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
+                              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch User to Dollar
+                            </button>
+                            {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button> --}}
+                            @else
+                            <input type="hidden" name="currency" value="Naira">
+                            <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
+                              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch User to Naira
+                            </button>
+                            {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button> --}}
+                            @endif
+                        </form> 
+
+
+                        <hr>
+
+
+
                       <h5 class="fw-normal text-muted text-center mt-2">
                         Dead-end for this User!!!!
                         </h5>
