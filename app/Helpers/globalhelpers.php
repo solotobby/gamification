@@ -104,11 +104,6 @@ if(!function_exists('setWalletBaseCurrency')){
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
-
-        // if($wall->base_currency == null){
-            
-        // }
-
        return $wall;
     }
 }
