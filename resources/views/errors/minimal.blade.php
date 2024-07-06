@@ -26,6 +26,8 @@
                 <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
                     <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
                         @yield('code')
+                        <br>
+                        <a href="{{ url('/login')}}" class="btn btn-info btn-ld">Click Here to Refresh</a>
                     </div>
 
                     <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
