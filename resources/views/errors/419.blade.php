@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __(''))
+@section('title', __('Refresh Page'))
 @section('code', 'Refresh the page. Thank you :)')
-@section('message', __(''))
+@section('message', __('Refresh Page'))

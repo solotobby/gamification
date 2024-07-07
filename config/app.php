@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
+        Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
 
     ],
 
@@ -242,6 +243,7 @@ return [
         'FacebookHelper' => App\Helpers\FacebookHelper::class,
         'Sendmoony' => App\Helpers\Sendmonny::class,
         'Admin' => App\Helpers\Admin::class,
+        'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
     ],
 
 ];
