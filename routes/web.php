@@ -247,8 +247,18 @@ Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::cl
 Route::get('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccount']);
 Route::post('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccountProcess']);
 
-Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
-Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
+//form builder
+
+Route::get('create/survey', [\App\Http\Controllers\FormBuilderController::class, 'create']);
+Route::post('store/form', [\App\Http\Controllers\FormBuilderController::class, 'storeForm']);
+Route::post('build/form', [\App\Http\Controllers\FormBuilderController::class, 'buildForm']);
+Route::get('survey/{survey_code}', [\App\Http\Controllers\FormBuilderController::class, 'survey']);
+
+Route::get('preview/form/{survey_code}', [\App\Http\Controllers\FormBuilderController::class, 'previewForm']);
+Route::get('list/survey', [\App\Http\Controllers\FormBuilderController::class, 'listSurvey']);
+
+// Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
+// Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
