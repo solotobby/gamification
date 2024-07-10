@@ -24,33 +24,33 @@
 <div class="content content-boxed">
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-          <h2 class="content-heading">Create Survey Information</h2>
+          <h2 class="content-heading">Create Survey</h2>
           <form method="post" action="{{ url('store/form') }}" enctype="multipart/form-data" oninput="price.value=parseFloat(rate.value)*parseFloat(qty.value)">
             @csrf
       
           <div class="row items-push">
              
                 <div class="col-lg-3">
-                    Enter the information of the survey
+                   
                 </div>
                
                   <div class="col-lg-9">
                         <div class="mb-4">
                             <label class="form-label" for="post-title">Title</label>
                             <input type="text" class="form-control" id="post-title" name="title" value="{{ old('title') }}" required>
-                            <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
+                            <small><i>Please give a simple survey title e.g Facebook Like or Youtube comment</i></small>
                         </div>
-                        <div class="mb-4">
+                        {{-- <div class="mb-4">
                             <label class="form-label" for="post-title">Upload banner(optional)</label>
                             <input type="file" class="form-control" id="banner-url" name="banner">
                             <small><i>Upload an image. Must be of high quality with a dimension width: 1024, height: 250 </i></small>
-                        </div>
+                        </div> --}}
                         <div class="mb-4">
-                            <label class="form-label" for="post-files">Survey Description <small>(Ensure you provide simple and clear instruction on task to be done)</small></label>
+                            <label class="form-label" for="post-files">Description <small>(provide more information about your survey/questionnaire e.g purpose of survey)</small></label>
                             <textarea class="form-control" name="description" id="js-ckeditor5-classic"> {{ old('description') }}</textarea>
                         </div>
 
-                        <div class="col-lg-12 col-xl-12">
+                        {{-- <div class="col-lg-12 col-xl-12">
                             <div class="row mb-4">
                                 <label class="form-label">Choose Target Audience</label><small>Check atleast 5</small>
                                 @foreach ($preferences as $pref)
@@ -64,7 +64,7 @@
                                     </div>  
                                 @endforeach
                             </div>
-                        </div> 
+                        </div>  --}}
 
                         <div class="mb-4">
                             <label class="form-label" for="post-title">Enter number of responses</label>
@@ -126,8 +126,8 @@
                         <hr>
                         <div class="row mb-2">
                             
-                        <div class="col-lg-9"></div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-8"></div>
+                        <div class="col-lg-4">
                             <button type="submit" class="btn btn-alt-primary">
                             <i class="fa fa-plus opacity-50 me-1"></i> Start Building Form
                             </button>

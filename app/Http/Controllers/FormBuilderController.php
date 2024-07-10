@@ -20,8 +20,8 @@ class FormBuilderController extends Controller
     }
 
     public function create(){
-        $preferences = listPreferences();
-        return view('user.form_builder.create', ['preferences' => $preferences]);
+        // $preferences = listPreferences();
+        return view('user.form_builder.create');
     }
 
     public function survey($survey_code){
@@ -66,21 +66,21 @@ class FormBuilderController extends Controller
 
     public function storeForm(Request $request){
     
-        $lissy = [];
-        foreach($request->count as $res){
-            $lissy[] = explode("|",$res);
-        }
+        // $lissy = [];
+        // foreach($request->count as $res){
+        //     $lissy[] = explode("|",$res);
+        // }
 
-        // $newlissy = [];
-        foreach($lissy as $lis)
-        {
-            $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
-        }
+        // // $newlissy = [];
+        // foreach($lissy as $lis)
+        // {
+        //     $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
+        // }
 
-        foreach($counts as $id)
-        {
-            $unit[] = $id['unit'];
-        }
+        // foreach($counts as $id)
+        // {
+        //     $unit[] = $id['unit'];
+        // }
         $survey = Survey::create([
             'user_id' => auth()->user()->id,
             'survey_code' => Str::random(16),
@@ -96,11 +96,11 @@ class FormBuilderController extends Controller
             'status' => 'in_progress'
         ]);
 
-        foreach($counts as $id)
-        {
-            SurveyInterest::create(['survey_id' => $survey->id, 'interest_id' => $id['id'], 'unit' => $id['unit']]);
-            // \DB::table('survey_interests')->insert(['survey_id' => $survey->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
-        }
+        // foreach($counts as $id)
+        // {
+        //     SurveyInterest::create(['survey_id' => $survey->id, 'interest_id' => $id['id'], 'unit' => $id['unit']]);
+        //     // \DB::table('survey_interests')->insert(['survey_id' => $survey->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
+        // }
 
        
           return redirect('survey/'.$survey->survey_code);
