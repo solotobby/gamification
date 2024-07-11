@@ -38,7 +38,7 @@
                         <div class="mb-4">
                             <label class="form-label" for="post-title">Title</label>
                             <input type="text" class="form-control" id="post-title" name="title" value="{{ old('title') }}" required>
-                            <small><i>Please give a simple survey title e.g Facebook Like or Youtube comment</i></small>
+                            <small><i>Please give a simple survey title e.g Product review or customer satisfaction survey, Academic Research, etc</i></small>
                         </div>
                         {{-- <div class="mb-4">
                             <label class="form-label" for="post-title">Upload banner(optional)</label>
@@ -68,7 +68,7 @@
 
                         <div class="mb-4">
                             <label class="form-label" for="post-title">Enter number of responses</label>
-                            <input type="number" class="form-control" id="budget" name="number_of_response" min="50" value="{{ old('budget') }}" required>
+                            <input type="number" class="form-control" id="budget" name="number_of_response" min="20" value="{{ old('budget') }}" required>
                             {{-- <small><i>The total amount you want to spend</i></small> --}}
                         </div>
 
