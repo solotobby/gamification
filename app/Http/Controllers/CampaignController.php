@@ -677,11 +677,18 @@ class CampaignController extends Controller
         //[$est_amount, $percent, $total];
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
         if(auth()->user()->wallet->base_currency == 'Naira'){
+            $campaign = Campaign::where('job_id', $request->id)->first();
+            $uploadFee = '';
+            if($campaign->allow_upload == 1){
+                $uploadFee = $request->new_number * 5;
+            }else{
+                $uploadFee = 0;
+            }
             if($wallet->balance >= $total){
-                $wallet->balance -= $total;
+                $wallet->balance -= $total+$uploadFee;
                 $wallet->save();
                 
-                $campaign = Campaign::where('job_id', $request->id)->first();
+                
                 $campaign->number_of_staff += $request->new_number;
                 $campaign->total_amount += $est_amount;
                 $campaign->is_completed = false;
@@ -733,10 +740,17 @@ class CampaignController extends Controller
             }
         }else{
             if($wallet->usd_balance >= $total){
-                $wallet->usd_balance -= $total;
-                $wallet->save();
-                
                 $campaign = Campaign::where('job_id', $request->id)->first();
+                $uploadFee = '';
+                if($campaign->allow_upload == 1){
+                    $uploadFee = $request->new_number * 0.01;
+                }else{
+                    $uploadFee = 0;
+                }
+
+                $wallet->usd_balance -= $total+$uploadFee;
+                $wallet->save();
+
                 $campaign->number_of_staff += $request->new_number;
                 $campaign->total_amount += $est_amount;
                 $campaign->is_completed = false;
