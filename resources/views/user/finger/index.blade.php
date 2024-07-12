@@ -1,4 +1,4 @@
-@extends('layouts.main.master')
+{{-- @extends('layouts.main.master')
 @section('content')
 
  <!-- Hero -->
@@ -42,11 +42,7 @@
             </div>
         @endif
             
-        {{-- <div class="alert alert-info">
-          Hi, Login point is not longer active. --}}
-            {{-- <li class="fa fa-info"></li>  --}}
-            {{-- You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;50  --}}
-        {{-- </div> --}}
+       
         <div class="table-responsive">
             <ul class="list-group push">  
                
@@ -59,49 +55,183 @@
                    Number of Paid Referrals
                    <span class="badge rounded-pill bg-info">gfkjhgfygh</span>
                 </li>
+
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     Date 
                     <span class=" rounded-pill ">gyfkhgk</span>
-                 </li>
-                 {{-- <span class="" style="color:gr">{{ $count }}</span> --}}
-                  
+                </li>
+                
             </ul>
             <a href="{{ route('redeem.badge') }}" class="btn btn-secondary mb-3">Redeem</a>
 
-          {{-- <table class="table table-bordered table-striped table-vcenter">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Point</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody> --}}
-                {{-- @foreach ($loginpoints as $point)
-                <tr>
-                    <td>
-                     {{ \Carbon\Carbon::parse($point->date)->format('d F, Y') }}
-                    </td>
-                    <td>
-                        {{ $point->point }}
-                    </td>
-                    <td>
-                        {{ $point->is_redeemed == true ? 'Redeemed' : 'Not Redeemed' }}
-                    </td>
-                </tr>
-                @endforeach --}}
-              
-            {{-- </tbody>
-          </table>
-          <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3 disabled">Redeem Points</a> --}}
+          
         </div>
       </div>
     </div>
     <div class="d-flex">
-      {{-- {!! $loginpoints->links('pagination::bootstrap-4') !!} --}}
+     
     </div>
     <!-- END Full Table -->
 
   </div>
 
-  @endsection
+  @endsection --}}
+
+
+
+  @extends('layouts.main.master')
+@section('content')
+  <!-- Page Content -->
+<div class="content">
+  <div class="block block-rounded">
+    <div class="block-header block-header-default">
+      <h3 class="block-title">Fastest Finger</h3>
+    </div>
+  <div class="block-content">
+ 
+    
+      <!-- Text -->
+
+      {{-- <div class="mb-2 text-center content-heading mb-4">
+        <p class="text-uppercase fw-bold fs-sm text-muted">Buy Airtime</p>
+        <p class="link-fx fw-bold fs-1">
+          &#8358;{{ number_format(auth()->user()->wallet->balance) }}
+        </p>
+        <p>Wallet Balance</p>
+      </div> --}}
+
+      <div class="row">
+        <div class="col-lg-3"></div>
+          <div class="col-lg-6">
+            
+            <div class="alert alert-info mb-4">
+              Share the fun, enjoy daily giveaway from Freebyz
+              <br>
+              - Must have 10 verified referrals in the last 10days<br>
+              - Must be a verified user <br>
+            </div>
+            @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if(!auth()->user()->is_verified)
+                <div class="alert alert-danger">
+                  You need to be a verified to partake in the give away! To get verified, <a href="{{ url('upgrade') }}"> Click Here </a>
+                </div>
+            @else
+            
+            @if($refCount >= 10)
+
+                @if(!$Info)
+
+                    <div class="alert alert-success">
+                      You are eligible for the Fastest Finger Give away! Please fill the foem below to get started
+                    </div>
+
+                   
+                    <form class="js-validation-reminder" action="{{ route('fastest.finger') }}" method="POST">
+                      @csrf
+                      <div class="mb-4">
+                        <div class="input-group">
+                          <span class="input-group-text">
+                            <i class="fab fa-tiktok"></i>
+                          </span>
+                          <input type="text" class="form-control @error('tiktok') is-invalid @enderror" id="reminder-credential" name="tiktok" value="{{ old('tiktok') }}" placeholder="Enter Tiktok Handle" required>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <div class="input-group">
+                          <span class="input-group-text">
+                            <i class="fa fa-phone"></i>
+                          </span>
+                          <input type="text" class="form-control @error('phone') is-invalid @enderror" id="reminder-credential" name="phone" value="{{ old('phone') }}" placeholder="Enter phone Number (08054887593)" required>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <div class="input-group">
+                        <select class="form-control" name="network" required>
+                            <option value="">Select Network</option>
+                            <option value="MTN">MTN</option>
+                            <option value="AIRTEL">AIRTEL</option>
+                            <option value="GLO">GLO</option>
+                            <option value="9MOBILE">9MOBILE</option>
+                        </select>
+                        </div>
+                      </div>
+                      <div class="text-center mb-4">
+                        <button type="submit" class="btn btn-primary">
+                          <i class="fa fa-fw fa-share opacity-50 me-1"></i> Declare Interest
+                        </button>
+                      </div>
+                    </form>
+                @else
+                
+                  @if(!$checkTodayPool)
+                    <div class="alert alert-success">
+                      Yaayyyyy...You qualified for our daily recharge card giveaway. Click the button below to enter Pool for todays Giveaway
+              
+                      </div>
+                    <form action="{{ route('enter.pool') }}" method="POST">
+                      @csrf
+
+                    <button type="submit" class="btn btn-primary mb-3">Enter Pool for: {{ Carbon\Carbon::today()->format('l M Y') }}</button>
+
+                    </form>
+                  @else
+                    <div class="alert alert-success">
+                    Yes! Pool successfully submitted  for {{ Carbon\Carbon::today()->format('l M Y') }}
+              
+                    </div>
+                      
+                  @endif
+
+                @endif
+
+              @else
+              
+                <div class="alert alert-danger">
+                  You have {{ $refCount }} verified referrals in the last 10 days, therefore you do not qualify. 
+                </div>
+
+              @endif
+
+            @endif
+
+          </div>
+          <div class="col-lg-3"></div>
+       
+      </div>
+      <!-- END Text -->
+    
+  </div>
+</div>
+
+@endsection
+
+@section('script')
+ <!-- Page JS Plugins -->
+ <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+
+ <!-- Page JS Code -->
+ <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
+@endsection
+
+

@@ -12,13 +12,15 @@
         </a>
       </li>
 
-      {{-- <li class="nav-main-item">
+       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('fastest/finger') }}">
-          <i class="nav-main-link-icon fa fa-snowflake"></i>
+          <i class="nav-main-link-icon fa fa-fingerprint"></i>
           <span class="nav-main-link-name">Fastest Finger</span>   
           <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
         </a>
-      </li> --}}
+      </li> 
+
+
 
      
 
@@ -47,7 +49,7 @@
         <a class="nav-main-link" href="{{ url('safelock') }}">
           <i class="nav-main-link-icon fa fa-snowflake"></i>
           <span class="nav-main-link-name">Safelock Funds</span>   
-          <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
+         
         </a>
       </li>
      

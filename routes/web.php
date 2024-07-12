@@ -238,6 +238,9 @@ Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'chr
 Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
 
 Route::get('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'index']);
+Route::post('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'declareInterest'])->name('fastest.finger');
+Route::post('enter/pool', [\App\Http\Controllers\FastestFingerController::class, 'enterPool'])->name('enter.pool');
+
 //webhook handling
 
 //Flutterwave Top up
@@ -425,3 +428,6 @@ Route::get('remove/virtual/account/{id}', [\App\Http\Controllers\Admin\AdminCont
 Route::get('admin/knowledgebase', [\App\Http\Controllers\KnowledgeBaseController::class, 'adminList']);
 ///Partnerships
 Route::get('admin/partner', [\App\Http\Controllers\Admin\PartnershipController::class, 'list']);
+
+Route::get('admin/finger', [\App\Http\Controllers\Admin\FastestFingerController::class, 'showPool'])->name('show.pool');
+Route::get('admin/random/selection', [\App\Http\Controllers\Admin\FastestFingerController::class, 'randomSelection']);
