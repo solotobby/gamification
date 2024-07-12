@@ -16,6 +16,13 @@
       </li> 
 
       <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('admin/finger') }}">
+          <i class="nav-main-link-icon fa fa-th"></i>
+          <span class="nav-main-link-name">Fastest Finger</span>
+        </a>
+      </li> 
+
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/partner') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Partners</span>
