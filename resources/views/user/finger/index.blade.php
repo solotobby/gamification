@@ -105,7 +105,7 @@
           <div class="col-lg-6">
             
             <div class="alert alert-info mb-4">
-              Share the fun, enjoy daily giveaway from Freebyz
+              Share the fun, enjoy daily giveaway from Freebyz. We are giving out FREE Airtime/Data to all qualified Users. To access the freebies, you
               <br>
               - Must have 10 verified referrals in the last 10days<br>
               - Must be a verified user <br>
