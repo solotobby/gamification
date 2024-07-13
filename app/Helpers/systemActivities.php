@@ -105,6 +105,7 @@ class SystemActivities{
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency,
+                'priotized' => $value->approved,
                 // 'created_at' => $value->created_at
             ];
         }
@@ -115,15 +116,21 @@ class SystemActivities{
         $filteredArray = array_filter($list, function ($item) {
             return $item['is_completed'] !== true;
         });
+
+        // Sort the array to prioritize 'Priotized'
+        usort($filteredArray, function ($a, $b) {
+            return strcmp($b['priotized'], $a['priotized']);
+        });
+
+         return $filteredArray;
       
-        return $filteredArray;
     }
 
     public static function badgeCount(){
         $currentDate = Carbon::now()->subMonth();
         return Referral::where('referee_id', auth()->user()->id)
                 ->whereMonth('updated_at', $currentDate->month)
-        // ->whereDate('updated_at', today())
+            // ->whereDate('updated_at', today())
                 ->count();
     }
 

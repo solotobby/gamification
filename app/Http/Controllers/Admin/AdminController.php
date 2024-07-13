@@ -585,6 +585,19 @@ class AdminController extends Controller
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
+    public function priotize($id){
+        $campaign = Campaign::find($id);
+        if($campaign->approved == 'Pending'){
+            $campaign->approved = 'Priotized';
+            $campaign->save();
+            return back()->with('success', 'Campaign Priotized!');
+        }else{
+            $campaign->approved = 'Pending';
+            $campaign->save();
+            return back()->with('success', 'Campaign Unpriotized!');
+        }
+    }
+
     
 
     public function campaignInfo($id){
