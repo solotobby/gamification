@@ -53,7 +53,7 @@
                     <th>Completed</th>
                     <th>Unit Price</th>
                     <th>Total</th>
-                    <th>Completed?</th>
+                    <th>Priotize</th>
                     <th>When Created</th>
                     </tr>
             </thead>
@@ -80,7 +80,10 @@
                           ${{ $camp->total_amount }}
                           @endif
                         </td>
-                        <td><a href="{{ url('change/completed/'.$camp->id) }}"> {{$camp->is_completed == true ? 'YES' : 'NO' }}</a></td>
+                        <td>
+                          {{-- <a href="{{ url('change/completed/'.$camp->id) }}"> {{$camp->is_completed == true ? 'YES' : 'NO' }}</a> --}}
+                          <a href="{{ url('priotize/'.$camp->id) }}"> {{$camp->approved == 'Pending' ? 'Unpriotized' : 'Priotized' }}</a>
+                        </td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                 @endforeach

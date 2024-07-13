@@ -145,8 +145,7 @@
                     <div class="alert alert-success">
                       You are eligible for the Fastest Finger Give away! Please fill the foem below to get started
                     </div>
-
-                   
+                    
                     <form class="js-validation-reminder" action="{{ route('fastest.finger') }}" method="POST">
                       @csrf
                       <div class="mb-4">
@@ -182,6 +181,7 @@
                         </button>
                       </div>
                     </form>
+
                 @else
                 
                   @if(!$checkTodayPool)
