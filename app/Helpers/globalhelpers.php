@@ -1139,7 +1139,7 @@ if(!function_exists('topEarners')){
         ->orderByDesc('total_payout')
         ->take('10')->get();
     
-    return $highestPayoutUser;
+        return $highestPayoutUser;
     }
 }
 
