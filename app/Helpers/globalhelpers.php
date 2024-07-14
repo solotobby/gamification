@@ -20,6 +20,7 @@ use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\VirtualAccount;
 use App\Models\Wallet;
+use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
@@ -1130,4 +1131,15 @@ if(!function_exists('userNairaUpgrade')){
     }
 }
 
+
+if(!function_exists('topEarners')){
+    function topEarners(){ 
+        $highestPayoutUser = Withrawal::with(['user:id,name'])->select('user_id', DB::raw('SUM(amount) as total_payout'))
+        ->groupBy('user_id')
+        ->orderByDesc('total_payout')
+        ->take('10')->get();
+    
+    return $highestPayoutUser;
+    }
+}
 
