@@ -260,6 +260,9 @@ Route::get('survey/{survey_code}', [\App\Http\Controllers\FormBuilderController:
 Route::get('preview/form/{survey_code}', [\App\Http\Controllers\FormBuilderController::class, 'previewForm']);
 Route::get('list/survey', [\App\Http\Controllers\FormBuilderController::class, 'listSurvey']);
 
+//achievers
+Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'topEarners']);
+
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
