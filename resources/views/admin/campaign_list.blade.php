@@ -42,8 +42,8 @@
         @endif
 
         <div class="table-responsive">
-          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+          <table class="table table-bordered table-striped table-vcenter">
+          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
             <thead>
                 <tr>
                     <th>#</th>
@@ -90,9 +90,9 @@
               
             </tbody>
           </table>
-          {{-- <div class="d-flex">
+          <div class="d-flex">
             {!! $campaigns->links('pagination::bootstrap-4') !!}
-          </div> --}}
+          </div>
         </div>
       </div>
     </div>
