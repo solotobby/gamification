@@ -118,7 +118,7 @@ class SystemActivities{
         });
 
         // Sort the array to prioritize 'Priotized'
-        usort($filteredArray, function ($a, $b) {
+        usort($filteredArrayjhj, function ($a, $b) {
             return strcmp($b['priotized'], $a['priotized']);
         });
 
