@@ -581,7 +581,7 @@ class AdminController extends Controller
     }
 
     public function campaignList(){
-        $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->paginate(30);
+        $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();//paginate(30);
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 

@@ -42,8 +42,8 @@
         @endif
 
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-vcenter">
-          {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+          {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
+          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
                 <tr>
                     <th>#</th>
@@ -64,8 +64,9 @@
                         <th scope="row">{{ $camp->job_id }}.</th>
                         <td class="fw-semibold"><a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank"> {{$camp->post_title }}</a></td>
                         <td><a href="{{ url('user/'.$camp->user->id.'/info') }}"> {{ $camp->user->name }} </td>
-                        <td>{{ $camp->completed()->count() }}/{{ $camp->number_of_staff }} </td>
-                        <td>{{ $camp->completed()->where('status', 'Approved')->count() }}/{{ $camp->number_of_staff }} </td>
+                        <td>{{ $camp->pending_count }}/{{ $camp->number_of_staff }} </td>
+                        <td>{{ $camp->completed_count }}/{{ $camp->number_of_staff }} </td>
+                        {{-- completed()->where('status', 'Approved')->count() --}}
                         <td>
                           @if($camp->currency == 'NGN')
                           &#8358;{{ number_format($camp->campaign_amount) }}
@@ -90,9 +91,9 @@
               
             </tbody>
           </table>
-          <div class="d-flex">
+          {{-- <div class="d-flex">
             {!! $campaigns->links('pagination::bootstrap-4') !!}
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>
