@@ -102,7 +102,7 @@ class SystemActivities{
                 'category' => $value->campaignCategory->name,
                 //'attempts' => $attempts,
                 'completed' => $c, //$value->completed_count+$value->pending_count,
-                'is_completed' => $c >= $value->number_of_staff ? true : false,
+                // 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency,
                 'priotized' => $value->approved,
@@ -113,16 +113,16 @@ class SystemActivities{
         //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         // Remove objects where 'is_completed' is true
-        $filteredArray = array_filter($list, function ($item) {
-            return $item['is_completed'] !== true;
-        });
+        // $filteredArray = array_filter($list, function ($item) {
+        //     return $item['is_completed'] !== true;
+        // });
 
         // Sort the array to prioritize 'Priotized'
-        usort($filteredArrayjhj, function ($a, $b) {
+        usort($list, function ($a, $b) {
             return strcmp($b['priotized'], $a['priotized']);
         });
 
-         return $filteredArray;
+         return  $list;
       
     }
 
