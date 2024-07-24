@@ -31,6 +31,11 @@ class CurrencyConverterController extends Controller
      
         $label = $request->label;
         if($label == 'naira'){
+
+            $request->validate([
+                'amount' => 'required|numeric|min:2000'
+            ]);
+
             $balance =auth()->user()->wallet->balance;
             if($request->amount > $balance){
                 return back()->with('error', 'Insufficient fund');
@@ -77,7 +82,11 @@ class CurrencyConverterController extends Controller
 
 
         }else{
-            $balance =auth()->user()->wallet->usd_balance;
+            $request->validate([
+                'usd' => 'required|numeric|min:2'
+            ]);
+    
+            $balance=auth()->user()->wallet->usd_balance;
             if($request->usd > $balance){
                 return back()->with('error', 'Insufficient fund');
             }

@@ -63,12 +63,12 @@
                         <span class="input-group-text">
                             &#8358;
                         </span>
-                        <input type="text" class="form-control @error('amount') is-invalid @enderror" id="naira" name="amount" value="{{ old('amount') }}"  placeholder="Enter amount to convert" required>
+                        <input type="text" class="form-control @error('amount') is-invalid @enderror" id="naira" min="2000" name="amount" value="{{ old('amount') }}"  placeholder="Enter amount to convert" required>
                 @else
                         <span class="input-group-text">
                         $
                         </span>
-                        <input type="text" class="form-control @error('usd') is-invalid @enderror" id="usd" name="usd" value="{{ old('usd') }}" placeholder="Enter amount to convert" required>
+                        <input type="text" class="form-control @error('usd') is-invalid @enderror" id="usd" name="usd" min="2" value="{{ old('usd') }}" placeholder="Enter amount to convert" required>
                 @endif
 
                 {{-- <select class="form-control" required name="network" id="network">

@@ -71,7 +71,75 @@ class SystemActivities{
        return ActivityLog::whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('user_type', 'regular')->get();  
     }
 
-    public static function availableJobs(){
+    public static function filterCampaign($categoryID){
+        $user = Auth::user();
+        $jobfilter = '';
+        $campaigns = '';
+
+        if($user){
+            $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
+        }
+
+        if($user->USD_verified){ //if user is usd verified, they see all jobs
+            if($categoryID == 0){
+                $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            }else{
+                $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            }
+            
+        }else{
+            if($categoryID == 0){
+                $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            }else{
+                $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            }
+            
+        }
+
+      
+
+        $list = [];
+        foreach($campaigns as $key => $value){
+            $c = $value->pending_count + $value->completed_count;//
+            $div = $c / $value->number_of_staff;
+            $progress = $div * 100;
+
+            $list[] = [ 
+                'id' => $value->id, 
+                'job_id' => $value->job_id, 
+                'campaign_amount' => $value->campaign_amount,
+                'post_title' => $value->post_title, 
+                'number_of_staff' => $value->number_of_staff, 
+                'type' => $value->campaignType->name, 
+                'category' => $value->campaignCategory->name,
+                //'attempts' => $attempts,
+                'completed' => $c, //$value->completed_count+$value->pending_count,
+                'is_completed' => $c >= $value->number_of_staff ? true : false,
+                'progress' => $progress,
+                'currency' => $value->currency,
+                'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
+                'priotized' => $value->approved,
+                // 'created_at' => $value->created_at
+            ];
+        }
+
+        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+        // Remove objects where 'is_completed' is true
+        $filteredArray = array_filter($list, function ($item) {
+            return $item['is_completed'] !== true;
+        });
+
+        // Sort the array to prioritize 'Priotized'
+        usort($filteredArray, function ($a, $b) {
+            return strcmp($b['priotized'], $a['priotized']);
+        });
+
+         return  $filteredArray;
+      
+    }
+
+    public static function availableJobs(){ //depreciated
         $user = Auth::user();
         $jobfilter = '';
         $campaigns = '';

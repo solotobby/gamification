@@ -263,6 +263,10 @@ Route::get('list/survey', [\App\Http\Controllers\FormBuilderController::class, '
 //achievers
 Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'topEarners']);
 
+
+
+///filter
+Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController::class, 'filterCampaignByCategories']);
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 

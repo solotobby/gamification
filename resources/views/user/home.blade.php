@@ -180,8 +180,10 @@
         @endif
     </div>
 
+    
     <!-- VPS -->
     <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
+
         <h4 class="fw-light mb-0">Available Jobs</h4>
 
          <form action="{{ url('switch/wallet') }}" method="POST">
@@ -202,6 +204,29 @@
           </form> 
 
     </div>
+
+    <form action="#" method="POST">
+      <div class="row items-push">
+        {{-- <div class="col-sm-6 col-xl-8">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa fa-search"></i>
+            </span>
+            <input type="text" class="form-control border-start-0" id="dm-projects-search" name="dm-projects-search" placeholder="Search Projects..">
+          </div>
+        </div> --}}
+        {{-- <div class="col-sm-6 col-xl-3 offset-xl-6"> --}}
+        <div class="col-sm-6 col-xl-3">
+          <select class="form-select" id="jobs-categories" name="dm-projects-filter">
+            <option value="0">All Categories</option>
+            @foreach ($categories as $category)
+              <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+    </form>
+
 
      
       {{-- <div class="block block-rounded block-fx-pop mb-2">
@@ -278,14 +303,18 @@
           </div> 
         </a> 
 
+        <div class="" id="display-jobs">
+        </div>
+
+
+
       <!-- END VPS -->
-      @foreach ($available_jobs as $job)
+      {{-- @foreach ($available_jobs as $job)
       <a href="{{ url('campaign/'.$job['job_id']) }}"> 
         <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-primary">
             <div class="d-md-flex justify-content-md-between align-items-md-center">
                 <div class="col-12">
-                {{-- <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div> --}}
                 <h3 class="h4 fw-bold mb-1" style="color: black">{!! $job['post_title'] !!}</h3>
                 <p class="fs-sm text-muted">
 
@@ -297,7 +326,7 @@
 
                       @else
                       &#8358;{{ number_format($job['campaign_amount'],2)}}  
-                        {{-- ${{ convertDollar('5') }} --}}
+                       
 
                     @endif
 
@@ -326,7 +355,9 @@
             </div>
         </div>
       </a>
-      @endforeach
+      @endforeach --}}
+
+
    </div>
 
 
@@ -369,7 +400,7 @@
 
 <!-- Page JS Code -->
 <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script>
 function myFunction() {
@@ -392,5 +423,184 @@ function myFunction() {
 
     console.log(navigator.clipboard.writeText(copyText.value));
   }
+
+  $(document).ready(function() {
+            const baseApiUrl = '{{ url("available/jobs") }}';
+            const baseUrl = '{{ url("campaign") }}';
+
+            function loadJobs(apiUrl) {
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        $("#display-jobs").empty(); // Clear previous results
+                        $.each(data, function(key, value) {
+                            const url = `${baseUrl}/${value.job_id}`;
+                            const jobHtml = `
+                                <a href="${url}">
+                                    <div class="block block-rounded block-fx-pop mb-2">
+                                        <div class="block-content block-content-full border-start border-3 border-primary">
+                                            <div class="d-md-flex justify-content-md-between align-items-md-center">
+                                                <div class="col-12">
+                                                    <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+                                                    <p class="fs-sm text-muted">${value.currency_code}${value.campaign_amount}</p>
+                                                    <div class="mb-0">
+                                                        <div class="progress mb-1" style="height: 6px;">
+                                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <p class="fs-sm fw-semibold mb-3" style="color: black">
+                                                            <span class="fw-bold">${value.completed} completed</span>
+                                                            <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+                                                        </p>
+                                                    </div>
+                                                    <p class="fs-sm text-muted mb-0">${value.type}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>`;
+                            $("#display-jobs").append(jobHtml);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+            // Load all jobs on initial page load
+            loadJobs(`${baseApiUrl}/0`);
+
+            // Load jobs based on selected category
+            $('#jobs-categories').on('change', function() {
+                const selectedValue = $(this).val();
+                const apiUrl = `${baseApiUrl}/${selectedValue}`;
+                loadJobs(apiUrl);
+            });
+        });
+    
+
+
+  // $(document).ready(function() {
+    
+
+  //   const apiUrl = '{{ url("available/jobs/0") }}'; 
+  //   const baseUrl = '{{ url("campaign") }}';
+  //     fetch(apiUrl).then(response => {
+  //                   if (!response.ok) {
+  //                       throw new Error('Network response was not ok ' + response.statusText);
+  //                   }
+  //                   return response.json();
+  //               })
+  //               .then(data => {
+  //                   // console.log(data);
+
+  //                   $.each(data, function(key, value) {
+                       
+  //                           const url = `${baseUrl}/${value.job_id}`;
+  //                           const jobHtml = `
+  //                               <a href="${url}">
+  //                                   <div class="block block-rounded block-fx-pop mb-2">
+  //                                       <div class="block-content block-content-full border-start border-3 border-primary">
+  //                                           <div class="d-md-flex justify-content-md-between align-items-md-center">
+  //                                               <div class="col-12">
+  //                                                   <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+  //                                                   <p class="fs-sm text-muted">${value.currency_code}${value.campaign_amount}</p>
+  //                                                   <div class="mb-0">
+  //                                                       <div class="progress mb-1" style="height: 6px;">
+  //                                                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+  //                                                       </div>
+  //                                                       <p class="fs-sm fw-semibold mb-3" style="color: black">
+  //                                                           <span class="fw-bold">${value.completed} completed</span>
+  //                                                           <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+  //                                                       </p>
+  //                                                   </div>
+  //                                                   <p class="fs-sm text-muted mb-0">${value.type}</p>
+  //                                               </div>
+  //                                           </div>
+  //                                       </div>
+  //                                   </div>
+  //                               </a>`;
+  //                           $("#display-jobs").append(jobHtml);
+                       
+  //                         });
+
+  //                   // Handle the API response data here
+  //               })
+  //               .catch(error => {
+  //                   console.error('Error:', error);
+  //       });
+
+
+  //       document.getElementById('jobs-categories').addEventListener('change', function() {
+  //   const selectedValue = this.value; 
+
+  //   const baseUrl = '{{ url("campaign") }}';
+  //   const baseApiUrl = '{{ url("available/jobs") }}';
+  //   const apiUrl = `${baseApiUrl}/${selectedValue}`;
+
+  //   fetch(apiUrl).then(response => {
+  //                   if (!response.ok) {
+  //                       throw new Error('Network response was not ok ' + response.statusText);
+  //                   }
+  //                   return response.json();
+  //               })
+  //               .then(data => {
+  //                   console.log(data);
+
+  //                   $.each(data, function(key, value) {
+                       
+  //                           const url = `${baseUrl}/${value.job_id}`;
+  //                           const jobHtml = `
+  //                               <a href="${url}">
+  //                                   <div class="block block-rounded block-fx-pop mb-2">
+  //                                       <div class="block-content block-content-full border-start border-3 border-primary">
+  //                                           <div class="d-md-flex justify-content-md-between align-items-md-center">
+  //                                               <div class="col-12">
+  //                                                   <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+  //                                                   <p class="fs-sm text-muted">${value.currency_code}${value.campaign_amount}</p>
+  //                                                   <div class="mb-0">
+  //                                                       <div class="progress mb-1" style="height: 6px;">
+  //                                                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+  //                                                       </div>
+  //                                                       <p class="fs-sm fw-semibold mb-3" style="color: black">
+  //                                                           <span class="fw-bold">${value.completed} completed</span>
+  //                                                           <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+  //                                                       </p>
+  //                                                   </div>
+  //                                                   <p class="fs-sm text-muted mb-0">${value.type}</p>
+  //                                               </div>
+  //                                           </div>
+  //                                       </div>
+  //                                   </div>
+  //                               </a>`;
+  //                           $("#display-jobs").append(jobHtml);
+                       
+  //                         });
+
+  //                   // Handle the API response data here
+  //               })
+  //               .catch(error => {
+  //                   console.error('Error:', error);
+  //               });
+
+  // });
+
+  // });
+
+
+  
+
+  
+  
+
+
+
+
 </script>
+
+
 @endsection
