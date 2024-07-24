@@ -19,6 +19,7 @@ use App\Models\UserScore;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\Category;
 use App\Models\LoginPoints;
 use App\Models\OTP;
 use App\Models\PaymentTransaction;
@@ -92,15 +93,36 @@ class HomeController extends Controller
 
         $badgeCount = SystemActivities::badgeCount();
 
-        $available_jobs = SystemActivities::availableJobs();
+        // $available_jobs = SystemActivities::availableJobs();
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
 
         $announcement = Announcement::where('status', true)->first();
 
         $ads = adBanner();
+        $categories = $this->listCategories();
 
-        return view('user.home', ['badgeCount' => $badgeCount, 'available_jobs' => $available_jobs, 'completed' => $completed,  'user' => auth()->user(), 'balance' => $balance, 'announcement' => $announcement, 'ads' => $ads]);
+        
+        return view('user.home', [
+            'badgeCount' => $badgeCount, 
+            // 'available_jobs' => $available_jobs, 
+            'completed' => $completed,  
+            'user' => auth()->user(), 
+            'balance' => $balance, 
+            'announcement' => $announcement, 
+            'ads' => $ads, 
+            'categories' => $categories
+        ]);
+    }
+
+    public function listCategories(){
+        return Category::query()->orderBy('name', 'ASC')->get();
+    }
+
+    public function filterCampaignByCategories($category_id){
+       
+
+        return SystemActivities::filterCampaign($category_id);
     }
 
     public function howTo()
