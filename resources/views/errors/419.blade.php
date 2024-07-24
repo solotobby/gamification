@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login Page</title>
+    <title>Error page</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .login-container {
@@ -24,12 +24,8 @@
 </head>
 <body>
     <div class="container login-container">
-      
-            <h1>
-                Please Click the button below Refresh 
-            </h1>
-
-            <a href="{{url('/')}}" class="btn btn-primary btn-block">Home</button>
+            
+            <a href="{{url('/login')}}" class="btn btn-primary btn-block">Click Here to Login</button>
   
     </div>
 
