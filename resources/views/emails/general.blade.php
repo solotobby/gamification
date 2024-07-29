@@ -16,6 +16,9 @@
                     {!! $content !!}
                     <br>
                 </p>
+                <p>
+                    Thank you for choosing Freebyz!
+                </p>
                 <p style="margin-bottom: 10px;">
                     Click the button below to access more jobs... <br><br>
                     <a href="{{ url($url) }}" target="_blank" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">

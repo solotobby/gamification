@@ -78,7 +78,16 @@
                       {{$banner->click_count == null ? '0' : $banner->click_count}}/{{$banner->clicks}}
                      </td>
                     <td>
-                        {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                      @if($banner->live_state == null)
+                       Under Review
+                    @elseif($banner->live_state == 'Started')
+                      {{ $banner->live_state }}
+                    @elseif($banner->live_state == 'Rejected')
+                      Rejected
+                    @else
+                      Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                    @endif
+                        {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
