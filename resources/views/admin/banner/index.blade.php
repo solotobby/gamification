@@ -1,4 +1,3 @@
-
 @extends('layouts.main.master')
 
 @section('content')
@@ -87,6 +86,8 @@
                        Under Review
                     @elseif($banner->live_state == 'Started')
                       {{ $banner->live_state }}
+                    @elseif($banner->live_state == 'Rejected')
+                      Rejected
                     @else
                       Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
                     @endif
@@ -150,11 +151,13 @@
                                        {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
                                      
                                       @if($banner->live_state == null)
-                                        Status -  Under Review
+                                       Status - Under Review
                                       @elseif($banner->live_state == 'Started')
-                                        Status - {{ $banner->live_state }}
+                                       Status -  {{ $banner->live_state }}
+                                      @elseif($banner->live_state == 'Rejected')
+                                       Status - Rejected
                                       @else
-                                        Status - Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
+                                       Status - Ended on {{ \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }}
                                       @endif
 
                                     </li>
@@ -168,6 +171,12 @@
                                         <button class="btn btn-secondary btn-sm disabled"> {{ $banner->live_state}}</button>
                                     @else
                                         <a href="{{ url('admin/banner/activate/'.$banner->id) }}" class="btn btn-secondary btn-sm">Take Live</a>
+                                        @if($banner->live_state == 'Rejected')
+                                         
+                                        @else
+                                          <a href="{{ url('admin/banner/reject/'.$banner->id) }}" class="btn btn-danger btn-sm">Reject Banner Ad</a>
+                                        @endif
+                                
                                     @endif 
 
                                 </div>
