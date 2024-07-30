@@ -264,6 +264,8 @@ Route::get('list/survey', [\App\Http\Controllers\FormBuilderController::class, '
 Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'topEarners']);
 
 
+///skills 
+Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
 
 ///filter
 Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController::class, 'filterCampaignByCategories']);
@@ -273,6 +275,8 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
+
+
 
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');

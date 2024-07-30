@@ -145,7 +145,16 @@
               @else
               <span><small> Allow image to be uploaded with proof at a cost of $0.01 per worker </small></span>
               @endif
-          </div>
+            </div>
+            <div class="mb-2">
+              <input type="checkbox" name="priotize" value="1" class="">
+              @if(auth()->user()->wallet->base_currency == "Naira")
+              <span><small> Make your Campaign appear at the top for 500 Naira </small></span>
+              @else
+              <span><small> Make your Campaign appear at the top for $0.3 </small></span>
+              @endif
+            </div>
+
             <div class="mb-2">
                 <input type="checkbox" name="validate" required class="">
                 <span><small> I agree that this campaign will be automatically approved after 24 hours if i fail to approve it. </small></span>

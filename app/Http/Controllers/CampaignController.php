@@ -192,7 +192,7 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
-        
+       
         $request->validate([
             'description' => 'required|string',
             'proof' => 'required|string',
@@ -201,6 +201,22 @@ class CampaignController extends Controller
             'campaign_amount' => 'required|numeric',
             'validate' => 'required'
         ]);
+
+        $prAmount = '';
+        $priotize = '';
+
+        if($request->priotize == true){
+            if(auth()->user()->wallet->base_currency == "Naira"){
+                $prAmount = 500;
+                $priotize = 'Priotize';
+            }else{
+                $prAmount =  0.30;
+                $priotize = 'Priotize';
+            }
+        }else{
+            $prAmount =  0;
+            $priotize = 'Pending';
+        }
 
         $iniAmount = '';
         if($request->allow_upload == true){
@@ -216,6 +232,8 @@ class CampaignController extends Controller
             $allowUpload = false;
         }
 
+
+
      
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (60 / 100) * $est_amount;
@@ -227,11 +245,12 @@ class CampaignController extends Controller
       
             if(auth()->user()->wallet->base_currency == "Naira"){
                 
-                $walletValidity = checkWalletBalance(auth()->user(), 'Naira', $total+$iniAmount);
+                $walletValidity = checkWalletBalance(auth()->user(), 'Naira', $total+$iniAmount+$prAmount);
                 if($walletValidity){
-                    $debitWallet = debitWallet(auth()->user(), 'Naira', $total+$iniAmount);
+
+                    $debitWallet = debitWallet(auth()->user(), 'Naira', $total+$iniAmount+$prAmount);
                     if($debitWallet){
-                        $campaign = $this->processCampaign($total+$iniAmount,$request,$job_id,$percent,$allowUpload);
+                        $campaign = $this->processCampaign($total+$iniAmount+$prAmount,$request,$job_id,$percent,$allowUpload,$priotize);
                         Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                         return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                     }
@@ -241,11 +260,12 @@ class CampaignController extends Controller
                 }
                
             }else{
-                 $walletValidity = checkWalletBalance(auth()->user(), 'Dollar', $total+$iniAmount);
+                 $walletValidity = checkWalletBalance(auth()->user(), 'Dollar', $total+$iniAmount+$prAmount);
                  if($walletValidity){
-                        $debitWallet = debitWallet(auth()->user(), 'Dollar', $total+$iniAmount);
+
+                        $debitWallet = debitWallet(auth()->user(), 'Dollar', $total+$iniAmount+$prAmount);
                         if($debitWallet){
-                            $campaign = $this->processCampaign($total+$iniAmount,$request,$job_id,$percent,$allowUpload);
+                            $campaign = $this->processCampaign($total+$iniAmount+$prAmount,$request,$job_id,$percent,$allowUpload,$priotize);
                             Mail::to(auth()->user()->email)->send(new CreateCampaign($campaign));
                             return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
                         }else{
@@ -261,7 +281,7 @@ class CampaignController extends Controller
        
     }
 
-    public function processCampaign($total, $request, $job_id, $percent,$allowUpload)
+    public function processCampaign($total, $request, $job_id, $percent,$allowUpload, $priotize)
     {
 
         $currency = '';
@@ -275,7 +295,7 @@ class CampaignController extends Controller
             $channel = 'paypal';
         }
 
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload]);
+        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload, 'approved' => $priotize]);
         $campaign = Campaign::create($request->all());
 
         $ref = time();
@@ -430,8 +450,8 @@ class CampaignController extends Controller
 
             setPendingCount($campaign->id);
             
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
+            // $name = SystemActivities::getInitials(auth()->user()->name);
+            // SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
             
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
