@@ -220,7 +220,7 @@
           <select class="form-select" id="jobs-categories" name="dm-projects-filter">
             <option value="0">All Categories</option>
             @foreach ($categories as $category)
-              <option value="{{ $category->id }}">{{ $category->name }}</option>
+              <option value="{{ $category->id }}">{{ ucwords($category->name) }}</option>
             @endforeach
           </select>
         </div>
