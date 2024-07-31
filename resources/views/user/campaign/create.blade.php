@@ -149,15 +149,15 @@
             <div class="mb-2">
               <input type="checkbox" name="priotize" value="1" class="">
               @if(auth()->user()->wallet->base_currency == "Naira")
-              <span><small> Make your Campaign appear at the top for 500 Naira </small></span>
+              <span><small> Make your Campaign appear at the top for 500 Naira (Optional) </small></span>
               @else
-              <span><small> Make your Campaign appear at the top for $0.3 </small></span>
+              <span><small> Make your Campaign appear at the top for $0.3 (Optional)</small></span>
               @endif
             </div>
 
             <div class="mb-2">
                 <input type="checkbox" name="validate" required class="">
-                <span><small> I agree that this campaign will be automatically approved after 24 hours if i fail to approve it. </small></span>
+                <span><small> I agree that this campaign will be automatically approved after 24 hours If I fail to approve it. </small></span>
             </div>
             
             </div>
