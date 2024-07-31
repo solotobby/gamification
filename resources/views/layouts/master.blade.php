@@ -7,7 +7,7 @@
         <meta name="description" content="afiliate, afiliate marketing, money, cash, online, online money, make money online">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- favicon icon -->
-        <link rel="icon" href="{{ asset('asset/img/favicon.png') }}">
+        <link rel="icon" href="{{ asset('favicon.png') }}">
 
 		<!-- All CSS Files Here -->
         <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}">
