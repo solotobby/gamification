@@ -266,6 +266,11 @@ Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'top
 
 ///skills 
 Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
+Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create']);
+Route::post('store/skill',[\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
+Route::get('my/skill',[\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
+
+Route::post('create/portfolio', [\App\Http\Controllers\SkillsController::class, 'addPortfolio'])->name('add.portfolio');
 
 ///filter
 Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController::class, 'filterCampaignByCategories']);
