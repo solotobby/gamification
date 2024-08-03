@@ -105,9 +105,13 @@ class GeneralController extends Controller
         //     // }
         // }
 
+       
+     
+    }
+
+    public function solution(){
         return $disputes = CampaignWorker::where('is_dispute', true)->where('created_at', '<=', Carbon::create(2024, 7, 31))->sum('amount');
 
-     
     }
 
     public function promo(){
