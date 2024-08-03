@@ -56,6 +56,7 @@ Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 Route::get('solution', [\App\Http\Controllers\GeneralController::class, 'solution']);
+
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
 Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
 
