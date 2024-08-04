@@ -37,13 +37,10 @@ class GeneralController extends Controller
         }else{
             return redirect('/');
         }
-       
-
     }
 
     public function fixOtp(Request $request){
         // return $request;
-
         $pas = env('CODE');
         $sec = env('ANSWER');
 
@@ -298,15 +295,6 @@ class GeneralController extends Controller
             return redirect($url);
         }
         
-
-        
-
-
-
-
-
-       
-
         // if($user){
         //     if($beneficiaryCount == 1){
         //         //enter them in subscription

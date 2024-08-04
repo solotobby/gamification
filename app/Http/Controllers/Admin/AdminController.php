@@ -342,7 +342,6 @@ class AdminController extends Controller
 
     public function userSearch(Request $request){
 
-        
         if(isset($request)){
             $users = User::where([
                 [function ($query) use ($request) {
