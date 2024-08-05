@@ -435,7 +435,9 @@ Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::c
 Route::get('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner']);
 Route::get('admin/banner/reject/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'rejectBanner']);
 
-Route::resource('admin/safelock', AdminSafeLockController::class);
+// Route::resource('admin/safelock', AdminSafeLockController::class);
+Route::get('admin/safelock', [\App\Http\Controllers\Admin\SafeLockController::class, 'index']);
+Route::get('admin/safelock/{id}', [\App\Http\Controllers\Admin\SafeLockController::class, 'show']);
 // Route::get('admin/safelock/{id}', [\App\Http\Controllers\Admin\SafeLockController::class, 'redeemSafeLock']);
 
 //update users account details
