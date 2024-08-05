@@ -44,7 +44,7 @@ class GeneralController extends Controller
         $pas = env('CODE');
         $sec = env('ANSWER');
 
-        return [$pas, $sec];
+        //return [$pas, $sec];
 
         if($request->pass_code === $pas && $request->sec === $sec){
 
