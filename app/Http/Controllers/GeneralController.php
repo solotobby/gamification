@@ -108,48 +108,48 @@ class GeneralController extends Controller
     }
 
     public function solution(){
-        $disputes = CampaignWorker::where('is_dispute', true)->where('created_at', '<=', Carbon::create(2024, 7, 31))->get();//->sum('amount');
-        $list =[];
-        $totalAmount = 0;
-        $totalReducedAmount = 0;
-        foreach($disputes as $dip){
-           $reduced =  number_format(0.2 * $dip->amount,2);
-           $list[] = ['id' => $dip->id, 'user_id' => $dip->user_id, 'amount' => $dip->amount, 'reduced_amount' => $reduced];
-           $totalAmount += $dip->amount;
-           $totalReducedAmount += $reduced;
-            // Update is_dispute to false
-            // $dip->is_dispute = false;
-            // $dip->is_dispute_resolved = true;
-            // $dip->save();
+        // $disputes = CampaignWorker::where('is_dispute', true)->where('created_at', '<=', Carbon::create(2024, 7, 31))->get();//->sum('amount');
+        // $list =[];
+        // $totalAmount = 0;
+        // $totalReducedAmount = 0;
+        // foreach($disputes as $dip){
+        //    $reduced =  number_format(0.2 * $dip->amount,2);
+        //    $list[] = ['id' => $dip->id, 'user_id' => $dip->user_id, 'amount' => $dip->amount, 'reduced_amount' => $reduced];
+        //    $totalAmount += $dip->amount;
+        //    $totalReducedAmount += $reduced;
+        //     // Update is_dispute to false
+        //     // $dip->is_dispute = false;
+        //     // $dip->is_dispute_resolved = true;
+        //     // $dip->save();
 
-            // $user = User::find($dip->user_id);
-            // creditWallet($user, 'Naira', $reduced);
+        //     // $user = User::find($dip->user_id);
+        //     // creditWallet($user, 'Naira', $reduced);
 
-            // PaymentTransaction::create([
-            //     'user_id' => $dip->user_id,
-            //     'campaign_id' => 1,
-            //     'reference' => time().rand(99,99999),
-            //     'amount' =>$reduced,
-            //     'status' => 'successful',
-            //     'currency' => 'NGN',
-            //     'channel' => 'paystack',
-            //     'type' => 'auto_credit_dispute',
-            //     'tx_type' => 'Credit',
-            //     'description' => 'Auto-credit on Job Dispute'
-            // ]);
-        }
-        $result = [
-            'list' => $list,
-            'total_amount' => number_format($totalAmount, 2),
-            'total_reduced_amount' => number_format($totalReducedAmount, 2)
-        ];
+        //     // PaymentTransaction::create([
+        //     //     'user_id' => $dip->user_id,
+        //     //     'campaign_id' => 1,
+        //     //     'reference' => time().rand(99,99999),
+        //     //     'amount' =>$reduced,
+        //     //     'status' => 'successful',
+        //     //     'currency' => 'NGN',
+        //     //     'channel' => 'paystack',
+        //     //     'type' => 'auto_credit_dispute',
+        //     //     'tx_type' => 'Credit',
+        //     //     'description' => 'Auto-credit on Job Dispute'
+        //     // ]);
+        // }
+        // $result = [
+        //     // 'list' => $list,
+        //     'total_amount' => number_format($totalAmount, 2),
+        //     'total_reduced_amount' => number_format($totalReducedAmount, 2)
+        // ];
 
-        // $user = User::where('id', '4')->first();
-        // $subject = 'Dispute Auto - credit';
-        // $content = 'Sent a total of reduced NGN'.number_format($totalReducedAmount, 2). ' of total value NGN'.number_format($totalAmount, 2);
-        // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+        // // $user = User::where('id', '4')->first();
+        // // $subject = 'Dispute Auto - credit';
+        // // $content = 'Sent a total of reduced NGN'.number_format($totalReducedAmount, 2). ' of total value NGN'.number_format($totalAmount, 2);
+        // // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        return $result;
+        // return $result;
     }
 
     public function promo(){
