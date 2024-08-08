@@ -70,7 +70,7 @@
                             <th scope="row">{{ $i++ }}.</th>
                             {{-- <td class="fw-semibold"><a href="{{ url('staff/'.$staff->id.'/info') }}" target="_blank"> {{$staff->name }}</a></td> --}}
                             <td>{{ @$sh->user->name }}</td>
-                            <td>{{ @$sh->titok }}</td>
+                            <td>{{ @$sh->tiktok }}</td>
                             <td>{{ @$sh->phone }}</td>
                             <td>{{ @$sh->network }}</td>
                             <td>{{ \Carbon\Carbon::parse($sh->date)->format('d/m/Y') }}</td>
