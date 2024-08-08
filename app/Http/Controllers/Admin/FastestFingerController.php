@@ -12,8 +12,9 @@ class FastestFingerController extends Controller
 {
     public function showPool(){
         $date = Carbon::today()->format('Y-m-d');
-        $show = FastestFingerPool::where(['date'=>$date ])->get();
-        return view('admin.fastest_finger.show', ['show' => $show, 'date' =>$date]);
+        $show = FastestFingerPool::where(['date'=>$date ])->pluck('user_id')->toarray();
+        $fastestFinger = FastestFinger::whereIn('user_id', $show)->get();
+        return view('admin.fastest_finger.show', ['show' => $fastestFinger, 'date' =>$date]);
     }
 
     public function randomSelection(){
