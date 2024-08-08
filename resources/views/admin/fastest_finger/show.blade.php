@@ -74,7 +74,7 @@
                             <td>{{ @$sh->phone }}</td>
                             <td>{{ @$sh->network }}</td>
                             <td>{{ \Carbon\Carbon::parse($sh->date)->format('d/m/Y') }}</td>
-                            <td>{{ $sh->is_selected == false ? 'Not Selected' : 'Selected' }}</td>
+                            <td>{{ $sh->pool->is_selected == false ? 'Not Selected' : 'Selected' }}</td>
                         </tr>
                   
                 @endforeach
