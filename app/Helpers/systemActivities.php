@@ -60,7 +60,7 @@ class SystemActivities{
         $initials = rtrim($initials, '.');
         return $initials; 
     }
-
+    ///this is very important, cannot be removed
     public static function activityLog($user, $activity_type, $description, $user_type){
         return ActivityLog::create(['user_id' => $user->id, 'activity_type' => $activity_type, 'description' => $description, 'user_type' => $user_type]);
     }
