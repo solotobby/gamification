@@ -10,4 +10,8 @@ class FastestFinger extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'phone', 'tiktok', 'network'];
+
+    public function user(){
+        return  $this->belongsTo(User::class, 'user_id');
+    }
 }

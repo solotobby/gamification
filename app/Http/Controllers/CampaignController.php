@@ -197,6 +197,7 @@ class CampaignController extends Controller
             'description' => 'required|string',
             'proof' => 'required|string',
             'post_title' => 'required|string',
+            'post_link' => 'required|string',
             'number_of_staff' => 'required|numeric',
             'campaign_amount' => 'required|numeric',
             'validate' => 'required'
@@ -692,7 +693,7 @@ class CampaignController extends Controller
 
     public function addMoreWorkers(Request $request){
         $est_amount = $request->new_number * $request->amount;
-        $percent = (50 / 100) * $est_amount;
+        $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
         //[$est_amount, $percent, $total];
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();

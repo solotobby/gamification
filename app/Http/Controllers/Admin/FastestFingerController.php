@@ -20,7 +20,7 @@ class FastestFingerController extends Controller
         $date = Carbon::today()->format('Y-m-d');
         $checkSelection = FastestFingerPool::where(['date'=>$date])->where('is_selected', true)->first();
         if(!$checkSelection){
-            $show = FastestFingerPool::where(['date'=>$date ])->inRandomOrder()->first();
+            $show = FastestFingerPool::where(['date'=>$date])->inRandomOrder()->first();
             $show->is_selected = true;
             $show->save();
             return back()->with('success', 'Pool Selection successfully!');
