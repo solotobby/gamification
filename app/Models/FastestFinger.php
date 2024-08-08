@@ -18,5 +18,7 @@ class FastestFinger extends Model
     public function pool(){
         return $this->belongsTo(FastestFingerPool::class, 'user_id');
     }
+
     
+
 }
