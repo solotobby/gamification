@@ -71,7 +71,7 @@ class HomeController extends Controller
     public function userHome()
     {
         //Sendmonny::accessToken();
-        Analytics::dailyVisit('Dashboard');
+        dailyVisit('Dashboard');
         if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
         }
@@ -132,7 +132,7 @@ class HomeController extends Controller
 
     public function adminHome(Request $request)
     {
-        // $retention = Analytics::retentionRate();
+        // $retention = retentionRate();
         // return PaystackHelpers::getPosts();
         // $campaigns = Campaign::where('status', 'Live')->get();
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
@@ -154,34 +154,34 @@ class HomeController extends Controller
         //$Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
 
-        // return $campaignMetric = Analytics::campaignMetrics();
+        // return $campaignMetric = campaignMetrics();
         //users registered
 
-        $dailyActivity = Analytics::dailyActivities();
+        $dailyActivity = dailyActivities();
 
         //monthly visits
         // $start_date = \Carbon\Carbon::today()->subDays(30);
         // $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
-        $MonthlyVisit = Analytics::monthlyVisits();
+        $MonthlyVisit = monthlyVisits();
 
         //daily visits
-        $dailyVisits = Analytics::dailyStats();
+        $dailyVisits = dailyStats();
 
         //registration channel
-        $registrationChannel = Analytics::registrationChannel();
+        $registrationChannel = registrationChannel();
 
         //revenue channel
-        $revenueChannel = Analytics::revenueChannel();
+        $revenueChannel = revenueChannel();
 
         //revenue 
-        $revenue = Analytics::monthlyRevenue();
+        $revenue = monthlyRevenue();
 
         //country distribution
-        $countryDistribution = Analytics::countryDistribution();
+        $countryDistribution = countryDistribution();
 
         //age distribution
-        $ageDistribution = Analytics::ageDistribution();
+        $ageDistribution = ageDistribution();
 
         // $christmas = Profile::where('is_xmas', true)->count();
 
@@ -243,7 +243,7 @@ class HomeController extends Controller
         // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         // $data['loginPointsValue'] = $data['loginPoints']/5;
 
-        // $data['monthlyVisits'] = Analytics::monthlyVisits();
+        // $data['monthlyVisits'] = monthlyVisits();
         return $data;
     }
 
@@ -260,16 +260,16 @@ class HomeController extends Controller
         $Wal = Wallet::where('user_id', auth()->user()->id)->first();
 
         //users registered
-        $dailyActivity = Analytics::dailyActivities();
+        $dailyActivity = dailyActivities();
 
         //monthly visis
-        $MonthlyVisit = Analytics::monthlyVisits();
+        $MonthlyVisit = monthlyVisits();
 
         ///daily visits
-        $dailyVisits = Analytics::dailyStats();
+        $dailyVisits = dailyStats();
 
         //registration channel
-        $registrationChannel = Analytics::registrationChannel();
+        $registrationChannel = registrationChannel();
 
         return view('staff.home', [
             'users' => $user, 
