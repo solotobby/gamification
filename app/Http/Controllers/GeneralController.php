@@ -161,11 +161,11 @@ class GeneralController extends Controller
     {  
         
         dailyVisit('LandingPage');
-        $users = User::where('role', 'regular')->count();
-        $workers = CampaignWorker::all()->count();
+        // $users = User::where('role', 'regular')->count();
+        // $workers = CampaignWorker::all()->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('amount', '>', 5000)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
-        return [$users, $workers, $transactions];
-        return view('landingPage', ['transactions' => $transactions, 'users' => $users, 'workers' => $workers ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        return [$transactions];
+        return view('landingPage', ['transactions' => $transactions ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 
     public function ladingpageApi(){
