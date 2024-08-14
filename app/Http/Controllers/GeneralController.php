@@ -174,13 +174,13 @@ class GeneralController extends Controller
 
     public function contact()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('contact');
     }
 
     public function goal()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('goal');
     }
 
@@ -192,49 +192,49 @@ class GeneralController extends Controller
 
     public function gamelist()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         $games = Games::orderBy('created_at', 'desc')->get();
         return view('gamelist', ['games' => $games]);
     }
 
     public function terms()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('terms');
     }
 
     public function privacy()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('privacy');
     }
     
     public function make_money()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('make_money');
     }
 
     public function trackRecord()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('track_record');
     }
 
     public function faq()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('faq');
     }
     public function about()
     {
-        Analytics::dailyVisit('LandingPage');
+       dailyVisit('LandingPage');
         return view('about');
     }
 
     public function download()
     {
-        Analytics::dailyVisit('LandingPage');
+        dailyVisit('LandingPage');
         return view('download');
     }
 
