@@ -85,15 +85,11 @@ class HomeController extends Controller
         }
 
         $balance = '';
-        // if(walletHandler() == 'sendmonny' && auth()->user()->is_wallet_transfere == true){
-        //     $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
-        // }
-        ///set User currency
-        //$activity_log = SystemActivities::showActivityLog();
+       
 
-        $badgeCount = SystemActivities::badgeCount();
+        $badgeCount = badgeCount();
 
-        // $available_jobs = SystemActivities::availableJobs();
+     
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
 
@@ -122,7 +118,7 @@ class HomeController extends Controller
     public function filterCampaignByCategories($category_id){
        
 
-        return SystemActivities::filterCampaign($category_id);
+        return filterCampaign($category_id);
     }
 
     public function howTo()
@@ -133,7 +129,7 @@ class HomeController extends Controller
     public function adminHome(Request $request)
     {
         // $retention = retentionRate();
-        // return PaystackHelpers::getPosts();
+        // return getPosts();
         // $campaigns = Campaign::where('status', 'Live')->get();
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
@@ -147,7 +143,7 @@ class HomeController extends Controller
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
-        $available_jobsCount = count(SystemActivities::availableJobs());
+        $available_jobsCount = count(availableJobs());
 
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -393,7 +389,7 @@ class HomeController extends Controller
         if ($reward_type->reward_type == 'CASH' && $reward_type->is_redeem == '0') {
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             if ($bankInformation == null) {
-                $bankList = PaystackHelpers::bankList();
+                $bankList = bankList();
                 return view('bank_information', ['bankList' => $bankList, 'id' => $id]);
             }
 
@@ -465,7 +461,7 @@ class HomeController extends Controller
     public function selectBankInformation()
     {
 
-        $bankList = PaystackHelpers::bankList();
+        $bankList = bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
         $otp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();
         return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'otp' => $otp]);
@@ -477,10 +473,10 @@ class HomeController extends Controller
         $this->validate($request, [
             'account_number' => 'numeric|required|digits:10'
         ]);
-        $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
+        $accountInformation = resolveBankName($request->account_number, $request->bank_code);
 
         if ($accountInformation['status'] == 'true') {
-            $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
+            $recipientCode = recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
             $bankInfor = BankInformation::create([
                 'user_id' => auth()->user()->id,
                 'name' => $accountInformation['data']['account_name'],
@@ -504,7 +500,7 @@ class HomeController extends Controller
 
     public function transferFund($amount, $recipient)
     {
-        return PaystackHelpers::transferFund($amount, $recipient, 'Freebyz Withdrawal');
+        return transferFund($amount, $recipient, 'Freebyz Withdrawal');
     }
 
     public function sendAirtime($phone, $amount)

@@ -43,7 +43,7 @@ class LoginPointCountroller extends Controller
         //record
         LoginPointsRedeemed::create(['user_id'=>auth()->user()->id, 'point' => $total_point, 'amount' => $amount]);
 
-        PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', time(), $amount, 'successful', 'login_point_redemption', auth()->user()->name.' redeemed login points', 'Credit', 'regular');
+        paymentTrasanction(auth()->user()->id, '1', time(), $amount, 'successful', 'login_point_redemption', auth()->user()->name.' redeemed login points', 'Credit', 'regular');
         return back()->with('success', 'Points redeemed successfully');
     }
 }

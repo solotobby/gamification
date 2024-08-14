@@ -17,12 +17,12 @@ class BadgeController extends Controller
     }
 
     public function index(){
-        $badge = SystemActivities::badge();
+        $badge = badge();
         return view('user.badge.index', ['badge' => $badge]); 
     }
 
     public function redeemBadge(){
-        $badge = SystemActivities::badge();
+        $badge = badge();
         $date = Carbon::now()->subMonth()->format('M, Y');
         if($badge['count'] < 10){
             return back()->with('error', 'You do not have up to 10 paid referral in '.$date);

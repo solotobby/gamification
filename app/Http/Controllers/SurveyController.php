@@ -45,7 +45,7 @@ class SurveyController extends Controller
         }
         // $date = \Carbon\Carbon::today()->toDateString();
         
-        ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'survey_points', 'description' =>  SystemActivities::getInitials($user->name) .' earned 100 points for taking freebyz survey', 'user_type' => 'regular']);
+        ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'survey_points', 'description' =>  $user->name .' earned 100 points for taking freebyz survey', 'user_type' => 'regular']);
         // LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '100']);
 
         return view('user.survey.completed');

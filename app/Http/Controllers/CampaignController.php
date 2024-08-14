@@ -347,7 +347,7 @@ class CampaignController extends Controller
             abort(400);
         }
 
-         $getCampaign = SystemActivities::viewCampaign($job_id);
+         $getCampaign = viewCampaign($job_id);
             if($getCampaign){
 
                 if($getCampaign->currency == 'USD'){
@@ -392,7 +392,7 @@ class CampaignController extends Controller
         // $getCampaign = Campaign::where('job_id', $job_id)->first();
         // if($getCampaign->campaignType->name == 'Facebook Influencer'){
         //     if(auth()->user()->facebook_id == null){
-        //         // return PaystackHelpers::getPosts();
+        //         // return getPosts();
         //         return redirect('auth/facebook');
         //     }
         // }
@@ -451,8 +451,6 @@ class CampaignController extends Controller
 
             setPendingCount($campaign->id);
             
-            // $name = SystemActivities::getInitials(auth()->user()->name);
-            // SystemActivities::activityLog(auth()->user(), 'campaign_submission', $name .' submitted a campaign of NGN'.number_format($request->amount), 'regular');
             
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
@@ -570,7 +568,7 @@ class CampaignController extends Controller
                'user_type' => 'regular'
            ]);
            
-           SystemActivities::activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format( $workSubmitted->amount), 'regular');
+           activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format( $workSubmitted->amount), 'regular');
            
            $subject = 'Job Approved';
            $status = 'Approved';

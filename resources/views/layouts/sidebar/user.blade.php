@@ -6,7 +6,7 @@
           <i class="nav-main-link-icon fa fa-home"></i>
           <span class="nav-main-link-name">Dashboard</span>
           <?php 
-          $badge = App\Helpers\SystemActivities::badge();
+          $badge = badge();
           ?>
           <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$badge['color']}}"></i> </span>
         </a>

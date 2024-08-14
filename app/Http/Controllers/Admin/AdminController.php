@@ -189,7 +189,7 @@ class AdminController extends Controller
 
             $phone = '234'.substr($score->user->phone, 1);
             $message = "Hello ".$score->user->name. " you have a ".$request->name." reward of ".$formattedReward." from Freebyz.com. Please login to cliam it. Thanks";
-            PaystackHelpers::sendNotificaion($phone, $message);
+            // PaystackHelpers::sendNotificaion($phone, $message);
         }
         return back()->with('status', 'Reward Assigned Successfully');
     }
@@ -381,7 +381,7 @@ class AdminController extends Controller
         $info = User::where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
-        $bankList = PaystackHelpers::bankList();
+        $bankList = bankList();
         return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
         'bankList' => $bankList
         ]);
@@ -510,8 +510,8 @@ class AdminController extends Controller
             }
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
             
-            $name = SystemActivities::getInitials($getUser->name);
-            SystemActivities::activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
+            $name = $getUser->name;
+            activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
 
@@ -569,8 +569,8 @@ class AdminController extends Controller
                 ]);
             }
             systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
-            $name = SystemActivities::getInitials($getUser->name);
-            SystemActivities::activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
+            $name = $getUser->name;
+            activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
              
             Mail::to($getUser->email)->send(new UpgradeUser($getUser));
             return back()->with('success', 'Upgrade Successful');
@@ -697,7 +697,7 @@ class AdminController extends Controller
         // // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
         // ->orderBy('created_at', 'DESC')->paginate(200);
 
-        //  $list = SystemActivities::availableJobs();
+     
         $yesterday = Carbon::yesterday();
         $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
                ->whereDate('created_at', $yesterday)
@@ -793,12 +793,12 @@ class AdminController extends Controller
         // }
         // return $list;
 
-        $process = PaystackHelpers::sendBulkSMS($number, $message);
-        if($process['code'] == 'ok'){
-            return back()->with('success', 'SMS Sent Successful');
-        }else{
-            return back()->with('error', 'There was an error in transit');
-        } 
+        // $process = PaystackHelpers::sendBulkSMS($number, $message);
+        // if($process['code'] == 'ok'){
+        //     return back()->with('success', 'SMS Sent Successful');
+        // }else{
+        //     return back()->with('error', 'There was an error in transit');
+        // } 
     }
 
     public function campaignPending(){
@@ -933,8 +933,8 @@ class AdminController extends Controller
                 //set activity log
                 $am = number_format($withdrawals->amount*100);
                 
-                $name = SystemActivities::getInitials($user->name);
-                SystemActivities::activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
+                $name = $user->name;
+                activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
                 //send mail
                 $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                 $subject = 'Withdrawal Request Granted';
@@ -957,8 +957,8 @@ class AdminController extends Controller
 
         //set activity log
         $am = number_format($withdrawals->amount);
-        $name = SystemActivities::getInitials($user->name);
-        SystemActivities::activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
+        $name = $user->name;
+        activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
 
         $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
@@ -969,7 +969,7 @@ class AdminController extends Controller
 
     public function transferFund($amount, $recipient, $reason)
     {
-           return PaystackHelpers::transferFund($amount, $recipient, $reason);
+           return transferFund($amount, $recipient, $reason);
     }
 
     public function removeMarketplaceProduct($product_id){
@@ -1119,11 +1119,11 @@ class AdminController extends Controller
 
     public function updateUserAccountDetails(Request $request){
 
-            $accountInformation = PaystackHelpers::resolveBankName($request->account_number, $request->bank_code);
+            $accountInformation = resolveBankName($request->account_number, $request->bank_code);
 
             if($accountInformation['status'] == 'true')
             {
-                $recipientCode = PaystackHelpers::recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
+                $recipientCode = recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
                 $bankInfor = BankInformation::where('user_id', $request->user_id)->first();
                 $bankInfor->name = $accountInformation['data']['account_name'];
                 $bankInfor->bank_name = $recipientCode['data']['details']['bank_name'];
@@ -1161,7 +1161,7 @@ class AdminController extends Controller
     }
 
     public function listFlutterwaveTrf(){
-        return PaystackHelpers::listFlutterwaveTransaction();
+        return listFlutterwaveTransaction();
     }
 
     public function test(){

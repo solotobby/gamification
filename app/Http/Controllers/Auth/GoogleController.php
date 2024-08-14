@@ -67,7 +67,7 @@ class GoogleController extends Controller
                 //     }
                 // }
 
-                SystemActivities::activityLog($get, 'login', $get->name .' Logged In', 'regular');
+                activityLog($get, 'login', $get->name .' Logged In', 'regular');
                 PaystackHelpers::userLocation('Login');
                 return redirect('/home');
      
@@ -100,7 +100,7 @@ class GoogleController extends Controller
                     return view('phone');
                 }
                 // PaystackHelpers::loginPoints($newUser);
-                SystemActivities::activityLog($get, 'google_account_creation', $get->name .' Registered', 'regular');
+                activityLog($get, 'google_account_creation', $get->name .' Registered', 'regular');
                 return redirect('/home');
             }
     

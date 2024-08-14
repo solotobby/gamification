@@ -29,13 +29,13 @@ class ProfileController extends Controller
     public function index()
     {
         // return currentLocation();
-        //  $countries = PaystackHelpers::countryList();
+    
 
-         $bankList = PaystackHelpers::bankList();
+         $bankList = bankList();
          
         //  return ['countries'=>$countries, 'banks'=>$bankList];
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
-        $badge = SystemActivities::badge();
+        $badge = badge();
         return view('user.profile.profile', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'badge' => $badge]);
     }
 

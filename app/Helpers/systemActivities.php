@@ -44,7 +44,7 @@ class SystemActivities{
         //     }
         //     $initials = rtrim($initials, '.');
         //     ActivityLog::create(['user_id' => $user->id, 'activity_type' => 'login_points', 'description' =>  $initials .' earned 50 points for log in', 'user_type' => 'regular']);
-            LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
+            // LoginPoints::create(['user_id' => $user->id, 'date' => $date, 'point' => '50']);
         // }
 
     }

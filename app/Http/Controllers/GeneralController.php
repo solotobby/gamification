@@ -509,10 +509,10 @@ class GeneralController extends Controller
         parse_str($url_components['query'], $params);
 
          $ref = $params['trxref']; //paystack
-         $res = PaystackHelpers::verifyTransaction($ref); 
+         $res = verifyTransaction($ref); 
          $amount = $res['data']['amount']/100;
         if($res['status'] == true){
-            PaystackHelpers::paymentUpdate($ref, 'successful');
+            paymentUpdate($ref, 'successful');
             $referral_id =  $res['data']['metadata'];
             
           
