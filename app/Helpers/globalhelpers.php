@@ -20,10 +20,12 @@ use App\Models\Settings;
 use App\Models\Statistics;
 use App\Models\Usdverified;
 use App\Models\User;
+use App\Models\UserLocation;
 use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
@@ -103,7 +105,7 @@ if(!function_exists('walletHandler')){
 
 if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
-        $location = PaystackHelpers::getLocation();
+        $location = getLocation();
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
@@ -116,7 +118,7 @@ if(!function_exists('setWalletBaseCurrency')){
 //         $wall = Wallet::where('user_id', auth()->user()->id)->first();
         
 //         if($wall->base_currency == null){
-//             $location = PaystackHelpers::getLocation();
+//             $location = getLocation();
 //             $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
 //             $wall->save();
 //         }
@@ -584,7 +586,7 @@ if(!function_exists('generateVirtualAccountOnboarding')){
         // $splitedName = explode(" ", $name);
 
         //check if user exist, if yes, update informatioon
-        $fetchCustomer = PaystackHelpers::fetchCustomer($user->email);
+        $fetchCustomer = fetchCustomer($user->email);
 
         if($fetchCustomer['status'] == true){
            
@@ -595,7 +597,7 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                 "phone"=> "+".$phone_number
             ];
 
-            $updateCustomer = PaystackHelpers::updateCustomer($user->email, $customerPayload);
+            $updateCustomer = updateCustomer($user->email, $customerPayload);
 
             if($updateCustomer['status'] == true){
 
@@ -604,7 +606,7 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                     "preferred_bank"=>env('PAYSTACK_BANK')
                 ];
                         
-                $response = PaystackHelpers::virtualAccount($data);
+                $response = virtualAccount($data);
 
                 $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
                 if($VirtualAccount){
@@ -647,7 +649,7 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                 "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
-            $res = PaystackHelpers::createCustomer($payload);
+            $res = createCustomer($payload);
 
             if($res['status'] == true){
             
@@ -658,7 +660,7 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                     "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
-                $response = PaystackHelpers::virtualAccount($data);
+                $response = virtualAccount($data);
     
                 if($VirtualAccount){
                     
@@ -700,7 +702,7 @@ if(!function_exists('generateVirtualAccount')){
         $splitedName = explode(" ", $name);
 
         //check if user exist, if yes, update informatioon
-        $fetchCustomer = PaystackHelpers::fetchCustomer(auth()->user()->email);
+        $fetchCustomer = fetchCustomer(auth()->user()->email);
 
         if($fetchCustomer['status'] == true){
            
@@ -711,7 +713,7 @@ if(!function_exists('generateVirtualAccount')){
                 "phone"=> "+".$phone_number
             ];
 
-            $updateCustomer = PaystackHelpers::updateCustomer(auth()->user()->email, $customerPayload);
+            $updateCustomer = updateCustomer(auth()->user()->email, $customerPayload);
 
             if($updateCustomer['status'] == true){
 
@@ -720,7 +722,7 @@ if(!function_exists('generateVirtualAccount')){
                     "preferred_bank"=>env('PAYSTACK_BANK')
                 ];
                         
-                $response = PaystackHelpers::virtualAccount($data);
+                $response = virtualAccount($data);
 
                 $VirtualAccount = VirtualAccount::where('user_id', auth()->user()->id)->first();
                 if($VirtualAccount){
@@ -763,7 +765,7 @@ if(!function_exists('generateVirtualAccount')){
                 "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone_number
             ];
-            $res = PaystackHelpers::createCustomer($payload);
+            $res = createCustomer($payload);
 
             if($res['status'] == true){
             
@@ -774,7 +776,7 @@ if(!function_exists('generateVirtualAccount')){
                     "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
-                $response = PaystackHelpers::virtualAccount($data);
+                $response = virtualAccount($data);
     
                 if($VirtualAccount){
                     
@@ -817,7 +819,7 @@ if(!function_exists('reGenerateVirtualAccount')){
     function reGenerateVirtualAccount($user){
         // $splitedName = explode(" ", $name);
         //check if user exist, if yes, update informatioon
-       $fetchCustomer = PaystackHelpers::fetchCustomer($user->email);
+       $fetchCustomer = fetchCustomer($user->email);
 
         if($fetchCustomer['status'] == true){
            
@@ -829,7 +831,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 "phone"=> "+".$phone
             ];
 
-            $updateCustomer = PaystackHelpers::updateCustomer($user->email, $customerPayload);
+            $updateCustomer = updateCustomer($user->email, $customerPayload);
 
             if($updateCustomer['status'] == true){
                 
@@ -840,7 +842,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                     "preferred_bank"=>env('PAYSTACK_BANK')
                 ];
                         
-              $response = PaystackHelpers::virtualAccount($data);
+              $response = virtualAccount($data);
 
                 $VirtualAccount = VirtualAccount::create([
                     'user_id' => $user->id, 
@@ -871,7 +873,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                 "last_name"=> 'Freebyz',
                 "phone"=> "+".$phone
             ];
-            $res = PaystackHelpers::createCustomer($payload);
+            $res = createCustomer($payload);
 
             if($res['status'] == true){
             
@@ -882,7 +884,7 @@ if(!function_exists('reGenerateVirtualAccount')){
                     "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
                 ];
                         
-                $response = PaystackHelpers::virtualAccount($data);
+                $response = virtualAccount($data);
  
                 $VirtualAccount = VirtualAccount::create(['user_id' => $user->id, 
                     'channel' => 'paystack', 
@@ -1000,8 +1002,8 @@ if(!function_exists('userDollaUpgrade')){
                 ]);
             }
             systemNotification($getUser, 'success', 'User Verification',  $getUser->name.' was verified');
-            $name = SystemActivities::getInitials($getUser->name);
-            SystemActivities::activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
+            $name = $getUser->name;
+            activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
              
             return [$usd_Verified, $getUser, $tx];
             
@@ -1058,7 +1060,7 @@ if(!function_exists('userNairaUpgrade')){
 
                 ///Transactions
                 $description = 'Referer Bonus from '.$user->name;
-                // PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+                // paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
 
                PaymentTransaction::create([
                     'user_id' => $referee->referee_id,
@@ -1080,7 +1082,7 @@ if(!function_exists('userNairaUpgrade')){
 
                 //Admin Transaction Table
                 $description = 'Referer Bonus from '.$user->name;
-                // PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+                // paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
             
                 PaymentTransaction::create([
                     'user_id' => 1,
@@ -1125,8 +1127,8 @@ if(!function_exists('userNairaUpgrade')){
             ]);
         }
 
-        $name = SystemActivities::getInitials($user->name);
-        SystemActivities::activityLog($user, 'account_verification', $name .' account verification', 'regular');
+        $name = $user->name;
+        activityLog($user, 'account_verification', $name .' account verification', 'regular');
         
 
         return $transaction;
@@ -1292,5 +1294,598 @@ if(!function_exists('ageDistribution')){
 }
 
 
+if(!function_exists('numberFormat')){
+    function numberFormat($number, $plus = true){ 
+        if($number >= 1000000000){
+            $number = number_format(($number/1000000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'B+':(int)$number.'B';
+            return $number;
+        }
+        if($number >= 1000000){
+            $number = number_format(($number/1000000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'M+':(int)$number.'M';
+            return $number;
+        }
+    
+        if($number >= 1000){
+            $number = number_format(($number/1000), 1);
+            $number = $number > (int)$number && $plus ? (int)$number.'K+':(int)$number.'K';
+            return $number;
+        }
+        return $number;
+
+    }
+}
+
+if(!function_exists('numberFormat')){
+    function numberFormat($name){ 
+
+        $names = explode(' ', $name);
+        $initials = '';
+        foreach ($names as $name) {
+            $initials .= isset($name[0]) . '.';
+        }
+        $initials = rtrim($initials, '.');
+        return $initials; 
+    }
+}
 
 
+if(!function_exists('activityLog')){
+    function activityLog($user, $activity_type, $description, $user_type){ 
+
+        return ActivityLog::create(['user_id' => $user->id, 'activity_type' => $activity_type, 'description' => $description, 'user_type' => $user_type]);
+    }
+}
+
+if(!function_exists('showActivityLog')){
+    function showActivityLog(){ 
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+       return ActivityLog::whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('user_type', 'regular')->get();  
+    }
+}
+
+if(!function_exists('filterCampaign')){
+    function filterCampaign($categoryID){ 
+
+        $user = Auth::user();
+    $jobfilter = '';
+    $campaigns = '';
+
+    if($user){
+        $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
+    }
+
+    if($user->USD_verified){ //if user is usd verified, they see all jobs
+        if($categoryID == 0){
+            $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }else{
+            $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }
+        
+    }else{
+        if($categoryID == 0){
+            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }else{
+            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }
+        
+    }
+
+  
+
+    $list = [];
+    foreach($campaigns as $key => $value){
+        $c = $value->pending_count + $value->completed_count;//
+        $div = $c / $value->number_of_staff;
+        $progress = $div * 100;
+
+        $list[] = [ 
+            'id' => $value->id, 
+            'job_id' => $value->job_id, 
+            'campaign_amount' => $value->campaign_amount,
+            'post_title' => $value->post_title, 
+            'number_of_staff' => $value->number_of_staff, 
+            'type' => $value->campaignType->name, 
+            'category' => $value->campaignCategory->name,
+            //'attempts' => $attempts,
+            'completed' => $c, //$value->completed_count+$value->pending_count,
+            'is_completed' => $c >= $value->number_of_staff ? true : false,
+            'progress' => $progress,
+            'currency' => $value->currency,
+            'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
+            'priotized' => $value->approved,
+            // 'created_at' => $value->created_at
+        ];
+    }
+
+    //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+    // Remove objects where 'is_completed' is true
+    $filteredArray = array_filter($list, function ($item) {
+        return $item['is_completed'] !== true;
+    });
+
+    // Sort the array to prioritize 'Priotized'
+    usort($filteredArray, function ($a, $b) {
+        return strcmp($b['priotized'], $a['priotized']);
+    });
+
+     return  $filteredArray;
+  
+
+
+    }
+}
+
+if(!function_exists('availableJobs')){
+    function availableJobs(){ 
+
+
+        $user = Auth::user();
+        $jobfilter = '';
+        $campaigns = '';
+    
+        if($user){
+            $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
+        }
+    
+        if($user->USD_verified){ //if user is usd verified, they see all jobs
+            $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }else{
+            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+        }
+        
+        $list = [];
+        foreach($campaigns as $key => $value){
+            $c = $value->pending_count + $value->completed_count;//
+            $div = $c / $value->number_of_staff;
+            $progress = $div * 100;
+    
+            $list[] = [ 
+                'id' => $value->id, 
+                'job_id' => $value->job_id, 
+                'campaign_amount' => $value->campaign_amount,
+                'post_title' => $value->post_title, 
+                'number_of_staff' => $value->number_of_staff, 
+                'type' => $value->campaignType->name, 
+                'category' => $value->campaignCategory->name,
+                //'attempts' => $attempts,
+                'completed' => $c, //$value->completed_count+$value->pending_count,
+                'is_completed' => $c >= $value->number_of_staff ? true : false,
+                'progress' => $progress,
+                'currency' => $value->currency,
+                'priotized' => $value->approved,
+                // 'created_at' => $value->created_at
+            ];
+        }
+    
+        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+    
+        // Remove objects where 'is_completed' is true
+        $filteredArray = array_filter($list, function ($item) {
+            return $item['is_completed'] !== true;
+        });
+    
+        // Sort the array to prioritize 'Priotized'
+        usort($filteredArray, function ($a, $b) {
+            return strcmp($b['priotized'], $a['priotized']);
+        });
+    
+         return  $filteredArray;
+    
+
+    }
+}
+
+
+if(!function_exists('badgeCount')){
+    function badgeCount(){ 
+
+        $currentDate = Carbon::now()->subMonth();
+        return Referral::where('referee_id', auth()->user()->id)
+                ->whereMonth('updated_at', $currentDate->month)
+            // ->whereDate('updated_at', today())
+                ->count();
+
+    }
+}
+
+
+if(!function_exists('badge')){
+    function badge(){ 
+
+        $currentDate = Carbon::now()->subMonth();
+        $count = Referral::where('referee_id', auth()->user()->id)->whereMonth('updated_at', $currentDate->month)->count();
+    
+        $color = '';
+        $membership = '';
+        $amount = '';
+        
+        if($count >= 10 && $count <= 20){
+            $color = '#E5E4E2';
+            $membership = 'Platinum';
+            $amount = 500;
+        }elseif($count >= 21 && $count <= 49){
+            $color = 'silver';
+            $membership = 'Silver';
+            $amount = 1500;
+        }elseif($count >= 50){
+            $color = 'gold';
+            $membership = 'Gold';
+            $amount = 500;
+        }else{
+            $color = 'grey';
+            $membership = 'Standard';
+            $amount = 0;
+        }
+        $data['count'] = $count;
+        $data['color'] = $color;
+        $data['badge'] = $membership;
+        $data['amount'] = $amount;
+        $data['duration'] = Carbon::now()->subMonth()->format('M, Y');
+    
+        return $data;
+    }
+}
+
+
+if(!function_exists('viewCampaign')){
+    function viewCampaign($campaign_id){ 
+
+        if($campaign_id == null){
+            return false;
+        }
+       $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
+       if($campaign){
+            $campaign->impressions += 1;
+            $campaign->save();
+    
+            $data = $campaign;
+            $data['current_user_id'] = auth()->user()->id;
+            $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
+            $data['attempts'] = $campaign->completed()->count();
+            return $data;
+       }else{
+            return false;
+       }
+
+    }
+}
+
+
+if(!function_exists('countryList')){
+    function countryList(){ 
+        $url = 'https://api.paystack.co/country';
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get($url)->throw();
+    
+        return json_decode($res->getBody()->getContents(), true)['data'];
+    }
+}
+
+if(!function_exists('bankList')){
+    function bankList(){
+        // country=nigeria
+        $url = 'https://api.paystack.co/bank?country=nigeria';
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get($url)->throw();
+
+        return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
+    }
+}
+
+if(!function_exists('resolveBankName')){
+    function resolveBankName($account_number, $bank_code){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/bank/resolve?account_number='.$account_number.'&bank_code='.$bank_code);
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+
+
+if(!function_exists('recipientCode')){
+    function recipientCode($name, $account_number, $bank_code){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transferrecipient', [
+            "type"=> "nuban",
+            "name"=> $name,
+            "account_number"=> $account_number,
+            "bank_code"=> $bank_code,
+            "currency"=> "NGN"
+        ]);
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+if(!function_exists('transferFund')){
+    function transferFund($amount, $recipient, $reason){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transfer', [
+            "source"=> "balance", 
+            "amount"=> $amount, 
+            "recipient"=> $recipient, 
+            "reason"=> $reason
+        ]);
+    
+         return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+if(!function_exists('bulkFundTransfer')){
+    function  bulkFundTransfer($transfers){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transfer/bulk', [
+            "currency"=> "NGN",
+            "source"=> "balance", 
+            "transfers"=> $transfers
+        ]);
+    
+         return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+if(!function_exists('initiateTrasaction')){
+    function  initiateTrasaction($ref, $amount, $redirect_url){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/transaction/initialize', [
+            'email' => auth()->user()->email,
+            'amount' => $amount*100,
+            'channels' => ['card'],
+            'currency' => 'NGN',
+            'reference' => $ref,
+            'callback_url' => url($redirect_url),
+            "metadata"=> [
+                "user_id"=> auth()->user()->id,
+            ]
+        ]);
+       return $res['data']['authorization_url'];
+
+    }
+}
+
+if(!function_exists('verifyTransaction')){
+    function  verifyTransaction($ref){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+if(!function_exists('virtualAccount')){
+    function  virtualAccount($data){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/dedicated_account', $data);
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+if(!function_exists('createCustomer')){
+    function  createCustomer($data){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->post('https://api.paystack.co/customer', $data);
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+
+if(!function_exists('fetchCustomer')){
+    function  fetchCustomer($email){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/customer/'.$email);
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+
+if(!function_exists('updateCustomer')){
+    function  updateCustomer($email, $payload){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->put('https://api.paystack.co/customer/'.$email, $payload);
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+ //fluterwave apis
+
+ if(!function_exists('listFlutterwaveTransaction')){
+    function  listFlutterwaveTransaction(){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->get('https://api.flutterwave.com/v3/transactions')->throw();
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+if(!function_exists('initiateFlutterwavePayment')){
+    function  initiateFlutterwavePayment($payload){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('hhttps://api.flutterwave.com/v3/payments', $payload)->throw();
+    
+        return json_decode($res->getBody()->getContents(), true);
+
+    }
+}
+
+
+
+if(!function_exists('getLocation')){
+    function  getLocation(){
+          // if(env('APP_ENV') == 'local_test'){
+    //     $ip = '48.188.144.248';
+    // }else{
+       
+    // }
+        $ip = request()->ip();
+        $location = Location::get($ip);
+     return $location->countryName;
+    }
+}
+
+
+if(!function_exists('userLocation')){
+    function  userLocation($type){
+
+        if(env('APP_ENV') == 'local_test'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+        }
+       
+       if($type == 'Login'){
+            $check = UserLocation::where('user_id', auth()->user()->id)->whereDate('created_at', today())->first();
+    
+            if(!$check){
+                $location = Location::get($ip);
+                UserLocation::create([
+                     'user_id' => auth()->user()->id,
+                     'activity' => $type, 
+                     'ip' => $ip,
+                     'countryName' => $location->countryName, 
+                     'countryCode' => $location->countryCode, 
+                     'regionName' => $location->regionName,
+                     'regionCode' => $location->regionCode, 
+                     'cityName' => $location->cityName,
+                     'zipCode' => $location->zipCode, 
+                     'areaCode' => $location->areaCode, 
+                     'timezone' => $location->timezone
+                 ]);
+            }
+       }else{
+            $location = Location::get($ip);
+            
+            UserLocation::create([
+                'user_id' => auth()->user()->id,
+                'activity' => $type, 
+                'ip' => $ip,
+                'countryName' => $location->countryName, 
+                'countryCode' => $location->countryCode, 
+                'regionName' => $location->regionName,
+                'regionCode' => $location->regionCode, 
+                'cityName' => $location->cityName,
+                'zipCode' => $location->zipCode, 
+                'areaCode' => $location->areaCode, 
+                'timezone' => $location->timezone
+            ]);
+    
+       }
+
+    }
+}
+
+if(!function_exists('paymentTrasanction')){
+    function  paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type){
+        return PaymentTransaction::create([
+            'user_id' => $userId,
+            'campaign_id' => $campaign_id,
+            'reference' => $ref,
+            'amount' => $amount,
+            'status' => $status,
+            'currency' => auth()->user()->wallet->base_currency == 'Naira' ? 'NGN' : 'USD',
+            'channel' => auth()->user()->wallet->base_currency == 'Naira' ? 'paystack' : 'paypal',
+            'type' => $type,
+            'description' => $description,
+            'tx_type' => $tx_type,
+            'user_type' => $user_type
+        ]);
+    }
+}
+
+
+if(!function_exists('paymentUpdate')){
+    function  paymentUpdate($ref, $status){
+        $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
+        $fetchPaymentTransaction->status = $status;
+        $fetchPaymentTransaction->save();
+        return $fetchPaymentTransaction;
+    }
+}
+
+
+// public static function sendNotificaion($number, $message)
+// {
+//     $res = Http::withHeaders([
+//         'Accept' => 'application/json',
+//         'Content-Type' => 'application/json',
+//     ])->post('https://api.ng.termii.com/api/sms/send', [
+//         "to"=> $number,
+//         "from"=> "FREEBYZ",
+//         "sms"=> $message,
+//         "type"=> "plain",
+//         "channel"=> "generic",
+//         "api_key"=> env('TERMI_KEY')
+//     ]);
+    
+//      return json_decode($res->getBody()->getContents(), true);
+// }

@@ -123,7 +123,7 @@ class RegisterController extends Controller
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
 
-        SystemActivities::activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+        activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
 
         if ($location == 'Nigeria') {
             $phone = '234' . substr($request->phone, 1);
@@ -216,9 +216,7 @@ class RegisterController extends Controller
                                 PaystackHelpers::userLocation('Login');
                             }
                           
-                            // SystemActivities::loginPoints($user);
-            
-                            SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
+                            activityLog($user, 'login', $user->name . ' Logged In', 'regular');
                             return redirect('home'); //redirect to home
             
                         } else {

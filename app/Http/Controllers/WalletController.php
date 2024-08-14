@@ -147,9 +147,9 @@ class WalletController extends Controller
         //     ];
             // $url = flutterwavePaymentInitiation($payload)['data']['link'];
     
-            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
+            $url = initiateTrasaction($ref, $amount, '/wallet/topup');
             
-            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
+            paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
             
             return redirect($url);
         
@@ -338,8 +338,8 @@ class WalletController extends Controller
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             $wallet->usd_balance += $update->amount;
             $wallet->save();
-            // $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+           
+            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
 
             systemNotification($user, 'success', 'Wallet Topup', '$'.$update->amount.' Wallet Topup Successful');
 
@@ -356,7 +356,7 @@ class WalletController extends Controller
         parse_str($url_components['query'], $params);
 
         $ref = $params['trxref']; //paystack
-        $res = PaystackHelpers::verifyTransaction($ref); //
+        $res = verifyTransaction($ref); //
    
         $amount = $res['data']['amount'];
 
@@ -369,14 +369,14 @@ class WalletController extends Controller
 
        if($res['data']['status'] == 'success') //success - paystack
        {
-            PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
+            paymentUpdate($ref, 'successful'); //update transaction
             
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             $wallet->balance += $creditAmount;
             $wallet->save();
             
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+            $name = auth()->user()->name;
+            activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
             systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
 
@@ -400,15 +400,15 @@ class WalletController extends Controller
         $res = flutterwaveVeryTransaction($tx_id);
 
         if($res['status'] == 'success'){
-            $ver = PaystackHelpers::paymentUpdate($ref, 'successful');
+            $ver = paymentUpdate($ref, 'successful');
 
             // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             // $wallet->balance += $res['data']['amount_settled'];//->amount;
             // $wallet->save();
             creditWallet(auth()->user(), 'Dollar', $res['data']['amount_settled']);
             
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+            $name = auth()->user()->name;
+            activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
             systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN'.$ver->amount.' Wallet Topup Successful');
 
@@ -544,7 +544,7 @@ class WalletController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'admin'
             ]);
-            SystemActivities::activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
+            activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
             // $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             $cur = $currency == 'USD' ? '$' : 'NGN';
             systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
@@ -554,7 +554,7 @@ class WalletController extends Controller
             // $content = 'A withdrwal request has been made and it being queued';
             // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        return $withdrawal;
+            return $withdrawal;
     }
 
     public function switchWallet(Request $request){

@@ -97,8 +97,8 @@ class UserController extends Controller
                 ]);
             }
 
-            $name = SystemActivities::getInitials(auth()->user()->name);
-            SystemActivities::activityLog(auth()->user(), 'dollar_account_verification', $name .' account verification', 'regular');
+            $name = auth()->user()->name;
+            activityLog(auth()->user(), 'dollar_account_verification', $name .' account verification', 'regular');
                     
             systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
     
@@ -112,7 +112,7 @@ class UserController extends Controller
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
         $ref = $params['trxref']; //paystack
-        $res = PaystackHelpers::verifyTransaction($ref);
+        $res = verifyTransaction($ref);
 
         $statusVerification = $res['data']['status'];
         $statusAmount = $res['data']['amount'];
@@ -120,7 +120,7 @@ class UserController extends Controller
         $checkTransaction = PaymentTransaction::where('reference', $ref)->first();
         if($checkTransaction->status == 'unsuccessful'){
            if($statusVerification == 'success'){
-                PaystackHelpers::paymentUpdate($ref, 'successful'); //update transaction
+                paymentUpdate($ref, 'successful'); //update transaction
                 
                 $user = User::where('id', auth()->user()->id)->first();
                 $user->is_verified = true;
@@ -128,11 +128,8 @@ class UserController extends Controller
                
                 Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
 
-                // $description = 'Direct Referer Bonus from '.auth()->user()->name;
-                // PaystackHelpers::paymentTrasanction(1, '1', time(), $statusAmount, 'successful', 'direct_referer_bonus_naira_usd', $description, 'Credit', 'admin');
-
-                $name = SystemActivities::getInitials(auth()->user()->name);
-                SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+                $name = auth()->user()->name;
+                activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
                 
                 systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
 
@@ -198,8 +195,8 @@ class UserController extends Controller
         
         if(auth()->user()->wallet->base_currency == 'Naira'){
             $ref = time();
-            $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/upgrade/payment');
-            PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
+            $url = initiateTrasaction($ref, $amount, '/upgrade/payment');
+            paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
             return redirect($url);
         }else{
             $checkWalletBalance = checkWalletBalance(auth()->user(), 'Dollar', 5);
@@ -397,7 +394,7 @@ class UserController extends Controller
          $user->save();
 
         
-         PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Debit', 'regular');
+         paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Debit', 'regular');
           
 
            $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
@@ -416,7 +413,7 @@ class UserController extends Controller
     
                     ///Transactions
                     $description = 'Referer Bonus from '.auth()->user()->name;
-                    PaystackHelpers::paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+                    paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
     
                     $adminWallet = Wallet::where('user_id', '1')->first();
                     $adminWallet->balance += 500;
@@ -424,7 +421,7 @@ class UserController extends Controller
     
                     //Admin Transaction Table
                     $description = 'Referer Bonus from '.auth()->user()->name;
-                    PaystackHelpers::paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+                    paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
                 
                 }else{
                     $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -453,8 +450,8 @@ class UserController extends Controller
             ]);
            }
 
-           $name = SystemActivities::getInitials(auth()->user()->name);
-           SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+           $name = auth()->user()->name;
+           activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
            
            Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
            return redirect('success');
@@ -529,8 +526,8 @@ class UserController extends Controller
 
     public function loadData($network){
         //$net;
-        $access_token = PaystackHelpers::access_token();
-        return PaystackHelpers::loadNetworkData($access_token, $network);
+        // $access_token = PaystackHelpers::access_token();
+        // return PaystackHelpers::loadNetworkData($access_token, $network);
     }
 
     public function buyAirtime(Request $request){
@@ -621,31 +618,31 @@ class UserController extends Controller
         }
         
         $ref = time();
-        $access_token = PaystackHelpers::access_token();
+        // $access_token = PaystackHelpers::access_token();
         $network = $request->network.'DATA';
         $provider = $request->network;
-        $response = PaystackHelpers::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
+        // $response = PaystackHelpers::purchaseData($access_token, $code, $network, $provider, $request->phone, $ref);
         
-        if($response['status'] == 'success'){
-            $wallet->balance -= $amount; ///debit wallet
-            $wallet->save();
-            PaymentTransaction::create([
-                'user_id' => auth()->user()->id,
-                'campaign_id' => '1',
-                'reference' => $ref,
-                'amount' => $amount,
-                'status' => 'successful',
-                'currency' => 'NGN',
-                'channel' => 'capital_sage',
-                'type' => 'databundle',
-                'description' => $provider.' data purchase', //$gig.' sent to '.$request->phone.' for Databundle Purchase',
-                'tx_type' => 'Debit',
-                'user_type' => 'regular'
-            ]);
-            return back()->with('success', 'Databundle processed successfully');
-        }else{
-            return back()->with('error', 'An error Occoured');
-        }
+        // if($response['status'] == 'success'){
+        //     $wallet->balance -= $amount; ///debit wallet
+        //     $wallet->save();
+        //     PaymentTransaction::create([
+        //         'user_id' => auth()->user()->id,
+        //         'campaign_id' => '1',
+        //         'reference' => $ref,
+        //         'amount' => $amount,
+        //         'status' => 'successful',
+        //         'currency' => 'NGN',
+        //         'channel' => 'capital_sage',
+        //         'type' => 'databundle',
+        //         'description' => $provider.' data purchase', //$gig.' sent to '.$request->phone.' for Databundle Purchase',
+        //         'tx_type' => 'Debit',
+        //         'user_type' => 'regular'
+        //     ]);
+        //     return back()->with('success', 'Databundle processed successfully');
+        // }else{
+        //     return back()->with('error', 'An error Occoured');
+        // }
 
        
         

@@ -29,7 +29,7 @@ class VirtualAccountController extends Controller
             "last_name"=> "Solomon",
             "phone"=> "+2348137331282"
         ];
-        $res = PaystackHelpers::createCustomer($payload);
+        $res = createCustomer($payload);
 
         $data = [
             "customer"=> $res['data']['customer_code'], 
