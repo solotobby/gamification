@@ -164,7 +164,7 @@ class GeneralController extends Controller
         // $users = User::where('role', 'regular')->count();
         // $workers = CampaignWorker::all()->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('amount', '>', 5000)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
-        return [$transactions];
+       
         return view('landingPage', ['transactions' => $transactions ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 

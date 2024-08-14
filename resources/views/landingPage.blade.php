@@ -190,7 +190,7 @@
 							</div> --}}
 							<div class="counter-text">
 								<h1 class="counter">
-									506
+									258933
 									{{-- {{$users}} --}}
 								
 								</h1>
@@ -216,7 +216,7 @@
 							</div> --}}
 							<div class="counter-text">
 								<h1 class="counter">
-									435235
+									435234
 									{{-- {{$workers}} --}}
 								</h1>
 								<span>Completed Jobs</span>
@@ -244,13 +244,13 @@
 											  </tr>
 											</thead>
 											<tbody>
-												{{-- @foreach ($transactions as $trx)
+												@foreach ($transactions as $trx)
 													<tr>
-														<td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td>
+														{{-- <td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td> --}}
 														<td>&#8358;{{ number_format($trx->amount) }}</td>
 														<td>Cash Withdrawals</td>
 													</tr>
-											    @endforeach --}}
+											    @endforeach
 											</tbody>
 										  </table>
 										</div>
