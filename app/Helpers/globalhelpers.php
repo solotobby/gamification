@@ -16,6 +16,7 @@ use App\Models\Preference;
 use App\Models\Profile;
 use App\Models\Referral;
 use App\Models\Settings;
+use App\Models\Statistics;
 use App\Models\Usdverified;
 use App\Models\User;
 use App\Models\VirtualAccount;
@@ -1142,4 +1143,21 @@ if(!function_exists('topEarners')){
         return $highestPayoutUser;
     }
 }
+
+if(!function_exists('dailyVisit')){
+    function dailyVisit($type){ 
+        $date = \Carbon\Carbon::today()->toDateString();
+    
+        $check = Statistics::where('date', $date)->where('type', $type)->first();
+        if($check == null)
+        {
+            Statistics::create(['type' => $type, 'date' => $date, 'count' => '1']);
+        }else{
+            $check->count += 1;
+            $check->save();
+        }
+    }
+}
+
+
 

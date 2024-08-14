@@ -159,7 +159,8 @@ class GeneralController extends Controller
 
     public function landingPage()
     {  
-        Analytics::dailyVisit('LandingPage');
+        
+        dailyVisit('LandingPage');
         $users = User::where('role', 'regular')->count();
         $workers = CampaignWorker::all()->count();
         $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('amount', '>', 5000)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
