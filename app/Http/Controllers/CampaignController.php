@@ -460,7 +460,7 @@ class CampaignController extends Controller
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-        //     return back()->with('success', 'Job Submitted Successfully');
+            return back()->with('success', 'Job Submitted Successfully');
         // }else{
         //     return back()->with('error', 'Upload an image');
         // }
