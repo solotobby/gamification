@@ -481,8 +481,10 @@ class CampaignController extends Controller
         $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
         if(!$cam){
             return redirect('home');
-        }  
-       return view('user.campaign.activities', ['lists' => $cam]);
+        } 
+        
+       $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
+       return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses]);
     }
 
     public function activitiesResponse($id){

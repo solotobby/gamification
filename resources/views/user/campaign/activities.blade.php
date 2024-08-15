@@ -67,8 +67,9 @@
             </thead>
             <tbody>
 
-                  @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list)
-                      <tr>
+                  {{-- @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list) --}}
+                  @foreach ($responses as $list)    
+                  <tr>
                           <td>
                               {{ @$list->user->name }}
                               </td>
@@ -102,6 +103,9 @@
                   @endforeach
             </tbody>
           </table>
+          <div class="d-flex">
+            {!! $responses->links('pagination::bootstrap-4') !!}
+          </div>
         </form>
         </div>
       </div>
