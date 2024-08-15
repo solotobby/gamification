@@ -118,7 +118,7 @@ class RegisterController extends Controller
             \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
 
-        $location = PaystackHelpers::getLocation(); //get user location dynamically
+        $location = getLocation(); //get user location dynamically
         $wall = Wallet::where('user_id', $user->id)->first();
         $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
         $wall->save();
