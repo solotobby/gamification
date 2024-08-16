@@ -19,7 +19,7 @@
             <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
             {{-- <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
              --}}
-             {{-- <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a> --}}
+             <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a>
              
               @if(env('APP_ENV') == 'production')
                   <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
