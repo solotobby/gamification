@@ -10,8 +10,8 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-            {{-- Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}}</a>
-            <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->where('balance', '>=', 2500)->sum('balance'),2)}} </a>
+             Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}}</a>
+            {{--<br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->where('balance', '>=', 2500)->sum('balance'),2)}} </a>
             <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet->sum('usd_balance'),2)}}</a>
             <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
             <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
