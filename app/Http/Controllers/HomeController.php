@@ -131,7 +131,16 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-        $wallet = Wallet::where('user_id', '!=', '1')->get();
+         $wallet =   
+        
+        \DB::select('
+                SELECT 
+                SUM(balance) AS total_balance,
+                SUM(CASE WHEN balance > 200 THEN balance ELSE 0 END) AS balance_gt_200,
+                SUM(usd_balance) AS total_usd_balance
+                FROM wallets
+        ');
+        //Wallet::where('user_id', '!=', '1')->get();
       
         //this wwee
         // $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
