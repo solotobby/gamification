@@ -136,7 +136,7 @@ class HomeController extends Controller
         \DB::select('
                 SELECT 
                 SUM(balance) AS total_balance,
-                SUM(CASE WHEN balance > 200 THEN balance ELSE 0 END) AS balance_gt_200,
+                SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
                 SUM(usd_balance) AS total_usd_balance
                 FROM wallets
         ');
@@ -168,50 +168,50 @@ class HomeController extends Controller
         // return $campaignMetric = campaignMetrics();
         //users registered
 
-        // $dailyActivity = dailyActivities();
+        $dailyActivity = dailyActivities();
 
         //monthly visits
         // $start_date = \Carbon\Carbon::today()->subDays(30);
         // $end_date = \Carbon\Carbon::now()->format('Y-m-d');
 
-        // $MonthlyVisit = monthlyVisits();
+        $MonthlyVisit = monthlyVisits();
 
         //daily visits
-        // $dailyVisits = dailyStats();
+        $dailyVisits = dailyStats();
 
         //registration channel
-        // $registrationChannel = registrationChannel();
+        $registrationChannel = registrationChannel();
 
         //revenue channel
-        // $revenueChannel = revenueChannel();
+        $revenueChannel = revenueChannel();
 
         //revenue 
-        // $revenue = monthlyRevenue();
+        $revenue = monthlyRevenue();
 
         //country distribution
-        // $countryDistribution = countryDistribution();
+        $countryDistribution = countryDistribution();
 
         //age distribution
-        // $ageDistribution = ageDistribution();
+        $ageDistribution = ageDistribution();
 
         // $christmas = Profile::where('is_xmas', true)->count();
 
-        return view('admin.index_', [
+        return view('admin.index', [
             'wallet' => $wallet,
             // 'weekPayment' => $thisWeekPayment,
             'totalPayout' => $totalPayout,
             'transactions' => $transactions,
             // 'xmas' => $christmas,
             'av_count' => $available_jobsCount
-        ]); // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
-            // ->with('visitor', json_encode($dailyActivity))
-            // ->with('daily', json_encode($dailyVisits))
-            // ->with('monthly', json_encode($MonthlyVisit))
-            // ->with('channel', json_encode($registrationChannel))
-            // ->with('revenue', json_encode($revenueChannel))
-            // ->with('country', json_encode($countryDistribution))
-            // ->with('age', json_encode($ageDistribution))
-            // ->with('monthlyRevenue', json_encode($revenue));
+        ]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
+            ->with('visitor', json_encode($dailyActivity))
+            ->with('daily', json_encode($dailyVisits))
+            ->with('monthly', json_encode($MonthlyVisit))
+            ->with('channel', json_encode($registrationChannel))
+            ->with('revenue', json_encode($revenueChannel))
+            ->with('country', json_encode($countryDistribution))
+            ->with('age', json_encode($ageDistribution))
+            ->with('monthlyRevenue', json_encode($revenue));
             // ->with('retention', json_encode($retention));
     }
 
