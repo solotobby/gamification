@@ -152,7 +152,7 @@ class HomeController extends Controller
         $available_jobsCount = count(availableJobs());
 
         $transactions = \DB::select('
-            SELECT COUNT(*) AS total_successful_transactions
+            SELECT SUM(amount) AS total_successful_transactions
             FROM payment_transactions
             WHERE status = ?
         ', ['successful']);
