@@ -131,7 +131,7 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-        // $wallet = Wallet::where('user_id', '!=', '1')->get();
+        $wallet = Wallet::where('user_id', '!=', '1')->get();
       
         //this wwee
         // $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
@@ -179,7 +179,7 @@ class HomeController extends Controller
         // $christmas = Profile::where('is_xmas', true)->count();
 
         return view('admin.index_', [
-            // 'wallet' => $wallet,
+            'wallet' => $wallet,
             // 'weekPayment' => $thisWeekPayment,
             // 'totalPayout' => $totalPayout,
             // 'transactions' => $transactions,
