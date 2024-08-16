@@ -15,6 +15,7 @@ use App\Models\PartnershipBeneficiary;
 use App\Models\PartnershipSubscriber;
 use App\Models\PartnerSubscription;
 use App\Models\PaymentTransaction;
+use App\Models\Staff;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
@@ -108,6 +109,8 @@ class GeneralController extends Controller
     }
 
     public function solution(){
+
+        return Staff::where('basic_salary', '>', 0)->where('status', 'active')->get();
         // $disputes = CampaignWorker::where('is_dispute', true)->where('created_at', '<=', Carbon::create(2024, 7, 31))->get();//->sum('amount');
         // $list =[];
         // $totalAmount = 0;
