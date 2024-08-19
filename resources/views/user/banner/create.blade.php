@@ -67,7 +67,7 @@
                     <small><i>The url you want to redirect users to</i></small>
                 </div>
 
-                <div class="col-lg-12 col-xl-12">
+                {{-- <div class="col-lg-12 col-xl-12">
                     <div class="row mb-4">
                         <label class="form-label">Choose Target Audience</label><small>Check atleast 5</small>
                         @foreach ($preferences as $pref)
@@ -81,7 +81,7 @@
                             </div>  
                         @endforeach
                     </div>
-                </div> 
+                </div>  --}}
 
                 <div class="mb-4">
                     <label class="form-label" for="post-title">Enter Budget</label>

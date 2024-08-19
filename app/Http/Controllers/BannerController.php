@@ -38,8 +38,8 @@ class BannerController extends Controller
     public function create()
     {
         // $countryList = countryList();
-        $preferences = listPreferences();
-        return view('user.banner.create', ['preferences' => $preferences]);
+        // $preferences = listPreferences();
+        return view('user.banner.create');
         // ['preferences' => $preferences, 'countryLists' => $countryList]
     }
 
@@ -54,31 +54,27 @@ class BannerController extends Controller
         
         $request->validate([
             'banner_url' => 'required|image|mimes:png,jpeg,gif,jpg',
-            'count' => 'required|array|min:5',
+            // 'count' => 'required|array|min:5',
             'external_link' => 'required|string',
             'budget' => 'required|numeric',
-            // 'country' => 'required|string',
-            // 'age_bracket' => 'required|string',
-            // 'ad_placement' => 'required|string',
-            // 'adplacement' => 'required|string',
-            // 'duration' => 'required|string',
+            
         ]);
 
-        $lissy = [];
-        foreach($request->count as $res){
-            $lissy[] = explode("|",$res);
-        }
+        // $lissy = [];
+        // foreach($request->count as $res){
+        //     $lissy[] = explode("|",$res);
+        // }
 
-        // $newlissy = [];
-        foreach($lissy as $lis)
-        {
-            $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
-        }
+        // // $newlissy = [];
+        // foreach($lissy as $lis)
+        // {
+        //     $counts[] = ['unit'=>$lis[0], 'id' => $lis[1]];
+        // }
 
-        foreach($counts as $id)
-        {
-            $unit[] = $id['unit'];
-        }
+        // foreach($counts as $id)
+        // {
+        //     $unit[] = $id['unit'];
+        // }
 
         // $parameters =  array_sum($unit) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
         // $finalTotal = $parameters * 25;
@@ -140,16 +136,16 @@ class BannerController extends Controller
                     'user_type' => 'regular'
                 ]);
 
-                foreach($counts as $id)
-                {
-                    \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
-                }
+                // foreach($counts as $id)
+                // {
+                //     \DB::table('banner_interests')->insert(['banner_id' => $createdBanner->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
+                // }
             }
           
-            // $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
-            // $subject = 'Ad Banner Placement - Under Review';
+            $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
+            $subject = 'Ad Banner Placement - Under Review';
 
-            // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
+            Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
             return back()->with('success', 'Banner Ad Created Successfully');
 
         }else{
