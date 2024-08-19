@@ -214,10 +214,9 @@
             <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
                 <thead>
                   <tr>
-                    <th>ID</th>
+                   
                     <th>Campaign Name</th>
-                    <th>Staffs</th>
-                    <th>Completed</th>
+                   
                     <th>Amount</th>
                     <th>Status</th>
                     <th>When Done</th>
@@ -227,15 +226,11 @@
                 <tbody>
                     @foreach ($info->myJobs->sortByDesc('created_at') as $job)
                     <tr>
-                      <td>
-                        {{ @$job->campaign->job_id }}
-                      </td>
+                    
                        <td>
                           {{ @$job->campaign->post_title }}
                         </td>
-                        <td>{{ @$job->campaign->pending_count }}/{{ @$job->campaign->number_of_staff }} </td>
-                        <td>{{ @$job->campaign->completed_count }}/{{ @$job->campaign->number_of_staff }} </td>
-                      
+                        
                         <td>
                           @if(@$job->campaign->currency == 'NGN')
                             &#8358;{{ number_format($job->amount,2) }}
@@ -270,20 +265,27 @@
             <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
                 <thead>
                   <tr>
+                    <th>Job Id</th>
                     <th>Campaign Name</th>
+                    <th>Staffs</th>
+                    <th>Completed</th>
                     <th>Unit Amount</th>
                     <th>No. of Worker</th>
                     <th>Total Value</th>
                     <th>When Done</th>
-                    <th></th>
+                    {{-- <th></th> --}}
                   </tr>
                 </thead>
                 <tbody>
                     @foreach ($info->myCampaigns->sortByDesc('created_at') as $campaign)
                     <tr>
+                      <td>{{ $campaign->job_id }} </td>
                         <td>
                           {{ @$campaign->post_title }}
                         </td>
+                        <td>{{ @$campaign->pending_count }}/{{ @$campaign->number_of_staff }} </td>
+                        <td>{{ @$campaign->completed_count }}/{{ @$campaign->number_of_staff }} </td>
+                      
                         <td>
                             &#8358;{{ number_format(@$campaign->campaign_amount,2) }}
                         </td>
@@ -298,7 +300,7 @@
                             {{ @$campaign->created_at }}
                         </td>
                         <td>
-                          <a href="{{ url('campaign/activities/'.$campaign->job_id)  }}" class="btn btn-primary btn-sm">View Activities</a>
+                          {{-- <a href="{{ url('campaign/activities/'.$campaign->job_id)  }}" class="btn btn-primary btn-sm">View Activities</a> --}}
                       </td>
                       </tr>
                     @endforeach
