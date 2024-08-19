@@ -214,7 +214,10 @@
             <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
                 <thead>
                   <tr>
+                    <th>ID</th>
                     <th>Campaign Name</th>
+                    <th>Staffs</th>
+                    <th>Completed</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th>When Done</th>
@@ -224,9 +227,15 @@
                 <tbody>
                     @foreach ($info->myJobs->sortByDesc('created_at') as $job)
                     <tr>
-                        <td>
+                      <td>
+                        {{ @$job->campaign->job_id }}
+                      </td>
+                       <td>
                           {{ @$job->campaign->post_title }}
                         </td>
+                        <td>{{ @$job->campaign->pending_count }}/{{ @$job->campaign->number_of_staff }} </td>
+                        <td>{{ @$job->campaign->completed_count }}/{{ @$job->campaign->number_of_staff }} </td>
+                      
                         <td>
                           @if(@$job->campaign->currency == 'NGN')
                             &#8358;{{ number_format($job->amount,2) }}
