@@ -76,9 +76,9 @@ class HomeController extends Controller
             setProfile(auth()->user());
         }
 
-        if (auth()->user()->phone == '' || auth()->user()->country == '') {
-            return view('phone');
-        }
+        // if (auth()->user()->phone == '' || auth()->user()->country == '') {
+        //     return view('phone');
+        // }
 
         if (auth()->user()->age_range == '' || auth()->user()->gender == '') { //compell people to take survey
             return redirect('survey');
