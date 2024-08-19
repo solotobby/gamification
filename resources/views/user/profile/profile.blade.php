@@ -96,7 +96,7 @@
                 <p>{{ auth()->user()->age_range }}</p>
                 
               </div>
-              <div class="mb-4">
+              {{-- <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-job-title">Phone Number</label>
                 <p>  {{ @auth()->user()->phone }} </p>
                 
@@ -105,7 +105,7 @@
                 <label class="form-label" for="dm-profile-edit-job-title">Country</label>
                 <p>  {{ @auth()->user()->country }} </p>
                
-              </div>
+              </div> --}}
               <div class="mb-4">
                 <label class="form-label" for="dm-profile-edit-email">Base Currency</label>
                 <p> {{ auth()->user()->wallet->base_currency }}</p>
