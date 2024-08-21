@@ -580,7 +580,9 @@ class AdminController extends Controller
     }
 
     public function campaignList(){
-        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();//paginate(30);
+        $campaigns = \DB::select('SELECT * FROM campaigns WHERE status = ? ORDER BY created_at DESC', ['Live']); 
+        
+        //Campaign::where('status', 'Live')->orderBy('id', 'DESC')->get();//paginate(30);
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
