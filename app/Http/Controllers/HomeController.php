@@ -113,8 +113,6 @@ class HomeController extends Controller
     }
 
     public function filterCampaignByCategories($category_id){
-       
-
         return filterCampaign($category_id);
     }
 
@@ -123,7 +121,7 @@ class HomeController extends Controller
         return view('user.documentation.how_to_approve');
     }
 
-    public function adminHome(Request $request)
+    public function adminHome()
     {
         // $retention = retentionRate();
         // return getPosts();
@@ -131,8 +129,8 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-         $wallet =   
-        
+
+        $wallet = 
         \DB::select('
                 SELECT 
                 SUM(balance) AS total_balance,
