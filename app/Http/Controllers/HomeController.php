@@ -143,12 +143,12 @@ class HomeController extends Controller
         //Wallet::where('user_id', '!=', '1')->get();
       
         //this wwee
-        // $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
-        // $end_week = Carbon::now()->endOfWeek();
+        $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
+        $end_week = Carbon::now()->endOfWeek();
         $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']); //Date('')
-        // $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
+        $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
-        // $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
+        $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         $available_jobsCount = count(availableJobs());
 
         $transactions = \DB::select('
@@ -156,9 +156,6 @@ class HomeController extends Controller
             FROM payment_transactions
             WHERE status = ?
         ', ['successful']);
-
-
-
 
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -198,7 +195,7 @@ class HomeController extends Controller
 
         return view('admin.index', [
             'wallet' => $wallet,
-            // 'weekPayment' => $thisWeekPayment,
+            'weekPayment' => $thisWeekPayment,
             'totalPayout' => $totalPayout,
             'transactions' => $transactions,
             // 'xmas' => $christmas,
