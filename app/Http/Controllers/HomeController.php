@@ -113,8 +113,6 @@ class HomeController extends Controller
     }
 
     public function filterCampaignByCategories($category_id){
-       
-
         return filterCampaign($category_id);
     }
 
@@ -123,7 +121,7 @@ class HomeController extends Controller
         return view('user.documentation.how_to_approve');
     }
 
-    public function adminHome(Request $request)
+    public function adminHome()
     {
         // $retention = retentionRate();
         // return getPosts();
@@ -131,8 +129,8 @@ class HomeController extends Controller
         // $campaignWorker = CampaignWorker::where('status', 'Approved')->sum('amount');
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
-         $wallet =   
-        
+
+        $wallet = 
         \DB::select('
                 SELECT 
                 SUM(balance) AS total_balance,
@@ -143,12 +141,12 @@ class HomeController extends Controller
         //Wallet::where('user_id', '!=', '1')->get();
       
         //this wwee
-        // $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
-        // $end_week = Carbon::now()->endOfWeek();
+        $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
+        $end_week = Carbon::now()->endOfWeek();
         $withdrawal = Withrawal::get(['status', 'amount', 'is_usd', 'created_at']); //Date('')
-        // $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
+        $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
-        // $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
+        $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         $available_jobsCount = count(availableJobs());
 
         $transactions = \DB::select('
@@ -156,9 +154,6 @@ class HomeController extends Controller
             FROM payment_transactions
             WHERE status = ?
         ', ['successful']);
-
-
-
 
         //$ref_rev = Referral::where('is_paid', true)->count();
         //$transactions = PaymentTransaction::where('user_type', 'admin')->get();
@@ -198,7 +193,7 @@ class HomeController extends Controller
 
         return view('admin.index', [
             'wallet' => $wallet,
-            // 'weekPayment' => $thisWeekPayment,
+            'weekPayment' => $thisWeekPayment,
             'totalPayout' => $totalPayout,
             'transactions' => $transactions,
             // 'xmas' => $christmas,
