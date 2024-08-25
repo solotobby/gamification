@@ -35,6 +35,10 @@
   var monthlyRevenue = <?php echo $monthlyRevenue; ?>
 </script>
 
+<script>
+  var weeklyRegistrationChannel = <?php echo $weeklyRegistrationChannel; ?>
+</script>
+
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -43,6 +47,7 @@
 <script src="{{ asset('js/admin/countryDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/ageDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/monthlyRevenue.js')}}"></script>
+<script src="{{ asset('js/admin/weeklyRegistrationChannel.js')}}"></script>
 @endsection
 
 @section('content')
@@ -310,6 +315,12 @@
        <div id="linechart" style="width: 100%; height: 500px"></div> 
       </div>
       <hr>
+      
+      <div class="col-xl-12">
+       <div id="chart_div_weekly_rev_channel" style="width: 100%; height: 500px"></div> 
+      </div>
+      <hr>
+      
        <div class="col-xl-12">
           <div id="donutchart" style="width: 100%; height: 500px;"></div>
       </div>

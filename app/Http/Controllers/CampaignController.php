@@ -593,7 +593,7 @@ class CampaignController extends Controller
             $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
 
             // $campaign = Campaign::where('id', $deny->campaign_id)->first();
-            $campaingOwner = User::where('id', $campaign->user_id)->first();
+            // $campaingOwner = User::where('id', $campaign->user_id)->first();
 
             if($campaign->currency == 'NGN'){
                 $currency = 'Naira';
