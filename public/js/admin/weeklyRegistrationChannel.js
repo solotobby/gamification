@@ -7,9 +7,9 @@ function drawVisualization() {
   var data = google.visualization.arrayToDataTable(weeklyRegistrationChannel);
 
   var options = {
-    title : 'Weekly Revenue',
-    vAxis: {title: 'Revenue'},
-    hAxis: {title: 'Months'},
+    title : 'Weekly Registration',
+    vAxis: {title: 'Registrations'},
+    hAxis: {title: 'Days'},
     seriesType: 'bars',
     series: {5: {type: 'line'}}
   };
