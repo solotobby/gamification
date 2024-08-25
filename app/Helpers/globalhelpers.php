@@ -1249,7 +1249,7 @@ if(!function_exists('weeklyRegistrationChannel')){
 
         $weeklyRegistrationChannel = User::
         select(
-            \DB::raw('DATE_FORMAT(created_at, "%b %Y") AS day'),
+            \DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
             \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
         )
         ->where('created_at', '>', Carbon::now()->subDays(7))
