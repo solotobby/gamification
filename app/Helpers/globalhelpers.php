@@ -1250,15 +1250,17 @@ if(!function_exists('weeklyRegistrationChannel')){
         $weeklyRegistrationChannel = User::
         select(
             \DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
+
             \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
+            \DB::raw('COUNT(CASE WHEN source = "Facebook" THEN 1 END) AS facebook'),
         )
         ->where('created_at', '>', Carbon::now()->subDays(7))
         ->groupBy('day')
         ->get();
 
-        $weekly[] = ['day', 'Youtube'];
+        $weekly[] = ['day', 'Youtube', 'Facebook'];
         foreach ($weeklyRegistrationChannel as $key => $value) {
-            $weekly[++$key] = [$value->day, (int)$value->youtube
+            $weekly[++$key] = [$value->day, (int)$value->youtube, (int)$value->facebook
             // (int)$value->referer_bonus, (int)$value->campaign_revenue,(int)$value->campaign_revenue_add, (int)$value->withdrawal_commission
             ];
         }
