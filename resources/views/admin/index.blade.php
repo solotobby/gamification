@@ -15,9 +15,7 @@
   var monthly = <?php echo $monthly; ?>;
 </script>
 
-<script>
-  var channel = <?php echo $channel; ?>
-</script>
+
 
 <script>
   var revenue = <?php echo $revenue; ?>
@@ -41,7 +39,7 @@
 
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
-<script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
+// <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
 <script src="{{ asset('js/admin/dailyActivities.js')}}"></script>
 <script src="{{ asset('js/admin/revenueChannel.js')}}"></script>
 <script src="{{ asset('js/admin/countryDistribution.js')}}"></script>
@@ -319,11 +317,11 @@
       <div class="col-xl-12">
        <div id="chart_div_weekly_rev_channel" style="width: 100%; height: 500px"></div> 
       </div>
-      <hr>
-      
-       <div class="col-xl-12">
+     
+
+       {{--<div class="col-xl-12">
           <div id="donutchart" style="width: 100%; height: 500px;"></div>
-      </div>
+      </div> --}}
       
       <hr>
        <div class="col-xl-12 mb-3">
