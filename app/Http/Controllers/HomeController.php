@@ -175,15 +175,15 @@ class HomeController extends Controller
         $dailyVisits = dailyStats();
 
         //registration channel
-        $registrationChannel = registrationChannel();
+        // $registrationChannel = registrationChannel();
 
         //revenue channel
         $revenueChannel = revenueChannel();
 
         //revenue 
-       $revenue = monthlyRevenue();
+        $revenue = monthlyRevenue();
 
-         $weeklyRegistrationChannel = weeklyRegistrationChannel();
+        $weeklyRegistrationChannel = weeklyRegistrationChannel();
 
         //country distribution
         $countryDistribution = countryDistribution();
@@ -204,7 +204,7 @@ class HomeController extends Controller
             ->with('visitor', json_encode($dailyActivity))
             ->with('daily', json_encode($dailyVisits))
             ->with('monthly', json_encode($MonthlyVisit))
-            ->with('channel', json_encode($registrationChannel))
+            // ->with('channel', json_encode($registrationChannel))
             ->with('revenue', json_encode($revenueChannel))
             ->with('country', json_encode($countryDistribution))
             ->with('age', json_encode($ageDistribution))
