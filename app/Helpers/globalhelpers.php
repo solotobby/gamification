@@ -1170,7 +1170,7 @@ if(!function_exists('dailyActivities')){
             \DB::raw('SUM(CASE WHEN activity_type = "google_account_creation" THEN 1 ELSE 0 END) as google_reg_count'),
             \DB::raw('SUM(CASE WHEN activity_type = "account_creation" THEN 1 ELSE 0 END) as reg_count'),
             \DB::raw('SUM(CASE WHEN activity_type = "account_verification" THEN 1 ELSE 0 END) as verified_count')
-        )->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
+        )->where('created_at', '>=', Carbon::now()->subMonths(2))->groupBy('date')
         ->get();
    
         $result[] = ['Year','Registered','Verified'];
@@ -1231,6 +1231,8 @@ if(!function_exists('registrationChannel')){
 
 
 
+
+
 if(!function_exists('revenueChannel')){
     function revenueChannel(){ 
         $revenue = PaymentTransaction::select('type', \DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->where('type', '!=', 'direct_referer_bonus_naira_usd')->get();
@@ -1241,6 +1243,30 @@ if(!function_exists('revenueChannel')){
      return $list;
     }
 }
+
+if(!function_exists('weeklyRegistrationChannel')){
+    function weeklyRegistrationChannel(){  
+
+        $weeklyRegistrationChannel = User::
+        select(
+            \DB::raw('DATE_FORMAT(created_at, "%b %Y") AS day'),
+            \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
+        )
+        ->where('created_at', '>', Carbon::now()->subDays(7))
+        ->groupBy('day')
+        ->get();
+
+        $weekly[] = ['day', 'Youtube'];
+        foreach ($weeklyRegistrationChannel as $key => $value) {
+            $weekly[++$key] = [$value->day, (int)$value->youtube
+            // (int)$value->referer_bonus, (int)$value->campaign_revenue,(int)$value->campaign_revenue_add, (int)$value->withdrawal_commission
+            ];
+        }
+        return $weekly;
+
+    }
+}
+
 
 if(!function_exists('monthlyRevenue')){
     function monthlyRevenue(){ 
