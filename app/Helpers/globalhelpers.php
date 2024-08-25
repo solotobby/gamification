@@ -1266,8 +1266,15 @@ if(!function_exists('weeklyRegistrationChannel')){
 
         $weekly[] = ['day', 'Youtube', 'Facebook', 'Instagram', 'Whatsapp', 'TikTok', 'Twitter', 'Online Ads', 'Referred by a Friend'];
         foreach ($weeklyRegistrationChannel as $key => $value) {
-            $weekly[++$key] = [$value->day, (int)$value->youtube, 
-            (int)$value->facebook,(int)$value->instagram,(int)$value->whatsapp,(int)$value->tiktok,(int)$value->online_ads,(int)$value->referred
+            $weekly[++$key] = [$value->day, 
+            (int)$value->youtube, 
+            (int)$value->facebook,
+            (int)$value->instagram,
+            (int)$value->whatsapp,
+            (int)$value->tiktok,
+            (int)$value->twitter,
+            (int)$value->online_ads,
+            (int)$value->referred
             // (int)$value->referer_bonus, (int)$value->campaign_revenue,(int)$value->campaign_revenue_add, (int)$value->withdrawal_commission
             ];
         }
