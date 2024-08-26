@@ -1250,7 +1250,6 @@ if(!function_exists('weeklyRegistrationChannel')){
         $weeklyRegistrationChannel = User::
         select(
             \DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
-
             \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
             \DB::raw('COUNT(CASE WHEN source = "Facebook" THEN 1 END) AS facebook'),
             \DB::raw('COUNT(CASE WHEN source = "Instagram" THEN 1 END) AS instagram'),
