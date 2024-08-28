@@ -414,7 +414,7 @@ if(!function_exists('setIsComplete')){
             $cam->save();
             return 'OK';
         }else{
-            return 'NOT OK';
+            return 'NOT_OK';
         }
     }
 }
@@ -1263,7 +1263,7 @@ if(!function_exists('weeklyRegistrationChannel')){
         ->groupBy('day')
         ->get();
 
-        $weekly[] = ['day', 'Youtube', 'Facebook', 'Instagram', 'Whatsapp', 'TikTok', 'Twitter', 'Online Ads', 'Referred by a Friend'];
+        $weekly[] = ['day', 'Youtube', 'Facebook', 'Instagram', 'Whatsapp', 'TikTok', 'Twitter', 'Online Ads', 'Referrals'];
         foreach ($weeklyRegistrationChannel as $key => $value) {
             $weekly[++$key] = [$value->day, 
             (int)$value->youtube, 

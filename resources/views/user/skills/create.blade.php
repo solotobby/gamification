@@ -175,43 +175,43 @@
             <!-- END Optional Info -->
           </form>
         <hr>
-          @if($portfolio->count() > 0)
-            <div class="row push">
-                <div class="col-lg-4">
-                    <p class="text-muted">
-                        Your Portfolio
-                    </p>
-                </div>
-                <div class="col-lg-8">
-                    @foreach ($portfolio as $port)
-                        <div class=" mb-2">
-                            <div class="col-md-12">
-                            <label class="form-label" for="dm-project-new-color">Project Title</label>
-                            <p>{{ $port->title }} </p>
-                            {{-- <input type="text" class="form-control" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project"> --}}
+              @if($portfolio->count() > 0)
+                <div class="row push">
+                    <div class="col-lg-4">
+                        <p class="text-muted">
+                            Your Portfolio
+                        </p>
+                    </div>
+                    <div class="col-lg-8">
+                        @foreach ($portfolio as $port)
+                            <div class=" mb-2">
+                                <div class="col-md-12">
+                                <label class="form-label" for="dm-project-new-color">Project Title</label>
+                                <p>{{ $port->title }} </p>
+                                {{-- <input type="text" class="form-control" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project"> --}}
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-2">
-                            <label class="form-label" for="dm-project-new-description">Description of the Project</label>
-                            <p>{!! $port->description !!} </p>
-                            {{-- <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What is this project about?"></textarea> --}}
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label" for="dm-project-new-description">Skills</label>
-                           
-                           <p> @foreach ($port->skills as $key=>$value)
-                                {{ $value->name }},
-                            @endforeach  
-                           </p>  
-                        </div>
-                       
-                        <hr>
-                    @endforeach
+                            <div class="mb-2">
+                                <label class="form-label" for="dm-project-new-description">Description of the Project</label>
+                                <p>{!! $port->description !!} </p>
+                                {{-- <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What is this project about?"></textarea> --}}
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="dm-project-new-description">Skills</label>
+                              
+                              <p> 
+                                  @foreach ($port->skills as $key=>$value)
+                                      {{ $value->name }},
+                                  @endforeach  
+                              </p>  
+                            </div>
+                          
+                            <hr>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-          @endif
-
+              @endif
 
           @endif
 

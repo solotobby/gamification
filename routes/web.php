@@ -284,7 +284,6 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
 
-
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
 Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
