@@ -72,38 +72,61 @@ class SafeLockController extends Controller
          }
          
          $user = User::where('id', $getSafeLock->user_id)->first();
-        $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
-        if($bankInfo){   
-             $transfter = transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
-            if($transfter['status'] == true){
+         $getSafeLock->status = 'Redeemed';
+         $getSafeLock->is_paid = true;
+         $getSafeLock->save();
 
-                $getSafeLock->status = 'Redeemed';
-                $getSafeLock->is_paid = true;
-                $getSafeLock->save();
+         PaymentTransaction::create([
+             'user_id' => auth()->user()->id,
+             'campaign_id' => 1,
+             'reference' => time(),
+             'amount' =>$getSafeLock->total_payment,
+             'status' => 'successful',
+             'currency' => 'NGN',
+             'channel' => 'paystack',
+             'type' => 'safelock_redeemed',
+             'tx_type' => 'Debit',
+             'description' => 'Redeemed SafeLock'
+         ]);
 
-                PaymentTransaction::create([
-                    'user_id' => auth()->user()->id,
-                    'campaign_id' => 1,
-                    'reference' => time(),
-                    'amount' =>$getSafeLock->total_payment,
-                    'status' => 'successful',
-                    'currency' => 'NGN',
-                    'channel' => 'paystack',
-                    'type' => 'safelock_redeemed',
-                    'tx_type' => 'Debit',
-                    'description' => 'Redeemed SafeLock'
-                ]);
+         $subject = 'Freebyz SafeLock Redeemed';
+         $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
+         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-                $subject = 'Freebyz SafeLock Redeemed';
-                $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+         return back()->with('success', 'Safelock redeemed, and your account has been funded.');
 
-                return back()->with('success', 'Safelock redeemed, and your account has been funded.');
+        // $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
+        // if($bankInfo){   
+        //      $transfter = transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
+        //     if($transfter['status'] == true){
 
-            }else{
-                return back()->with('error', 'An error occoured, please try again');
-            }
-        }
+        //         $getSafeLock->status = 'Redeemed';
+        //         $getSafeLock->is_paid = true;
+        //         $getSafeLock->save();
+
+        //         PaymentTransaction::create([
+        //             'user_id' => auth()->user()->id,
+        //             'campaign_id' => 1,
+        //             'reference' => time(),
+        //             'amount' =>$getSafeLock->total_payment,
+        //             'status' => 'successful',
+        //             'currency' => 'NGN',
+        //             'channel' => 'paystack',
+        //             'type' => 'safelock_redeemed',
+        //             'tx_type' => 'Debit',
+        //             'description' => 'Redeemed SafeLock'
+        //         ]);
+
+        //         $subject = 'Freebyz SafeLock Redeemed';
+        //         $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
+        //         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+        //         return back()->with('success', 'Safelock redeemed, and your account has been funded.');
+
+        //     }else{
+        //         return back()->with('error', 'An error occoured, please try again');
+        //     }
+        // }
     }
 
     /**
