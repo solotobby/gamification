@@ -272,8 +272,8 @@ class AdminController extends Controller
            ]);
 
            $subject = 'Job '.$request->status;
-            $status = $request->status;
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+           $status = $request->status;
+           Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
 
 
            return back()->with('success', 'Dispute resolved Successfully');
@@ -413,8 +413,6 @@ class AdminController extends Controller
     public function upgradeUserNaira($id){
         
         if(auth()->user()->hasRole('admin')){
-
-            
             $getUser = User::where('id', $id)->first();
             $getUser->is_verified = 1;
             $getUser->save();

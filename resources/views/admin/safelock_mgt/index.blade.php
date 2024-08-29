@@ -150,7 +150,7 @@
                                           @if($lock->status == 'Redeemed')
                                               <button class="btn btn-success" disabled>Safelock Redeemed</button>
                                           @else
-                                          <a href="{{ url('admin/safelock/'.$lock->id) }}" class="btn btn-primary" >Initiate withdrawal </a>
+                                          <a href="{{ url('admin/safelock/'.$lock->id) }}" class="btn btn-primary">Update withdrawal </a>
                                               {{-- <form action="{{ url('redeem/safelock') }}" method="POST">
                                                 @csrf()
                                               <input type="hidden" name="id" value="{{ $lock->id }}"> --}}
