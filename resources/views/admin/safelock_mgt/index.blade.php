@@ -75,7 +75,7 @@
                 @foreach ($safelocks as $lock)
                 <tr>
                     <td>{{ $i++ }}</td>
-                    <td>{{ $lock->user->name }}</td>
+                    <td><a href="{{ url('user/'.$lock->user->id.'/info') }}" target="_blank"> {{ $lock->user->name }}</a></td>
                     <td>&#8358;{{ number_format($lock->amount_locked) }}</td>
                     <td>
                       {{ number_format($lock->interest_rate) }}%
