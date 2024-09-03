@@ -1285,8 +1285,9 @@ if(!function_exists('weeklyRegistrationChannel')){
 
 if(!function_exists('weeklyVerificationChannel')){
     function weeklyVerificationChannel(){ 
-        $weeklyRegistrationChannel = User::where('is_verified', true)->
-        select(
+        $weeklyRegistrationChannel = User::where('is_verified', true)
+        ->where('created_at', '>', Carbon::now()->subDays(7))
+        ->select(
             \DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
             \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
             \DB::raw('COUNT(CASE WHEN source = "Facebook" THEN 1 END) AS facebook'),
@@ -1297,7 +1298,7 @@ if(!function_exists('weeklyVerificationChannel')){
             \DB::raw('COUNT(CASE WHEN source = "Online Ads" THEN 1 END) AS online_ads'),
             \DB::raw('COUNT(CASE WHEN source = "Referred by a Friend" THEN 1 END) AS referred'),
         )
-        ->where('updated_at', '>', Carbon::now()->subDays(7))
+       
         ->groupBy('day')
         ->get();
 
