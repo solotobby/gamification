@@ -37,6 +37,10 @@
   var weeklyRegistrationChannel = <?php echo $weeklyRegistrationChannel; ?>
 </script>
 
+<script>
+  var weeklyVerificationChannel = <?php echo $weeklyVerificationChannel; ?>
+</script>
+
 <script src="{{ asset('js/admin/monthlyRegistration.js')}}"></script>
 <script src="{{ asset('js/admin/dailyVisitor.js')}}"></script>
 // <script src="{{ asset('js/admin/registrationChannel.js')}}"></script>
@@ -46,6 +50,7 @@
 <script src="{{ asset('js/admin/ageDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/monthlyRevenue.js')}}"></script>
 <script src="{{ asset('js/admin/weeklyRegistrationChannel.js')}}"></script>
+<script src="{{ asset('js/admin/weeklyVerificationChannel.js')}}"></script>
 @endsection
 
 @section('content')
@@ -316,6 +321,9 @@
       
       <div class="col-xl-12">
        <div id="chart_div_weekly_rev_channel" style="width: 100%; height: 500px"></div> 
+      </div>
+      <div class="col-xl-12">
+       <div id="chart_div_weekly_verification_channel" style="width: 100%; height: 500px"></div> 
       </div>
      
 

@@ -1283,6 +1283,44 @@ if(!function_exists('weeklyRegistrationChannel')){
 }
 
 
+if(!function_exists('weeklyVerificationChannel')){
+    function weeklyVerificationChannel(){ 
+        $weeklyRegistrationChannel = User::where('is_verified', true)->
+        select(
+            \DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
+            \DB::raw('COUNT(CASE WHEN source = "Youtube" THEN 1 END) AS youtube'),
+            \DB::raw('COUNT(CASE WHEN source = "Facebook" THEN 1 END) AS facebook'),
+            \DB::raw('COUNT(CASE WHEN source = "Instagram" THEN 1 END) AS instagram'),
+            \DB::raw('COUNT(CASE WHEN source = "Whatsapp" THEN 1 END) AS whatsapp'),
+            \DB::raw('COUNT(CASE WHEN source = "TikTok" THEN 1 END) AS tiktok'),
+            \DB::raw('COUNT(CASE WHEN source = "Twitter" THEN 1 END) AS twitter'),
+            \DB::raw('COUNT(CASE WHEN source = "Online Ads" THEN 1 END) AS online_ads'),
+            \DB::raw('COUNT(CASE WHEN source = "Referred by a Friend" THEN 1 END) AS referred'),
+        )
+        ->where('updated_at', '>', Carbon::now()->subDays(7))
+        ->groupBy('day')
+        ->get();
+
+        $weekly[] = ['day', 'Youtube', 'Facebook', 'Instagram', 'Whatsapp', 'TikTok', 'Twitter', 'Online Ads', 'Referrals'];
+        foreach ($weeklyRegistrationChannel as $key => $value) {
+            $weekly[++$key] = [$value->day, 
+            (int)$value->youtube, 
+            (int)$value->facebook,
+            (int)$value->instagram,
+            (int)$value->whatsapp,
+            (int)$value->tiktok,
+            (int)$value->twitter,
+            (int)$value->online_ads,
+            (int)$value->referred
+            // (int)$value->referer_bonus, (int)$value->campaign_revenue,(int)$value->campaign_revenue_add, (int)$value->withdrawal_commission
+            ];
+        }
+        return $weekly;
+
+    }
+}
+
+
 if(!function_exists('monthlyRevenue')){
     function monthlyRevenue(){ 
         $monthlyRev =  PaymentTransaction::
