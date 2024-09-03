@@ -184,6 +184,7 @@ class HomeController extends Controller
         $revenue = monthlyRevenue();
 
         $weeklyRegistrationChannel = weeklyRegistrationChannel();
+        $weeklyVerificationChannel = weeklyVerificationChannel();
 
         //country distribution
         $countryDistribution = countryDistribution();
@@ -209,7 +210,8 @@ class HomeController extends Controller
             ->with('country', json_encode($countryDistribution))
             ->with('age', json_encode($ageDistribution))
             ->with('monthlyRevenue', json_encode($revenue))
-            ->with('weeklyRegistrationChannel', json_encode($weeklyRegistrationChannel));
+            ->with('weeklyRegistrationChannel', json_encode($weeklyRegistrationChannel))
+            ->with('weeklyVerificationChannel', json_encode($weeklyVerificationChannel));
             // ->with('retention', json_encode($retention));
     }
 
