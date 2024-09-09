@@ -19,6 +19,9 @@ class CreateSkillsTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('skill_category');
             $table->longText('description');
+            $table->string('availability');
+            $table->string('profeciency_level');
+            $table->string('payment_mode');
             $table->bigInteger('min_price');
             $table->bigInteger('max_price');
             $table->timestamps();

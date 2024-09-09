@@ -6,6 +6,7 @@ use App\Models\Portfolio;
 use App\Models\PortfolioTool;
 use App\Models\Skill;
 use App\Models\SkillCategory;
+use App\Models\SkillProficiencyLevel;
 use App\Models\Tool;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,8 @@ class SkillsController extends Controller
         $skill = Skill::where('user_id', auth()->user()->id)->first();
         $tools = Tool::all();
         $portfolio = Portfolio::where('user_id', auth()->user()->id)->get();
-        return view('user.skills.create', ['skillCategory' => $skillCategory, 'skill' => $skill, 'tools' => $tools, 'portfolio' => $portfolio]);
+        $profeciencies = SkillProficiencyLevel::all();
+        return view('user.skills.create', ['skillCategory' => $skillCategory, 'skill' => $skill, 'tools' => $tools, 'portfolio' => $portfolio, 'profeciencies' => $profeciencies]);
     }
 
     public function storeSkill(Request $request){
@@ -35,12 +37,15 @@ class SkillsController extends Controller
             'title' => 'required|string',
             'skill_category' => 'required|numeric',
             'description' => 'required|string',
-            'max_price' => 'required|numeric',
-            'min_price' => 'required|numeric'
+            'payment_mode' => 'required|string',
+            'profeciency_level' => 'required|string',
+            'availability' => 'required|string',
+            // 'max_price' => 'required|numeric',
+            // 'min_price' => 'required|numeric'
         ]);
 
-        $request->request->add(['user_id' => auth()->user()->id]);
-        $skill = Skill::create($request->all());
+        $request->request->add(['user_id' => auth()->user()->id, 'max_price' => 0, 'min_price' => 0]);
+        Skill::create($request->all());
 
         return back();
 
