@@ -62,7 +62,7 @@
 
               <div class="mb-4">
                 <label class="form-label" for="dm-project-new-name">
-                  Title <span class="text-danger">*</span>
+                  Title <small> (What defines your skill)</small><span class="text-danger">*</span>
                 </label>
                 <input type="text" required class="form-control" id="dm-project-new-name" name="title" placeholder="eg: software engineer, ui/ux, cv writer e.t.c">
               </div>
@@ -73,14 +73,9 @@
                   </label>
                   <select class="form-select" required id="dm-project-new-category" name="skill_category">
                     <option value="">Select a category</option>
-                    <option value="1">Web Design</option>
-                    <option value="2">Logo Design</option>
-                    <option value="3">UX/UI Design</option>
-                    <option value="4">Web Development</option>
-                    <option value="5">App Development</option>
-                    <option value="6">Mobile Development</option>
-                    <option value="7">Identity</option>
-                    <option value="8">Marketing</option>
+                      @foreach ($skillCategory as $skill)
+                        <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+                      @endforeach
                   </select>
                 </div>
               </div>
@@ -90,18 +85,64 @@
                         Brief Description of yourself and what you do <span class="text-danger">*</span>
                     </label>
                     
-                    <textarea class="form-control" required name="description" rows="6" placeholder="What is this project about?"></textarea>
+                    <textarea class="form-control" required name="description" rows="6" placeholder="e.g My Name is Joan, I have over 6 years experience as a UI/UX expert using Figma. I deliver averagely 20-30 screens in 6hours."></textarea>
                 </div>
               </div>
 
-              <div class="row mb-4">
+              {{-- <div class="row mb-4">
                 <label class="form-label" for="dm-project-new-color">Price Range <span class="text-danger">*</span></label>
                 <div class="col-md-6">
                   <input type="number" required class="form-control" id="dm-project-new-color" name="min_price" placeholder="Min. Price">
                 </div>
                 <div class="col-md-6">
                     <input type="number" required class="form-control" id="dm-project-new-color" name="max_price" placeholder="Max. Price">
-                  </div>
+                </div>
+              </div> --}}
+
+              <div class="row mb-4">
+                <div class="col-lg-12">
+                  <label class="form-label" for="dm-project-new-category">
+                    Level of Proficiency<span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" required id="dm-project-new-category" name="profeciency_level">
+                    <option value="">Select a category</option>
+                   
+                    @foreach ($profeciencies as $prof)
+                      <option value="{{ $prof->id }}">{{ $prof->name }}</option>
+                    @endforeach
+                   
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-lg-12">
+                  <label class="form-label" for="dm-project-new-category">
+                    Payment Model<span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" required id="dm-project-new-category" name="payment_mode">
+                    <option value="">Select a category</option>
+                    <option value="pay_per_hour">Pay per Hour</option>
+                    <option value="pay_per_project">Pay per Project</option>
+                    <option value="pay_per_milestone">Pay per Milestone</option>
+                    
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-lg-12">
+                  <label class="form-label" for="dm-project-new-category">
+                    Availability<span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" required id="dm-project-new-category" name="availability">
+                    <option value="">Select a category</option>
+                    <option value="remote">Remote</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="physical">Physical</option>
+                    
+                  </select>
+                </div>
               </div>
 
             </div>
@@ -129,7 +170,7 @@
             <div class="row push">
                 <div class="col-lg-4">
                 <p class="text-muted">
-                    You can add more details if you like but it is not required
+                   Tell us about what you have done. You will be hired based on your experience
                 </p>
                 </div>
                 <div class="col-lg-8 ">
@@ -163,7 +204,7 @@
                         <div class="col-lg-8">
                         <div class="mb-4">
                             <button type="submit" class="btn btn-alt-primary">
-                            <i class="fa fa-plus-circle me-1 opacity-50"></i> Add
+                            <i class="fa fa-plus-circle me-1 opacity-50"></i> Add Portfolio
                             </button>
                         </div>
                         </div>

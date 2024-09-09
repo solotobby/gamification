@@ -213,7 +213,11 @@ class AdminController extends Controller
     }
 
     public function campaignDisputesDecision(Request $request){
+
          $workDone = CampaignWorker::where('id', $request->id)->first();
+         if($workDone->is_dispute_resolve == true){
+            return back()->with('error', 'Dispute has been attended to');
+         }
          $workDone->status = $request->status;
          $workDone->is_dispute_resolved = true;
          $workDone->is_dispute = false;
@@ -266,7 +270,7 @@ class AdminController extends Controller
                'currency' => $currency,
                'channel' => $channel,
                'type' => 'campaign_payment_dispute_resolved',
-               'description' => 'Campaign Payment for '. $workDone->campaign->post_title,
+               'description' => 'Campaign Dispute Resolution for '. $workDone->campaign->post_title,
                'tx_type' => 'Credit',
                'user_type' => 'regular'
            ]);
@@ -313,7 +317,7 @@ class AdminController extends Controller
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'campaign_payment_refund',
-                'description' => 'Campaign Payment Refund for '.$workDone->campaign->post_title,
+                'description' => 'Campaign Dispute Resolution for '.$workDone->campaign->post_title,
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
