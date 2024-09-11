@@ -19,6 +19,7 @@ use App\Models\Rating;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Rules\ProhibitedWords;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -193,15 +194,29 @@ class CampaignController extends Controller
     public function postCampaign(Request $request)
     {
        
-        $request->validate([
-            'description' => 'required|string',
-            'proof' => 'required|string',
-            'post_title' => 'required|string',
-            'post_link' => 'required|string',
-            'number_of_staff' => 'required|numeric',
-            'campaign_amount' => 'required|numeric',
-            'validate' => 'required'
-        ]);
+        if($request->allow_upload == true){
+            $request->validate([
+                'description' => 'required|string',
+                'proof' => 'required|string',
+                'post_title' => 'required|string',
+                'post_link' => 'required|string',
+                'number_of_staff' => 'required|numeric',
+                'campaign_amount' => 'required|numeric',
+                'validate' => 'required'
+            ]);
+        }else{
+            $request->validate([
+                'description' => 'required|string',
+                
+                'proof' => ['required', new ProhibitedWords()],
+                'post_title' => 'required|string',
+                'post_link' => 'required|string',
+                'number_of_staff' => 'required|numeric',
+                'campaign_amount' => 'required|numeric',
+                'validate' => 'required'
+            ]);
+        }
+        
 
         $prAmount = '';
         $priotize = '';
@@ -232,9 +247,6 @@ class CampaignController extends Controller
             $iniAmount = 0;
             $allowUpload = false;
         }
-
-
-
      
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         $percent = (60 / 100) * $est_amount;
