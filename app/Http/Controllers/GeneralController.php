@@ -110,7 +110,13 @@ class GeneralController extends Controller
 
     public function solution(){
 
-        return Staff::where('basic_salary', '>', 0)->where('status', 'active')->get();
+        // Get the start and end time for 24 hours ago
+        $startTime = Carbon::now()->subDays(1)->startOfHour();
+        $endTime = Carbon::now()->subDays(1)->endOfHour();
+
+        // Query to get the accounts created exactly 24 hours ago
+       return $usersCreated24HoursAgo = CampaignWorker::where('status', 'Pending')->where('reason', null)->whereBetween('created_at', [$startTime, $endTime])->get();
+
         // $disputes = CampaignWorker::where('is_dispute', true)->where('created_at', '<=', Carbon::create(2024, 7, 31))->get();//->sum('amount');
         // $list =[];
         // $totalAmount = 0;

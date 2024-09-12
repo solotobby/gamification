@@ -48,9 +48,7 @@ class SkillsController extends Controller
         Skill::create($request->all());
 
         return back();
-
-        
-       
+ 
     }
 
     public function addPortfolio(Request $request){
