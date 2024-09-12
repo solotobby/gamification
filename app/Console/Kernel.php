@@ -148,6 +148,10 @@ class Kernel extends ConsoleKernel
 
         })->dailyAt('23:30');
 
+        $schedule->call(function(){
+            
+        })->dailyAt('23:30');
+
 
         // $schedule->call(function(){
         //     $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
