@@ -87,11 +87,14 @@ class Kernel extends ConsoleKernel
         })->daily(); //does this daily
 
         $schedule->call(function(){
-            $yesterday = Carbon::yesterday();
-
+            // $yesterday = Carbon::yesterday();
+            // Get the start and end time for 24 hours ago
+            $startTime = Carbon::now()->subDays(1)->startOfHour();
+            $endTime = Carbon::now()->subDays(1)->endOfHour();
             $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-               ->whereDate('created_at', $yesterday)
-               ->get();
+                    ->whereBetween('created_at', [$startTime, $endTime])
+                    //->whereDate('created_at', $yesterday)
+                    ->get();
 
             foreach($lists as $list){
 
@@ -146,11 +149,11 @@ class Kernel extends ConsoleKernel
             $content = 'Job Automatic Approval of '.$lists->count();
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        })->dailyAt('23:30');
+        })->hourlyAt(01);
 
-        $schedule->call(function(){
-            
-        })->dailyAt('23:30');
+        // $schedule->call(function(){
+
+        // })->dailyAt('23:30');
 
 
         // $schedule->call(function(){
