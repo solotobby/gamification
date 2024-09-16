@@ -65,7 +65,14 @@
               </p>
             </div>
             <div class="col-lg-9">
-               
+              <div class="alert alert-warning">
+                Note: Social media Apps like Facebook, TikTok, YouTube, Instagram has algorithms to 
+                detect unusual behaviour  and attempt to buy followers or subscribers which can lead 
+                to a 10-15% drop in the number of followers/subscribers you actually hired. 
+                This may make you think our workers actually unsubcribed/unfollowed your page. Therefore 
+                avoid using your direct links (as much as possible). You can also choose the Comment 
+                before subscribe/Follow Subcategory or other creative means.
+              </div>
               <div class="mb-4">
                 <label class="form-label" for="post-type">Category</label>
                 <select class="js-select2 form-select" id="post-type" name="campaign_type" style="width: 100%;" data-placeholder="Choose type.." required>
@@ -116,6 +123,7 @@
               </p>
             </div>
             <div class="col-lg-9">
+              
               <div class="mb-4">
                 <label class="form-label" for="post-title">Title</label>
                 <input type="text" class="form-control" id="post-title" name="post_title" value="{{ old('post_title') }}" required>
