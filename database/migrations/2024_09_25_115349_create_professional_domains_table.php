@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSkillCategoriesTable extends Migration
+class CreateProfessionalDomainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateSkillCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('skill_categories', function (Blueprint $table) {
+        Schema::create('professional_domains', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('professional_sub_categories_id');
             $table->string('name');
-            $table->boolean('status')->default(true);
             $table->timestamps();
+
+            $table->foreign('professional_sub_categories_id')->references('id')->on('professionals_sub_categories')->cascadeOnDelete();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateSkillCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('skill_categories');
+        Schema::dropIfExists('professional_domains');
     }
 }

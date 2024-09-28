@@ -128,7 +128,7 @@
                 <label class="form-label" for="post-title">Title</label>
                 <input type="text" class="form-control" id="post-title" name="post_title" value="{{ old('post_title') }}" required>
                 <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small>
-            </div>
+              </div>
 
             <div class="mb-4">
                 <label class="form-label" for="post-title">External Link</label>

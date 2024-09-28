@@ -34,7 +34,7 @@
             <div class="row push">
             <div class="col-lg-4">
               <p class="text-muted">
-                Some vital information about your new project
+                Set up your profile to start getting Skilled Jobs
               </p>
             </div>
             <div class="col-lg-8">
@@ -189,12 +189,12 @@
              
                     <div class="mb-4">
                         <label class="form-label" for="dm-project-new-description">Choose Skills Used</label>
-                      <select class="js-select2 form-select" id="example-select2-multiple" name="tools[]" style="width: 100%;" data-placeholder="Choose as many skills..." multiple required>
-                        <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                            @foreach ($tools as $tool)
-                                <option value="{{ $tool->id }}">{{ $tool->name }}</option>
-                            @endforeach
-                      </select>
+                        <select class="js-select2 form-select" id="example-select2-multiple" name="tools[]" style="width: 100%;" data-placeholder="Choose as many skills..." multiple required>
+                          <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                              @foreach ($tools as $tool)
+                                  <option value="{{ $tool->id }}">{{ $tool->name }}</option>
+                              @endforeach
+                        </select>
                     </div>
 
                     <input type="hidden" name="skill_id" value="{{ @$skill->id }}" required>

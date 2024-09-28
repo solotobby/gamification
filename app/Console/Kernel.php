@@ -8,6 +8,7 @@ use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\OTP;
 use App\Models\PaymentTransaction;
+use App\Models\Question;
 use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
@@ -36,7 +37,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
-        
+
+        //sends campaign to users who registered in the last 1 week 
         $schedule->call(function(){
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
         
@@ -150,6 +152,12 @@ class Kernel extends ConsoleKernel
             // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
         })->hourly();
+
+        $schedule->call(function(){ 
+
+            Question::where('option_A', null)->delete();
+
+        })->daily();
 
         // $schedule->call(function(){
 
