@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSkillProficiencyLevelsTable extends Migration
+class CreateProfessionalsSubCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateSkillProficiencyLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('skill_proficiency_levels', function (Blueprint $table) {
+        Schema::create('professionals_sub_categories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('professional_category_id');
+            $table->foreign('professional_category_id')->references('id')->on('professionals_categories')->onDelete('cascade');
             $table->string('name');
+            $table->string('unique_id');
             $table->string('status')->default('active');
             $table->timestamps();
         });
@@ -28,6 +31,6 @@ class CreateSkillProficiencyLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('skill_proficiency_levels');
+        Schema::dropIfExists('professionals_sub_categories');
     }
 }
