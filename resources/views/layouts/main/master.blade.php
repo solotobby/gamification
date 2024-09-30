@@ -303,4 +303,8 @@
 
     @yield('script')
   </body>
+  <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-7484162262282358">
+  </amp-auto-ads>
+
 </html>

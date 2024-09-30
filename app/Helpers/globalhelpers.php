@@ -1862,14 +1862,25 @@ if(!function_exists('initiateFlutterwavePayment')){
 
 if(!function_exists('getLocation')){
     function  getLocation(){
-          // if(env('APP_ENV') == 'local_test'){
-    //     $ip = '48.188.144.248';
-    // }else{
+          if(env('APP_ENV') == 'local_test'){
+                $ip = '48.188.144.248';
+            }else{
+                $ip = request()->ip();
+                $location = Location::get($ip);
+                return $location->countryName;
+            }
        
-    // }
-        $ip = request()->ip();
-        $location = Location::get($ip);
-     return $location->countryName;
+    }
+}
+
+if(!function_exists('geo')){
+    function  geo(){
+        if(env('APP_ENV') == 'local_test'){
+            $ip = '48.188.144.248';
+        }else{
+            $ip = request()->ip();
+            return Location::get($ip);
+        }
     }
 }
 

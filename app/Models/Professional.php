@@ -9,10 +9,9 @@ class Professional extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'professional_category_id', 'description', 'max_price', 'min_price', 'profeciency_level', 'payment_mode', 'availability'];
+    protected $fillable = ['user_id', '_link', 'professional_category_id', 'professional_sub_category_id', 'professional_domain_id', 'title', 'full_name', 'employment_status', 'main_production_domain', 
+                            'work_experience', 'communication_mode', 'avg_rating', 'website_link', 'fb_link', 'x_link', 'linkedin_link', 'instagram_link', 'tiktok_link', 'geo'];
 
-    public function portfolios(){
-        return $this->hasMany(Portfolio::class, 'skill_id');
-    }
+   
 
 }

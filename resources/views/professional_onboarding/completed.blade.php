@@ -446,7 +446,7 @@
                 <div class="bg-black-75">
                   <div class="content py-6">
                     <h3 class="text-center text-white mb-0">
-                        Register as A Professional
+                        Application Submitted
                     </h3>
                   </div>
                 </div>
@@ -474,162 +474,31 @@
         <!-- Section 2 -->
         <div class="bg-body-extra-light">
           
-          <div class="content content-full">
+          <div class="content content-full mb-10">
             <div class="row">
                 <div class="col-2"></div>
                 <div class="col-8">
                     <div class="py-3 push">
-                        <h2 class="mb-2">
-                          Title 2
+                        <h1 class="mb-2">
+                         Application Submitted Succesfully
                         </h2>
                         <h3 class="text-muted mb-0">
                           Subtitle
                         </h3>
                     </div>
 
+                    Some other information can appear here
                     
                 </div>
                 <div class="col-2"></div>
             </div>
           </div>
         </div>
-        <!-- END Section 2 -->
-
-        <!-- Section 3 -->
-        <div class="bg-body-light">
-          <div class="content content-full">
-            <form action="" method="POST">
-              @csrf
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-8">
-
-                      @if (session('success'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
-                        @if (session('error'))
-                            <div class="alert alert-danger" role="alert">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
-                        @if ($errors->any())
-                          <div class="alert alert-danger">
-                              <ul>
-                                  @foreach ($errors->all() as $error)
-                                      <li>{{ $error }}</li>
-                                  @endforeach
-                              </ul>
-                          </div>
-                        @endif
 
 
-                        <div class="mb-4">
-                            <label class="form-label" for="post-title">Select Category</label>
-                            <select name="professional_category_id" class="form-control" id="skill_set" required> 
+       <!-- END Section 2 -->
 
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label" for="post-title">Select Sub Category</label>
-                            <select name="professional_sub_category_id" class="form-control" id="skill_set_sub_categories" required> 
-
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                          <label class="form-label" for="post-title">Title </label>
-                          <input type="text" class="form-control" id="post-title" name="title" value="{{ old('title') }}" required>
-                          <small><i>Enter the title of your role, Graphics designer, UI/UX, Content Writer, SEO Specialist</i></small>
-                      </div>
-                      
-                        <div class="mb-4">
-                            <label class="form-label" for="post-title">Full Name</label>
-                            <input type="text" class="form-control" id="post-title" name="full_name" value="{{ old('full_name') }}" required>
-                            {{-- <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small> --}}
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="post-title">Email Address</label>
-                            <input type="email" class="form-control" id="post-title" name="email" value="{{ old('email') }}" required>
-                            <small><i>You can use email associated with Freebyz Account. If you don't have an account on Freebyz, use your email</i></small>
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label" for="post-title">Phone Number</label>
-                          <input type="text" class="form-control" id="post-title" name="phone" value="{{ old('phone') }}" required>
-                          {{-- <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small> --}}
-                      </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="post-title">Username</label>
-                            <input type="text" class="form-control" id="post-title" name="username" value="{{ old('username') }}" required>
-                            {{-- <small><i>Please give a simple campaign title e.g Facebook Like or Youtube comment</i></small> --}}
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">Current Employment Status</label>
-                            <div class="space-x-2">
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="example-radios-inline1" name="employment_status" value="Freelancer">
-                                <label class="form-check-label" for="example-radios-inline1">Freelancer</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="example-radios-inline2" name="employment_status" value="Fulltime">
-                                <label class="form-check-label" for="example-radios-inline2">Full time Employee</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="example-radios-inline3" name="employment_status" value="Hybrid" >
-                                <label class="form-check-label" for="example-radios-inline3">Hybrid(Part time freelancer)</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="example-radios-inline3" name="employment_status" value="Agency" >
-                                <label class="form-check-label" for="example-radios-inline3">Agency</label>
-                              </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                          <label class="form-label" for="post-title">Main Production Domain</label>
-                          <select name="main_production_domain" class="form-control" id="professional_domain" required> 
-
-                          </select>
-                      </div>
-
-                      <div class="mb-4">
-                        <label class="form-label" for="dm-project-new-description">Choose Skills Used</label>
-                        <select class="js-select2 form-select" id="example-select2-multiple" name="tools[]" style="width: 100%;" data-placeholder="Choose as many skills..." multiple required>
-                          <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                              @foreach ($tools as $tool)
-                                  <option value="{{ $tool->id }}">{{ $tool->name }}</option>
-                              @endforeach
-                        </select>
-                      </div>
-                    
-                      <div class="mb-4">
-                        <label class="form-label" for="dm-project-new-description">Share your work and business experience</label>
-                      
-                        <!-- SimpleMDE Container -->
-                        <textarea class="js-simplemde" id="simplemde" name="work_experience"></textarea>
-                      </div>
-
-                      
-
-                      <div class="mb-4">
-                        <button type="submit" class="btn btn-alt-primary">
-                            <i class="fa fa-plus-circle me-1 opacity-50"></i> Submit
-                        </button>
-                      </div>
-
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            </form>
-           
-          </div>
-        </div>
-        <!-- END Section 3 -->
+        
       </main>
       <!-- END Main Container -->
 
@@ -661,97 +530,6 @@
     -->
     <script src="{{ asset('src/assets/js/lib/jquery.min.js')}}"></script>
     <script src="{{ asset('src/assets/js/dashmix.app.min.js')}}"></script>
-    <script src="{{ asset('src/assets/js/plugins/select2/js/select2.full.min.js')}}"></script>
-    <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script>
-    <script>Dashmix.helpersOnLoad([ 'jq-select2', 'js-simplemde']);</script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-    <script>
-    $(document).ready(function(){ 
-        // alert('ok');
-
-        $.ajax({
-                    url: '{{ url("professional/categories") }}',
-                    type: "GET",
-                    data: {
-                        //  country_id: country_id,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    // context: document.body,
-                    success: function(result) {
-                        // console.log(result);
-                        $('#skill_set').html('<option value="">Select Category</option>');
-                        $.each(result, function(key, value) {
-                            $("#skill_set").append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-                    }
-                });
-
-                $('#skill_set').change(function(){
-                    var skill_set_ID = this.value;
-
-                    $("#skill_set_sub_categories").html('');
-                        $.ajax({
-                            
-                            url: '{{ url("professional/sub/categories") }}/' + encodeURI(skill_set_ID),
-                            type: "GET",
-                            data: {
-                                //  country_id: country_id,
-                                _token: '{{csrf_token()}}'
-                            },
-                            dataType: 'json',
-                            success: function(result) {
-                                // var new_result = result.sort(function(a, b) {
-                                //     return a.name.localeCompare(b.name);
-                                // });
-
-                                // console.log(result)
-
-                                $('#skill_set_sub_categories').html('<option value="">Select Sub Category</option>');
-                                $.each(result, function(key, value) {
-                                    // document.getElementById("number-of-staff").value = value.amount;
-                                    $("#skill_set_sub_categories").append('<option value="' + value.id + '">' + value.name + '</option>');  
-                                });
-                                // $('#city-dropdown').html('<option value="">Select Region/State First</option>');
-                            }
-                    });
-                });
-
-                $('#skill_set_sub_categories').change(function(){
-                  var sub_prof_ID = this.value; 
-
-                  $("#professional_domain").html('');
-                        $.ajax({
-                            
-                            url: '{{ url("professional/domain") }}/' + encodeURI(sub_prof_ID),
-                            type: "GET",
-                            data: {
-                                //  country_id: country_id,
-                                _token: '{{csrf_token()}}'
-                            },
-                            dataType: 'json',
-                            success: function(result) {
-                                // var new_result = result.sort(function(a, b) {
-                                //     return a.name.localeCompare(b.name);
-                                // });
-
-                                // console.log(result)
-
-                                $('#professional_domain').html('<option value="">Select Sub Category</option>');
-                                $.each(result, function(key, value) {
-                                    // document.getElementById("number-of-staff").value = value.amount;
-                                    $("#professional_domain").append('<option value="' + value.id + '">' + value.name + '</option>');  
-                                });
-                                // $('#city-dropdown').html('<option value="">Select Region/State First</option>');
-                            }
-                    });
-
-                });
-
-
-     });
-     </script>
   </body>
 </html>

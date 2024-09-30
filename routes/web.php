@@ -31,9 +31,8 @@ Route::get('applicant', [\App\Http\Controllers\ProfessionalOnboardingController:
 Route::post('applicant', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'store'])->name('applicant');
 Route::get('professional/categories', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'categories']);
 Route::get('professional/sub/categories/{id}', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'subCategories']);
-
 Route::get('professional/domain/{id}', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'domains']);
-
+Route::get('professional/completed/{link}', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'completed']);
 
 Route::get('landing/api', [\App\Http\Controllers\GeneralController::class, 'ladingpageApi']);
 Route::get('contact', [\App\Http\Controllers\GeneralController::class, 'contact'])->name('contact');
