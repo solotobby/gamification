@@ -121,9 +121,9 @@
 
         <!-- Add your site or application content here -->
  		<!-- PRELOADER -->
-		<div class="page-loader">
+		{{-- <div class="page-loader">
 			<div class="loader">Loading...</div>
-		</div>
+		</div> --}}
 		<!-- /PRELOADER -->
 		<!-- header start -->
 		@include('layouts.header')
