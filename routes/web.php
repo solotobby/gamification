@@ -293,7 +293,7 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
 ////promote business
-Route::get('user/business', [\App\Http\Controllers\PromoteBusinessController::class, 'create'])->name('create.business');
+Route::get('user/business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
 
 Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
 Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
