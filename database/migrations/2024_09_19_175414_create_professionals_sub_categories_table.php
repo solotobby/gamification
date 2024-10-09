@@ -16,7 +16,7 @@ class CreateProfessionalsSubCategoriesTable extends Migration
         Schema::create('professionals_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('professional_category_id');
-            $table->foreign('professional_category_id')->references('id')->on('professionals_categories')->onDelete('cascade');
+            // $table->foreign('professional_category_id')->references('id')->on('professionals_categories')->onDelete('cascade');
             $table->string('name');
             $table->string('unique_id');
             $table->string('status')->default('active');

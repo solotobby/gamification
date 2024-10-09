@@ -16,9 +16,9 @@ class CreatePortfolioToolsTable extends Migration
         Schema::create('portfolio_tools', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('portfolio_id');
-            $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
+            // $table->foreign('portfolio_id')->references('id')->on('portfolios')->onDelete('cascade');
             $table->unsignedBigInteger('tool_id');
-            $table->foreign('tool_id')->references('id')->on('tools')->onDelete('cascade');
+            // $table->foreign('tool_id')->references('id')->on('tools')->onDelete('cascade');
            
             $table->timestamps();
         });

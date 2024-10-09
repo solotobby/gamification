@@ -19,8 +19,8 @@ class CreateProfessionalToolsTable extends Migration
             $table->unsignedBigInteger('tool_id');
             $table->timestamps();
 
-            $table->foreign('professional_id')->references('id')->on('professionals')->cascadeOnDelete();
-            $table->foreign('tool_id')->references('id')->on('tools')->cascadeOnDelete();
+            // $table->foreign('professional_id')->references('id')->on('professionals')->cascadeOnDelete();
+            // $table->foreign('tool_id')->references('id')->on('tools')->cascadeOnDelete();
         });
     }
 

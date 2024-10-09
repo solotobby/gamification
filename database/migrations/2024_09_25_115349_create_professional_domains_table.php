@@ -19,7 +19,7 @@ class CreateProfessionalDomainsTable extends Migration
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('professional_sub_categories_id')->references('id')->on('professionals_sub_categories')->cascadeOnDelete();
+            // $table->foreign('professional_sub_categories_id')->references('id')->on('professionals_sub_categories')->cascadeOnDelete();
         });
     }
 
