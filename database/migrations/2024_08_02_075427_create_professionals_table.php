@@ -35,10 +35,10 @@ class CreateProfessionalsTable extends Migration
             $table->text('geo')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('professional_category_id')->references('id')->on('professionals_categories')->cascadeOnDelete();
-            $table->foreign('professional_sub_category_id')->references('id')->on('professionals_sub_categories')->cascadeOnDelete();
-            $table->foreign('professional_domain_id')->references('id')->on('professional_domains')->cascadeOnDelete();
+            // $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            // $table->foreign('professional_category_id')->references('id')->on('professionals_categories')->cascadeOnDelete();
+            // $table->foreign('professional_sub_category_id')->references('id')->on('professionals_sub_categories')->cascadeOnDelete();
+            // $table->foreign('professional_domain_id')->references('id')->on('professional_domains')->cascadeOnDelete();
 
         });
     }
