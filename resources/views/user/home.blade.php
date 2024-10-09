@@ -176,7 +176,6 @@
                   <img src="https://freebyz.s3.us-east-1.amazonaws.com/ad/1701380428.jpg" width="100%" height="300" class="img-responsive">
                 </a>
         
-        {{-- <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
         @endif
     </div>
 

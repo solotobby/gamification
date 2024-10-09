@@ -1,6 +1,6 @@
 @extends('layouts.main.master')
 
-@section('title', 'Winner List')
+@section('title', 'Create Campaign')
 
 @section('style')
 {{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}

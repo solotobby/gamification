@@ -8,6 +8,7 @@ use App\Helpers\PaystackHelpers;
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
 use App\Models\Answer;
+use App\Models\Business;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\Games;
@@ -71,6 +72,13 @@ class GeneralController extends Controller
         //     return 'You do not have to be doing this';
         // }
 
+    }
+
+    public function businessPage($id){
+       $business = Business::where('business_link', $id)->first();
+        $business->visits += 1;
+        $business->save();
+        return view('business_page', ['business' => $business]);
     }
 
     public function fix(){

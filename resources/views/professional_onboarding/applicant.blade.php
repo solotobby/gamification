@@ -117,10 +117,10 @@
             <!-- Logo -->
             <a class="fw-semibold text-white tracking-wide" href="">
               <span class="smini-visible">
-                D<span class="opacity-75">x</span>
+                Free<span class="opacity-75">byz</span>
               </span>
               <span class="smini-hidden">
-                Dash<span class="opacity-75">mix</span>
+                Free<span class="opacity-75">byz</span>
               </span>
             </a>
             <!-- END Logo -->

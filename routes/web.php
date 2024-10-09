@@ -25,6 +25,10 @@ use App\Http\Controllers\SafeLockController;
 use Illuminate\Support\Facades\App;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
+//business Page
+Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessPage']);
+
+
 ///oonboarding skillset
 Route::get('applicant', [\App\Http\Controllers\ProfessionalOnboardingController::class, 'index']);
 
@@ -288,6 +292,14 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
+////promote business
+Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 'create'])->name('create.business');
+
+Route::post('business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
+Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
+
+
+
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
@@ -462,3 +474,9 @@ Route::get('admin/partner', [\App\Http\Controllers\Admin\PartnershipController::
 
 Route::get('admin/finger', [\App\Http\Controllers\Admin\FastestFingerController::class, 'showPool'])->name('show.pool');
 Route::get('admin/random/selection', [\App\Http\Controllers\Admin\FastestFingerController::class, 'randomSelection']);
+
+Route::get('admin/business', [\App\Http\Controllers\Admin\BusinessController::class, 'index']);
+Route::get('admin/business/random', [\App\Http\Controllers\Admin\BusinessController::class, 'randomBusinessSelection'])->name('random.business.selection');
+Route::get('admin/business/category', [\App\Http\Controllers\Admin\BusinessController::class, 'category']);
+Route::post('admin/category', [\App\Http\Controllers\Admin\BusinessController::class, 'store'])->name('store');
+Route::get('admin/status/{id}', [\App\Http\Controllers\Admin\BusinessController::class, 'status']);
