@@ -14,7 +14,6 @@
     </div>
 </div>
 
-
 <div class="content">
 
     <!-- Elements -->
@@ -85,10 +84,5 @@
             </div>
           </div>
       </div>
-
-
-
-
-        
 
 @endsection

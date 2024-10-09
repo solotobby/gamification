@@ -298,12 +298,9 @@ Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 
 Route::post('business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
 Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
 
-
-
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
-
 
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
