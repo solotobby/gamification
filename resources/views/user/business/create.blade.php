@@ -66,20 +66,14 @@
                 <form action="{{ route('store.business') }}" method="POST">
                         @csrf
                     <div class="alert alert-success">
-                        Note: Social media Apps like Facebook, TikTok, YouTube, Instagram has algorithms to 
-                        detect unusual behaviour  and attempt to buy followers or subscribers which can lead 
-                        to a 10-15% drop in the number of followers/subscribers you actually hired. 
-
-                        This may make you think our workers actually unsubcribed/unfollowed your page. Therefore 
-                        avoid using your direct links (as much as possible). You can also choose the Comment 
-                        before subscribe/Follow Subcategory or other creative means.
+                        Setup your business on Freebyz Business Promotion. Businesses will be randomly selected to display at the topmost part of our page. 
+                        You will also have a unique business link where you can show case your product for free. 
                     </div>
 
 
                 <div class="mb-2">
                     <label class="form-label" for="post-title">Official Business Name</label>
-                    <input type="text" class="form-control" id="post-title" name="business_name" value="{{ old('business_name') }}" placeholder="Glowzconcept Design" required>
-                    
+                    <input type="text" class="form-control" id="post-title" name="business_name" value="{{ old('business_name') }}" placeholder="Glowzconcept Design" required>  
                 </div>
 
                 <div class="mb-2">
@@ -90,7 +84,6 @@
                     <label class="form-label" for="post-title">Business Category</label>
                     <select name="category_id" class="form-control" required>
                         <option value=""> Select One</option>
-
                         @foreach ($categories as $cate)
                             <option value="{{ $cate->id }}">{{ $cate->name }}</option>
                         @endforeach
