@@ -14,7 +14,6 @@
       </div>
     </div>
 </div>
-
  <!-- Page Content -->
  <div class="content">
 
@@ -49,7 +48,6 @@
                 </div>
             </div>
         </form>
-
         <form action="{{ route('store.subcategory') }}" method="POST">
             @csrf
             <div class="row push">
@@ -93,7 +91,6 @@
             </div>
         </form>
     </div>
-
     <div class="block-content">
         <p>
             List of Categories

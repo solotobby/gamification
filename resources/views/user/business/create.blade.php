@@ -241,12 +241,10 @@
                         </li>
 
                         <li>
-                            
                             <div class="flex-grow-1">
                               <div class="fw-semibold">Page Status</div>
                               <div class="fs-sm text-muted">{{ $business->status}}</div>
                             </div>
-                          
                       </li>
                        
                       </ul>
