@@ -117,7 +117,13 @@ Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'send
 Route::post('verify/phone/otp', [\App\Http\Controllers\OTPController::class, 'verifyPhoneOTP'])->name('verify.phone.otp');
 
 ////promote business
-Route::get('user/business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
+
+Route::get('user/business', function () {
+    return redirect('business');
+});
+
+Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
+
 
 Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
 Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
@@ -477,4 +483,4 @@ Route::get('admin/business', [\App\Http\Controllers\Admin\BusinessController::cl
 Route::get('admin/business/random', [\App\Http\Controllers\Admin\BusinessController::class, 'randomBusinessSelection'])->name('random.business.selection');
 Route::get('admin/business/category', [\App\Http\Controllers\Admin\BusinessController::class, 'category']);
 Route::post('admin/store/category', [\App\Http\Controllers\Admin\BusinessController::class, 'storeCategory'])->name('store.category');
-Route::get('admin/status/{id}', [\App\Http\Controllers\Admin\BusinessController::class, 'status']);
+Route::get('admin/status/{id}/{status}', [\App\Http\Controllers\Admin\BusinessController::class, 'status']);

@@ -75,11 +75,11 @@ class GeneralController extends Controller
     }
 
     public function businessPage($id){
-       $business = Business::where('business_link', $id)->where('status', 'ACTIVE')->first();
-       if($business){
-        $business->visits += 1;
-        $business->save();
-        return view('business_page', ['business' => $business]);
+       $business = Business::where('business_link', $id)->first();
+       if($business->status == 'ACTIVE' || $business->status == 'PENDING'){
+            $business->visits += 1;
+            $business->save();
+            return view('business_page', ['business' => $business]);
        } else{
         return redirect('error');
        }
