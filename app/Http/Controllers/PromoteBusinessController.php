@@ -39,7 +39,7 @@ class PromoteBusinessController extends Controller
 
         if($business){
             $subject = 'Freebyz Business Promotion - Business Created Successfully';
-            $content = 'Your business has been successfully created on Freebyz Business Promotion.';
+            $content = 'Your business will soon be activated. Once activated, you can add products and share your links freely on your social media.';
             
             Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
 

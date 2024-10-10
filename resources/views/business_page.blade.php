@@ -6,14 +6,14 @@
 
     <title>Freebyz Pro</title>
 
-    <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="description" content=" {{$business->business_name}}">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework">
-    <meta property="og:site_name" content="Dashmix">
-    <meta property="og:description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:title" content=" {{$business->business_name}}">
+    <meta property="og:site_name" content="Freebyz">
+    <meta property="og:description" content=" {{Str::limit($business->business_description,20)}}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
@@ -38,6 +38,11 @@
     <!-- <link rel="stylesheet" id="css-theme" href="src/assets/css/themes/xwork.min.css"> -->
     <link rel="stylesheet" href="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.css')}}">
     <!-- END Stylesheets -->
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7484162262282358"
+    crossorigin="anonymous"></script>
+
+
   </head>
   <body>
 
@@ -589,5 +594,11 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     </body>
+
+    <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-7484162262282358">
+    </amp-auto-ads>
+
+
   </html>
   
