@@ -476,5 +476,5 @@ Route::get('admin/random/selection', [\App\Http\Controllers\Admin\FastestFingerC
 Route::get('admin/business', [\App\Http\Controllers\Admin\BusinessController::class, 'index']);
 Route::get('admin/business/random', [\App\Http\Controllers\Admin\BusinessController::class, 'randomBusinessSelection'])->name('random.business.selection');
 Route::get('admin/business/category', [\App\Http\Controllers\Admin\BusinessController::class, 'category']);
-Route::post('admin/category', [\App\Http\Controllers\Admin\BusinessController::class, 'store'])->name('store');
+Route::post('admin/store/category', [\App\Http\Controllers\Admin\BusinessController::class, 'storeCategory'])->name('store.category');
 Route::get('admin/status/{id}', [\App\Http\Controllers\Admin\BusinessController::class, 'status']);

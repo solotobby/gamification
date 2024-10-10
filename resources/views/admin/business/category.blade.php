@@ -28,7 +28,7 @@
                 </div>
             @endif
     
-            <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('store.category') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row push">
                     <div class="col-lg-4">
