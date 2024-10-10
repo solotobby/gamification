@@ -55,15 +55,11 @@ class BusinessController extends Controller
         return back()->with('success', 'Business Category created successfully!');
     }
 
-    public function status($id){
+    public function status($id, $status){
         $business = Business::where('business_link', $id)->first();
-        if($business->status == 'ACTIVE'){
-            $business->status = 'PENDING';
-            $business->save();
-        }else{
-            $business->status = 'ACTIVE';
-            $business->save();
-        }
+        $business->status = $status;
+        $business->save();
+        
         $user = User::where('id', $business->user_id)->first();
         $subject = 'Freebyz Business Promotion - Business '.$business->status;
         $content = 'Your business is now '.$business->status.' on Freebyz Business Promotion.';
