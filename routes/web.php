@@ -116,6 +116,12 @@ Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'send
 
 Route::post('verify/phone/otp', [\App\Http\Controllers\OTPController::class, 'verifyPhoneOTP'])->name('verify.phone.otp');
 
+////promote business
+Route::get('user/business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
+
+Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
+Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
+
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');
@@ -292,11 +298,6 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
-////promote business
-Route::get('user/business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
-
-Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
-Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes
