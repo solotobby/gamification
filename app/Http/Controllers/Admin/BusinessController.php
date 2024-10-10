@@ -58,7 +58,7 @@ class BusinessController extends Controller
     public function status($id){
         $business = Business::where('business_link', $id)->first();
         if($business->status == 'ACTIVE'){
-            $business->status = 'PENDIND';
+            $business->status = 'PENDING';
             $business->save();
         }else{
             $business->status = 'ACTIVE';
