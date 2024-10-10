@@ -50,7 +50,7 @@ class BusinessController extends Controller
         return view('admin.business.category', ['category' => $category]);
     }
 
-    public function store(Request $request){
+    public function storeCategory(Request $request){
         BusinessCategory::create($request->all());
         return back()->with('success', 'Business Category created successfully!');
     }
