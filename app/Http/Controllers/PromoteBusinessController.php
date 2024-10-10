@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class PromoteBusinessController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    
     public function create(){
        // ProfessionalCategory::orderBy('name', 'DESC')->get();;
        $business = Business::where('user_id', auth()->user()->id)->first();

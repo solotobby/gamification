@@ -140,7 +140,7 @@
 
                 <div class="block h-100 mb-0">
                     <div class="block-header block-header-default">
-                      <h3 class="block-title">Your Business Information</h3>
+                      <h3 class="block-title">Your Business Link: <a target="_blank" href="{{url('m/'.$business->business_link) }}"> {{url('m/'.$business->business_link) }} </a></h3>
                     </div>
                     <div class="block-content">
                       <ul class="nav-items push">
