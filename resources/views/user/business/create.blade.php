@@ -251,7 +251,7 @@
         </div>
 
 
-        @if($business->status == 'ACTIVE')
+        @if(@$business->status == 'ACTIVE')
         <div class="block-content block-content-full">
             <h2 class="content-heading">Add Product</h2>
             <div class="row items-push">
