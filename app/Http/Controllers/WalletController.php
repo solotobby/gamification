@@ -173,6 +173,7 @@ class WalletController extends Controller
                 'amount'=> $amount,
                 'currency'=> "USD",
                 'redirect_url'=> url('flutterwave/wallet/top'),
+                'payment_options'=> "card, mobilemoneyghana",
                 'meta'=> [
                     'consumer_id' => auth()->user()->id,
                     'consumer_mac'=> ''
