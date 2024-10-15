@@ -376,7 +376,15 @@
                </div>
           
                <div class="content content-full content-boxed">
+                    <div class="alert alert-info">
+                        <li class="fa fa-info"></li> <strong>Business Information</strong>
+                        <span>
+                        {!! $business->description !!}
+                        </span>
+                    </div>
 
+
+                    @if($business->products->count() > 0)
                     <h2 class="content-heading">
                         <i class="si si-briefcase me-1"></i> My Product
                     </h2>
@@ -402,23 +410,16 @@
                             </div>
                           </div>
                         @endforeach
-                       
-                        
                       </div>
-                      {{-- <div class="text-end">
-                        <button type="button" class="btn btn-alt-primary">
-                          Check out more <i class="fa fa-arrow-right ms-1"></i>
-                        </button>
-                      </div> --}}
 
-
-
-
-
-                    <h2 class="content-heading">
+                      @endif
+                     
+                      <h2 class="content-heading">
                         <i class="si si-note me-1"></i> Connect With Me
-                    </h2>
-            
+                      </h2>
+
+                      
+
                     <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ url('m/'.$business->business_link) }}">
                         <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                         <h4 class="fs-base text-primary mb-0">
