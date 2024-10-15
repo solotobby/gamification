@@ -376,18 +376,30 @@
                </div>
           
                <div class="content content-full content-boxed">
-                    <div class="alert alert-info">
-                        <li class="fa fa-info"></li> <strong>Business Information</strong>
-                        <span>
-                        {!! $business->description !!}
-                        </span>
+                    
+                    <div class="col-md-12 col-xl-12">
+                        <div class="block block-rounded">
+                            <div class="block block-rounded justify-content-center">
+                         
+                             <div class="block-content block-content-full">
+                                <i class="si si-briefcase me-1"></i> Business Information
+                                <hr>
+                                
+                                 {!! $business->description !!}
+                             </div>
+                            
+                            </div>
+                        </div>
+                        
                     </div>
 
 
                     @if($business->products->count() > 0)
                     <h2 class="content-heading">
-                        <i class="si si-briefcase me-1"></i> My Product
+                        <i class="si si-list me-1"></i> My Product
                     </h2>
+                   
+
                     <div class="row">
                         @foreach ($business->products as $product)
                         <div class="col-md-6 col-xl-4">
