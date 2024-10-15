@@ -389,8 +389,15 @@
 
             <div class="mb-2">
                 <label class="form-label" for="post-title">Official Business Phone Number</label>
-                <input type="text" class="form-control" id="post-title" name="business_phone" value="{{ old('business_name') }}" required>
+                <input type="text" class="form-control" id="post-title" name="business_phone" value="{{ old('business_phone') }}" placeholder="0808277***" required>
             </div>
+
+            <div class="mb-2">
+                <label class="form-label" for="post-title">Unique Business username</label>
+                <input type="text" class="form-control" id="post-title" name="business_link" value="{{ old('business_link') }}" placeholder="sammy" required>
+                <small>if your username is sammy, your store name will be https://freebyz.com/m/sammy</small>
+            </div>
+
             <div class="mb-2">
                 <label class="form-label" for="post-title">Business Category</label>
                 <select name="category_id" class="form-control" required>
