@@ -441,6 +441,20 @@
                       </p>
                     </div>
                   </a>
+
+                  <a class="block block-rounded block-link-shadow mb-3" href="tel:{{$business->business_phone}}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-instagram-square text-muted me-1"></i> Contact Business
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                       
+                        {{ substr($business->business_phone, 0, 5) . "*****";
+ }}
+                      </p>
+                    </div>
+                  </a>
+
                   <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->instagram_link == null ? '#' :  $business->instagram_link }}">
                     <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                       <h4 class="fs-base text-primary mb-0">
