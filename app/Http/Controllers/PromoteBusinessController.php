@@ -32,6 +32,7 @@ class PromoteBusinessController extends Controller
         $this->validate($request, [
             'business_name' => 'required|string|unique:businesses',
             'business_phone' => 'required|string|unique:businesses',
+            'business_link' => 'required|string|unique:businesses',
             'description' => 'required|string',
             // 'x_link' => 'string',
             // 'facebook_link' => 'string',
@@ -40,7 +41,7 @@ class PromoteBusinessController extends Controller
             // 'pinterest_link' => 'string',
            
         ]);
-        $request->request->add(['user_id' => auth()->user()->id, 'status' => 'PENDING', 'business_link' => Str::random(7)]);
+        $request->request->add(['user_id' => auth()->user()->id, 'status' => 'PENDING', 'business_link' => $request->business_link,]);
         
         $business = Business::create($request->all());
 

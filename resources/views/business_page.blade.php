@@ -419,9 +419,9 @@
                                 <a class="btn btn-sm btn-alt-secondary" href="tel:{{$business->business_phone}}">
                                   <i class="fa fa-user-circle text-muted me-1"></i> Contact Seller
                                 </a>
-                                <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
+                                {{-- <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
                                   <i class="fa fa-user-circle text-muted me-1"></i> Profile
-                                </a>
+                                </a> --}}
                               </div>
                             </div>
                           </div>
