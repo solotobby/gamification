@@ -11,6 +11,7 @@ use App\Models\AccountInformation;
 use App\Models\Announcement;
 use App\Models\Answer;
 use App\Models\BankInformation;
+use App\Models\Business;
 use App\Models\Games;
 use App\Models\Question;
 use App\Models\Transaction;
@@ -95,6 +96,8 @@ class HomeController extends Controller
         $ads = adBanner();
         $categories = $this->listCategories();
 
+        $businessPromotion = Business::where('is_live', true)->first();
+
         
         return view('user.home', [
             'badgeCount' => $badgeCount, 
@@ -104,7 +107,8 @@ class HomeController extends Controller
             'balance' => $balance, 
             'announcement' => $announcement, 
             'ads' => $ads, 
-            'categories' => $categories
+            'categories' => $categories,
+            'promotion' => $businessPromotion,
         ]);
     }
 

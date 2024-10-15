@@ -93,6 +93,8 @@ class GeneralController extends Controller
 
     public function fix(){
 
+     
+
         //  $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
         //  $list = [];
         //  foreach($users as $user){
