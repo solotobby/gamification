@@ -65,17 +65,23 @@ class PromoteBusinessController extends Controller
         ]);
         
 
-        $proofUrl = '';
+       
             if($request->hasFile('img')){
                 $fileBanner = $request->file('img');
                 $Bannername = time() . $fileBanner->getClientOriginalName();
                 $filePathBanner = 'products/' . $Bannername;
         
                 Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-                $productfUrl = Storage::disk('s3')->url($filePathBanner);
-                $request->request->add([ 'pid' => rand(999,100000), 'unique' => Str::random(7), 'img' =>$productfUrl]);
-        
-                BusinessProduct::create($request->all());
+             
+                BusinessProduct::create([
+                    'business_id' => $request->business_id,
+                    'name' => $request->name,
+                    'price' => $request->price,
+                    'description' => $request->description,
+                    'pid' => rand(999,1000000),
+                    'unique' => Str::random(7),
+                    'img' =>  Storage::disk('s3')->url($filePathBanner)
+                ]);//create($request->all());
 
                 return back()->with('success', 'Product added Successfully');
             }

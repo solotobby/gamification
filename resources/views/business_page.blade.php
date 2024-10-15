@@ -384,7 +384,7 @@
                              <div class="block-content block-content-full">
                                 <i class="si si-briefcase me-1"></i> Business Information
                                 <hr>
-                                
+
                                  {!! $business->description !!}
                              </div>
                             
@@ -402,26 +402,32 @@
 
                     <div class="row">
                         @foreach ($business->products as $product)
-                        <div class="col-md-6 col-xl-4">
+                       
+                        
+                            
+                            
+                     <div class="col-md-6 col-xl-4"> 
                             <div class="block block-rounded text-center">
-                              <div class="block-content block-content-full bg-image" style="background-image: url({{$product->img}});">
-                                {{-- <img class="img-avatar img-avatar-thumb" src="{{$product->img}}" alt=""> --}}
-                              </div>
-                              <div class="block-content block-content-full block-content-sm bg-body-light">
-                                <div class="fw-semibold">{{$product->name}}</div>
-                                <div class="fs-sm text-muted">&#8358;{{number_format($product->price,2)}}</div>
-                              </div>
+                              {{-- <div class="block-content block-content-full bg-image" style="background-image: url({{$product->img}});">
+                                 </div> --}}
+                                 <img src="{{ asset($product->img) }}" alt="Product Image" class="block-content block-content-full bg-image" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="block-content block-content-full block-content-sm bg-body-light">
+                                    <div class="fw-semibold">{{$product->name}}</div>
+                                    <div class="fs-sm text-muted">&#8358;{{number_format($product->price,2)}}</div>
+                                </div>
                               <div class="block-content block-content-full">
                                 <a class="btn btn-sm btn-alt-secondary" href="tel:{{$business->business_phone}}">
                                   <i class="fa fa-user-circle text-muted me-1"></i> Contact Seller
                                 </a>
-                                {{-- <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
+                                <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
                                   <i class="fa fa-user-circle text-muted me-1"></i> Profile
-                                </a> --}}
+                                </a>
                               </div>
                             </div>
                           </div>
-                        @endforeach
+                        @endforeach 
+
+                       
                       </div>
 
                       @endif
