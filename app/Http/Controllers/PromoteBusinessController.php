@@ -19,10 +19,10 @@ class PromoteBusinessController extends Controller
         $this->middleware('auth');
     }
 
-    
+
     public function create(){
        // ProfessionalCategory::orderBy('name', 'DESC')->get();;
-       $business = Business::where('user_id', auth()->user()->id)->first();
+       $business = Business::with('products')->where('user_id', auth()->user()->id)->first();
        $categories = BusinessCategory::all();
         return view('user.business.create', ['business' => $business, 'categories' => $categories]);
 
@@ -73,13 +73,34 @@ class PromoteBusinessController extends Controller
         
                 Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
                 $productfUrl = Storage::disk('s3')->url($filePathBanner);
-                $request->request->add(['img' =>$productfUrl]);
+                $request->request->add([ 'pid' => rand(999,100000), 'unique' => Str::random(7), 'img' =>$productfUrl]);
         
                 BusinessProduct::create($request->all());
 
                 return back()->with('success', 'Product added Successfully');
             }
            
+    }
+
+    public function editProduct($id){
+        $product= BusinessProduct::where('unique', $id)->first();
+        return view('user.business.edit_product', ['product' => $product]);
+    }
+
+    public function deleteProduct($id){
+        BusinessProduct::where('unique', $id)->delete();
+        return back()->with('status', 'Product deleted Successfully');
+    }
+
+    public function processProductEdit(Request $request){
+        $findProduct = BusinessProduct::where('unique', $request->product_id)->first();
+        $findProduct->name = $request->name;
+        $findProduct->price = $request->price;
+        $findProduct->description = $request->description;
+        $findProduct->save();
+        // BusinessProduct::where('unique', $id)->delete();
+        return redirect('user/business')->with('status', 'Product updated Successfully');
+        //return back()->with('success', 'Product updated Successfully');
     }
 
 }

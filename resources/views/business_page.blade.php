@@ -351,211 +351,151 @@
         <!-- Main Container -->
         <main id="main-container">
         
-          <!-- Hero -->
-          {{-- <div class="hero hero-lg bg-body-extra-light overflow-hidden">
-              
-             <div class="hero-inner">
-              <div class="content content-full">
-                <div class="row">
-                  <div class="col-lg-5 text-center text-lg-start d-lg-flex align-items-lg-center">
-                    <div>
-                      <h1 class="h2 fw-bold mb-3">
-                        Product Title
-                      </h1>
-                      <p class="fs-4 text-muted mb-5">
-                        Lead paragraph containing the main purpose of your product.
-                      </p>
-                      <div>
-                        <a class="btn btn-primary px-3 py-2 m-1" href="javascript:void(0)">
-                          <i class="fa fa-fw fa-link opacity-50 me-1"></i> Call to action
-                        </a>
-                        <a class="btn btn-alt-primary px-3 py-2 m-1" href="javascript:void(0)">
-                          <i class="fa fa-fw fa-link opacity-50 me-1"></i> Call to action
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 offset-lg-1 d-none d-lg-block">
-                    <img class="img-fluid rounded" src="{{ asset('src/assets/media/various/promo_dashboard.png')}}" srcset="{{ asset('src/assets/media/various/promo_dashboard@2x.png 2x')}}"  alt="Hero Promo">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="hero-meta">
-              <div>
-                <span class="d-inline-block animated bounce infinite">
-                  <i class="si si-arrow-down text-muted fa-2x"></i>
-                </span>
-              </div>
-            </div> 
-          </div> --}}
-          <!-- END Hero -->
+            <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo21@2x.jpg')}}');">
+                {{-- <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo17@2x.jpg')}});"> --}}
+                 <div class="bg-black-25">
+                   <div class="content content-full">
+                     <div class="py-5 text-center">
+                       {{-- <a class="img-link" href="be_pages_generic_profile.html">
+                         <img class="img-avatar img-avatar96 img-avatar-thumb" src="assets/media/avatars/avatar10.jpg" alt="">
+                       </a> --}}
+                       <h1 class="fw-bold my-2 text-white"> {{ isset($business) ? $business->business_name : 'SignUp your Business for Freebyz Promotion'; }}</h1>
+                       @if($business)
+                       <h2 class="h4 fw-bold text-white-75">
+                         
+                         Business Page <a class="text-primary-lighter" href="{{url('m/'.$business->business_link) }}" target="_blank">{{url('m/'.$business->business_link) }}</a>
+                       </h2>
+                       @else
+             
+             
+                       @endif
+                      
+                     </div>
+                   </div>
+                 </div>
+               </div>
           
-          <!-- Section 1 -->
-          <div class="bg-body-light">
-              <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo21@2x.jpg')}}');">
-                  <div class="bg-black-75">
-                    <div class="content py-6">
-                      <h3 class="text-center text-white mb-0">
-                          {{$business->business_name}}
-                      </h3>
+               <div class="content content-full content-boxed">
+
+                    <h2 class="content-heading">
+                        <i class="si si-briefcase me-1"></i> My Product
+                    </h2>
+                    <div class="row">
+                        @foreach ($business->products as $product)
+                        <div class="col-md-6 col-xl-4">
+                            <div class="block block-rounded text-center">
+                              <div class="block-content block-content-full bg-image" style="background-image: url({{$product->img}});">
+                                {{-- <img class="img-avatar img-avatar-thumb" src="{{$product->img}}" alt=""> --}}
+                              </div>
+                              <div class="block-content block-content-full block-content-sm bg-body-light">
+                                <div class="fw-semibold">{{$product->name}}</div>
+                                <div class="fs-sm text-muted">&#8358;{{number_format($product->price,2)}}</div>
+                              </div>
+                              <div class="block-content block-content-full">
+                                <a class="btn btn-sm btn-alt-secondary" href="tel:{{$business->business_phone}}">
+                                  <i class="fa fa-user-circle text-muted me-1"></i> Contact Seller
+                                </a>
+                                {{-- <a class="btn btn-sm btn-alt-secondary" href="javascript:void(0)">
+                                  <i class="fa fa-user-circle text-muted me-1"></i> Profile
+                                </a> --}}
+                              </div>
+                            </div>
+                          </div>
+                        @endforeach
+                       
+                        
+                      </div>
+                      {{-- <div class="text-end">
+                        <button type="button" class="btn btn-alt-primary">
+                          Check out more <i class="fa fa-arrow-right ms-1"></i>
+                        </button>
+                      </div> --}}
+
+
+
+
+
+                    <h2 class="content-heading">
+                        <i class="si si-note me-1"></i> Connect With Me
+                    </h2>
+            
+                    <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ url('m/'.$business->business_link) }}">
+                        <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                        <h4 class="fs-base text-primary mb-0">
+                            <i class="fa fa-newspaper text-muted me-1"></i> Freebyz Page
+                        </h4>
+                        <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                            {{ $business->status}}
+                        </p>
+                        </div>
+                    </a>
+            
+                  <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->facebook_link == null ? '#' :  $business->facebook_link }}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-facebook text-muted me-1"></i> Facebook
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                        {{ $business->facebook_link == null ? 'Not set' : $business->facebook_link }}
+                      </p>
                     </div>
-                  </div>
-              </div>
-            {{-- <div class="content content-full">
-              <div class="py-5 push">
-                <h2 class="mb-2 text-center">
-                  Title 1
-                </h2>
-                <h3 class="text-muted mb-0 text-center">
-                  Subtitle
-                </h3>
-              </div>
-              <div class="text-center">
-                <p>
-                  Your content..
-                </p>
-              </div>
-            </div> --}}
+                  </a>
+                  <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->instagram_link == null ? '#' :  $business->instagram_link }}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-instagram-square text-muted me-1"></i> Instagram
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                        {{ $business->instagram_link == null ? 'Not set' : $business->instagram_link }}
+                      </p>
+                    </div>
+                  </a>
+            
+                  <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->x_link == null ? '#' :  $business->x_link }}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-x-twitter text-muted me-1"></i> X 
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                        {{ $business->x_link == null ? 'Not set' : $business->x_link }}
+                      </p>
+                    </div>
+                  </a>
+            
+                  <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->tiktok_link == null ? '#' :  $business->tiktok_link }}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-tiktok text-muted me-1"></i> Tiktok
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                        {{ $business->tiktok_link == null ? 'Not set' : $business->tiktok_link }}
+                      </p>
+                    </div>
+                  </a>
+            
+                  <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->pinterest_link == null ? '#' :  $business->pinterest_link }}">
+                    <div class="block-content block-content-full d-flex align-items-center justify-content-between">
+                      <h4 class="fs-base text-primary mb-0">
+                        <i class="fab fa-pinterest text-muted me-1"></i> Pinterest
+                      </h4>
+                      <p class="fs-sm text-muted mb-0 ms-2 text-end">
+                        {{ $business->pinterest_link == null ? 'Not set' : $business->pinterest_link }}
+                      </p>
+                    </div>
+                  </a>
+
+
+
+
+               </div>
+          
+            
           </div>
           <!-- END Section 1 -->
   
   
   
-          <!-- Section 2 -->
-          {{-- <div class="bg-body-extra-light">
-            
-            <div class="content content-full">
-              <div class="row">
-                  <div class="col-2"></div>
-                  <div class="col-8">
-                      <div class="py-3 push">
-                          <h2 class="mb-2">
-                            Title 2
-                          </h2>
-                          <h3 class="text-muted mb-0">
-                            Subtitle
-                          </h3>
-                      </div>
-  
-                      
-                  </div>
-                  <div class="col-2"></div>
-              </div>
-            </div>
-          </div>
-          <!-- END Section 2 --> --}}
-  
-          <!-- Section 3 -->
-          <div class="bg-body-light">
-            <div class="content content-full">
-              <form action="" method="POST">
-                @csrf
-                  <div class="row">
-                      <div class="col-2"></div>
-                      <div class="col-8">
-  
-                        <div class="block h-100 mb-0">
-                            <div class="block-header block-header-default">
-                              <h3 class="block-title">Business Information</h3>
-                            </div>
-                            <div class="block-content">
-                              <ul class="nav-items push">
-                                <li>
-                                  <a class="d-flex py-2" href="javascript:void(0)">
-                                    <div class="flex-grow-1">
-                                      <div class="fw-semibold">Business Name</div>
-                                      <div class="fs-sm text-muted">{{$business->business_name}}</div>
-                                    </div>
-                                  </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" href="javascript:void(0)">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Business Phone Number</div>
-                                        <div class="fs-sm text-muted">{{$business->business_phone}}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" href="javascript:void(0)">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Description</div>
-                                        <div class="fs-sm text-muted">{!! $business->description !!}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ url('m/'.$business->business_link) }}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Freebyz Page</div>
-                                        <div class="fs-sm text-muted">{{ url('m/'.$business->business_link) }}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ $business->facebook_link == null ? '#' :  $business->facebook_link }}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Facebook Page</div>
-                                        <div class="fs-sm text-muted">{{ $business->facebook_link == null ? 'NOT SET' :  $business->facebook_link}}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ $business->x_link== null ? '#' : $business->x_link}}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">X Page</div>
-                                        <div class="fs-sm text-muted">{{ $business->x_link == null ? 'NOT SET' : $business->x_link }}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ $business->instagram_link == null ? '#' : $business->instagram_link }}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Instagram Page</div>
-                                        <div class="fs-sm text-muted">{{ $business->instagram_link == null ? 'NOT SET' : $business->instagram_link }}</div>
-                                      </div>
-                                    </a>
-                                </li>
-                            
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ $business->tiktok_link  == null ? '#' : $business->tiktok_link}}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Tiktok Page</div>
-                                        <div class="fs-sm text-muted">{{ $business->tiktok_link == null ? 'NOT SET' : $business->tiktok_link }}</div>
-                                      </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="d-flex py-2" target="_blank" href="{{ $business->pinterest_link == null ? '#' : $business->pinterest_link }}">
-                                      <div class="flex-grow-1">
-                                        <div class="fw-semibold">Pinterest Page</div>
-                                        <div class="fs-sm text-muted">{{ $business->pinterest_link == null ? 'NOT SET' :  $business->pinterest_link}}</div>
-                                      </div>
-                                    </a>
-                                </li>
-        
-                                
-                               
-                              </ul>
-                            </div>
-                          </div>
-               
-  
-                      </div>
-                      <div class="col-2"></div>
-                  </div>
-              </form>
-             
-            </div>
-          </div>
-          <!-- END Section 3 -->
+          
         </main>
         <!-- END Main Container -->
   
