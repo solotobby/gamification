@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
+use App\Models\Business;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
 use App\Models\OTP;
@@ -159,9 +160,32 @@ class Kernel extends ConsoleKernel
 
         })->daily();
 
-        // $schedule->call(function(){
+        $schedule->call(function(){
 
-        // })->dailyAt('23:30');
+            
+            Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
+
+            // Then, select a random business and set its 'is_live' to true
+            $randomBusiness = Business::inRandomOrder()->first();
+            if ($randomBusiness) {
+                $randomBusiness->update(['is_live' => true]);
+            }
+    
+            $user = User::where('id', $randomBusiness->user_id)->first();
+            $subject = 'Freebyz Business Promotion - Business Selected';
+            $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
+                
+    
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+    
+
+            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            $subject = 'New Business Promotion selected';
+            $content = 'Automatic Business Promotion Selected';
+            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
+
+        })->daily();
 
 
         // $schedule->call(function(){
