@@ -99,6 +99,21 @@
 
               @else
 
+              {{-- <div class="input-group mb-0">
+                <span class="input-group-text">
+                  Country 
+                </span>
+                <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
+                  <option value="">Select Country</option>
+                  
+                  <option value="GHS">Ghana</option>
+                  <option value="RWF">Rwanda</option>
+                  <option value="KES">Kenya</option>
+                  <option value="USD">Other</option>
+                </select>
+              </div>
+              <small><i>Select other if your country is not listed</i></small> --}}
+
               <div class="input-group mb-4">
                 <span class="input-group-text">
                   Payment Method

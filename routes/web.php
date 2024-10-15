@@ -123,11 +123,13 @@ Route::get('user/business', function () {
 });
 
 Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
-
-
 Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
 Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
 
+Route::get('product/edit/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'editProduct']);
+Route::get('product/delete/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'deleteProduct']);
+
+Route::post('product/edit', [\App\Http\Controllers\PromoteBusinessController::class, 'processProductEdit'])->name('edit.business.product');
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');

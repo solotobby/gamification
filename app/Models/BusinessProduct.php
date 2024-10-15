@@ -9,5 +9,9 @@ class BusinessProduct extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['business_id', 'name', 'description', 'price', 'img', 'visits', 'is_live'];
+    protected $fillable = ['business_id', 'pid', 'unique', 'name', 'description', 'price', 'img', 'visits', 'is_live'];
+
+    public function business(){
+        return $this->belongsTo(Business::class, 'business_id');
+    }
 }
