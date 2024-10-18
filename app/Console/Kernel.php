@@ -166,7 +166,7 @@ class Kernel extends ConsoleKernel
             Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
 
             // Then, select a random business and set its 'is_live' to true
-            $randomBusiness = Business::inRandomOrder()->first();
+            $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
             if ($randomBusiness) {
                 $randomBusiness->update(['is_live' => true]);
             }

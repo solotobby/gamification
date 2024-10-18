@@ -112,6 +112,10 @@ Route::get('bank/information', [\App\Http\Controllers\HomeController::class, 'se
 
 Route::post('save/phone/information', [\App\Http\Controllers\HomeController::class, 'savePhoneInformation'])->name('save.phone.information');
 
+Route::post('continue/country', [\App\Http\Controllers\HomeController::class, 'continueCountry'])->name('continue.country');
+
+
+
 Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'sendPhoneOTP'])->name('send.phone.otp');
 
 Route::post('verify/phone/otp', [\App\Http\Controllers\OTPController::class, 'verifyPhoneOTP'])->name('verify.phone.otp');
@@ -130,6 +134,7 @@ Route::get('product/edit/{id}', [\App\Http\Controllers\PromoteBusinessController
 Route::get('product/delete/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'deleteProduct']);
 
 Route::post('product/edit', [\App\Http\Controllers\PromoteBusinessController::class, 'processProductEdit'])->name('edit.business.product');
+
 
 ////Referral Routes
 Route::get('referral/view/all', [\App\Http\Controllers\ReferralController::class, 'viewAll'])->name('ref.all');

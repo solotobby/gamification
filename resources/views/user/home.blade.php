@@ -326,58 +326,6 @@
         <div class="" id="display-jobs">
         </div>
 
-
-
-      <!-- END VPS -->
-      {{-- @foreach ($available_jobs as $job)
-      <a href="{{ url('campaign/'.$job['job_id']) }}"> 
-        <div class="block block-rounded block-fx-pop mb-2">
-            <div class="block-content block-content-full border-start border-3 border-primary">
-            <div class="d-md-flex justify-content-md-between align-items-md-center">
-                <div class="col-12">
-                <h3 class="h4 fw-bold mb-1" style="color: black">{!! $job['post_title'] !!}</h3>
-                <p class="fs-sm text-muted">
-
-                 @if($job['currency'] == 'NGN')
-
-                    @if(auth()->user()->wallet->base_currency == 'Naira')
-
-                        &#8358;{{ number_format($job['campaign_amount'],2)}}  
-
-                      @else
-                      &#8358;{{ number_format($job['campaign_amount'],2)}}  
-                       
-
-                    @endif
-
-
-                  @else
-                     
-                     ${{ $job['campaign_amount'] }}
-
-                  @endif
-                    
-                </p>
-                <div class="mb-0">
-                    <div class="progress mb-1" style="height: 6px;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: {{$job['progress']}}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p class="fs-sm fw-semibold mb-3" style="color: black">
-                    <span class="fw-bold">{{  $job['completed'] }} completed</span>   <span class="fw-bold text-muted">out of {{ $job['number_of_staff'] }} workers</span> 
-                    </p>
-                </div>
-                <p class="fs-sm text-muted mb-0">
-                    {{  @$job['type'] }}
-                </p>
-                
-                </div>
-            </div>
-            </div>
-        </div>
-      </a>
-      @endforeach --}}
-
-
    </div>
 
 
@@ -386,6 +334,9 @@
     @if(auth()->user()->profile->is_welcome == 0)
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
+
+      {{-- @elseif(auth()->user()->wallet->base_currency_set == false)
+        @include('layouts.resources.validate_currency')   --}}
 
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")
