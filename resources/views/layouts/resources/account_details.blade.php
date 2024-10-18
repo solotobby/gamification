@@ -4,11 +4,11 @@
       <div class="modal-content rounded overflow-hidden bg-image bg-image-bottom border-0" style="background-image: url({{asset('src/assets/media/photos/photo23.jpg')}});">
         <div class="row">
           <div class="col-md-12">
-            <div class="p-3 text-end text-md-start">
+            {{-- <div class="p-3 text-end text-md-start">
               <a class="fw-semibold text-white" href="#" data-bs-dismiss="modal" aria-label="Close">
-                {{-- Skip Intro --}}
+                Skip Intro
               </a>
-            </div>
+            </div> --}}
             <div class="bg-body-extra-light shadow-lg">
               <div class="js-slider slick-dotted-inner" data-dots="true" data-arrows="false" data-infinite="false">
                 <div class="p-5">
@@ -33,5 +33,5 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
   <!-- END Onboarding Modal -->

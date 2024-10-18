@@ -239,7 +239,7 @@
         </ul>
       </li>
 
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon si si-note"></i>
           <span class="nav-main-link-name">Accounts</span>
@@ -250,7 +250,7 @@
               <span class="nav-main-link-name">View</span>
             </a>
           </li>
-        </ul>
+        </ul> --}}
       </li>
 
       {{-- <li class="nav-main-item">
@@ -292,13 +292,13 @@
         </ul>
       </li> --}}
 
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('mass.sms') }}">
           <i class="nav-main-link-icon fa fa-envelope"></i>
           <span class="nav-main-link-name">BroadCast SMS</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">8</span> --}}
+         
         </a>
-      </li>
+      </li> --}}
      
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('audit/trail') }}">
@@ -307,12 +307,12 @@
         </a>
       </li>
 
-       <li class="nav-main-item">
+       {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('settings') }}">
           <i class="nav-main-link-icon fa fa-tty"></i>
           <span class="nav-main-link-name">Settings</span>
         </a>
-      </li>
+      </li> --}}
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -334,12 +334,12 @@
         </ul>
       </li>
 
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/virtual/list') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Virtual Accounts</span>
         </a>
-      </li>
+      </li> --}}
 
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('user.tracker') }}">

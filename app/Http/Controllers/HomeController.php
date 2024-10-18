@@ -522,42 +522,26 @@ class HomeController extends Controller
         return transferFund($amount, $recipient, 'Freebyz Withdrawal');
     }
 
-    public function sendAirtime($phone, $amount)
-    {
-        // $bearerToken = PaystackHelpers::reloadlyAuth0Token();
-        // $bearerToken['access_token'];
+    public function continueCountry(Request $request){
 
-        // $operator = PaystackHelpers::getRealoadlyMobileOperator($bearerToken['access_token'], $phone);
-        // $operatorId = $operator['operatorId'];
+        $currencyRequest = explode(',', $request->currency);
 
-        // return PaystackHelpers::initiateReloadlyAirtime($bearerToken['access_token'], $phone, $operatorId, $amount);
+        $currencyCode = $currencyRequest[0];
+        $country = $currencyRequest[1];
 
-        //return PaystackHelpers::reloadlyAuth0Token();
+        
+        
+       $profile = Profile::where('user_id', auth()->user()->id)->first();
+       $profile->country = $country;
+       $profile->currency_code = $currencyCode;
+       $profile->save();
 
-        // $username = "solotob";
-        //  $apiKey = env('AFRICA_TALKING_LIVE');
-
-        //  $AT = new AfricasTalking($username, $apiKey);
-
-        //  $airtime = $AT->airtime();
-
-        //  // Use the service
-        //  $recipients = [[
-        //      "phoneNumber"  => $phone,
-        //      "currencyCode" => "NGN",
-        //      "amount"       => $amount
-        //  ]];
-
-        //  try {
-        //      // That's it, hit send and we'll take care of the rest
-        //      $results = $airtime->send([
-        //          "recipients" => $recipients
-        //      ]);
-
-
-        //  } catch(\Exception $e) {
-        //      echo "Error: ".$e->getMessage();
-        //  }
-        //  return $results;//response()->json($results);  //json_decode($results->getBody()->getContents(), true);
+       $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+       $wallet->base_currency = $currencyCode;
+       $wallet->base_currency_set = true;
+       $wallet->Save();
+       
+       return back();
+       
     }
 }
