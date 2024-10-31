@@ -55,18 +55,21 @@
         </div>
         <div class="modal-body">
             <h4 class="fw-normal text-muted text-center">
-                Kindly select your country of Origin to continue
+                Kindly select your country of origin to continue
             </h4>
+            <div class="alert alert-warning"> This will enable us pay you in your local currency.</div>
 
           <form action="{{ route('continue.country') }}" method="POST">
             @csrf
             <div class="form-group mb-3">
                 <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select Country</option>
-                    <option value="GHS,Ghana">Ghana</option>
-                    <option value="RWF,Rwanda">Rwanda</option>
-                    <option value="KES,Kenya">Kenya</option>
-                    <option value="USD,Other">Other</option>
+                    @foreach (currencyList('NGN',true) as $currency)
+                      <option value="{{$currency->code}},{{$currency->country}}">{{$currency->country}}</option>
+                    @endforeach
+                    
+                    
+                    <option value="USD,Other">Others</option> --}}
                 </select>
             </div>
             

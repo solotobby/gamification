@@ -11,6 +11,7 @@ use App\Models\BannerImpression;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\ConversionRate;
+use App\Models\Currency;
 use App\Models\Notification;
 use App\Models\PaymentTransaction;
 use App\Models\Preference;
@@ -107,8 +108,11 @@ if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
         $location = getLocation();
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
-        $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
-        $wall->save();
+        if($wall->base_currency_set != 1){
+            $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+            $wall->save();
+        }
+        
        return $wall;
     }
 }
@@ -160,7 +164,7 @@ if(!function_exists('convertDollar')){
     function convertDollar($amount){  
         $rate = ConversionRate::where('from', 'Dollar')->first()->amount;
 
-        return number_format($amount/$rate, 4);
+        return number_format($amount/$rate, 2);
     }
 }
 
@@ -263,14 +267,14 @@ if(!function_exists('systemNotification')){
 if(!function_exists('checkWalletBalance')){
     function checkWalletBalance($user, $type, $amount){
         
-       if($type == 'Naira'){
+       if($type == 'Naira' || 'NGN'){
         $wallet =  Wallet::where('user_id', $user->id)->first();
             if((int) $wallet->balance >= $amount){
                 return true;
             }else{
                 return false;
             }
-       }elseif($type == 'Dollar'){
+       }elseif($type == 'Dollar' || $type = 'USD'){
         
         $wallet =  Wallet::where('user_id', $user->id)->first();
         
@@ -281,7 +285,13 @@ if(!function_exists('checkWalletBalance')){
             }
 
        }else{
-        return 'invalid';
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            
+            if((int) $wallet->base_currency_balance >= $amount){
+                return true;
+            }else{
+                return false;
+            }
        }
        
     }
@@ -291,18 +301,27 @@ if(!function_exists('creditWallet')){
     function creditWallet($user, $type, $amount){
         
        if($type == 'Naira' || $type == 'NGN'){
+
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->balance += $amount;
             $wallet->save();
             return $wallet;
+
        }elseif($type == 'Dollar' || $type == 'USD'){
+
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->usd_balance += $amount;
             $wallet->save();
             return $wallet;
 
        }else{
-        return 'invalid';
+
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->base_currency_balance += $amount;
+            $wallet->save();
+            return $wallet;
+
+            //  return 'invalid';
        }
        
     }
@@ -323,7 +342,10 @@ if(!function_exists('debitWallet')){
             return $wallet;
 
        }else{
-        return 'invalid';
+            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet->base_currency_balance -= $amount;
+            $wallet->save();
+            return $wallet;
        }
        
     }
@@ -338,9 +360,16 @@ if(!function_exists('dollar_naira')){
 
 if(!function_exists('naira_dollar')){
     function naira_dollar(){
-        return ConversionRate::where('from', 'Naira')->first()->amount;
+        return ConversionRate::where('from', 'NGN')->first()->amount;
     }
 }
+
+if(!function_exists('nairaConversion')){
+    function nairaConversion($currency){
+        return ConversionRate::where('from', 'NGN')->where('to', $currency)->first()->amount;
+    }
+}
+
 
 if(!function_exists('short_name')){
     function short_name($name){
@@ -385,6 +414,20 @@ if(!function_exists('flutterwaveVeryTransaction')){
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
         ])->get('https://api.flutterwave.com/v3/transactions/'.$id.'/verify')->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+        
+    }
+}
+
+if(!function_exists('flutterwaveTransfer')){
+    function flutterwaveTransfer($payload){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('FL_SECRET_KEY')
+        ])->post('https://api.flutterwave.com/v3/transfers', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
         
@@ -1207,7 +1250,7 @@ if(!function_exists('monthlyVisits')){
     function monthlyVisits(){ 
         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
         // ->whereBetween('created_at',[$start_date, $end_date])
-        ->where('created_at', '>=', Carbon::now()->subMonths(3))
+        ->where('created_at', '>=', Carbon::now()->subMonths(2))
         ->groupBy('month')->get(); 
         // 
         $MonthlyVisit[] = ['Month', 'Users','Verified'];
@@ -1427,21 +1470,38 @@ if(!function_exists('showActivityLog')){
     }
 }
 
+if(!function_exists('currencyList')){
+    function currencyList($exempt=null, $status=null){ 
+        if($status == true){
+            return Currency::where('code', '!=', $exempt)->where('is_active', true)->orderBy('country', 'ASC')->get();
+        }else{
+            return Currency::where('code', '!=', $exempt)->orderBy('country', 'ASC')->get();
+        }
+            
+    }
+}
+
 if(!function_exists('filterCampaign')){
     function filterCampaign($categoryID){ 
 
         $user = Auth::user();
-    $jobfilter = '';
-    $campaigns = '';
+        $jobfilter = '';
+        $campaigns = '';
 
     if($user){
         $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
     }
 
+    $baseCurrency = $user->wallet->base_currency;
+
+   
     if($user->USD_verified){ //if user is usd verified, they see all jobs
+
         if($categoryID == 0){
+            ///without filter
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         }else{
+            //with filter
             $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         }
         
@@ -1451,11 +1511,9 @@ if(!function_exists('filterCampaign')){
         }else{
             $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         }
-        
+
     }
-
   
-
     $list = [];
     foreach($campaigns as $key => $value){
         $c = $value->pending_count + $value->completed_count;//
@@ -1955,11 +2013,41 @@ if(!function_exists('paymentTrasanction')){
 
 
 if(!function_exists('paymentUpdate')){
-    function  paymentUpdate($ref, $status){
+    function  paymentUpdate($ref, $status, $amount){
         $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
         $fetchPaymentTransaction->status = $status;
+        $fetchPaymentTransaction->amount = $amount;
         $fetchPaymentTransaction->save();
         return $fetchPaymentTransaction;
+    }
+}
+
+
+if(!function_exists('amountCalculator')){
+    function  amountCalculator($amount){
+        $percent = 5/100 * $amount;
+        return $amount + $percent + 0.4;
+    }
+}
+
+if(!function_exists('currencySymbol')){
+    function  currencySymbol($currency){
+          
+            // @elseif(auth()->user()->wallet->base_currency == 'GHS')
+            //     &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+
+            // @elseif(auth()->user()->wallet->base_currency == 'KES')
+            // &#75;&#83;&#104; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+            // @elseif(auth()->user()->wallet->base_currency == 'TZS')
+            // &#84;&#83;&#104; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+            // @elseif(auth()->user()->wallet->base_currency == 'RWF')
+            // &#82;&#8355;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+            // @elseif(auth()->user()->wallet->base_currency == 'MWK')
+            // &#77;&#75; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+            // @else
+
+            //     ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
+            // @endif
     }
 }
 

@@ -11,7 +11,7 @@
     <div class="bg-primary-dark-op">
       <div class="content content-full">
         <div class="row my-3">
-          <div class="col-md-6 d-md-flex align-items-md-center">
+          <div class="col-md-5 d-md-flex align-items-md-center">
             <div class="py-4 py-md-0 text-center text-md-start">
               <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}} 
                 @if(auth()->user()->wallet->base_currency == 'Naira')
@@ -31,16 +31,39 @@
               <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Jobs and Get Paid!</h2>
             </div>
           </div>
-          <div class="col-md-6 d-md-flex align-items-md-center">
+          <div class="col-md-7 d-md-flex align-items-md-center">
             <div class="row w-100 text-center">
               <div class="col-4 col-xl-4">
                     <p class="fs-3 fw-semibold text-white mb-0">
 
-                        @if(auth()->user()->wallet->base_currency == "Naira")
+                        {{-- @if(auth()->user()->wallet->base_currency == "Naira")
                             &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
                         @else
                             ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
+                        @endif --}}
+
+                        @if(auth()->user()->wallet->base_currency == "Naira")
+                            &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'GHS')
+                            &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'KES')
+                            KES {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'TZS')
+                            TZS {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'RWF')
+                            RWF {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'MWK')
+                            MWK {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'UGX')
+                            UGX {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+                            ZAR {{ number_format(auth()->user()->wallet->base_currency_balance) }}
+                        @else 
+
+                            ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
                         @endif
+
+
                      
                     </p>
                     <p class="fs-sm fw-semibold text-white-75 mb-0">
@@ -332,11 +355,13 @@
 
    <!-- END Call to Action -->
     @if(auth()->user()->profile->is_welcome == 0)
+    
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-      {{-- @elseif(auth()->user()->wallet->base_currency_set == false)
-        @include('layouts.resources.validate_currency')   --}}
+    @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
+       
+        @include('layouts.resources.validate_currency')  
 
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")
@@ -348,6 +373,8 @@
         @if(auth()->user()->wallet->base_currency == "Naira")
             @include('layouts.resources.account_details')      
         @endif  --}}
+
+
 
     @elseif(auth()->user()->is_verified == 0)
     

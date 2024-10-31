@@ -68,16 +68,23 @@
                         <td> 
                           @if($camp->currency == 'NGN')
                           &#8358;{{ number_format($camp->campaign_amount) }} 
-                          @else
+                          @elseif($camp->currency == 'USD')
                           ${{ $camp->campaign_amount }} 
+                          @else
+                           {{ $camp->currency }} {{ $camp->campaign_amount }} 
                           @endif
                         </td>
                         <td>
+
                           @if($camp->currency == 'NGN')
-                          &#8358;{{ number_format($camp->total_amount) }}
+                            &#8358;{{ number_format($camp->total_amount) }} 
+                          @elseif($camp->currency == 'USD')
+                            ${{ $camp->campaign_amount }} 
                           @else
-                          ${{ $camp->total_amount }}
+                            {{ $camp->currency }} {{ $camp->total_amount }} 
                           @endif
+
+                        
                         </td>
                         <td>{{ $camp->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>

@@ -1,9 +1,25 @@
 @extends('layouts.main.master')
 @section('content')
+ <!-- Hero -->
+ <div class="bg-body-light">
+  <div class="content content-full">
+    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+      <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Fund Wallet</h1>
+      <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item active" aria-current="page">Fund Wallet</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- END Hero -->
+
 <div class="content">
   <div class="block block-rounded">
     <div class="block-header block-header-default">
-      <h3 class="block-title">Fund Wallet</h3>
+      <h3 class="block-title">.</h3>
     </div>
   <div class="block-content">
 
@@ -13,11 +29,26 @@
       <div class="mb-2 text-center content-heading mb-4">
         <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
+
           @if(auth()->user()->wallet->base_currency == "Naira")
-              &#8358;{{ number_format(auth()->user()->wallet->balance,3) }}
-          @else
-              
-              ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
+              &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'GHS')
+              &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+
+          @elseif(auth()->user()->wallet->base_currency == 'KES')
+              KES {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'TZS')
+              TZS {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'RWF')
+              RWF {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'MWK')
+              MWK {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'UGX')
+              UGX {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+              ZAR {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @else   
+              ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
           @endif
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
@@ -115,25 +146,60 @@
               </div>
               <small><i>Select other if your country is not listed</i></small> --}}
 
-              <div class="input-group mb-4">
+              {{-- <div class="input-group mb-4">
                 <span class="input-group-text">
                   Payment Method
                 </span>
                 <select name="method" class="form-control @error('method') is-invalid @enderror" required>
                   <option value="">Select Payment Method</option>
-                  {{-- <option value="stripe">Stripe</option> --}}
+                  <option value="stripe">Stripe</option>
                   <option value="flutterwave">Flutterwave</option>
                 </select>
-              </div>
+              </div> --}}
 
 
-              <div class="input-group">
-                <span class="input-group-text">
-                  $
-                </span>
-                <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
-                <span class="input-group-text">.00</span>
-              </div>
+             
+                <div class="input-group">
+                  <span class="input-group-text">
+
+                    @if(auth()->user()->wallet->base_currency == "Naira")
+                        &#8358;
+                    @elseif(auth()->user()->wallet->base_currency == 'GHS')
+                        &#8373;
+          
+                    @elseif(auth()->user()->wallet->base_currency == 'KES')
+                        KES 
+                    @elseif(auth()->user()->wallet->base_currency == 'TZS')
+                        TZS 
+                    @elseif(auth()->user()->wallet->base_currency == 'RWF')
+                        RWF 
+                    @elseif(auth()->user()->wallet->base_currency == 'MWK')
+                        MWK
+                        
+                    @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+                       ZAR
+                    @elseif(auth()->user()->wallet->base_currency == 'UGX')
+                      UGX
+                    @else
+                        $
+                    @endif
+
+                    
+
+                  </span>
+                  <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                  <span class="input-group-text">.00</span>
+                </div>
+
+              {{-- @else
+                <div class="input-group">
+                  <span class="input-group-text">
+                    $
+                  </span>
+                  <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                  <span class="input-group-text">.00</span>
+                </div>
+              @endif --}}
 
             </div>
 

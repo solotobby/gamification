@@ -13,8 +13,8 @@
         <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Campaign List</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">Users</li>
-            <li class="breadcrumb-item active" aria-current="page">Users List</li>
+            <li class="breadcrumb-item">Campaigns</li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
           </ol>
         </nav>
       </div>
@@ -70,16 +70,20 @@
                         {{-- completed()->where('status', 'Approved')->count() --}}
                         <td>
                           @if($camp->currency == 'NGN')
-                          &#8358;{{ number_format($camp->campaign_amount) }}
+                          &#8358;{{ number_format($camp->campaign_amount) }} 
+                          @elseif($camp->currency == 'USD')
+                          ${{ $camp->campaign_amount }} 
                           @else
-                          ${{ $camp->campaign_amount }}
+                           {{ $camp->currency }} {{ $camp->campaign_amount }} 
                           @endif
                         </td>
                         <td>
                           @if($camp->currency == 'NGN')
-                          &#8358;{{ number_format($camp->total_amount) }}
+                            &#8358;{{ number_format($camp->total_amount) }} 
+                          @elseif($camp->currency == 'USD')
+                            ${{ $camp->campaign_amount }} 
                           @else
-                          ${{ $camp->total_amount }}
+                            {{ $camp->currency }} {{ $camp->total_amount }} 
                           @endif
                         </td>
                         <td>

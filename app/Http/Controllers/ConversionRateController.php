@@ -37,7 +37,7 @@ class ConversionRateController extends Controller
      */
     public function store(StoreConversionRateRequest $request)
     {
-        //
+        return $request;
     }
 
     /**
@@ -72,7 +72,14 @@ class ConversionRateController extends Controller
     public function update(UpdateConversionRateRequest $request, ConversionRate $conversionRate)
     {
         $conversionRate = ConversionRate::find($request->id);
-        $conversionRate->update(['amount' => $request->rate]);
+        $conversionRate->update([
+            'amount' => $request->rate,
+            'referral_commission' => $request->referral_commission,
+            'upgrade_fee' => $request->upgrade_fee,
+            'priotize' => $request->priotize,
+            'allow_upload' => $request->allow_upload,
+
+        ]);
         return back()->with('success', 'Rate updated!');
     }
 

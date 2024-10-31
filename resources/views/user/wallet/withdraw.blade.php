@@ -1,10 +1,25 @@
 @extends('layouts.main.master')
 @section('content')
+ <!-- Hero -->
+ <div class="bg-body-light">
+  <div class="content content-full">
+    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+      <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Withdraw Funds</h1>
+      <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item active" aria-current="page">Withdraw</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- END Hero -->
   <!-- Page Content -->
   <div class="content">
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Withdraw Funds</h3>
+        <h3 class="block-title">.</h3>
       </div>
     <div class="block-content">
    
@@ -15,12 +30,34 @@
         <div class="mb-2 text-center content-heading mb-4">
           {{-- <p class="text-uppercase fw-bold fs-sm text-muted">Withdraw Funds</p> --}}
           <p class="link-fx fw-bold fs-1">
-            @if(auth()->user()->wallet->base_currency == "Naira")
-          &#8358;{{ number_format(auth()->user()->wallet->balance,3) }}
-          @else
-          ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
+            {{-- @if(auth()->user()->wallet->base_currency == "Naira")
+              &#8358;{{ number_format(auth()->user()->wallet->balance,3) }}
+            @else
+              ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
+            @endif --}}
+
+
+          @if(auth()->user()->wallet->base_currency == "Naira")
+              &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'GHS')
+              &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+
+          @elseif(auth()->user()->wallet->base_currency == 'KES')
+              KES {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'TZS')
+              TZS {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'RWF')
+              RWF {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'MWK')
+              MWK {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'UGX')
+              UGX {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+              ZAR {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+          @else   
+              ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
           @endif
-            {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
+          
           </p>
           <p>Wallet Balance</p>
         </div>
@@ -49,16 +86,140 @@
                       </ul>
                   </div>
               @endif
-  
+              @if(auth()->user()->wallet->base_currency == 'Naira')
+
               <div class="mb-4">
                 <div class="input-group">
-                  @if(auth()->user()->wallet->base_currency == 'Naira')
+                
                       <span class="input-group-text">
                         &#8358;
                       </span>
                       <input type="number" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="2500" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                       <span class="input-group-text">.00</span>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa fa-grip-vertical"></i>
+                  </span>
+                
+                  <select name="type" class="form-control" required>
+                    <option value="">Select An Option</option>
+                    <option value="local_withdrawal">Local Withdrawal</option>
+                    <option value="paypal_withdrawal">Paypal Withdrawal</option>
+                  </select>
+                  
+                </div>
+              </div>
+
+
                   @else
+
+                  <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                          @if(auth()->user()->wallet->base_currency == "Naira")
+                              &#8358;
+                          @elseif(auth()->user()->wallet->base_currency == 'GHS')
+                              &#8373;
+                
+                          @elseif(auth()->user()->wallet->base_currency == 'KES')
+                              KES 
+                          @elseif(auth()->user()->wallet->base_currency == 'TZS')
+                              TZS 
+                          @elseif(auth()->user()->wallet->base_currency == 'RWF')
+                              RWF 
+                          @elseif(auth()->user()->wallet->base_currency == 'MWK')
+                              MWK
+                              
+                          @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+                            ZAR
+                          @elseif(auth()->user()->wallet->base_currency == 'UGX')
+                            UGX
+                          @else
+                              $
+                          @endif
+
+                        </span>
+                        <input type="text" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="0" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                        <span class="input-group-text">.00</span>
+                    </div>
+                  </div> 
+
+                  @if(auth()->user()->wallet->base_currency == 'GHS')
+                  <div class="mb-4">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa fa-grip-vertical"></i>
+                      </span>
+                    
+                      <select name="account_bank" class="form-control" required>
+                        <option value="">Select Bank</option>
+                        <option value="AIRTEL">AIRTEL</option>
+                        <option value="TIGO">TIGO</option>
+                        <option value="MTN">MTN</option>
+                        <option value="VODAFONE">VODAFONE</option>
+                      
+                      </select>
+                      
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fa fa-grip-vertical"></i>
+                        </span>
+                        <input type="text" class="form-control @error('account_number') is-invalid @enderror" id="reminder-credential" name="account_number" value="{{ old('account_number') }}" placeholder="Enter Account Number" required>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fa fa-grip-vertical"></i>
+                        </span>
+                        <input type="text" class="form-control @error('beneficiary_name') is-invalid @enderror" id="reminder-credential" name="beneficiary_name" value="{{ old('beneficiary_name') }}" placeholder="Enter Beneficiary Name" required>
+                    </div>
+                  </div>
+
+                  @else
+                  <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fa fa-grip-vertical"></i>
+                        </span>
+                        <input type="text" class="form-control @error('account_number') is-invalid @enderror" id="reminder-credential" name="account_number" value="{{ old('account_number') }}" placeholder="Enter Account Number" required>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fa fa-grip-vertical"></i>
+                        </span>
+                        <input type="text" class="form-control @error('beneficiary_name') is-invalid @enderror" id="reminder-credential" name="beneficiary_name" value="{{ old('beneficiary_name') }}" placeholder="Enter Beneficiary Name" required>
+                    </div>
+                  </div>
+                  @endif
+
+
+         
+
+
+
+                  @if(auth()->user()->wallet->base_currency == "Dollar" || auth()->user()->wallet->base_currency == "USD")
+                    <div class="mb-4">
+                      <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="fa fa-envelope"></i>
+                        </span>
+                        <input type="email" class="form-control @error('paypal_email') is-invalid @enderror" id="reminder-credential" name="paypal_email" value="{{ old('paypal_email') }}" placeholder="Enter Paypal Email Address" required>
+                      </div>
+                    </div>
+                  @endif
+
 
                  
                     {{-- <span class="input-group-text">
@@ -69,9 +230,8 @@
                --}}
 
                   @endif
-                </div>
-              </div>
-              @if(auth()->user()->wallet->base_currency== 'Naira')
+               
+              {{-- @if(auth()->user()->wallet->base_currency== 'Naira')
                   <div class="mb-4">
                     <div class="input-group">
                       <span class="input-group-text">
@@ -125,7 +285,7 @@
                     </span>
                     <input type="text" class="form-control @error('mobile') is-invalid @enderror" id="reminder-credential"  name="mobile" value="{{ old('phone') }}" placeholder="Enter Mobile number" required>
                 </div>
-              </div>  --}}
+              </div>  --}
 
 
               <div class="mb-4">
@@ -149,7 +309,7 @@
 
 
              
-          @endif
+          @endif --}}
 
               <div class="text-center mb-4">
                

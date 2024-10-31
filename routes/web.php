@@ -148,7 +148,7 @@ Route::get('api/get/sub/categories/info/{id}', [\App\Http\Controllers\CampaignCo
 Route::post('post/campaign', [\App\Http\Controllers\CampaignController::class, 'postCampaign'])->name('post.campaign');
 Route::post('edit/campaign', [\App\Http\Controllers\CampaignController::class, 'update'])->name('edit.campaign');
 
-Route::get('decline/campaign/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'declineCampaign']);
+Route::get('decline/get/sub/categories/info', [\App\Http\Controllers\Admin\AdminController::class, 'declineCampaign']);
 
 Route::get('extend/payment', [\App\Http\Controllers\CampaignController::class, 'campaign_extension_payment']);
 Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign']);
@@ -336,6 +336,7 @@ Route::get('how/to', [\App\Http\Controllers\HomeController::class, 'howTo'])->na
 Route::get('admin/notifications', [\App\Http\Controllers\NotificationController::class, 'adminNotifications']);
 Route::post('store/notification', [\App\Http\Controllers\NotificationController::class, 'storeNotification']);
 Route::get('change/notification/status/{id}', [\App\Http\Controllers\NotificationController::class, 'changeNotificationStatus']);
+
 Route::get('/games/create/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'createGame']);
 Route::get('question/create', [\App\Http\Controllers\Admin\AdminController::class, 'createQuestion'])->name('questions.create');
 Route::post('question/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeQuestion'])->name('questions.store');
@@ -345,6 +346,7 @@ Route::get('question/list', [\App\Http\Controllers\Admin\AdminController::class,
 Route::get('game/status/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'gameStatus'])->name('game.status');
 Route::get('view/activities/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'viewActivities'])->name('view.activities');
 Route::post('assign/reward', [\App\Http\Controllers\Admin\AdminController::class, 'assignReward'])->name('assign.reward');
+
 
 ///knowledge_bases
 Route::resource('knowledgebase', KnowledgeBaseController::class);

@@ -93,20 +93,45 @@
                   <input type="number" class="form-control" id="number-of-staff" name="number_of_staff" min="15" value="15" required>
                 </div>
                 <div class="col-6">
+
                   @if(auth()->user()->wallet->base_currency == "Naira")
-                      <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
+                      <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                     @else
-                      <label class="form-label" for="post-salary-min">Cost per Campaign($)</label>
-                    @endif
+                      <label class="form-label" for="post-salary-min">Cost per Campaign</label>
+                  @endif
+
+
                     <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount" value="" readonly>
                 </div>
               </div>
               <hr>
-              @if(auth()->user()->wallet->base_currency == "Naira")
+              @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == "NGN")
+                <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
+              @elseif(auth()->user()->wallet->base_currency == 'GHS')
+                <h4>Estimated Cost: &#8373;<span id="demo"></span></h4>
+                 
+              @elseif(auth()->user()->wallet->base_currency == 'KES')
+                  <h4>Estimated Cost: KES <span id="demo"></span></h4>
+                  
+              @elseif(auth()->user()->wallet->base_currency == 'TZS')
+                <h4>Estimated Cost: TZS <span id="demo"></span></h4>
+              @elseif(auth()->user()->wallet->base_currency == 'RWF')
+                <h4>Estimated Cost: RWF <span id="demo"></span></h4>
+              @elseif(auth()->user()->wallet->base_currency == 'MWK')
+                <h4>Estimated Cost:  MWK <span id="demo"></span></h4>
+              @elseif(auth()->user()->wallet->base_currency == 'UGX')
+                <h4>Estimated Cost:  UGX <span id="demo"></span></h4>
+              @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+                <h4>Estimated Cost: ZAR <span id="demo"></span></h4>
+              @else 
+                <h4>Estimated Cost: $<span id="demo"></span></h4>
+              @endif
+
+{{--          @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == "NGN")
               <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
               @else
               <h4>Estimated Cost: $<span id="demo"></span></h4>
-              @endif
+              @endif --}}
               
             </div>
           </div>
@@ -240,7 +265,7 @@
                                     return a.name.localeCompare(b.name);
                                 });
 
-                                // console.log(result)
+                                console.log(result)
 
                                 $('#post-category').html('<option value="">Select Category</option>');
                                 $.each(new_result, function(key, value) {

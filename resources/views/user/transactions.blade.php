@@ -26,7 +26,9 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Transaction List - Successful: &#8358;{{ number_format($lists->where('status', 'successful')->where('currency', 'NGN')->sum('amount')) }} | ${{ number_format($lists->where('status', 'successful')->where('currency', 'USD')->sum('amount'), 2) }}</h3>
+        <h3 class="block-title">Transaction List
+          {{-- Successful: &#8358;{{ number_format($lists->where('status', 'successful')->where('currency', 'NGN')->sum('amount')) }} | ${{ number_format($lists->where('status', 'successful')->where('currency', 'USD')->sum('amount'), 2) }} --}}
+        </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -42,7 +44,7 @@
               <tr>
                 <th>Reference</th>
                 <th>Amount</th>
-                <th>Currency</th>
+                {{-- <th>Currency</th> --}}
                 <th>Status</th>
                 <th>Description</th>
                 <th>When</th>
@@ -59,15 +61,19 @@
                       {{ $list->reference }}
                     </td>
                     <td>
+
+                      
                       @if($list->currency == 'NGN')
-                        &#8358;{{ number_format($list->amount,2) }}
-                        @else
-                        ${{ ($list->amount) }}
-                        @endif
+                      &#8358;
+                        {{ number_format($list->amount,2) }}
+                      @elseif($list->currency == 'USD')
+                      ${{ ($list->amount) }}
+                      @else
+                        {{ $list->currency }} {{ ($list->amount) }}
+                      @endif
+
                     </td>
-                    <td>
-                        {{ $list->currency }}
-                    </td>
+                  
                     <td>
                         {{ $list->status }}
                     </td>

@@ -176,12 +176,35 @@
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-wallet"></i>
           <span class="nav-main-link-name">Wallet</span>
-          
+
           @if(auth()->user()->wallet->base_currency == "Naira")
+          <span class="nav-main-link-badge badge rounded-pill bg-default"> &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'GHS')
+            <span class="nav-main-link-badge badge rounded-pill bg-default"> &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+
+            @elseif(auth()->user()->wallet->base_currency == 'KES')
+            <span class="nav-main-link-badge badge rounded-pill bg-default"> KES {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'TZS')
+            <span class="nav-main-link-badge badge rounded-pill bg-default">TZS {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'RWF')
+            <span class="nav-main-link-badge badge rounded-pill bg-default"> RWF {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'MWK')
+            <span class="nav-main-link-badge badge rounded-pill bg-default">MWK {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'UGX')
+            <span class="nav-main-link-badge badge rounded-pill bg-default">UGX {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+            @elseif(auth()->user()->wallet->base_currency == 'ZAR')
+            <span class="nav-main-link-badge badge rounded-pill bg-default">ZAR {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}</span>
+           
+            @else  
+
+            <span class="nav-main-link-badge badge rounded-pill bg-default">${{ number_format(auth()->user()->wallet->usd_balance,2) }}</span>
+          @endif
+          
+          {{-- @if(auth()->user()->wallet->base_currency == "Naira")
           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ @number_format(auth()->user()->wallet->balance) }}</span>
           @else
           <span class="nav-main-link-badge badge rounded-pill bg-default">${{ number_format(auth()->user()->wallet->usd_balance,3) }}</span>
-          @endif
+          @endif --}}
            
         </a>
         <ul class="nav-main-submenu">
