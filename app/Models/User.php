@@ -80,6 +80,11 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'usdverifieds', 'referral_id');
     }
 
+    public function attemptedCampaigns()
+    {
+        return $this->belongsToMany(Campaign::class, 'campaign_workers', 'user_id', 'campaign_id');
+    }
+
     public function myWorks()
     {
         return $this->hasMany(CampaignWorker::class, 'campaign_id');

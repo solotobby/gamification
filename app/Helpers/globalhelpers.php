@@ -1492,7 +1492,11 @@ if(!function_exists('filterCampaign')){
         $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
     }
 
-         $baseCurrency = $user->wallet->base_currency;
+     
+
+
+
+        //  $baseCurrency = $user->wallet->base_currency;
 
         // if($categoryID == 0){
         //     ///without filter
@@ -1506,17 +1510,62 @@ if(!function_exists('filterCampaign')){
 
         if($categoryID == 0){
             ///without filter
-            $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
+            $campaigns = Campaign::where('status', 'Live')
+                ->where('is_completed', false)
+                ->whereNotIn('id', function($query) use ($user) {
+                
+                    $query->select('campaign_id')
+                    ->from('campaign_workers')
+                    ->where('user_id', $user->id);
+                
+            })->orderBy('created_at', 'DESC')->get();
+
         }else{
             //with filter
-            $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            // $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            $campaigns = Campaign::where('status', 'Live')
+                ->where('is_completed', false)
+                ->where('campaign_type', $categoryID)
+                ->whereNotIn('id', function($query) use ($user) {
+                
+                    $query->select('campaign_id')
+                    ->from('campaign_workers')
+                    ->where('user_id', $user->id);
+                
+            })->orderBy('created_at', 'DESC')->get();
         }
         
     }else{
         if($categoryID == 0){
-            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            // $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
+            $campaigns = Campaign::where('status', 'Live')
+                ->where('is_completed', false)
+                ->where('currency', $jobfilter)
+                ->whereNotIn('id', function($query) use ($user) {
+                
+                    $query->select('campaign_id')
+                    ->from('campaign_workers')
+                    ->where('user_id', $user->id);
+                
+            })->orderBy('created_at', 'DESC')->get();
+
+
         }else{
-            $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            // $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+            $campaigns = Campaign::where('status', 'Live')
+                ->where('is_completed', false)
+                ->where('currency', $jobfilter)
+                ->where('campaign_type', $categoryID)
+                ->whereNotIn('id', function($query) use ($user) {
+                
+                    $query->select('campaign_id')
+                            ->from('campaign_workers')
+                            ->where('user_id', $user->id);
+                
+            })->orderBy('created_at', 'DESC')->get();
         }
 
     }
@@ -1528,8 +1577,8 @@ if(!function_exists('filterCampaign')){
         $progress = $div * 100;
 
         //jobCurrency 
-        $from = $value->currency; //from
-        $to = $baseCurrency; //to
+        // $from = $value->currency; //from
+        // $to = $baseCurrency; //to
 
         // if($value->currency == 'NGN'){
         //     $currencyCode = "&#8358";
@@ -1555,9 +1604,9 @@ if(!function_exists('filterCampaign')){
             'campaign_amount' => $value->campaign_amount,
             'converted_amount' => '0', //jobCurrencyConverter($from, $to, $value->campaign_amount),
             'currency' => $value->currency,
-            'converted_currency' => $baseCurrency,
+            // 'converted_currency' => $baseCurrency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
-            'converted_currency_code' => $baseCurrency,
+            // 'converted_currency_code' => $baseCurrency,
 
             'priotized' => $value->approved,
             // 'created_at' => $value->created_at
