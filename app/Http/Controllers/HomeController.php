@@ -71,7 +71,7 @@ class HomeController extends Controller
 
     public function userHome()
     {
-        //Sendmonny::accessToken();
+        
         dailyVisit('Dashboard');
         if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
@@ -84,6 +84,8 @@ class HomeController extends Controller
         if (auth()->user()->age_range == '' || auth()->user()->gender == '') { //compell people to take survey
             return redirect('survey');
         }
+
+        // return filterCampaign('0');
 
         $balance = '';
        
@@ -479,7 +481,6 @@ class HomeController extends Controller
 
     public function selectBankInformation()
     {
-
         $bankList = bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
         $otp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();

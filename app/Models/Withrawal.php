@@ -10,7 +10,12 @@ class Withrawal extends Model
     use HasFactory;
 
     protected $table = "withrawals"; 
-    protected $fillable = ['user_id', 'amount', 'next_payment_date', 'status', 'currency', 'channel', 'paypal_email', 'is_usd'];
+
+    protected $fillable = ['user_id', 'amount', 'next_payment_date', 'status', 'base_currency', 'channel', 'paypal_email', 'is_usd', 'content'];
+
+    protected $casts = [
+        'content' => 'array',
+    ];
 
     public function user()
     {

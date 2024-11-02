@@ -51,9 +51,13 @@
                 <tr>
                     <td>
                         @if($list->is_usd == true)
-                        ${{ number_format($list->amount) }}
+                          ${{ number_format($list->amount) }}
+                        @elseif($list->base_currency == null)
+
+                          &#8358;{{ number_format($list->amount) }}
+
                         @else
-                        &#8358;{{ number_format($list->amount) }}
+                          {{$list->base_currency}} {{ number_format($list->amount) }}
                         @endif
                         
                     </td>

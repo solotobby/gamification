@@ -114,8 +114,8 @@
                     <td>{{ $s->subCate->count() }}</td>
                     <td>
                         <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">View</button>
-                        <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-{{ $s->id }}">Edit Dollar Price</button>
-                        <button type="button" class="btn btn-alt-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $s->id }}">Edit Naira Price</button>
+                        <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-{{ $s->id }}">Edit Price</button>
+                        {{-- <button type="button" class="btn btn-alt-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $s->id }}">Edit Naira Price</button> --}}
                     </td>
                 </tr>
                 <div class="modal fade" id="modal-default-popout-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
@@ -181,14 +181,23 @@
                                   <ul class="list-group push">
                                       
                                       @foreach ($s->subCate as $n)
-                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                      <li class="list-group-item d-flex justify-content-between align-items-center mb-3">
                                           {{$n->name}}
                                           <span class="badge rounded-pill bg-info">&#8358;{{ number_format($n->amount) }}</span>
+                                          <span class="badge rounded-pill bg-info">${{ number_format($n->usd) }}</span>
                                         </li>
+                                        <div class="mb-4">
+                                          <label class="form-label" for="example-text-input">Unit Price (Naira)</label>
+                                          <input type="text" name="amount[]" class="form-control" size="5" value="{{ $n->amount }}" required>
+                                        </div>
                                         <div class="mb-4">
                                           <label class="form-label" for="example-text-input">Unit Price (USD)</label>
                                           <input type="text" name="usd[]" class="form-control" size="5" value="{{ $n->usd }}" required>
-                                      </div>
+                                        </div>
+                                        <div class="mb-4">
+                                          <label class="form-label" for="example-text-input">Unit Price (GHS)</label>
+                                          <input type="text" name="ghs[]" class="form-control" size="5" value="{{ $n->usd }}" required>
+                                        </div>
                                       <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
                                       <hr>
                                       @endforeach
@@ -211,56 +220,59 @@
                   </div>
                 </div>
 
-              <div class="modal fade" id="modal-default-popout-edit-naira-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-popout" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title">Edit SubCategories(Naira)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                {{-- <div class="modal fade" id="modal-default-popout-edit-naira-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-popout" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title">Edit SubCategories(Naira)</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
 
-                    <div class="modal-body pb-1">
-                        <div class="col-xl-12">
-                            <!-- With Badges -->
-                            <div class="block block-rounded">
-                              <div class="block-header block-header-default">
-                                <h3 class="block-title">{{ $s->name }}</h3>
-                              </div>
-                              <div class="block-content">
-                                <form action="{{ url('edit/subcategories/naira') }}" method="POST">
-                                  @csrf
-                                <ul class="list-group push">
+                      <div class="modal-body pb-1">
+                          <div class="col-xl-12">
+                              <!-- With Badges -->
+                              <div class="block block-rounded">
+                                <div class="block-header block-header-default">
+                                  <h3 class="block-title">{{ $s->name }}</h3>
+                                </div>
+                                <div class="block-content">
+                                  <form action="{{ url('edit/subcategories/naira') }}" method="POST">
+                                    @csrf
+                                  <ul class="list-group push">
+                                      
+                                      @foreach ($s->subCate as $n)
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                          {{$n->name}}
+                                          <span class="badge rounded-pill bg-info">${{ number_format($n->usd,2) }}</span>
+                                        </li>
+                                        <div class="mb-4">
+                                          <label class="form-label" for="example-text-input">Unit Price (Naira)</label>
+                                          <input type="text" name="amount[]" class="form-control" size="5" value="{{ $n->amount }}" required>
+                                        </div>
+                                        <div class="mb-4">
+                                          <label class="form-label" for="example-text-input">Unit Price (GHS)</label>
+                                          <input type="text" name="ghs[]" class="form-control" size="5" value="{{ $n->amount }}" required>
+                                        </div>
+                                      <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
+                                      <hr>
+                                      @endforeach
                                     
-                                    @foreach ($s->subCate as $n)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{$n->name}}
-                                        <span class="badge rounded-pill bg-info">${{ number_format($n->usd,2) }}</span>
-                                      </li>
-                                      <div class="mb-4">
-                                        <label class="form-label" for="example-text-input">Unit Price (Naira)</label>
-                                        <input type="text" name="amount[]" class="form-control" size="5" value="{{ $n->amount }}" required>
-                                    </div>
-                                    <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
-                                    <hr>
-                                    @endforeach
-                                   
-                                </ul>
-                                <button class="btn btn-primary" type="submit">Update</button>
-                                </form>
+                                  </ul>
+                                  <button class="btn btn-primary" type="submit">Update</button>
+                                  </form>
+                                </div>
                               </div>
+                              <!-- END With Badges -->
                             </div>
-                            <!-- END With Badges -->
-                          </div>
-                        
-                    </div>
-                    
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                    {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
-                    </div>
-                </div>
-                </div>
-            </div>
+                          
+                      </div>
+                      
+                      <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+                  </div>
+                </div> --}}
                 @endforeach
             </tbody>
           </table>

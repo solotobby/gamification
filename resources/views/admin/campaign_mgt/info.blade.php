@@ -73,20 +73,16 @@
                 </div>
                 <div class="col-6">
                   @if(auth()->user()->wallet->base_currency == "Naira")
-                      <label class="form-label" for="post-salary-min">Cost per Campaign(&#8358;)</label>
+                      <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                     @else
-                      <label class="form-label" for="post-salary-min">Cost per Campaign($)</label>
+                      <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                     @endif
                     <br>
                     {{$campaign->campaign_amount}}
                 </div>
               </div>
               <hr>
-              @if(auth()->user()->wallet->base_currency == "Naira")
-              <h4>Estimated Cost: &#8358;{{ $campaign->total_amount}} </h4>
-              @else
-              <h4>Estimated Cost: ${{ $campaign->total_amount}}</h4>
-              @endif
+              <h4>Estimated Cost: {{ $campaign->currency }} {{ $campaign->total_amount }} </h4>
               
             </div>
           </div>

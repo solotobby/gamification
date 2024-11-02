@@ -930,25 +930,49 @@ class AdminController extends Controller
        $withdrawals = Withrawal::where('id', $id)->first();
        
        if($withdrawals->status == '0'){
-            $user = User::where('id', $withdrawals->user->id)->first();
-            $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
-            $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code, 'Freebyz Withdrawal');
-            if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
-                $withdrawals->status = true;
-                $withdrawals->save();
-                //set activity log
-                $am = number_format($withdrawals->amount*100);
+            if($withdrawals->base_currency != null || $withdrawals->base_currency != 'NGN' || $withdrawals->base_currency != 'USD'){
+                $payload =  $withdrawals->content;
+
+                $trf = flutterwaveTransfer($payload);
                 
-                $name = $user->name;
-                activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
-                //send mail
-                $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-                $subject = 'Withdrawal Request Granted';
-                Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
-                return back()->with('success', 'Withdrawals Updated');
+                if($trf['status'] == 'success'){
+                    $withdrawals->status = true;
+                    $withdrawals->save();
+                    $user = User::where('id', $withdrawals->user->id)->first();
+                    $name = $user->name;
+                    activityLog($user, 'withdrawal_sent',' '.$withdrawals->base_currency.''. $am = number_format($withdrawals->amount*100).' cash withdrawal by '.$name, 'regular');
+                  
+                    $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+                    $subject = 'Withdrawal Request Granted';
+                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Withdrawals Updated');
+
+                }else{
+                    return back()->with('error', 'Withdrawal Error');
+                }
+
             }else{
-                return back()->with('error', 'Withdrawals Error');
+                $user = User::where('id', $withdrawals->user->id)->first();
+                $bankInformation = BankInformation::where('user_id', $withdrawals->user->id)->first();
+                $transfer = $this->transferFund($withdrawals->amount*100, $bankInformation->recipient_code, 'Freebyz Withdrawal');
+                if($transfer['data']['status'] == 'success' || $transfer['data']['status'] == 'pending'){
+                    $withdrawals->status = true;
+                    $withdrawals->save();
+                    //set activity log
+                    $am = number_format($withdrawals->amount*100);
+                    
+                    $name = $user->name;
+                    activityLog($user, 'withdrawal_sent', 'NGN'.$am.' cash withdrawal by '.$name, 'regular');
+                    //send mail
+                    $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+                    $subject = 'Withdrawal Request Granted';
+                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Withdrawals Updated');
+                }else{
+                    return back()->with('error', 'Withdrawals Error');
+                }
             }
+           
        }else{
             return back()->with('error', 'Payment has already been processed');
        }
