@@ -1492,7 +1492,7 @@ if(!function_exists('filterCampaign')){
         $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
     }
 
-        //  $baseCurrency = $user->wallet->base_currency;
+         $baseCurrency = $user->wallet->base_currency;
 
         // if($categoryID == 0){
         //     ///without filter
