@@ -1553,7 +1553,7 @@ if(!function_exists('filterCampaign')){
             'progress' => $progress,
 
             'campaign_amount' => $value->campaign_amount,
-            'converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
+            'converted_amount' => '0', //jobCurrencyConverter($from, $to, $value->campaign_amount),
             'currency' => $value->currency,
             'converted_currency' => $baseCurrency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
