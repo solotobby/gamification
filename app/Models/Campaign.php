@@ -19,6 +19,11 @@ class Campaign extends Model
         'allow_upload'];
 
     
+        public function userAttempts()
+        {
+            return $this->belongsToMany(User::class, 'campaign_workers', 'campaign_id', 'user_id');
+        }
+
         public function user(){
             return $this->belongsTo(User::class);
         }
