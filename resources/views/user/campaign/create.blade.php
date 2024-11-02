@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-6">
 
-                  @if(auth()->user()->wallet->base_currency == "Naira")
+                  @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == "NGN")
                       <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                     @else
                       <label class="form-label" for="post-salary-min">Cost per Campaign</label>

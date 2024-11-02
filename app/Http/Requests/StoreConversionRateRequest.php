@@ -24,7 +24,7 @@ class StoreConversionRateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'rate' => 'required|numeric'
         ];
     }
 }

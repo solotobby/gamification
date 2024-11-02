@@ -359,9 +359,9 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
+    {{-- @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
        
-        @include('layouts.resources.validate_currency')  
+        @include('layouts.resources.validate_currency')   --}}
 
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")

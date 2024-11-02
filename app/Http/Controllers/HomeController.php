@@ -481,7 +481,6 @@ class HomeController extends Controller
 
     public function selectBankInformation()
     {
-
         $bankList = bankList();
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
         $otp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();

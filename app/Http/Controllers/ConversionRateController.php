@@ -37,7 +37,12 @@ class ConversionRateController extends Controller
      */
     public function store(StoreConversionRateRequest $request)
     {
-        return $request;
+        if($request->from == $request->to){
+            return back()->with('error', 'You cannot create the same currency variation');
+        }
+
+        $created = ConversionRate::create(['from' => $request->from, 'to' => $request->to, 'rate' => $request->rate, 'amount' => 0]);
+        return back()->with('success', 'Currency variation created Successfully');
     }
 
     /**
@@ -73,11 +78,11 @@ class ConversionRateController extends Controller
     {
         $conversionRate = ConversionRate::find($request->id);
         $conversionRate->update([
-            'amount' => $request->rate,
-            'referral_commission' => $request->referral_commission,
-            'upgrade_fee' => $request->upgrade_fee,
-            'priotize' => $request->priotize,
-            'allow_upload' => $request->allow_upload,
+            'rate' => $request->rate,
+            // 'referral_commission' => $request->referral_commission,
+            // 'upgrade_fee' => $request->upgrade_fee,
+            // 'priotize' => $request->priotize,
+            // 'allow_upload' => $request->allow_upload,
 
         ]);
         return back()->with('success', 'Rate updated!');

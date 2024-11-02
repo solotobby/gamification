@@ -537,7 +537,7 @@ class CampaignController extends Controller
             $campaign->pending_count += 1;
             $campaign->save();
 
-            setPendingCount($campaign->id);
+            // setPendingCount($campaign->id);
             
             
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member

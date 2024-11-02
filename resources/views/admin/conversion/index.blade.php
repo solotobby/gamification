@@ -33,11 +33,34 @@
                             </p>
                         </div>
                         <div class="col-lg-8 col-xl-5">
+
+                            @if (session('success'))
+                                <div class="alert alert-success" role="alert">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+
                             <div class="mb-4">
                                 <label class="form-label" for="example-text-input">From (Only active currencies)</label>
                                 <select class="form-control" name="from" required>
                                     <option value="">Select Currency</option>
-                                    @foreach (currencyList('NGN',true) as $currency)
+                                    @foreach (currencyList('',true) as $currency)
                                         <option value="{{$currency->code}}">{{$currency->country}} - {{$currency->code}}</option>
                                     @endforeach
                              
@@ -47,7 +70,7 @@
                                 <label class="form-label" for="example-text-input">To (Only active currencies)</label>
                                 <select class="form-control" name="to" required>
                                     <option value="">Select Currency</option>
-                                    @foreach (currencyList('NGN',true) as $currency)
+                                    @foreach (currencyList('',true) as $currency)
                                         <option value="{{$currency->code}}">{{$currency->country}} - {{$currency->code}}</option>
                                     @endforeach
 
@@ -87,9 +110,9 @@
                 <th>From</th>
                 <th>To</th>
                 <th>Rate</th>
-                <th>Upgrade</th>
+                {{-- <th>Upgrade</th>
                 <th>UploadFee</th>
-                <th>PriotizeFee</th>
+                <th>PriotizeFee</th> --}}
                 <th>Status</th>
                 <th></th>
             </tr>
@@ -101,10 +124,10 @@
                     <td>{{ $i++ }}.</td>
                     <td>{{ $s->from }}</td>
                     <td>{{ $s->to }}</td>
-                    <td>{{ $s->amount }}</td>
-                    <td>{{ $s->upgrade_fee }}</td>
+                    <td>{{ $s->rate }}</td>
+                    {{-- <td>{{ $s->upgrade_fee }}</td>
                     <td>{{ $s->allow_upload }}</td>
-                    <td>{{ $s->priotize }}</td>
+                    <td>{{ $s->priotize }}</td> --}}
                     <td>{{ $s->status == 1 ? 'Active' : 'Inactive' }}</td>
                     {{-- <td>{{ $s->updated_at->diffForHumans() }}</td> --}}
                     <td>
@@ -130,9 +153,9 @@
                                     <div class="col-lg-12">
                                         <div class="mb-4">
                                             <label class="form-label" for="example-text-input">Rate</label>
-                                            <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->amount }}">
+                                            <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->rate }}">
                                         </div>
-                                        <div class="mb-4">
+                                        {{-- <div class="mb-4">
                                             <label class="form-label" for="example-text-input">Upgrade Fee</label>
                                             <input type="text" class="form-control" id="example-text-input" name="upgrade_fee" value="{{ $s->upgrade_fee }}">
                                         </div>
@@ -147,7 +170,7 @@
                                         <div class="mb-4">
                                             <label class="form-label" for="example-text-input">Priotize Fee</label>
                                             <input type="text" class="form-control" id="example-text-input" name="priotize" value="{{ $s->priotize }}">
-                                        </div>
+                                        </div> --}}
                                         <input type="hidden" name="id" value="{{ $s->id}}" required>
                                         <div class="mb-4">
                                             <button class="btn btn-primary" type="submit">Update</button>

@@ -111,11 +111,20 @@
         </a>
       </li>
       <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('currency') }}">
+          <i class="nav-main-link-icon fa fa-money-bill-wave"></i>
+          <span class="nav-main-link-name">Currency</span>
+        </a>
+      </li>
+
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('conversions') }}">
           <i class="nav-main-link-icon fa fa-money-bill-wave"></i>
           <span class="nav-main-link-name">Rate</span>
         </a>
       </li>
+
+
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">

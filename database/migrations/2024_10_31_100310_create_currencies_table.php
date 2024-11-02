@@ -17,6 +17,11 @@ class CreateCurrenciesTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('country');
+            $table->string('upgrade_fee')->nullable();
+            $table->string('allow_upload')->nullable();
+            $table->string('priotize')->nullable();
+            $table->string('referral_commission')->nullable();
+            $table->string('min_upgrade_amount')->nullable();
             $table->boolean('is_active');
             $table->timestamps();
         });
