@@ -47,6 +47,12 @@ class Campaign extends Model
             return $this->hasMany(CampaignWorker::class, 'campaign_id');
         }
 
+        public function approvedAttempts(){
+            $this->attempts()->where('status', 'Approved')->get();
+        }
+
+        
+
         // public function completedAll()
         // {
         //     return $this->hasMany(CampaignWorker::class, 'campaign_id');

@@ -216,6 +216,7 @@ class RegisterController extends Controller
                                 setProfile($user); //set profile page 
                                 userLocation('Login');
                             }
+                            setProfile($user);
                           
                             activityLog($user, 'login', $user->name . ' Logged In', 'regular');
                             return redirect('home'); //redirect to home

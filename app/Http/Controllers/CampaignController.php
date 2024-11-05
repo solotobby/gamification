@@ -503,14 +503,12 @@ class CampaignController extends Controller
             return back()->with('error', 'You have comppleted this campaign before');
         }
 
-        // $campaignInfo = Campaign::where('id', $request->campaign_id)->first();
-        // $campCount = $campaignInfo->completed()->where('status', '!=', 'Denied')->count();
-        
-        // if($campCount >= $campaignInfo->number_of_staff){
-        //     return back()->with('error', 'This campaign has reach its maximum workers');
-        // }
-
         $campaign = Campaign::where('id', $request->campaign_id)->first();
+        // $campCount = $campaign->completed()->where('status', '!=', 'Denied')->count();
+
+        // if($campCount >= $campaign->number_of_staff){
+        //     return back()->with('error', 'This campaign has reach its maximum of workers');
+        // }
 
         $data['campaign'] = $campaign;
 
@@ -556,7 +554,8 @@ class CampaignController extends Controller
 
     public function mySubmittedCampaign($id)
     {
-        $work = CampaignWorker::where('id', $id)->first();
+         $work = CampaignWorker::where('id', $id)->first();
+        //  $campaign = $work->campaign->completed_count == $work->campaign->pending_count;
         if(!$work)
         {
             return redirect('home');

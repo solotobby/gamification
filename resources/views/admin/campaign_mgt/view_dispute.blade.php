@@ -178,12 +178,19 @@
             <div class="col-lg-9">
                 @if(@$campaign->is_dispute == true)
                     @if(!$campaign->is_dispute_resolved == true )
-                        <div class="mb-4">
-                            <label class="form-label" for="post-files">Admin Decision</small></label>
-                                <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+                        @if($campaign->campaign->is_completed == true)
+                            <div class="alert alert-success" role="alert">
+                            This campaign has recieved complete Approved responses. 
                         </div>
-                        <button type="submit"  class="btn btn-alt-primary" name="status" value="Approved"> <i class="fa fa-save opacity-50 me-1"></i>Approve Disputed Job</button>
-                        <button type="submit" class="btn btn-alt-danger" name="status" value="Denied"><i class="fa fa-times opacity-50 me-1"></i> Deny Job Abruptly</button>
+                        @else
+                            <div class="mb-4">
+                                <label class="form-label" for="post-files">Admin Decision</small></label>
+                                    <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+                            </div>
+                            <button type="submit"  class="btn btn-alt-primary" name="status" value="Approved"> <i class="fa fa-save opacity-50 me-1"></i>Approve Disputed Job</button>
+                            <button type="submit" class="btn btn-alt-danger" name="status" value="Denied"><i class="fa fa-times opacity-50 me-1"></i> Deny Job Abruptly</button>
+
+                        @endif
                     @else
                         <label class="form-label" for="post-files">Admin Decision</small></label>
                         <i> {!! @$campaign->dispute->response !!} </i>

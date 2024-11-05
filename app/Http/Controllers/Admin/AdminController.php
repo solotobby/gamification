@@ -206,8 +206,8 @@ class AdminController extends Controller
     }
 
     public function campaignDisputesView($id){
-        $workdisputed = CampaignWorker::where('id', $id)->first();
-         
+         $workdisputed = CampaignWorker::where('id', $id)->first();
+        //$workdisputed->campaign;
         // return $disputedJobInfo = DisputedJobs::where('campaign_worker_id', $workdisputed->id)->first();
         return view('admin.campaign_mgt.view_dispute', ['campaign' => $workdisputed]);
     }
