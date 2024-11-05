@@ -258,10 +258,10 @@ Route::post('redeem/safelock', [\App\Http\Controllers\SafeLockController::class,
 
 Route::get('ad/{id}/view', [\App\Http\Controllers\BannerController::class, 'adView']);
 
-// Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
-// Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);
-// Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);
-// Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterController::class, 'makeConversion'])->name('make.conversion');
+Route::get('currency/converter', [\App\Http\Controllers\CurrencyConverterController::class, 'index'])->name('converter');
+Route::get('naira/dollar', [\App\Http\Controllers\CurrencyConverterController::class, 'nairaDollar']);
+Route::get('dollar/naira', [\App\Http\Controllers\CurrencyConverterController::class, 'dollarNaira']);
+Route::post('make/conversion', [\App\Http\Controllers\CurrencyConverterController::class, 'makeConversion'])->name('make.conversion');
 
 //stripe integration
 Route::get('stripe/checkout/success', [\App\Http\Controllers\WalletController::class, 'stripeCheckoutSuccess'])->name('stripe.checkout.success');
