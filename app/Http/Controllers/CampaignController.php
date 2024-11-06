@@ -215,7 +215,7 @@ class CampaignController extends Controller
            return  $list = [ 
                 'id' => $subCate->id,
                 'name' => $subCate->name,
-                'amount' =>  jobCurrencyConverter('NGN', baseCurrency(), $subCate->amount),//number_format($convertedAmount,2),
+                'amount' =>  $subCate->usd,  //jobCurrencyConverter('NGN', baseCurrency(), $subCate->amount),//number_format($convertedAmount,2),
                 'category_id' => $subCate->category_id,
                 '_currency' => $baseCurrency,
                 '_channel' => 'other'
