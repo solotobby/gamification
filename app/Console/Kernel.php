@@ -59,54 +59,54 @@ class Kernel extends ConsoleKernel
         })->dailyAt('22:10');
 
 
-        // $schedule->call(function(){
-        //     $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
+        $schedule->call(function(){
+            $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
         
-        //     $list = [];
-        //     foreach($campaigns as $key => $value){
+            $list = [];
+            foreach($campaigns as $key => $value){
                 
-        //        $c = $value->pending_count + $value->completed_count;
-        //         //$div = $c / $value->number_of_staff;
-        //         // $progress = $div * 100;
+               $c = $value->pending_count + $value->completed_count;
+                //$div = $c / $value->number_of_staff;
+                // $progress = $div * 100;
     
-        //         $list[] = [ 
-        //             'id' => $value->id, 
-        //             'job_id' => $value->job_id, 
-        //             'campaign_amount' => $value->campaign_amount,
-        //             'post_title' => $value->post_title, 
-        //             //'number_of_staff' => $value->number_of_staff, 
-        //             'type' => $value->campaignType->name, 
-        //             'category' => $value->campaignCategory->name,
-        //             //'attempts' => $attempts,
-        //             //'completed' => $c, //$value->completed_count+$value->pending_count,
-        //             'is_completed' => $c >= $value->number_of_staff ? true : false,
-        //             //'progress' => $progress,
-        //             'currency' => $value->currency,
-        //             //'created_at' => $value->created_at
-        //         ];
-        //     }
+                $list[] = [ 
+                    'id' => $value->id, 
+                    'job_id' => $value->job_id, 
+                    'campaign_amount' => $value->campaign_amount,
+                    'post_title' => $value->post_title, 
+                    //'number_of_staff' => $value->number_of_staff, 
+                    'type' => $value->campaignType->name, 
+                    'category' => $value->campaignCategory->name,
+                    //'attempts' => $attempts,
+                    //'completed' => $c, //$value->completed_count+$value->pending_count,
+                    'is_completed' => $c >= $value->number_of_staff ? true : false,
+                    //'progress' => $progress,
+                    'currency' => $value->currency,
+                    //'created_at' => $value->created_at
+                ];
+            }
     
-        //     //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+            //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
     
-        //     // Remove objects where 'is_completed' is true
-        //     $filteredArray = array_filter($list, function ($item) {
-        //         return $item['is_completed'] !== true;
-        //     });
+            // Remove objects where 'is_completed' is true
+            $filteredArray = array_filter($list, function ($item) {
+                return $item['is_completed'] !== true;
+            });
           
-        //     // return $filteredArray;
-        //     $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
-        //     $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
+            // return $filteredArray;
+            $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
+            $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
             
-        //     // Query users registered within last week
-        //     $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+            // Query users registered within last week
+            $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
             
-        //     // $user = User::where('id', 1)->first();
-        //     foreach($usersLastWeek as $user){
-        //         $subject = 'Fresh Campaign';
-        //         Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray)); 
-        //     }
+            // $user = User::where('id', 1)->first();
+            foreach($usersLastWeek as $user){
+                $subject = 'Fresh Campaign';
+                Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray)); 
+            }
            
-        // })->daily(); //does this daily
+        })->daily(); //does this daily
 
         $schedule->call(function(){
             // $yesterday = Carbon::yesterday();
@@ -173,38 +173,38 @@ class Kernel extends ConsoleKernel
 
         })->hourly();
 
-        // $schedule->call(function(){ 
+        $schedule->call(function(){ 
 
-        //     Question::where('option_A', null)->delete();
+            Question::where('option_A', null)->delete();
 
-        // })->daily();
+        })->daily();
 
-        // $schedule->call(function(){
+        $schedule->call(function(){
 
             
-        //     Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
+            Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
 
-        //     // Then, select a random business and set its 'is_live' to true
-        //     $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
-        //     if ($randomBusiness) {
-        //         $randomBusiness->update(['is_live' => true]);
-        //     }
+            // Then, select a random business and set its 'is_live' to true
+            $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
+            if ($randomBusiness) {
+                $randomBusiness->update(['is_live' => true]);
+            }
     
-        //     $user = User::where('id', $randomBusiness->user_id)->first();
-        //     $subject = 'Freebyz Business Promotion - Business Selected';
-        //     $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
+            $user = User::where('id', $randomBusiness->user_id)->first();
+            $subject = 'Freebyz Business Promotion - Business Selected';
+            $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
                 
     
-        //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
     
 
-        //     $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-        //     $subject = 'New Business Promotion selected';
-        //     $content = 'Automatic Business Promotion Selected';
-        //     Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            $subject = 'New Business Promotion selected';
+            $content = 'Automatic Business Promotion Selected';
+            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
 
-        // })->daily();
+        })->daily();
 
 //////////////////////////////////////////////////////////////////////////////////////////
         // $schedule->call(function(){
