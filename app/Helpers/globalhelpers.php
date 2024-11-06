@@ -1740,18 +1740,18 @@ if(!function_exists('filterCampaign')){
             'currency' => $value->currency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
 
-            'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
+            // 'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
             'local_converted_currency' => $baseCurrency,
             'local_converted_currency_code' => $baseCurrency,
 
             'priotized' => $value->approved,
 
-            
+
             'rate' => getRate($from, $to),
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
-            'rate_amount' => $rates * $value->campaign_amount,
+            'local_converted_amount' => $rates * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
     }
