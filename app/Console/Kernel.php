@@ -40,23 +40,23 @@ class Kernel extends ConsoleKernel
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
         //sends campaign to users who registered in the last 1 week 
-        $schedule->call(function(){
+        // $schedule->call(function(){
 
-            \DB::table('wallets')
-            ->where(function($query) {
-                $query->whereNull('base_currency')
-                      ->orWhere('base_currency', 'Naira')
-                      ->orWhere('base_currency', 'Dollar');
-            })
-            ->update([
-                'base_currency' => \DB::raw("CASE 
-                    WHEN base_currency IS NULL THEN 'NGN' 
-                    WHEN base_currency = 'Naira' THEN 'NGN' 
-                    WHEN base_currency = 'Dollar' THEN 'USD' 
-                    ELSE base_currency END")
-            ]);
+        //     \DB::table('wallets')
+        //     ->where(function($query) {
+        //         $query->whereNull('base_currency')
+        //               ->orWhere('base_currency', 'Naira')
+        //               ->orWhere('base_currency', 'Dollar');
+        //     })
+        //     ->update([
+        //         'base_currency' => \DB::raw("CASE 
+        //             WHEN base_currency IS NULL THEN 'NGN' 
+        //             WHEN base_currency = 'Naira' THEN 'NGN' 
+        //             WHEN base_currency = 'Dollar' THEN 'USD' 
+        //             ELSE base_currency END")
+        //     ]);
 
-        })->dailyAt('22:10');
+        // })->dailyAt('22:10');
 
 
         $schedule->call(function(){
