@@ -1784,18 +1784,21 @@ if(!function_exists('filterCampaign')){
 if(!function_exists('jobCurrencyConverter')){
     function jobCurrencyConverter($from, $to, $amount){ 
 
+        if($from == $to){
+            $amountConv = $amount;
+        }
+
         $getRate = getRate($from, $to);
         if($getRate == null){
             $rates = 0;
         }else{
             $rates = $getRate->amount;
         }
+            $amountConv =  $rates * $amount;
+            
+        return number_format($amountConv, 5);
 
-        if($from == $to){
-            $amount = $amount;
-        }
-
-        return number_format($rates * $amount, 5);
+     
     }
 
 
