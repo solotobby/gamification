@@ -75,6 +75,7 @@ class HomeController extends Controller
         dailyVisit('Dashboard');
         if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
+            setWalletBaseCurrency();
         }
 
         // if (auth()->user()->phone == '' || auth()->user()->country == '') {

@@ -109,7 +109,7 @@ if(!function_exists('setWalletBaseCurrency')){
         $location = getLocation();
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
         if($wall->base_currency_set != 1){
-            $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+            $wall->base_currency = $location == "Nigeria" ? 'NGN' : 'USD';
             $wall->save();
         }
         
@@ -1767,7 +1767,7 @@ if(!function_exists('jobCurrencyConverter')){
     function jobCurrencyConverter($from, $to, $amount){ 
         $from_ = '';
         $to_ = '';
-        
+
         if($from == 'Naira'){
             $from_ = 'NGN';
         }elseif($from == 'Dollar'){

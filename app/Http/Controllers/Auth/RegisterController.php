@@ -120,7 +120,7 @@ class RegisterController extends Controller
 
         $location = getLocation(); //get user location dynamically
         $wall = Wallet::where('user_id', $user->id)->first();
-        $wall->base_currency = $location == "Nigeria" ? 'Naira' : 'Dollar';
+        $wall->base_currency = $location == "Nigeria" ? 'NGN' : 'USD';
         $wall->base_currency_set = $location == "Nigeria" ? true : false;
         $wall->save();
 
