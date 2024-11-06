@@ -1738,6 +1738,11 @@ if(!function_exists('filterCampaign')){
             'local_converted_currency_code' => $baseCurrency,
 
             'priotized' => $value->approved,
+
+            'rate' => getRate($from, $to),
+            'from' => $from,
+            'to' => $to,
+            'baseCurrency' => baseCurrency()
             // 'created_at' => $value->created_at
         ];
     }
@@ -1789,12 +1794,47 @@ if(!function_exists('jobCurrencyConverter')){
             }else{
                 $convertedAmount = $getExactConvertationRate->amount * $amount;
             }
-            // $purifiedAmount = $getExactConvertationRate->rate == null ? '0' : $getExactConvertationRate->rate;
-            // $convertedAmount = $purifiedAmount * $amount;
+          
         }
 
-        return number_format($convertedAmount,2);
+        return number_format($convertedAmount,4);
+    }
+}
 
+
+if(!function_exists('getRate')){
+    function getRate($from, $to){ 
+
+        $from_ = '';
+        $to_ = '';
+
+        if($from == 'Naira'){
+            $from_ = 'NGN';
+        }elseif($from == 'Dollar'){
+            $from_ == 'USD';
+        }elseif($to == 'Naira'){
+            $to_ = 'NGN';
+        }elseif($to == 'Dollar'){
+            $to_ = 'USD';
+        }
+
+        return $getExactConvertationRate = ConversionRate::where(['from' => $from, 'to' => $to])->first();
+        // return [$from, $to];
+        // if($from_ == $to_){
+        //     $convertedAmount = $amount;
+        // }else{
+        //     // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
+            
+        //     $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
+        //     if($getExactConvertationRate == null){
+        //         $convertedAmount = null;
+        //     }else{
+        //         $convertedAmount = $getExactConvertationRate->amount * $amount;
+        //     }
+          
+        // }
+
+        // return number_format($convertedAmount,4);
 
     }
 }
