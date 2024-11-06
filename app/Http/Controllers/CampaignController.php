@@ -389,9 +389,9 @@ class CampaignController extends Controller
             if($getCampaign){
 
                 $baseCurrency = baseCurrency();
-                $minUpgradeFee =  currencyParameter($baseCurrency);
+                $minUpgradeFee =  currencyParameter($baseCurrency)->min_upgrade_amount;
 
-                return [$baseCurrency, $minUpgradeFee];
+                // return [$baseCurrency, $minUpgradeFee];
 
                 if($baseCurrency == 'NGN' || $baseCurrency == 'Naira'){
                     if(auth()->user()->is_verified){
