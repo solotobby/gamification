@@ -1875,7 +1875,7 @@ if(!function_exists('currencyParameter')){
             $new_currency = null;
         }
     
-        return $currency = Currency::where('code', $new_currency)->first();
+        return $currency = Currency::where('code', $currency)->first();
   
 
     }
