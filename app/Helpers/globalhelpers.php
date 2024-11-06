@@ -292,7 +292,7 @@ if(!function_exists('checkWalletBalance')){
             }else{
                 return false;
             }
-            
+
        }
        
     }
@@ -1765,13 +1765,25 @@ if(!function_exists('filterCampaign')){
 
 if(!function_exists('jobCurrencyConverter')){
     function jobCurrencyConverter($from, $to, $amount){ 
+        $from_ = '';
+        $to_ = '';
+        
+        if($from == 'Naira'){
+            $from_ = 'NGN';
+        }elseif($from == 'Dollar'){
+            $from_ == 'USD';
+        }elseif($to == 'Naira'){
+            $to_ = 'NGN';
+        }elseif($to == 'Dollar'){
+            $to_ = 'USD';
+        }
         // return [$from, $to];
-        if($from == $to){
+        if($from_ == $to_){
             $convertedAmount = $amount;
         }else{
             // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
             
-            $getExactConvertationRate = ConversionRate::where(['from' => $from, 'to' => $to])->first();
+            $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
             if($getExactConvertationRate == null){
                 $convertedAmount = null;
             }else{
