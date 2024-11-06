@@ -389,7 +389,7 @@ class CampaignController extends Controller
             if($getCampaign){
 
                 $baseCurrency = baseCurrency();
-                $minUpgradeFee =  currencyParameter($baseCurrency)->min_upgrade_amount;
+                $minUpgradeFee =  currencyParameter($baseCurrency);
 
                 return [$baseCurrency, $minUpgradeFee];
 
