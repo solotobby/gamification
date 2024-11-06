@@ -52,11 +52,13 @@
                       {{ $list->campaign->post_title }}
                     </td>
                     <td>
-                      @if($list->campaign->currency == 'NGN')
+                      {{-- @if($list->campaign->currency == 'NGN')
                       &#8358;{{ $list->campaign->campaign_amount }}
                       @else
                       ${{ $list->campaign->campaign_amount }}
-                      @endif
+                      @endif --}}
+                      
+                      {{ @$list->currency }} {{ @$list->amount }}
                     </td>
                     <td>{{ $list->status }}</td>
                     <td><a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-primary btn-sm">

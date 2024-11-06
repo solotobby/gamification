@@ -63,12 +63,13 @@
                       {{ @$list->campaign->post_title }}
                     </td>
                     <td>
-                      @if(@$list->campaign->currency == 'NGN')
+                      {{ @$list->currency }} {{ @$list->amount }}
+                      {{-- @if(@$list->currency == 'NGN')
                         &#8358;{{ @$list->amount }}
                         @else
                         ${{ @$list->amount }}
-                      @endif
-                     </td>
+                      @endif --}}
+                    </td>
                       <td>
                        
 
@@ -85,6 +86,7 @@
                         <code>{!! @$list->reason !!}</code>
                      </td>
                      <td>
+                      @if(@$list->status == 'Denied')
                       @if($list->updated_at >= '2024-01-16 14:07:14')
                         @if($list->is_dispute_resolved == false)
                             <a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-secondary btn-sm">Dispute</a>
@@ -93,6 +95,9 @@
                         @endif
                       @else
                         <a class="btn btn-secondary btn-sm disabled">No Dispute</a>
+                      @endif
+                      @else
+                        <a class="btn btn-secondary btn-sm disabled">Pending</a>
                       @endif
                      </td>
                      <td>

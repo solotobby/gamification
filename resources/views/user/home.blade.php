@@ -289,24 +289,26 @@
         </div>
       </div>  --}}
 
-      @if($promotion)
-      <a href="{{ url('m/'.$promotion->business_link) }}" target="_blank">
-        <div class="block block-rounded block-fx-pop mb-2">
-          <div class="block-content block-content-full border-start border-3 border-dark">
-            <div class="d-md-flex justify-content-md-between align-items-md-center">
-              <div class="col-12">
-                <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> <small><i style="color: goldenrod">Freebyz Business Promotion</i></small></div>
-                <h3 class="h4 fw-bold mb-1" style="color: #191918">{{ $promotion->business_name}}</h3>
-                <p class="fs-sm text-muted">
-                  
-                    {!! $promotion->description !!}
-                </p>
-              </div>
-              
-            </div>
-          </div>
-        </div> 
-      </a> 
+      @if(auth()->user()->wallet->base_currency == 'Naira')
+          @if($promotion)
+              <a href="{{ url('m/'.$promotion->business_link) }}" target="_blank">
+                <div class="block block-rounded block-fx-pop mb-2">
+                  <div class="block-content block-content-full border-start border-3 border-dark">
+                    <div class="d-md-flex justify-content-md-between align-items-md-center">
+                      <div class="col-12">
+                        <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> <small><i style="color: goldenrod">Freebyz Business Promotion</i></small></div>
+                        <h3 class="h4 fw-bold mb-1" style="color: #191918">{{ $promotion->business_name}}</h3>
+                        <p class="fs-sm text-muted">
+                          
+                            {!! $promotion->description !!}
+                        </p>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div> 
+              </a> 
+          @endif
       @endif
 
     
@@ -359,9 +361,9 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    {{-- @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
+    @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
        
-        @include('layouts.resources.validate_currency')   --}}
+        @include('layouts.resources.validate_currency')  
 
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "Naira")
@@ -444,7 +446,7 @@ function myFunction() {
                                             <div class="d-md-flex justify-content-md-between align-items-md-center">
                                                 <div class="col-12">
                                                     <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
-                                                    <p class="fs-sm text-muted">${value.currency_code}${value.campaign_amount}</p>
+                                                    <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
                                                     <div class="mb-0">
                                                         <div class="progress mb-1" style="height: 6px;">
                                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>

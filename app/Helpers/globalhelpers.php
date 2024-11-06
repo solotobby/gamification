@@ -267,14 +267,14 @@ if(!function_exists('systemNotification')){
 if(!function_exists('checkWalletBalance')){
     function checkWalletBalance($user, $type, $amount){
         
-       if($type == 'Naira' || 'NGN'){
+       if($type == 'Naira' || $type == 'NGN'){
         $wallet =  Wallet::where('user_id', $user->id)->first();
             if((int) $wallet->balance >= $amount){
                 return true;
             }else{
                 return false;
             }
-       }elseif($type == 'Dollar' || $type = 'USD'){
+       }elseif($type == 'Dollar' || $type == 'USD'){
         
         $wallet =  Wallet::where('user_id', $user->id)->first();
         
@@ -285,13 +285,14 @@ if(!function_exists('checkWalletBalance')){
             }
 
        }else{
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+           $wallet =  Wallet::where('user_id', $user->id)->first();
             
             if((int) $wallet->base_currency_balance >= $amount){
                 return true;
             }else{
                 return false;
             }
+            
        }
        
     }
@@ -992,6 +993,118 @@ if(!function_exists('currentLocation')){
     }
 
 }
+if(!function_exists('userForeignUpgrade')){
+    function userForeignUpgrade($user, $currency, $amount, $referral_amount=null){ 
+
+        $debitWallet = debitWallet($user, $currency, $amount);
+        if($debitWallet){
+            $getUser = User::where('id', $user->id)->first();    
+            $getUser->is_verified = 1;
+            $getUser->save();
+
+             $usd_Verified =  Usdverified::create(['user_id'=> $getUser->id]);
+
+            $ref = time();
+
+            $tx = PaymentTransaction::create([
+                'user_id' => $getUser->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $amount,
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => 'flutterwave',
+                'type' => 'upgrade_payment',
+                'tx_type' => 'Debit',
+                'description' => 'Ugrade Payment - '.$currency
+            ]);
+
+            $referee = Referral::where('user_id',  $getUser->id)->first();
+
+            if($referee){
+
+
+                $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+                if($wallet->base_currency == 'Naira'){
+                    $baseCur = 'NGN';
+                }elseif($wallet->base_currency == 'Dollar'){
+                    $baseCur = 'USD';
+                }else{
+                    $baseCur = $wallet->base_currency;
+                }
+
+                //convert the referral commission to the referrer base currency and credit the wallet
+                $referral_converted_amount = jobCurrencyConverter($currency, $baseCur, $referral_amount);
+
+                $referralInfo = User::find($referee->referee_id);
+                
+                 creditWallet($referralInfo, $baseCur, $referral_converted_amount);
+
+                $usd_Verified->referral_id = $referee->referee_id;
+                $usd_Verified->is_paid = true;
+                $usd_Verified->amount = $referral_converted_amount;
+                $usd_Verified->save();
+
+                ///Transactions
+             $ref_tx = PaymentTransaction::create([
+                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $referral_converted_amount,
+                    'status' => 'successful',
+                    'currency' => $baseCur,
+                    'channel' => 'paystack',
+                    'type' => 'foreign_referer_bonus',
+                    'tx_type' => 'Credit',
+                    'description' => $baseCur.' Referral Bonus from '.$getUser->name
+                ]);
+
+            }else{
+
+                $walletAdmin = Wallet::where('user_id', 1)->first();
+
+                if($walletAdmin->base_currency == 'Naira'){
+                    $baseCur = 'NGN';
+                }elseif($walletAdmin->base_currency == 'Dollar'){
+                    $baseCur = 'USD';
+                }else{
+                    $baseCur = $walletAdmin->base_currency;
+                }
+                $referral_converted_amount = jobCurrencyConverter($currency, $baseCur, $referral_amount);
+
+                $referralInfo = User::find($referee->referee_id);
+                
+                creditWallet($referralInfo, $baseCur, $referral_converted_amount);
+
+                $ref_tx = PaymentTransaction::create([
+                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $referral_converted_amount,
+                    'status' => 'successful',
+                    'currency' => $baseCur,
+                    'channel' => 'flutterwave',
+                    'type' => 'direct_foreign_referer_bonus',
+                    'tx_type' => 'Credit',
+                    'description' => $baseCur.' Referral Bonus from '.$getUser->name
+                ]);
+
+            }
+
+            systemNotification($getUser, 'success', 'User Verification',  $getUser->name.' was verified');
+            $name = $getUser->name;
+            activityLog($getUser, 'foreign_account_verification', $name .' account verification', 'regular');
+            
+            return [$usd_Verified, $getUser, $tx, $ref_tx];
+
+
+        }else{
+            return false;
+        }
+
+    }
+}
+
 
 if(!function_exists('userDollaUpgrade')){
     function userDollaUpgrade($user){ 
@@ -1488,88 +1601,103 @@ if(!function_exists('filterCampaign')){
         $jobfilter = '';
         $campaigns = '';
 
-    if($user){
-        $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
-    }
+    // if($user){
+    //     $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
+    // }
 
-     
+    $baseCurrency = $user->wallet->base_currency;
 
-
-
-        //  $baseCurrency = $user->wallet->base_currency;
-
-        // if($categoryID == 0){
-        //     ///without filter
-        //     $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-        // }else{
-        //     //with filter
-        //     $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-        // }
-   
-    if($user->USD_verified){ //if user is usd verified, they see all jobs
-
-        if($categoryID == 0){
-            ///without filter
-            // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-
-            $campaigns = Campaign::where('status', 'Live')
-                ->where('is_completed', false)
-                ->whereNotIn('id', function($query) use ($user) {
-                
-                    $query->select('campaign_id')
-                    ->from('campaign_workers')
-                    ->where('user_id', $user->id);
-                
-            })->orderBy('created_at', 'DESC')->get();
-
-        }else{
-            //with filter
-            // $campaigns = Campaign::where('status', 'Live')->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-            $campaigns = Campaign::where('status', 'Live')
-                ->where('is_completed', false)
-                ->where('campaign_type', $categoryID)
-                ->whereNotIn('id', function($query) use ($user) {
-                
-                    $query->select('campaign_id')
-                    ->from('campaign_workers')
-                    ->where('user_id', $user->id);
-                
-            })->orderBy('created_at', 'DESC')->get();
-        }
         
+    // if($user->USD_verified){ //if user is usd verified, they see all jobs
+
+    //     if($categoryID == 0){
+    //         ///without filter
+    //         // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
+    //         $campaigns = Campaign::where('status', 'Live')
+    //             ->where('is_completed', false)
+    //             ->whereNotIn('id', function($query) use ($user) {
+                
+    //                 $query->select('campaign_id')
+    //                 ->from('campaign_workers')
+    //                 ->where('user_id', $user->id);
+                
+    //         })->orderBy('created_at', 'DESC')->get();
+
+    //     }else{
+    //         //with filter
+    //         $campaigns = Campaign::where('status', 'Live')
+    //             ->where('is_completed', false)
+    //             ->where('campaign_type', $categoryID)
+    //             ->whereNotIn('id', function($query) use ($user) {
+                
+    //                 $query->select('campaign_id')
+    //                 ->from('campaign_workers')
+    //                 ->where('user_id', $user->id);
+                
+    //         })->orderBy('created_at', 'DESC')->get();
+    //     }
+        
+    // }else{
+    //     if($categoryID == 0){
+            
+    //         $campaigns = Campaign::where('status', 'Live')
+    //             ->where('is_completed', false)
+    //             ->where('currency', $jobfilter)
+    //             ->whereNotIn('id', function($query) use ($user) {
+                
+    //                 $query->select('campaign_id')
+    //                 ->from('campaign_workers')
+    //                 ->where('user_id', $user->id);
+                
+    //         })->orderBy('created_at', 'DESC')->get();
+
+
+    //     }else{
+    //          $campaigns = Campaign::where('status', 'Live')
+    //             ->where('is_completed', false)
+    //             ->where('currency', $jobfilter)
+    //             ->where('campaign_type', $categoryID)
+    //             ->whereNotIn('id', function($query) use ($user) {
+                
+    //                 $query->select('campaign_id')
+    //                         ->from('campaign_workers')
+    //                         ->where('user_id', $user->id);
+                
+    //         })->orderBy('created_at', 'DESC')->get();
+    //     }
+
+    // }
+
+    if($categoryID == 0){
+        ///without filter
+       
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
+
     }else{
-        if($categoryID == 0){
-            // $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-
-            $campaigns = Campaign::where('status', 'Live')
-                ->where('is_completed', false)
-                ->where('currency', $jobfilter)
-                ->whereNotIn('id', function($query) use ($user) {
-                
-                    $query->select('campaign_id')
-                    ->from('campaign_workers')
-                    ->where('user_id', $user->id);
-                
-            })->orderBy('created_at', 'DESC')->get();
-
-
-        }else{
-            // $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('campaign_type', $categoryID)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-            $campaigns = Campaign::where('status', 'Live')
-                ->where('is_completed', false)
-                ->where('currency', $jobfilter)
-                ->where('campaign_type', $categoryID)
-                ->whereNotIn('id', function($query) use ($user) {
-                
-                    $query->select('campaign_id')
-                            ->from('campaign_workers')
-                            ->where('user_id', $user->id);
-                
-            })->orderBy('created_at', 'DESC')->get();
-        }
-
+        //with filter
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->where('campaign_type', $categoryID)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
     }
-  
+
+    // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
     $list = [];
     foreach($campaigns as $key => $value){
         $c = $value->pending_count + $value->completed_count;//
@@ -1577,16 +1705,16 @@ if(!function_exists('filterCampaign')){
         $progress = $div * 100;
 
         //jobCurrency 
-        // $from = $value->currency; //from
-        // $to = $baseCurrency; //to
+        $from = $value->currency; //from
+        $to = $baseCurrency; //to
 
-        // if($value->currency == 'NGN'){
-        //     $currencyCode = "&#8358";
-        // }elseif($value->currency == 'USD'){
-        //     $currencyCode = '$';
-        // }else{
-        //     $currencyCode = $baseCurrency;
-        // }
+        if($value->currency == 'NGN'){
+            $currencyCode = "&#8358";
+        }elseif($value->currency == 'USD'){
+            $currencyCode = '$';
+        }else{
+            $currencyCode = $baseCurrency;
+        }
 
         $list[] = [ 
             'id' => $value->id, 
@@ -1602,11 +1730,12 @@ if(!function_exists('filterCampaign')){
             'progress' => $progress,
 
             'campaign_amount' => $value->campaign_amount,
-            'converted_amount' => '0', //jobCurrencyConverter($from, $to, $value->campaign_amount),
             'currency' => $value->currency,
-            // 'converted_currency' => $baseCurrency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
-            // 'converted_currency_code' => $baseCurrency,
+
+            'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
+            'local_converted_currency' => $baseCurrency,
+            'local_converted_currency_code' => $baseCurrency,
 
             'priotized' => $value->approved,
             // 'created_at' => $value->created_at
@@ -1644,9 +1773,9 @@ if(!function_exists('jobCurrencyConverter')){
             
             $getExactConvertationRate = ConversionRate::where(['from' => $from, 'to' => $to])->first();
             if($getExactConvertationRate == null){
-                $convertedAmount = 0;
+                $convertedAmount = null;
             }else{
-                $convertedAmount = $getExactConvertationRate->rate * $amount;
+                $convertedAmount = $getExactConvertationRate->amount * $amount;
             }
             // $purifiedAmount = $getExactConvertationRate->rate == null ? '0' : $getExactConvertationRate->rate;
             // $convertedAmount = $purifiedAmount * $amount;
@@ -1654,6 +1783,15 @@ if(!function_exists('jobCurrencyConverter')){
 
         return number_format($convertedAmount,2);
 
+
+    }
+}
+
+if(!function_exists('currencyParameter')){
+    function currencyParameter($currency){ 
+
+        return $currency = Currency::where('code', $currency)->first();
+  
 
     }
 }
@@ -1785,11 +1923,27 @@ if(!function_exists('viewCampaign')){
             $data['current_user_id'] = auth()->user()->id;
             $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
             $data['attempts'] = $campaign->completed()->count();
+            $data['local_converted_amount'] = jobCurrencyConverter($campaign->currency, baseCurrency() , $campaign->campaign_amount);
+            $data['local_converted_currency'] = baseCurrency();
             return $data;
        }else{
             return false;
        }
 
+    }
+}
+
+if(!function_exists('baseCurrency')){
+    function baseCurrency($user=null){ 
+       
+        if($user == null){
+            $user = Auth::user();
+            return $user->wallet->base_currency;
+        }else{
+            $user = User::find($user->id);
+            return $user->wallet->base_currency;
+        }
+        
     }
 }
 

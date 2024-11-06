@@ -186,6 +186,7 @@ Route::get('upgrade/full/{amount}', [\App\Http\Controllers\UserController::class
 Route::get('complete/upgrade', [\App\Http\Controllers\UserController::class, 'completeUpgrade']);
 
 Route::get('make/payment', [\App\Http\Controllers\UserController::class, 'makePayment'])->name('make.payment');
+Route::get('make/payment/foreign', [\App\Http\Controllers\UserController::class, 'makeUpgradeForeign'])->name('make.payment.foreign');
 Route::get('upgrade/payment', [\App\Http\Controllers\UserController::class, 'upgradeCallback']);
 Route::get('make/payment/wallet', [\App\Http\Controllers\UserController::class, 'makePaymentWallet'])->name('make.payment.wallet');
 //otp

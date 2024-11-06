@@ -41,7 +41,7 @@ class ConversionRateController extends Controller
             return back()->with('error', 'You cannot create the same currency variation');
         }
 
-        $created = ConversionRate::create(['from' => $request->from, 'to' => $request->to, 'rate' => $request->rate, 'amount' => 0]);
+        $created = ConversionRate::create(['from' => $request->from, 'to' => $request->to, 'rate' => $request->rate, 'amount' => $request->rate]);
         return back()->with('success', 'Currency variation created Successfully');
     }
 
@@ -78,7 +78,7 @@ class ConversionRateController extends Controller
     {
         $conversionRate = ConversionRate::find($request->id);
         $conversionRate->update([
-            'rate' => $request->rate,
+            'amount' => $request->rate,
             // 'referral_commission' => $request->referral_commission,
             // 'upgrade_fee' => $request->upgrade_fee,
             // 'priotize' => $request->priotize,

@@ -181,6 +181,29 @@ class UserController extends Controller
 
     }
 
+    public function makeUpgradeForeign(){
+        $user = Auth::user();
+        $currency = baseCurrency();
+        $parameter = currencyParameter($currency);
+
+        $checkWalletBalance = checkWalletBalance($user, $currency, $parameter->upgrade_fee);
+        if($checkWalletBalance){
+         
+                $upgrade = userForeignUpgrade($user, $currency, $parameter->upgrade_fee, $parameter->referral_commission);
+
+                if($upgrade){
+                    Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
+                    return back()->with('success', 'Upgrade Successful');
+                }else{
+                    return back()->with('error', 'An Error occoured while upgrading your Account');
+                }
+         
+        }else{
+            return back()->with('error', 'You do not have enough funds in your wallet, kindly top up your wallet');
+        }
+
+    }
+
     public function makePayment()
     {
        $user = Auth::user();
