@@ -1716,6 +1716,13 @@ if(!function_exists('filterCampaign')){
             $currencyCode = $baseCurrency;
         }
 
+        if(getRate($from, $to) == null){
+            $rates = 0;
+        }else{
+            $rates = getRate($from, $to)->amount;
+        }
+
+
         $list[] = [ 
             'id' => $value->id, 
             'job_id' => $value->job_id, 
@@ -1739,11 +1746,12 @@ if(!function_exists('filterCampaign')){
 
             'priotized' => $value->approved,
 
+            
             'rate' => getRate($from, $to),
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
-            'rate' => getRate($from, $to)->amount * $value->campaign_amount,
+            'rate_amount' => $rates * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
     }
