@@ -12,7 +12,7 @@
         </a>
       </li>
 
-      @if(auth()->user()->wallet->base_currency == 'Naira')
+      @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
         <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('fastest/finger') }}">
             <i class="nav-main-link-icon fa fa-fingerprint"></i>
@@ -87,7 +87,7 @@
  --}}
 
 
-      @if(auth()->user()->wallet->base_currency == 'Naira')
+      @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
 
         <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('safelock') }}">
@@ -285,7 +285,7 @@
         </a>
       </li> --}}
 
-      @if(auth()->user()->wallet->base_currency == 'Naira')
+      @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
        <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('badge') }}">
           <i class="nav-main-link-icon si si-badge"></i>
