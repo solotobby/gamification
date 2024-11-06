@@ -385,7 +385,7 @@ class CampaignController extends Controller
             abort(400);
         }
 
-         $getCampaign = viewCampaign($job_id);
+        $getCampaign = viewCampaign($job_id);
             if($getCampaign){
 
                 if($getCampaign->currency == 'USD'){

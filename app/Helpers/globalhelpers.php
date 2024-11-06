@@ -1786,16 +1786,18 @@ if(!function_exists('jobCurrencyConverter')){
 
         if($from == $to){
             $amountConv = $amount;
+        }else{
+            $getRate = getRate($from, $to);
+            if($getRate == null){
+                $rates = 0;
+            }else{
+                $rates = $getRate->amount;
+            }
+                $amountConv =  $rates * $amount;
         }
 
-        $getRate = getRate($from, $to);
-        if($getRate == null){
-            $rates = 0;
-        }else{
-            $rates = $getRate->amount;
-        }
-            $amountConv =  $rates * $amount;
-            
+        
+
         return number_format($amountConv, 5);
 
      
