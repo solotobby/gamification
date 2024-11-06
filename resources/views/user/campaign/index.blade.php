@@ -65,18 +65,22 @@
                         {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }}
                      </td>
                     <td>
-                      @if($list->currency == 'NGN')
+                      {{-- @if($list->currency == 'NGN')
                         &#8358;{{ $list->campaign_amount }}
                         @else
                          ${{ $list->campaign_amount }}
-                        @endif
+                        @endif --}}
+                        {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}
+                        {{-- {{$list->currency}} {{ $list->campaign_amount }} --}}
                     </td>
                       <td>
-                        @if($list->currency == 'NGN')
+                        {{-- @if($list->currency == 'NGN')
                         &#8358;{{ number_format($list->total_amount) }}
                         @else
                         ${{ number_format($list->total_amount, 2) }}
-                        @endif
+                        @endif --}}
+
+                        {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
                       </td>
                      
                    
@@ -107,13 +111,16 @@
 
                         <div class="modal-body pb-1">
                           Current Number of Workers - {{ $list->number_of_staff }} <br>
-                          @if($list->currency == 'NGN')
-                          Value per Job  - &#8358;{{ number_format($list->campaign_amount) }} <br>
+                          Value per Job  - {{$list->currency}} {{ number_format($list->campaign_amount) }} <br>
+                          Total Value of Job  - {{$list->currency}} {{ number_format($list->total_amount) }} <br>
+
+                          {{-- @if($list->currency == 'NGN')
+                          Value per Job  - {{$list->currency}} {{ number_format($list->campaign_amount) }} <br>
                           Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
                           @else
                           Value per Job  - ${{ number_format($list->campaign_amount, 2) }} <br>
                           Total Value of Job  - ${{ number_format($list->total_amount, 2) }} <br>
-                          @endif
+                          @endif --}}
                           <hr>
                           <form action="{{ route('addmore.workers') }}" method="POST">
                             @csrf

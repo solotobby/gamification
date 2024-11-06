@@ -120,7 +120,7 @@
         @endif
 
         <span class="m-2 d-inline-block">
-          @if(auth()->user()->wallet->base_currency == 'Naira')
+          @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
               @if(auth()->user()->is_verified == '0')
 
                   {{-- <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
@@ -163,11 +163,24 @@
                 <i class="fa fa-link opacity-50 me-1"></i> Verification Completed
               </a>
               @endif
-          @else
+
+          @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD')
           
               @if(!auth()->user()->USD_verified)
                 <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
                   <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Wallet Balance - $5
+                </a>
+              @else
+                  <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">
+                    <i class="fa fa-link opacity-50 me-1"></i> Verification Completed
+                  </a>
+              @endif
+
+              @else
+
+              @if(!auth()->user()->USD_verified)
+                <a href="{{ route('make.payment.foreign') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
+                  <i class="fa fa-link opacity-50 me-1"></i>Get Verified Using Wallet Balance - {{ baseCurrency() }} {{ currencyParameter( baseCurrency() )->upgrade_fee }}
                 </a>
               @else
                   <a class="btn btn-hero btn-primary disabled" href="javascript:void(0)" data-toggle="click-ripple">

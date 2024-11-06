@@ -116,11 +116,12 @@
             <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto" href="">
               <div class="block-content block-content-full px-5 py-4">
                 <div class="fs-2 fw-semibold text-white">
-                  @if($campaign['currency'] == 'NGN')
-                    &#8358;{{$campaign['campaign_amount']}}<span class="text-white-50"></span>
+                  {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
+                  {{-- @if($campaign['currency'] == 'NGN')
+                    &#8358;{{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
                     @else
-                    ${{$campaign['campaign_amount']}}<span class="text-white-50"></span>
-                  @endif
+                    {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
+                  @endif --}}
                 </div>
                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Job</div>
                 {{-- <span class="btn btn-hero btn-primary">
@@ -172,11 +173,12 @@
                   <i class="fa fa-money-check-alt"></i>
                 </span>
                 <div class="fw-semibold">Amount per Campaign</div>
-                @if($campaign['currency'] == 'NGN')
+                <div class="text-muted"> {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}</div>
+                {{-- @if($campaign['currency'] == 'NGN')
                 <div class="text-muted">&#8358;{{$campaign['campaign_amount']}}</div>
                 @else
                 <div class="text-muted">${{$campaign['campaign_amount']}}</div>
-                @endif
+                @endif --}}
               </li>
               <li>
                 <span class="fa-li text-primary">
@@ -185,11 +187,11 @@
                 <div class="fw-semibold">Number of Worker</div>
                 <div class="text-muted">{{$campaign['number_of_staff']}}</div>
               </li>
-              @if($campaign['user_id'] == auth()->user()->id)
+              {{-- @if($campaign['user_id'] == auth()->user()->id)
                 <li>
                   <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}"> <i class="fa fa-plus opacity-50 me-1"></i> Add More Workers</button>
                 </li>
-              @endif
+              @endif --}}
             </ul>
           </div>
         </div>
@@ -204,12 +206,12 @@
 
               <div class="modal-body pb-1">
                 Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
-                Current Value per Job  - {{ number_format($campaign['campaign_amount']) }} <br>
-                @if($campaign['currency'] == 'NGN')
+                Current Value per Job  - {{ number_format($campaign['local_converted_amount']) }} <br>
+                {{-- @if($campaign['currency'] == 'NGN')
                 Current Value  - &#8358;{{ number_format($campaign['total_amount']) }} <br>
                 @else
                 Current Value  - ${{ number_format($campaign['total_amount'],2) }} <br>
-                @endif
+                @endif --}}
                 <hr>
                 <form action="{{ route('addmore.workers') }}" method="POST">
                   @csrf
@@ -218,7 +220,7 @@
                         <input class="form-control" name="new_number" type="number" required>
                   </div>
                   <input type="hidden" name="id" value="{{ $campaign['job_id'] }}">
-                  <input type="hidden" name="amount" value="{{ $campaign['campaign_amount'] }}">
+                  <input type="hidden" name="amount" value="{{$campaign['local_converted_amount']}}">
                   <div class="mb-4">
                     <button class="btn btn-primary" type="submit">Add</button>
                   </div>
@@ -413,7 +415,7 @@
                                           </div>
                                           @endif
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                          <input type="hidden" name="amount" value="{{ $campaign->campaign_amount }}">
+                                          <input type="hidden" name="amount" value="{{$campaign['local_converted_amount']}}">
                                           <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
                                           <div class="mb-2">
                                             <input type="checkbox" name="validate" required class="">

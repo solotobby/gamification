@@ -62,11 +62,13 @@
                       {{ @$list->campaign->post_title }}
                     </td>
                     <td>
-                      @if(@$list->campaign->currency == 'NGN')
+                      {{-- @if(@$list->campaign->currency == 'NGN')
                         &#8358;{{ @$list->amount }}
                         @else
                         ${{ @$list->amount }}
-                      @endif
+                      @endif --}}
+                      
+                      {{ @$list->currency }} {{ @$list->amount }}
                      </td>
                       <td>
                          {{ @$list->status }}
