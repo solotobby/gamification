@@ -215,6 +215,7 @@ class RegisterController extends Controller
                             if(env('APP_ENV') == 'production'){
                                 setProfile($user); //set profile page 
                                 userLocation('Login');
+                                setWalletBaseCurrency();
                             }
                             // setProfile($user);
                           
