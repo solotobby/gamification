@@ -1787,6 +1787,10 @@ if(!function_exists('jobCurrencyConverter')){
             $rates = $getRate->amount;
         }
 
+        if($from == $to){
+            $amount = $amount;
+        }
+
         return number_format($rates * $amount, 5);
     }
 
