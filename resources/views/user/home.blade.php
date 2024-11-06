@@ -41,7 +41,7 @@
                         @else
                             ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
                         @endif --}}
-
+{{-- 
                         @if(auth()->user()->wallet->base_currency == "Naira")
                             &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
                         @elseif(auth()->user()->wallet->base_currency == 'GHS')
@@ -61,9 +61,16 @@
                         @else 
 
                             ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
-                        @endif
+                        @endif --}}
 
 
+                        @if(baseCurrency() == 'Naira' || baseCurrency() == 'NGN')
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }}
+                         @elseif(baseCurrency() == 'Dollar' || baseCurrency() == 'USD')
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
+                         @else
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+                         @endif
                      
                     </p>
                     <p class="fs-sm fw-semibold text-white-75 mb-0">
