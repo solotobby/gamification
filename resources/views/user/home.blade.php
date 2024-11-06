@@ -109,7 +109,7 @@
 
 
       <div class="col-12">
-          @if(auth()->user()->wallet->base_currency == 'Naira')
+          @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
 
             @if(auth()->user()->is_verified)
                   <div class="alert alert-warning">
@@ -159,7 +159,7 @@
             <table class="table table-borderless table-vcenter mb-0">
                 <div class="input-group">
                   {{-- <span class="form-control form-control-alt">Coming Soon!</span>  --}}
-                  @if(auth()->user()->wallet->base_currency == "Naira")
+                  @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
       
                       @if(auth()->user()->virtualAccount)
 

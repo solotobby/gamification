@@ -30,7 +30,7 @@
         <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
 
-          @if(auth()->user()->wallet->base_currency == "Naira")
+          @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
               &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
           @elseif(auth()->user()->wallet->base_currency == 'GHS')
               &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
@@ -84,7 +84,7 @@
              
             </div>
             <div class="mb-4">
-              @if(auth()->user()->wallet->base_currency == 'Naira')
+              @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
               <div class="alert alert-info">
                 <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 1min
               </div>
