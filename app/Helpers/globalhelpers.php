@@ -1866,8 +1866,15 @@ if(!function_exists('getRate')){
 
 if(!function_exists('currencyParameter')){
     function currencyParameter($currency){ 
-
-        return $currency = Currency::where('code', $currency)->first();
+        $new_currency = '';
+        if($currency == 'Naira'){
+            $new_currency = 'NGN';
+        }elseif($currency == 'Dollar'){
+            $new_currency == 'USD';
+        }else{
+            $new_currency = null;
+        }
+        return $currency = Currency::where('code', $new_currency)->first();
   
 
     }
