@@ -1747,7 +1747,7 @@ if(!function_exists('filterCampaign')){
             'priotized' => $value->approved,
 
 
-            'rate' => getRate($from, $to),
+            // 'rate' => getRate($from, $to),
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
