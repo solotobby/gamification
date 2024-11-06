@@ -41,7 +41,7 @@
                         @else
                             ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
                         @endif --}}
-
+{{-- 
                         @if(auth()->user()->wallet->base_currency == "Naira")
                             &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
                         @elseif(auth()->user()->wallet->base_currency == 'GHS')
@@ -61,9 +61,16 @@
                         @else 
 
                             ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
-                        @endif
+                        @endif --}}
 
 
+                        @if(baseCurrency() == 'Naira' || baseCurrency() == 'NGN')
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }}
+                         @elseif(baseCurrency() == 'Dollar' || baseCurrency() == 'USD')
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
+                         @else
+                          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+                         @endif
                      
                     </p>
                     <p class="fs-sm fw-semibold text-white-75 mb-0">
@@ -208,20 +215,18 @@
 
         <h4 class="fw-light mb-0">Available Jobs</h4>
 
-         <form action="{{ url('switch/wallet') }}" method="POST">
+         {{-- <form action="{{ url('switch/wallet') }}" method="POST"> --}}
             @csrf
               @if(auth()->user()->wallet->base_currency == 'Naira')
               <input type="hidden" name="currency" value="Dollar">
               <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                 <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch to Dollar
               </button>
-              {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button> --}}
               @else
               <input type="hidden" name="currency" value="Naira">
               <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                 <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch to Naira
               </button>
-              {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button> --}}
               @endif
           </form> 
 
