@@ -41,6 +41,25 @@ class Kernel extends ConsoleKernel
 
         //sends campaign to users who registered in the last 1 week 
         $schedule->call(function(){
+
+            \DB::table('wallets')
+            ->where(function($query) {
+                $query->whereNull('base_currency')
+                      ->orWhere('base_currency', 'Naira')
+                      ->orWhere('base_currency', 'Dollar');
+            })
+            ->update([
+                'base_currency' => \DB::raw("CASE 
+                    WHEN base_currency IS NULL THEN 'NGN' 
+                    WHEN base_currency = 'Naira' THEN 'NGN' 
+                    WHEN base_currency = 'Dollar' THEN 'USD' 
+                    ELSE base_currency END")
+            ]);
+
+        })->dailyAt('22:10');
+
+
+        $schedule->call(function(){
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
         
             $list = [];
@@ -187,7 +206,7 @@ class Kernel extends ConsoleKernel
 
         })->daily();
 
-
+//////////////////////////////////////////////////////////////////////////////////////////
         // $schedule->call(function(){
         //     $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
         //     ->get();
