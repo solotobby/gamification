@@ -69,7 +69,7 @@
                     @endforeach
                     
                     
-                    <option value="USD,Other">Others</option> --}}
+                    <option value="USD,Other">Others</option>
                 </select>
             </div>
             
