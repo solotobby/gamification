@@ -1742,7 +1742,8 @@ if(!function_exists('filterCampaign')){
             'rate' => getRate($from, $to),
             'from' => $from,
             'to' => $to,
-            'baseCurrency' => baseCurrency()
+            'baseCurrency' => baseCurrency(),
+            'rate' => getRate($from, $to)->amount * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
     }
