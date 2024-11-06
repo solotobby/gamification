@@ -37,7 +37,7 @@
             @endif --}}
 
 
-          @if(auth()->user()->wallet->base_currency == "Naira")
+          @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
               &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
           @elseif(auth()->user()->wallet->base_currency == 'GHS')
               &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
@@ -120,7 +120,7 @@
                   <div class="mb-4">
                     <div class="input-group">
                         <span class="input-group-text">
-                          @if(auth()->user()->wallet->base_currency == "Naira")
+                          @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
                               &#8358;
                           @elseif(auth()->user()->wallet->base_currency == 'GHS')
                               &#8373;
