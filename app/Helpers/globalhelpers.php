@@ -1834,7 +1834,7 @@ if(!function_exists('getRate')){
             $to_ = 'USD';
         }
 
-        return $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
+        return $getExactConvertationRate = ConversionRate::where(['from' => $from, 'to' => $to])->first();
         // return [$from, $to];
         // if($from_ == $to_){
         //     $convertedAmount = $amount;
