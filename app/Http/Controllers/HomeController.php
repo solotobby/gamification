@@ -85,7 +85,7 @@ class HomeController extends Controller
             return redirect('survey');
         }
 
-        return filterCampaign('0');
+        // return filterCampaign('0');
 
         $balance = '';
        
