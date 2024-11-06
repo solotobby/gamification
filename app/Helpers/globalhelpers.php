@@ -1716,11 +1716,11 @@ if(!function_exists('filterCampaign')){
             $currencyCode = $baseCurrency;
         }
 
-        if(getRate($from, $to) == null){
-            $rates = 0;
-        }else{
-            $rates = getRate($from, $to)->amount;
-        }
+        // if(getRate($from, $to) == null){
+        //     $rates = 0;
+        // }else{
+        //     $rates = getRate($from, $to)->amount;
+        // }
 
 
         $list[] = [ 
@@ -1740,7 +1740,7 @@ if(!function_exists('filterCampaign')){
             'currency' => $value->currency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
 
-            // 'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
+            'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
             'local_converted_currency' => $baseCurrency,
             'local_converted_currency_code' => $baseCurrency,
 
@@ -1751,7 +1751,7 @@ if(!function_exists('filterCampaign')){
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
-            'local_converted_amount' => $rates * $value->campaign_amount,
+            // 'local_converted_amount' => $rates * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
     }
@@ -1779,35 +1779,38 @@ if(!function_exists('filterCampaign')){
 
 if(!function_exists('jobCurrencyConverter')){
     function jobCurrencyConverter($from, $to, $amount){ 
-        $from_ = '';
-        $to_ = '';
 
-        if($from == 'Naira'){
-            $from_ = 'NGN';
-        }elseif($from == 'Dollar'){
-            $from_ == 'USD';
-        }elseif($to == 'Naira'){
-            $to_ = 'NGN';
-        }elseif($to == 'Dollar'){
-            $to_ = 'USD';
-        }
-        // return [$from, $to];
-        if($from_ == $to_){
-            $convertedAmount = $amount;
+        $getRate = getRate($from, $to);
+        if($getRate == null){
+            $rates = 0;
         }else{
-            // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
-            
-            $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
-            if($getExactConvertationRate == null){
-                $convertedAmount = null;
-            }else{
-                $convertedAmount = $getExactConvertationRate->amount * $amount;
-            }
-          
+            $rates = $getRate->amount;
         }
 
-        return number_format($convertedAmount,4);
+        return number_format($rates * $amount, 5);
     }
+
+
+
+
+
+        // // return [$from, $to];
+        // if($from_ == $to_){
+        //     $convertedAmount = $amount;
+        // }else{
+        //     // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
+            
+        //     $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
+        //     if($getExactConvertationRate == null){
+        //         $convertedAmount = null;
+        //     }else{
+        //         $convertedAmount = $getExactConvertationRate->amount * $amount;
+        //     }
+          
+        // }
+
+        // return number_format($convertedAmount,4);
+    
 }
 
 
