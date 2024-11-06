@@ -35,7 +35,7 @@
               @endif
 
               <div class="fs-4 fw-semibold pt-3 mb-0">Opps</div>
-              @if(auth()->user()->wallet->base_currency == 'Naira')
+              @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
               
                     @if(auth()->user()->is_verified)
                             <p> You are verified for naira jobs but not elligible for dollar jobs. 

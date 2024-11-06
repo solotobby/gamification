@@ -199,7 +199,7 @@ class UserController extends Controller
                 }
          
         }else{
-            return back()->with('error', 'You do not have enough funds in your wallet, kindly top up your wallet');
+            return redirect('wallet/fund')->with('error', 'You do not have enough funds in your wallet, kindly top up your wallet below');
         }
 
     }
@@ -217,17 +217,22 @@ class UserController extends Controller
             $amount = 1050;
         }
         
-        if(auth()->user()->wallet->base_currency == 'Naira'){
-            $ref = time();
-            $url = initiateTrasaction($ref, $amount, '/upgrade/payment');
-            paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
-            return redirect($url);
-        }else{
-            $checkWalletBalance = checkWalletBalance(auth()->user(), 'Dollar', 5);
+        // if(auth()->user()->wallet->base_currency == 'Naira'){
+        //     $ref = time();
+        //     $url = initiateTrasaction($ref, $amount, '/upgrade/payment');
+        //     paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'unsuccessful', 'upgrade_payment', 'Upgrade Payment-Paystack', 'Payment_Initiation', 'regular');
+        //     return redirect($url);
+        // }else{
+            $user = Auth::user();
+            $currency = baseCurrency();
+            $parameter = currencyParameter($currency);
+
+            $checkWalletBalance = checkWalletBalance($user, $currency, $parameter->upgrade_fee);
+            // $checkWalletBalance = checkWalletBalance(auth()->user(), 'Dollar', 5);
             if($checkWalletBalance){
-                $debitWallet = debitWallet(auth()->user(), 'Dollar', 5);
+                $debitWallet = debitWallet($user, $currency, $parameter->upgrade_fee);
                 if($debitWallet){
-                    $upgrade = userDollaUpgrade(auth()->user());
+                    $upgrade = userDollaUpgrade($user);
                     if($upgrade){
                         Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
                         return back()->with('success', 'Upgrade Successful');
@@ -235,7 +240,9 @@ class UserController extends Controller
                 }
                
             }else{
-                return back()->with('error', 'You do not have enough funds in your dollar wallet');
+                return redirect('wallet/fund')->with('error', 'You do not have enough funds in your wallet, kindly top up your wallet below');
+
+                // return back()->with('error', 'You do not have enough funds in your dollar wallet');
             }
            
             
@@ -251,7 +258,7 @@ class UserController extends Controller
             //     PaystackHelpers::paymentTrasanction(auth()->user()->id, '1', $result['id'], 5, 'unsuccessful', 'upgrade_payment_usd', 'Upgrade Payment - USD', 'Payment_Initiation', 'regular');
             //     return redirect($url);
             //  }
-        } 
+        // } 
     }
 
     public function captureUpgrade(){
