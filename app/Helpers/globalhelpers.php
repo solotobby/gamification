@@ -1722,7 +1722,11 @@ if(!function_exists('filterCampaign')){
         //     $rates = getRate($from, $to)->amount;
         // }
 
-
+        if(baseCurrency() == 'NGN' || baseCurrency() == 'Naira'){
+            $convertedAmount = $value->campaign_amount;
+        }else{
+            $convertedAmount = jobCurrencyConverter($from, $to, $value->campaign_amount);
+        }
         $list[] = [ 
             'id' => $value->id, 
             'job_id' => $value->job_id, 
@@ -1740,7 +1744,7 @@ if(!function_exists('filterCampaign')){
             'currency' => $value->currency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
 
-            'local_converted_amount' => jobCurrencyConverter($from, $to, $value->campaign_amount),
+            'local_converted_amount' => $convertedAmount,
             'local_converted_currency' => $baseCurrency,
             'local_converted_currency_code' => $baseCurrency,
 
