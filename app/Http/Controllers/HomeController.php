@@ -86,7 +86,7 @@ class HomeController extends Controller
             return redirect('survey');
         }
 
-        // return filterCampaign('0');
+       
 
         $balance = '';
        
@@ -121,6 +121,10 @@ class HomeController extends Controller
 
     public function filterCampaignByCategories($category_id){
         return filterCampaign($category_id);
+    }
+
+    public function testCampaignList(){
+        return filterCampaign('0');
     }
 
     public function howTo()
