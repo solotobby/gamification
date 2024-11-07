@@ -206,7 +206,7 @@
 
               <div class="modal-body pb-1">
                 Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
-                Current Value per Job  - {{ number_format($campaign['local_converted_amount']) }} <br>
+                Current Value per Job  - {{ $campaign['local_converted_amount'] }} <br>
                 {{-- @if($campaign['currency'] == 'NGN')
                 Current Value  - &#8358;{{ number_format($campaign['total_amount']) }} <br>
                 @else
