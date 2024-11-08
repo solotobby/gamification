@@ -171,13 +171,16 @@
                               <ul class="list-group push">
                                
 
-                                <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                {{-- <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                   Beneficiary Name
-                                   <span class="badge rounded-pill bg-info">dsdfd </span>
-                                </li>
+                                   <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }}  </span>
+                                </li> --}}
 
                                  
-
+                              <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                 Bank Name
+                                   <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->bank_name }}  </span>
+                              </li>
                              <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                   Account Name
                                    <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }} </span>
