@@ -1798,7 +1798,7 @@ if(!function_exists('jobCurrencyConverter')){
 
         
 
-        return number_format($amountConv, 5);
+        return number_format($amountConv, 2);
 
      
     }

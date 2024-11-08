@@ -93,7 +93,25 @@ class GeneralController extends Controller
 
     public function fix(){
 
-     
+        $counts = \DB::table('wallets')
+        ->selectRaw("
+            COUNT(CASE WHEN base_currency IS NULL THEN 1 END) AS null_count,
+            COUNT(CASE WHEN base_currency = 'Naira' THEN 1 END) AS naira_count,
+            COUNT(CASE WHEN base_currency = 'NGN' THEN 1 END) AS ngn_count,
+            COUNT(CASE WHEN base_currency = 'Dollar' THEN 1 END) AS dollar_count,
+            COUNT(CASE WHEN base_currency = 'USD' THEN 1 END) AS usd_count
+        ")
+        ->first();
+
+
+        echo "Null count: " . $counts->null_count; echo "<br>";
+        echo "Naira count: " . $counts->naira_count; echo "<br>";
+        echo "NGN count: " . $counts->ngn_count; echo "<br>";
+        echo "Dollar count: " . $counts->dollar_count; echo "<br>";
+        echo "USD count: " . $counts->usd_count; echo "<br>";
+
+
+
 
         //  $users = User::where('role', 'regular')->where('country', 'Nigeria')->get('phone');
         //  $list = [];

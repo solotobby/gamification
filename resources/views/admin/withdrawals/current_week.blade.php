@@ -169,21 +169,16 @@
                            
                             <div class="block-content">
                               <ul class="list-group push">
-                                 <?php  
+                               
 
-                                  // $content = json_decode($with->content, true);
-                                  ?>
-                                  {{-- {{ htmlspecialchars($content['amount']) }}  --}}
-
-                                {{-- <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                   Beneficiary Name
                                    <span class="badge rounded-pill bg-info">dsdfd </span>
-                                  
-                                </li> --}}
+                                </li>
 
                                  
 
-                                 {{-- <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                             <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                                   Account Name
                                    <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }} </span>
                                   
@@ -198,7 +193,7 @@
                                   Amount
                                    <span class="badge rounded-pill bg-info">&#8358;{{ number_format($with->amount) }} </span>
                                   
-                                 </li> --}}
+                                 </li>
 
                               </ul>
                             </div>
@@ -207,20 +202,20 @@
                         
                         <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve Payment</a>
-                        {{-- @if($with->status != '1')
+                        {{-- <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve Payment</a> --}}
+                         @if($with->status != '1')
                                 
-                                  @if(@$with->user->accountDetails->bank_name == '')
+                                  {{-- @if(@$with->user->accountDetails->bank_name == '')
                                     <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-primary">Manual Approval</a>
                                   @else
                                     <a href="{{ url('update/withdrawal/'.$with->id) }}" class="btn btn-sm btn-primary">Approve</a>
-                                  @endif
+                                  @endif --}}
 
                                   <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
                                 
                             @else
                                 <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
-                            @endif --}}
+                            @endif
                         </div>
                     </div>
                     </div>
