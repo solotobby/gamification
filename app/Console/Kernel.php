@@ -131,18 +131,26 @@ class Kernel extends ConsoleKernel
                 $camp->pending_count -= 1;
                 $camp->save();
     
-                
-                if($camp->currency == 'NGN'){
+                $user = User::where('id', $ca->user_id)->first();
+                $baseCurrency = baseCurrency($user);
+                $amountCredited = jobCurrencyConverter($camp->currency, baseCurrency($user), $ca->amount);
+                if($baseCurrency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->balance += $ca->amount;
+                    $wallet->balance += $amountCredited;
                     $wallet->save();
-                }else{
+                }elseif($camp->currency == 'NGN'){
                     $currency = 'USD';
                     $channel = 'paypal';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->usd_balance += $ca->amount;
+                    $wallet->usd_balance += $amountCredited;
+                    $wallet->save();
+                }else{
+                    $currency = baseCurrency($user);
+                    $channel = 'flutterwave';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    $wallet->base_currency_balance += $amountCredited;
                     $wallet->save();
                 }
     
@@ -154,7 +162,7 @@ class Kernel extends ConsoleKernel
                     'user_id' => $ca->user_id,
                     'campaign_id' => '1',
                     'reference' => $ref,
-                    'amount' => $ca->amount,
+                    'amount' => $amountCredited,
                     'status' => 'successful',
                     'currency' => $currency,
                     'channel' => $channel,
