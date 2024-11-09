@@ -389,6 +389,9 @@ class AdminController extends Controller
         return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
         'bankList' => $bankList
         ]);
+        // return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
+        // 'bankList' => $bankList
+        // ]);
     }
 
     public function adminUserReferrals($id){

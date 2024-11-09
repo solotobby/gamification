@@ -50,6 +50,7 @@
           @else   
               ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
           @endif
+          
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
         <p>Wallet Balance</p>
