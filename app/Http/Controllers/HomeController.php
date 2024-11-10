@@ -160,7 +160,7 @@ class HomeController extends Controller
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
-        $available_jobsCount = count(availableJobs());
+        $available_jobsCount = count(filterCampaign('0'));
 
         $transactions = \DB::select('
             SELECT SUM(amount) AS total_successful_transactions
@@ -205,6 +205,8 @@ class HomeController extends Controller
         //age distribution
         $ageDistribution = ageDistribution();
 
+        $currencyDistribution = currencyDistribution();
+
         // $christmas = Profile::where('is_xmas', true)->count();
 
         return view('admin.index', [
@@ -222,6 +224,7 @@ class HomeController extends Controller
             ->with('revenue', json_encode($revenueChannel))
             ->with('country', json_encode($countryDistribution))
             ->with('age', json_encode($ageDistribution))
+            ->with('currency', json_encode($currencyDistribution))
             ->with('monthlyRevenue', json_encode($revenue))
             ->with('weeklyRegistrationChannel', json_encode($weeklyRegistrationChannel))
             ->with('weeklyVerificationChannel', json_encode($weeklyVerificationChannel));

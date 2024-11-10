@@ -1529,6 +1529,17 @@ if(!function_exists('ageDistribution')){
     }
 }
 
+if(!function_exists('currencyDistribution')){
+    function currencyDistribution(){ 
+        $currencyDistribution = Wallet::select('base_currency', \DB::raw('COUNT(*) as total'))->groupBy('base_currency')->get();
+        $currency[] = ['Age Range', 'Total'];
+         foreach($currencyDistribution as $key => $value){
+            $currency[++$key] = [$value->base_currency == null ? 'Unassigned' :$value->base_currency, (int)$value->total ];
+         }
+         return $currency;
+    }
+}
+
 
 if(!function_exists('numberFormat')){
     function numberFormat($number, $plus = true){ 
@@ -1830,20 +1841,8 @@ if(!function_exists('jobCurrencyConverter')){
 if(!function_exists('getRate')){
     function getRate($from, $to){ 
 
-        $from_ = '';
-        $to_ = '';
+        return ConversionRate::where(['from' => $from, 'to' => $to])->first();
 
-        if($from == 'Naira'){
-            $from_ = 'NGN';
-        }elseif($from == 'Dollar'){
-            $from_ == 'USD';
-        }elseif($to == 'Naira'){
-            $to_ = 'NGN';
-        }elseif($to == 'Dollar'){
-            $to_ = 'USD';
-        }
-
-        return $getExactConvertationRate = ConversionRate::where(['from' => $from, 'to' => $to])->first();
         // return [$from, $to];
         // if($from_ == $to_){
         //     $convertedAmount = $amount;
@@ -1866,24 +1865,12 @@ if(!function_exists('getRate')){
 
 if(!function_exists('currencyParameter')){
     function currencyParameter($currency){ 
-        $new_currency = '';
-        if($currency == 'Naira'){
-            $new_currency = 'NGN';
-        }elseif($currency == 'Dollar'){
-            $new_currency == 'USD';
-        }else{
-            $new_currency = null;
-        }
-    
-        return $currency = Currency::where('code', $currency)->first();
-  
-
+        return $currency = Currency::where('code', $currency)->where('is_active', true)->first();
     }
 }
 
 if(!function_exists('availableJobs')){
     function availableJobs(){ 
-
 
         $user = Auth::user();
         $jobfilter = '';
