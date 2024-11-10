@@ -94,40 +94,40 @@ class GeneralController extends Controller
 
     public function fix(){
 
-        $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
-                    ->where('created_at', '>=', Carbon::now()->subDays(5))
-                    ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
+        // $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
+        //             ->where('created_at', '>=', Carbon::now()->subDays(5))
+        //             ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
 
                    
-                    // return $data;
+        //             // return $data;
 
-                    // foreach($counts as $c){
-                    //         $wallet = Wallet::where('user_id', $c->user_id)->first(); //\DB::table('wallets')->where('id', $c->user)->first();
-                    //         $wallet->balance += $c->amount;
-                    //         $wallet->save();
+        //             foreach($counts as $c){
+        //                     $wallet = Wallet::where('user_id', $c->user_id)->first(); //\DB::table('wallets')->where('id', $c->user)->first();
+        //                     $wallet->balance += $c->amount;
+        //                     $wallet->save();
 
-                    //         $withs = Withrawal::where('id', $c->id)->first();
-                    //         $withs->status = '1';
-                    //         $withs->save();
+        //                     $withs = Withrawal::where('id', $c->id)->first();
+        //                     $withs->status = '1';
+        //                     $withs->save();
 
-                    //         PaymentTransaction::create([
-                    //             'user_id' => $c->user_id,
-                    //             'campaign_id' => '1',
-                    //             'reference' => time(),
-                    //             'amount' => $c->amount,
-                    //             'status' => 'successful',
-                    //             'currency' => 'NGN',
-                    //             'channel' => 'paystack',
-                    //             'type' => 'withdrawal_reversal',
-                    //             'description' => 'Withdrawal Reversal',
-                    //             'tx_type' => 'Credit',
-                    //             'user_type' => 'regular'
-                    //         ]);
-                    // }
-                    $data['count'] = count($counts);
-                    $data['data'] = $counts;
+        //                     PaymentTransaction::create([
+        //                         'user_id' => $c->user_id,
+        //                         'campaign_id' => '1',
+        //                         'reference' => time(),
+        //                         'amount' => $c->amount,
+        //                         'status' => 'successful',
+        //                         'currency' => 'NGN',
+        //                         'channel' => 'paystack',
+        //                         'type' => 'withdrawal_reversal',
+        //                         'description' => 'Withdrawal Reversal',
+        //                         'tx_type' => 'Credit',
+        //                         'user_type' => 'regular'
+        //                     ]);
+        //             }
+        //             $data['count'] = count($counts);
+        //             $data['data'] = $counts;
 
-                    return $data;
+        //             return $data;
 
         // $counts = \DB::table('wallets')
         // ->selectRaw("

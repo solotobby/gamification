@@ -12,6 +12,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Question;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -39,7 +40,43 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
-        //sends campaign to users who registered in the last 1 week 
+        $schedule->call(function(){
+
+            $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
+                    ->where('created_at', '>=', Carbon::now()->subDays(5))
+                    ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
+
+                   
+                    // return $data;
+
+                    foreach($counts as $c){
+                            $wallet = Wallet::where('user_id', $c->user_id)->first(); //\DB::table('wallets')->where('id', $c->user)->first();
+                            $wallet->balance += $c->amount;
+                            $wallet->save();
+
+                            $withs = Withrawal::where('id', $c->id)->first();
+                            $withs->status = '1';
+                            $withs->save();
+
+                            PaymentTransaction::create([
+                                'user_id' => $c->user_id,
+                                'campaign_id' => '1',
+                                'reference' => time(),
+                                'amount' => $c->amount,
+                                'status' => 'successful',
+                                'currency' => 'NGN',
+                                'channel' => 'paystack',
+                                'type' => 'withdrawal_reversal',
+                                'description' => 'Withdrawal Reversal',
+                                'tx_type' => 'Credit',
+                                'user_type' => 'regular'
+                            ]);
+                    }
+
+
+        })->dailyAt('14:00');
+
+
         $schedule->call(function(){
 
             \DB::table('wallets')
