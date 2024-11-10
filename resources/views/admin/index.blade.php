@@ -30,6 +30,10 @@
 </script>
 
 <script>
+  var currency = <?php echo $currency; ?>
+</script>
+
+<script>
   var monthlyRevenue = <?php echo $monthlyRevenue; ?>
 </script>
 
@@ -48,6 +52,7 @@
 <script src="{{ asset('js/admin/revenueChannel.js')}}"></script>
 <script src="{{ asset('js/admin/countryDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/ageDistribution.js')}}"></script>
+<script src="{{ asset('js/admin/currencyDistribution.js')}}"></script>
 <script src="{{ asset('js/admin/monthlyRevenue.js')}}"></script>
 <script src="{{ asset('js/admin/weeklyRegistrationChannel.js')}}"></script>
 <script src="{{ asset('js/admin/weeklyVerificationChannel.js')}}"></script>
@@ -342,6 +347,10 @@
       <hr>
        <div class="col-xl-12 mb-3">
           <div id="age_distribution" style="width: 100%; height: 500px;"></div>
+      </div>
+      <hr>
+       <div class="col-xl-12 mb-3">
+          <div id="currency_distribution" style="width: 100%; height: 500px;"></div>
       </div>
       
 
