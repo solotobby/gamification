@@ -379,7 +379,7 @@ Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::cl
 Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'userTransaction'])->name('user.transaction');
 Route::get('admin/user/referral/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserReferrals']);
 
-Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
+Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'store.withdraw']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');
 Route::get('admin/withdrawal/request/queued', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequestQueued'])->name('admin.withdrawal.queued');
 Route::get('admin/withdrawal/request/queued/current', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequestQueuedCurrent'])->name('admin.withdrawal.queued.current');

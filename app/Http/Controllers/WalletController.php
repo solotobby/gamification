@@ -503,10 +503,15 @@ class WalletController extends Controller
     public function storeWithdraw(Request $request)
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
-        if($baseCurrency == 'Naira' || $baseCurrency == 'NGN'){
+        if( $baseCurrency == 'NGN'){
+          
+
             $request->validate([
-                'balance' => 'required',
+                'amount' => 'required|numeric|min:2500',
+            ], [
+                'amount.min' => 'The amount must be at least 2500.',
             ]);
+            
 
             if($request->balance >= 50000){
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
@@ -557,7 +562,7 @@ class WalletController extends Controller
             ]);
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            if($baseCurrency == 'USD' || $baseCurrency == 'Dollar'){
+            if($baseCurrency == 'USD'){
                 if($wallet->usd_balance < $request->balance)
                 {
                     return back()->with('error', 'Insufficient balance');
