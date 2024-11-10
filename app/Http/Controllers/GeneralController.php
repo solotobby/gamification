@@ -95,7 +95,7 @@ class GeneralController extends Controller
     public function fix(){
 
         $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
-                    ->where('created_at', '>=', Carbon::now()->subDays(25))
+                    ->where('created_at', '>=', Carbon::now()->subDays(5))
                     ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
 
                    
