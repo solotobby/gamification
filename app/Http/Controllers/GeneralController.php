@@ -21,6 +21,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
 use App\Models\Wallet;
+use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -93,22 +94,57 @@ class GeneralController extends Controller
 
     public function fix(){
 
-        $counts = \DB::table('wallets')
-        ->selectRaw("
-            COUNT(CASE WHEN base_currency IS NULL THEN 1 END) AS null_count,
-            COUNT(CASE WHEN base_currency = 'Naira' THEN 1 END) AS naira_count,
-            COUNT(CASE WHEN base_currency = 'NGN' THEN 1 END) AS ngn_count,
-            COUNT(CASE WHEN base_currency = 'Dollar' THEN 1 END) AS dollar_count,
-            COUNT(CASE WHEN base_currency = 'USD' THEN 1 END) AS usd_count
-        ")
-        ->first();
+        $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
+                    ->where('created_at', '>=', Carbon::now()->subDays(25))
+                    ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
+
+                   
+                    // return $data;
+
+                    // foreach($counts as $c){
+                    //         $wallet = Wallet::where('user_id', $c->user_id)->first(); //\DB::table('wallets')->where('id', $c->user)->first();
+                    //         $wallet->balance += $c->amount;
+                    //         $wallet->save();
+
+                    //         $withs = Withrawal::where('id', $c->id)->first();
+                    //         $withs->status = '1';
+                    //         $withs->save();
+
+                    //         PaymentTransaction::create([
+                    //             'user_id' => $c->user_id,
+                    //             'campaign_id' => '1',
+                    //             'reference' => time(),
+                    //             'amount' => $c->amount,
+                    //             'status' => 'successful',
+                    //             'currency' => 'NGN',
+                    //             'channel' => 'paystack',
+                    //             'type' => 'withdrawal_reversal',
+                    //             'description' => 'Withdrawal Reversal',
+                    //             'tx_type' => 'Credit',
+                    //             'user_type' => 'regular'
+                    //         ]);
+                    // }
+                    $data['count'] = count($counts);
+                    $data['data'] = $counts;
+
+                    return $data;
+
+        // $counts = \DB::table('wallets')
+        // ->selectRaw("
+        //     COUNT(CASE WHEN base_currency IS NULL THEN 1 END) AS null_count,
+        //     COUNT(CASE WHEN base_currency = 'Naira' THEN 1 END) AS naira_count,
+        //     COUNT(CASE WHEN base_currency = 'NGN' THEN 1 END) AS ngn_count,
+        //     COUNT(CASE WHEN base_currency = 'Dollar' THEN 1 END) AS dollar_count,
+        //     COUNT(CASE WHEN base_currency = 'USD' THEN 1 END) AS usd_count
+        // ")
+        // ->first();
 
 
-        echo "Null count: " . $counts->null_count; echo "<br>";
-        echo "Naira count: " . $counts->naira_count; echo "<br>";
-        echo "NGN count: " . $counts->ngn_count; echo "<br>";
-        echo "Dollar count: " . $counts->dollar_count; echo "<br>";
-        echo "USD count: " . $counts->usd_count; echo "<br>";
+        // echo "Null count: " . $counts->null_count; echo "<br>";
+        // echo "Naira count: " . $counts->naira_count; echo "<br>";
+        // echo "NGN count: " . $counts->ngn_count; echo "<br>";
+        // echo "Dollar count: " . $counts->dollar_count; echo "<br>";
+        // echo "USD count: " . $counts->usd_count; echo "<br>";
 
 
 
