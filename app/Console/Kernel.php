@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function(){
 
-            $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
+            $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2475)
                     ->where('created_at', '>=', Carbon::now()->subDays(5))
                     ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
 
