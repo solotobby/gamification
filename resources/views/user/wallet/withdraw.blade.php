@@ -23,7 +23,7 @@
       </div>
     <div class="block-content">
    
-      <form class="js-validation-reminder" action="{{ route('store.withdraw') }}" method="POST">
+      <form class="js-validation-reminder" action="{{ route('store/withdraw') }}" method="POST">
           @csrf
         <!-- Text -->
   

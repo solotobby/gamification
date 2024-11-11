@@ -385,10 +385,10 @@
 
                           @else
                               <?php 
-                              $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
+                              // $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
                               // $completed_count = $campaign->completed()->where('status', 'Approved')->count();
                               ?>
-                              @if($completed_count >= $campaign->number_of_staff)
+                              {{-- @if($completed_count >= $campaign->number_of_staff)
                                 <div class="block-content">
                                   <div class="row">
                                     <div class="col-md-12">
@@ -400,7 +400,7 @@
                                     </div>
                                   </div>
                                 </div>
-                              @else
+                              @else --}}
                                   <div class="block-content">
                                     <div class="row">
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
@@ -455,7 +455,7 @@
                                       
 
                                   </div>
-                                @endif
+                                {{-- @endif --}}
                           @endif
 
                       @endif
