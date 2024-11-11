@@ -252,9 +252,9 @@ class AdminController extends Controller
                $currency = 'USD';
                $channel = 'paypal';
                creditWallet($user, $currency, $workDone->amount);
-            }elseif($campaign->currency == null){
-               $currency = 'NGN';
-               $channel = 'paystack';
+            }else{
+               $currency = baseCurrency($user);
+               $channel = 'flutterwave';
                creditWallet($user, $currency, $workDone->amount);
            }
 
@@ -299,9 +299,9 @@ class AdminController extends Controller
             }elseif($campaign->currency == 'USD'){
                 $currency = 'USD';
                 $channel = 'paypal';
-            }elseif($campaign->currency == null){
-                $currency = 'NGN';
-                $channel = 'paystack';
+            }else{
+                $currency = baseCurrency($campaingOwner);
+                $channel = 'flutterwave';
             }
 
              creditWallet($campaingOwner, $currency, $workDone->amount);
@@ -381,17 +381,20 @@ class AdminController extends Controller
         return view('admin.users.user_transactions', ['lists' => $list]);
     }
 
+  
+
     public function userInfo($id){
+       
         $info = User::where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
         $bankList = bankList();
         return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
-        'bankList' => $bankList
-        ]);
+                                                'bankList' => $bankList]);
         // return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
         // 'bankList' => $bankList
         // ]);
+
     }
 
     public function adminUserReferrals($id){
