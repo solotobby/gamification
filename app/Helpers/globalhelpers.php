@@ -1719,13 +1719,13 @@ if(!function_exists('filterCampaign')){
         $from = $value->currency; //from
         $to = $baseCurrency; //to
 
-        if($value->currency == 'NGN'){
-            $currencyCode = "&#8358";
-        }elseif($value->currency == 'USD'){
-            $currencyCode = '$';
-        }else{
-            $currencyCode = $baseCurrency;
-        }
+        // if($value->currency == 'NGN'){
+        //     $currencyCode = "&#8358";
+        // }elseif($value->currency == 'USD'){
+        //     $currencyCode = '$';
+        // }else{
+        //     $currencyCode = $baseCurrency;
+        // }
 
         // if(getRate($from, $to) == null){
         //     $rates = 0;
@@ -1733,7 +1733,7 @@ if(!function_exists('filterCampaign')){
         //     $rates = getRate($from, $to)->amount;
         // }
 
-        if(baseCurrency() == 'NGN' || baseCurrency() == 'Naira'){
+        if(baseCurrency() == 'NGN'){
             $convertedAmount = $value->campaign_amount;
         }else{
             $convertedAmount = jobCurrencyConverter($from, $to, $value->campaign_amount);

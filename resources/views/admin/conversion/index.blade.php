@@ -153,7 +153,7 @@
                                     <div class="col-lg-12">
                                         <div class="mb-4">
                                             <label class="form-label" for="example-text-input">Rate</label>
-                                            <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->rate }}">
+                                            <input type="text" class="form-control" id="example-text-input" name="rate" value="{{ $s->amount }}">
                                         </div>
                                         {{-- <div class="mb-4">
                                             <label class="form-label" for="example-text-input">Upgrade Fee</label>
