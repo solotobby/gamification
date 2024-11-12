@@ -378,6 +378,11 @@ Route::get('usd/verified/users', [\App\Http\Controllers\Admin\AdminController::c
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
 Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'userTransaction'])->name('user.transaction');
 Route::get('admin/user/referral/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserReferrals']);
+Route::get('admin/user/transactions/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserTransactions']);
+Route::get('admin/user/campaigns/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserCampaigns']);
+Route::get('admin/user/jobs/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserJobs']);
+
+
 
 Route::get('user/{id}/info', [\App\Http\Controllers\Admin\AdminController::class, 'userInfo']);
 Route::get('admin/withdrawal/request', [\App\Http\Controllers\Admin\AdminController::class, 'withdrawalRequest'])->name('admin.withdrawal');
