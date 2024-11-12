@@ -385,11 +385,11 @@ class AdminController extends Controller
 
     public function userInfo($id){
         // $info = User::where('id', $id)->first();
-        $info = User::where('id', $id)->first();
+        $info = User::withCount(['myCampaigns', 'referees', 'myJobs'])->where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
         $bankList = bankList();
-        return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
+        return view('admin.users.user_info_new', ['info' => $info, 'referredBy' => $referredBy,
                                                 'bankList' => $bankList]);
         // return view('admin.users.user_info', ['info' => $info, 'referredBy' => $referredBy,
         // 'bankList' => $bankList
@@ -402,6 +402,24 @@ class AdminController extends Controller
         $ref = $user->referees()->paginate(50);
         return view('admin.users.referrals', ['ref' => $ref, 'user' => $user]);
     }
+    public function adminUserJobs($id){
+        $user = User::where('id', $id)->first();
+        $jobs = $user->myJobs->sortByDesc('created_at');//->paginate(50);
+        return view('admin.users.jobs', ['jobs' => $jobs, 'user' => $user]);
+    }
+    public function adminUserTransactions($id){
+        $user = User::where('id', $id)->first();
+        $transactions = $user->transactions->where('status', 'successful');
+        return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
+    }
+    public function adminUserCampaigns($id){
+        $user = User::where('id', $id)->first();
+        $campaigns = $user->myCampaigns->sortByDesc('created_at');
+        return view('admin.users.campaigns', ['campaigns' => $campaigns, 'user' => $user]);
+    }
+   
+   
+   
 
     public function withdrawalRequest(){
         $withdrawal = Withrawal::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
