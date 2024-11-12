@@ -806,13 +806,13 @@ class CampaignController extends Controller
     }
 
     public function addMoreWorkers(Request $request){
-
+       
         $est_amount = $request->new_number * $request->amount;
         $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
         //[$est_amount, $percent, $total];
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        if(auth()->user()->wallet->base_currency == 'Naira'){
+        if(baseCurrency() == 'NGN'){
             $campaign = Campaign::where('job_id', $request->id)->first();
             $uploadFee = '';
             if($campaign->allow_upload == 1){
@@ -875,7 +875,7 @@ class CampaignController extends Controller
             }else{
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
-        }elseif(auth()->user()->wallet->base_currency == 'Dollar'){
+        }elseif(baseCurrency() == 'USD'){
             if($wallet->usd_balance >= $total){
                 $campaign = Campaign::where('job_id', $request->id)->first();
                 $uploadFee = '';
