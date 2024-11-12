@@ -16,7 +16,7 @@
           Email: {{$info->email}} <br>
           Naira Balance: &#8358;{{number_format(@$info->wallet->balance,2)}} <br>
           USD Balance: ${{number_format(@$info->wallet->usd_balance,3)}} <br>
-          Naira Verified: {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}}<br>
+          Naira Verified: {{$info->is_verified == '1' ? 'Verified' : 'Unverified'}} <br>
           USD Verified: {{ $info->USD_verified == true ? 'Verified' : 'Unverified'}} <br>
           Phone Number: {{ $info->phone }}<br>
           Country: {{ $info->country }}<br>
@@ -473,19 +473,19 @@
                       @endif
 
                      
-
-                      <hr>
-                      <h5 class="fw-normal text-muted text-center mt-2">
-                        Generate Virtual Account
-                        </h5>
-                        <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-success btn-sm">Activate VA</a>
-
+                        @if($info->wallet->base_currency == 'NGN')
+                          <hr>
+                          <h5 class="fw-normal text-muted text-center mt-2">
+                            Generate Virtual Account
+                            </h5>
+                            <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-success btn-sm">Activate VA</a>
+                        @endif
                       <hr>
                       <h5 class="fw-normal text-muted text-center mt-2">
                         Switch User
                         </h5>
                         Current Base Currency : {{ $info->wallet->base_currency }}
-                        <br>
+                        <br>   <br>
                         {{-- @if($info->is_blacklisted == '0')
                         <a class="btn btn-hero btn-secondary" href="{{url('admin/switch/'.$info->id)}}" data-toggle="click-ripple">
                           Blacklist User
@@ -500,19 +500,18 @@
                         <form action="{{ url('admin/switch/wallet') }}" method="POST">
                           @csrf
                           <input type="hidden" name="user_id" value="{{ $info->id }}">
-                            @if($info->wallet->base_currency == 'Naira')
-                            <input type="hidden" name="currency" value="Dollar">
-                            <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
-                              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch User to Dollar
-                            </button>
-                            {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Dollar</button> --}}
-                            @else
-                            <input type="hidden" name="currency" value="Naira">
-                            <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
-                              <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch User to Naira
-                            </button>
-                            {{-- <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency to Naira</button> --}}
-                            @endif
+
+                          <div class="form-group mb-3">
+                            <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
+                                <option value="">Select Currency</option>
+                                @foreach (currencyList($info->wallet->base_currency,true) as $currency)
+                                  <option value="{{$currency->code}}">{{$currency->code}} - {{$currency->country}}</option>
+                                @endforeach
+                            </select>
+                          </div>
+
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-fw fa-share opacity-50"></i>Switch Currency</button>
+                         
                         </form> 
 
 
