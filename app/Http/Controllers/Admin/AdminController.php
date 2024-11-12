@@ -384,7 +384,7 @@ class AdminController extends Controller
   
 
     public function userInfo($id){
-       
+        // $info = User::where('id', $id)->first();
         $info = User::where('id', $id)->first();
         @$user = Referral::where('user_id', $id)->first()->referee_id;
         @$referredBy = User::where('id', $user)->first();
