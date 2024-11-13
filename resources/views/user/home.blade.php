@@ -64,9 +64,9 @@
                         @endif --}}
 
 
-                        @if(baseCurrency() == 'Naira' || baseCurrency() == 'NGN')
+                        @if(baseCurrency() == 'NGN')
                           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }}
-                         @elseif(baseCurrency() == 'Dollar' || baseCurrency() == 'USD')
+                         @elseif(baseCurrency() == 'USD')
                           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
                          @else
                           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
