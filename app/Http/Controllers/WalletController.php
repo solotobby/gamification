@@ -507,9 +507,9 @@ class WalletController extends Controller
           
 
             $request->validate([
-                'amount' => 'required|numeric|min:2500',
+                'balance' => 'required|numeric|min:2500',
             ], [
-                'amount.min' => 'The amount must be at least 2500.',
+                'balance.min' => 'The amount must be at least 2500.',
             ]);
             
 
