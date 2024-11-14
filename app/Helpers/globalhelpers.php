@@ -705,31 +705,35 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                 ];
                         
                 $response = virtualAccount($data);
-    
-                if($VirtualAccount){
+
+              
+
+                    if($VirtualAccount){
+                        
+                        $VirtualAccount->bank_name = $response['data']['bank']['name'];
+                        $VirtualAccount->account_name = $response['data']['account_name'];
+                        $VirtualAccount->account_number = $response['data']['account_number'];
+                        $VirtualAccount->account_name = $response['data']['account_name'];
+                        $VirtualAccount->currency = 'NGN';
+                        $VirtualAccount->save();
+
+                    }else{
+
                     
-                    $VirtualAccount->bank_name = $response['data']['bank']['name'];
-                    $VirtualAccount->account_name = $response['data']['account_name'];
-                    $VirtualAccount->account_number = $response['data']['account_number'];
-                    $VirtualAccount->account_name = $response['data']['account_name'];
-                    $VirtualAccount->currency = 'NGN';
-                    $VirtualAccount->save();
+                            $VirtualAccount = VirtualAccount::create([
+                                'user_id' => $user->id, 
+                                'channel' => 'paystack', 
+                                'customer_id'=>$res['data']['customer_code'], 
+                                'customer_intgration'=> $res['data']['integration'],
+                                'bank_name' => $response['data']['bank']['name'],
+                                'account_name' => $response['data']['account_name'],
+                                'account_number' => $response['data']['account_number'],
+                                'account_name' => $response['data']['account_name'],
+                                'currency' => 'NGN'
+                            ]);
+                    }
 
-                }else{
-
-                    $VirtualAccount = VirtualAccount::create([
-                        'user_id' => $user->id, 
-                        'channel' => 'paystack', 
-                        'customer_id'=>$res['data']['customer_code'], 
-                        'customer_intgration'=> $res['data']['integration'],
-                        'bank_name' => $response['data']['bank']['name'],
-                        'account_name' => $response['data']['account_name'],
-                        'account_number' => $response['data']['account_number'],
-                        'account_name' => $response['data']['account_name'],
-                        'currency' => 'NGN'
-                    ]);
-                
-                }
+               
                 
                 $data['res']=$response;
                 $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');

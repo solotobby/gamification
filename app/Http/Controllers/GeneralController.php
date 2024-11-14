@@ -20,6 +20,7 @@ use App\Models\Staff;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserScore;
+use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
@@ -94,8 +95,64 @@ class GeneralController extends Controller
 
     public function fix(){
 
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+        ])->get('https://api.paystack.co/customer/?from=2024-11-14');
+    
+       $resp= json_decode($res->getBody()->getContents(), true);
 
-        return currencyParameter('NGN');
+
+        // Check if the response has data and loop through each customer
+        if (isset($resp['data']) && is_array($resp['data'])) {
+            foreach ($resp['data'] as $customer) {
+                // return $customer;
+                // Fetch and print each customer's id
+                if (isset($customer['customer_code'])) {
+                        $data =[
+                            "customer"=> $customer['customer_code'], 
+                            "preferred_bank"=>env('PAYSTACK_BANK')
+                        ];
+
+                            $response = virtualAccount($data);
+
+                            if($response['status' == true]){
+
+                                $user = User::where('email', $customer['email'])->first();
+                                $VirtualAccount = VirtualAccount::create([
+                                    'user_id' => $user->id, 
+                                    'channel' => 'paystack', 
+                                    'customer_id'=>$customer['customer_code'], 
+                                    'customer_intgration'=> $customer['integration'],
+                                    'bank_name' => $response['data']['bank']['name'],
+                                    'account_name' => $response['data']['account_name'],
+                                    'account_number' => $response['data']['account_number'],
+                                    'account_name' => $response['data']['account_name'],
+                                    'currency' => 'NGN'
+                                ]);
+
+                            }
+                        
+                }
+            }
+        } else {
+            echo "No data found in response.";
+        }
+
+       
+
+       
+                
+       
+
+
+        
+     
+    //     $user = User::where('id', '14')->first();
+    //     $phone = '234' . substr('08098337847', 1);
+    //    return  generateVirtualAccountOnboarding($user, $phone);
+        // return currencyParameter('NGN');
         // $counts = \DB::table('withrawals')->where('status', 0)->where('base_currency', 'NGN')->where('amount', '<', 2500)
         //             ->where('created_at', '>=', Carbon::now()->subDays(5))
         //             ->get(['id', 'user_id', 'amount', 'status', 'base_currency', 'created_at']);
