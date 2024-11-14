@@ -36,34 +36,6 @@
               <div class="col-4 col-xl-4">
                     <p class="fs-3 fw-semibold text-white mb-0">
 
-                        {{-- @if(auth()->user()->wallet->base_currency == "Naira")
-                            &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
-                        @else
-                            ${{ number_format(auth()->user()->wallet->usd_balance,3) }}
-                        @endif --}}
-{{-- 
-                        @if(auth()->user()->wallet->base_currency == "Naira")
-                            &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'GHS')
-                            &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'KES')
-                            KES {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'TZS')
-                            TZS {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'RWF')
-                            RWF {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'MWK')
-                            MWK {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'UGX')
-                            UGX {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @elseif(auth()->user()->wallet->base_currency == 'ZAR')
-                            ZAR {{ number_format(auth()->user()->wallet->base_currency_balance) }}
-                        @else 
-
-                            ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
-                        @endif --}}
-
-
                         @if(baseCurrency() == 'NGN')
                           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }}
                          @elseif(baseCurrency() == 'USD')
