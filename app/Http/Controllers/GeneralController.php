@@ -117,7 +117,7 @@ class GeneralController extends Controller
 
                             $response = virtualAccount($data);
 
-                            if($response['status' == true]){
+                            if($response['status'] == true){
 
                                 $user = User::where('email', $customer['email'])->first();
                                 $VirtualAccount = VirtualAccount::create([
@@ -132,10 +132,18 @@ class GeneralController extends Controller
                                     'currency' => 'NGN'
                                 ]);
 
+                              
+
                             }
+
+                           
                         
                 }
+
+              
             }
+
+            echo 'completed';
         } else {
             echo "No data found in response.";
         }
