@@ -409,7 +409,7 @@ class AdminController extends Controller
     }
     public function adminUserTransactions($id){
         $user = User::where('id', $id)->first();
-        $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->orderBy('created_at', 'DESC')->get(); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
+        $transactions =[];// PaymentTransaction::where('user_id', $id)->where('status', 'successful')->orderBy('created_at', 'DESC')->get(); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
         return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
     }
     public function adminUserCampaigns($id){
