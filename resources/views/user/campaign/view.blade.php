@@ -383,24 +383,7 @@
                               </div>
                             </div>
 
-                          @else
-                              <?php 
-                              // $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
-                              // $completed_count = $campaign->completed()->where('status', 'Approved')->count();
-                              ?>
-                              {{-- @if($completed_count >= $campaign->number_of_staff)
-                                <div class="block-content">
-                                  <div class="row">
-                                    <div class="col-md-12">
-                                        
-                                        <h4 class="fw-normal text-muted text-center">
-                                            This campaign has reached its maximum number of worker.
-                                        </h4>
-                                      
-                                    </div>
-                                  </div>
-                                </div>
-                              @else --}}
+                          @elseif
                                   <div class="block-content">
                                     <div class="row">
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
@@ -430,7 +413,7 @@
                                             </div>
                                         </div>
                                          
-                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount <= 10)
+                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount < currencyParameter(baseCurrency())->min_upgrade_amount)
                                         <div class="row mb-4 mt-4">
                                           <div class="col-lg-6">
                                           <button type="submit" class="btn btn-alt-primary">
