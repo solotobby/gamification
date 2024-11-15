@@ -383,7 +383,24 @@
                               </div>
                             </div>
 
-                          @elseif
+                          @else
+                              <?php 
+                              // $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
+                              // $completed_count = $campaign->completed()->where('status', 'Approved')->count();
+                              ?>
+                              {{-- @if($completed_count >= $campaign->number_of_staff)
+                                <div class="block-content">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                        
+                                        <h4 class="fw-normal text-muted text-center">
+                                            This campaign has reached its maximum number of worker.
+                                        </h4>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              @else --}}
                                   <div class="block-content">
                                     <div class="row">
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
@@ -404,7 +421,6 @@
                                             <input type="checkbox" name="validate" required class="">
                                             <span><small> I agree that I will wait for a maximum of 24hrs for this tasks to be approved by the advertiser. </small></span>
                                         </div>
-
                                         <div class="row mb-4 mt-4">
                                           <div class="col-lg-6">
                                           <button type="submit" class="btn btn-alt-primary">
@@ -413,7 +429,28 @@
                                           </div>
                                       </div>
 
-                                
+                                          {{-- @if(auth()->user()->is_verified)
+                                        
+                                         
+                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount <= 10) --}}
+                                        {{-- <div class="row mb-4 mt-4">
+                                          <div class="col-lg-6">
+                                          <button type="submit" class="btn btn-alt-primary">
+                                              <i class="fa fa-plus opacity-50 me-1"></i> Submit
+                                          </button>
+                                          </div>
+                                        </div> --}}
+                                        {{-- @else --}}
+                                        {{-- <div class="row mb-4 mt-4">
+                                          <div class="col-lg-12">
+                                            <p> You are not verified yet. Please click the button below to get Verified!</p>
+                                            <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a> --}}
+                                          {{-- <button type="button" class="btn btn-alt-primary">
+                                              <i class="fa fa-plus opacity-50 me-1 disabled"></i> Submit
+                                          </button> --}}
+                                          {{-- </div>
+                                        </div> --}}
+                                        {{-- @endif --}}
                                           
                                       </form>
                                     </div>
