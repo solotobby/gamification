@@ -158,11 +158,11 @@ class CampaignController extends Controller
 
         $baseCurrency = auth()->user()->wallet->base_currency;
        
-        if($baseCurrency == "Naira" || $baseCurrency == 'NGN'){
+        if($baseCurrency == 'NGN'){
 
             return SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
 
-        }elseif($baseCurrency == "Dollar" || $baseCurrency == 'USD'){ 
+        }elseif($baseCurrency == 'USD'){ 
 
             // $rate = nairaConversion($baseCurrency);
             $subCates = SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
@@ -203,10 +203,10 @@ class CampaignController extends Controller
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
 
-        if($baseCurrency == "Naira" || $baseCurrency == 'NGN'){
+        if($baseCurrency == 'NGN'){
             return SubCategory::where('id', $id)->first();
 
-        }elseif($baseCurrency == "Dollar" || $baseCurrency == 'USD'){ 
+        }elseif($baseCurrency == 'USD'){ 
 
             $subCate = SubCategory::where('id', $id)->first();
             // $rate = nairaConversion($baseCurrency);
@@ -327,10 +327,10 @@ class CampaignController extends Controller
         $channel = '';
 
         $baseCurrency = auth()->user()->wallet->base_currency;
-        if($baseCurrency == "Naira" || $baseCurrency == "NGN"){
+        if($baseCurrency == "NGN"){
             $currency = 'NGN';
             $channel = 'paystack';
-        }elseif($baseCurrency == "Dollar" || $baseCurrency == "USD"){
+        }elseif($baseCurrency == "USD"){
             $currency = 'USD';
             $channel = 'paypal';
         }else{
@@ -661,8 +661,8 @@ class CampaignController extends Controller
             }elseif($campaign->currency == null){
                $currency = baseCurrency();
                $channel = 'flutterwave';
-               return $converted_amount = jobCurrencyConverter(baseCurrency(), $campaign->currency, $workSubmitted->amount);
-               creditWallet($user, baseCurrency(), $converted_amount);
+            //   $converted_amount = $workSubmitted->amount;//jobCurrencyConverter(baseCurrency(), $campaign->currency, $workSubmitted->amount);
+               creditWallet($user, baseCurrency(), $workSubmitted->amount);
            }
 
 
