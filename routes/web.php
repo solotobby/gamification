@@ -120,6 +120,8 @@ Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'send
 
 Route::post('verify/phone/otp', [\App\Http\Controllers\OTPController::class, 'verifyPhoneOTP'])->name('verify.phone.otp');
 
+
+Route::get('generate/virtual/account', [\App\Http\Controllers\HomeController::class, 'generateVirtualAccount'])->name('generate.virtual.account');
 ////promote business
 
 Route::get('user/business', function () {

@@ -125,19 +125,20 @@ class RegisterController extends Controller
         $wall->save();
 
         activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+        $subject = 'Welcome to Freebyz';
+        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
-        if ($location == 'Nigeria') {
-            $phone = '234' . substr($request->phone, 1);
-            generateVirtualAccountOnboarding($user, $phone);
-        }
+        // if ($location == 'Nigeria') {
+        //     $phone = '234' . substr($request->phone, 1);
+        //     generateVirtualAccountOnboarding($user, $phone);
+        // }
 
         // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-        if(env('APP_ENV')  == 'local_test'){
-           // $curLocation = 'United Kingdom';
-        }else{
-            $subject = 'Welcome to Freebyz';
-             Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
-        }
+        // if(env('APP_ENV')  == 'local_test'){
+        //    // $curLocation = 'United Kingdom';
+        // }else{
+           
+        // }
 
         
         return $user;

@@ -312,6 +312,18 @@ class HomeController extends Controller
             ->with('channel', json_encode($registrationChannel));
     }
 
+    public function generateVirtualAccount(){
+        
+         $res = reGenerateVirtualAccount(auth()->user());
+         $responseData = $res->getData(true);
+
+        if($responseData['status'] == true){
+            return back()->with('success', 'Freebyz Personal Account Created Successfully');
+        }else{
+            return back()->with('error', 'An error occoured while creating account, please contact admin by ckicking Talk to Us on the side menu');
+        }
+    }
+
     public function savePhoneInformation(Request $request)
     {
         // $this->validate($request, [
