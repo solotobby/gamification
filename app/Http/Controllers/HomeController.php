@@ -314,8 +314,8 @@ class HomeController extends Controller
 
     public function generateVirtualAccount(){
         
-         $res = reGenerateVirtualAccount(auth()->user());
-         $responseData = $res->getData(true);
+        $res = reGenerateVirtualAccount(auth()->user());
+        $responseData = $res->getData(true);
 
         if($responseData['status'] == true){
             return back()->with('success', 'Freebyz Personal Account Created Successfully');

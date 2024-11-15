@@ -119,7 +119,7 @@
                 Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
               </p>
           @else
-              <a href="{{ url('reactivate/virtual/account/'.auth()->user()->id) }}" class="btn btn-success btn-sm">Activate Your Freebyz Personal Account</a>
+              <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Activate Your Freebyz Personal Account</a>
           @endif
           <p> <i>Note: After successful payment to your virtual wallet, your account will be automatically verified. <br>You can then proceed <a href="{{ url('home') }}">here</a> to start earning.</i></p>
         @endif
@@ -196,6 +196,8 @@
           @endif
         </span>
       </div>
+
+      <a href="{{ route('generate.virtual.account') }}">v_a</a>
     </div>
   </div>
 
