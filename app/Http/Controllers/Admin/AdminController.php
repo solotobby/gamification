@@ -377,7 +377,7 @@ class AdminController extends Controller
         return view('admin.admin_transactions', ['lists' => $list]);
     }
     public function userTransaction(){
-        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
+        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
         return view('admin.users.user_transactions', ['lists' => $list]);
     }
 
@@ -409,7 +409,7 @@ class AdminController extends Controller
     }
     public function adminUserTransactions($id){
         $user = User::where('id', $id)->first();
-        $transactions = $user->transactions->where('status', 'successful');
+        $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->orderBy('created_at', 'DESC')->get(); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
         return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
     }
     public function adminUserCampaigns($id){

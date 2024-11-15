@@ -404,7 +404,7 @@ class CampaignController extends Controller
                         }
 
                    
-                    }elseif(!auth()->user()->is_verified && $getCampaign['local_converted_amount'] <= $minUpgradeFee){
+                    }elseif(!auth()->user()->is_verified && $getCampaign['local_converted_amount'] < $minUpgradeFee){
 
                         if($getCampaign['is_completed'] == true){
                             return redirect('#');
@@ -433,7 +433,7 @@ class CampaignController extends Controller
                             return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
                         }
 
-                    }elseif(!auth()->user()->USD_verified && $getCampaign['local_converted_amount'] <= $minUpgradeFee){
+                    }elseif(!auth()->user()->USD_verified && $getCampaign['local_converted_amount'] < $minUpgradeFee){
                        
 
                         if($getCampaign['is_completed'] == true){
