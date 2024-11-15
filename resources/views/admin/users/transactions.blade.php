@@ -36,7 +36,8 @@
       </div>
       <div class="block-content">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+          {{-- js-dataTable-full-pagination --}}
+            <table class="table table-bordered table-striped table-vcenter">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -49,7 +50,7 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach ($transactions as $list)
+                  @foreach ($user->transactions->where('status', 'successful') as $list)
                   
                     @if($list->tx_type == 'Credit')
                       <tr style="color: forestgreen">
