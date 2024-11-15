@@ -377,7 +377,7 @@ class AdminController extends Controller
         return view('admin.admin_transactions', ['lists' => $list]);
     }
     public function userTransaction(){
-        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
+        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->get();
         return view('admin.users.user_transactions', ['lists' => $list]);
     }
 

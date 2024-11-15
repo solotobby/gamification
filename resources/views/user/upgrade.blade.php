@@ -197,7 +197,6 @@
         </span>
       </div>
 
-      <a href="{{ route('generate.virtual.account') }}">v_a</a>
     </div>
   </div>
 
