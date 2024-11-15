@@ -320,7 +320,7 @@ class HomeController extends Controller
         if($responseData['status'] == true){
             return back()->with('success', 'Freebyz Personal Account Created Successfully');
         }else{
-            return back()->with('error', 'An error occoured while creating account, please contact admin by ckicking Talk to Us on the side menu');
+            return back()->with('error', 'An error occoured while creating account, please contact admin by clicking Talk to Us on the side menu');
         }
     }
 
