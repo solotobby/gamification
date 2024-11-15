@@ -111,7 +111,7 @@
                   @endif
             @else 
 
-                  <a href="{{  url('bank/information') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
+                  <a href="{{ route('generate.virtual.account') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
             @endif
 
