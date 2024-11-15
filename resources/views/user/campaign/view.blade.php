@@ -404,34 +404,16 @@
                                             <input type="checkbox" name="validate" required class="">
                                             <span><small> I agree that I will wait for a maximum of 24hrs for this tasks to be approved by the advertiser. </small></span>
                                         </div>
-                                          @if(auth()->user()->is_verified)
-                                          <div class="row mb-4 mt-4">
-                                            <div class="col-lg-6">
-                                            <button type="submit" class="btn btn-alt-primary">
-                                                <i class="fa fa-plus opacity-50 me-1"></i> Submit
-                                            </button>
-                                            </div>
-                                        </div>
-                                         
-                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount < currencyParameter(baseCurrency())->min_upgrade_amount)
+
                                         <div class="row mb-4 mt-4">
                                           <div class="col-lg-6">
                                           <button type="submit" class="btn btn-alt-primary">
                                               <i class="fa fa-plus opacity-50 me-1"></i> Submit
                                           </button>
                                           </div>
-                                        </div>
-                                        @else
-                                        <div class="row mb-4 mt-4">
-                                          <div class="col-lg-12">
-                                            <p> You are not verified yet. Please click the button below to get Verified!</p>
-                                            <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a>
-                                          {{-- <button type="button" class="btn btn-alt-primary">
-                                              <i class="fa fa-plus opacity-50 me-1 disabled"></i> Submit
-                                          </button> --}}
-                                          </div>
-                                        </div>
-                                        @endif
+                                      </div>
+
+                                
                                           
                                       </form>
                                     </div>
