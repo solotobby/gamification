@@ -42,23 +42,23 @@ class Kernel extends ConsoleKernel
 
             
 
-        $schedule->call(function(){
+        // $schedule->call(function(){
 
-            \DB::table('wallets')
-            ->where(function($query) {
-                $query->whereNull('base_currency')
-                      ->orWhere('base_currency', 'Naira')
-                      ->orWhere('base_currency', 'Dollar');
-            })
-            ->update([
-                'base_currency' => \DB::raw("CASE 
-                    WHEN base_currency IS NULL THEN 'NGN' 
-                    WHEN base_currency = 'Naira' THEN 'NGN' 
-                    WHEN base_currency = 'Dollar' THEN 'USD' 
-                    ELSE base_currency END")
-            ]);
+        //     \DB::table('wallets')
+        //     ->where(function($query) {
+        //         $query->whereNull('base_currency')
+        //               ->orWhere('base_currency', 'Naira')
+        //               ->orWhere('base_currency', 'Dollar');
+        //     })
+        //     ->update([
+        //         'base_currency' => \DB::raw("CASE 
+        //             WHEN base_currency IS NULL THEN 'NGN' 
+        //             WHEN base_currency = 'Naira' THEN 'NGN' 
+        //             WHEN base_currency = 'Dollar' THEN 'USD' 
+        //             ELSE base_currency END")
+        //     ]);
 
-        })->dailyAt('20:30');
+        // })->dailyAt('20:30');
 
 
         $schedule->call(function(){
@@ -135,14 +135,14 @@ class Kernel extends ConsoleKernel
     
                 $user = User::where('id', $ca->user_id)->first();
                 $baseCurrency = baseCurrency($user);
-                $amountCredited = jobCurrencyConverter($camp->currency, baseCurrency($user), $ca->amount);
+                $amountCredited =$ca->amount; //jobCurrencyConverter($camp->currency, baseCurrency($user), $ca->amount);
                 if($baseCurrency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
                     $wallet->balance += (int)$amountCredited;
                     $wallet->save();
-                }elseif($camp->currency == 'NGN'){
+                }elseif($camp->currency == 'USD'){
                     $currency = 'USD';
                     $channel = 'paypal';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
@@ -183,11 +183,11 @@ class Kernel extends ConsoleKernel
 
         })->hourly();
 
-        $schedule->call(function(){ 
+        // $schedule->call(function(){ 
 
-            Question::where('option_A', null)->delete();
+        //     Question::where('option_A', null)->delete();
 
-        })->daily();
+        // })->daily();
 
         $schedule->call(function(){
 

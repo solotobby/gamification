@@ -78,7 +78,7 @@
                 <p>Amount: {{ $job['currency'] }} {{ $job['campaign_amount'] }}</p>
                 <p>Category: {{ $job['type'] }}</p> 
                 <div class="cta-button">
-                    <a href="{{  url('campaign/'.$job['job_id']) }}" target="_blank">View Campaign</a>
+                    <a href=" https://freebyz.com/campaign/{{ $job['job_id'] }}" target="_blank">View Campaign</a>
                 </div>
             </div>
         @endforeach
