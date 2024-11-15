@@ -314,7 +314,7 @@ class HomeController extends Controller
 
     public function generateVirtualAccount(){
         
-        $res = reGenerateVirtualAccount(auth()->user());
+       return $res = reGenerateVirtualAccount(auth()->user());
         $responseData = $res->getData(true);
 
         if($responseData['status'] == true){
