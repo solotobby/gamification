@@ -112,6 +112,18 @@
 
 <div class="row">
 
+              @if (session('success'))
+                  <div class="alert alert-success" role="alert">
+                      {{ session('success') }}
+                  </div>
+              @endif
+  
+              @if (session('error'))
+                  <div class="alert alert-danger" role="alert">
+                      {{ session('error') }}
+                  </div>
+              @endif
+
     <div class="col-md-6">
         <h5 class="fw-light mb-2">Referral Link</h5>
         <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9" data-task-completed="false" data-task-starred="false">
@@ -131,8 +143,10 @@
             <table class="table table-borderless table-vcenter mb-0">
                 <div class="input-group">
                   {{-- <span class="form-control form-control-alt">Coming Soon!</span>  --}}
-                  @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
+                  @if(auth()->user()->wallet->base_currency == 'NGN')
       
+                  
+
                       @if(auth()->user()->virtualAccount)
 
                         <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
@@ -148,8 +162,9 @@
                         </button> --}}
 
                             <span class="form-control form-control-alt">
-                              <a href="{{ url('reactivate/virtual/account/'.auth()->user()->id) }}" class="btn btn-success btn-sm">Activate Freebyz Personal Account</a>
+                              <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Activate Freebyz Personal Account</a>
                             </span>
+
                       @endif
 
                   @else
