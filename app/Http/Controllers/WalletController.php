@@ -621,10 +621,10 @@ class WalletController extends Controller
         }
 
          $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-         if($currency == 'USD' || $currency == 'Dollar'){
+         if($currency == 'USD'){
             $wallet->usd_balance -= $request->balance;
             $wallet->save();
-         }elseif($currency == 'NGN' || $currency == 'Naira'){
+         }elseif($currency == 'NGN'){
             $wallet->balance -= $request->balance;
             $wallet->save();
          }else{
@@ -638,7 +638,7 @@ class WalletController extends Controller
              'amount' => $newamount_to_be_withdrawn,
              'next_payment_date' => $nextFriday,
              'paypal_email' => $currency == 'USD' ? $request->paypal_email : null,
-             'is_usd' => $currency == 'USD' ? true : false,
+             'is_usd' => false,
              'base_currency' => $currency,
              'content' => $payload == '' ? null : $payload
          ]);

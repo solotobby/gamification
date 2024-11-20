@@ -46,6 +46,7 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Approved</th>
                 <th>Unit Price</th>
@@ -58,6 +59,9 @@
             <tbody>
                 @foreach ($lists as $list)
                 <tr>
+                  <td>
+                    {{ $list->job_id }}
+                  </td>
                     <td>
                       {{ $list->post_title }}
                     </td>

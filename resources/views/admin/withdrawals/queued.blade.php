@@ -69,7 +69,11 @@
                         <td class="fw-semibold"> <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}"> {{$with->user->name }}</a></td>
                         <td>{{ $with->user->email }}</td>
                         <td>{{ $with->user->phone }}</td>
-                        <td>&#8358;{{ number_format(@$with->amount) }}</td>
+                        <td>
+                          {{-- &#8358;{{ number_format(@$with->amount) }} --}}
+                          {{$with->base_currency}} {{ number_format($with->amount) }}
+
+                        </td>
                         <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
                         <td><a href="{{ url('user/'.@$with->user->id.'/info') }}" target="_blank" class="btn btn-primary btn-sm">User</a></td>
                         <td>{{ \Carbon\Carbon::parse($with->created_at)->format('d/m/Y @ h:i:s a') }}</td>

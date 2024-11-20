@@ -1662,7 +1662,7 @@ if(!function_exists('filterCampaign')){
     function filterCampaign($categoryID){ 
 
         $user = Auth::user();
-        $jobfilter = '';
+        // $jobfilter = '';
         $campaigns = '';
 
     // if($user){
@@ -1671,67 +1671,6 @@ if(!function_exists('filterCampaign')){
 
     $baseCurrency = $user->wallet->base_currency;
 
-        
-    // if($user->USD_verified){ //if user is usd verified, they see all jobs
-
-    //     if($categoryID == 0){
-    //         ///without filter
-    //         // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-
-    //         $campaigns = Campaign::where('status', 'Live')
-    //             ->where('is_completed', false)
-    //             ->whereNotIn('id', function($query) use ($user) {
-                
-    //                 $query->select('campaign_id')
-    //                 ->from('campaign_workers')
-    //                 ->where('user_id', $user->id);
-                
-    //         })->orderBy('created_at', 'DESC')->get();
-
-    //     }else{
-    //         //with filter
-    //         $campaigns = Campaign::where('status', 'Live')
-    //             ->where('is_completed', false)
-    //             ->where('campaign_type', $categoryID)
-    //             ->whereNotIn('id', function($query) use ($user) {
-                
-    //                 $query->select('campaign_id')
-    //                 ->from('campaign_workers')
-    //                 ->where('user_id', $user->id);
-                
-    //         })->orderBy('created_at', 'DESC')->get();
-    //     }
-        
-    // }else{
-    //     if($categoryID == 0){
-            
-    //         $campaigns = Campaign::where('status', 'Live')
-    //             ->where('is_completed', false)
-    //             ->where('currency', $jobfilter)
-    //             ->whereNotIn('id', function($query) use ($user) {
-                
-    //                 $query->select('campaign_id')
-    //                 ->from('campaign_workers')
-    //                 ->where('user_id', $user->id);
-                
-    //         })->orderBy('created_at', 'DESC')->get();
-
-
-    //     }else{
-    //          $campaigns = Campaign::where('status', 'Live')
-    //             ->where('is_completed', false)
-    //             ->where('currency', $jobfilter)
-    //             ->where('campaign_type', $categoryID)
-    //             ->whereNotIn('id', function($query) use ($user) {
-                
-    //                 $query->select('campaign_id')
-    //                         ->from('campaign_workers')
-    //                         ->where('user_id', $user->id);
-                
-    //         })->orderBy('created_at', 'DESC')->get();
-    //     }
-
-    // }
 
     if($categoryID == 0){
         ///without filter
@@ -1791,6 +1730,7 @@ if(!function_exists('filterCampaign')){
         }else{
             $convertedAmount = jobCurrencyConverter($from, $to, $value->campaign_amount);
         }
+        
         $list[] = [ 
             'id' => $value->id, 
             'job_id' => $value->job_id, 
