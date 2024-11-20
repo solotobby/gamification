@@ -80,7 +80,7 @@
                         <td>
                           {{-- &#8358;{{ number_format(@$with->amount) }} --}}
 
-                              @if($with->is_usd == true)
+                              {{-- @if($with->is_usd == true)
                                 ${{ number_format($list->amount) }}
                               @elseif($with->base_currency == null)
 
@@ -88,7 +88,9 @@
 
                               @else
                                 {{$with->base_currency}} {{ number_format($with->amount) }}
-                              @endif
+                              @endif --}}
+
+                              {{$with->base_currency}} {{ number_format($with->amount) }}
 
                         </td>
                         <td>{{ $with->status == '1' ? 'Sent' : 'Queued'}}</td>
