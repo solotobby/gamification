@@ -95,8 +95,8 @@ class GeneralController extends Controller
 
     public function fix(){
 
-       return $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-            ->get();
+       return $lists = CampaignWorker::where('status', 'Pending')->where('reason', null)
+                        ->get();
 
        
     //     $user = User::where('id', '14')->first();
