@@ -237,7 +237,7 @@ class Kernel extends ConsoleKernel
 
                 $user = User::where('id', $ca->user_id)->first();
                 $baseCurrency = baseCurrency($user);
-                
+
                 $amountCredited =$ca->amount;
                 if($baseCurrency == 'NGN'){
                     $currency = 'NGN';
@@ -284,7 +284,7 @@ class Kernel extends ConsoleKernel
             $content = 'Job Automatic Approval of '.$lists->count();
             Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        })->dailyAt('22:00');
+        })->dailyAt('18:10');
         
         // $schedule->call(function(){
         // //credit all dispute from July 2024 upward
