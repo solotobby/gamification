@@ -219,72 +219,72 @@ class Kernel extends ConsoleKernel
 //////////////////////////////////////////////////////////////////////////////////////////
         
         //remove after tonight
-        $schedule->call(function(){
+        // $schedule->call(function(){
 
-            $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)->get();
+        //     $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)->get();
 
-            foreach($lists as $list){
+        //     foreach($lists as $list){
 
-                $ca = CampaignWorker::where('id', $list->id)->first();
-                $ca->status = 'Approved';
-                $ca->reason = 'Auto-approval';
-                $ca->save();
+        //         $ca = CampaignWorker::where('id', $list->id)->first();
+        //         $ca->status = 'Approved';
+        //         $ca->reason = 'Auto-approval';
+        //         $ca->save();
     
-                $camp = Campaign::where('id', $ca->campaign_id)->first();
-                $camp->completed_count += 1;
-                $camp->pending_count -= 1;
-                $camp->save();
+        //         $camp = Campaign::where('id', $ca->campaign_id)->first();
+        //         $camp->completed_count += 1;
+        //         $camp->pending_count -= 1;
+        //         $camp->save();
 
-                $user = User::where('id', $ca->user_id)->first();
-                $baseCurrency = baseCurrency($user);
+        //         $user = User::where('id', $ca->user_id)->first();
+        //         $baseCurrency = baseCurrency($user);
 
-                $amountCredited =$ca->amount;
-                if($baseCurrency == 'NGN'){
-                    $currency = 'NGN';
-                    $channel = 'paystack';
-                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->balance += (int)$amountCredited;
-                    $wallet->save();
-                }elseif($camp->currency == 'USD'){
-                    $currency = 'USD';
-                    $channel = 'paypal';
-                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->usd_balance += (int)$amountCredited;
-                    $wallet->save();
-                }else{
-                    $currency = baseCurrency($user);
-                    $channel = 'flutterwave';
-                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->base_currency_balance += (int)$amountCredited;
-                    $wallet->save();
-                }
+        //         $amountCredited =$ca->amount;
+        //         if($baseCurrency == 'NGN'){
+        //             $currency = 'NGN';
+        //             $channel = 'paystack';
+        //             $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        //             $wallet->balance += (int)$amountCredited;
+        //             $wallet->save();
+        //         }elseif($camp->currency == 'USD'){
+        //             $currency = 'USD';
+        //             $channel = 'paypal';
+        //             $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        //             $wallet->usd_balance += (int)$amountCredited;
+        //             $wallet->save();
+        //         }else{
+        //             $currency = baseCurrency($user);
+        //             $channel = 'flutterwave';
+        //             $wallet = Wallet::where('user_id', $ca->user_id)->first();
+        //             $wallet->base_currency_balance += (int)$amountCredited;
+        //             $wallet->save();
+        //         }
     
-                setIsComplete($ca->campaign_id);
+        //         setIsComplete($ca->campaign_id);
 
                 
-                $ref = time();
+        //         $ref = time();
     
-                PaymentTransaction::create([
-                    'user_id' => $ca->user_id,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => $ca->amount,
-                    'status' => 'successful',
-                    'currency' => $currency,
-                    'channel' => $channel,
-                    'type' => 'campaign_payment',
-                    'description' => 'Campaign Payment for '.$ca->campaign->post_title,
-                    'tx_type' => 'Credit',
-                    'user_type' => 'regular'
-                ]);    
-            }
+        //         PaymentTransaction::create([
+        //             'user_id' => $ca->user_id,
+        //             'campaign_id' => '1',
+        //             'reference' => $ref,
+        //             'amount' => $ca->amount,
+        //             'status' => 'successful',
+        //             'currency' => $currency,
+        //             'channel' => $channel,
+        //             'type' => 'campaign_payment',
+        //             'description' => 'Campaign Payment for '.$ca->campaign->post_title,
+        //             'tx_type' => 'Credit',
+        //             'user_type' => 'regular'
+        //         ]);    
+        //     }
 
-            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'Batched Job Approval(Missed Jobs) -  Notification';
-            $content = 'Job Automatic Approval of '.$lists->count();
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+        //     $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+        //     $subject = 'Batched Job Approval(Missed Jobs) -  Notification';
+        //     $content = 'Job Automatic Approval of '.$lists->count();
+        //     Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
-        })->dailyAt('18:10');
+        // })->dailyAt('18:10');
         
         // $schedule->call(function(){
         // //credit all dispute from July 2024 upward
