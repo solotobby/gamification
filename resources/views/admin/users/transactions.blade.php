@@ -64,11 +64,8 @@
                         {{ $list->type }}
                       </td>
                       <td>
-                        @if($list->currency == 'NGN')
-                          &#8358;{{ number_format($list->amount,2) }}
-                          @else
-                          ${{ number_format($list->amount,2) }}
-                          @endif
+                        {{ number_format($list->amount,2) }}
+                        
                       </td>
                       <td>
                           {{ $list->currency }}
