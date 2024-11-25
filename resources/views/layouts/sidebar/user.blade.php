@@ -260,7 +260,7 @@
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
-            @if(auth()->user()->wallet->base_currency == 'Naira')
+            @if(auth()->user()->wallet->base_currency == 'NGN')
             <a class="nav-main-link" href="{{route('ref.all')}}">
               <span class="nav-main-link-name">View All</span>
             </a>
@@ -285,7 +285,7 @@
         </a>
       </li> --}}
 
-      @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
+      @if(auth()->user()->wallet->base_currency == 'NGN')
        <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('badge') }}">
           <i class="nav-main-link-icon si si-badge"></i>
