@@ -1127,11 +1127,17 @@ class AdminController extends Controller
                         $wallet = Wallet::where('user_id', $request->user_id)->first(); 
                         $wallet->balance += $request->amount;
                         $wallet->save();
-                    }else{
+                    }elseif($request->currency == 'USD'){
                         $currency = 'USD';
                         $channel = 'paypal';
                         $wallet = Wallet::where('user_id', $request->user_id)->first(); 
                         $wallet->usd_balance += $request->amount;
+                        $wallet->save();
+                    }else{
+                        $currency = $request->currency;
+                        $channel = 'flutterwave';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->base_currency_balance += $request->amount;
                         $wallet->save();
                     }
                 
@@ -1164,11 +1170,17 @@ class AdminController extends Controller
                         $wallet = Wallet::where('user_id', $request->user_id)->first(); 
                         $wallet->balance -= $request->amount;
                         $wallet->save();
-                    }else{
+                    }elseif($request->currency == 'USD'){
                         $currency = 'USD';
                         $channel = 'paypal';
                         $wallet = Wallet::where('user_id', $request->user_id)->first(); 
                         $wallet->usd_balance -= $request->amount;
+                        $wallet->save();
+                    }else{
+                        $currency = $request->currency;
+                        $channel = 'flutterwave';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->base_currency_balance -= $request->amount;
                         $wallet->save();
                     }
                 
