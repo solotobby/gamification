@@ -19,7 +19,8 @@
         <link rel="stylesheet" href="{{ asset('asset/style.css') }}">
         <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
         <script src="{{ asset('asset/js/vendor/modernizr-2.8.3.min.js') }}"></script>
-
+        
+        <script src="https://alwingulla.com/88/tag.min.js" data-zone="115972" async data-cfasync="false"></script>
     
         <script>
             !function(f,b,e,v,n,t,s)
