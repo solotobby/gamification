@@ -559,7 +559,7 @@ class AdminController extends Controller
         
         $name = $getUser->name;
         activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
-        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
         
