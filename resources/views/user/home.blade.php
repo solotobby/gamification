@@ -339,6 +339,25 @@
           </div> 
         </a> 
 
+        <a href="https://zireemilsoude.net/4/8562126" target="_blank">
+          <div class="block block-rounded block-fx-pop mb-2">
+            <div class="block-content block-content-full border-start border-3 border-dark">
+              <div class="d-md-flex justify-content-md-between align-items-md-center">
+                <div class="col-12">
+                  <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
+                  <h3 class="h4 fw-bold mb-1" style="color: #191918">Get Amazing Opportunities from our Partners</h3>
+                  <p class="fs-sm text-muted">
+                    <i class="fa fa-heart me-1"></i>Play Games and Install Apps to earn more money
+                  </p>
+                  
+                </div>
+                
+              </div>
+            </div>
+          </div> 
+        </a> 
+
+
         <div class="" id="display-jobs">
         </div>
 
