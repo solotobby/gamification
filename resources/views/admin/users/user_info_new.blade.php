@@ -12,8 +12,6 @@
             @if($info->is_verified)
                 <i class='fa fa-check text-info me-1'></i>
             @endif
-           
-           
         </h1>
         <p class="text-muted">
           {{-- <i class="fa fa-award text-warning me-1"></i> --}}
@@ -61,6 +59,13 @@
     </div>
     <div class="block-content">
       <div class="row">
+
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="col-lg-6">
           <!-- Billing Address -->
           <div class="block block-rounded block-bordered">
@@ -209,23 +214,27 @@
             Please Click the Button below to Upgrade User
             </h4>
             @if($info->is_verified == '0')
+            <center>
                 <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
                   Verify User (Naira) Now!
                 </a>
                 @else
-                <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
-                  Verification Successfull (Naira)
+                <a class="btn btn-hero btn-warning" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
+                  UnVerify User (Naira) Now!
                 </a>
+            </center>
             @endif
 
             @if(!$info->USD_verified)
+            <center>
                 <a class="btn btn-hero btn-primary" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
                   Verify User (USD) Now!
                 </a>
                 @else
-                <a class="btn btn-hero btn-primary disabled" href="#" data-toggle="click-ripple">
-                  Verification Successfull (USD)
+                <a class="btn btn-hero btn-warning" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
+                  UnVerify User (USD) Now!
                 </a>
+              </center>
             @endif
 
            
@@ -234,7 +243,9 @@
                 <h5 class="fw-normal text-muted text-center">
                   Generate Virtual Account
                   </h5>
-                  <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-success btn-sm mb-4">Activate VA</a>
+                  <center>
+                  <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-hero btn-success mb-4">Activate VA</a>
+                  </center>
               @endif
         </div>
 
