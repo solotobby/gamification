@@ -175,13 +175,12 @@
                     </div>
                     <select name="currency" class="form-control" required>
                       <option value="">Select Currency</option>
-                      <option value="USD">Dollar</option>
-                      <option value="NGN">Naira</option>
+                        <option value="{{ baseCurrency($info) }}"> {{ baseCurrency($info) }} </option>
                     </select>
                   </div>
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
-                      <div class="input-group-text">&#8358;/$</div>
+                      <div class="input-group-text">{{ baseCurrency($info) }}</div>
                     </div>
                     <input type="text" class="form-control" name="amount" placeholder="Amount" required>
                   </div>
