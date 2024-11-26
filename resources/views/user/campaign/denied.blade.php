@@ -61,14 +61,10 @@
                       {{ $list->campaign->post_title }}
                     </td>
                     <td>
-                      {{-- @if($list->campaign->currency == 'NGN')
-                      &#8358;{{ $list->amount }}
-                      @else
-                      ${{ $list->amount }}
-                    @endif --}}
-                    {{baseCurrency()}} {{ currencyConverter($list->currency, baseCurrency(), $list->amount) }}
+                      
+                    {{baseCurrency()}} {{ currencyConverter($list->campaign->currency, baseCurrency(), $list->amount) }}
                     
-                    {{-- {{ $list->currency }} {{ $list->amount }} --}}
+                  
                      </td>
                     <td>
                          {{ $list->user->name }}
