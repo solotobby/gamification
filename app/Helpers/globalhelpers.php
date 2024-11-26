@@ -2349,6 +2349,57 @@ if(!function_exists('amountCalculator')){
     }
 }
 
+if(!function_exists('baseRates')){
+    function  baseRates(){
+
+        $currencies = Currency::query()->get(['id', 'code', 'base_rate']);
+
+        // Initialize results array
+        $pairsWithRates = [];
+
+        foreach($currencies as $base){
+
+            foreach($currencies as $target){
+                // if($base !== $target){
+                    $rate = $target['base_rate'] / $base['base_rate'];
+                    $pairsWithRates[] = [
+                        'from' => $base['code'],
+                        'to' => $target['code'],
+                        'rate' => sprintf("%.6g", $rate),
+                    ];
+                // }
+                
+            }
+
+        }
+
+        return $pairsWithRates;
+
+    }
+}
+
+if(!function_exists('getBaseRate')){
+    function  getBaseRate($currencyCode){ 
+            return Currency::where('code', $currencyCode)->first()->base_rate;
+    }
+}
+
+if(!function_exists('currencyConverter')){
+    function  currencyConverter($from, $to, $amount){ 
+        $baseCurr = getBaseRate($from);
+        $target = getBaseRate($to);
+
+        $rate = $target / $baseCurr;
+
+        $convertedAmount = $rate * $amount;
+        
+        return number_format($convertedAmount,2);
+
+    }
+}
+
+
+
 if(!function_exists('currencySymbol')){
     function  currencySymbol($currency){
           
