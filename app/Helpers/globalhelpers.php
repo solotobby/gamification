@@ -2352,7 +2352,7 @@ if(!function_exists('amountCalculator')){
 if(!function_exists('baseRates')){
     function  baseRates(){
 
-        $currencies = Currency::query()->get(['id', 'code', 'base_rate']);
+        $currencies = Currency::query()->where('is_active', '1')->get(['id', 'code', 'base_rate']);
 
         // Initialize results array
         $pairsWithRates = [];
@@ -2392,7 +2392,7 @@ if(!function_exists('currencyConverter')){
         $rate = $target / $baseCurr;
 
         $convertedAmount = $rate * $amount;
-        
+
         return number_format($convertedAmount,2);
 
     }
