@@ -188,7 +188,7 @@ class CampaignController extends Controller
                 $list[] = [ 
                     'id' => $sub->id,
                     'name' => $sub->name,
-                    'amount' => jobCurrencyConverter('NGN', baseCurrency(), $sub->amount), //number_format($convertedAmount,2),
+                    'amount' => CurrencyConverter('NGN', baseCurrency(), $sub->amount), //number_format($convertedAmount,2),
                     'category_id' => $sub->category_id,
                     '_currency' => baseCurrency(),
                     '_channel' => 'other'
@@ -215,7 +215,7 @@ class CampaignController extends Controller
            return  $list = [ 
                 'id' => $subCate->id,
                 'name' => $subCate->name,
-                'amount' =>  $subCate->usd,  //jobCurrencyConverter('NGN', baseCurrency(), $subCate->amount),//number_format($convertedAmount,2),
+                'amount' =>  $subCate->usd,
                 'category_id' => $subCate->category_id,
                 '_currency' => $baseCurrency,
                 '_channel' => 'other'
@@ -230,7 +230,7 @@ class CampaignController extends Controller
              $list = [ 
                  'id' => $subCate->id,
                  'name' => $subCate->name,
-                 'amount' => jobCurrencyConverter('NGN', baseCurrency(), $subCate->amount),
+                 'amount' => CurrencyConverter('NGN', baseCurrency(), $subCate->amount),
                  'category_id' => $subCate->category_id,
                  '_currency' => $baseCurrency,
                  '_channel' => 'other'
@@ -385,7 +385,7 @@ class CampaignController extends Controller
             abort(400);
         }
 
-        $getCampaign = viewCampaign($job_id);
+            $getCampaign = viewCampaign($job_id);
             if($getCampaign){
 
                 $baseCurrency = baseCurrency();
@@ -547,7 +547,7 @@ class CampaignController extends Controller
             $campaignWorker['user_id'] = auth()->user()->id;
             $campaignWorker['campaign_id'] = $request->campaign_id;
             $campaignWorker['comment'] = $request->comment;
-            $campaignWorker['amount'] = $request->amount; //jobCurrencyConverter($campaign->currency, baseCurrency() , $campaign->campaign_amount);  ;
+            $campaignWorker['amount'] = $request->amount; 
             $campaignWorker['proof_url'] = $proofUrl == '' ? 'no image' : $proofUrl;
             $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
            
@@ -592,7 +592,7 @@ class CampaignController extends Controller
             return redirect('home');
         } 
 
-        $convertedAmount = jobCurrencyConverter($cam->currency, baseCurrency(), $cam->campaign_amount);
+        $convertedAmount = currencyConverter($cam->currency, baseCurrency(), $cam->campaign_amount);
         
        $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
        return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount]);
@@ -661,7 +661,6 @@ class CampaignController extends Controller
             }elseif($campaign->currency == null){
                $currency = baseCurrency();
                $channel = 'flutterwave';
-            //   $converted_amount = $workSubmitted->amount;//jobCurrencyConverter(baseCurrency(), $campaign->currency, $workSubmitted->amount);
                creditWallet($user, baseCurrency(), $workSubmitted->amount);
            }
 

@@ -85,7 +85,7 @@
                               ${{ $list->amount }}
                               @endif --}}
 
-                              {{ baseCurrency() }} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->amount)  }}
+                              {{ baseCurrency() }} {{ currencyConverter($list->currency, baseCurrency(), $list->amount)  }}
                           </td>
                           <td>{{ $list->status }}</td>
                           <td>
