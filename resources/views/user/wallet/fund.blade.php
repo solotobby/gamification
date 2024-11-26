@@ -30,25 +30,15 @@
         <p class="text-uppercase fw-bold fs-sm text-muted">Fund Wallet</p>
         <p class="link-fx fw-bold fs-1">
 
-          @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == 'NGN')
+          @if(auth()->user()->wallet->base_currency == 'NGN')
               &#8358;{{ number_format(auth()->user()->wallet->balance,2) }}
           @elseif(auth()->user()->wallet->base_currency == 'GHS')
               &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
 
-          @elseif(auth()->user()->wallet->base_currency == 'KES')
-              KES {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @elseif(auth()->user()->wallet->base_currency == 'TZS')
-              TZS {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @elseif(auth()->user()->wallet->base_currency == 'RWF')
-              RWF {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @elseif(auth()->user()->wallet->base_currency == 'MWK')
-              MWK {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @elseif(auth()->user()->wallet->base_currency == 'UGX')
-              UGX {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @elseif(auth()->user()->wallet->base_currency == 'ZAR')
-              ZAR {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-          @else   
-              ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
+          @elseif(auth()->user()->wallet->base_currency == 'USD')
+          ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
+         @else   
+         {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
           @endif
           
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}

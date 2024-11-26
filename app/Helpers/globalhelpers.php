@@ -1087,7 +1087,7 @@ if(!function_exists('userForeignUpgrade')){
                 }
 
                 //convert the referral commission to the referrer base currency and credit the wallet
-                $referral_converted_amount = jobCurrencyConverter($currency, $baseCur, $referral_amount);
+                $referral_converted_amount = currencyConverter($currency, $baseCur, $referral_amount);
 
                 $referralInfo = User::find($referee->referee_id);
                 
@@ -1123,7 +1123,7 @@ if(!function_exists('userForeignUpgrade')){
                 }else{
                     $baseCur = $walletAdmin->base_currency;
                 }
-                $referral_converted_amount = jobCurrencyConverter($currency, $baseCur, $referral_amount);
+                $referral_converted_amount = currencyConverter($currency, $baseCur, $referral_amount);
 
                 $referralInfo = User::find($referee->referee_id);
                 
@@ -1665,11 +1665,7 @@ if(!function_exists('filterCampaign')){
         // $jobfilter = '';
         $campaigns = '';
 
-    // if($user){
-    //     $jobfilter= $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
-    // }
-
-    $baseCurrency = $user->wallet->base_currency;
+        $baseCurrency = $user->wallet->base_currency;
 
 
     if($categoryID == 0){
@@ -1709,27 +1705,7 @@ if(!function_exists('filterCampaign')){
 
         //jobCurrency 
         $from = $value->currency; //from
-        $to = $baseCurrency; //to
-
-        // if($value->currency == 'NGN'){
-        //     $currencyCode = "&#8358";
-        // }elseif($value->currency == 'USD'){
-        //     $currencyCode = '$';
-        // }else{
-        //     $currencyCode = $baseCurrency;
-        // }
-
-        // if(getRate($from, $to) == null){
-        //     $rates = 0;
-        // }else{
-        //     $rates = getRate($from, $to)->amount;
-        // }
-
-        if(baseCurrency() == 'NGN'){
-            $convertedAmount = $value->campaign_amount;
-        }else{
-            $convertedAmount = jobCurrencyConverter($from, $to, $value->campaign_amount);
-        }
+        $to = $baseCurrency; //to user local currency
         
         $list[] = [ 
             'id' => $value->id, 
@@ -1748,14 +1724,11 @@ if(!function_exists('filterCampaign')){
             'currency' => $value->currency,
             'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
 
-            'local_converted_amount' => $convertedAmount,
+            'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
             'local_converted_currency' => $baseCurrency,
             'local_converted_currency_code' => $baseCurrency,
-
+            
             'priotized' => $value->approved,
-
-
-            'rate' => getRate($from, $to),
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
@@ -1779,80 +1752,7 @@ if(!function_exists('filterCampaign')){
     });
 
      return  $filteredArray;
-  
-
-
-    }
-}
-
-if(!function_exists('jobCurrencyConverter')){
-    function jobCurrencyConverter($from, $to, $amount){ 
-
-        if($from == $to){
-            $amountConv = $amount;
-        }else{
-            $getRate = getRate($from, $to);
-            if($getRate == null){
-                $rates = 0;
-            }else{
-                $rates = $getRate->amount;
-            }
-                $amountConv =  $rates * $amount;
-        }
-
-        
-
-        return number_format($amountConv, 2);
-
-     
-    }
-
-
-
-
-
-        // // return [$from, $to];
-        // if($from_ == $to_){
-        //     $convertedAmount = $amount;
-        // }else{
-        //     // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
-            
-        //     $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
-        //     if($getExactConvertationRate == null){
-        //         $convertedAmount = null;
-        //     }else{
-        //         $convertedAmount = $getExactConvertationRate->amount * $amount;
-        //     }
-          
-        // }
-
-        // return number_format($convertedAmount,4);
-    
-}
-
-
-if(!function_exists('getRate')){
-    function getRate($from, $to){ 
-
-        return ConversionRate::where(['from' => $from, 'to' => $to])->first();
-
-        // return [$from, $to];
-        // if($from_ == $to_){
-        //     $convertedAmount = $amount;
-        // }else{
-        //     // $convertedAmount = ConversionRate::where(['from' => $from, 'to' => $to])->first();
-            
-        //     $getExactConvertationRate = ConversionRate::where(['from' => $from_, 'to' => $to_])->first();
-        //     if($getExactConvertationRate == null){
-        //         $convertedAmount = null;
-        //     }else{
-        //         $convertedAmount = $getExactConvertationRate->amount * $amount;
-        //     }
-          
-        // }
-
-        // return number_format($convertedAmount,4);
-
+ 
     }
 }
 
@@ -1988,7 +1888,7 @@ if(!function_exists('viewCampaign')){
             $data['current_user_id'] = auth()->user()->id;
             $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
             $data['attempts'] = $campaign->completed()->count();
-            $data['local_converted_amount'] = jobCurrencyConverter($campaign->currency, baseCurrency() , $campaign->campaign_amount);
+            $data['local_converted_amount'] = currencyConverter($campaign->currency, baseCurrency() , $campaign->campaign_amount);
             $data['local_converted_currency'] = baseCurrency();
             return $data;
        }else{

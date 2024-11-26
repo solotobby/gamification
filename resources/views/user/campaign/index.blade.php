@@ -74,7 +74,7 @@
                         @else
                          ${{ $list->campaign_amount }}
                         @endif --}}
-                        {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}
+                        {{baseCurrency()}} {{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}
                         {{-- {{$list->currency}} {{ $list->campaign_amount }} --}}
                     </td>
                       <td>
@@ -84,7 +84,7 @@
                         ${{ number_format($list->total_amount, 2) }}
                         @endif --}}
 
-                        {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
+                        {{baseCurrency()}} {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
                       </td>
                      
                    
@@ -115,8 +115,8 @@
 
                         <div class="modal-body pb-1">
                           Current Number of Workers - {{ $list->number_of_staff }} <br>
-                          Value per Job  - {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}<br>
-                          Total Value of Job  - {{baseCurrency()}} {{ jobCurrencyConverter($list->currency, baseCurrency(), $list->total_amount) }} <br>
+                          Value per Job  - {{baseCurrency()}} {{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}<br>
+                          Total Value of Job  - {{baseCurrency()}} {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }} <br>
 
                           {{-- @if($list->currency == 'NGN')
                           Value per Job  - {{$list->currency}} {{ number_format($list->campaign_amount) }} <br>
@@ -133,7 +133,7 @@
                                   <input class="form-control" name="new_number" type="number" required>
                             </div>
                             <input type="hidden" name="id" value="{{ $list->job_id }}">
-                            <input type="hidden" name="amount" value="{{ jobCurrencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}">
+                            <input type="hidden" name="amount" value="{{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}">
                             <div class="mb-4">
                               <button class="btn btn-primary" type="submit">Add</button>
                             </div>
