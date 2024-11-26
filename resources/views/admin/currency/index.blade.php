@@ -37,9 +37,10 @@
                 <table class="table table-bordered table-striped table-vcenter">
                     <thead>
                     <tr>
-                        <th>#</th>
+                        
                         <th>Code</th>
                         <th>Country</th>
+                        <th>BaseRate(USD)</th>
                         <th>Upgrade</th>
                         <th>Ref. Com.</th>
                         <th>UploadFee</th>
@@ -52,10 +53,10 @@
                         <?php $i = 1; ?>
                         @foreach ($currencies as $s)
                         <tr>
-                            <td>{{ $i++ }}.</td>
+                           
                             <td>{{ $s->code }}</td>
                             <td>{{ $s->country }}</td>
-                            
+                            <td>{{ $s->base_rate }}</td>
                             <td>{{ $s->upgrade_fee }}</td>
                             <td>{{ $s->referral_commission }}</td>
                             <td>{{ $s->allow_upload }}</td>
@@ -64,7 +65,7 @@
                             {{-- <td>{{ $s->updated_at->diffForHumans() }}</td> --}}
                             <td>
                                 {{-- <a href="{{ url('change/notification/status/'.$s->id) }}" class="btn btn-alt-primary btn-sm">Change Status</a> --}}
-                                <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}" {{ $s->is_active == 1 ? '' : 'disabled' }}>Change</button>
+                                <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">Change</button>
                             </td>
                         </tr>
                         <div class="modal fade" id="modal-default-popout-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
@@ -83,7 +84,10 @@
                                         
                                         <div class="row push">
                                             <div class="col-lg-12">
-                                               
+                                                <div class="mb-4">
+                                                    <label class="form-label" for="example-text-input">Base Rate (against USD)</label>
+                                                    <input type="text" class="form-control" id="example-text-input" name="base_rate" value="{{ $s->base_rate }}">
+                                                </div>
                                                  <div class="mb-4">
                                                     <label class="form-label" for="example-text-input">Upgrade Fee</label>
                                                     <input type="text" class="form-control" id="example-text-input" name="upgrade_fee" value="{{ $s->upgrade_fee }}">

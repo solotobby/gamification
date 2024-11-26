@@ -15,8 +15,8 @@ class ConversionRateController extends Controller
      */
     public function index()
     {
-        $conversions = ConversionRate::all();
-        return view('admin.conversion.index', ['rates' => $conversions]);
+        $baseRates = baseRates();
+        return view('admin.conversion.index', ['baseRates' => $baseRates]);
     }
 
     /**

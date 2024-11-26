@@ -454,6 +454,7 @@ Route::resource('preferences', PreferenceController::class);
 Route::resource('conversions', ConversionRateController::class);
 Route::get('currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'index']);
 Route::post('update/currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'updateCurrency']);
+Route::get('base/rates', [\App\Http\Controllers\Admin\CurrencyController::class, 'baseRates']);
 
 Route::get('change/completed/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'changeCompleted']);
 Route::get('priotize/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'priotize']);
