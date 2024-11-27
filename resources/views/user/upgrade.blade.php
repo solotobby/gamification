@@ -119,10 +119,14 @@
           @if(auth()->user()->virtualAccount)
               <p>
                 Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
-             <br>
-              For alternative manual funding, pay to 6667335193 (Moniepoint BANK- Freebyz Technologies LTD)
-            </p>
+              </p>
+              
+              <p> For alternative manual funding, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
+      
           @else
+          <br>
+              <p> For alternative manual funding, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
+      
               <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Activate Your Freebyz Personal Account</a>
           @endif
           <p> <i>Note: After successful payment to your virtual wallet, your account will be automatically verified. <br>You can then proceed <a href="{{ url('home') }}">here</a> to start earning.</i></p>
