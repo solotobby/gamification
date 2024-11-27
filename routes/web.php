@@ -375,6 +375,7 @@ Route::post('edit/subcategories/naira', [\App\Http\Controllers\CategoryControlle
 //User List
 Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 'userSearch'])->name('user.search');
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
+Route::get('campaign/creator/list', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCreatorList'])->name('campaign.creator.list');
 Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'verifiedUserList'])->name('verified.user.list');
 Route::get('usd/verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'usdVerifiedUserList'])->name('usd.verified.user.list');
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
