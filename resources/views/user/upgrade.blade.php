@@ -121,11 +121,11 @@
                 Account Name: {{ auth()->user()->virtualAccount->account_name }} | Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br> Account Number: {{ auth()->user()->virtualAccount->account_number }}
               </p>
               
-              <p> For alternative manual funding, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
+              <p> For alternative manual verification, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
       
           @else
           <br>
-              <p> For alternative manual funding, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
+              <p> For alternative manual verification, pay to <b>6667335193 (Moniepoint BANK- Freebyz Technologies LTD) </b> </p>
       
               <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Activate Your Freebyz Personal Account</a>
           @endif
