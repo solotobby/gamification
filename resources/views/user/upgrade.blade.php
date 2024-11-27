@@ -110,7 +110,9 @@
         <h2 class="mb-3 text-center">
           How to get Verified
         </h2>
-        @if(auth()->user()->wallet->base_currency == 'Naira')
+
+
+        @if(auth()->user()->wallet->base_currency == 'NGN')
           <h3 class="h4 fw-light text-muted push text-center">
             Credit your account below with &#8358;1050 for automatic verification of Naira Wallet
           </h3>
@@ -125,7 +127,7 @@
         @endif
 
         <span class="m-2 d-inline-block">
-          @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
+          @if(auth()->user()->wallet->base_currency == 'NGN')
               @if(auth()->user()->is_verified == '0')
 
                   {{-- <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
@@ -169,7 +171,7 @@
               </a>
               @endif
 
-          @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD')
+          @elseif( auth()->user()->wallet->base_currency == 'USD')
           
               @if(!auth()->user()->USD_verified)
                 <a href="{{ route('make.payment') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">

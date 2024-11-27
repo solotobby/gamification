@@ -280,7 +280,7 @@
         </div>
       </div>  --}}
 
-      @if(auth()->user()->wallet->base_currency == 'Naira')
+      @if(auth()->user()->wallet->base_currency == 'NGN')
           @if($promotion)
               <a href="{{ url('m/'.$promotion->business_link) }}" target="_blank">
                 <div class="block block-rounded block-fx-pop mb-2">
