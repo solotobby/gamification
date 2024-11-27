@@ -362,7 +362,22 @@ class AdminController extends Controller
         return view('admin.users.search_result', ['users' => $users]);
     }
 
+    public function campaignCreatorList(){
+        //  $usersWithPosts = User::whereIn('id', function ($query) {
+        //     $query->select('user_id')
+        //         ->from('campaigns')
+        //         ->distinct();
+        // })->get(); 
 
+        $usersWithPosts = User::select('users.*', DB::raw('(SELECT COUNT(*) FROM campaigns WHERE campaigns.user_id = users.id) as total_posts'))
+        ->whereIn('id', function ($query) {
+            $query->select('user_id')
+                ->from('campaigns')
+                ->distinct();
+        })
+        ->paginate(10); 
+        return view('admin.users.campaign_creator', ['verifiedUsers' => $usersWithPosts]);
+    }
     public function verifiedUserList(){
         $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);

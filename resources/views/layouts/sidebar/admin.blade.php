@@ -74,6 +74,9 @@
             <a class="nav-main-link" href="{{ url('admin/campaign/disputes') }}">
               <span class="nav-main-link-name">In Dispute</span>
             </a>
+            <a class="nav-main-link" href="{{ route('campaign.creator.list') }}">
+              <span class="nav-main-link-name">Creator List</span>
+            </a>
           </li>
         </ul>
       </li>
@@ -156,6 +159,8 @@
             <a class="nav-main-link" href="{{ route('usd.verified.user.list') }}">
               <span class="nav-main-link-name">USD Verified</span>
             </a>
+            
+            
           </li>
         </ul>
       </li>
