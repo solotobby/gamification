@@ -809,6 +809,7 @@ class CampaignController extends Controller
         $total = $est_amount + $percent;
         //[$est_amount, $percent, $total];
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+
         if(baseCurrency() == 'NGN'){
             $campaign = Campaign::where('job_id', $request->id)->first();
             $uploadFee = '';
@@ -818,123 +819,133 @@ class CampaignController extends Controller
                 $uploadFee = 0;
             }
 
-            if($wallet->balance >= $total){
-                $wallet->balance -= $total+$uploadFee;
-                $wallet->save();
-                
-                
-                $campaign->number_of_staff += $request->new_number;
-                $campaign->total_amount += $est_amount;
-                $campaign->is_completed = false;
-                $campaign->save();
+            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total+$uploadFee);
+            if($walletValidity){
 
-                $currency = 'NGN';
-                $channel = 'paystack';
+                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$uploadFee);
+                if($debitWallet){
+                        $campaign->number_of_staff += $request->new_number;
+                        $campaign->total_amount += $est_amount;
+                        $campaign->is_completed = false;
+                        $campaign->save();
 
-                $ref = time();
-                    PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $total,
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'added_more_worker',
-                        'description' => 'Added worker for '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Debit',
-                        'user_type' => 'regular'
-                    ]);
+                        $currency = 'NGN';
+                        $channel = 'paystack';
 
-                    //credit admin 
-                    $adminWallet = Wallet::where('user_id', '1')->first();
-                    $adminWallet->balance += $percent;
-                    $adminWallet->save();
-                    PaymentTransaction::create([
-                        'user_id' => '1',
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $percent,
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'campaign_revenue_add',
-                        'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'admin'
-                    ]);
+                        $ref = time();
+                            PaymentTransaction::create([
+                                'user_id' => auth()->user()->id,
+                                'campaign_id' => $campaign->id,
+                                'reference' => $ref,
+                                'amount' => $total,
+                                'status' => 'successful',
+                                'currency' => $currency,
+                                'channel' => $channel,
+                                'type' => 'added_more_worker',
+                                'description' => 'Added worker for '.$campaign->post_title.' campaign',
+                                'tx_type' => 'Debit',
+                                'user_type' => 'regular'
+                            ]);
 
-                $content = "You have successfully increased the number of your workers.";
-                $subject = "Add More Worker";
-                $user = User::where('id', auth()->user()->id)->first();
-                Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
-                return back()->with('success', 'Worker Updated Successfully');
+                            //credit admin 
+                            $adminWallet = Wallet::where('user_id', '1')->first();
+                            $adminWallet->balance += $percent;
+                            $adminWallet->save();
+                            PaymentTransaction::create([
+                                'user_id' => '1',
+                                'campaign_id' => $campaign->id,
+                                'reference' => $ref,
+                                'amount' => $percent,
+                                'status' => 'successful',
+                                'currency' => $currency,
+                                'channel' => $channel,
+                                'type' => 'campaign_revenue_add',
+                                'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
+                                'tx_type' => 'Credit',
+                                'user_type' => 'admin'
+                            ]);
+
+                        $content = "You have successfully increased the number of your workers.";
+                        $subject = "Add More Worker";
+                        $user = User::where('id', auth()->user()->id)->first();
+                        Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                        return back()->with('success', 'Worker Updated Successfully');
+                }
+
+
             }else{
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
+
+            
         }elseif(baseCurrency() == 'USD'){
-            if($wallet->usd_balance >= $total){
-                $campaign = Campaign::where('job_id', $request->id)->first();
-                $uploadFee = '';
-                if($campaign->allow_upload == 1){
-                    $uploadFee = $request->new_number * 0.01;
-                }else{
-                    $uploadFee = 0;
+            $campaign = Campaign::where('job_id', $request->id)->first();
+            $uploadFee = '';
+            if($campaign->allow_upload == 1){
+                $uploadFee = $request->new_number * 0.01;
+            }else{
+                $uploadFee = 0;
+            }
+
+            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total+$uploadFee);
+            if($walletValidity){ 
+
+                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$uploadFee);
+                if($debitWallet){
+
+                    $campaign->number_of_staff += $request->new_number;
+                    $campaign->total_amount += $est_amount;
+                    $campaign->is_completed = false;
+                    $campaign->save();
+
+
+                    $currency = 'USD';
+                    $channel = 'paypal';
+
+                    $ref = time();
+                        PaymentTransaction::create([
+                            'user_id' => auth()->user()->id,
+                            'campaign_id' => $campaign->id,
+                            'reference' => $ref,
+                            'amount' => $total,
+                            'status' => 'successful',
+                            'currency' => $currency,
+                            'channel' => $channel,
+                            'type' => 'added_more_worker',
+                            'description' => 'Added worker for '.$campaign->post_title.' campaign',
+                            'tx_type' => 'Debit',
+                            'user_type' => 'regular'
+                        ]);
+
+                        //credit admin 
+                        $adminWallet = Wallet::where('user_id', '1')->first();
+                        $adminWallet->usd_balance += $percent;
+                        $adminWallet->save();
+
+                        PaymentTransaction::create([
+                            'user_id' => '1',
+                            'campaign_id' => $campaign->id,
+                            'reference' => $ref,
+                            'amount' => $percent,
+                            'status' => 'successful',
+                            'currency' => $currency,
+                            'channel' => $channel,
+                            'type' => 'campaign_revenue_add',
+                            'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
+                            'tx_type' => 'Credit',
+                            'user_type' => 'admin'
+                        ]);
+
+
+                    $content = "You have successfully increased the number of your workers.";
+                    $subject = "Add More Worker";
+                    $user = User::where('id', auth()->user()->id)->first();
+                    Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Worker Updated Successfully');
                 }
 
-                $wallet->usd_balance -= $total+$uploadFee;
-                $wallet->save();
-
-                $campaign->number_of_staff += $request->new_number;
-                $campaign->total_amount += $est_amount;
-                $campaign->is_completed = false;
-                $campaign->save();
-
-
-                $currency = 'USD';
-                $channel = 'paypal';
-
-                $ref = time();
-                    PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $total,
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'added_more_worker',
-                        'description' => 'Added worker for '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Debit',
-                        'user_type' => 'regular'
-                    ]);
-
-                    //credit admin 
-                    $adminWallet = Wallet::where('user_id', '1')->first();
-                    $adminWallet->usd_balance += $percent;
-                    $adminWallet->save();
-
-                    PaymentTransaction::create([
-                        'user_id' => '1',
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $percent,
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'campaign_revenue_add',
-                        'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'admin'
-                    ]);
-
-
-                $content = "You have successfully increased the number of your workers.";
-                $subject = "Add More Worker";
-                $user = User::where('id', auth()->user()->id)->first();
-                Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
-                return back()->with('success', 'Worker Updated Successfully');
             }else{
+
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
 
