@@ -297,7 +297,7 @@ class CampaignController extends Controller
         $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
 
-      
+
         [$est_amount, $percent, $total];
         $job_id = Str::random(7);//rand(10000,10000000);
        
@@ -305,7 +305,7 @@ class CampaignController extends Controller
         
         if($walletValidity){
 
-             $debitWallet = debitWallet(auth()->user(), $baseCurrency, $total+$iniAmount+$prAmount);
+            $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$iniAmount+$prAmount);
             if($debitWallet){
                 $processedCampaign = $this->processCampaign($total+$iniAmount+$prAmount,$request,$job_id,$percent,$allowUpload,$priotize);
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
@@ -355,7 +355,7 @@ class CampaignController extends Controller
             ]);
 
             //CREDIT ADMIN
-            $adminUser = User::where('id', auth()->user()->id)->first(); 
+            $adminUser = User::where('id', 1)->first(); 
             $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
             
             if($creditAdminWallet){
