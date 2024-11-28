@@ -208,10 +208,10 @@ class Kernel extends ConsoleKernel
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
     
 
-            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'New Business Promotion selected';
-            $content = 'Automatic Business Promotion Selected';
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            // $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            // $subject = 'New Business Promotion selected';
+            // $content = 'Automatic Business Promotion Selected';
+            // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
 
         })->daily();
