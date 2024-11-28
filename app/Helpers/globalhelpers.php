@@ -331,12 +331,12 @@ if(!function_exists('creditWallet')){
 if(!function_exists('debitWallet')){
     function debitWallet($user, $type, $amount){
         
-       if($type == 'Naira' || $type == 'NGN'){
+       if($type == 'NGN'){
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->balance -= $amount;
             $wallet->save();
             return $wallet;
-       }elseif($type == 'Dollar' || $type == 'USD'){
+       }elseif($type == 'USD'){
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->usd_balance -= $amount;
             $wallet->save();
