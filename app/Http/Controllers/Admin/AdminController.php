@@ -374,8 +374,8 @@ class AdminController extends Controller
             $query->select('user_id')
                 ->from('campaigns')
                 ->distinct();
-        })
-        ->paginate(10); 
+        })->get();
+        //->paginate(10); 
         return view('admin.users.campaign_creator', ['verifiedUsers' => $usersWithPosts]);
     }
     public function verifiedUserList(){
