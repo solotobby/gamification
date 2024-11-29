@@ -418,7 +418,7 @@ class UserController extends Controller
         
         $ref = time();
        
-         debitWallet(auth()->user(), 'Naira', $amount);
+         debitWallet(auth()->user(), 'NGN', $amount);
 
          $user = User::where('id', auth()->user()->id)->first();
          $user->is_verified = true;
