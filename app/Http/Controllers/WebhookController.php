@@ -37,8 +37,22 @@ class WebhookController extends Controller
                 $creditUser = creditWallet($user, 'NGN', $amount);
                 if($creditUser){
 
-                    $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
+                    // $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
                     
+                    $transaction =  PaymentTransaction::create([
+                        'user_id' => $user->id,
+                        'campaign_id' => 1,
+                        'reference' => $reference,
+                        'amount' => $amount,
+                        'status' => 'successful',
+                        'currency' => 'NGN',
+                        'channel' => 'paystack',
+                        'type' => 'transfer_topup',
+                        'description' => 'Cash transfer from '.$user->name,
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
+
                     if($transaction){
                         $subject = 'Wallet Credited';
                         $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
