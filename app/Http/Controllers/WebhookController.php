@@ -34,7 +34,7 @@ class WebhookController extends Controller
                 $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
                 $user = User::where('id', $virtualAccount->user_id)->first();
 
-                $creditUser = creditWallet($user, 'Naira', $amount);
+                $creditUser = creditWallet($user, 'NGN', $amount);
                 if($creditUser){
 
                     $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
@@ -49,7 +49,7 @@ class WebhookController extends Controller
 
                     if($user->is_verified == false){
                         if($amount >= 1050){
-                            $debitWallet = debitWallet($user, 'Naira', 1050);
+                            $debitWallet = debitWallet($user, 'NGN', 1050);
                             
                             if($debitWallet){
                                 
