@@ -301,14 +301,14 @@ if(!function_exists('checkWalletBalance')){
 if(!function_exists('creditWallet')){
     function creditWallet($user, $type, $amount){
         
-       if($type == 'Naira' || $type == 'NGN'){
+       if($type == 'NGN'){
 
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->balance += $amount;
             $wallet->save();
             return $wallet;
 
-       }elseif($type == 'Dollar' || $type == 'USD'){
+       }elseif($type == 'USD'){
 
             $wallet =  Wallet::where('user_id', $user->id)->first();
             $wallet->usd_balance += $amount;
@@ -322,7 +322,6 @@ if(!function_exists('creditWallet')){
             $wallet->save();
             return $wallet;
 
-            //  return 'invalid';
        }
        
     }
@@ -1235,7 +1234,7 @@ if(!function_exists('userNairaUpgrade')){
         
         $ref = time();
         $userInfo = User::where('id', $user->id)->first();
-        $userInfo->is_verified = true;
+        $userInfo->is_verified = 1;
         $userInfo->save();
 
       
