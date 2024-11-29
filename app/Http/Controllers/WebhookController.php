@@ -8,6 +8,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Question;
 use App\Models\User;
 use App\Models\VirtualAccount;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -34,8 +35,15 @@ class WebhookController extends Controller
                 $virtualAccount = VirtualAccount::where('customer_id', $customer_code)->first();
                 $user = User::where('id', $virtualAccount->user_id)->first();
 
-                $creditUser = creditWallet($user, 'NGN', $amount);
-                if($creditUser){
+                // $creditUser = creditWallet($user, 'NGN', $amount);
+                
+                $walletCredit =  Wallet::where('user_id', $user->id)->first();
+                $walletCredit->balance += $amount;
+                $walletCredit->save();
+               
+
+
+                if($walletCredit){
 
                     // $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
                     
