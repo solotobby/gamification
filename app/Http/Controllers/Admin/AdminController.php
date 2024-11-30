@@ -934,7 +934,7 @@ class AdminController extends Controller
             $userWallet->save(); 
 
             $est_amount = $camp->number_of_staff * $camp->campaign_amount;
-            $percent = (50 / 100) * $est_amount;
+            $percent = (60 / 100) * $est_amount;
             $adminCom = $est_amount - $percent;
 
             $adminWallet = Wallet::where('user_id', '1')->first();
