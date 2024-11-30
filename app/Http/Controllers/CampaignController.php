@@ -351,7 +351,10 @@ class CampaignController extends Controller
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'campaign_posted',
-                'description' => $campaign->post_title.' Campaign'
+                'description' => $campaign->post_title.' Campaign',
+                'tx_type' => 'Debit',
+                'user_type' => 'regular'
+
             ]);
 
             //CREDIT ADMIN
