@@ -1734,6 +1734,7 @@ if(!function_exists('filterCampaign')){
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
+            'completed_status' => checkCampaignCompletedStatus($value->id)
             // 'local_converted_amount' => $rates * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
@@ -1761,6 +1762,21 @@ if(!function_exists('filterCampaign')){
 if(!function_exists('currencyParameter')){
     function currencyParameter($currency){ 
         return $currency = Currency::where('code', $currency)->where('is_active', true)->first();
+    }
+}
+
+if(!function_exists('checkCampaignCompletedStatus')){
+    function checkCampaignCompletedStatus($campaignId){
+        // return $campaignId;
+        
+       return  $counts = \DB::table('campaign_workers')
+            ->where('campaign_id', $campaignId)
+            ->select('status', \DB::raw('COUNT(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        // $approvedCount = $counts['approved'] ?? 0;
+        // $pendingCount = $counts['pending'] ?? 0;
     }
 }
 
