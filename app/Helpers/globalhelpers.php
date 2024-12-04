@@ -1799,7 +1799,7 @@ if(!function_exists('testCampaign')){
                 ->from('campaign_workers')
                 ->where('user_id', $user->id);
             
-        })->orderBy('created_at', 'DESC')->get();
+        })->orderBy('created_at', 'DESC')->paginate(10);
 
     }else{
         //with filter
@@ -1824,7 +1824,7 @@ if(!function_exists('testCampaign')){
                 ->from('campaign_workers')
                 ->where('user_id', $user->id);
             
-        })->orderBy('created_at', 'DESC')->get();
+        })->orderBy('created_at', 'DESC')->paginate(10);
     }
 
    
