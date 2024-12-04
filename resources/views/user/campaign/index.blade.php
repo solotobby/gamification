@@ -21,9 +21,12 @@
   <!-- Page Content -->
   <div class="content">
     <!-- Full Table -->
+    <div class="alert alert-warning">
+      Campaigns with Activity Status <b>Completed</b> will not be available on the dashboard. 
+    </div>
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Campaign List</h3>
+        <h3 class="block-title">Campaign List</h3> <small><span style="color: chocolate"></span></small>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -52,7 +55,8 @@
                 <th>Unit Price</th>
                 <th>Total Price</th>
                 <th>Status</th>
-                <th>Upload Allowed</th>
+                <th>Activity Status </th>
+                {{-- <th>Upload Allowed</th> --}}
                 <th>Action</th>
               </tr>
             </thead>
@@ -89,7 +93,10 @@
                      
                    
                     <td>{{ $list->status }}</td>
-                    <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td>
+                    <?php  $c = $list->pending_count + $list->completed_count;  ?>
+                    <td> {{ $c >= $list->number_of_staff ? 'Completed' : 'Not Completed' }} </td>
+
+                    {{-- <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td> --}}
                     <td>
                       @if($list->status == "Offline")
                         {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}

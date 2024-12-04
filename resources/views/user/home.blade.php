@@ -466,7 +466,7 @@ function myFunction() {
                                                             <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
                                                         </p>
                                                     </div>
-                                                    <p class="fs-sm text-muted mb-0">${value.type}</p>
+                                                    <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
                                                 </div>
                                             </div>
                                         </div>
