@@ -1781,6 +1781,18 @@ if(!function_exists('testCampaign')){
        
         $campaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
+            ->withCount([
+                'completed as total_approved' => function ($query) {
+                    $query->where('status', 'Approved');
+                },
+                'completed as total_pending' => function ($query) {
+                    $query->where('status', 'Pending');
+                },
+                'completed as total_denied' => function ($query) {
+                    $query->where('status', 'Denied');
+                }
+            ])->havingRaw("(total_approved + total_pending) < number_of_staff")
+
             ->whereNotIn('id', function($query) use ($user) {
             
                 $query->select('campaign_id')
@@ -1794,6 +1806,18 @@ if(!function_exists('testCampaign')){
         $campaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
             ->where('campaign_type', $categoryID)
+            ->withCount([
+                'completed as total_approved' => function ($query) {
+                    $query->where('status', 'Approved');
+                },
+                'completed as total_pending' => function ($query) {
+                    $query->where('status', 'Pending');
+                },
+                'completed as total_denied' => function ($query) {
+                    $query->where('status', 'Denied');
+                }
+            ])->havingRaw("(total_approved + total_pending) < number_of_staff")
+
             ->whereNotIn('id', function($query) use ($user) {
             
                 $query->select('campaign_id')
@@ -1803,13 +1827,20 @@ if(!function_exists('testCampaign')){
         })->orderBy('created_at', 'DESC')->get();
     }
 
+   
+
     // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
 
+    
+    
     $list = [];
     foreach($campaigns as $key => $value){
-        $campaignStatus = checkCampaignCompletedStatus($value->id);
+        // $campaignStatus = checkCampaignCompletedStatus($value->id);
 
-        $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;//
+        // $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;//
+        
+        $c= $value->total_approved + $value->total_pending;
+       
         $div = $c / $value->number_of_staff;
         $progress = $div * 100;
 
@@ -1827,8 +1858,8 @@ if(!function_exists('testCampaign')){
             'number_of_staff' => $value->number_of_staff, 
             'type' => $value->campaignType->name, 
             'category' => $value->campaignCategory->name,
-            //'attempts' => $attempts,
-            'completed' => $c, //$value->completed_count+$value->pending_count,
+           
+            'completed' => $c, 
             'is_completed' => $c >= $value->number_of_staff ? true : false,
             'progress' => $progress,
 
@@ -1844,6 +1875,9 @@ if(!function_exists('testCampaign')){
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
+            'total_approved_count' => $value->total_approved,
+            'total_pending_count' => $value->total_pending,
+            'total_denied_count' => $value->total_denied,
 
             // 'completed_status' => checkCampaignCompletedStatus($value->id)
             // 'local_converted_amount' => $rates * $value->campaign_amount,
@@ -1863,13 +1897,13 @@ if(!function_exists('testCampaign')){
 
     // Sort the array to prioritize 'Priotized'
 
-    // usort($filteredArray, function ($a, $b) {
-    //     return strcmp($b['priotized'], $a['priotized']);
-    // });
+    usort($list, function ($a, $b) {
+        return strcmp($b['priotized'], $a['priotized']);
+    });
 
-    //  return  $filteredArray;
+     return  $list;
 
-    return $list;
+    //return $list;
 
 
     }
