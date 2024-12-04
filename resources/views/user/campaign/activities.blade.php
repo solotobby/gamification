@@ -38,21 +38,21 @@
         <div class="ms-2 me-auto">
           <div class="fw-bold">Approved</div>
         </div>
-        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Approved'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Approved'] ?? 0 }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Pending</div>
          
         </div>
-        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Pending'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Pending'] ?? 0 }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Denied</div>
         
         </div>
-        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Denied'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Denied'] ?? 0 }}</span>
       </li>
      
 
@@ -68,7 +68,7 @@
           <div class="fw-bold">Amount Spent</div>
         
         </div>
-        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ $campaignStat['Approved'] ?? 0 * $amount }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff, 2) }}</span>
+        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ @$campaignStat['Approved'] ?? 0 * $amount }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff, 2) }}</span>
       </li>
 
       <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -77,7 +77,7 @@
         
         </div>
         <?php 
-        $c = $campaignStat['Pending'] ?? 0 + $campaignStat['Approved'] ?? 0;
+        $c = @$campaignStat['Pending'] ?? 0 + @$campaignStat['Approved'] ?? 0;
         ?>
         <span class="badge bg-primary rounded-pill"> {{ $c >= $lists->number_of_staff ? 'Completed' : 'Not Completed' }} </span>
       </li>

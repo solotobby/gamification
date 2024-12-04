@@ -558,8 +558,8 @@ class CampaignController extends Controller
             $campaignWork = CampaignWorker::create($campaignWorker);
             
             //activity log
-            $campaign->pending_count += 1;
-            $campaign->save();
+            // $campaign->pending_count += 1;
+            // $campaign->save();
 
             // setPendingCount($campaign->id);
             
@@ -652,9 +652,9 @@ class CampaignController extends Controller
            $workSubmitted->save();
 
            //update completed action
-           $campaign->completed_count += 1;
-           $campaign->pending_count -= 1;
-           $campaign->save();
+        //    $campaign->completed_count += 1;
+        //    $campaign->pending_count -= 1;
+        //    $campaign->save();
 
            setIsComplete($workSubmitted->campaign_id);
 
