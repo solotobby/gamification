@@ -12,7 +12,7 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Campaigns</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">{{ $lists->post_title }} </h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Campaign</li>
@@ -24,19 +24,71 @@
   </div>
   <!-- Page Content -->
   <div class="content">
+    <ol class="list-group list-group-numbered mb-3">
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Number of Worker</div>
+        
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ $lists->number_of_staff }}</span>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Approved</div>
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Approved'] ?? 0 }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Pending</div>
+         
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Pending'] ?? 0 }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Denied</div>
+        
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ $campaignStat['Denied'] ?? 0 }}</span>
+      </li>
+     
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Campaign Amount</div>
+        
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ $amount }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Amount Spent</div>
+        
+        </div>
+        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ $campaignStat['Approved'] * $amount }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff, 2) }}</span>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Campaign Status</div>
+        
+        </div>
+        <?php 
+        $c = $campaignStat['Pending']  + $campaignStat['Approved'] ;
+        ?>
+        <span class="badge bg-primary rounded-pill"> {{ $c >= $lists->number_of_staff ? 'Completed' : 'Not Completed' }} </span>
+      </li>
+
+    </ol>
+
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'Pending')->count() }} 
-          | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
-          | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
-          | Amount Spent -   {{ baseCurrency() }} {{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $amount,2) }}/ {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff, 2) }}
-        
-          {{-- @if($lists->currency == 'NGN')
-          | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }}
-          @else
-          | Amount Spent -   ${{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount,2) }}/${{ number_format($lists->campaign_amount * $lists->number_of_staff, 2) }}
-          @endif --}}
+        <h3 class="block-title"> 
+
         </h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">

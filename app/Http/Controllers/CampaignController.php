@@ -596,9 +596,13 @@ class CampaignController extends Controller
         } 
 
         $convertedAmount = currencyConverter($cam->currency, baseCurrency(), $cam->campaign_amount);
+
+        $campaignStat = checkCampaignCompletedStatus($cam->id);
+
+        $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
         
-       $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
-       return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount]);
+       return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount, 'campaignStat' => $campaignStat]);
+
     }
 
     public function activitiesResponse($id){

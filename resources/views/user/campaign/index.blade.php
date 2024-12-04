@@ -62,6 +62,10 @@
             </thead>
             <tbody>
                 @foreach ($lists as $list)
+
+                <?php 
+                $campaignStat = checkCampaignCompletedStatus($list->id);
+                ?>
                 <tr>
                   <td>
                     {{ $list->job_id }}
@@ -70,7 +74,8 @@
                       {{ $list->post_title }}
                     </td>
                     <td>
-                        {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }}
+                      {{ $campaignStat['Approved'] ?? 0 }}/{{ $list->number_of_staff }}
+                        {{-- {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }} --}}
                      </td>
                     <td>
                       {{-- @if($list->currency == 'NGN')
@@ -93,7 +98,7 @@
                      
                    
                     <td>{{ $list->status }}</td>
-                    <?php  $c = $list->pending_count + $list->completed_count;  ?>
+                    <?php  $c = $campaignStat['Pending']  + $campaignStat['Approved'] ;  ?>
                     <td> {{ $c >= $list->number_of_staff ? 'Completed' : 'Not Completed' }} </td>
 
                     {{-- <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td> --}}
