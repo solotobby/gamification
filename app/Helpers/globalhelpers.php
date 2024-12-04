@@ -1734,7 +1734,7 @@ if(!function_exists('filterCampaign')){
             'from' => $from,
             'to' => $to,
             'baseCurrency' => baseCurrency(),
-            'completed_status' => checkCampaignCompletedStatus($value->id)
+            // 'completed_status' => checkCampaignCompletedStatus($value->id)
             // 'local_converted_amount' => $rates * $value->campaign_amount,
             // 'created_at' => $value->created_at
         ];
