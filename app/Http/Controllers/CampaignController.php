@@ -581,12 +581,17 @@ class CampaignController extends Controller
     public function mySubmittedCampaign($id)
     {
          $work = CampaignWorker::where('id', $id)->first();
+
+         $campaignStat = checkCampaignCompletedStatus($work->campaign->id);
+        
+            $c = @$campaignStat['Pending'] ?? 0 + @$campaignStat['Approved'] ?? 0;
+            $c >= $work->campaign->number_of_staff ? true : false;
         //  $campaign = $work->campaign->completed_count == $work->campaign->pending_count;
         if(!$work)
         {
             return redirect('home');
         }
-        return view('user.campaign.my_submitted_campaign', ['work' => $work]);
+        return view('user.campaign.my_submitted_campaign', ['work' => $work, 'check' =>$c]);
     }
 
     public function activities($id)
