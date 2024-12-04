@@ -1701,7 +1701,9 @@ if(!function_exists('filterCampaign')){
 
     $list = [];
     foreach($campaigns as $key => $value){
-        $c = $value->pending_count + $value->completed_count;//
+        //$c = $value->pending_count + $value->completed_count;//
+        $campaignStatus = checkCampaignCompletedStatus($value->id);
+        $c = $campaignStatus['Pending'] + $campaignStatus['Approved'];
         $div = $c / $value->number_of_staff;
         $progress = $div * 100;
 
@@ -1735,8 +1737,7 @@ if(!function_exists('filterCampaign')){
             'to' => $to,
             'baseCurrency' => baseCurrency(),
             // 'completed_status' => checkCampaignCompletedStatus($value->id)
-            // 'local_converted_amount' => $rates * $value->campaign_amount,
-            // 'created_at' => $value->created_at
+            
         ];
     }
 
@@ -1765,18 +1766,130 @@ if(!function_exists('currencyParameter')){
     }
 }
 
+if(!function_exists('testCampaign')){
+    function testCampaign($categoryID){ 
+
+        $user = Auth::user();
+        // $jobfilter = '';
+        $campaigns = '';
+
+        $baseCurrency = $user->wallet->base_currency;
+
+
+    if($categoryID == 0){
+        ///without filter
+       
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
+
+    }else{
+        //with filter
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->where('campaign_type', $categoryID)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
+    }
+
+    // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
+    $list = [];
+    foreach($campaigns as $key => $value){
+        $campaignStatus = checkCampaignCompletedStatus($value->id);
+
+        $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;//
+        $div = $c / $value->number_of_staff;
+        $progress = $div * 100;
+
+
+
+        //jobCurrency 
+        $from = $value->currency; //from
+        $to = $baseCurrency; //to user local currency
+        
+        $list[] = [ 
+            'id' => $value->id, 
+            'job_id' => $value->job_id, 
+            
+            'post_title' => $value->post_title, 
+            'number_of_staff' => $value->number_of_staff, 
+            'type' => $value->campaignType->name, 
+            'category' => $value->campaignCategory->name,
+            //'attempts' => $attempts,
+            'completed' => $c, //$value->completed_count+$value->pending_count,
+            'is_completed' => $c >= $value->number_of_staff ? true : false,
+            'progress' => $progress,
+
+            'campaign_amount' => $value->campaign_amount,
+            'currency' => $value->currency,
+            'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
+
+            'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
+            'local_converted_currency' => $baseCurrency,
+            'local_converted_currency_code' => $baseCurrency,
+            
+            'priotized' => $value->approved,
+            'from' => $from,
+            'to' => $to,
+            'baseCurrency' => baseCurrency(),
+
+            // 'completed_status' => checkCampaignCompletedStatus($value->id)
+            // 'local_converted_amount' => $rates * $value->campaign_amount,
+            // 'created_at' => $value->created_at
+        ];
+    }
+
+
+
+    //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+    // Remove objects where 'is_completed' is true
+
+    // $filteredArray = array_filter($list, function ($item) {
+    //     return $item['is_completed'] !== true;
+    // });
+
+    // Sort the array to prioritize 'Priotized'
+
+    // usort($filteredArray, function ($a, $b) {
+    //     return strcmp($b['priotized'], $a['priotized']);
+    // });
+
+    //  return  $filteredArray;
+
+    return $list;
+
+
+    }
+}
+
 if(!function_exists('checkCampaignCompletedStatus')){
     function checkCampaignCompletedStatus($campaignId){
-        // return $campaignId;
-        
-       return  $counts = \DB::table('campaign_workers')
-            ->where('campaign_id', $campaignId)
+
+       $counts = array_merge([
+            'Approved' => 0,
+            'Pending' => 0,
+            'Denied' => 0,
+        ], \DB::table('campaign_workers')
+        ->where('campaign_id', $campaignId)
             ->select('status', \DB::raw('COUNT(*) as count'))
             ->groupBy('status')
-            ->pluck('count', 'status');
+            ->pluck('count', 'status')->toArray());
 
-        // $approvedCount = $counts['approved'] ?? 0;
-        // $pendingCount = $counts['pending'] ?? 0;
+        return $counts;
+        
     }
 }
 
