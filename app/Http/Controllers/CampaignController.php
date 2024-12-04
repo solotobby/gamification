@@ -388,7 +388,8 @@ class CampaignController extends Controller
             abort(400);
         }
 
-            $getCampaign = viewCampaign($job_id);
+
+          $getCampaign = viewCampaign($job_id);
             if($getCampaign){
 
                 $baseCurrency = baseCurrency();
@@ -600,7 +601,7 @@ class CampaignController extends Controller
         $campaignStat = checkCampaignCompletedStatus($cam->id);
 
         $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
-        
+
        return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount, 'campaignStat' => $campaignStat]);
 
     }
