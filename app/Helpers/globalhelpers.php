@@ -1703,7 +1703,7 @@ if(!function_exists('filterCampaign')){
     foreach($campaigns as $key => $value){
         //$c = $value->pending_count + $value->completed_count;//
         $campaignStatus = checkCampaignCompletedStatus($value->id);
-        $c = $campaignStatus['Pending'] + $campaignStatus['Approved'];
+        $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;
         $div = $c / $value->number_of_staff;
         $progress = $div * 100;
 
