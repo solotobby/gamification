@@ -786,7 +786,7 @@ class CampaignController extends Controller
 
     public function completedJobs()
     {
-        $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'ASC')->paginate(10);
+        $completedJobs = CampaignWorker::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->paginate(10);
         return view('user.campaign.completed_jobs', ['lists' => $completedJobs]);
     }
 
