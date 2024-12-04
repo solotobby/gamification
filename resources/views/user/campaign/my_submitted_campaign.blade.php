@@ -107,25 +107,27 @@
                 {{ session('success') }}
             </div>
             @endif
-            <h4>Dispute Job Denial</h4>
+            <h4>Dispute Job Denial</h4> 
+           
             @if($work->is_dispute == false)
-            @if($work->campaign->is_completed == true)
-                <div class="alert alert-success" role="alert">
-                  This campaign has recieved complete Approved responses. 
-              </div>
-            @else
-              <form action="{{ url('process/disputed/jobs') }}" method="POST">
-                @csrf
-                <div class="mb-4">
-                  <label class="form-label" for="post-files">Give reason why you feel this job shouldn't be denied</small></label>
-                      <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+              
+            @if($check == true) {{--  check if campaign is completed --}}
+                  <div class="alert alert-success" role="alert">
+                    This campaign has recieved complete Approved responses. 
                 </div>
-                <input type="hidden" name="id" value="{{ $work->id }}">
-                <div class="mb-4">
-                  <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Submit </button>
-                </div>
-              </form>
-            @endif
+              @else
+                <form action="{{ url('process/disputed/jobs') }}" method="POST">
+                  @csrf
+                  <div class="mb-4">
+                    <label class="form-label" for="post-files">Give reason why you feel this job shouldn't be denied</small></label>
+                        <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
+                  </div>
+                  <input type="hidden" name="id" value="{{ $work->id }}">
+                  <div class="mb-4">
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Submit </button>
+                  </div>
+                </form>
+              @endif
 
             @else
                 <div class="alert alert-success" role="alert">
