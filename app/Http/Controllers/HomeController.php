@@ -126,7 +126,7 @@ class HomeController extends Controller
     public function testCampaignList(){
         // testCampaign('0');
         
-        return filterCampaign('0');
+        return testCampaign('0'); //filterCampaign('0');
     }
 
     public function howTo()
