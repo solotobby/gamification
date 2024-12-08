@@ -256,7 +256,6 @@ class CampaignController extends Controller
         }else{
             $request->validate([
                 'description' => 'required|string',
-                
                 'proof' => ['required', new ProhibitedWords()],
                 'post_title' => 'required|string',
                 'post_link' => 'required|string',
@@ -354,7 +353,6 @@ class CampaignController extends Controller
                 'description' => $campaign->post_title.' Campaign',
                 'tx_type' => 'Debit',
                 'user_type' => 'regular'
-
             ]);
 
             //CREDIT ADMIN
@@ -388,7 +386,6 @@ class CampaignController extends Controller
             abort(400);
         }
 
-
           $getCampaign = viewCampaign($job_id);
             if($getCampaign){
 
@@ -407,7 +404,6 @@ class CampaignController extends Controller
                             return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
                         }
 
-                   
                     }elseif(!auth()->user()->is_verified && $getCampaign['local_converted_amount'] < $minUpgradeFee){
 
                         if($getCampaign['is_completed'] == true){
@@ -452,67 +448,12 @@ class CampaignController extends Controller
                     }else{
                             return redirect('info');
                     }
-
-                
-                
-
-                // if($getCampaign->currency == 'USD'){
-
-                //     if(auth()->user()->USD_verified){
-                //         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                //         $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                //         $checkRating = isset($rating) ? true : false;
-                //         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                //     }else{
-                //         return redirect('conversion');
-                //     }
-
-                // }else{
-
-                    // if(auth()->user()->is_verified){
-
-                    //     if($getCampaign['is_completed'] == true){
-                    //         return redirect('home');
-                    //     }else{
-                    //         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    //         $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    //         $checkRating = isset($rating) ? true : false;
-                    //         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                    //     }
-
-                    // }elseif(!auth()->user()->is_verified && $getCampaign['campaign_amount'] <= 10){
-
-                    //     if($getCampaign['is_completed'] == true){
-                    //         return redirect('#');
-                    //     }else{
-                    //         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    //         $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    //         $checkRating = isset($rating) ? true : false;
-                    //         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                    //     }
-
-                    // }else{
-                    //     return redirect('info');
-                    // }
-
                 }
 
             }else{
                  return back()->with('error', 'campaign not valid');
             }
 
-        // $getCampaign = Campaign::where('job_id', $job_id)->first();
-        // if($getCampaign->campaignType->name == 'Facebook Influencer'){
-        //     if(auth()->user()->facebook_id == null){
-        //         // return getPosts();
-        //         return redirect('auth/facebook');
-        //     }
-        // }
-
-        // $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-        
-        
-        // return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
     }
 
     public function submitWork(Request $request){
@@ -562,10 +503,17 @@ class CampaignController extends Controller
             // $campaign->save();
 
             // setPendingCount($campaign->id);
-            
+
+            $campaignStatus = checkCampaignCompletedStatus($campaign->id);
+
+            // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
+            // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
+            // $campaign->save();
+
             Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
         
-            $campaign = Campaign::where('id', $request->campaign_id)->first();
+            //$campaign = Campaign::where('id', $request->campaign_id)->first();
+
             $user = User::where('id', $campaign->user->id)->first();
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
@@ -584,17 +532,14 @@ class CampaignController extends Controller
         if($work){
 
             $campaignStat = checkCampaignCompletedStatus($work->campaign->id);
-            $c = @$campaignStat['Pending'] + @$campaignStat['Approved'];
-            $c >= $work->campaign->number_of_staff ? true : false;
+            // $c = @$campaignStat['Pending'] + @$campaignStat['Approved'];
+            // $c >= $work->campaign->number_of_staff ? true : false;
 
-            return view('user.campaign.my_submitted_campaign', ['work' => $work, 'check' =>$c]);
-            
+            return view('user.campaign.my_submitted_campaign', ['work' => $work, 'check' =>$campaignStat]);
+
         }else{
             return redirect('home');
         }
-       
-        //  $campaign = $work->campaign->completed_count == $work->campaign->pending_count;
-       
         
     }
 

@@ -98,8 +98,13 @@
                      
                    
                     <td>{{ $list->status }}</td>
-                    <?php  $c = $campaignStat['Pending']  + $campaignStat['Approved'] ;  ?>
-                    <td> {{ $c >= $list->number_of_staff ? 'Completed' : 'Not Completed' }} </td>
+                    <?php  
+                          // $c = $campaignStat['Pending']  + $campaignStat['Approved'] ; 
+                     ?>
+                    <td> 
+                      {{ $list->is_completed ? 'Completed' : 'Not Completed' }} 
+                      {{-- {{ $c >= $list->number_of_staff ? 'Completed' : 'Not Completed' }}  --}}
+                    </td>
 
                     {{-- <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td> --}}
                     <td>

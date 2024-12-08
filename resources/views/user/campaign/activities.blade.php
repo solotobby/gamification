@@ -29,7 +29,6 @@
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Number of Workers</div>
-        
         </div>
         <span class="badge bg-primary rounded-pill">{{ $lists->number_of_staff }}</span>
       </li>
@@ -76,10 +75,8 @@
           <div class="fw-bold">Campaign Status</div>
         
         </div>
-        <?php 
-          $c = @$campaignStat['Pending'] ?? 0 + @$campaignStat['Approved'] ?? 0;
-        ?>
-        <span class="badge bg-primary rounded-pill"> {{ $c >= $lists->number_of_staff ? 'Completed' : 'Not Completed' }} </span>
+       
+        <span class="badge bg-primary rounded-pill">  {{ $lists->is_completed ? 'Completed' : 'Not Completed' }}  </span>
       </li>
 
     </ol>
