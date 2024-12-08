@@ -111,7 +111,7 @@
            
             @if($work->is_dispute == false)
               
-            @if($check == true) {{--  check if campaign is completed --}}
+            @if($check['is_completed'] == true) {{--  check if campaign is completed --}}
                   <div class="alert alert-success" role="alert">
                     This campaign has recieved complete Approved responses. 
                 </div>

@@ -129,13 +129,18 @@ class Kernel extends ConsoleKernel
     
                 
                 $camp = Campaign::where('id', $ca->campaign_id)->first();
-                $camp->completed_count += 1;
-                $camp->pending_count -= 1;
-                $camp->save();
+                checkCampaignCompletedStatus($camp->id);
+
+                // $camp->pending_count = $campaignStatus['Pending'] ?? 0;
+                // $camp->completed_count = $campaignStatus['Approved'] ?? 0;
+                // $camp->save();
+                // $camp->completed_count += 1;
+                // $camp->pending_count -= 1;
+                // $camp->save();
     
                 $user = User::where('id', $ca->user_id)->first();
                 $baseCurrency = baseCurrency($user);
-                $amountCredited =$ca->amount;
+                $amountCredited = $ca->amount;
                 if($baseCurrency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
@@ -158,7 +163,7 @@ class Kernel extends ConsoleKernel
     
                 $ref = time();
     
-                setIsComplete($ca->campaign_id);
+                // setIsComplete($ca->campaign_id);
         
                 PaymentTransaction::create([
                     'user_id' => $ca->user_id,

@@ -1713,8 +1713,8 @@ if(!function_exists('filterCampaign')){
         
         $list[] = [ 
             'id' => $value->id, 
-            'job_id' => $value->job_id, 
-            
+            'job_id' => $value->job_id,
+
             'post_title' => $value->post_title, 
             'number_of_staff' => $value->number_of_staff, 
             'type' => $value->campaignType->name, 
@@ -1921,9 +1921,28 @@ if(!function_exists('checkCampaignCompletedStatus')){
             ->select('status', \DB::raw('COUNT(*) as count'))
             ->groupBy('status')
             ->pluck('count', 'status')->toArray());
-
-        return $counts;
         
+        $campaign = Campaign::where('id', $campaignId)->first();
+        $campaign->pending_count = $counts['Pending'];
+        $campaign->completed_count = $counts['Approved'];
+        $campaign->save();
+
+        $totalCampaign = $counts['Approved'] + $counts['Pending'];
+
+        if($totalCampaign >= $campaign->number_of_staff){
+            $campaign->is_completed = 1;
+            $campaign->save();
+        }else{
+            $campaign->is_completed = 0;
+            $campaign->save();
+        }
+
+        // $data['campaign'] = $campaign;
+        $data['is_completed'] = $campaign->is_completed; //$totalCampaign;
+        $data['counts'] = $counts;
+
+        return $data; //$counts;
+
     }
 }
 

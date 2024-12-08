@@ -1,7 +1,6 @@
 @extends('layouts.main.master')
 @section('style')
 
-
 @endsection
 
 @section('content')
@@ -77,8 +76,6 @@
    <!-- Page Content -->
    <div class="content content-full">
    <div class="row">
-  
-
 
       <div class="col-12">
           @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
@@ -112,17 +109,17 @@
 
 <div class="row">
 
-              @if (session('success'))
-                  <div class="alert alert-success" role="alert">
-                      {{ session('success') }}
-                  </div>
-              @endif
-  
-              @if (session('error'))
-                  <div class="alert alert-danger" role="alert">
-                      {{ session('error') }}
-                  </div>
-              @endif
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="col-md-6">
         <h5 class="fw-light mb-2">Referral Link</h5>
@@ -491,20 +488,6 @@ function myFunction() {
             });
         });
     
-
-
-  
-
-
-  
-
-  
-  
-
-
-
-
 </script>
-
 
 @endsection
