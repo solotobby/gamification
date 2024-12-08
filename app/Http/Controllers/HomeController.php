@@ -126,8 +126,8 @@ class HomeController extends Controller
     public function testCampaignList(){
         // testCampaign('0');
         //46  43 : 0,0,0
-        // checkCampaignCompletedStatus('46');
-        return filterCampaign('0');
+        return checkCampaignCompletedStatus('6155');
+        // return filterCampaign('0');
     }
 
     public function howTo()
