@@ -2068,10 +2068,10 @@ if(!function_exists('viewCampaign')){
 
        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
        
-        $campaignStatus = checkCampaignCompletedStatus($campaign->id);
-        $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
-        $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
-        $campaign->save();
+        checkCampaignCompletedStatus($campaign->id);
+        // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
+        // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
+        // $campaign->save();
        
        if($campaign){
 
