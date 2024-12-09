@@ -2068,15 +2068,17 @@ if(!function_exists('viewCampaign')){
 
        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
        
-        checkCampaignCompletedStatus($campaign->id);
+        
         // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
         // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
         // $campaign->save();
        
        if($campaign){
-
+        
             $campaign->impressions += 1;
             $campaign->save();
+
+            checkCampaignCompletedStatus($campaign->id);
     
             $data = $campaign;
             $data['current_user_id'] = auth()->user()->id;
