@@ -553,9 +553,7 @@ class CampaignController extends Controller
         $convertedAmount = currencyConverter($cam->currency, baseCurrency(), $cam->campaign_amount);
 
         $campaignStat = checkCampaignCompletedStatus($cam->id);
-        $cam->pending_count = $campaignStatus['Pending'] ?? 0;
-        $cam->completed_count = $campaignStatus['Approved'] ?? 0;
-        $cam->save();
+        
 
         $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
 

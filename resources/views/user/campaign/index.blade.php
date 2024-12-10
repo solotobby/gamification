@@ -74,7 +74,7 @@
                       {{ $list->post_title }}
                     </td>
                     <td>
-                      {{ $campaignStat['Approved'] ?? 0 }}/{{ $list->number_of_staff }}
+                      {{ @$campaignStat['counts']['Approved'] }}/{{ $list->number_of_staff }}
                         {{-- {{ $list->completed()->where('status', '=', 'Approved')->count(); }}/{{ $list->number_of_staff }} --}}
                      </td>
                     <td>

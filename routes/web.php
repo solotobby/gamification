@@ -168,7 +168,8 @@ Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::clas
 Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 'welcomeUser']);
 
 Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
-
+//spin the wheel
+Route::get('spin', [\App\Http\Controllers\SpinController::class, 'index'])->name('spin');
 ///paystack payment 
 // Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 // Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);

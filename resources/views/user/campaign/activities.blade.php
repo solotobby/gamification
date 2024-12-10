@@ -37,21 +37,21 @@
         <div class="ms-2 me-auto">
           <div class="fw-bold">Approved</div>
         </div>
-        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Approved'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['counts']['Approved'] }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Pending</div>
          
         </div>
-        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Pending'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['counts']['Pending'] }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Denied</div>
         
         </div>
-        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['Denied'] ?? 0 }}</span>
+        <span class="badge bg-primary rounded-pill">{{ @$campaignStat['counts']['Denied'] }}</span>
       </li>
      
 
@@ -67,7 +67,7 @@
           <div class="fw-bold">Amount Spent</div>
         
         </div>
-        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ @$campaignStat['Approved']  * $amount }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff, 2) }}</span>
+        <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ number_format(@$campaignStat['counts']['Approved']  * $amount) }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff) }}</span>
       </li>
 
       <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -76,7 +76,7 @@
         
         </div>
        
-        <span class="badge bg-primary rounded-pill">  {{ $lists->is_completed ? 'Completed' : 'Not Completed' }}  </span>
+        <span class="badge bg-primary rounded-pill">  {{ @$campaignStat['is_completed'] ? 'Completed' : 'Not Completed' }}  </span>
       </li>
 
     </ol>
