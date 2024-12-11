@@ -12,6 +12,8 @@
         </a>
       </li>
 
+    
+      @if(auth()->user()->wallet->base_currency == 'NGN')
       {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('spin') }}">
           <i class="nav-main-link-icon fa fa-star"></i>
@@ -20,8 +22,8 @@
             <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> 
           </span>
         </a>
-      </li> --}}
-      @if(auth()->user()->wallet->base_currency == 'NGN')
+      </li>
+       --}}
         <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('fastest/finger') }}">
             <i class="nav-main-link-icon fa fa-fingerprint"></i>
