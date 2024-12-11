@@ -170,6 +170,8 @@ Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 
 Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
 //spin the wheel
 Route::get('spin', [\App\Http\Controllers\SpinController::class, 'index'])->name('spin');
+Route::post('spin-wheel', [\App\Http\Controllers\SpinController::class, 'spinWheel'])->name('spin.wheel');
+Route::get('spin/attempt', [\App\Http\Controllers\SpinController::class, 'attempt'])->name('spin.attempt');
 ///paystack payment 
 // Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 // Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
