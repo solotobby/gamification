@@ -67,7 +67,7 @@ class SpinController extends Controller
         }else{
             $count = 1;
         }
-        $balanceCheck = checkWalletBalance(auth()->user(), baseCurrency(), 1000);
+        $balanceCheck = checkWalletBalance(auth()->user(), baseCurrency(), 10000);
         $data['count'] = $count;
         $data['balance'] = $balanceCheck;
         return response()->json($data);
