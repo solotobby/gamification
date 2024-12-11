@@ -608,7 +608,7 @@ class WalletController extends Controller
     public function processWithdrawals($request, $currency, $channel, $payload){
 
         $amount = $request->balance;
-        $percent = 5/100 * $amount;
+        $percent = 7.5/100 * $amount;
         $formatedAm = $percent;
         $newamount_to_be_withdrawn = $amount - $formatedAm;
  
@@ -660,10 +660,10 @@ class WalletController extends Controller
 
         //admin commission
             $adminWallet = Wallet::where('user_id', '1')->first();
-            if($currency == 'USD' || $currency == 'Dollar'){
+            if($currency == 'USD'){
                 $adminWallet->usd_balance += $formatedAm;
                 $adminWallet->save();
-             }elseif($currency == 'NGN' || $currency == 'Naira'){
+             }elseif($currency == 'NGN'){
                 $adminWallet->balance += $formatedAm;
                 $adminWallet->save();
              }else{
