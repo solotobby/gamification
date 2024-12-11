@@ -1926,7 +1926,7 @@ if(!function_exists('checkCampaignCompletedStatus')){
         $campaign->pending_count = $counts['Pending'];
         $campaign->completed_count = $counts['Approved'];
         $campaign->save();
-
+        
         $totalCampaign = $counts['Approved'] + $counts['Pending'];
 
         if($totalCampaign >= $campaign->number_of_staff){
@@ -2074,7 +2074,7 @@ if(!function_exists('viewCampaign')){
         // $campaign->save();
        
        if($campaign){
-        
+
             $campaign->impressions += 1;
             $campaign->save();
 
