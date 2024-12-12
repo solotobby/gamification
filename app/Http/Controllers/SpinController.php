@@ -28,7 +28,7 @@ class SpinController extends Controller
         try{
 
             $user = Auth::user();
-            $params = SpinParams::where('total_spins_allowed', '!=', '')->first();
+            $params = SpinParams::query()->orderBy('created_at', 'DESC')->first();
             $userBalance = $user->wallet->balance;
             $dailyLimitSpins = $params->total_spins_allowed; // Max spins per day
             $dailyLimitPayout =$params->total_payouts_allowed; // Max total payout in Naira
@@ -186,12 +186,12 @@ class SpinController extends Controller
 
     public function adminSpinner(){
        $spinTracker = SpinTracker::all();//pluck('id', 'date', 'total_spins', 'total_payout');
-       $param = SpinParams::where('total_spins_allowed', '!=', '')->first();
+       $param = SpinParams::query()->orderBy('created_at', 'DESC')->first();//latest();
         return view('admin.spin.create', ['spinTracker' => $spinTracker, 'param' => $param]);
     }
 
     public function store(Request $request){
-        $params = SpinParams::where('total_spins_allowed', '!=', '')->delete();
+        // $params = SpinParams::where('total_spins_allowed', '!=', '')->delete();
         SpinParams::create(['total_spins_allowed' => $request->total_spins_allowed, 'total_payouts_allowed' => $request->total_payouts_allowed]);
         return back()->with('success', 'Paramed Updated successfully');
     }
