@@ -191,7 +191,7 @@ class SpinController extends Controller
     }
 
     public function store(Request $request){
-        // $params = SpinParams::where('total_spins_allowed', '!=', '')->delete();
+        $params = SpinParams::where('total_spins_allowed', '!=', '')->delete();
         SpinParams::create(['total_spins_allowed' => $request->total_spins_allowed, 'total_payouts_allowed' => $request->total_payouts_allowed]);
         return back()->with('success', 'Paramed Updated successfully');
     }
