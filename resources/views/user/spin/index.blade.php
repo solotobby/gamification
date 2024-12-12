@@ -27,6 +27,12 @@ a {
   margin-top: 2rem;
 }
 
+#error{
+  color: #36454f;
+  text-align:center;
+  margin-top: 2rem;
+}
+
 /* WRAPPER */
 #wrapper {
   margin: 40px auto 0;
@@ -300,6 +306,9 @@ a {
 }
 
 
+
+
+
 </style>
 @endsection
 
@@ -326,13 +335,13 @@ a {
             <div id="wheel">
                 <div id="inner-wheel">
                   <div class="sec"><span class="fas">₦50k</span></div>
-                  <div class="sec"><span class="fas">₦10k</span></div>
-                  <div class="sec"><span class="fas">₦70</span></div>
-                  <div class="sec"><span class="fas">₦60</span></div>
+                  <div class="sec"><span class="fas">₦20k</span></div>
+                  <div class="sec"><span class="fas">₦1k</span></div>
                   <div class="sec"><span class="fas">₦50</span></div>
-                  <div class="sec"><span class="fas">₦40</span></div>
-                  <div class="sec"><span class="fas">₦30</span></div>
+                  <div class="sec"><span class="fas">₦25</span></div>
                   <div class="sec"><span class="fas">₦20</span></div>
+                  <div class="sec"><span class="fas">₦15</span></div>
+                  <div class="sec"><span class="fas">₦10</span></div>
               </div>
               
               <div id="spin">
@@ -344,6 +353,14 @@ a {
           
           <div id="txt"></div>
           <div id="winnings">
+          <div id="error">
+        </div>
+
+        <div id="error-modal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="error-message"></p>
+          </div>
         </div>
 
     </div>
@@ -354,6 +371,31 @@ a {
 <script>
 
 $(document).ready(function () {
+  function showErrorModal(message) {
+    // Get modal and elements
+    const modal = document.getElementById("error-modal");
+    const errorMessage = document.getElementById("error-message");
+    const closeBtn = document.querySelector(".close");
+
+    // Set the message
+    errorMessage.textContent = message;
+
+    // Show the modal
+    modal.style.display = "block";
+
+    // Close modal on button click
+    closeBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    // Close modal on outside click
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+  }
+
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
     let attempts = 0;
@@ -415,7 +457,19 @@ $(document).ready(function () {
                 body: JSON.stringify({ attemptsRemaining: attempts }),
             });
 
-            if (!response.ok) throw new Error("Failed to fetch result");
+           // if (!response.ok) throw new Error("Failed to fetch result");
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                $("#winnings").text(errorData.message);
+                document.querySelector("#spin").disabled = true;
+
+                // // alert(errorData.error); // Display error message
+                // if (errorData.error.includes("limit reached")) {
+                //   // Disable spin button
+                // }
+                return;
+            }
 
 
             const result = await response.json();
@@ -439,11 +493,16 @@ $(document).ready(function () {
 
 
          } catch (error) {
+
+          // showErrorModal("An unexpected error occurred. Please try again.");
+            // console.error("Error spinning the wheel:", error);
+
             console.error("Error fetching spin result:", error);
             $("#winnings").text("Error, please try again!");
         }
 
     } else {
+      
         $("#winnings").text("No attempts remaining.");
     }
 

@@ -510,3 +510,8 @@ Route::get('admin/business/random', [\App\Http\Controllers\Admin\BusinessControl
 Route::get('admin/business/category', [\App\Http\Controllers\Admin\BusinessController::class, 'category']);
 Route::post('admin/store/category', [\App\Http\Controllers\Admin\BusinessController::class, 'storeCategory'])->name('store.category');
 Route::get('admin/status/{id}/{status}', [\App\Http\Controllers\Admin\BusinessController::class, 'status']);
+
+
+///admin spinner
+Route::get('admin/spin', [\App\Http\Controllers\SpinController::class, 'adminSpinner'])->name('admin.spin');
+Route::post('admin/spin', [\App\Http\Controllers\SpinController::class, 'store'])->name('admin.spin.store');
