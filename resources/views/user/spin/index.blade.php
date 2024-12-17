@@ -523,7 +523,7 @@ $(document).ready(function () {
 
     } else {
       
-        $("#winnings").text("No attempts remaining.");
+        $("#winnings").text("You have completed todays Spin, please check back tomorrow!");
     }
 
   });
