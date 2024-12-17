@@ -369,8 +369,8 @@ a {
         <hr>
         <div class="alert alert-warning">
           <strong> How to  Win! 🎉🎉🎉</strong> <br>
-          1.⁠ ⁠You qualify for a spin each time your wallet balance reaches N10,000 or you deposit between N10,000 and N20,000 <br>
-          2.⁠ ⁠When you deposit above N20,000 in your wallet, you stand a chance to win up to 50k<br>
+          1.⁠ ⁠You qualify for a spin each time your wallet balance reaches ₦10,000 or you deposit between ₦10,000 and ₦20,000 <br>
+          2.⁠ ⁠When you deposit above ₦20,000 in your wallet, you stand a chance to win up to ₦50,000<br>
           3.⁠ ⁠Once you qualify, simply spin and win<br>
           4.⁠ ⁠Your bonus will be credited to your wallet<br>
   
