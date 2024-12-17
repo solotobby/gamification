@@ -63,7 +63,7 @@ class WebhookController extends Controller
 
                     if($transaction){
                         $subject = 'Wallet Credited';
-                        $content = 'Congratulations, your wallet has been credited with NGN'.$amount;
+                        $content = 'Congratulations, your wallet has been credited with ₦'.$amount;
                         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
                     }
 
@@ -98,7 +98,7 @@ class WebhookController extends Controller
                                     
                                 }
                             }
-                            
+
                         }
                     }
                     
