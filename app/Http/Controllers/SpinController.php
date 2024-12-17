@@ -62,14 +62,14 @@ class SpinController extends Controller
         
             // Define outcomes
             $prizes = [
-                ['degreeOffset' => 0, 'score' => 10, 'prize' => 'You win ₦10'],
-                ['degreeOffset' => 45, 'score' => 15, 'prize' => 'You win ₦15'],
-                ['degreeOffset' => 90, 'score' => 20, 'prize' => 'You win ₦20'],
-                ['degreeOffset' => 135, 'score' => 25, 'prize' => 'You win ₦25'],
-                ['degreeOffset' => 180, 'score' => 50, 'prize' => 'You win ₦50'],
-                ['degreeOffset' => 225, 'score' => 1000, 'prize' => 'You win ₦1000'],
-                ['degreeOffset' => 270, 'score' => 20000, 'prize' => 'You win ₦20k'],
-                ['degreeOffset' => 315, 'score' => 50000, 'prize' => 'You win ₦50k'],
+                ['degreeOffset' => 0, 'score' => 10, 'prize' => 'You win ₦10 🎉🎉'],
+                ['degreeOffset' => 45, 'score' => 15, 'prize' => 'You win ₦15 🎉🎉'],
+                ['degreeOffset' => 90, 'score' => 20, 'prize' => 'You win ₦20 🎉🎉'],
+                ['degreeOffset' => 135, 'score' => 25, 'prize' => 'You win ₦25 🎉🎉'],
+                ['degreeOffset' => 180, 'score' => 50, 'prize' => 'You win ₦50 🎉🎉'],
+                ['degreeOffset' => 225, 'score' => 1000, 'prize' => 'You win ₦1000 🎉🎉🎉🎉'],
+                ['degreeOffset' => 270, 'score' => 20000, 'prize' => 'You win ₦20K 🎉🎉🎉🎉'],
+                ['degreeOffset' => 315, 'score' => 50000, 'prize' => 'You win ₦50K 🎉🎉🎉🎉'],
             ];
 
 
