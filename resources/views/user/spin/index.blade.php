@@ -22,7 +22,8 @@ a {
   margin-bottom: 2rem;
 }
 #winnings{
-  color: #36454f;
+  /* color: #36454f; */
+  color: #856404; 
   text-align:center;
   margin-top: 2rem;
 }
@@ -329,6 +330,17 @@ a {
 
     <!-- Page Content -->
     <div class="content">
+      <div class="alert alert-warning">
+        <strong> How to  Win!</strong> <br>
+        1.⁠ ⁠You qualify for a spin each time your wallet balance reaches N10,000 or you deposit between N10,000 and N20,000 <br>
+        2.⁠ ⁠When you deposit above N20,000 in your wallet, you stand a chance to win up to 50k<br>
+        3.⁠ ⁠Once you qualify, simply spin and win<br>
+        4.⁠ ⁠Your bonus will be credited to your wallet<br>
+
+        <strong> Promo Period </strong><br>
+        December 17th, 2024 to January 31st 2025<br>
+
+      </div>
 
         <div id="wrapper">
             {{-- <div id="counter"> </div> --}}
@@ -352,7 +364,7 @@ a {
           </div>
           
           <div id="txt"></div>
-          <div id="winnings">
+          <div id="winnings"> </div>
           <div id="error">
         </div>
 
@@ -407,7 +419,7 @@ $(document).ready(function () {
         try {
             const response = await fetch('spin/attempt');
             if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
             console.log(data); // Display today's entries
@@ -429,7 +441,6 @@ $(document).ready(function () {
             console.error("Error fetching today's entries:", error);
         }
     }
-
     fetchTodaysEntries();
 
 
@@ -440,13 +451,13 @@ $(document).ready(function () {
   $("#spin").click(async function () {
 
     if (attempts > 0) {
-
-        
         attempts--;
         $("#counter").text(`Attempts Remaining: ${attempts}`);
 
         try{
             
+          const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
             // Fetch the result from the backend
             const response = await fetch("spin-wheel", {
                 method: "POST",
@@ -488,9 +499,6 @@ $(document).ready(function () {
             setTimeout(() => {
                 $("#winnings").text(prize);
             }, 6000); // Wait for the spin animation to complete
-
-            
-
 
          } catch (error) {
 

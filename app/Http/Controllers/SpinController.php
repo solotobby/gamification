@@ -97,6 +97,22 @@ class SpinController extends Controller
                     'is_paid' => true,
                     'is_high_prize' => true
                 ]);
+
+                    creditWallet(auth()->user(), baseCurrency(), $selectedPrize['score']);
+            
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => '1',
+                        'reference' => time(),
+                        'amount' =>  $selectedPrize['score'],
+                        'status' => 'successful',
+                        'currency' => baseCurrency(),
+                        'channel' => 'paystack',
+                        'type' => 'spin_wheel_prize',
+                        'description' => 'Spin the Wheel Prize',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
             }else{
                 SpinScore::create([
                     'user_id' => $user->id,
@@ -104,9 +120,23 @@ class SpinController extends Controller
                     'prize' => $selectedPrize['prize'],
                     'is_paid' => true
                 ]);
-            }
 
-           //$check = in_array($selectedPrize['score'], $monthlyLimitPrizes);
+                    creditWallet(auth()->user(), baseCurrency(), $selectedPrize['score']);
+                
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => '1',
+                        'reference' => time(),
+                        'amount' =>  $selectedPrize['score'],
+                        'status' => 'successful',
+                        'currency' => baseCurrency(),
+                        'channel' => 'paystack',
+                        'type' => 'spin_wheel_prize',
+                        'description' => 'Spin the Wheel Prize',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
+            }
 
             // Update spin tracker
             $spinTracker->increment('total_spins');
@@ -124,49 +154,6 @@ class SpinController extends Controller
             // 'prize_check' => $check,
         ]);
         
-     
-
-    
-
-
-
-        // // Define outcomes
-        // $prizes = [
-        //     ['degreeOffset' => 0, 'score' => 10, 'prize' => 'You win ₦10'],
-        //     ['degreeOffset' => 45, 'score' => 15, 'prize' => 'You win ₦15'],
-        //     ['degreeOffset' => 90, 'score' => 20, 'prize' => 'You win ₦20'],
-        //     ['degreeOffset' => 135, 'score' => 25, 'prize' => 'You win ₦25'],
-        //     ['degreeOffset' => 180, 'score' => 50, 'prize' => 'You win ₦50'],
-        //     ['degreeOffset' => 225, 'score' => 1000, 'prize' => 'You win ₦1000'],
-        //     ['degreeOffset' => 270, 'score' => 20000, 'prize' => 'You win ₦20k'],
-        //     ['degreeOffset' => 315, 'score' => 50000, 'prize' => 'You win ₦50k'],
-        // ];
-
-        // Pre-determine the result (logic can be enhanced as per requirements)
-        // $resultIndex = array_rand($prizes);
-        
-        // $result = $prizes[$resultIndex];
-
-        // $spin = SpinScore::create(['user_id' => auth()->user()->id, 'score' => $result['score'], 'prize' => $result['prize'], 'is_paid' => true]);
-        // if($spin){
-        //     creditWallet(auth()->user(), baseCurrency(),$result['score']);
-            
-        //     PaymentTransaction::create([
-        //         'user_id' => auth()->user()->id,
-        //         'campaign_id' => '1',
-        //         'reference' => time(),
-        //         'amount' => $result['score'],
-        //         'status' => 'successful',
-        //         'currency' => baseCurrency(),
-        //         'channel' => 'paystack',
-        //         'type' => 'spin_wheel_prize',
-        //         'description' => 'Spin the Wheel Prize',
-        //         'tx_type' => 'Credit',
-        //         'user_type' => 'regular'
-        //     ]);
-        // }
-
-        // return response()->json($result);
     }
 
     public function attempt(){
