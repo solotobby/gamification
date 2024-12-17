@@ -330,19 +330,15 @@ a {
 
     <!-- Page Content -->
     <div class="content">
-      <div class="alert alert-warning">
-        <strong> How to  Win!</strong> <br>
-        1.⁠ ⁠You qualify for a spin each time your wallet balance reaches N10,000 or you deposit between N10,000 and N20,000 <br>
-        2.⁠ ⁠When you deposit above N20,000 in your wallet, you stand a chance to win up to 50k<br>
-        3.⁠ ⁠Once you qualify, simply spin and win<br>
-        4.⁠ ⁠Your bonus will be credited to your wallet<br>
-
-        <strong> Promo Period </strong><br>
-        December 17th, 2024 to January 31st 2025<br>
-
-      </div>
+     
 
         <div id="wrapper">
+          {{-- @if(auth()->user()->wallet->balance <= 10000)
+            <div class="alert alert-danger">
+                You need to have a minimum of ₦10,000 to Spin!
+            </div>
+          @endif --}}
+
             {{-- <div id="counter"> </div> --}}
             <div id="wheel">
                 <div id="inner-wheel">
@@ -368,12 +364,28 @@ a {
           <div id="error">
         </div>
 
-        <div id="error-modal" class="modal">
+       
+
+        <hr>
+        <div class="alert alert-warning">
+          <strong> How to  Win! 🎉🎉🎉</strong> <br>
+          1.⁠ ⁠You qualify for a spin each time your wallet balance reaches N10,000 or you deposit between N10,000 and N20,000 <br>
+          2.⁠ ⁠When you deposit above N20,000 in your wallet, you stand a chance to win up to 50k<br>
+          3.⁠ ⁠Once you qualify, simply spin and win<br>
+          4.⁠ ⁠Your bonus will be credited to your wallet<br>
+  
+          <strong> Promo Period ⌛</strong><br>
+          December 17th, 2024 to January 31st 2025<br>
+  
+        </div>
+
+
+        {{-- <div id="error-modal" class="modal">
           <div class="modal-content">
             <span class="close">&times;</span>
             <p id="error-message"></p>
           </div>
-        </div>
+        </div> --}}
 
     </div>
 @endsection
@@ -429,10 +441,10 @@ $(document).ready(function () {
             if(!balance){
                 $("#spin").css({
                     "pointer-events": "none",
-                    "opacity": "0.6"
+                    "opacity": "0.9"
                 });
 
-                $("#winnings").text("You need a minium balance of NGN10,000 in your wallet to play this game!");
+                $("#winnings").text("You need a minium balance of ₦10,000 in your wallet to Spin!");
             }
            
 
