@@ -10,4 +10,5 @@ class SpinParams extends Model
     use HasFactory;
 
     protected $fillable = ['total_spins_allowed', 'total_payouts_allowed'];
+    
 }

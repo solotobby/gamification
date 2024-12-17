@@ -83,6 +83,22 @@ class WebhookController extends Controller
                                 }
                                 
                             }
+                        }else{
+
+                            $walletCredit =  Wallet::where('user_id', $user->id)->first();
+                            if($walletCredit->balance >= 1050){
+                                $debitWallet = debitWallet($user, 'NGN', 1050);
+                                if($debitWallet){
+                                
+                                    $upgrdate = userNairaUpgrade($user);
+    
+                                    if($upgrdate){
+                                        Mail::to($user->email)->send(new UpgradeUser($user));
+                                    }
+                                    
+                                }
+                            }
+                            
                         }
                     }
                     
