@@ -101,7 +101,7 @@ class CategoryController extends Controller
     }
 
     public function updateSubcategory(Request $request){
-        return $request;
+        
         for ($i = 0; $i < count($request->id); $i++) {
             $id = $request->id[$i];
             $usd = $request->usd[$i];

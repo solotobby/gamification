@@ -114,8 +114,8 @@
                     <td>{{ $s->subCate->count() }}</td>
                     <td>
                         <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">View</button>
-                        <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-{{ $s->id }}">Edit Price</button>
-                        {{-- <button type="button" class="btn btn-alt-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $s->id }}">Edit Naira Price</button> --}}
+                        {{-- <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-{{ $s->id }}">Edit Price</button> --}}
+                        <button type="button" class="btn btn-alt-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-edit-naira-{{ $s->id }}">Edit Price</button>
                     </td>
                 </tr>
                 <div class="modal fade" id="modal-default-popout-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
@@ -220,7 +220,7 @@
                   </div>
                 </div>
 
-                {{-- <div class="modal fade" id="modal-default-popout-edit-naira-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                <div class="modal fade" id="modal-default-popout-edit-naira-{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-popout" role="document">
                   <div class="modal-content">
                       <div class="modal-header">
@@ -249,10 +249,7 @@
                                           <label class="form-label" for="example-text-input">Unit Price (Naira)</label>
                                           <input type="text" name="amount[]" class="form-control" size="5" value="{{ $n->amount }}" required>
                                         </div>
-                                        <div class="mb-4">
-                                          <label class="form-label" for="example-text-input">Unit Price (GHS)</label>
-                                          <input type="text" name="ghs[]" class="form-control" size="5" value="{{ $n->amount }}" required>
-                                        </div>
+                                       
                                       <input type="hidden" name="id[]"  value="{{ $n->id }}" required>
                                       <hr>
                                       @endforeach
@@ -272,7 +269,7 @@
                       </div>
                   </div>
                   </div>
-                </div> --}}
+                </div>
                 @endforeach
             </tbody>
           </table>
