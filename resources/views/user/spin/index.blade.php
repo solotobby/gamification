@@ -373,6 +373,7 @@ a {
           2.⁠ ⁠When you deposit above ₦20,000 in your wallet, you stand a chance to win up to ₦50,000<br>
           3.⁠ ⁠Once you qualify, simply spin and win<br>
           4.⁠ ⁠Your bonus will be credited to your wallet<br>
+          5.⁠ You don't loose your deposits by spinning. You can always place withdrawal anytime.<br>
   
           <strong> Promo Period ⌛</strong><br>
           December 17th, 2024 to January 31st 2025<br>
