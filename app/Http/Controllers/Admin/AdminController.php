@@ -1281,7 +1281,13 @@ class AdminController extends Controller
                 $bankInfor->save();
             }
 
-            $user = User::where('id', $request->user_id)->first();
+
+            $data['resolvedBankName'] = $accountInformation;
+            $data['recipientCode'] = $recipientCode;
+
+            return $data;
+
+             $user = User::where('id', $request->user_id)->first();
             $subject = 'Account Details Updated';
             $content = 'Congratulations, your account details has been updated on Freebyz.';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
