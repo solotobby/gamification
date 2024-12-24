@@ -1267,7 +1267,7 @@ class AdminController extends Controller
 
     public function updateUserAccountDetails(Request $request){
 
-            return $accountInformation = resolveBankName($request->account_number, $request->bank_code);
+             $accountInformation = resolveBankName($request->account_number, $request->bank_code);
 
             if($accountInformation['status'] == 'true')
             {
@@ -1280,12 +1280,6 @@ class AdminController extends Controller
                 $bankInfor->recipient_code = $recipientCode['data']['recipient_code'];
                 $bankInfor->save();
             }
-
-
-            $data['resolvedBankName'] = $accountInformation;
-            $data['recipientCode'] = $recipientCode;
-
-            return $data;
 
              $user = User::where('id', $request->user_id)->first();
             $subject = 'Account Details Updated';
