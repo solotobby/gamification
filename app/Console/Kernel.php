@@ -202,13 +202,10 @@ class Kernel extends ConsoleKernel
                 Mail::to($us->email)->send(new MassMail($us, $content, $subject, ''));
             }
 
-             $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            $userInfo = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
             $subject = 'Bulk Verification Notification Sent';
             $content = 'Number of users Notified:'.$user->count();
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
-
-
-    
+            Mail::to('solotobby@gmail.com')->send(new GeneralMail($userInfo, $content, $subject, ''));
             // Question::where('option_A', null)->delete();
 
         })->dailyAt('06:00'); //->daily();
