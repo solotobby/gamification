@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Affiliate Marketing Hub | Make Money Online')
+@section('title', 'Freebyz | Micro and Remote Job Hub')
 @section('style')
 <style>
 	.carousel-item {
