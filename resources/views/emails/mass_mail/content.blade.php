@@ -13,14 +13,31 @@
             <td style="padding: 30px 30px 20px">
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
                 <p style="margin-bottom: 10px;">
-                {!! $message !!}    
+                {{-- {!! $message !!}     --}}
+                Thank you for being a valued Freebyz customer! <br>
+
+                We would like to let you know that, on January 15, 2025, we are going to increase verification fees for new user(s).
                 <br>
-                    
+                As you may be aware, hosting servers has been implementing yearly price increases that impacted several businesses. In recent years, we’ve absorbed these costs to keep your access to Freebyz stable. However, due to the ongoing changes, we’ve made the difficult decision to adjust our verification fees.
+                <br>
+                The new verification price(s) will be :<br>
+                ₦3,000 (for naira wallet), $6 (for dollar wallets) and their equivalents in GHS, KES, ZAR, UGX and other currencies available on Freebyz
+                <br>
+
+                To this end, referral bonuses will also be ₦1, 000 (for naira wallet), ($2.5 for dollar wallets) and their respective equivalents in other currencies.
+                <br>
+                Please note that minimum withdrawal will still remain ₦2,500, $10 and their respective equivalents. 
+                <br>
+                This adjustment will be applied from cycle after January 15, 2025.
+                <br><br>
+                Thank you for your understanding.
+                <br>
                 </p>
                 <p style="margin-bottom: 10px;">
-                    Click the button below to access more jobs... <br><br>
-                    <a href="{{ url('home') }}" target="_blank" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">
-                        Take More Jobs
+                    If you have any questions, please don't hesitate to contact our Customer Support team 
+                     <br><br>
+                    <a href="https://tawk.to/chat/6510bbe9b1aaa13b7a78ae75/1hb4ls2fd" target="_blank" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">
+                        Contact Customer Care
                     </a>
                 </p>
                 {{-- <p style="margin-bottom: 10px;">Its clean, minimal and pre-designed email template that is suitable for multiple purposes email template.</p>

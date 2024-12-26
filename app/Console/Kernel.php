@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
+use App\Mail\MassMail;
 use App\Models\Business;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
@@ -189,10 +190,15 @@ class Kernel extends ConsoleKernel
         })->hourly();
 
         $schedule->call(function(){ 
+            $user = User::where('id', 4)->first();
+            $subject = 'IMPORTANT! Upcoming Verification & Referral bonus Pricing changes';
+            $content = '';
+            
+            Mail::to($user->email)->send(new MassMail($user, $content, $subject, ''));
+    
+            // Question::where('option_A', null)->delete();
 
-            Question::where('option_A', null)->delete();
-
-        })->daily();
+        })->dailyAt('19:15'); //->daily();
 
         $schedule->call(function(){
 
