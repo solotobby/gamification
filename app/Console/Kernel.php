@@ -199,7 +199,7 @@ class Kernel extends ConsoleKernel
             $content = '';
 
             foreach($user as $us){
-                Mail::to($us->email)->send(new MassMail($user, $content, $subject, ''));
+                Mail::to($us->email)->send(new MassMail($us, $content, $subject, ''));
             }
     
             // Question::where('option_A', null)->delete();
