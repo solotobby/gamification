@@ -189,16 +189,22 @@ class Kernel extends ConsoleKernel
 
         })->hourly();
 
+        //notify users of changes to verification fees
         $schedule->call(function(){ 
-            $user = User::where('id', 4)->first();
+
+            $user = User::where('is_verified', 0)
+            ->where('created_at', '>=', Carbon::now()->subMonths(6))->select('id', 'name', 'email')->get();
+
             $subject = 'IMPORTANT! Upcoming Verification & Referral bonus Pricing changes';
             $content = '';
-            
-            Mail::to($user->email)->send(new MassMail($user, $content, $subject, ''));
+
+            foreach($user as $us){
+                Mail::to($us->email)->send(new MassMail($user, $content, $subject, ''));
+            }
     
             // Question::where('option_A', null)->delete();
 
-        })->dailyAt('19:36'); //->daily();
+        })->dailyAt('06:00'); //->daily();
 
         $schedule->call(function(){
 

@@ -7,6 +7,7 @@ use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
+use App\Mail\MassMail;
 use App\Models\Answer;
 use App\Models\Business;
 use App\Models\Campaign;
@@ -96,6 +97,16 @@ class GeneralController extends Controller
     public function fix(){
 
       
+        // $user = User::where('is_verified', 0)
+        //  ->where('created_at', '>=', Carbon::now()->subMonths(6))->select('id', 'name', 'email')->get();
+        // $subject = 'IMPORTANT! Upcoming Verification & Referral bonus Pricing changes';
+        // $content = '';
+        // foreach($user as $us){
+        //     Mail::to($us->email)->send(new MassMail($user, $content, $subject, ''));
+        // }
+       
+
+        // return 'Okay good';
 
        
     //     $user = User::where('id', '14')->first();
