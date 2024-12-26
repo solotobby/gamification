@@ -11,7 +11,9 @@
         </tr> --}}
         <tr>
             <td style="padding: 30px 30px 20px">
-                <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
+                <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},
+                    
+                </strong></p>
                 <p style="margin-bottom: 10px;">
                 {{-- {!! $message !!}     --}}
                

@@ -96,16 +96,14 @@ class GeneralController extends Controller
 
     public function fix(){
 
-      
         $user = User::where('is_verified', 0)
          ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
+
         $subject = 'IMPORTANT! Upcoming Verification & Referral bonus Pricing changes';
         $content = '';
         foreach($user as $us){
-            Mail::to($us->email)->send(new MassMail($user, $content, $subject, ''));
+            Mail::to($us->email)->send(new MassMail($us, $content, $subject, ''));
         }
-       
-
         return 'Okay good';
 
        
