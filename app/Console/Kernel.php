@@ -198,7 +198,7 @@ class Kernel extends ConsoleKernel
     
             // Question::where('option_A', null)->delete();
 
-        })->dailyAt('19:15'); //->daily();
+        })->dailyAt('19:36'); //->daily();
 
         $schedule->call(function(){
 

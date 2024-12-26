@@ -14,21 +14,20 @@
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
                 <p style="margin-bottom: 10px;">
                 {{-- {!! $message !!}     --}}
-                Thank you for being a valued Freebyz customer! <br>
-
+               
+                Thank you for being a valued Freebyz customer!
+                <br><br>
                 We would like to let you know that, on January 15, 2025, we are going to increase verification fees for new user(s).
-                <br>
-                As you may be aware, hosting servers has been implementing yearly price increases that impacted several businesses. In recent years, we’ve absorbed these costs to keep your access to Freebyz stable. However, due to the ongoing changes, we’ve made the difficult decision to adjust our verification fees.
-                <br>
-                The new verification price(s) will be :<br>
-                ₦3,000 (for naira wallet), $6 (for dollar wallets) and their equivalents in GHS, KES, ZAR, UGX and other currencies available on Freebyz
-                <br>
+                <br><br>
 
-                To this end, referral bonuses will also be ₦1, 000 (for naira wallet), ($2.5 for dollar wallets) and their respective equivalents in other currencies.
+                As you may be aware, hosting servers has been implementing yearly price increases that impacted several businesses. In recent years, we’ve absorbed these costs to keep your access to Freebyz stable. However, due to the ongoing changes, we’ve made the difficult decision to adjust our verification fees.
+                <br><br>
+                The new verification price(s) will be ₦3000 (for naira wallet), $6 (for dollar wallets) and their equivalents in GHS, KES, ZAR, UGX and other currencies available on Freebyz. 
+                To this end, referral bonuses will also be  ₦1, 000 (for naira wallet), ($2.5 for dollar wallets) and their respective equivalents in other currencies.
+                <br><br>
+                Please note that minimum withdrawal will still remain  ₦2500 (for naira wallet), $10 (for dollar wallet) and their respective equivalents. 
                 <br>
-                Please note that minimum withdrawal will still remain ₦2,500, $10 and their respective equivalents. 
-                <br>
-                This adjustment will be applied from cycle after January 15, 2025.
+                This adjustment will be applied by 12.00 GMT on January 15, 2025.
                 <br><br>
                 Thank you for your understanding.
                 <br>
