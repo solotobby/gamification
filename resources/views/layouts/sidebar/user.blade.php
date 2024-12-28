@@ -17,7 +17,7 @@
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('spin') }}">
           <i class="nav-main-link-icon fa fa-spinner"></i>
-          <span class="nav-main-link-name">Spin</span>
+          <span class="nav-main-link-name">Spin & Win</span>
           {{-- <span class="nav-main-link-badge badge rounded-pill "> 
             <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> 
           </span> --}}
