@@ -66,7 +66,7 @@ class SafeLockController extends Controller
                 // or use the paystack option
             }
         
-            debitWallet(auth()->user(), 'Naira', $amount_locked);
+            debitWallet(auth()->user(), 'NGN', $amount_locked);
             $created = $this->createSafeLock($request, $interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date);
             if($created){
                 PaymentTransaction::create([
