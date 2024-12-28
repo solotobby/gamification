@@ -120,7 +120,7 @@ class BannerController extends Controller
             $createdBanner = Banner::create($banner);
 
             if($createdBanner){
-                debitWallet(auth()->user(),'Naira', $request->budget);
+                debitWallet(auth()->user(),'NGN', $request->budget);
                 //transaction log 
                 PaymentTransaction::create([
                     'user_id' => auth()->user()->id,
