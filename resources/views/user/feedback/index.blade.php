@@ -34,7 +34,7 @@
 </div> --}}
 
   <!-- Page Content -->
-   <div class="row g-0 flex-md-grow-1">
+  <div class="row g-0 flex-md-grow-1">
     <div class="col-md-12 col-lg-12 col-xl-12">
         <div class="content">
           <a href="{{ url('feedback/create')}}" type="button" class="btn w-35 btn-alt-primary mb-3">
