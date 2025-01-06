@@ -18,6 +18,6 @@ class Feedback extends Model
     }
 
     public function replies(){
-        return $this->hasMany(FeedbackReplies::class);
+        return $this->hasMany(FeedbackReplies::class, 'feedback_id');
     }
 }
