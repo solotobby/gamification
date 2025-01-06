@@ -1766,6 +1766,12 @@ if(!function_exists('currencyParameter')){
     }
 }
 
+if(!function_exists('fetchUpgradeFee')){
+    function fetchUpgradeFee($currency){ 
+        return  Currency::where('code', $currency)->where('is_active', true)->first()->upgrade_fee;
+    }
+}
+
 if(!function_exists('testCampaign')){
     function testCampaign($categoryID){ 
 
@@ -2099,10 +2105,10 @@ if(!function_exists('baseCurrency')){
        
         if($user == null){
             $user = Auth::user();
-            return $user->wallet->base_currency;
+            return Wallet::where('user_id', $user->id)->first()->base_currency; //$user->wallet->base_currency;
         }else{
             $user = User::find($user->id);
-            return $user->wallet->base_currency;
+            return Wallet::where('user_id', $user->id)->first()->base_currency; //$user->wallet->base_currency;
         }
         
     }

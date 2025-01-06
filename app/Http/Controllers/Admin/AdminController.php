@@ -605,10 +605,10 @@ class AdminController extends Controller
             switch ($status) {
             case "1":
                  $this->unverifyUsdUser($id);
-                return back()->with('success', 'User unverified!');
+                return back()->with('success', 'User Unverified Successfully!');
                 break;
             case "0":
-                $this->verifyUsdUser($id);
+                $this->verifyUsdUser($id); // handles global verification
                 return back()->with('success', 'Upgrade Successful');
                 break;
             default:
@@ -621,55 +621,72 @@ class AdminController extends Controller
     private function verifyUsdUser($id){
 
         $getUser = User::where('id', $id)->first();
-        $getUser->is_verified = 1;
-        $getUser->save();
 
-        $usd_Verified =  Usdverified::create(['user_id'=> $getUser->id]);
+        $userBaseCurrency = baseCurrency($getUser);
+        $currencyParams = currencyParameter($userBaseCurrency);
+        $upgradeFee = $currencyParams->upgrade_fee;
+        $refComission = $currencyParams->referral_commission;
+
+        $getUser->is_verified = 1; //first step of verification
+        $getUser->save();
+        
+        $usd_Verified = Usdverified::create(['user_id'=> $getUser->id]);
 
         $ref = time();
         PaymentTransaction::create([
             'user_id' => $getUser->id,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 5,
+            'amount' => $upgradeFee,
             'status' => 'successful',
-            'currency' => 'USD',
+            'currency' => $userBaseCurrency,
             'channel' => 'paypal',
             'type' => 'upgrade_payment',
-            'description' => 'Manual Ugrade Payment - USD'
+            'description' => 'Manual Ugrade Payment - '.$userBaseCurrency
         ]);
 
         $referee = Referral::where('user_id',  $getUser->id)->first();
-        if($referee){
 
-            $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-            $wallet->usd_balance += 1.5;
-            $wallet->save();
+        if($referee){
+            
+            ///fetch referee user information
+            $refereeUserInfor = User::where('id', $referee->referee_id)->first();
+            $refereeBaseCurrency = baseCurrency($refereeUserInfor);
+
+            //convert to referral local currency
+            $refComBaseAmount = currencyConverter($userBaseCurrency, $refereeBaseCurrency, $refComission);
+
+            //credit referee with referral comission amount
+            creditWallet($refereeUserInfor, $refereeBaseCurrency, $refComBaseAmount);
 
             $usd_Verified->referral_id = $referee->referee_id;
             $usd_Verified->is_paid = true;
-            $usd_Verified->amount = 1.5;
+            $usd_Verified->amount = $refComBaseAmount;
             $usd_Verified->save();
 
-            ///Transactions
+            ///Transactions for referee
             PaymentTransaction::create([
-                'user_id' => $referee->referee_id, ///auth()->user()->id,
+                'user_id' => $referee->referee_id, 
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => 1.5,
+                'amount' => $refComBaseAmount,
                 'status' => 'successful',
-                'currency' => 'USD',
+                'currency' => $refereeBaseCurrency,
                 'channel' => 'paystack',
                 'type' => 'usd_referer_bonus',
                 'tx_type' => 'Credit',
-                'description' => 'USD Referral Bonus from '.$getUser->name
+                'description' => $refereeBaseCurrency.' Referral Bonus from '.$getUser->name
             ]);
+
         }
+
         systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+        
         $name = $getUser->name;
+
         activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
          
-        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
 
