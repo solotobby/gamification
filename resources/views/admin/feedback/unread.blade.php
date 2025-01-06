@@ -89,10 +89,10 @@
                        
                           <span class="badge rounded-pill bg-dark m-1 float-end">{{ $feedback->replies()->where('user_id', '!=', auth()->user()->id)->where('status', true)->count() }}</span>
                           <p class="fs-6 fw-bold mb-0">
-                              Ticket #{{$feedback->id}}
+                              Ticket #{{$feedback->id}} - {{ $feedback->user?->name }}
                           </p>
                           <p class="text-muted mb-2">
-                              {!! \Illuminate\Support\Str::words($feedback->message, 20) !!}
+                              {!! \Illuminate\Support\Str::words($feedback->message, 30) !!}
                           </p>
                           <p class="fs-sm text-muted mb-0">
                               <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->updated_at)->diffForHumans()}} 
