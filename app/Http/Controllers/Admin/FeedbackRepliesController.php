@@ -17,12 +17,12 @@ class FeedbackRepliesController extends Controller
     }
 
     public function index(){
-        $feedbacks = Feedback::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
+        $feedbacks = Feedback::where('status', '1')->orderBy('created_at', 'DESC')->paginate(25);
         return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
     }
 
     public function unread(){
-        $feedbacks = Feedback::where('status', '0')->orderBy('created_at', 'DESC')->paginate(50);
+        $feedbacks = Feedback::where('status', '0')->orderBy('created_at', 'DESC')->paginate(25);
         return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
     }
 

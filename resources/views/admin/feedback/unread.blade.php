@@ -100,6 +100,10 @@
                       </a>
                   @endforeach
               </div>
+
+              <div class="d-flex">
+                {!! $feedbacks->links('pagination::bootstrap-4') !!}
+              </div>
          
       </div>
     </div> 
