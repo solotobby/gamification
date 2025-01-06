@@ -102,7 +102,8 @@
                 Virtual Account Name: {{ @$info->virtualAccount->account_name }} <br>
                 Virtual Account Number: {{ @$info->virtualAccount->account_number }}<br>
                 @else
-                 Virtual Account Number: Not Created<br>
+                 <a href="{{ url('reactivate/virtual/account/'.$info->id) }}" class="btn btn-sm btn-success"> Generate Virtual Account </a>
+                 <br>
                @endif
               </address>
               <div class="fs-5 mb-1">Bank Account</div>

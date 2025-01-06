@@ -688,7 +688,7 @@ class AdminController extends Controller
          
         Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
-        return $getUser;
+        return response()->json(); $getUser;
 
     }
 
@@ -1317,7 +1317,7 @@ class AdminController extends Controller
         // $bankInfor = BankInformation::where('user_id', $id)->first()->name;
        $userPhone = User::where('id', $id)->first();
         reGenerateVirtualAccount($userPhone);
-        return back()->with('success', 'VA regenerated Successfully');
+        return back()->with('success', 'Virtual Account Regenerated Successfully');
     }
 
     public function removeVirtualAccount($id){
