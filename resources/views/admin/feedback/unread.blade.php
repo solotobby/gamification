@@ -89,7 +89,7 @@
                        
                           <span class="badge rounded-pill bg-dark m-1 float-end">{{ $feedback->replies()->where('user_id', '!=', auth()->user()->id)->where('status', true)->count() }}</span>
                           <p class="fs-6 fw-bold mb-0">
-                              Ticket #{{$feedback->id}} - {{ $feedback->user?->name }}
+                              Ticket #{{$feedback->id}} - {{ @$feedback->user->name }}
                           </p>
                           <p class="text-muted mb-2">
                               {!! \Illuminate\Support\Str::words($feedback->message, 30) !!}
