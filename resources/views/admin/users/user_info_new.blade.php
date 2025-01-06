@@ -213,33 +213,41 @@
             <h4 class="fw-normal text-muted text-center">
             Please Click the Button below to Upgrade User
             </h4>
-            <center>
-            @if($info->is_verified == '0')
-           
-                <a class="btn btn-hero btn-primary mb-4" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
-                  Verify User (Naira) Now!
-                </a>
-                @else
-                <a class="btn btn-hero btn-warning mb-4" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
-                  UnVerify User (Naira) Now!
-                </a>
-           
-            @endif
-          </center>
-
-          <center>
-            @if(!$info->USD_verified)
+            <?php 
             
-                <a class="btn btn-hero btn-primary mb-4" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
-                  Verify User (USD) Now!
-                </a>
-                @else
-                <a class="btn btn-hero btn-warning mb-4" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
-                  UnVerify User (USD) Now!
-                </a>
-              
-            @endif
-          </center>
+            ?>
+            
+            @if(baseCurrency($info) == 'NGN' )
+                <center>
+                      @if($info->is_verified == '0')
+                    
+                          <a class="btn btn-hero btn-primary mb-4" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
+                            Verify User (Naira) Now!
+                          </a>
+                          @else
+                          <a class="btn btn-hero btn-warning mb-4" href="{{url('admin/upgrade/'.$info->id.'/naira')}}" data-toggle="click-ripple">
+                            UnVerify User (Naira) Now!
+                          </a>
+                    
+                      @endif
+              </center>
+          @else
+
+            <center>
+                @if(!$info->USD_verified)
+                
+                    <a class="btn btn-hero btn-primary mb-4" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
+                      Verify User ({{baseCurrency($info)}}) Now!
+                    </a>
+                    @else
+                    <a class="btn btn-hero btn-warning mb-4" href="{{url('admin/upgrade/'.$info->id.'/dollar')}}" data-toggle="click-ripple">
+                      UnVerify User ({{ baseCurrency($info) }}) Now!
+                    </a>
+                  
+                @endif
+            </center>
+
+          @endif
 
            
               @if($info->wallet->base_currency == 'NGN')

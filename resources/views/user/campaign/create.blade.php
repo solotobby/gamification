@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-6">
 
-                  @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == "NGN")
+                  @if(auth()->user()->wallet->base_currency == "NGN")
                       <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                     @else
                       <label class="form-label" for="post-salary-min">Cost per Campaign</label>
@@ -105,7 +105,7 @@
                 </div>
               </div>
               <hr>
-              @if(auth()->user()->wallet->base_currency == "Naira" || auth()->user()->wallet->base_currency == "NGN")
+              @if(auth()->user()->wallet->base_currency == "NGN")
                 <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
               @elseif(auth()->user()->wallet->base_currency == 'GHS')
                 <h4>Estimated Cost: &#8373;<span id="demo"></span></h4>
