@@ -1125,12 +1125,12 @@ if(!function_exists('userForeignUpgrade')){
                 }
                 $referral_converted_amount = currencyConverter($currency, $baseCur, $referral_amount);
 
-                $referralInfo = User::find($referee->referee_id);
+               // $referralInfo = User::find($referee->referee_id);
                 
-                creditWallet($referralInfo, $baseCur, $referral_converted_amount);
+                creditWallet($walletAdmin, $baseCur, $referral_converted_amount);
 
                 $ref_tx = PaymentTransaction::create([
-                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'user_id' => 1, ///auth()->user()->id,
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $referral_converted_amount,
