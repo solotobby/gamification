@@ -252,6 +252,7 @@ Route::post('feedback/reply', [\App\Http\Controllers\FeedbackController::class, 
 
 Route::get('feedback/create', [\App\Http\Controllers\FeedbackController::class, 'create']);
 Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackController::class, 'view']);
+
 //notification
 Route::resource('notifications', NotificationController::class);
 
