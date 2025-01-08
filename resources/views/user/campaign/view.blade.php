@@ -457,6 +457,7 @@
                                       
 
                                   </div>
+     
                                 {{-- @endif --}}
                           @endif
 
@@ -464,7 +465,7 @@
             </div>
 
             <a href="{{ url('home') }}" class="btn btn-secondary btn-sm mb-2"><i class="fa fa-backspace"></i> Back Home</a>
-
+    </div>
       </div>
     </div>
   </div>
