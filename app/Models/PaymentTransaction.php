@@ -11,7 +11,7 @@ class PaymentTransaction extends Model
 
     protected $table = 'payment_transactions';
 
-    protected $fillable = ['reference', 'user_id', 'campaign_id', 'amount', 'currency', 'status', 'channel', 'type', 'description', 'tx_type', 'user_type'];
+    protected $fillable = ['reference', 'user_id', 'campaign_id', 'amount', 'balance', 'currency', 'status', 'channel', 'type', 'description', 'tx_type', 'user_type'];
 
     public function user(){
         return $this->belongsTo(User::class);

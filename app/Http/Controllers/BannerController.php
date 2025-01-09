@@ -127,6 +127,7 @@ class BannerController extends Controller
                     'campaign_id' => $createdBanner->id,
                     'reference' => time(),
                     'amount' => $request->budget,
+                    'balance' => walletBalance(auth()->user()->id),
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'internal',

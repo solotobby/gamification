@@ -52,6 +52,7 @@ class WebhookController extends Controller
                         'campaign_id' => 1,
                         'reference' => $reference,
                         'amount' => $amount,
+                        'balance' => walletBalance($user->id),
                         'status' => 'successful',
                         'currency' => 'NGN',
                         'channel' => 'paystack',
@@ -69,14 +70,20 @@ class WebhookController extends Controller
 
                     //check wallet stat
 
+                    $userBaseCurrency = baseCurrency($user);
+
+                    $currencyParams = currencyParameter($userBaseCurrency);
+                    $upgradeAmount = $currencyParams->upgrade_fee;
+                    $referral_commission = $currencyParams->referral_commission;
+
                     if($user->is_verified == false){
-                        if($amount >= 1050){
+                        if($amount >= $upgradeAmount){
                             
-                            $debitWallet = debitWallet($user, 'NGN', 1050);
+                            $debitWallet = debitWallet($user, 'NGN', $upgradeAmount);
                             
                             if($debitWallet){
                                 
-                                $upgrdate = userNairaUpgrade($user);
+                                $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
 
                                 if($upgrdate){
                                     Mail::to($user->email)->send(new UpgradeUser($user));
@@ -86,11 +93,11 @@ class WebhookController extends Controller
                         }else{
 
                             $walletCredit =  Wallet::where('user_id', $user->id)->first();
-                            if($walletCredit->balance >= 1050){
-                                $debitWallet = debitWallet($user, 'NGN', 1050);
+                            if($walletCredit->balance >= $upgradeAmount){
+                                $debitWallet = debitWallet($user, 'NGN', $upgradeAmount);
                                 if($debitWallet){
                                 
-                                    $upgrdate = userNairaUpgrade($user);
+                                    $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
     
                                     if($upgrdate){
                                         Mail::to($user->email)->send(new UpgradeUser($user));

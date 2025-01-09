@@ -40,6 +40,7 @@ class BadgeController extends Controller
             'campaign_id' => '1',
             'reference' => time(),
             'amount' => $badge['amount'],
+            'balance' => walletBalance(auth()->user()->id),
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',

@@ -47,6 +47,7 @@
               <tr>
                 <th>Reference</th>
                 <th>Amount</th>
+                <th>Balance</th>
                 <th>Currency</th>
                 <th>Status</th>
                 <th>Description</th>
@@ -61,8 +62,11 @@
                     </td>
                     
                     <td>
-                        &#8358;{{ number_format($list->amount) }}
+                        {{ number_format($list->amount) }}
                     </td>
+                    <td>
+                      {{ number_format($list->balance) }}
+                  </td>
                     <td>
                         {{ $list->currency }}
                     </td>

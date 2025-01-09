@@ -1,6 +1,6 @@
 @extends('layouts.main.master')
 
-@section('title', 'Users Transactions')
+@section('title', 'User Transactions')
 @section('style')
 <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
 <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}">
@@ -48,7 +48,8 @@
                 <th>Reference</th>
                 <th>User Name</th>
                 <th>Email</th>
-                <th>&#8358;Amount</th>
+                <th>Amount</th>
+                <th>Balance</th>
                 <th>Currency</th>
                 <th>Tx. Type</th>
                 <th>Status</th>
@@ -63,13 +64,16 @@
                       {{ $list->reference }}
                     </td>
                     <td>
-                      {{ $list->user->name }}
+                      {{ @$list->user->name }}
                     </td>
                     <td>
-                      {{ $list->user->email }}
+                      {{ @$list->user->email }}
                     </td>
                     <td>
                         {{ number_format($list->amount) }}
+                    </td>
+                    <td>
+                      {{ number_format($list->balance) }}
                     </td>
                     <td>
                         {{ $list->currency }}
