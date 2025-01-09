@@ -171,6 +171,7 @@ class Kernel extends ConsoleKernel
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $amountCredited,
+                    'balance' => walletBalance($ca->user_id),
                     'status' => 'successful',
                     'currency' => $currency,
                     'channel' => $channel,

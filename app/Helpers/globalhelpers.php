@@ -1022,6 +1022,7 @@ if(!function_exists('transactionProcessor')){
                     'campaign_id' => '1',
                     'reference' => $reference,
                     'amount' => $amount,
+                    'balance' => walletBalance($user->id),
                     'status' => $status,
                     'currency' => $currency,
                     'channel' => $channel,
@@ -1064,6 +1065,7 @@ if(!function_exists('userForeignUpgrade')){
                 'campaign_id' => '1',
                 'reference' => $ref,
                 'amount' => $amount,
+                'balance' => walletBalance($getUser->id),
                 'status' => 'successful',
                 'currency' => $currency,
                 'channel' => 'flutterwave',
@@ -1104,6 +1106,7 @@ if(!function_exists('userForeignUpgrade')){
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $referral_converted_amount,
+                    'balance' => walletBalance($referee->referee_id),
                     'status' => 'successful',
                     'currency' => $baseCur,
                     'channel' => 'paystack',
@@ -1134,6 +1137,7 @@ if(!function_exists('userForeignUpgrade')){
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $referral_converted_amount,
+                    'balance' => walletBalance('1'),
                     'status' => 'successful',
                     'currency' => $baseCur,
                     'channel' => 'flutterwave',
@@ -1176,6 +1180,7 @@ if(!function_exists('userDollaUpgrade')){
                 'campaign_id' => '1',
                 'reference' => $ref,
                 'amount' => 5,
+                'balance' => walletBalance($getUser->id),
                 'status' => 'successful',
                 'currency' => 'USD',
                 'channel' => 'paypal',
@@ -1202,6 +1207,7 @@ if(!function_exists('userDollaUpgrade')){
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => 1.5,
+                    'balance' => walletBalance($referee->referee_id),
                     'status' => 'successful',
                     'currency' => 'USD',
                     'channel' => 'paystack',
@@ -1222,16 +1228,16 @@ if(!function_exists('userDollaUpgrade')){
 }
 
 if(!function_exists('userNairaUpgrade')){
-    function userNairaUpgrade($user){ 
+    function userNairaUpgrade($user, $upgradeAmount, $referral_commission){ 
 
-        @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
-        @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
-        $amount = 0;
-        if($profile_celebrity){
-            $amount = 920;
-        }else{
-            $amount = 1050;
-        }
+        // @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        // @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        // $amount = 0;
+        // if($profile_celebrity){
+        //     $amount = 920;
+        // }else{
+        //     $amount = 1050;
+        // }
         
         $ref = time();
         $userInfo = User::where('id', $user->id)->first();
@@ -1244,7 +1250,8 @@ if(!function_exists('userNairaUpgrade')){
             'user_id' => $user->id,
             'campaign_id' => 1,
             'reference' => $ref,
-            'amount' => $amount,
+            'amount' => $upgradeAmount,
+            'balance' => walletBalance($user->id),
             'status' => 'successful',
             'currency' => 'NGN',
             'channel' => 'paystack',
@@ -1262,7 +1269,7 @@ if(!function_exists('userNairaUpgrade')){
 
             if(!$refereeInfo){
                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                $wallet->balance += 500;
+                $wallet->balance += $referral_commission;
                 $wallet->save();
             
                 $refereeUpdate = Referral::where('user_id',  $user->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -1277,7 +1284,8 @@ if(!function_exists('userNairaUpgrade')){
                     'user_id' => $referee->referee_id,
                     'campaign_id' => 1,
                     'reference' => $ref,
-                    'amount' => 500,
+                    'amount' => $referral_commission,
+                    'balance' => walletBalance($referee->referee_id),
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',
@@ -1288,7 +1296,7 @@ if(!function_exists('userNairaUpgrade')){
                 ]);
 
                 $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 500;
+                $adminWallet->balance += $referral_commission;
                 $adminWallet->save();
 
                 //Admin Transaction Table
@@ -1299,7 +1307,8 @@ if(!function_exists('userNairaUpgrade')){
                     'user_id' => 1,
                     'campaign_id' => 1,
                     'reference' => $ref,
-                    'amount' => 500,
+                    'amount' => $referral_commission,
+                    'balance' => walletBalance('1'),
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',
@@ -1320,14 +1329,15 @@ if(!function_exists('userNairaUpgrade')){
 
         }else{
             $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += 1000;
+            $adminWallet->balance += $upgradeAmount;
             $adminWallet->save();
              //Admin Transaction Tablw
              PaymentTransaction::create([
                 'user_id' => 1,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => 1000,
+                'amount' => $upgradeAmount,
+                'balance' => walletBalance('1'),
                 'status' => 'successful',
                 'currency' => 'NGN',
                 'channel' => 'paystack',
@@ -2421,6 +2431,7 @@ if(!function_exists('paymentTrasanction')){
             'campaign_id' => $campaign_id,
             'reference' => $ref,
             'amount' => $amount,
+            'balance' => walletBalance($userId),
             'status' => $status,
             'currency' => auth()->user()->wallet->base_currency == 'Naira' ? 'NGN' : 'USD',
             'channel' => auth()->user()->wallet->base_currency == 'Naira' ? 'paystack' : 'paypal',
@@ -2499,6 +2510,51 @@ if(!function_exists('currencyConverter')){
 
     }
 }
+
+if(!function_exists('walletBalance')){
+    function  walletBalance($userId){ 
+
+       $wallet = Wallet::where('user_id', $userId)->first();
+
+       if($wallet->base_currency == 'NGN'){
+            return $wallet->balance;
+       }elseif($wallet->base_currency == 'USD'){
+            return $wallet->usd_balance;
+       }else{
+            return $wallet->base_currency_balance;
+       }
+
+
+    //    if($type == 'Naira' || $type == 'NGN'){
+    //     $wallet =  Wallet::where('user_id', $user->id)->first();
+    //         if((int) $wallet->balance >= $amount){
+    //             return true;
+    //         }else{
+    //             return false;
+    //         }
+    //    }elseif($type == 'Dollar' || $type == 'USD'){
+        
+    //     $wallet =  Wallet::where('user_id', $user->id)->first();
+        
+    //         if((int) $wallet->usd_balance >= $amount){
+    //             return true;
+    //         }else{
+    //             return false;
+    //         }
+
+    //    }else{
+    //        $wallet =  Wallet::where('user_id', $user->id)->first();
+            
+    //         if((int) $wallet->base_currency_balance >= $amount){
+    //             return true;
+    //         }else{
+    //             return false;
+    //         }
+
+    //    }
+    }
+}
+
 
 
 

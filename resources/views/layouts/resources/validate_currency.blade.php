@@ -64,7 +64,7 @@
             <div class="form-group mb-3">
                 <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select Country</option>
-                    @foreach (currencyList('NGN',true) as $currency)
+                    @foreach (currencyList(null,true) as $currency)
                       <option value="{{$currency->code}},{{$currency->country}}">{{$currency->country}}</option>
                     @endforeach
                     

@@ -74,10 +74,12 @@ class SafeLockController extends Controller
                     'campaign_id' => 1,
                     'reference' => time(),
                     'amount' => $amount_locked,
+                    'balance' => walletBalance(auth()->user()->id),
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'internal',
                     'type' => 'safelock_created',
+                    'tx_type' => 'Debit',
                     'description' => 'Created a SafeLock'
                 ]);
 
@@ -163,6 +165,7 @@ class SafeLockController extends Controller
                     'campaign_id' => 1,
                     'reference' => time(),
                     'amount' => $getSafeLock->total_payment,
+                    'balance' => walletBalance($user->id),
                     'status' => 'successful',
                     'currency' => 'NGN',
                     'channel' => 'paystack',

@@ -88,6 +88,7 @@ class UserController extends Controller
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => 1.5,
+                    'balance' => walletBalance($referee->user_id),
                     'status' => 'successful',
                     'currency' => 'USD',
                     'channel' => 'paystack',
@@ -372,6 +373,39 @@ class UserController extends Controller
 
     public function makePaymentWallet()
     {
+
+        $user = Auth::user();
+        $userBaseCurrency = baseCurrency($user);
+
+        $currencyParams = currencyParameter($userBaseCurrency);
+        $upgradeAmount = $currencyParams->upgrade_fee;
+        $referral_commission = $currencyParams->referral_commission;
+
+        
+
+        $amount = $user->wallet->balance;
+
+        if($amount >= $upgradeAmount){
+
+            $debitWallet = debitWallet($user, 'NGN', $upgradeAmount);
+
+            if($debitWallet){
+                                
+                $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
+
+                if($upgrdate){
+                    // Mail::to($user->email)->send(new UpgradeUser($user));
+                }
+                
+            }
+
+            return back()->with('success', 'Verification Successfull');
+            
+        }else{
+            return back()->with('error', 'Your balance is too low, please top up your account to get verified');
+        }
+
+
         
         // $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
         
@@ -403,93 +437,95 @@ class UserController extends Controller
         //     return back()->with('error', 'Your balance is too low');
         // }
 
-        $user = Auth::user();
-        @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
-        @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
-        $amount = 0;
-        if($profile_celebrity){
-            $amount = 920;
-        }else{
-            $amount = 1050;
-        }
+        // $user = Auth::user();
+        // @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
+        // @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
+        // $amount = 0;
+        // if($profile_celebrity){
+        //     $amount = 920;
+        // }else{
+        //     $amount = 1050;
+        // }
         
-        if(auth()->user()->wallet->balance >= $amount){
+        // if(auth()->user()->wallet->balance >= $amount){
 
         
-        $ref = time();
+        //     $ref = time();
        
-         debitWallet(auth()->user(), 'NGN', $amount);
+        //  debitWallet(auth()->user(), 'NGN', $amount);
 
-         $user = User::where('id', auth()->user()->id)->first();
-         $user->is_verified = true;
-         $user->save();
+        //  $user = User::where('id', auth()->user()->id)->first();
+        //  $user->is_verified = true;
+        //  $user->save();
 
         
-         paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Debit', 'regular');
+        //  paymentTrasanction(auth()->user()->id, '1', $ref, $amount, 'successful', 'upgrade_payment', 'Upgrade Payment', 'Debit', 'regular');
           
 
-           $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+        //    $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
            
-           if($referee){
-            $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
+        //    if($referee){
+        //     $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
 
-                if(!$refereeInfo){
-                    $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                    $wallet->balance += 500;
-                    $wallet->save();
+        //         if(!$refereeInfo){
+        //             $wallet = Wallet::where('user_id', $referee->referee_id)->first();
+        //             $wallet->balance += 500;
+        //             $wallet->save();
                 
-                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                    $refereeUpdate->is_paid = true;
-                    $refereeUpdate->save();
+        //             $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+        //             $refereeUpdate->is_paid = true;
+        //             $refereeUpdate->save();
     
-                    ///Transactions
-                    $description = 'Referer Bonus from '.auth()->user()->name;
-                    paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
+        //             ///Transactions
+        //             $description = 'Referer Bonus from '.auth()->user()->name;
+        //             paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
     
-                    $adminWallet = Wallet::where('user_id', '1')->first();
-                    $adminWallet->balance += 500;
-                    $adminWallet->save();
+        //             $adminWallet = Wallet::where('user_id', '1')->first();
+        //             $adminWallet->balance += 500;
+        //             $adminWallet->save();
     
-                    //Admin Transaction Table
-                    $description = 'Referer Bonus from '.auth()->user()->name;
-                    paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
+        //             //Admin Transaction Table
+        //             $description = 'Referer Bonus from '.auth()->user()->name;
+        //             paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
                 
-                }else{
-                    $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
-                    $refereeUpdate->is_paid = true;
-                    $refereeUpdate->save();
-                }
+        //         }else{
+        //             $refereeUpdate = Referral::where('user_id', auth()->user()->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+        //             $refereeUpdate->is_paid = true;
+        //             $refereeUpdate->save();
+        //         }
 
             
-           }else{
-            $adminWallet = Wallet::where('user_id', '1')->first();
-            $adminWallet->balance += 1000;
-            $adminWallet->save();
-             //Admin Transaction Tablw
-             PaymentTransaction::create([
-                'user_id' => 1,
-                'campaign_id' => '1',
-                'reference' => $ref,
-                'amount' => 1000,
-                'status' => 'successful',
-                'currency' => 'NGN',
-                'channel' => 'paystack',
-                'type' => 'direct_referer_bonus',
-                'description' => 'Direct Referer Bonus from '.$user->name,
-                'tx_type' => 'Credit',
-                'user_type' => 'admin'
-            ]);
-           }
+        //    }else{
+        //     $adminWallet = Wallet::where('user_id', '1')->first();
+        //     $adminWallet->balance += 1000;
+        //     $adminWallet->save();
+        //      //Admin Transaction Tablw
+        //      PaymentTransaction::create([
+        //         'user_id' => 1,
+        //         'campaign_id' => '1',
+        //         'reference' => $ref,
+        //         'amount' => 1000,
+        //         'status' => 'successful',
+        //         'currency' => 'NGN',
+        //         'channel' => 'paystack',
+        //         'type' => 'direct_referer_bonus',
+        //         'description' => 'Direct Referer Bonus from '.$user->name,
+        //         'tx_type' => 'Credit',
+        //         'user_type' => 'admin'
+        //     ]);
+        //    }
 
-           $name = auth()->user()->name;
-           activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
+        //    $name = auth()->user()->name;
+        //    activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
            
-           Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
-           return redirect('success');
-        }else{
-            return back()->with('error', 'Your balance is too low');
-            // return redirect('error');
-        }
+        //    Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+        //    return redirect('success');
+        // }else{
+        //     return back()->with('error', 'Your balance is too low');
+        //     // return redirect('error');
+        // }
+
+
     } 
 
     
@@ -622,6 +658,7 @@ class UserController extends Controller
                 'campaign_id' => '1',
                 'reference' =>$ref,
                 'amount' => $request->amount,
+                'balance' => walletBalance(auth()->user()->id),
                 'status' => 'successful',
                 'currency' => 'NGN',
                 'channel' => 'capital_sage',
