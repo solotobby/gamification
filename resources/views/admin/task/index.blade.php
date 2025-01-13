@@ -40,7 +40,7 @@
                     </div> --}}
                     <input type="hidden" class="form-control" value="Task" id="example-text-input" name="title" placeholder="Category">
                     <div class="mb-4">
-                    <label class="form-label" for="example-text-input">Description</label>
+                    <label class="form-label" for="example-text-input">Task Description</label>
                         <textarea name="description" class="form-control" rows="10" required></textarea>
                     </div>
                     {{-- <div class="mb-4">
@@ -150,6 +150,8 @@
 
        
     </div>
+</div>
+    
 
 
 
