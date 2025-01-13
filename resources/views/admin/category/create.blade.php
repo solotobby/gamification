@@ -15,7 +15,7 @@
     </div>
 </div>
  <!-- Page Content -->
- <div class="content">
+<div class="content">
 
 <!-- Elements -->
 <div class="block block-rounded">

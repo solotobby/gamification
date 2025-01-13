@@ -516,3 +516,8 @@ Route::get('admin/status/{id}/{status}', [\App\Http\Controllers\Admin\BusinessCo
 ///admin spinner
 Route::get('admin/spin', [\App\Http\Controllers\SpinController::class, 'adminSpinner'])->name('admin.spin');
 Route::post('admin/spin', [\App\Http\Controllers\SpinController::class, 'store'])->name('admin.spin.store');
+
+Route::get('admin/task', [\App\Http\Controllers\Admin\TaskController::class, 'index'])->name('admin.task');
+
+Route::post('admin/task', [\App\Http\Controllers\Admin\TaskController::class, 'store'])->name('admin.store.task');
+Route::post('admin/task/update', [\App\Http\Controllers\Admin\TaskController::class, 'updateTask'])->name('admin.update.task');
