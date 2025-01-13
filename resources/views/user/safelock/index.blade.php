@@ -46,7 +46,7 @@
                 <div class="col-lg-8 col-xl-5">
                     <div class="mb-4">
                         <label class="form-label" for="example-text-input">Amount</label>
-                        <input type="number" class="form-control" name="amount" placeholder="100000" required>
+                        <input type="number" class="form-control" name="amount" placeholder="100000" min="50000" required>
                     </div>
                     <div class="mb-4">
                       <label class="form-label" for="example-text-input">Duration</label>

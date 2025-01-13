@@ -49,7 +49,7 @@ class SafeLockController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1000'
+            'amount' => 'required|numeric|min:50000'
         ]);
 
         $interest_rate = 5;

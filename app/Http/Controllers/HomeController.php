@@ -162,7 +162,7 @@ class HomeController extends Controller
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
         $available_jobsCount = count(filterCampaign('0'));
-        $totalPayout_ = $withdrawal->where('status', true)->whereBetween('created_at', ['2024-01-01 11:00:27', '2024-12-31 11:00:27'])->sum('amount');
+        // $totalPayout_ = $withdrawal->where('status', true)->whereBetween('created_at', ['2024-01-01 11:00:27', '2024-12-31 11:00:27'])->sum('amount');
 
         $transactions = \DB::select('
             SELECT SUM(amount) AS total_successful_transactions
@@ -216,7 +216,7 @@ class HomeController extends Controller
             'weekPayment' => $thisWeekPayment,
             'totalPayout' => $totalPayout,
             'transactions' => $transactions,
-            'totalPayout_' => $totalPayout_,
+            // 'totalPayout_' => $totalPayout_,
             // 'xmas' => $christmas,
             'av_count' => $available_jobsCount
         ]) // ['users' => $user, 'campaigns' => $campaigns, 'workers' => $campaignWorker, 'loginPoints' => $loginPoints]) // 'wallet' => $wallet, 'ref_rev' => $ref_rev, 'tx' => $transactions, 'wal'=>$Wal])
