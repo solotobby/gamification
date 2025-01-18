@@ -862,6 +862,71 @@ if(!function_exists('generateVirtualAccount')){
     }
 }
 
+if(!function_exists('reGenerateUpdatedVirtualAccount')){
+    function reGenerateUpdatedVirtualAccount($email, $phone, $user){ 
+
+        try{
+
+            // $data = \DB::transaction(function () use ($email, $phone, $user) {
+                $payload = [
+                    "email"=> $email,
+                    "first_name"=> $user->name,
+                    "last_name"=> 'Freebyz',
+                    "phone"=> "+".$phone
+                ];
+                $res = createCustomer($payload);
+
+                if($res['status'] == true){
+                    
+                    $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
+                
+                    $data = [
+                        "customer"=> $res['data']['customer_code'], 
+                        "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
+                    ];
+                        
+                    $response = virtualAccount($data);
+
+            
+
+                    if($VirtualAccount){
+                        // customer_code
+                        $VirtualAccount->customer_id=$res['data']['customer_code'];
+                        $VirtualAccount->bank_name = $response['data']['bank']['name'];
+                        $VirtualAccount->account_name = $response['data']['account_name'];
+                        $VirtualAccount->account_number = $response['data']['account_number'];
+                        $VirtualAccount->account_name = $response['data']['account_name'];
+                        $VirtualAccount->currency = 'NGN';
+                        $VirtualAccount->save();
+
+                    }
+                   
+                }
+
+                $data['updated_user'] = $res;
+                $data['updated_va'] = $VirtualAccount;
+
+            // }, 2);
+
+             // Return the object as JSON
+            return $data;
+            //  return response()->json([
+            //     'status' => true,
+            //     'data' => $VirtualAccount,
+            // ], 200);
+
+
+            } catch (\Exception $e) {
+                // Handle errors and roll back the transaction
+                return response()->json([
+                    'status' => false,
+                    'message' => $e->getMessage()
+                ], 403);
+            }
+
+
+    }
+}
 
 if(!function_exists('reGenerateVirtualAccount')){
     function reGenerateVirtualAccount($user){
@@ -938,16 +1003,16 @@ if(!function_exists('reGenerateVirtualAccount')){
             ];
             $res = createCustomer($payload);
 
-            if($res['status'] == true){
+                if($res['status'] == true){
             
-                $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
-               
-                $data = [
-                    "customer"=> $res['data']['customer_code'], 
-                    "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
-                ];
+                    $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
+                
+                    $data = [
+                        "customer"=> $res['data']['customer_code'], 
+                        "preferred_bank"=> env('PAYSTACK_BANK') //"wema-bank"
+                    ];
                         
-                $response = virtualAccount($data);
+                    $response = virtualAccount($data);
 
               
 
