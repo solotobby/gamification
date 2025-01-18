@@ -146,7 +146,7 @@
 
                       @if(auth()->user()->virtualAccount)
 
-                        @if(auth()->user()->email == 'Wema Bank')
+                        @if(auth()->user()->virtualAccount->bank_name == 'Wema Bank')
                         
                             <span class="form-control form-control-alt">
                               <a href="{{ route('create.updated.virtual.account') }}" class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
