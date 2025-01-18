@@ -376,7 +376,7 @@
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
-    @elseif(auth()->user()->wallet->base_currency == 'Dollar' || auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
+    @elseif(auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
        
         @include('layouts.resources.validate_currency')  
 
@@ -393,15 +393,22 @@
 
 
 
-    @elseif(auth()->user()->is_verified == 0)
+    @elseif(auth()->user()->wallet->base_currency == 'NGN' && auth()->user()->virtualAccount->bank_name == 'Wema Bank')
     
+
+     @include('layouts.resources.virtualaccount')
+
       {{-- @include('layouts.resources.unverified') --}}
 
     {{-- @else
     
       @include('layouts.resources.xmas') --}}
 
+     
+
     @endif
+
+    
 
 
 @endsection
