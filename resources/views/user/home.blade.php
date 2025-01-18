@@ -13,7 +13,7 @@
           <div class="col-md-5 d-md-flex align-items-md-center">
             <div class="py-4 py-md-0 text-center text-md-start">
               <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}} 
-                @if(auth()->user()->wallet->base_currency == 'Naira')
+                @if(auth()->user()->wallet->base_currency == 'NGN')
                 
                     @if(auth()->user()->is_verified)
                         <i class="fa fa-check opacity-75 me-1"></i>
@@ -78,7 +78,7 @@
    <div class="row">
 
       <div class="col-12">
-          @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
+          @if(auth()->user()->wallet->base_currency == 'NGN')
 
             @if(auth()->user()->is_verified)
                   <div class="alert alert-warning">
@@ -145,11 +145,19 @@
                   
 
                       @if(auth()->user()->virtualAccount)
+                     
+                        @if(auth()->user()->email == 'solotobby@gmail.com')
+                        
+                            <span class="form-control form-control-alt">
+                              <a href="{{ route('create.updated.virtual.account') }}" class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
+                            </span>
 
-                        <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
-                        <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
-                          <i class="fa fa-copy"></i>
-                        </button>
+                        @else
+                            <span class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span> <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}" class="form-control form-control-alt" id="myInput-2" readonly>
+                            <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
+                              <i class="fa fa-copy"></i>
+                            </button>
+                        @endif
                         
                       @else
                     

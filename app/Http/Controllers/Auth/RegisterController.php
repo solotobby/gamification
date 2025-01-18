@@ -217,6 +217,7 @@ class RegisterController extends Controller
                                 setProfile($user); //set profile page 
                                 userLocation('Login');
                                 setWalletBaseCurrency();
+                                
                             }
                             // setProfile($user);
                           

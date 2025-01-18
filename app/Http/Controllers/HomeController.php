@@ -35,6 +35,7 @@ use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Nette\Utils\Random;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -326,6 +327,48 @@ class HomeController extends Controller
             return back()->with('error', 'An error occoured while creating account, please contact admin by clicking Talk to Us on the side menu');
         }
     }
+
+    public function createUpdatedVirtualAccount(){
+
+        $user = Auth::user();
+        $email = $user->email;
+        $divide = explode('@', $email);
+        $emailString = Str::random(5);
+        $newEmail = $divide[0].$emailString.'@'.$divide[1];
+
+        $newRandPhone =  $this->replaceMiddleDigits(substr($user->phone, 1));
+
+        $phoneFormated = '234' . $newRandPhone;
+
+
+        $updateVa = reGenerateUpdatedVirtualAccount($newEmail, $phoneFormated, auth()->user()); 
+
+        if($updateVa){
+            return back()->with('success', 'Freebyz Personal Account Created Successfully');
+        }else{
+            return back()->with('error', 'An error occoured while creating account, please contact admin by clicking Talk to Us on the side menu');
+        }
+        //  if($updateVa[0]['status'] == true){
+        //     return back()->with('success', 'Freebyz Personal Account Created Successfully');
+        // }else{
+        //     return back()->with('error', 'An error occoured while creating account, please contact admin by clicking Talk to Us on the side menu');
+        // }
+    }
+
+    public function replaceMiddleDigits($phoneNumber) {
+       
+        $firstPart = substr($phoneNumber, 0, 3);
+        $lastPart = substr($phoneNumber, 7);
+
+       // Generate a random 4-digit number
+        $randomDigits = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+
+       // Combine parts with the new 4-digit number
+       return $modifiedNumber = $firstPart . $randomDigits . $lastPart;
+
+    }
+    
+   
 
     public function savePhoneInformation(Request $request)
     {
