@@ -145,8 +145,8 @@
                   
 
                       @if(auth()->user()->virtualAccount)
-                     
-                        @if(auth()->user()->email == 'solotobby@gmail.com')
+
+                        @if(auth()->user()->email == 'Wema Bank')
                         
                             <span class="form-control form-control-alt">
                               <a href="{{ route('create.updated.virtual.account') }}" class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
