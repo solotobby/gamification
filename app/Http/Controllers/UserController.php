@@ -215,7 +215,7 @@ class UserController extends Controller
         if($profile_celebrity){
             $amount = 920;
         }else{
-            $amount = 1050;
+            $amount = 3000;
         }
         
         // if(auth()->user()->wallet->base_currency == 'Naira'){

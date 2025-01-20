@@ -24,19 +24,19 @@
 						<div class="contact-person">
 							<h4>How do I start earning on Freebyz?</h4>
 							<p>
-                                Click on <a href="https:/freebyz.com/register"><b>www.freebyz.com</b></a> then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with 500 on each friend you refer to Freebyz.
+                                Click on <a href="https:/freebyz.com/register"><b>www.freebyz.com</b></a> then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with 1000 on each friend you refer to Freebyz.
                             </p>
 
                             <h4>How can I withdraw my money on Freebyz?</h4>
 							<p>
-								You can withdraw your funds at any time in Naira or Dollars. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is ₦2,500 (or $5 via Paypal).  Sign up to start earning now. Click on www.freebyz.com then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with N500 on each friend you refer to Freebyz.
+								You can withdraw your funds at any time in Naira or Dollars. We pay out every Friday to your bank account and via Paypal. The minimum withdraw fund is ₦2,500 (or $6 via Paypal).  Sign up to start earning now. Click on www.freebyz.com then sign up to start earning on Freebyz. Several online Jobs are waiting for you. You can earn big by referring your friends. We will reward you with N1000 on each friend you refer to Freebyz.
 							</p>
 							<h4>How do I withdraw in Dollars?</h4>
 							<p>Once you place a withdrawal request to withdraw in Dollars, your earnings (funds) will be converted to dollars and then sent to the Paypal account you supplied.</p>
                             
                             <h4>How do I become an affiliate marketer on Freebyz?</h4>
                             <p>
-								We want you to enjoy our referral bonus hence we created an affiliate link/referral code for everyone who signs up on Freebyz. We will reward you with N500 on each friend you refer to Freebyz. Your friends must have a verified account for you to earn referral bonus.
+								We want you to enjoy our referral bonus hence we created an affiliate link/referral code for everyone who signs up on Freebyz. We will reward you with N1000 on each friend you refer to Freebyz. Your friends must have a verified account for you to earn referral bonus.
 							</p>
 							<h4>What are the advantages of verifying my account?</h4>
 							<p>A verified account is an authorized user on Freebyz which gives you 1. Lifetime access to jobs- You will get unlimited access to available jobs including premium ones. 2. Access to Hire Workers- You will have unlimited access to hire workers to promote your youtube channel, social handles and promote your flyers/event banners. 3. Unlimited Withdrawals- Access to withdraw all your earnings and other juicy offers coming up shortly</p>
