@@ -36,10 +36,10 @@
                                 (b) withdraw from wallet<br>
                                 (c) Post Jobs<br>
                                 7. All users can use referral codes to refer friends.<br>
-                                8. A sum of 1050 NGN is required to verify an account. Withdrawal can be requested any time but payment is only made on Fridays.
+                                8. A sum of 3000 NGN is required to verify an account. Withdrawal can be requested any time but payment is only made on Fridays.
                                 Minimum withdrawal is 2,500 NGN with 5% withdrawal charges. Withdrawal  requests made before 12pm on Fridays will be processed next Friday.
                                 Withdrawal will only be made to your bank account or PayPal that matches exactly the names used in registration. Disparities in names can delay payment (s).<br>
-                                9. You are paid a sum of N500 on every friend you refer to Freebyz using your affiliate link (available on your dashboard). <br>
+                                9. You are paid a sum of N1000 on every friend you refer to Freebyz using your affiliate link (available on your dashboard). <br>
                                 10. Unverified users can refer friends but cannot post jobs or make withdrawal (s).<br>
                                 11. You can play games and quizzes to earn points which can be converted to money.<br>
                                 This Terms of Use will be updated regularly.You will find the updates in your dashboard.<br><br>

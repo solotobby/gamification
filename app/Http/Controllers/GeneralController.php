@@ -1065,7 +1065,7 @@ class GeneralController extends Controller
             'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => 'solotobby@gmail.com', //auth()->user()->email,
-            'amount' => 1050*100,
+            'amount' => 3000*100,
             'channels' => ['mobile_money'],
             'currency' => 'GH',
             'reference' => time(),

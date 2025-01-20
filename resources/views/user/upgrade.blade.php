@@ -47,7 +47,7 @@
               Lifetime access to jobs
             </h4>
             <p class="mb-0 text-muted">
-              You will get unlimited access to jobs above 10 Naira (for Naira wallet) and can earn in dollars (when you verify your dollar wallet). Dollar verification fee is $5 (to access dollar jobs)
+              You will get unlimited access to jobs above 20 Naira (for Naira wallet) and can earn in dollars (when you verify your dollar wallet). Dollar verification fee is $6 (to access dollar jobs)
             </p>
           </div>
           <div class="col-sm-6 col-md-6 mb-5">
@@ -58,7 +58,7 @@
              Earn Referral Bonus
             </h4>
             <p class="mb-0 text-muted">
-              You can invite your friends using your referral link and earn N500 (or $1.5) on each verified friend. Some users have cashed out more than N100,000 at a time by just referring friends only with extra income on tasks completed.
+              You can invite your friends using your referral link and earn N1000 on each verified friend. Some users have cashed out more than N100,000 at a time by just referring friends only with extra income on tasks completed.
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@
         </div>
 
         <p>
-          Apart from  N500 bonus you get on each friend you refer, We have special referral bonuses in 3 levels:
+          Apart from  N1000 bonus you get on each friend you refer, We have special referral bonuses in 3 levels:
           <br> 1. When you get 50+ verified users in a month, you earn over N25k plus extra N5000 from Freebyz
           <br> 2. When you get 20+ verified users in a month, you earn over N10k plus extra N1500 from Freebyz
           <br> 3. When you get 10+ verified users in a month, you earn over earn N5k plus extra N500 from Freebyz
@@ -114,7 +114,7 @@
 
         @if(auth()->user()->wallet->base_currency == 'NGN')
           <h3 class="h4 fw-light text-muted push text-center">
-            Credit your account below with &#8358;1050 for automatic verification of Naira Wallet
+            Credit your account below with &#8358;3000 for automatic verification of Naira Wallet
           </h3>
           @if(auth()->user()->virtualAccount)
               <p>
@@ -153,7 +153,7 @@
                   @endif --}}
 
                 
-                @if(auth()->user()->wallet->balance >= 1050)
+                @if(auth()->user()->wallet->balance >= 3000)
                     <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary" data-toggle="click-ripple">
                       <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
                     </a>
