@@ -98,7 +98,9 @@
                   <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select a Funding Channel</option>
                     <option value="va">Virtual Account</option>
-                    {{-- <option value="kora">Koray Pay</option> --}}
+                    @if(auth()->user()->email == 'solotobby@gmail.com')
+                    <option value="kora">Koray Pay</option>
+                    @endif
                   </select>
                 </div>
 

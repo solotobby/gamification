@@ -285,7 +285,7 @@
         </div>
       </div>  --}}
 
-      @if(auth()->user()->wallet->base_currency == 'NGN')
+      {{-- @if(auth()->user()->wallet->base_currency == 'NGN')
           @if($promotion)
               <a href="{{ url('m/'.$promotion->business_link) }}" target="_blank">
                 <div class="block block-rounded block-fx-pop mb-2">
@@ -305,7 +305,7 @@
                 </div> 
               </a> 
           @endif
-      @endif
+      @endif --}}
 
     
         <a href="https://payhankey.com" target="_blank">
