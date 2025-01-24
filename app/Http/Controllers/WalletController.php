@@ -103,6 +103,7 @@ class WalletController extends Controller
 
     public function fund()
     {
+
         // $balance = '';
         // if(walletHandler() == 'sendmonny'){
         //     $balance = Sendmonny::getUserBalance(GetSendmonnyUserId(), accessToken());
@@ -117,73 +118,150 @@ class WalletController extends Controller
         return  view('user.wallet.withdraw');
     }
 
+    public function koraPayRedirect(){
+
+        $url = request()->fullUrl();
+        $url_components = parse_url($url);
+        parse_str($url_components['query'], $params);
+
+        $ref = $params['reference'];
+        $res = verifyKorayPay($ref);
+        if($res['status'] == true){
+           
+            $credit = creditWallet(auth()->user(), 'NGN', $res['data']['amount_paid']);
+
+            if($credit){
+                $PaymentTransaction = PaymentTransaction::where('reference', $res['data']['reference'])->first();
+                $PaymentTransaction->status = 'successful';
+                $PaymentTransaction->save();
+            }
+
+            return redirect('wallet/fund')->with('success', 'Wallet successfully funded');
+
+        }else{
+            return redirect('wallet/fund')->with('error', 'Action ended');
+        }
+
+    }
+
     public function storeFund(Request $request)
     {
 
-        $baseCurrency = auth()->user()->wallet->base_currency;
-
-        if($baseCurrency == 'GHS'){
-            $paymentOption = 'mobilemoneyghana';
-
-        }elseif($baseCurrency == 'KES'){
-            $paymentOption = 'mpesa';
-
-        }elseif($baseCurrency == 'RWF'){
-            $paymentOption = 'mobilemoneyrwanda';
-
-        }elseif($baseCurrency == 'TZS'){
-            $paymentOption = 'mobilemoneytanzania';
-
-        }elseif($baseCurrency == 'MWK'){
-            $paymentOption = 'mobilemoneymalawi';
-           
-        }else{
-            $paymentOption = null;
-        }
-            
+            $baseCurrency = auth()->user()->wallet->base_currency;
             $amount = amountCalculator($request->balance);
             $ref = Str::random(16);
 
-            $payload = [
-                'tx_ref' => $ref,
-                'amount'=> $amount,
-                'currency'=> $baseCurrency, //"USD",
-                'redirect_url'=> url('flutterwave/wallet/top'),
-                'payment_options'=> 'card ,'. $paymentOption,
-                'meta'=> [
-                    'consumer_id' => auth()->user()->id,
-                    'consumer_mac'=> ''
-                ],
-                'customer'=> [
-                    'email'=> auth()->user()->email,
-                    'phonenumber'=> auth()->user()->phone,
-                    'name'=> auth()->user()->name,
-                ],
-                'customizations'=>[
-                    'title'=> "Wallet Top Up",
-                    // 'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
-                ] 
-            ];
-            $url = flutterwavePaymentInitiation($payload)['data']['link'];
+            if($baseCurrency == 'NGN'){
+                $payloadNGN = [
+                    "amount"=> $request->balance, //$amount,
+                    "redirect_url"=> url('wallet/fund/redirect'),
+                    "currency"=> "NGN",
+                    "reference"=> $ref,
+                    "narration"=> "Wallet top up",
+                    "channels"=> [
+                        "card",
+                        "bank_transfer"
+                    ],
+                    // "default_channel"=> "card",
+                    "customer"=> [
+                        "name"=> auth()->user()->name,
+                        "email"=> auth()->user()->email
+                    ],
+                    "notification_url"=> "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
+                    // "metadata"=>[
+                    //     "key0"=> "test0",
+                    //     "key1"=> "test1",
+                    //     "key2"=> "test2",
+                    //     "key3"=> "test3",
+                    //     "key4"=> "test4"
+                    // ]
+                ];
 
-            // $url = PaystackHelpers::initiateTrasaction($ref, $amount, '/wallet/topup');
-             //Admin Transaction Tablw
-             PaymentTransaction::create([
-                'user_id' => auth()->user()->id,
-                'campaign_id' => '1',
-                'reference' => $ref,
-                'amount' => $amount,
-                'balance' => walletBalance(auth()->user()->id),
-                'status' => 'unsuccessful',
-                'currency' => $baseCurrency,
-                'channel' => 'flutterwave',
-                'type' => 'wallet_topup',
-                'description' => 'Wallet Top Up',
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
- 
-            return redirect($url);
+               $redirectUrl = initializeKorayPay($payloadNGN);
+
+               PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $amount,
+                    'balance' => walletBalance(auth()->user()->id),
+                    'status' => 'unsuccessful',
+                    'currency' => $baseCurrency,
+                    'channel' => 'kora',
+                    'type' => 'wallet_topup',
+                    'description' => 'Wallet Top Up',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+
+               return redirect($redirectUrl);
+                
+            }else{
+
+
+                if($baseCurrency == 'GHS'){
+                    $paymentOption = 'mobilemoneyghana';
+        
+                }elseif($baseCurrency == 'KES'){
+                    $paymentOption = 'mpesa';
+        
+                }elseif($baseCurrency == 'RWF'){
+                    $paymentOption = 'mobilemoneyrwanda';
+        
+                }elseif($baseCurrency == 'TZS'){
+                    $paymentOption = 'mobilemoneytanzania';
+        
+                }elseif($baseCurrency == 'MWK'){
+                    $paymentOption = 'mobilemoneymalawi';
+                   
+                }else{
+                    $paymentOption = null;
+                }
+
+
+                $payload = [
+                    'tx_ref' => $ref,
+                    'amount'=> $amount,
+                    'currency'=> $baseCurrency, //"USD",
+                    'redirect_url'=> url('flutterwave/wallet/top'),
+                    'payment_options'=> 'card ,'. $paymentOption,
+                    'meta'=> [
+                        'consumer_id' => auth()->user()->id,
+                        'consumer_mac'=> ''
+                    ],
+                    'customer'=> [
+                        'email'=> auth()->user()->email,
+                        'phonenumber'=> auth()->user()->phone,
+                        'name'=> auth()->user()->name,
+                    ],
+                    'customizations'=>[
+                        'title'=> "Wallet Top Up",
+                        // 'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
+                    ] 
+                ];
+                $url = flutterwavePaymentInitiation($payload)['data']['link'];
+
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $amount,
+                    'balance' => walletBalance(auth()->user()->id),
+                    'status' => 'unsuccessful',
+                    'currency' => $baseCurrency,
+                    'channel' => 'flutterwave',
+                    'type' => 'wallet_topup',
+                    'description' => 'Wallet Top Up',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+     
+                return redirect($url);
+
+            }
+
+            
+             
 
 
         
