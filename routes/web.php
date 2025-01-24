@@ -65,6 +65,7 @@ Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController
 
 
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
+Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook']);
 Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
@@ -297,12 +298,8 @@ Route::post('enter/pool', [\App\Http\Controllers\FastestFingerController::class,
 //Flutterwave Top up
 Route::get('flutterwave/wallet/top', [\App\Http\Controllers\WalletController::class, 'flutterwaveWalletTopUp']);
 
-//Bloq
-Route::get('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccount']);
-Route::post('setup/account', [\App\Http\Controllers\BloqController::class, 'setupAccountProcess']);
 
 //form builder
-
 Route::get('create/survey', [\App\Http\Controllers\FormBuilderController::class, 'create']);
 Route::post('store/form', [\App\Http\Controllers\FormBuilderController::class, 'storeForm']);
 Route::post('build/form', [\App\Http\Controllers\FormBuilderController::class, 'buildForm']);
