@@ -144,9 +144,9 @@
       
                   
 
-                      @if(auth()->user()->virtualAccount)
+                      @if(@auth()->user()->virtualAccount)
 
-                        @if(auth()->user()->virtualAccount->bank_name == 'Wema Bank')
+                        @if(@auth()->user()->virtualAccount->bank_name == 'Wema Bank')
                         
                             <span class="form-control form-control-alt">
                               <a href="{{ route('create.updated.virtual.account') }}" class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
@@ -393,7 +393,7 @@
 
 
 
-    @elseif(auth()->user()->wallet->base_currency == 'NGN' && auth()->user()->virtualAccount->bank_name == 'Wema Bank')
+    @elseif(auth()->user()->wallet->base_currency == 'NGN' && @auth()->user()->virtualAccount->bank_name == 'Wema Bank')
     
 
      @include('layouts.resources.virtualaccount')

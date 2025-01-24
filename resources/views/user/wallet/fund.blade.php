@@ -71,39 +71,83 @@
                 </div>
             @endif
 
-            <div class="col-md-12">
-             
-            </div>
-            <div class="mb-4">
-              @if(auth()->user()->wallet->base_currency == 'Naira' || auth()->user()->wallet->base_currency == 'NGN')
-              <div class="alert alert-info">
-                <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 1min
+            {{-- <div class="col-md-12">
+             <div class="input mb-2">
+              <label class="mb-2">Funding Channel</label>
+                <span class="input-group-text">
+                  Funding Channel
+                </span>
+                <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
+                  <option value="">Select a Funding Channel</option>
+                  
+                  <option value="va">Virtual Account</option>
+                  <option value="koray">Koray Pay</option>
+                  <option value="KES">Kenya</option>
+                  <option value="USD">Other</option>
+                </select>
               </div>
+              <small><i>Select other if your country is not listed</i></small> 
+            </div> --}}
+
+
+            <div class="mb-4">
+              @if(auth()->user()->wallet->base_currency == 'NGN')
+
+                <div class="input mb-2">
+                  <label class="mb-2">Funding Channel</label>
+                  <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
+                    <option value="">Select a Funding Channel</option>
+                    <option value="va">Virtual Account</option>
+                    {{-- <option value="kora">Koray Pay</option> --}}
+                  </select>
+                </div>
+
+
+
+                <div id="va">
+                  <div class="alert alert-info">
+                    <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 1min
+                  </div>
               
-              @if(auth()->user()->virtualAccount)
-              Account Name: {{ auth()->user()->virtualAccount->account_name }} <br>
-              Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
-         
-              Account Number:  {{ auth()->user()->virtualAccount->account_number }}
-              <hr>
-                  @if(auth()->user()->is_verified == '0')
-                        <center>
-                          <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
-                            <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-                          </a>
-                        </center>
-                  @else
-                  <center>
-                    <a href="#"" class="btn btn-hero btn-primary mt-1 disabled" data-toggle="click-ripple">
-                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
-                    </a>
-                  </center>
-                  @endif
-            @else 
+                      @if(auth()->user()->virtualAccount)
+                            Account Name: {{ auth()->user()->virtualAccount->account_name }} <br>
+                            Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
+                            Account Number:  {{ auth()->user()->virtualAccount->account_number }}
+                            <hr>
+                            @if(auth()->user()->is_verified == '0')
+                                  <center>
+                                    <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
+                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                                    </a>
+                                  </center>
+                            @else
+                                  <center>
+                                    <a href="#"" class="btn btn-hero btn-primary mt-1 disabled" data-toggle="click-ripple">
+                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                                    </a>
+                                  </center>
+                            @endif
+                      @else 
 
-                  <a href="{{ route('generate.virtual.account') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
+                            <a href="{{ route('generate.virtual.account') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
-            @endif
+                      @endif
+
+                </div>
+                <div id="kora">
+                  <div class=" mb-2">
+                  <label class="mb-1">Amount</label>
+                      <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="50" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                  </select>
+                  </div>
+
+  
+                <div class="mb-4">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
+                  </button>
+                </div>
+              </div>
 
               {{-- <div class="input-group">
                 <span class="input-group-text">
@@ -217,6 +261,41 @@
  <!-- Page JS Code -->
  <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
 
+ <script> 
+  window.addEventListener('DOMContentLoaded', function() { 
+     
+
+      // Get references to the select element and the divs
+    const currencySelect = document.querySelector('select[name="channel"]');
+    const vaDiv = document.getElementById('va');
+    const koraDiv = document.getElementById('kora');
+
+
+    // Hide both divs by default
+    vaDiv.style.display = 'none';
+    koraDiv.style.display = 'none';
+
+    // Add an event listener for changes to the select element
+    currencySelect.addEventListener('change', function() {
+        const selectedValue = currencySelect.value;
+
+        // Show or hide divs based on the selected value
+        if (selectedValue === 'va') {
+            vaDiv.style.display = 'block';
+            koraDiv.style.display = 'none';
+        } else if (selectedValue === 'kora') {
+            vaDiv.style.display = 'none';
+            koraDiv.style.display = 'block';
+        } else {
+            vaDiv.style.display = 'none';
+            koraDiv.style.display = 'none';
+        }
+    });
+
+
+
+  });
+ </script>
 
  @endsection
 

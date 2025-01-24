@@ -232,6 +232,14 @@ Route::get('wallet/fund', [\App\Http\Controllers\WalletController::class, 'fund'
 Route::get('wallet/withdraw', [\App\Http\Controllers\WalletController::class, 'withdraw'])->name('withdraw');
 Route::post('store/fund', [\App\Http\Controllers\WalletController::class, 'storeFund'])->name('store.funds');
 Route::get('cancel/transaction/{ref}', [\App\Http\Controllers\WalletController::class, 'cancelUrl']);//->name('store.funds');
+
+Route::get('wallet/fund/redirect', [\App\Http\Controllers\WalletController::class, 'koraPayRedirect']);
+
+
+///test
+Route::get('test/payement', [\App\Http\Controllers\HomeController::class, 'testpayment']);
+
+
 Route::post('store/withdraw', [\App\Http\Controllers\WalletController::class, 'storeWithdraw'])->name('store.withdraw');
 Route::get('wallet/topup', [\App\Http\Controllers\WalletController::class, 'walletTop']);
 Route::post('switch/wallet', [\App\Http\Controllers\WalletController::class, 'switchWallet']);

@@ -76,7 +76,7 @@ class HomeController extends Controller
         dailyVisit('Dashboard');
         if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
-            setWalletBaseCurrency();
+            // setWalletBaseCurrency();
         }
 
         // if (auth()->user()->phone == '' || auth()->user()->country == '') {
@@ -314,6 +314,43 @@ class HomeController extends Controller
             ->with('daily', json_encode($dailyVisits))
             ->with('monthly', json_encode($MonthlyVisit))
             ->with('channel', json_encode($registrationChannel));
+    }
+
+    public function testpayment(){
+
+       $amount = amountCalculator('100');
+
+        $payloadNGN = [
+            "amount"=> $amount,
+            "redirect_url"=> url('wallet/fund/redirect'),
+            "currency"=> "NGN",
+            "reference"=> time(),
+            "narration"=> "Wallet top up",
+            "channels"=> [
+                "card",
+                "bank_transfer"
+            ],
+            // "default_channel"=> "card",
+            "customer"=> [
+                "name"=> auth()->user()->name,
+                "email"=> auth()->user()->email
+            ],
+            "notification_url"=> "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
+            "metadata"=>[
+                "key0"=> "test0",
+                "key1"=> "test1",
+                "key2"=> "test2",
+                "key3"=> "test3",
+                "key4"=> "test4"
+            ]
+        ];
+
+        
+
+       return $redirectUrl = initializeKorayPay($payloadNGN);
+
+
+    //    return redirect($redirectUrl);
     }
 
     public function generateVirtualAccount(){

@@ -209,14 +209,14 @@ class RegisterController extends Controller
                                 null;
                             } else {
                                 
-                                setWalletBaseCurrency();
+                                // setWalletBaseCurrency();
                             }
             
                             //set base currency if not set
                             if(env('APP_ENV') == 'production'){
                                 setProfile($user); //set profile page 
                                 userLocation('Login');
-                                setWalletBaseCurrency();
+                                // setWalletBaseCurrency();
                                 
                             }
                             // setProfile($user);

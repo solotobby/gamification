@@ -379,6 +379,33 @@ if(!function_exists('short_name')){
     }
 }
 
+if(!function_exists('initializeKorayPay')){
+    function initializeKorayPay($payloadNGN){
+
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('KORA_SEC')
+        ])->post('https://api.korapay.com/merchant/api/v1/charges/initialize', $payloadNGN)->throw();
+
+        return json_decode($res->getBody()->getContents(), true)['data']['checkout_url'];
+        
+    }
+}
+
+if(!function_exists('verifyKorayPay')){
+    function verifyKorayPay($referee){
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.env('KORA_SEC')
+        ])->get('https://api.korapay.com/merchant/api/v1/charges/'.$referee)->throw();
+
+        return json_decode($res->getBody()->getContents(), true);
+        
+    }
+}
+
 if(!function_exists('flutterwaveVirtualAccount')){
     function flutterwaveVirtualAccount($payload){
 
