@@ -1117,7 +1117,7 @@ class GeneralController extends Controller
             ->orderBy(
                 'created_at',
                 'DESC'
-            )->paginate(20, ['*'], 'page', $page);
+            )->paginate(500, ['*'], 'page', $page);
     }
 
 
