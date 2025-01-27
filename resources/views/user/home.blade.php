@@ -366,6 +366,10 @@
         <div class="" id="display-jobs">
         </div>
 
+        <div id="pagination-controls"></div>
+
+        {{-- <div id="pagination-controls" class="d-flex justify-content-center mt-3"></div> --}}
+
    </div>
 
 
@@ -445,66 +449,244 @@ function myFunction() {
     console.log(navigator.clipboard.writeText(copyText.value));
   }
 
-  $(document).ready(function() {
-            const baseApiUrl = '{{ url("available/jobs") }}';
-            const baseUrl = '{{ url("campaign") }}';
+  $(document).ready(function () {
+    const baseApiUrl = '{{ url("available/jobs") }}';
+    const baseUrl = '{{ url("campaign") }}';
+    let currentPage = 1;
 
-            function loadJobs(apiUrl) {
-                fetch(apiUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        console.log(response);
-                        return response.json();
-                    })
-                    .then(data => {
-                        $("#display-jobs").empty(); // Clear previous results
-                        $.each(data, function(key, value) {
-                            const url = `${baseUrl}/${value.job_id}`;
-                            const jobHtml = `
-                                <a href="${url}">
-                                    <div class="block block-rounded block-fx-pop mb-2">
-                                        <div class="block-content block-content-full border-start border-3 border-primary">
-                                            <div class="d-md-flex justify-content-md-between align-items-md-center">
-                                                <div class="col-12">
-                                                    <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
-                                                    <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
-                                                    <div class="mb-0">
-                                                        <div class="progress mb-1" style="height: 6px;">
-                                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                        <p class="fs-sm fw-semibold mb-3" style="color: black">
-                                                            <span class="fw-bold">${value.completed} completed</span>
-                                                            <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
-                                                        </p>
-                                                    </div>
-                                                    <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>`;
-                            $("#display-jobs").append(jobHtml);
-                        });
-
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }
-
-            // Load all jobs on initial page load
-            loadJobs(`${baseApiUrl}/0`);
-
-            // Load jobs based on selected category
-            $('#jobs-categories').on('change', function() {
-                const selectedValue = $(this).val();
-                const apiUrl = `${baseApiUrl}/${selectedValue}`;
-                loadJobs(apiUrl);
+    function loadJobs(apiUrl) {
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch jobs: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJobs(data.data);
+                updatePaginationControls(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                $("#display-jobs").html(`<div class="alert alert-warning mt-2">Failed to load jobs. Please refresh your browser.</div>`);
             });
+    }
+
+    function renderJobs(jobs) {
+        const container = $("#display-jobs");
+        container.empty();
+
+        if (jobs.length === 0) {
+          $("#display-jobs").html(`<div class="alert alert-info mt-2">No jobs found for this category</div>`);
+            // container.html(`<p class="text-muted">No jobs found.</p>`);
+            return;
+        }
+
+        jobs.forEach(job => {
+            const url = `${baseUrl}/${job.job_id}`;
+            const jobHtml = `
+                <a href="${url}">
+                    <div class="block block-rounded block-fx-pop mb-2">
+                        <div class="block-content block-content-full border-start border-3 border-primary">
+                            <div class="d-md-flex justify-content-md-between align-items-md-center">
+                                <div class="col-12">
+                                    <h3 class="h4 fw-bold mb-1" style="color: black">${job.post_title}</h3>
+                                    <p class="fs-sm text-muted">${job.local_currency} ${job.local_converted_amount}</p>
+                                    <div class="mb-0">
+                                        <div class="progress mb-1" style="height: 6px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${job.progress}%;" aria-valuenow="${job.percentage_progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p class="fs-sm fw-semibold mb-3" style="color: black">
+                                            <span class="fw-bold">${job.completed} completed</span>
+                                            <span class="fw-bold text-muted">out of ${job.number_of_staff} workers</span>
+                                        </p>
+                                    </div>
+                                    <p class="fs-sm text-muted mb-0">${job.type} &bull; Originally posted in ${job.currency}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>`;
+            container.append(jobHtml);
         });
+    }
+
+    function updatePaginationControls(data) {
+        const controls = $("#pagination-controls");
+        controls.empty();
+
+        if (data.total === 0) return;
+
+        if (data.current_page > 1) {
+            controls.append(`<button class="btn btn-primary me-2 btn-sm" id="prev-page">Previous Page</button>`);
+            $("#prev-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page - 1}`));
+        }
+
+        if (data.current_page < data.last_page) {
+            controls.append(`<button class="btn btn-primary btn-sm" id="next-page">Next Page</button>`);
+            $("#next-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page + 1}`));
+        }
+    }
+
+    // Initial load
+    loadJobs(`${baseApiUrl}/0?page=${currentPage}`);
+
+    // Category filter
+    $('#jobs-categories').on('change', function () {
+        const selectedValue = $(this).val();
+        currentPage = 1; // Reset to first page
+        loadJobs(`${baseApiUrl}/${selectedValue}?page=${currentPage}`);
+    });
+});
+
+//   $(document).ready(function () {
+//     const baseApiUrl = '{{ url("available/jobs") }}';
+//     const baseUrl = '{{ url("campaign") }}';
+
+//     let currentPage = 1;
+
+//     function loadJobs(apiUrl) {
+//         fetch(apiUrl)
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Network response was not ok ' + response.statusText);
+//                 }
+//                 return response.json();
+//             })
+//             .then(data => {
+//                 $("#display-jobs").empty(); // Clear previous results
+
+//                 // Loop through data and render jobs
+//                 $.each(data.data, function (key, value) {
+//                     const url = `${baseUrl}/${value.id}`;
+//                     const jobHtml = `
+//                         <a href="${url}">
+//                             <div class="block block-rounded block-fx-pop mb-2">
+//                                 <div class="block-content block-content-full border-start border-3 border-primary">
+//                                     <div class="d-md-flex justify-content-md-between align-items-md-center">
+//                                         <div class="col-12">
+//                                             <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+//                                             <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
+//                                             <div class="mb-0">
+//                                                 <div class="progress mb-1" style="height: 6px;">
+//                                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+//                                                 </div>
+//                                                 <p class="fs-sm fw-semibold mb-3" style="color: black">
+//                                                     <span class="fw-bold">${value.completed} completed</span>
+//                                                     <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+//                                                 </p>
+//                                             </div>
+//                                             <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
+//                                         </div>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </a>`;
+//                     $("#display-jobs").append(jobHtml);
+//                 });
+
+//                 console.log(data.data);
+
+//                 // Update pagination controls
+//                 updatePaginationControls(data);
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//             });
+//     }
+
+//     function updatePaginationControls(data) {
+//         const paginationControls = $("#pagination-controls");
+//         paginationControls.empty();
+
+//         // Previous button
+//         if (data.current_page > 1) {
+//             paginationControls.append(`<button id="prev-page" class="btn btn-primary me-2">Previous</button>`);
+//             $("#prev-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page - 1}`));
+//         }
+
+//         // Next button
+//         if (data.current_page < data.last_page) {
+//             paginationControls.append(`<button id="next-page" class="btn btn-primary">Next</button>`);
+//             $("#next-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page + 1}`));
+//         }
+//     }
+
+//     // Load initial jobs
+//     loadJobs(`${baseApiUrl}/0`);
+
+//     // Load jobs based on selected category
+//     $('#jobs-categories').on('change', function () {
+//         const selectedValue = $(this).val();
+//         currentPage = 1; // Reset to first page on filter change
+//         const apiUrl = `${baseApiUrl}/${selectedValue}?page=${currentPage}`;
+//         loadJobs(apiUrl);
+//     });
+// });
+
+
+  // $(document).ready(function() {
+          
+
+  //           const baseApiUrl = '{{ url("available/jobs") }}';
+  //           const baseUrl = '{{ url("campaign") }}';
+
+  //           function loadJobs(apiUrl) {
+  //               fetch(apiUrl)
+  //                   .then(response => {
+  //                       if (!response.ok) {
+  //                           throw new Error('Network response was not ok ' + response.statusText);
+  //                       }
+  //                       console.log(response);
+  //                       return response.json();
+  //                   })
+  //                   .then(data => {
+  //                       $("#display-jobs").empty(); // Clear previous results
+  //                       $.each(data, function(key, value) {
+  //                           const url = `${baseUrl}/${value.job_id}`;
+  //                           const jobHtml = `
+  //                               <a href="${url}">
+  //                                   <div class="block block-rounded block-fx-pop mb-2">
+  //                                       <div class="block-content block-content-full border-start border-3 border-primary">
+  //                                           <div class="d-md-flex justify-content-md-between align-items-md-center">
+  //                                               <div class="col-12">
+  //                                                   <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+  //                                                   <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
+  //                                                   <div class="mb-0">
+  //                                                       <div class="progress mb-1" style="height: 6px;">
+  //                                                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+  //                                                       </div>
+  //                                                       <p class="fs-sm fw-semibold mb-3" style="color: black">
+  //                                                           <span class="fw-bold">${value.completed} completed</span>
+  //                                                           <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+  //                                                       </p>
+  //                                                   </div>
+  //                                                   <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
+  //                                               </div>
+  //                                           </div>
+  //                                       </div>
+  //                                   </div>
+  //                               </a>`;
+  //                           $("#display-jobs").append(jobHtml);
+  //                       });
+
+  //                       console.log(data);
+  //                   })
+  //                   .catch(error => {
+  //                       console.error('Error:', error);
+  //                   });
+  //           }
+
+  //           // Load all jobs on initial page load
+  //           loadJobs(`${baseApiUrl}/0`);
+
+  //           // Load jobs based on selected category
+  //           $('#jobs-categories').on('change', function() {
+  //               const selectedValue = $(this).val();
+  //               const apiUrl = `${baseApiUrl}/${selectedValue}`;
+  //               loadJobs(apiUrl);
+  //           });
+  // });
     
 </script>
 

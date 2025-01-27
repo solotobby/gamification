@@ -19,6 +19,15 @@ class Campaign extends Model
         'allow_upload'];
 
     
+         // Accessor for percentage progress
+    public function getPercentageProgressAttribute()
+    {
+        if ($this->number_of_staff > 0) {
+            return round(($this->completed / $this->number_of_staff) * 100, 2); // Rounded to 2 decimals
+        }
+        return 0;
+    }
+    
         public function userAttempts()
         {
             return $this->belongsToMany(User::class, 'campaign_workers', 'campaign_id', 'user_id');
