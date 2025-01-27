@@ -455,6 +455,7 @@ function myFunction() {
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
                         }
+                        console.log(response);
                         return response.json();
                     })
                     .then(data => {
@@ -486,6 +487,8 @@ function myFunction() {
                                 </a>`;
                             $("#display-jobs").append(jobHtml);
                         });
+
+                        console.log(data);
                     })
                     .catch(error => {
                         console.error('Error:', error);
