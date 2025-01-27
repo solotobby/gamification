@@ -182,7 +182,7 @@ class HomeController extends Controller
         $thisWeekPayment = $withdrawal->where('status', false)->whereBetween('created_at', [$start_week, $end_week])->sum('amount');
         $totalPayout = $withdrawal->where('is_usd', false)->sum('amount');
         $transactions = PaymentTransaction::where('status', 'successful')->sum('amount');
-        $available_jobsCount = count(filterCampaign('0'));
+        $available_jobsCount = 0;  //count(filterCampaign('0'));
         $totalPayout_ = $withdrawal->where('status', false)->whereBetween('created_at', ['2024-11-01 11:00:27', '2025-01-14 11:00:27'])->sum('amount');
 
         $transactions = \DB::select('
