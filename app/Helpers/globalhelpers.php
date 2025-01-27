@@ -1769,95 +1769,139 @@ if(!function_exists('filterCampaign')){
         // $jobfilter = '';
         $campaigns = '';
 
-        $baseCurrency = $user->wallet->base_currency;
+        $query = Campaign::query()
+            ->where('status', 'Live')
+            ->where('is_completed', false)
+            ->whereNotIn('id', function ($query) use ($user) {
+                $query->select('campaign_id')
+                    ->from('campaign_workers')
+                    ->where('user_id', $user->id);
+            });
+
+            if ($categoryID != 0) {
+                $query->where('campaign_type', $categoryID);
+            }
+
+            // Optimize sorting and paginate
+            $campaigns = $query->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+                ->orderBy('created_at', 'DESC')
+                ->paginate(7);
+
+        
+            // Add extra fields (handled by Accessors in the Model)
+            $campaigns->getCollection()->transform(function ($campaign) use ($user) {
+                $baseCurrency = $user->wallet->base_currency;
+                $c = $campaign->pending_count + $campaign->completed_count;
+
+                $campaign->local_currency = $baseCurrency;
+                $campaign->progress = $campaign->number_of_staff > 0 
+                ? round(($c / $campaign->number_of_staff) * 100, 2) 
+                : 0;
+
+                $from = $campaign->currency; //from
+                $to = $baseCurrency; //to user local currency
+                $campaign->local_converted_amount = currencyConverter($from, $to, $campaign->campaign_amount); //$convertedAmount,
+                $campaign->local_converted_currency = $baseCurrency;
+                $campaign->completed = $c;
+                $campaign->type = $campaign->campaignType->name;
+                // $campaign->local_converted_currency_code = $baseCurrency;
+                return $campaign;
+            });
+
+            return response()->json($campaigns);
 
 
-    if($categoryID == 0){
-        ///without filter
+
+
+    // if($categoryID == 0){
+    //     ///without filter
        
-        $campaigns = Campaign::where('status', 'Live')
-            ->where('is_completed', false)
-            ->whereNotIn('id', function($query) use ($user) {
+    //     $campaigns = Campaign::where('status', 'Live')
+    //         ->where('is_completed', false)
+    //         ->whereNotIn('id', function($query) use ($user) {
             
-                $query->select('campaign_id')
-                ->from('campaign_workers')
-                ->where('user_id', $user->id);
+    //             $query->select('campaign_id')
+    //             ->from('campaign_workers')
+    //             ->where('user_id', $user->id);
             
-        })->orderBy('created_at', 'DESC')->get();
+    //     })
+    //     ->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+    //     ->orderBy('created_at', 'DESC')->paginate(5);
+    // }else{
+    //     //with filter
+    //     $campaigns = Campaign::where('status', 'Live')
+    //         ->where('is_completed', false)
+    //         ->where('campaign_type', $categoryID)
+    //         ->whereNotIn('id', function($query) use ($user) {
+            
+    //             $query->select('campaign_id')
+    //             ->from('campaign_workers')
+    //             ->where('user_id', $user->id);
+            
+    //     })
+    //     ->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+    //     ->orderBy('created_at', 'DESC')->paginate(5);
+    // }
 
-    }else{
-        //with filter
-        $campaigns = Campaign::where('status', 'Live')
-            ->where('is_completed', false)
-            ->where('campaign_type', $categoryID)
-            ->whereNotIn('id', function($query) use ($user) {
-            
-                $query->select('campaign_id')
-                ->from('campaign_workers')
-                ->where('user_id', $user->id);
-            
-        })->orderBy('created_at', 'DESC')->get();
-    }
+    // return response()->json($campaigns);
 
     // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
 
-    $list = [];
-    foreach($campaigns as $key => $value){
-        $c = $value->pending_count + $value->completed_count;//
-        // $campaignStatus = checkCampaignCompletedStatus($value->id);
-        // $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;
-        $div = $c / $value->number_of_staff;
-        $progress = $div * 100;
+    // $list = [];
+    // foreach($campaigns as $key => $value){
+    //     $c = $value->pending_count + $value->completed_count;//
+    //     // $campaignStatus = checkCampaignCompletedStatus($value->id);
+    //     // $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;
+    //     $div = $c / $value->number_of_staff;
+    //     $progress = $div * 100;
 
-        //jobCurrency 
-        $from = $value->currency; //from
-        $to = $baseCurrency; //to user local currency
+    //     //jobCurrency 
+    //     $from = $value->currency; //from
+    //     $to = $baseCurrency; //to user local currency
         
-        $list[] = [ 
-            'id' => $value->id, 
-            'job_id' => $value->job_id,
+    //     $list[] = [ 
+    //         'id' => $value->id, 
+    //         'job_id' => $value->job_id,
 
-            'post_title' => $value->post_title, 
-            'number_of_staff' => $value->number_of_staff, 
-            'type' => $value->campaignType->name, 
-            'category' => $value->campaignCategory->name,
-            //'attempts' => $attempts,
-            'completed' => $c, //$value->completed_count+$value->pending_count,
-            'is_completed' => $c >= $value->number_of_staff ? true : false,
-            'progress' => $progress,
+    //         'post_title' => $value->post_title, 
+    //         'number_of_staff' => $value->number_of_staff, 
+    //         'type' => $value->campaignType->name, 
+    //         'category' => $value->campaignCategory->name,
+    //         //'attempts' => $attempts,
+    //         'completed' => $c, //$value->completed_count+$value->pending_count,
+    //         'is_completed' => $c >= $value->number_of_staff ? true : false,
+    //         'progress' => $progress,
 
-            'campaign_amount' => $value->campaign_amount,
-            'currency' => $value->currency,
-            'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
+    //         'campaign_amount' => $value->campaign_amount,
+    //         'currency' => $value->currency,
+    //         'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
 
-            'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
-            'local_converted_currency' => $baseCurrency,
-            'local_converted_currency_code' => $baseCurrency,
+    //         'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
+    //         'local_converted_currency' => $baseCurrency,
+    //         'local_converted_currency_code' => $baseCurrency,
             
-            'priotized' => $value->approved,
-            'from' => $from,
-            'to' => $to,
-            'baseCurrency' => baseCurrency(),
-            // 'completed_status' => checkCampaignCompletedStatus($value->id)
+    //         'priotized' => $value->approved,
+    //         'from' => $from,
+    //         'to' => $to,
+    //         'baseCurrency' => baseCurrency(),
+    //         // 'completed_status' => checkCampaignCompletedStatus($value->id)
             
-        ];
-    }
+    //     ];
+    // }
 
 
 
-    //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+    // // Remove objects where 'is_completed' is true
+    // $filteredArray = array_filter($list, function ($item) {
+    //     return $item['is_completed'] !== true;
+    // });
 
-    // Remove objects where 'is_completed' is true
-    $filteredArray = array_filter($list, function ($item) {
-        return $item['is_completed'] !== true;
-    });
+    // // Sort the array to prioritize 'Priotized'
+    // usort($filteredArray, function ($a, $b) {
+    //     return strcmp($b['priotized'], $a['priotized']);
+    // });
 
-    // Sort the array to prioritize 'Priotized'
-    usort($filteredArray, function ($a, $b) {
-        return strcmp($b['priotized'], $a['priotized']);
-    });
-
-     return  $filteredArray;
+    //  return  $filteredArray;
  
     }
 }

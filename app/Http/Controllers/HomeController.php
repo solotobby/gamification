@@ -116,11 +116,31 @@ class HomeController extends Controller
         ]);
     }
 
+    public function newHome(){
+        
+        $categoryID = 0;
+       return $campaigns = Campaign::where('status', 'Live')
+       ->where('is_completed', false)
+       ->where('campaign_type', $categoryID)
+       ->whereDoesntHave('attempts', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        ->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+        // ->orderByDesc('created_at') // Then order by newest creation date
+        ->paginate(10);
+
+
+        
+        // return $this->listCategories();
+    }
+
     public function listCategories(){
         return Category::query()->orderBy('name', 'ASC')->get();
     }
 
     public function filterCampaignByCategories($category_id){
+
+        // return $this->newHome();
         return filterCampaign($category_id);
     }
 

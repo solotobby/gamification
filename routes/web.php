@@ -327,6 +327,8 @@ Route::post('create/portfolio', [\App\Http\Controllers\SkillsController::class, 
 
 ///filter
 Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController::class, 'filterCampaignByCategories']);
+// Route::get('available/campaigns/{category_id}', [\App\Http\Controllers\HomeController::class, 'filterCampaignByCategories']);
+
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
@@ -339,6 +341,8 @@ Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'
 Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
 Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
 
+
+Route::get('new/home', [\App\Http\Controllers\HomeController::class, 'newHome']);
 ///staff Routes
 Route::get('staff/payslip', [\App\Http\Controllers\Staff\StaffManagementController::class, 'payslip'])->name('staff.payslip');
 Route::get('staff/create', [\App\Http\Controllers\Admin\StaffController::class, 'create'])->name('staff.create');
