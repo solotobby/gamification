@@ -1080,4 +1080,45 @@ class GeneralController extends Controller
     }
 
 
+    public function testapi(){
+        return testApi('0');
+    }
+
+
+
+    public function testapi1(){
+        $userId = 1;
+        $page = 1;
+        $subcategory = 0;
+        $completedCampaignIds = CampaignWorker::where('user_id', $userId)
+            ->pluck('campaign_id')
+            ->toArray();
+        return Campaign::where(
+            'status',
+            'Live'
+        )->where(
+            'is_completed',
+            false
+        )->where(
+            'user_id',
+            '!=',
+            $userId
+        )->whereNotIn(
+            'id',
+            $completedCampaignIds
+        )->when($subcategory, function ($query) use ($subcategory) {
+            $query->where(
+                'campaign_subcategory',
+                $subcategory
+            );
+        })->orderByRaw(
+            "CASE WHEN approved = 'prioritize' THEN 1 ELSE 2 END"
+        )
+            ->orderBy(
+                'created_at',
+                'DESC'
+            )->paginate(20, ['*'], 'page', $page);
+    }
+
+
 }
