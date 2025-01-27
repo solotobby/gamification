@@ -1803,12 +1803,19 @@ if(!function_exists('filterCampaign')){
                 $campaign->local_converted_amount = currencyConverter($from, $to, $campaign->campaign_amount); //$convertedAmount,
                 $campaign->local_converted_currency = $baseCurrency;
                 $campaign->completed = $c;
+                $campaign->is_completed = $c >= $campaign->number_of_staff ? true : false;
                 $campaign->type = $campaign->campaignType->name;
                 // $campaign->local_converted_currency_code = $baseCurrency;
                 return $campaign;
             });
 
+             // // Remove objects where 'is_completed' is true
+            // $filteredArray = array_filter($campaigns, function ($item) {
+            //     return $item['is_completed'] !== true;
+            // });
+
             return response()->json($campaigns);
+            // return $filteredArray;
 
 
 

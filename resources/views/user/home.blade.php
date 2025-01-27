@@ -475,14 +475,15 @@ function myFunction() {
     function renderJobs(jobs) {
         const container = $("#display-jobs");
         container.empty();
-
+       
         if (jobs.length === 0) {
           $("#display-jobs").html(`<div class="alert alert-info mt-2">No jobs found for this category</div>`);
             // container.html(`<p class="text-muted">No jobs found.</p>`);
             return;
         }
 
-        jobs.forEach(job => {
+        const filteredJobs = data.jobs.filter(job => !job.is_completed);
+        filteredJobs.forEach(job => {
             const url = `${baseUrl}/${job.job_id}`;
             const jobHtml = `
                 <a href="${url}">
