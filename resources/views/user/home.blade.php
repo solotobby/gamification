@@ -544,7 +544,7 @@ function myFunction() {
         currentPage = 1; // Reset to first page
         loadJobs(`${baseApiUrl}/${selectedValue}?page=${currentPage}`);
     });
-});
+  });
 
 //   $(document).ready(function () {
 //     const baseApiUrl = '{{ url("available/jobs") }}';
