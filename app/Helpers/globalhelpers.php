@@ -2649,42 +2649,104 @@ if(!function_exists('walletBalance')){
 
 
 
+if(!function_exists('testApi')){
+    function testApi($categoryID){ 
 
-if(!function_exists('currencySymbol')){
-    function  currencySymbol($currency){
-          
-            // @elseif(auth()->user()->wallet->base_currency == 'GHS')
-            //     &#8373;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
+        $user = User::where('id', 1)->first(); //Auth::user();
+        // $jobfilter = '';
+        $campaigns = '';
 
-            // @elseif(auth()->user()->wallet->base_currency == 'KES')
-            // &#75;&#83;&#104; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-            // @elseif(auth()->user()->wallet->base_currency == 'TZS')
-            // &#84;&#83;&#104; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-            // @elseif(auth()->user()->wallet->base_currency == 'RWF')
-            // &#82;&#8355;{{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-            // @elseif(auth()->user()->wallet->base_currency == 'MWK')
-            // &#77;&#75; {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
-            // @else
+        // $baseCurrency = $user->wallet->base_currency;
 
-            //     ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
-            // @endif
+
+    if($categoryID == 0){
+        ///without filter
+       
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
+
+    }else{
+        //with filter
+        $campaigns = Campaign::where('status', 'Live')
+            ->where('is_completed', false)
+            ->where('campaign_type', $categoryID)
+            ->whereNotIn('id', function($query) use ($user) {
+            
+                $query->select('campaign_id')
+                ->from('campaign_workers')
+                ->where('user_id', $user->id);
+            
+        })->orderBy('created_at', 'DESC')->get();
+    }
+
+    return $campaigns;
+
+    // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
+
+    // $list = [];
+    // foreach($campaigns as $key => $value){
+    //     $c = $value->pending_count + $value->completed_count;//
+    //     // $campaignStatus = checkCampaignCompletedStatus($value->id);
+    //     // $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;
+    //     $div = $c / $value->number_of_staff;
+    //     $progress = $div * 100;
+
+    //     //jobCurrency 
+    //     $from = $value->currency; //from
+    //     $to = $baseCurrency; //to user local currency
+        
+    //     $list[] = [ 
+    //         'id' => $value->id, 
+    //         'job_id' => $value->job_id,
+
+    //         'post_title' => $value->post_title, 
+    //         'number_of_staff' => $value->number_of_staff, 
+    //         'type' => $value->campaignType->name, 
+    //         'category' => $value->campaignCategory->name,
+    //         //'attempts' => $attempts,
+    //         'completed' => $c, //$value->completed_count+$value->pending_count,
+    //         'is_completed' => $c >= $value->number_of_staff ? true : false,
+    //         'progress' => $progress,
+
+    //         'campaign_amount' => $value->campaign_amount,
+    //         'currency' => $value->currency,
+    //         'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
+
+    //         'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
+    //         'local_converted_currency' => $baseCurrency,
+    //         'local_converted_currency_code' => $baseCurrency,
+            
+    //         'priotized' => $value->approved,
+    //         'from' => $from,
+    //         'to' => $to,
+    //         'baseCurrency' => baseCurrency(),
+    //         // 'completed_status' => checkCampaignCompletedStatus($value->id)
+            
+    //     ];
+    // }
+
+
+
+    //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+
+    // Remove objects where 'is_completed' is true
+    // $filteredArray = array_filter($list, function ($item) {
+    //     return $item['is_completed'] !== true;
+    // });
+
+    // // Sort the array to prioritize 'Priotized'
+    // usort($filteredArray, function ($a, $b) {
+    //     return strcmp($b['priotized'], $a['priotized']);
+    // });
+
+    //  return  $filteredArray;
+ 
     }
 }
-
-
-// public static function sendNotificaion($number, $message)
-// {
-//     $res = Http::withHeaders([
-//         'Accept' => 'application/json',
-//         'Content-Type' => 'application/json',
-//     ])->post('https://api.ng.termii.com/api/sms/send', [
-//         "to"=> $number,
-//         "from"=> "FREEBYZ",
-//         "sms"=> $message,
-//         "type"=> "plain",
-//         "channel"=> "generic",
-//         "api_key"=> env('TERMI_KEY')
-//     ]);
-    
-//      return json_decode($res->getBody()->getContents(), true);
-// }
