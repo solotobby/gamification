@@ -139,7 +139,7 @@
                 <div id="kora">
                   <div class=" mb-2">
                   <label class="mb-1">Amount</label>
-                      <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="50" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                      <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                   </select>
                   </div>
 
