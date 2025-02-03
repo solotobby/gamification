@@ -133,7 +133,7 @@
               <input type="date" class="form-control" id="end" name="end_date" placeholder="To" data-week-start="1" data-autoclose="true" data-today-highlight="true">
               </div>
           </div>
-        </form>
+    </form>
 
     <!-- Overview -->
     <div class="row items-push">
@@ -209,7 +209,7 @@
         </div>
       </div>
 
-      {{--<div class="col-sm-6 col-xl-3">
+      <div class="col-sm-6 col-xl-4">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full flex-grow-1">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -217,13 +217,13 @@
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
              
-              <span id="loginPoints"></span>
+              <span id="activeReg"></span>
               </div>
-            <div class="text-muted mb-3">Login Points</div>
+            <div class="text-muted mb-3">Active Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
 
-              &#8358; <span id="loginPointsValue"></span>
+               <span id="regUser"></span>
              
             </div>
           </div>
@@ -235,9 +235,11 @@
           </div>
         </div>
       </div>
+
+
       
 
-      <div class="col-sm-6 col-xl-3">
+     {{-- <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
           <div class="block-content block-content-full">
             <div class="item rounded-3 bg-body mx-auto my-3">
@@ -447,6 +449,9 @@
                 var campaigns = response.campaigns;
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
+                // var activeUsers = response.activeUsers;
+
+
                 // var loginPoints = response.loginPoints;
                 // var loginPointsValue = response.loginPointsValue;
                 // var monthly = response.monthlyVisits;
@@ -491,15 +496,22 @@
                           var campaigns = response.campaigns;
                           var campaignValue = response.campaignValue;
                           var campaignWorker = response.campaignWorker;
+                          var activeUsers = response.activeUsers.original.meta;
+                          // var regUsers = response.regUsers.original.meta.total_register;
                           // var loginPoints = response.loginPoints;
                           // var loginPointsValue = response.loginPointsValue;
-                        
-
+                
+                        var activeReg = activeUsers.total_active;
+                        var regUser = activeUsers.total_registered;
+                       
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                           document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
                           document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                           document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
                           document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
+                          document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
+                          document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
+                          
                           // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                           // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                          

@@ -8,6 +8,7 @@ use App\Models\PaymentTransaction;
 use App\Models\Statistics;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Analytics{
 
@@ -71,10 +72,10 @@ class Analytics{
         
         
        $data= ActivityLog::select(
-            \DB::raw('DATE(created_at) as date'),
-            \DB::raw('SUM(CASE WHEN activity_type = "google_account_creation" THEN 1 ELSE 0 END) as google_reg_count'),
-            \DB::raw('SUM(CASE WHEN activity_type = "account_creation" THEN 1 ELSE 0 END) as reg_count'),
-            \DB::raw('SUM(CASE WHEN activity_type = "account_verification" THEN 1 ELSE 0 END) as verified_count')
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('SUM(CASE WHEN activity_type = "google_account_creation" THEN 1 ELSE 0 END) as google_reg_count'),
+            DB::raw('SUM(CASE WHEN activity_type = "account_creation" THEN 1 ELSE 0 END) as reg_count'),
+            DB::raw('SUM(CASE WHEN activity_type = "account_verification" THEN 1 ELSE 0 END) as verified_count')
         )->where('created_at', '>=', Carbon::now()->subMonths(3))->groupBy('date')
         ->get();
 
@@ -87,7 +88,8 @@ class Analytics{
     }
 
     public static function dailyStats(){
-         $data = Statistics::select(\DB::raw('DATE(date) as date'))
+        
+         $data = Statistics::select(DB::raw('DATE(date) as date'))
          ->selectRaw('SUM(CASE WHEN type = "visits" THEN count ELSE 0 END) as visits')
         ->selectRaw('SUM(CASE WHEN type = "LandingPage" THEN count ELSE 0 END) as landing_page_count')
         ->selectRaw('SUM(CASE WHEN type = "Dashboard" THEN count ELSE 0 END) as dashboard_count')
@@ -102,7 +104,7 @@ class Analytics{
     }
     
     public static function monthlyVisits(){
-         $MonthlyVisitresult = User::select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
+         $MonthlyVisitresult = User::select(DB::raw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as user_per_month, SUM(is_verified) as verified_users'))
         // ->whereBetween('created_at',[$start_date, $end_date])
         ->where('created_at', '>=', Carbon::now()->subMonths(3))
         ->groupBy('month')->get(); 
@@ -115,7 +117,7 @@ class Analytics{
     }
 
     public static function registrationChannel(){
-        $registrationChannel = User::select('source', \DB::raw('COUNT(*) as total'))->groupBy('source')->get();
+        $registrationChannel = User::select('source', DB::raw('COUNT(*) as total'))->groupBy('source')->get();
         $list[] = ['Channel', 'Total'];
          foreach($registrationChannel as $key => $value){
             $list[++$key] = [$value->source == null ? 'Organic' :$value->source, (int)$value->total ];
@@ -124,7 +126,7 @@ class Analytics{
     }
 
     public static function revenueChannel(){
-       $revenue = PaymentTransaction::select('type', \DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->where('type', '!=', 'direct_referer_bonus_naira_usd')->get();
+       $revenue = PaymentTransaction::select('type', DB::raw('SUM(amount) as amount'))->groupBy('type')->where('user_id', '1')->where('tx_type', 'Credit')->where('type', '!=', 'direct_referer_bonus_naira_usd')->get();
        $list[] = ['Revenue Channel', 'Total'];
          foreach($revenue as $key => $value){
             $list[++$key] = [$value->type, (int)$value->amount ];
@@ -136,12 +138,12 @@ class Analytics{
 
         $monthlyRev =  PaymentTransaction::
         select(
-            \DB::raw('DATE_FORMAT(created_at, "%b %Y") AS month'),
-            \DB::raw('SUM(CASE WHEN type = "direct_referer_bonus" THEN amount ELSE 0 END) AS direct_referer_bonus'),
-            \DB::raw('SUM(CASE WHEN type = "referer_bonus" THEN amount ELSE 0 END) AS referer_bonus'),
-            \DB::raw('SUM(CASE WHEN type = "campaign_revenue" THEN amount ELSE 0 END) AS campaign_revenue'),
-            \DB::raw('SUM(CASE WHEN type = "withdrawal_commission" THEN amount ELSE 0 END) AS withdrawal_commission'),
-            \DB::raw('SUM(CASE WHEN type = "campaign_revenue_add" THEN amount ELSE 0 END) AS campaign_revenue_add'),
+            DB::raw('DATE_FORMAT(created_at, "%b %Y") AS month'),
+            DB::raw('SUM(CASE WHEN type = "direct_referer_bonus" THEN amount ELSE 0 END) AS direct_referer_bonus'),
+            DB::raw('SUM(CASE WHEN type = "referer_bonus" THEN amount ELSE 0 END) AS referer_bonus'),
+            DB::raw('SUM(CASE WHEN type = "campaign_revenue" THEN amount ELSE 0 END) AS campaign_revenue'),
+            DB::raw('SUM(CASE WHEN type = "withdrawal_commission" THEN amount ELSE 0 END) AS withdrawal_commission'),
+            DB::raw('SUM(CASE WHEN type = "campaign_revenue_add" THEN amount ELSE 0 END) AS campaign_revenue_add'),
         )
         ->where('user_id', '!=', 84)->where('created_at', '>', Carbon::now()->subMonths(3))
         ->groupBy('month')
@@ -158,7 +160,7 @@ class Analytics{
     }
 
     public static function countryDistribution(){
-        $countryDristibution = User::select('country', \DB::raw('COUNT(*) as total'))->groupBy('country')->get();
+        $countryDristibution = User::select('country', DB::raw('COUNT(*) as total'))->groupBy('country')->get();
         $country[] = ['Country', 'Total'];
          foreach($countryDristibution as $key => $value){
             $country[++$key] = [$value->country == null ? 'Unassigned' :$value->country, (int)$value->total ];
@@ -167,7 +169,7 @@ class Analytics{
     }
 
     public static function ageDistribution(){
-        $ageDristibution = User::select('age_range', \DB::raw('COUNT(*) as total'))->groupBy('age_range')->get();
+        $ageDristibution = User::select('age_range', DB::raw('COUNT(*) as total'))->groupBy('age_range')->get();
         $age[] = ['Age Range', 'Total'];
          foreach($ageDristibution as $key => $value){
             $age[++$key] = [$value->age_range == null ? 'Unassigned' :$value->age_range, (int)$value->total ];
@@ -175,6 +177,8 @@ class Analytics{
          return $age;
        // return 'age';
     }
+
+    
 
     public static function campaignMetrics(){
         $campaigns = Campaign::with(['completed'])

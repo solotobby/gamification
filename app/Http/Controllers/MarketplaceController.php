@@ -54,6 +54,7 @@ class MarketplaceController extends Controller
             $storeBanner = Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
 
+            
             // $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
             // $prodductUrl = Storage::disk('s3')->url($filePathProduct);
 
