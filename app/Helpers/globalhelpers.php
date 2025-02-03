@@ -26,10 +26,12 @@ use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('GetSendmonnyUserId')) {  //sendmonny user idauthenticated user
     function GetSendmonnyUserId()
@@ -2666,138 +2668,50 @@ if(!function_exists('walletBalance')){
        }else{
             return $wallet->base_currency_balance;
        }
-
-
-    //    if($type == 'Naira' || $type == 'NGN'){
-    //     $wallet =  Wallet::where('user_id', $user->id)->first();
-    //         if((int) $wallet->balance >= $amount){
-    //             return true;
-    //         }else{
-    //             return false;
-    //         }
-    //    }elseif($type == 'Dollar' || $type == 'USD'){
-        
-    //     $wallet =  Wallet::where('user_id', $user->id)->first();
-        
-    //         if((int) $wallet->usd_balance >= $amount){
-    //             return true;
-    //         }else{
-    //             return false;
-    //         }
-
-    //    }else{
-    //        $wallet =  Wallet::where('user_id', $user->id)->first();
-            
-    //         if((int) $wallet->base_currency_balance >= $amount){
-    //             return true;
-    //         }else{
-    //             return false;
-    //         }
-
-    //    }
     }
 }
 
+if(!function_exists('getWeeklyReport')){
+    function  getWeeklyReport(){ 
 
+        $registered = ActivityLog::where('activity_type', 'account_creation')
+            ->selectRaw('YEAR(created_at) as year, WEEK(created_at, 1) as week, COUNT(DISTINCT user_id) as registered')
+            ->groupBy('year', 'week')
+            ->get()
+            ->keyBy(fn($item) => $item->year . '-' . $item->week);
 
-if(!function_exists('testApi')){
-    function testApi($categoryID){ 
+             // Get active users per week (any activity type)
+        $active = ActivityLog::selectRaw('YEAR(created_at) as year, WEEK(created_at, 1) as week, COUNT(DISTINCT user_id) as active')
+        ->groupBy('year', 'week')
+        ->get()
+        ->keyBy(fn($item) => $item->year . '-' . $item->week);
 
-        $user = User::where('id', 1)->first(); //Auth::user();
-        // $jobfilter = '';
-        $campaigns = '';
+        return mergeResults($registered, $active, 'week');
 
-        // $baseCurrency = $user->wallet->base_currency;
+           
 
-
-    if($categoryID == 0){
-        ///without filter
-       
-        $campaigns = Campaign::where('status', 'Live')
-            ->where('is_completed', false)
-            ->whereNotIn('id', function($query) use ($user) {
-            
-                $query->select('campaign_id')
-                ->from('campaign_workers')
-                ->where('user_id', $user->id);
-            
-        })->orderBy('created_at', 'DESC')->get();
-
-    }else{
-        //with filter
-        $campaigns = Campaign::where('status', 'Live')
-            ->where('is_completed', false)
-            ->where('campaign_type', $categoryID)
-            ->whereNotIn('id', function($query) use ($user) {
-            
-                $query->select('campaign_id')
-                ->from('campaign_workers')
-                ->where('user_id', $user->id);
-            
-        })->orderBy('created_at', 'DESC')->get();
     }
+}
 
-    return $campaigns;
+if(!function_exists('mergeResults')){ 
+    function  mergeResults(Collection $registered, Collection $active, string $periodType){
 
-    // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-
-    // $list = [];
-    // foreach($campaigns as $key => $value){
-    //     $c = $value->pending_count + $value->completed_count;//
-    //     // $campaignStatus = checkCampaignCompletedStatus($value->id);
-    //     // $c = $campaignStatus['Pending'] ?? 0 + $campaignStatus['Approved'] ?? 0;
-    //     $div = $c / $value->number_of_staff;
-    //     $progress = $div * 100;
-
-    //     //jobCurrency 
-    //     $from = $value->currency; //from
-    //     $to = $baseCurrency; //to user local currency
-        
-    //     $list[] = [ 
-    //         'id' => $value->id, 
-    //         'job_id' => $value->job_id,
-
-    //         'post_title' => $value->post_title, 
-    //         'number_of_staff' => $value->number_of_staff, 
-    //         'type' => $value->campaignType->name, 
-    //         'category' => $value->campaignCategory->name,
-    //         //'attempts' => $attempts,
-    //         'completed' => $c, //$value->completed_count+$value->pending_count,
-    //         'is_completed' => $c >= $value->number_of_staff ? true : false,
-    //         'progress' => $progress,
-
-    //         'campaign_amount' => $value->campaign_amount,
-    //         'currency' => $value->currency,
-    //         'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
-
-    //         'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
-    //         'local_converted_currency' => $baseCurrency,
-    //         'local_converted_currency_code' => $baseCurrency,
+        $allKeys = $registered->keys()->merge($active->keys())->unique();
+    
+        return $allKeys->map(function ($key) use ($registered, $active, $periodType) {
+            [$year, $period] = explode('-', $key);
             
-    //         'priotized' => $value->approved,
-    //         'from' => $from,
-    //         'to' => $to,
-    //         'baseCurrency' => baseCurrency(),
-    //         // 'completed_status' => checkCampaignCompletedStatus($value->id)
-            
-    //     ];
-    // }
+            return [
+                'year' => (int)$year,
+                $periodType => (int)$period,
+                'registered' => $registered->get($key)?->registered ?? 0,
+                'active' => $active->get($key)?->active ?? 0,
+            ];
+        })
+        ->sortByDesc('year')
+        ->sortByDesc($periodType)
+        ->values();
 
 
-
-    //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
-
-    // Remove objects where 'is_completed' is true
-    // $filteredArray = array_filter($list, function ($item) {
-    //     return $item['is_completed'] !== true;
-    // });
-
-    // // Sort the array to prioritize 'Priotized'
-    // usort($filteredArray, function ($a, $b) {
-    //     return strcmp($b['priotized'], $a['priotized']);
-    // });
-
-    //  return  $filteredArray;
- 
-    }
+     }
 }

@@ -8,6 +8,7 @@ use App\Helpers\PaystackHelpers;
 use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Models\AccountInformation;
+use App\Models\ActivityLog;
 use App\Models\Announcement;
 use App\Models\Answer;
 use App\Models\BankInformation;
@@ -33,6 +34,7 @@ use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Nette\Utils\Random;
 use Illuminate\Support\Str;
@@ -269,6 +271,7 @@ class HomeController extends Controller
         $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at', [$request->start_date, $request->end_date])->sum('amount');
         $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
         $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
+        $data['activeUsers'] = $this->getDailyReport($request->start_date, $request->end_date);
         // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
         // $data['loginPointsValue'] = $data['loginPoints']/5;
 
@@ -291,12 +294,68 @@ class HomeController extends Controller
         $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at', '>=', $date)->sum('amount');
         $data['registeredUser'] = User::where('role', 'regular')->where('created_at', '>=', $date)->count();
         $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at', '>=', $date)->count();
+        $data['activeUsers'] = 1394;
         // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         // $data['loginPointsValue'] = $data['loginPoints']/5;
 
         // $data['monthlyVisits'] = monthlyVisits();
         return $data;
     }
+
+    public function getDailyReport($start_date, $end_date)
+    {
+        // $validated = $request->validate([
+        //     'start_date' => 'required|date',
+        //     'end_date' => 'required|date|after_or_equal:start_date'
+        // ]);
+
+        // return $start_date;
+
+        // $startDate = Carbon::parse($start_date)->startOfDay();
+        // $endDate = Carbon::parse($end_date)->endOfDay();
+
+        // Get registered users per day
+        $registered = ActivityLog::where('activity_type', 'account_creation')
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as registered')
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
+
+        // Get active users per day
+        $active = ActivityLog::whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active')
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
+
+        // Generate complete date range
+        $period = CarbonPeriod::create($start_date, $end_date);
+        
+        // Build results with all dates in range
+        $results = [];
+        foreach ($period as $date) {
+            $dateStr = $date->format('d-m-Y');
+            $results[] = [
+                'date' => $dateStr,
+                'registered' => $registered->get($dateStr)?->registered ?? 0,
+                'active' => $active->get($dateStr)?->active ?? 0,
+            ];
+        }
+
+
+
+        return response()->json([
+            // 'data' => $results,
+            'meta' => [
+                'total_registered' => $registered->sum('registered'),
+                'total_active' => $active->sum('active')
+            ]
+        ]);
+    }
+
+
+
 
 
     public function staffHome()

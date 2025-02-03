@@ -1081,7 +1081,7 @@ class GeneralController extends Controller
 
 
     public function testapi(){
-        return testApi('0');
+        return getWeeklyReport();
     }
 
 

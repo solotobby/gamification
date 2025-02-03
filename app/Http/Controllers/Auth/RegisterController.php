@@ -125,6 +125,9 @@ class RegisterController extends Controller
         $wall->save();
 
         activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+        if(env('APP_ENV') == 'production'){
+            userLocation('Registeration');
+        }
         $subject = 'Welcome to Freebyz';
         Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
