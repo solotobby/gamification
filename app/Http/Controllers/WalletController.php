@@ -155,7 +155,8 @@ class WalletController extends Controller
             if($baseCurrency == 'NGN'){
 
                 if($request->channel == 'paystack'){
-                    return initiateTrasaction(time(), $amount, 'www.facebook.com');
+                    $url = initiateTrasaction(time(), $amount, '/wallet/topup');
+                    return redirect($url);
                 }else{
 
                     $payloadNGN = [
@@ -516,7 +517,7 @@ class WalletController extends Controller
     public function walletTop()
     {
 
-        return back()->with('success', 'Wallet Topup Successful');
+        return back()->with('success', 'Payment Completed. Your wallet will be credited!');
 
 
 
