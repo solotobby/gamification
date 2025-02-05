@@ -98,12 +98,9 @@
                   <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select a Funding Channel</option>
                     <option value="va">Virtual Account</option>
-                    {{-- @if(auth()->user()->email == 'solotobby@gmail.com') --}}
-                    <option value="kora">Koray Pay</option>
-                    {{-- @endif --}}
+                    <option value="kora">Other Payment Channel</option>
                   </select>
                 </div>
-
 
 
                 <div id="va">
@@ -137,19 +134,32 @@
 
                 </div>
                 <div id="kora">
+
+                  <div class=" mb-2">
+                    <label class="mb-1">Processor</label>
+                        <select class="form-control" name="channel" required>
+                          <option value="">Select One</option>
+                          {{-- <option value="paystack">Paystack</option> --}}
+                          <option value="kora">Kora Pay</option>
+                        </select>
+                    </select>
+                    </div>
+
                   <div class=" mb-2">
                   <label class="mb-1">Amount</label>
-                      <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                      <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="50" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                   </select>
                   </div>
-
+                 
   
-                <div class="mb-4">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
-                  </button>
-                </div>
+                  <div class="mb-4">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
+                    </button>
+                  </div>
               </div>
+
+            
 
               {{-- <div class="input-group">
                 <span class="input-group-text">
@@ -271,11 +281,14 @@
     const currencySelect = document.querySelector('select[name="channel"]');
     const vaDiv = document.getElementById('va');
     const koraDiv = document.getElementById('kora');
+   
 
 
     // Hide both divs by default
     vaDiv.style.display = 'none';
     koraDiv.style.display = 'none';
+
+   
 
     // Add an event listener for changes to the select element
     currencySelect.addEventListener('change', function() {
@@ -285,12 +298,16 @@
         if (selectedValue === 'va') {
             vaDiv.style.display = 'block';
             koraDiv.style.display = 'none';
+         
         } else if (selectedValue === 'kora') {
             vaDiv.style.display = 'none';
             koraDiv.style.display = 'block';
+           
+         
         } else {
             vaDiv.style.display = 'none';
             koraDiv.style.display = 'none';
+            
         }
     });
 
