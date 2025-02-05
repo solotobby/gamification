@@ -735,8 +735,6 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                         
                 $response = virtualAccount($data);
 
-              
-
                     if($VirtualAccount){
                         
                         $VirtualAccount->bank_name = $response['data']['bank']['name'];
@@ -762,8 +760,6 @@ if(!function_exists('generateVirtualAccountOnboarding')){
                             ]);
                     }
 
-               
-                
                 $data['res']=$response;
                 $data['va']=$VirtualAccount; //back()->with('success', 'Account Created Succesfully');
                 return $data;
@@ -2650,7 +2646,7 @@ if(!function_exists('currencyConverter')){
         $rate = $target / $baseCurr;
 
         $convertedAmount = $rate * $amount;
-        
+
         return ceil($convertedAmount);
         // return number_format($convertedAmount,2);
 
