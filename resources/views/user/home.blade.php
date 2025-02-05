@@ -194,10 +194,11 @@
                 </a>
         @else
 
-                <a href="{{ url('banner/create')}}" target="_blank">
+                {{-- <a href="{{ url('banner/create')}}" target="_blank">
                   <img src="https://freebyz.s3.us-east-1.amazonaws.com/ad/1701380428.jpg" width="100%" height="300" class="img-responsive">
-                </a>
-        
+                </a> --}}
+
+                <iframe width="1060" height="315" src="https://www.youtube.com/embed/XAjXvFri0Z4?si=XCPZbkHroL7qfh2j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         @endif
     </div>
 
