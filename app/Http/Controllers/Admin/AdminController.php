@@ -985,7 +985,8 @@ class AdminController extends Controller
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Reason: '.$request->reason.'.';
             $subject = 'Campaign Declined';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));     
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));   
+            return redirect('campaigns/pending')->with('error', 'Campaign is Declined'); 
         }else{
             $camp->status = $request->status;
             $camp->post_title = $request->post_title;
@@ -996,9 +997,11 @@ class AdminController extends Controller
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Live!!!';
-            //Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            return redirect('campaigns/pending')->with('success', 'Campaign is Live!!!');
         }
-        return back()->with('success', 'Campaign Successfully '.$request->status);
+       
+        // return back()->with('success', 'Campaign Successfully '.$request->status);
     }
 
     public function marketplaceCreateProduct(){

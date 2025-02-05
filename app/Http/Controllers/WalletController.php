@@ -152,6 +152,9 @@ class WalletController extends Controller
             $ref = Str::random(16);
 
             if($baseCurrency == 'NGN'){
+
+
+
                 $payloadNGN = [
                     "amount"=> $request->balance, //$amount,
                     "redirect_url"=> url('wallet/fund/redirect'),
@@ -177,24 +180,24 @@ class WalletController extends Controller
                     // ]
                 ];
 
-               $redirectUrl = initializeKorayPay($payloadNGN);
+                $redirectUrl = initializeKorayPay($payloadNGN);
 
-               PaymentTransaction::create([
-                    'user_id' => auth()->user()->id,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => $amount,
-                    'balance' => walletBalance(auth()->user()->id),
-                    'status' => 'unsuccessful',
-                    'currency' => $baseCurrency,
-                    'channel' => 'kora',
-                    'type' => 'wallet_topup',
-                    'description' => 'Wallet Top Up',
-                    'tx_type' => 'Credit',
-                    'user_type' => 'regular'
-                ]);
+                PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => $amount,
+                        'balance' => walletBalance(auth()->user()->id),
+                        'status' => 'unsuccessful',
+                        'currency' => $baseCurrency,
+                        'channel' => 'kora',
+                        'type' => 'wallet_topup',
+                        'description' => 'Wallet Top Up',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
 
-               return redirect($redirectUrl);
+                return redirect($redirectUrl);
                 
             }else{
 
@@ -217,7 +220,6 @@ class WalletController extends Controller
                 }else{
                     $paymentOption = null;
                 }
-
 
                 $payload = [
                     'tx_ref' => $ref,
@@ -626,7 +628,7 @@ class WalletController extends Controller
 
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             if($bankInformation){
-                $this->processWithdrawals($request, 'NGN', 'paystack', '');
+                 $this->processWithdrawals($request, 'NGN', 'paystack', '');
                 return back()->with('success', 'Withdrawal Successfully queued');
                 //  $bankList = PaystackHelpers::bankList();
                 //  return view('user.bank_information', ['bankList' => $bankList]);
@@ -690,6 +692,8 @@ class WalletController extends Controller
         $percent = 7.5/100 * $amount;
         $formatedAm = $percent;
         $newamount_to_be_withdrawn = $amount - $formatedAm;
+
+        $referral_amount = 2/100 * $amount;
  
         $ref = time();
         
@@ -699,84 +703,135 @@ class WalletController extends Controller
             $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s');
         }
 
-         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-         if($currency == 'USD'){
-            $wallet->usd_balance -= $request->balance;
-            $wallet->save();
-         }elseif($currency == 'NGN'){
-            $wallet->balance -= $request->balance;
-            $wallet->save();
-         }else{
-            $wallet->base_currency_balance -= $request->balance;
-            $wallet->save();
-         }
+        $debitWallet =  debitWallet(auth()->user(), 'NGN', $request->balance);
         //  return $payload;
- 
-        $withdrawal = Withrawal::create([
-             'user_id' => auth()->user()->id, 
-             'amount' => $newamount_to_be_withdrawn,
-             'next_payment_date' => $nextFriday,
-             'paypal_email' => $currency == 'USD' ? $request->paypal_email : null,
-             'is_usd' => false,
-             'base_currency' => $currency,
-             'content' => $payload == '' ? null : $payload
-         ]);
+        if($debitWallet){
+            $withdrawal = Withrawal::create([
+                'user_id' => auth()->user()->id, 
+                'amount' => $newamount_to_be_withdrawn,
+                'next_payment_date' => $nextFriday,
+                'paypal_email' => $currency == 'USD' ? $request->paypal_email : null,
+                'is_usd' => false,
+                'base_currency' => $currency,
+                'content' => $payload == '' ? null : $payload
+            ]);
 
-        //process dollar withdrawal
-        PaymentTransaction::create([
-            'user_id' => auth()->user()->id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => $newamount_to_be_withdrawn,
-            'balance' => walletBalance(auth()->user()->id),
-            'status' => 'successful',
-            'currency' => $currency,
-            'channel' => $channel,
-            'type' => 'cash_withdrawal',
-            'description' => 'Cash Withdrawal from '.auth()->user()->name,
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
-
-        //admin commission
-            $adminWallet = Wallet::where('user_id', '1')->first();
-            if($currency == 'USD'){
-                $adminWallet->usd_balance += $formatedAm;
-                $adminWallet->save();
-             }elseif($currency == 'NGN'){
-                $adminWallet->balance += $formatedAm;
-                $adminWallet->save();
-             }else{
-                $adminWallet->base_currency_balance += $formatedAm;
-                $adminWallet->save();
-             }
-            //Admin Transaction Tablw
+            //process dollar withdrawal
             PaymentTransaction::create([
-                'user_id' => 1,
+                'user_id' => auth()->user()->id,
                 'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => $percent,
-                'balance' => walletBalance('1'),
+                'amount' => $newamount_to_be_withdrawn,
+                'balance' => walletBalance(auth()->user()->id),
                 'status' => 'successful',
                 'currency' => $currency,
                 'channel' => $channel,
-                'type' => 'withdrawal_commission',
-                'description' => 'Withdrwal Commission from '.auth()->user()->name,
-                'tx_type' => 'Credit',
-                'user_type' => 'admin'
+                'type' => 'cash_withdrawal',
+                'description' => 'Cash Withdrawal from '.auth()->user()->name,
+                'tx_type' => 'Debit',
+                'user_type' => 'regular'
             ]);
+
+
+
+
+            $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+
+                if($referee){
+                    
+                     $referreUser = User::with('wallet')->where('id', $referee->referee_id)->first();
+                    $referreUser->wallet->base_currency;
+                    // return [$amount, $percent, $referral_amount];
+                    $referral_converted_amount = currencyConverter($currency, $referreUser->wallet->base_currency, $referral_amount);
+                    $creditreferral = creditWallet($referreUser, $referreUser->wallet->base_currency, $referral_converted_amount);
+                    
+                    if($creditreferral){
+                        PaymentTransaction::create([
+                            'user_id' => $referreUser->id,
+                            'campaign_id' => '1',
+                            'reference' => $ref,
+                            'amount' => (int) $referral_converted_amount,
+                            'balance' => walletBalance($referreUser->id),
+                            'status' => 'successful',
+                            'currency' => $referreUser->wallet->base_currency,
+                            'channel' => $channel,
+                            'type' => 'referral_withdrawal_commission',
+                            'description' => 'Referral Withdrwal Commission from '.auth()->user()->name,
+                            'tx_type' => 'Credit',
+                            'user_type' => 'regular'
+                        ]);
+                    }
+
+                    $adminUser = User::find('1');
+                    
+                      $adjustedAdminAmount = (int) $percent - (int) $referral_converted_amount;
+                     
+                     $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
+               
+                    $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
+                     
+                    
+                    if($creditAdmin){
+                        PaymentTransaction::create([
+                            'user_id' => 1,
+                            'campaign_id' => '1',
+                            'reference' => $ref,
+                            'amount' => (int) $admin_referral_converted_amount,
+                            'balance' => walletBalance('1'),
+                            'status' => 'successful',
+                            'currency' => $adminUser->wallet->base_currency,
+                            'channel' => $channel,
+                            'type' => 'withdrawal_commission',
+                            'description' => 'Withdrwal Commission from '.auth()->user()->name,
+                            'tx_type' => 'Credit',
+                            'user_type' => 'admin'
+                        ]);
+                    }
+                   
+                }else{
+
+                    //if there is no referral
+                    $adminUser = User::find('1');
+                    // $adminWallet = Wallet::where('user_id', '1')->first();
+                      $adjustedAdminAmount = $percent;
+                     
+                     $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
+               
+                    $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
+                     
+                    
+                    if($creditAdmin){
+                        PaymentTransaction::create([
+                            'user_id' => 1,
+                            'campaign_id' => '1',
+                            'reference' => $ref,
+                            'amount' => (int) $admin_referral_converted_amount,
+                            'balance' => walletBalance('1'),
+                            'status' => 'successful',
+                            'currency' => $adminUser->wallet->base_currency,
+                            'channel' => $channel,
+                            'type' => 'withdrawal_commission',
+                            'description' => 'Withdrwal Commission from '.auth()->user()->name,
+                            'tx_type' => 'Credit',
+                            'user_type' => 'admin'
+                        ]);
+
+                    }
+                }
+             
+        
             activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
-            // $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
             $cur = $currency == 'USD' ? '$' : 'NGN';
             systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
         
-            // $user = User::where('id', '1')->first();
-            // $subject = 'Withdrawal Request Queued!!';
-            // $content = 'A withdrwal request has been made and it being queued';
-            // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
-
             return $withdrawal;
+
+        }else{
+            return false;
+        }     
     }
+
+ 
 
     public function switchWallet(Request $request){
         auth()->user()->wallet()->update(['base_currency' => $request->currency]);

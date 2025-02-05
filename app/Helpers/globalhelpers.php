@@ -269,14 +269,14 @@ if(!function_exists('systemNotification')){
 if(!function_exists('checkWalletBalance')){
     function checkWalletBalance($user, $type, $amount){
         
-       if($type == 'Naira' || $type == 'NGN'){
+       if( $type == 'NGN'){
         $wallet =  Wallet::where('user_id', $user->id)->first();
             if((int) $wallet->balance >= $amount){
                 return true;
             }else{
                 return false;
             }
-       }elseif($type == 'Dollar' || $type == 'USD'){
+       }elseif( $type == 'USD'){
         
         $wallet =  Wallet::where('user_id', $user->id)->first();
         
@@ -303,24 +303,24 @@ if(!function_exists('checkWalletBalance')){
 if(!function_exists('creditWallet')){
     function creditWallet($user, $type, $amount){
         
-       if($type == 'Naira' || $type == 'NGN'){
+       if($type == 'NGN'){
 
             $wallet =  Wallet::where('user_id', $user->id)->first();
-            $wallet->balance += $amount;
+            $wallet->balance += (int) $amount;
             $wallet->save();
             return $wallet;
 
-       }elseif($type == 'Dollar' || $type == 'USD'){
+       }elseif($type == 'USD'){
 
             $wallet =  Wallet::where('user_id', $user->id)->first();
-            $wallet->usd_balance += $amount;
+            $wallet->usd_balance += (int) $amount;
             $wallet->save();
             return $wallet;
 
        }else{
 
             $wallet =  Wallet::where('user_id', $user->id)->first();
-            $wallet->base_currency_balance += $amount;
+            $wallet->base_currency_balance += (int) $amount;
             $wallet->save();
             return $wallet;
 
@@ -1174,9 +1174,9 @@ if(!function_exists('userForeignUpgrade')){
 
 
                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                if($wallet->base_currency == 'Naira'){
+                if($wallet->base_currency == 'NGN'){
                     $baseCur = 'NGN';
-                }elseif($wallet->base_currency == 'Dollar'){
+                }elseif($wallet->base_currency == 'USD'){
                     $baseCur = 'USD';
                 }else{
                     $baseCur = $wallet->base_currency;
@@ -2650,8 +2650,9 @@ if(!function_exists('currencyConverter')){
         $rate = $target / $baseCurr;
 
         $convertedAmount = $rate * $amount;
-
-        return number_format($convertedAmount,2);
+        
+        return ceil($convertedAmount);
+        // return number_format($convertedAmount,2);
 
     }
 }

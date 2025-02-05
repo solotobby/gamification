@@ -385,13 +385,13 @@
         @include('layouts.resources.validate_currency')  
 
     {{-- @elseif(!auth()->user()->accountDetails)
-        @if(auth()->user()->wallet->base_currency == "Naira")
+        @if(auth()->user()->wallet->base_currency == "NGN")
             @include('layouts.resources.account_details') 
         @endif --}}
 
     {{-- @elseif(!auth()->user()->profile->phone_verified)
 
-        @if(auth()->user()->wallet->base_currency == "Naira")
+        @if(auth()->user()->wallet->base_currency == "NGN")
             @include('layouts.resources.account_details')      
         @endif  --}}
 

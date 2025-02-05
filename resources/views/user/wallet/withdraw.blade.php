@@ -93,7 +93,7 @@
                   <select name="type" class="form-control" required>
                     <option value="">Select An Option</option>
                     <option value="local_withdrawal">Local Withdrawal</option>
-                    <option value="paypal_withdrawal">Paypal Withdrawal</option>
+                    {{-- <option value="paypal_withdrawal">Paypal Withdrawal</option> --}}
                   </select>
                   
                 </div>

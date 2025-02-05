@@ -125,8 +125,14 @@
               <div class="mb-2">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Enter Reason for decline or approval</label>
-                    <textarea class="form-control" id="exampleInputEmail1" name="reason" required>{{ $campaign->reason }}</textarea>
+                    {{-- <textarea class="form-control" id="exampleInputEmail1" name="reason" required>{{ $campaign->reason }}</textarea> --}}
+                    <select name="reason" class="form-control" required>
+                      <option value="">Select One</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Denied">Denied</option>
+                    </select>
                   </div>
+
               </div>
              
 
