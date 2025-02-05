@@ -304,6 +304,8 @@ class HomeController extends Controller
 
     public function getDailyReport($start_date, $end_date)
     {
+
+        return 'ok';
         // $validated = $request->validate([
         //     'start_date' => 'required|date',
         //     'end_date' => 'required|date|after_or_equal:start_date'
@@ -315,43 +317,43 @@ class HomeController extends Controller
         // $endDate = Carbon::parse($end_date)->endOfDay();
 
         // Get registered users per day
-        $registered = ActivityLog::where('activity_type', 'account_creation')
-            ->whereBetween('created_at', [$start_date, $end_date])
-            ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as registered')
-            ->groupBy('date')
-            ->get()
-            ->keyBy('date');
+        // $registered = ActivityLog::where('activity_type', 'account_creation')
+        //     ->whereBetween('created_at', [$start_date, $end_date])
+        //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as registered')
+        //     ->groupBy('date')
+        //     ->get()
+        //     ->keyBy('date');
 
-        // Get active users per day
-        $active = ActivityLog::whereBetween('created_at', [$start_date, $end_date])
-            ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active')
-            ->groupBy('date')
-            ->get()
-            ->keyBy('date');
+        // // Get active users per day
+        // $active = ActivityLog::whereBetween('created_at', [$start_date, $end_date])
+        //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active')
+        //     ->groupBy('date')
+        //     ->get()
+        //     ->keyBy('date');
 
-        // Generate complete date range
-        $period = CarbonPeriod::create($start_date, $end_date);
+        // // Generate complete date range
+        // $period = CarbonPeriod::create($start_date, $end_date);
         
-        // Build results with all dates in range
-        $results = [];
-        foreach ($period as $date) {
-            $dateStr = $date->format('d-m-Y');
-            $results[] = [
-                'date' => $dateStr,
-                'registered' => $registered->get($dateStr)?->registered ?? 0,
-                'active' => $active->get($dateStr)?->active ?? 0,
-            ];
-        }
+        // // Build results with all dates in range
+        // $results = [];
+        // foreach ($period as $date) {
+        //     $dateStr = $date->format('d-m-Y');
+        //     $results[] = [
+        //         'date' => $dateStr,
+        //         'registered' => $registered->get($dateStr)->registered ?? 0,
+        //         'active' => $active->get($dateStr)->active ?? 0,
+        //     ];
+        // }
 
 
 
-        return response()->json([
-            // 'data' => $results,
-            'meta' => [
-                'total_registered' => $registered->sum('registered'),
-                'total_active' => $active->sum('active')
-            ]
-        ]);
+        // return response()->json([
+        //     // 'data' => $results,
+        //     'meta' => [
+        //         'total_registered' => $registered->sum('registered'),
+        //         'total_active' => $active->sum('active')
+        //     ]
+        // ]);
     }
 
 
