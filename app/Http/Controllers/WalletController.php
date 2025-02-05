@@ -148,7 +148,6 @@ class WalletController extends Controller
     public function storeFund(Request $request)
     {
 
-        
             $baseCurrency = auth()->user()->wallet->base_currency;
             $amount = amountCalculator($request->balance);
             $ref = Str::random(16);
@@ -191,7 +190,7 @@ class WalletController extends Controller
                             'user_id' => auth()->user()->id,
                             'campaign_id' => '1',
                             'reference' => $ref,
-                            'amount' => $amount,
+                            'amount' => $request->balance,
                             'balance' => walletBalance(auth()->user()->id),
                             'status' => 'unsuccessful',
                             'currency' => $baseCurrency,
