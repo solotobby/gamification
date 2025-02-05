@@ -2375,7 +2375,7 @@ if(!function_exists('initiateTrasaction')){
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => $amount*100,
-            'channels' => ['card', 'bank', 'ussd', 'opay', 'payattitude', 'transfer'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
+            'channels' => ['card', 'bank', 'ussd'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
             'currency' => 'NGN',
             'reference' => $ref,
             'callback_url' => url($redirect_url),
