@@ -190,12 +190,12 @@
           <i class="nav-main-link-icon fa fa-wallet"></i>
           <span class="nav-main-link-name">Wallet</span>
 
-          @if(baseCurrency() == 'Naira' || baseCurrency() == 'NGN')
+          @if( baseCurrency() == 'NGN')
           <span class="nav-main-link-badge badge rounded-pill bg-default">  
             {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }} 
           </span>
          
-         @elseif(baseCurrency() == 'Dollar' || baseCurrency() == 'USD')
+         @elseif( baseCurrency() == 'USD')
          <span class="nav-main-link-badge badge rounded-pill bg-default">  
           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
          </span>

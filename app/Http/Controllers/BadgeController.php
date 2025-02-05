@@ -33,7 +33,7 @@ class BadgeController extends Controller
         if($check){
             return back()->with('error', 'You already redeem membership badge bonus for '.$date);
         }
-        creditWallet(auth()->user(), 'Naira', $badge['amount']);
+        creditWallet(auth()->user(), 'NGN', $badge['amount']);
         
         PaymentTransaction::create([
             'user_id' => auth()->user()->id,

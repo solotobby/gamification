@@ -59,7 +59,7 @@ class BannerController extends Controller
             
 
             $user = User::where('id', $banner->user_id)->first();
-            creditWallet($user, 'Naira', $banner->amount);
+            creditWallet($user, 'NGN', $banner->amount);
 
             PaymentTransaction::create([
                 'user_id' => $user->id,

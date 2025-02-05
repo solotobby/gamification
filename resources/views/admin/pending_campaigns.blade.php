@@ -41,6 +41,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="table-responsive">
           {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
           <table class="table table-bordered table-striped table-vcenter">
@@ -89,7 +95,7 @@
                         <td>{{ $camp->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                         <td>
-                          <a href="{{ url('campaign/info/'.$camp->id) }}" target="_blank">View</a>
+                          <a href="{{ url('campaign/info/'.$camp->id) }}">View</a>
                           {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}">View</button> --}}
                         </td>
                     </tr>

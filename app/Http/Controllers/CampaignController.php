@@ -677,11 +677,11 @@ class CampaignController extends Controller
            if($campaign->currency == 'NGN'){
                $currency = 'NGN';
                $channel = 'paystack';
-               creditWallet($user, 'Naira', $workSubmitted->amount);
+               creditWallet($user, 'NGN', $workSubmitted->amount);
            }elseif($campaign->currency == 'USD'){
                $currency = 'USD';
                $channel = 'paypal';
-               creditWallet($user, 'Dollar', $workSubmitted->amount);
+               creditWallet($user, 'USD', $workSubmitted->amount);
             }elseif($campaign->currency == null){
                $currency = baseCurrency();
                $channel = 'flutterwave';
