@@ -285,8 +285,10 @@ class HomeController extends Controller
         $data = [];
 
         $date = \Carbon\Carbon::today()->subDays($period);
-        $start_date = \Carbon\Carbon::today()->subDays($period);
-        $end_date = \Carbon\Carbon::now()->format('Y-m-d');
+      
+
+        $start_date = Carbon::now()->subDays(30)->startOfDay()->format('Y-m-d');
+        $end_date = Carbon::now()->endOfDay()->format('Y-m-d');
 
         $camp = Campaign::where('status', 'Live')->where('created_at', '>=', $date)->get();
         $data['campaigns'] = $camp->count();
@@ -294,7 +296,7 @@ class HomeController extends Controller
         $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at', '>=', $date)->sum('amount');
         $data['registeredUser'] = User::where('role', 'regular')->where('created_at', '>=', $date)->count();
         $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at', '>=', $date)->count();
-        $data['activeUsers'] = 1394;
+        $data['activeUsers'] =  $this->getDailyReport($start_date, $end_date);
         // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
         // $data['loginPointsValue'] = $data['loginPoints']/5;
 
@@ -304,17 +306,36 @@ class HomeController extends Controller
 
     public function getDailyReport($start_date, $end_date)
     {
-
-        return 'ok';
         // $validated = $request->validate([
         //     'start_date' => 'required|date',
         //     'end_date' => 'required|date|after_or_equal:start_date'
         // ]);
 
-        // return $start_date;
+        
 
         // $startDate = Carbon::parse($start_date)->startOfDay();
         // $endDate = Carbon::parse($end_date)->endOfDay();
+
+        // $registeredUsersCount = ActivityLog::where('activity_type', 'account_creation')
+        // ->whereBetween('created_at', [$start_date, $end_date])
+        // ->distinct('user_id')
+        // ->count('user_id');
+
+        $activeUsersCount = ActivityLog::
+        whereIn('activity_type', ['login'])
+        ->whereBetween('created_at', [$start_date, $end_date])
+        ->distinct('user_id')
+        ->count('user_id');
+
+        return response()->json([
+            'registered_users' => 0,//$registeredUsersCount,
+            'active_users'     => $activeUsersCount,
+        ]);
+
+
+        
+
+
 
         // Get registered users per day
         // $registered = ActivityLog::where('activity_type', 'account_creation')
