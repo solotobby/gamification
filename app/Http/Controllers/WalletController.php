@@ -126,7 +126,8 @@ class WalletController extends Controller
 
         $ref = $params['reference'];
         $res = verifyKorayPay($ref);
-        if($res['status'] == true){
+
+        if($res['data']['status'] == 'success'){
            
             $credit = creditWallet(auth()->user(), 'NGN', $res['data']['amount_paid']);
 
@@ -147,57 +148,63 @@ class WalletController extends Controller
     public function storeFund(Request $request)
     {
 
+        
             $baseCurrency = auth()->user()->wallet->base_currency;
             $amount = amountCalculator($request->balance);
             $ref = Str::random(16);
 
             if($baseCurrency == 'NGN'){
 
+                if($request->channel == 'paystack'){
+                    return initiateTrasaction(time(), $amount, 'www.facebook.com');
+                }else{
 
-
-                $payloadNGN = [
-                    "amount"=> $request->balance, //$amount,
-                    "redirect_url"=> url('wallet/fund/redirect'),
-                    "currency"=> "NGN",
-                    "reference"=> $ref,
-                    "narration"=> "Wallet top up",
-                    "channels"=> [
-                        "card",
-                        "bank_transfer"
-                    ],
-                    // "default_channel"=> "card",
-                    "customer"=> [
-                        "name"=> auth()->user()->name,
-                        "email"=> auth()->user()->email
-                    ],
-                    "notification_url"=> "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
-                    // "metadata"=>[
-                    //     "key0"=> "test0",
-                    //     "key1"=> "test1",
-                    //     "key2"=> "test2",
-                    //     "key3"=> "test3",
-                    //     "key4"=> "test4"
-                    // ]
-                ];
-
-                $redirectUrl = initializeKorayPay($payloadNGN);
-
-                PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => '1',
-                        'reference' => $ref,
-                        'amount' => $amount,
-                        'balance' => walletBalance(auth()->user()->id),
-                        'status' => 'unsuccessful',
-                        'currency' => $baseCurrency,
-                        'channel' => 'kora',
-                        'type' => 'wallet_topup',
-                        'description' => 'Wallet Top Up',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'regular'
-                    ]);
-
-                return redirect($redirectUrl);
+                    $payloadNGN = [
+                        "amount"=> $request->balance, //$amount,
+                        "redirect_url"=> url('wallet/fund/redirect'),
+                        "currency"=> "NGN",
+                        "reference"=> $ref,
+                        "narration"=> "Wallet top up",
+                        "channels"=> [
+                            "card",
+                            "bank_transfer",
+                            "pay_with_bank"
+                        ],
+                        // "default_channel"=> "card",
+                        "customer"=> [
+                            "name"=> auth()->user()->name,
+                            "email"=> auth()->user()->email
+                        ],
+                        "notification_url"=> "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
+                        // "metadata"=>[
+                        //     "key0"=> "test0",
+                        //     "key1"=> "test1",
+                        //     "key2"=> "test2",
+                        //     "key3"=> "test3",
+                        //     "key4"=> "test4"
+                        // ]
+                    ];
+    
+                    $redirectUrl = initializeKorayPay($payloadNGN);
+    
+                    PaymentTransaction::create([
+                            'user_id' => auth()->user()->id,
+                            'campaign_id' => '1',
+                            'reference' => $ref,
+                            'amount' => $amount,
+                            'balance' => walletBalance(auth()->user()->id),
+                            'status' => 'unsuccessful',
+                            'currency' => $baseCurrency,
+                            'channel' => 'kora',
+                            'type' => 'wallet_topup',
+                            'description' => 'Wallet Top Up',
+                            'tx_type' => 'Credit',
+                            'user_type' => 'regular'
+                        ]);
+    
+                    return redirect($redirectUrl);
+                    
+                }
                 
             }else{
 
@@ -509,6 +516,11 @@ class WalletController extends Controller
 
     public function walletTop()
     {
+
+        return back()->with('success', 'Wallet Topup Successful');
+
+
+
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
