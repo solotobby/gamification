@@ -30,11 +30,11 @@
                                 their social media or business. We currently have two types of referral programs on Freebyz
                             </p>
                             <p>
-                                1. <strong>Direct referral program:</strong> When you refer a verified user, we pay you 50% of the referral fee 
-                                (N500 for naira wallets) or $1.5 (for dollar wallets). Using this simple referral principle, 
+                                1. <strong>Direct referral program:</strong> When you refer a verified user, 
+                                we pay you for every referral. Using this simple referral principle, 
                                 users have made millions by making review videos and social media posts using their referral links.
                                 <br>
-                                Apart from N500 commission on each referred friend, We offer amazing special referral bonuses in 3 levels:
+                                Apart from referral commission, We offer amazing special referral bonuses in 3 levels:
                                 <br>
                                 i. Refer 50+ verified users in a month to earn N25k + extra N5000 from Freebyz.
                                 <br>
@@ -70,18 +70,18 @@
                             </p>
                             <p>
                                 <b>Remote jobs offer a range of benefits for you, including:</b><br>
-- <b>Flexibility:</b> You can Work from anywhere, at any time, once you’re connected online.<br>
-- <b>Increased productivity:</b> Reduce distractions and optimize your work for more productivity. With Freebyz, you don’t need a skill to work, submit evidence and earn.<br>
-- <b>Improved work-life balance:</b> You can spend more time with family and friends<br>
-- <b>Reduced commuting time:</b> Save time and money by avoiding daily commutes.<br><br>
+                                - <b>Flexibility:</b> You can Work from anywhere, at any time, once you’re connected online.<br>
+                                - <b>Increased productivity:</b> Reduce distractions and optimize your work for more productivity. With Freebyz, you don’t need a skill to work, submit evidence and earn.<br>
+                                - <b>Improved work-life balance:</b> You can spend more time with family and friends<br>
+                                - <b>Reduced commuting time:</b> Save time and money by avoiding daily commutes.<br><br>
 
-<B>FREEBYZ</B> is a remote job and affiliate marketing website that connects workers with businesses and creators. With Freebyz, users can earn money by completing tasks online, promoting businesses and social media posts, and growing their online presence.
-Freebyz allows you to earn in dollars and convert your earnings to naira. You can also Find legitimate remote jobs and gigs.<br>
-- Promote businesses and social media posts to earn affiliate commissions ( for your clients) and grow your online presence.<br>
-- Get paid weekly for your work and referrals. You can withdraw every friday<br>
-- Freebyz rewards users for referring users to their platform. You can $1.5 dollars on each referral and millions of naira by referring friends to Freebyz.<br>
-- You can grow your social media presence on YouTube, TikTok, Facebook, Instagram, by getting unique and organic traffic followers, subscribers views likes and comments for your posts<br>
-- You can Monitor workers and approve or deny tasks to ensure quality and organic growth.<br>
+                                <B>FREEBYZ</B> is a remote job and affiliate marketing website that connects workers with businesses and creators. With Freebyz, users can earn money by completing tasks online, promoting businesses and social media posts, and growing their online presence.
+                                Freebyz allows you to earn in dollars and convert your earnings to naira. You can also Find legitimate remote jobs and gigs.<br>
+                                - Promote businesses and social media posts to earn affiliate commissions ( for your clients) and grow your online presence.<br>
+                                - Get paid weekly for your work and referrals. You can withdraw every friday<br>
+                                - Freebyz rewards users for referring users to their platform. You can $1.5 dollars on each referral and millions of naira by referring friends to Freebyz.<br>
+                                - You can grow your social media presence on YouTube, TikTok, Facebook, Instagram, by getting unique and organic traffic followers, subscribers views likes and comments for your posts<br>
+                                - You can Monitor workers and approve or deny tasks to ensure quality and organic growth.<br>
                             </p>
 							{{-- <p>
                                 Freebyz was created for you to make cool cash every day by doing simple social media jobs on YouTube, Facebook, TikTok, Instagram, and other social media platforms. 
