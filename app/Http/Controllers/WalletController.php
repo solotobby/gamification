@@ -155,7 +155,22 @@ class WalletController extends Controller
             if($baseCurrency == 'NGN'){
 
                 if($request->channel == 'paystack'){
+
                     $url = initiateTrasaction(time(), $amount, '/wallet/topup');
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => $request->balance,
+                        'balance' => walletBalance(auth()->user()->id),
+                        'status' => 'unsuccessful',
+                        'currency' => $baseCurrency,
+                        'channel' => 'kora',
+                        'type' => 'wallet_topup',
+                        'description' => 'Wallet Top Up',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
                     return redirect($url);
                 }else{
 
@@ -517,16 +532,23 @@ class WalletController extends Controller
     public function walletTop()
     {
 
-        return back()->with('success', 'Payment Completed. Your wallet will be credited!');
-
-
 
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
 
         $ref = $params['trxref']; //paystack
-        $res = verifyTransaction($ref); //
+         $res = verifyTransaction($ref); //
+
+        return paymentUpdate($res['data']['reference'], 'successful', $res['data']['amount']); 
+
+        activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+
+        return back()->with('success', 'Payment Completed. Your wallet will be credited!');
+
+
+
+        
    
         $amount = $res['data']['amount'];
 
@@ -539,7 +561,7 @@ class WalletController extends Controller
 
        if($res['data']['status'] == 'success') //success - paystack
        {
-            paymentUpdate($ref, 'successful'); //update transaction
+            //update transaction
             
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             $wallet->balance += $creditAmount;
