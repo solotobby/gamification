@@ -220,12 +220,12 @@
               <span id="activeReg"></span>
               </div>
             <div class="text-muted mb-3">Active Users</div>
-            <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
+            {{--<div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
 
                <span id="regUser"></span>
              
-            </div>
+            </div> --}}
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
             <a class="fw-medium" href="{{url('campaigns')}}">
@@ -406,6 +406,10 @@
                 var campaigns = response.campaigns;
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
+                var activeUsers = response.activeUsers.original;
+                       
+                var activeReg = activeUsers.active_users;
+                var regUser = activeUsers.registered_users;
                 // var loginPoints = response.loginPoints;
                 // var loginPointsValue = response.loginPointsValue;
                
@@ -416,6 +420,9 @@
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                 document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
+                document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
+                document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
+                          
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
 
@@ -449,6 +456,11 @@
                 var campaigns = response.campaigns;
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
+                var activeUsers = response.activeUsers.original;
+                       
+                
+                var activeReg = activeUsers.active_users;
+                var regUser = activeUsers.registered_users;
                 // var activeUsers = response.activeUsers;
 
 
@@ -462,6 +474,9 @@
                 document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
                 document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
+                document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
+                document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
+                          
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                 // document.getElementById("monthly").innerHTML = monthly.toFixed(2);
@@ -490,19 +505,17 @@
                             end_date: endDate,
                         },
                         success: function(response) {
-                          // console.log(response);
+                          console.log(response);
                           var totalUsers = response.registeredUser;
                           var verifiedUsers = response.verifiedUser;
                           var campaigns = response.campaigns;
                           var campaignValue = response.campaignValue;
                           var campaignWorker = response.campaignWorker;
-                          var activeUsers = response.activeUsers.original.meta;
-                          // var regUsers = response.regUsers.original.meta.total_register;
-                          // var loginPoints = response.loginPoints;
-                          // var loginPointsValue = response.loginPointsValue;
+                          var activeUsers = response.activeUsers.original;
+                       
                 
-                        var activeReg = activeUsers.total_active;
-                        var regUser = activeUsers.total_registered;
+                        var activeReg = activeUsers.active_users;
+                        var regUser = activeUsers.registered_users;
                        
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                           document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
