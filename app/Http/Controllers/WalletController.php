@@ -157,6 +157,7 @@ class WalletController extends Controller
                 if($request->channel == 'paystack'){
 
                     $url = initiateTrasaction(time(), $amount, '/wallet/topup');
+
                     PaymentTransaction::create([
                         'user_id' => auth()->user()->id,
                         'campaign_id' => '1',
@@ -171,6 +172,7 @@ class WalletController extends Controller
                         'tx_type' => 'Credit',
                         'user_type' => 'regular'
                     ]);
+                    
                     return redirect($url);
                 }else{
 

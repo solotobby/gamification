@@ -140,18 +140,17 @@
                     <label class="mb-1">Processor</label>
                         <select class="form-control" name="channel" required>
                           <option value="">Select One</option>
-                          @if(auth()->user()->email == 'solotobby@gmail.com')
-                              <option value="paystack">Paystack</option>
-                          @endif
+                            @if(auth()->user()->email == 'solotobby@gmail.com')
+                                <option value="paystack">Paystack</option>
+                            @endif
                           <option value="kora">Kora Pay</option>
                         </select>
                     </select>
                     </div>
 
-                  <div class=" mb-2">
-                  <label class="mb-1">Amount</label>
+                  <div class="mb-2">
+                      <label class="mb-1">Amount</label>
                       <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="500" value="{{ old('balance') }}" placeholder="Enter Amount" required>
-                  </select>
                   </div>
                  
   
