@@ -190,27 +190,6 @@ class Kernel extends ConsoleKernel
 
         })->hourly();
 
-        //notify users of changes to verification fees
-        $schedule->call(function(){ 
-
-            $user = User::where('is_verified', 0)
-            ->where('created_at', '>=', Carbon::now()->subMonths(6))->select('id', 'name', 'email')->get();
-
-            $subject = 'IMPORTANT! Upcoming Verification & Referral bonus Pricing changes';
-            $content = '';
-
-            foreach($user as $us){
-                Mail::to($us->email)->send(new MassMail($us, $content, $subject, ''));
-            }
-
-            $userInfo = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'Bulk Verification Notification Sent';
-            $content = 'Number of users Notified:'.$user->count();
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($userInfo, $content, $subject, ''));
-            // Question::where('option_A', null)->delete();
-
-        })->dailyAt('06:00'); //->daily();
-
         $schedule->call(function(){
 
             

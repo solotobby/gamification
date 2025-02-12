@@ -332,6 +332,10 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
+Route::get('view/posts', [\App\Http\Controllers\GistGrooveController::class, 'index']);
+
+Route::post('post', [\App\Http\Controllers\GistGrooveController::class, 'savePost'])->name('save.post');
+
 
 // ------------------------------------ Admin Routes ------------------------------------------ 
 //Admin Routes

@@ -99,11 +99,11 @@
 							</div><!-- .row -->
 						</form>
 
-                        <div class="col-md-12 text-center">
+                        {{-- <div class="col-md-12 text-center">
                             <br><br>
 							<a href="{{ url('auth/google') }}" class="btn btn-lg btn-round btn-dark">Login Using Google</a>
 						</div>
-                       
+                        --}}
                         <div class="col-md-12 text-center">
                             <br><br>
                             <a href="{{ route('register') }}" >Not registered yet, Click Here to Register</a>

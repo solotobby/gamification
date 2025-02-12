@@ -97,6 +97,13 @@
       </li> 
  --}}
 
+      {{-- <li class="nav-main-item">
+        <a class="nav-main-link" href="{{ url('view/posts') }}">
+          <i class="nav-main-link-icon fa fa-list"></i>
+          <span class="nav-main-link-name">Posts</span>
+        </a>
+      </li> --}}
+
 
       @if(auth()->user()->wallet->base_currency == 'NGN')
 
@@ -319,6 +326,7 @@
           <span class="nav-main-link-name">Buy DataBundle</span>
         </a>
       </li> --}}
+     
       
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">
