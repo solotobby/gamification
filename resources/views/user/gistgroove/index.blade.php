@@ -5,11 +5,11 @@
  <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Gist Posts</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Gist Groove Posts</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Dashboard</li>
-            <li class="breadcrumb-item active" aria-current="page">View Posts</li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Posts</li>
           </ol>
         </nav>
       </div>
@@ -100,26 +100,38 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
-                <th>Date</th>
                 <th>Title</th>
-                <th>Total Views</th>
-                <th>Unique Views</th>
+                <th>Total</th>
+                <th>Unique</th>
+                <th>Share</th>
               </tr>
             </thead>
             <tbody>
                 @foreach ($posts as $point)
                 <tr>
-                    <td>
+                    {{-- <td>
                      {{ \Carbon\Carbon::parse($point->created_at)->format('d F, Y') }}
-                    </td>
+                    </td> --}}
                     <td>
-                        {{ $point->title }}
+                        <a href="http://localhost:8080/details.php?slug={{ $point->slug }}" target="_blank"> {{ $point->title }} </a>
                     </td>
                     <td>
                         {{ $point->pageViews()->count() }}
                     </td>
                     <td>
                         {{ $point->pageViews()->distinct('ip_address')->count() }}
+                    </td>
+                    <td>
+                      <a href="" class="btn btn-sm btn-secondary">
+                        <span class="si si-social-twitter lg"></span>
+                      </a>
+                      <a class="btn btn-sm btn-primary" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:8080/details.php?slug={{ $point->slug }}" target="_blank">
+                        <span class="si si-social-facebook lg"></span>
+                      </a>
+                      <a class="btn btn-sm btn-info" href="">
+                        <span class="fab fa-linkedin-in lg"></span>
+                      </a>
+                      
                     </td>
                 </tr>
                 @endforeach
