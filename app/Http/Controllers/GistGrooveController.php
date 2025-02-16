@@ -30,12 +30,12 @@ class GistGrooveController extends Controller
         ]);
 
         $slug = Str::slug($request->title);
-
+        $categoryName = PostCategory::where('id', $request->category_id)->first();
         Post::create([
             'user_id' => auth()->user()->id, 
             'username' => auth()->user()->name, 
             'category_id' => $request->category_id, 
-            'category_name' => 'General', 
+            'category_name' => $categoryName->name, 
             'slug' => $slug,
             'title' => $request->title, 
             'body' => $request->body
