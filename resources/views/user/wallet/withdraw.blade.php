@@ -128,8 +128,10 @@
                           @endif
 
                         </span>
-                        <input type="text" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="0" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
-                        <span class="input-group-text">.00</span>
+                        @if(baseCurrency() == 'GHS')
+                            <input type="text" class="form-control @error('amount') is-invalid @enderror" id="reminder-credential" min="20" name="balance" value="{{ old('balance') }}" placeholder="Enter Amount" required>
+                            <span class="input-group-text">.00</span>
+                        @endif
                     </div>
                   </div> 
 
@@ -141,6 +143,7 @@
                           </span>
                         
                           <select name="account_bank" class="form-control" required>
+                            
                             <option value="">Select Bank</option>
                             <option value="AIRTEL">AIRTEL</option>
                             <option value="TIGO">TIGO</option>
