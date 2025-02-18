@@ -1,128 +1,191 @@
-@extends('layouts.master')
-@section('title', 'Register')
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-@section('style')
-<link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/css/intlTelInput.css"/>
-<script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <title>Freebyz - Register</title>
 
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
-{{-- <link rel="stylesheet" href="{{asset('dist/css/bootstrap-select-country.min.css')}}" />  --}}
+    <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
 
-@endsection
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework">
+    <meta property="og:site_name" content="Dashmix">
+    <meta property="og:description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
-@section('content')
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="{{ asset('src/assets/media/favicons/favicon.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
 
-    <!-- basic-breadcrumb start -->
-    <div class="basic-breadcrumb-area gray-bg ptb-70">
-        <div class="container">
-            <div class="basic-breadcrumb text-center">
-                <h3 class="">Register</h3>
-                <ol class="breadcrumb text-xs">
-                    <li><a href="{{ url('/') }}">Home</a></li>
-                    <li class="active">Create Account</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- basic-breadcrumb end -->
-		<div class="basic-contact-form ptb-90">
-			<div class="container">
-				<div class="area-title text-center">
-					<h2>Create Account</h2>
-					<p>Sign up below in just 2 minutes</p>
-				</div>
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-                        @if (session('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
+    <!-- Stylesheets -->
+    <!-- Fonts and Dashmix framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" id="css-main" href="{{ asset('src/assets/css/dashmix.min.css')}}">
+
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
+    <!-- END Stylesheets -->
+  </head>
+  <body>
+    <!-- Page Container -->
+    <!--
+      Available classes for #page-container:
+
+      GENERIC
+
+        'remember-theme'                            Remembers active color theme and dark mode between pages using localStorage when set through
+                                                    - Theme helper buttons [data-toggle="theme"],
+                                                    - Layout helper buttons [data-toggle="layout" data-action="dark_mode_[on/off/toggle]"]
+                                                    - ..and/or Dashmix.layout('dark_mode_[on/off/toggle]')
+
+      SIDEBAR & SIDE OVERLAY
+
+        'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
+        'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
+        'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
+        'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
+        'sidebar-dark'                              Dark themed sidebar
+
+        'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
+        'side-overlay-o'                            Visible Side Overlay by default
+
+        'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
+
+        'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
+
+      HEADER
+
+        ''                                          Static Header if no class is added
+        'page-header-fixed'                         Fixed Header
+
+
+      FOOTER
+
+        ''                                          Static Footer if no class is added
+        'page-footer-fixed'                         Fixed Footer (please have in mind that the footer has a specific height when is fixed)
+
+      HEADER STYLE
+
+        ''                                          Classic Header style if no class is added
+        'page-header-dark'                          Dark themed Header
+        'page-header-glass'                         Light themed Header with transparency by default
+                                                    (absolute position, perfect for light images underneath - solid light background on scroll if the Header is also set as fixed)
+        'page-header-glass page-header-dark'         Dark themed Header with transparency by default
+                                                    (absolute position, perfect for dark images underneath - solid dark background on scroll if the Header is also set as fixed)
+
+      MAIN CONTENT LAYOUT
+
+        ''                                          Full width Main Content if no class is added
+        'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
+        'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
+
+      DARK MODE
+
+        'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
+    -->
+    <div id="page-container">
+
+      <!-- Main Container -->
+      <main id="main-container">
+        <!-- Page Content -->
+        <div class="bg-image" style="background-image: url('{{ asset('src/assets/media/photos/photo22@2x.jpg')}}');">
+          <div class="row g-0 bg-primary-op">
+            <!-- Main Section -->
+            <div class="hero-static col-md-6 d-flex align-items-center bg-body-extra-light">
+              <div class="p-3 w-100">
+                <!-- Header -->
+                <div class="mb-3 text-center">
+                  <a class="link-fx fw-bold fs-1" href="https://freebyz.com">
+                    <span class="text-dark">Free</span><span class="text-primary">byz</span>
+                  </a>
+                  <p class="text-uppercase fw-bold fs-sm text-muted">Sign Up</p>
+                </div>
+                <!-- END Header -->
+
+                <!-- Sign In Form -->
+                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
+                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <div class="row g-0 justify-content-center">
+                  <div class="col-sm-8 col-xl-6">
+                    
+                    <form class="js-validation-signin" method="POST" action="{{ url('register/user') }}">
+                            @csrf
+                      <div class="py-3">
+                        @include('layouts.resources.reg')
+                        <div class="col-md-12 mb-3">
+
+                            <label>Referral Code</label>
+                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->referral_code }}" required readonly>
                         </div>
-                        @endif
-            
-                        @if (session('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('error') }}
-                        </div>
-                        @endif
-            
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
+                        <div class="mb-3">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input" id="signup-terms" name="signup-terms" required>
+                              <label class="form-check-label" for="signup-terms">I agree to Terms &amp; Conditions</label>
                             </div>
-                        @endif
-                        <form id="contact-form" method="POST" action="{{ url('register/user') }}">
-                        @csrf
+                        </div>
+                        <div class="mb-4">
+                            <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary">
+                              <i class="fa  fa-plus opacity-50 me-1"></i> Sign Up
+                            </button>
+                            <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
+                              
+                              <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1" href="{{ url('login') }}">
+                                <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Sign In
+                              </a>
+                            </p>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <!-- END Sign In Form -->
+              </div>
+            </div>
+            <!-- END Main Section -->
 
-							<div class="row">
-                                @include('layouts.resources.reg')
+            <!-- Meta Info Section -->
+            <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
+              <div class="p-3">
+                <p class="display-4 fw-bold text-white mb-3">
+                  Welcome to the future of possibilities
+                </p>
+                <p class="fs-lg fw-semibold text-white-75 mb-0">
+                  Copyright &copy; <span data-toggle="year-copy"></span>
+                </p>
+              </div>
+            </div>
+            <!-- END Meta Info Section -->
+          </div>
+        </div>
+        <!-- END Page Content -->
+      </main>
+      <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
 
-                                <div class="col-md-12 form-group">
+    <!--
+      Dashmix JS
 
-									<label>Referral Code</label>
-									<input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->referral_code }}" required readonly>
-								</div>
-                                <div class="col-md-12 form-group">
-                                    <input type="checkbox" name="terms" required> <span>I agree with the <a href="{{ url('terms') }}">Terms and Conditions</a></span> 
-                                </div>
+      Core libraries and functionality
+      webpack is putting everything together at assets/_js/main/app.js
+    -->
+    <script src="{{ asset('src/assets/js/dashmix.app.min.js')}}"></script>
 
-                                <input hidden name="ref_id" value="{{ $name->id }}">
-								
-								<div class="col-md-12 text-center">
-									<button type="submit" class="btn btn-lg btn-round btn-dark">Register</button>
-								</div>
-                                <div class="col-md-12 text-center">
-                                    <br><br>
-                                    <a href="{{ route('login') }}" >Already a registered, Click Here to Login</a>
-        
-                                </div>
-                                
-                                	
+    <!-- jQuery (required for jQuery Validation plugin) -->
+    <script src="{{ asset('src/assets/js/lib/jquery.min.js')}}"></script>
 
-							</div><!-- .row -->
-						</form>
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('src/assets/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
 
-                       
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-@endsection
-
-@section('script')
-<!-- Latest compiled and minified JavaScript -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
-
-<script src="{{asset('dist/js/bootstrap-select-country.min.js')}}"></script> --}}
-
-<script>
-
-$("document").ready( function () {
-       // alert("Hello, world");
-   
-    
-    var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
-        separateDialCode: true,
-        preferredCountries:["ng", "gb", "us"],
-        hiddenInput: "full",
-        utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
-    });
-    function myFunction() {
-        var full_number = phone_number.getNumber(intlTelInputUtils.numberFormat.E164);
-        $("input[name='phone_number[full]'").val(full_number);
-        // alert(full_number)
-    }
-
-}); 
-</script>
-
-@endsection
+    <!-- Page JS Code -->
+    <script src="{{ asset('src/assets/js/pages/op_auth_signin.min.js')}}"></script>
+  </body>
+</html>
