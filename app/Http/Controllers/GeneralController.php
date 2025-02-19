@@ -260,7 +260,7 @@ class GeneralController extends Controller
 
     public function landingPage()
     {  
-        
+        dailyVisit('LandingPage');
         return redirect('https://freebyz.com/');
         // dailyVisit('LandingPage');
         // // $users = User::where('role', 'regular')->count();
