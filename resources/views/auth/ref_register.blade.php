@@ -123,7 +123,7 @@
                         <div class="col-md-12 mb-3">
 
                             <label>Referral Code</label>
-                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_name" value="{{ $name->referral_code }}" required readonly>
+                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_code" value="{{ $name->referral_code }}" required readonly>
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
