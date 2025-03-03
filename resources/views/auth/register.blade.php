@@ -120,6 +120,12 @@
                             @csrf
                       <div class="py-3">
                         @include('layouts.resources.reg')
+                        
+                        <div class="col-md-12 mb-3">
+                            <label>Referral Code (Optional)</label>
+                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_code">
+                        </div>
+
                         <div class="mb-4">
                             <div class="form-check">
                               <input type="checkbox" class="form-check-input" id="signup-terms" name="signup-terms" required>

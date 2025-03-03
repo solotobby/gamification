@@ -55,6 +55,15 @@ class RegisterController extends Controller
 
     public function registerUser(Request $request)
     {
+        $ref_id = $request->referral_code;
+        if ($ref_id != '') {
+            $name = User::where('referral_code', $ref_id)->first();
+            if (!$name) {
+               
+                return view('auth.error', ['error' => 'Invalid referral code']);
+            }  
+        }
+        
         $curLocation = '';
         if(env('APP_ENV')  == 'local_test'){
             $curLocation = 'United Kingdom';
@@ -85,20 +94,27 @@ class RegisterController extends Controller
         }
 
 
-        $user = $this->createUser($request);
-        if ($user) {
-            Auth::login($user);
-            // PaystackHelpers::userLocation('Registeration');
-            setProfile($user); //set profile page
-            
-            return redirect('/home');
+         $user = $this->createUser($request);
+        if ($user == 'Error') {
+            return view('auth.error', ['error' => 'Invalid Referral code']);
+        }else{
+
+             // return $user;
+             Auth::login($user);
+             // PaystackHelpers::userLocation('Registeration');
+             setProfile($user); //set profile page
+             
+             return redirect('/home');
+
+
         }
+
     }
 
     public function createUser($request)
     {
 
-        $ref_id = $request->ref_id;
+        $ref_id = $request->referral_code;
         $name = $request->first_name . ' ' . $request->last_name;
         $user = User::create([
             'name' => $name,
@@ -114,8 +130,14 @@ class RegisterController extends Controller
         $user->save();
         Wallet::create(['user_id' => $user->id, 'balance' => '0.00']);
 
-        if ($ref_id != 'null') {
-            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+        if ($ref_id != '') {
+            $name = User::where('referral_code', $ref_id)->first();
+            if (!$name) {
+                return 'Error';
+                //return view('auth.error', ['error' => 'Invalid referral code']);
+            }
+
+            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' =>  $name->id]);
         }
 
         $location = getLocation(); //get user location dynamically
@@ -135,7 +157,7 @@ class RegisterController extends Controller
         }
 
         $subject = 'Welcome to Freebyz';
-        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         // if ($location == 'Nigeria') {
         //     $phone = '234' . substr($request->phone, 1);

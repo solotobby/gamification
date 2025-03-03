@@ -321,13 +321,12 @@
                           Earn up to $500 daily. Monetize every comment, likes and views.
                   </p>
                 </div>
-                
               </div>
             </div>
           </div> 
         </a> 
 
-        <a href="{{ route('agent.wellahealth') }}">
+        {{-- <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
               <div class="d-md-flex justify-content-md-between align-items-md-center">
@@ -343,7 +342,7 @@
               </div>
             </div>
           </div> 
-        </a> 
+        </a>  --}}
 
         <a href="https://zireemilsoude.net/4/8562126" target="_blank">
           <div class="block block-rounded block-fx-pop mb-2">
@@ -355,9 +354,7 @@
                   <p class="fs-sm text-muted">
                     <i class="fa fa-heart me-1"></i>Play Games and Install Apps to earn more money
                   </p>
-                  
                 </div>
-                
               </div>
             </div>
           </div> 
