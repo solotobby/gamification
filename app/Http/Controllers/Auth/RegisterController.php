@@ -147,9 +147,9 @@ class RegisterController extends Controller
         $wall->save();
 
         activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
-        if(env('APP_ENV') == 'production'){
-            userLocation('Registeration');
-        }
+        // if(env('APP_ENV') == 'production'){
+        //     userLocation('Registeration');
+        // }
 
         if ($location == 'Nigeria') {
             $phone = '234' . substr($request->phone, 1);
