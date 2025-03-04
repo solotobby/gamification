@@ -98,12 +98,10 @@ class RegisterController extends Controller
         if ($user == 'Error') {
             return view('auth.error', ['error' => 'Invalid Referral code']);
         }else{
-
              // return $user;
              Auth::login($user);
-             // PaystackHelpers::userLocation('Registeration');
              setProfile($user); //set profile page
-             
+             activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
              return redirect('/home');
 
 
@@ -146,7 +144,7 @@ class RegisterController extends Controller
         $wall->base_currency_set = $location == "Nigeria" ? true : false;
         $wall->save();
 
-        activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+       
         // if(env('APP_ENV') == 'production'){
         //     userLocation('Registeration');
         // }
@@ -157,7 +155,7 @@ class RegisterController extends Controller
         }
 
         $subject = 'Welcome to Freebyz';
-        // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         // if ($location == 'Nigeria') {
         //     $phone = '234' . substr($request->phone, 1);

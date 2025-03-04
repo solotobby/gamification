@@ -539,3 +539,14 @@ Route::get('admin/task', [\App\Http\Controllers\Admin\TaskController::class, 'in
 
 Route::post('admin/task', [\App\Http\Controllers\Admin\TaskController::class, 'store'])->name('admin.store.task');
 Route::post('admin/task/update', [\App\Http\Controllers\Admin\TaskController::class, 'updateTask'])->name('admin.update.task');
+
+Route::get('admin/professional', [\App\Http\Controllers\Admin\ProfessionalController::class, 'index']);
+Route::post('admin/professional/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'store'])->name('admin.professional.store');
+
+Route::get('admin/professional/category', [\App\Http\Controllers\Admin\ProfessionalController::class, 'professionalCategory']);
+Route::get('get/professional/category', [\App\Http\Controllers\Admin\ProfessionalController::class, 'loadProfessionalCategories']);
+Route::get('get/professional/sub/category/{id}', [\App\Http\Controllers\Admin\ProfessionalController::class, 'loadProfessionalSubCategories']);
+
+
+Route::post('professional/category/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalCategory'])->name('professional.store.category');
+Route::post('professional/subcategory/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalSubCategory'])->name('professional.sub.store.category');

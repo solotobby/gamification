@@ -5,22 +5,23 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Manage Points</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Manage Categories</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"> Points </li>
-            <li class="breadcrumb-item active" aria-current="page">Point</li>
+            <li class="breadcrumb-item"> Home </li>
+            <li class="breadcrumb-item active" aria-current="page">Categories</li>
           </ol>
         </nav>
       </div>
     </div>
 </div>
 
- <!-- Page Content -->
+
+
  <div class="content">
     <div class="block block-rounded">
         <div class="block-header block-header-default">
-          <h3 class="block-title">Create Point</h3>
+          <h3 class="block-title">Create Professional Category</h3>
         </div>
         <div class="block-content">
             @if (session('success'))
@@ -39,36 +40,60 @@
                 </div>
             @endif
 
-            <form action="{{ route('points') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('professional.store.category') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row push">
                     <div class="col-lg-4">
                         <p class="text-muted">
-                        {{-- Create The Categories here --}}
+                        Create The Categories here
                         </p>
                     </div>
                     <div class="col-lg-8 col-xl-5">
                         <div class="mb-4">
-                            <label class="form-label" for="example-text-input">Name</label>
-                            <select name="name" class="form-control" required>
-                                <option value="">Select one</option>
-                                <option value="login">Login</option>
-                                <option value="referral">Referral</option>
-                                <option value="post_job">Post Job</option>
-                                <option value="complete_job">Complete Job</option>
-                            </select>
+                        <label class="form-label" for="example-text-input">Name</label>
+                        <input type="text" class="form-control" id="example-text-input" name="name" placeholder="Category">
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="example-text-input">Point</label>
-                            <input type="number" class="form-control" id="example-text-input" name="point" placeholder="Point">
-                        </div>
-                        <div class="mb-4">
-                            <button class="btn btn-primary" type="submit">Create</button>
+                            <button class="btn btn-primary" type="submit">Create Category</button>
                         </div>
                     </div>
                 </div>
             </form>
+            <form action="{{ route('professional.sub.store.category') }}" method="POST">
+                @csrf
+                <div class="row push">
+                    <div class="col-lg-4">
+                        <p class="text-muted">
+                        Enter Subcategory Information
+                        </p>
+                    </div>
+                
+                    <div class="col-lg-8 col-xl-5">
+                        <div class="mb-4">
+                        <label class="form-label" for="example-select">Select Category</label>
+                        <select class="form-select" id="example-select" name="category_id" required>
+                            <option value="">Select One</option>
+                            @foreach ($category as $cate)
+                                <option value="{{ $cate->id }}">{{$cate->name}}</option>
+                            @endforeach
+                        </select>
+                        </div>
     
+                        <div class="mb-4">
+                            <label class="form-label" for="example-text-input">SubCategory Name</label>
+                            <input type="text" class="form-control" id="example-text-input" name="name" placeholder="Category">
+                        </div>
+    
+                      
+    
+                        <div class="mb-4">
+                            <button class="btn btn-primary" type="submit">Create SubCategory</button>
+                        </div>
+                    
+                    </div>
+             
+                </div>
+            </form>
 
 
 
@@ -77,9 +102,9 @@
 
     </div>
 
-    <div class="block-content">
+    {{-- <div class="block-content">
         <p>
-            {{-- List of Categories --}}
+            List of Categories
         </p>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
@@ -131,7 +156,7 @@
                         
                         <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
+                        {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --
                         </div>
                     </div>
                     </div>
@@ -140,8 +165,12 @@
             </tbody>
           </table>
         </div>
-    </div>
+    </div> --}}
 
  </div>
+
+
+
+
 
 @endsection
