@@ -28,7 +28,7 @@
         <div class="row push">
             <div class="col-lg-4">
               <p class="text-muted">
-                Some vital information about your new project
+                Some vital information about your skill set
               </p>
             </div>
           
@@ -37,25 +37,45 @@
                     <label class="form-label" for="dm-project-new-name">
                       Title 
                     </label><br>
-                    {{ $skill->title }}
+                   - {{ $skill->title }}
                 </div>
+                <div class="mb-4">
+                  <label class="form-label" for="dm-project-new-name">
+                    Skill
+                  </label><br>
+                  - {{ $skill->skill->name }}
+              </div>
                 <div class="mb-4">
                     <label class="form-label" for="dm-project-new-name">
                      Brief Description
                     </label><br>
-                    {!! $skill->description !!}
+                    - {!! $skill->description !!}
                 </div>
                 <div class="mb-4">
+                  <label class="form-label" for="dm-project-new-name">
+                  Profeciency Level
+                  </label><br>
+                  - {!! @$skill->profeciencyLevel->name !!}
+              </div>
+              <div class="mb-4">
+                <label class="form-label" for="dm-project-new-name">
+                Years of Experience
+                </label><br>
+                - {!! $skill->year_experience !!} years
+            </div>
+                <div class="mb-4">
                     <label class="form-label" for="dm-project-new-name">
-                    Price Range
+                    Location
                     </label><br>
-                    From {!! $skill->min_price !!} to  {!! $skill->max_price !!} 
+                    - {!! $skill->location !!}
                 </div>
             </div>
-            <h2 class="content-heading pt-0">Portfolio</h2>
+
+
+            {{-- <h2 class="content-heading pt-0">Portfolio</h2> --}}
            
 
-            <div class="row push">
+            {{-- <div class="row push">
                 <div class="col-lg-4">
                   <p class="text-muted">
                    Your portfolio
@@ -95,7 +115,7 @@
                     @endif
 
                 </div>
-            </div>
+            </div> --}}
             
 
         </div>

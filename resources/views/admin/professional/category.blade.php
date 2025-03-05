@@ -95,6 +95,30 @@
                 </div>
             </form>
 
+            <hr>
+            
+            <form action="{{ route('professional.store.skillset') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row push">
+                    <div class="col-lg-4">
+                        <p class="text-muted">
+                        Enter Skills
+                        </p>
+                    </div>
+                    <div class="col-lg-8 col-xl-5">
+                        <div class="mb-4">
+                        <label class="form-label" for="example-text-input">Name of Skill set</label>
+                        <input type="text" class="form-control" id="example-text-input" name="name" placeholder="Enter Skillset Name">
+                        </div>
+                        <div class="mb-4">
+                            <button class="btn btn-secondary" type="submit">Create Skillset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
 
 
         </div>
