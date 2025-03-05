@@ -550,3 +550,5 @@ Route::get('get/professional/sub/category/{id}', [\App\Http\Controllers\Admin\Pr
 
 Route::post('professional/category/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalCategory'])->name('professional.store.category');
 Route::post('professional/subcategory/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalSubCategory'])->name('professional.sub.store.category');
+Route::post('professional/skillset/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalSkillset'])->name('professional.store.skillset');
+

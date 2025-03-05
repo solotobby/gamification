@@ -16,7 +16,7 @@
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('admin/professional') }}">
-              <span class="nav-main-link-name">Create</span>
+              <span class="nav-main-link-name">Create Job</span>
             </a>
           </li>
           <li class="nav-main-item">

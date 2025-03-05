@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProfessionalCategory;
 use App\Models\ProfessionalJob;
 use App\Models\ProfessionalSubCategories;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -58,5 +59,10 @@ class ProfessionalController extends Controller
     public function professionalCategory(){
         $category = ProfessionalCategory::all();
         return view('admin.professional.category', ['category' => $category]);
+    }
+
+    public function storeProfessionalSkillset(Request $request){
+        Skill::create(['name' => $request->name]);
+        return back()->with('success', 'Skillset Created');
     }
 }
