@@ -23,6 +23,11 @@
 
    <!-- Page Content -->
    <div class="content">
+    <div class="alert alert-info">
+
+      Position yourself to get hired for remote and full time job opportunities.
+
+    </div>
     <div class="block block-rounded block-bordered">
       <div class="block-content">
         {{-- @if(!$skills) --}}
@@ -38,6 +43,56 @@
               </p>
             </div>
             <div class="col-lg-10">
+              @if (session('success'))
+                  <script>
+                      Swal.fire('Success!', '{{ session('success') }}', 'success');
+                  </script>
+              @endif
+
+              @if (session('error'))
+                  <script>
+                      Swal.fire('Error!', '{{ session('error') }}', 'error');
+                  </script>
+              @endif
+
+              @if (session('error'))
+                  <script>
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Validation Error',
+                          text: '{{ session('error') }}',
+                      });
+                  </script>
+              @endif
+
+              @if ($errors->any())
+                  <script>
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Validation Error',
+                          html: '{!! implode("<br>", $errors->all()) !!}', // Displays all errors in SweetAlert
+                      });
+                  </script>
+              @endif
+
+              @if (session('success'))
+                  <script>
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Success',
+                          text: '{{ session('success') }}',
+                      });
+                  </script>
+              @endif
+
+
+
+              @if ($errors->any())
+                  @php
+                      Alert::error('Validation Error', implode("\n", $errors->all()));
+                  @endphp
+              @endif
+
                 @if (session('success'))
                     <div class="alert alert-success" role="alert">
                         {{ session('success') }}
@@ -50,7 +105,7 @@
                     </div>
                 @endif
 
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
                         @foreach ($errors->all() as $error)
@@ -58,7 +113,7 @@
                         @endforeach
                     </ul>
                 </div>
-                @endif
+                @endif --}}
 
               <div class="mb-4">
                 <label class="form-label" for="dm-project-new-name">
@@ -89,15 +144,17 @@
                 </div>
               </div>
 
-              {{-- <div class="row mb-4">
-                <label class="form-label" for="dm-project-new-color">Price Range <span class="text-danger">*</span></label>
+              <div class="row mb-4">
+                <label class="form-label" for="dm-project-new-color">Price Range (in {{ baseCurrency() }}) <span class="text-danger">*</span> </label>
                 <div class="col-md-6">
-                  <input type="number" required class="form-control" id="dm-project-new-color" name="min_price" placeholder="Min. Price">
+                  Minimum Price
+                  <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->min_price }}" name="min_price" placeholder="Min. Price">
                 </div>
                 <div class="col-md-6">
-                    <input type="number" required class="form-control" id="dm-project-new-color" name="max_price" placeholder="Max. Price">
+                  Maximum Price
+                    <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->max_price }}" name="max_price" placeholder="Max. Price">
                 </div>
-              </div> --}}
+              </div>
 
               <div class="row mb-4">
                 <div class="col-lg-12">
@@ -127,13 +184,11 @@
                     <option value="6-10" {{ @$skillAsset->year_experience == '6-10' ? 'selected' : '' }}>6-10 years</option>
                     <option value="10+" {{ @$skillAsset->year_experience == '10+' ? 'selected' : '' }}>10+ years</option>
 
-                    {{-- <option value="0-2">0-2 years</option>
-                    <option value="3-5">3-5 years</option>
-                    <option value="6-10">6-10 years</option>
-                    <option value="10+">10+ years</option> --}}
                   </select>
                 </div>
               </div>
+
+
 
               {{-- <div class="row mb-4">
                 <div class="col-lg-12">
@@ -185,9 +240,15 @@
            <div class="row push">
             <div class="col-lg-10 col-xl-5 offset-lg-2">
               <div class="mb-4">
+                @if(@$skillAsset)
                 <button type="submit" class="btn btn-alt-primary">
-                  <i class="fa fa-check-circle me-1 opacity-50"></i> Continue
+                  <i class="fa fa-check-circle me-1 opacity-50"></i>  Update
                 </button>
+                @else
+                <button type="submit" class="btn btn-alt-primary">
+                  <i class="fa fa-plus-circle me-1 opacity-50"></i>  Submit
+                </button>
+                @endif
               </div>
             </div>
           </div>
@@ -196,32 +257,33 @@
           
           {{-- @else --}}
 
-
+          @if(@$skillAsset)
           <!-- Optional Info -->
-          {{-- <h2 class="content-heading pt-0">Portfolio</h2>
+          <h2 class="content-heading pt-0">Portfolio</h2>
           <form action="{{ route('add.portfolio') }}" method="POST">
             @csrf
             <div class="row push">
-                <div class="col-lg-4">
+           
+              <div class="col-lg-2">
                 <p class="text-muted">
                    Tell us about what you have done. You will be hired based on your experience
                 </p>
                 </div>
-                <div class="col-lg-8 ">
+                <div class="col-lg-10">
                     <div class="row mb-4">
                         <div class="col-md-12">
                         <label class="form-label" for="dm-project-new-color">Project Title</label>
-                        <input type="text" class="form-control" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project">
+                        <input type="text" class="form-control" value="{{ old('title') }}" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project">
                         </div>
                     </div>
 
                 <div class="mb-4">
                     <label class="form-label" for="dm-project-new-description">Description of the Project</label>
-                    <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What is this project about?"></textarea>
+                    <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What the project is about?">{{ old('description') }}</textarea>
                 </div>
 
              
-                    <div class="mb-4">
+                    {{-- <div class="mb-4">
                         <label class="form-label" for="dm-project-new-description">Choose Skills Used</label>
                         <select class="js-select2 form-select" id="example-select2-multiple" name="tools[]" style="width: 100%;" data-placeholder="Choose as many skills..." multiple required>
                           <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -229,9 +291,9 @@
                                   <option value="{{ $tool->id }}">{{ $tool->name }}</option>
                               @endforeach
                         </select>
-                    </div>
+                    </div> --}}
 
-                    <input type="hidden" name="skill_id" value="{{ @$skill->id }}" required>
+                    <input type="hidden" name="skill_id" value="{{ @$skillAsset->id }}" required>
                  
                 <!-- Submit -->
                     <div class="row push">
@@ -248,7 +310,8 @@
                 </div>
             </div>
             <!-- END Optional Info -->
-          </form> --}}
+          </form>
+          @endif
      
               {{-- @if($portfolio->count() > 0)
                 <div class="row push">
@@ -317,6 +380,6 @@
 
   <!-- Page JS Helpers (CKEditor 5 plugins) -->
   <script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script> --}}
+  
 
 @endsection
-

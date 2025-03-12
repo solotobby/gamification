@@ -154,5 +154,9 @@ class User extends Authenticatable
         return $this->hasMany(Rating::class, 'campaign_id');
     }
 
+    public function skill(){
+        return $this->hasOne(SkillAsset::class, 'user_id');
+    }
+
     
 }

@@ -159,7 +159,9 @@ Route::post('edit/campaign', [\App\Http\Controllers\CampaignController::class, '
 Route::get('decline/get/sub/categories/info', [\App\Http\Controllers\Admin\AdminController::class, 'declineCampaign']);
 
 Route::get('extend/payment', [\App\Http\Controllers\CampaignController::class, 'campaign_extension_payment']);
-Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign']);
+
+Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign'])->middleware(['auth', 'check.skills']);
+
 Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'submitWork'])->name('post.campaign.work');
 Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');
 Route::get('my/campaigns', [\App\Http\Controllers\CampaignController::class, 'index'])->name('my.campaigns');
@@ -319,7 +321,7 @@ Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'top
 Route::get('test/campaign', [\App\Http\Controllers\HomeController::class, 'testCampaignList']);
 ///skills 
 Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
-Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create']);
+Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
 Route::post('store/skill',[\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
 Route::get('my/skill',[\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
 
@@ -335,6 +337,19 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 Route::get('view/posts', [\App\Http\Controllers\GistGrooveController::class, 'index']);
 
 Route::post('post', [\App\Http\Controllers\GistGrooveController::class, 'savePost'])->name('save.post');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ------------------------------------ Admin Routes ------------------------------------------ 

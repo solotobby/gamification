@@ -37,7 +37,7 @@
     <!-- END Stylesheets -->
 
     {{-- <script src="https://alwingulla.com/88/tag.min.js" data-zone="115972" async data-cfasync="false"></script> --}}
-
+    @include('sweetalert::alert')
     
     <script>
       !function(f,b,e,v,n,t,s)

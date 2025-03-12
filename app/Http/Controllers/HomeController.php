@@ -81,6 +81,8 @@ class HomeController extends Controller
             // setWalletBaseCurrency();
         }
 
+        // return auth()->user()->skill;
+
         // if (auth()->user()->phone == '' || auth()->user()->country == '') {
         //     return view('phone');
         // }
@@ -88,6 +90,8 @@ class HomeController extends Controller
         if (auth()->user()->age_range == '' || auth()->user()->gender == '') { //compell people to take survey
             return redirect('survey');
         }
+
+
 
        
 

@@ -20,9 +20,9 @@
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-    <link rel="shortcut icon" href="{{ asset('src/assets/media/favicons/favicon.png')}}">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="shortcut icon" href="{{ asset('src/assets/media/favicons/faviconss.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192ss.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180ss.png">
     <!-- END Icons -->
 
     <!-- Stylesheets -->
@@ -115,6 +115,22 @@
                 <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                 <div class="row g-0 justify-content-center">
                   <div class="col-sm-8 col-xl-6">
+
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     
                     <form class="js-validation-signin" method="POST" action="{{ route('login.user') }}">
                             @csrf
