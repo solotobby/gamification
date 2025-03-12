@@ -12,6 +12,7 @@ use App\Models\SkillCategory;
 use App\Models\SkillProficiencyLevel;
 use App\Models\Tool;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SkillsController extends Controller
 {
@@ -82,8 +83,6 @@ class SkillsController extends Controller
 
     public function storeSkill(Request $request){
 
-
-        
         $validated = $this->validate($request, [
             'title' => 'required|string',
             'skill_id' => 'required|numeric',
@@ -92,12 +91,21 @@ class SkillsController extends Controller
             'profeciency_level' => 'required|string',
             'availability' => 'required|string',
             'location' => 'required|string',
-            // 'max_price' => 'required|numeric',
-            // 'min_price' => 'required|numeric'
+            'min_price' => ['required', 'numeric', 'min:0'],
+            'max_price' => [
+                'required', 'numeric', 'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->min_price > $request->max_price) {
+                        session()->flash('error', "Min price cannot be greater than Max price.");
+                        $fail('Min price cannot be greater than Max price.');
+                    }
+                }
+            ],
         ]);
 
         // $request->request->add(['user_id' => auth()->user()->id, 'max_price' => 0, 'min_price' => 0]);
         if($validated){
+
             SkillAsset::updateOrCreate(
                 ['user_id' => auth()->user()->id],
                 [
@@ -107,39 +115,80 @@ class SkillsController extends Controller
                 'profeciency_level' => $request->profeciency_level, 
                 'year_experience' => $request->year_experience, 
                 'location' => $request->location, 
-                'availability' => $request->availability
+                'availability' => $request->availability,
+                'max_price' => $request->max_price, 
+                'min_price' => $request->min_price
                 ]
             );
+
+            Alert::success('Success', 'Skill Updated Successfully');
+            return back()->with('success', 'Skill Updated Successfully');
+        
+        
+        }else{
+            Alert::error('Error', 'Something happened, please try again later');
+            return back()->with('error', 'Something happened, please try again later');
         }
-        return back()->with('success', 'Skill Updated Successfully');
-
-
-        // return back();
- 
+        
     }
 
     public function addPortfolio(Request $request){
        $validated =  $this->validate($request, [
             'title' => 'required|string',
-            'description' => 'required|string',
-            'tools' => 'required|array',
+            
+            'description' => [
+            'required',
+            function ($attribute, $value, $fail) {
+                // List of social media domains to check
+                $socialMediaDomains = [
+                    'facebook.com', 'fb.com',
+                    'twitter.com', 'x.com',
+                    'instagram.com',
+                    'youtube.com', 'youtu.be',
+                    'tiktok.com',
+                    'linkedin.com',
+                    'snapchat.com',
+                    'reddit.com',
+                ];
+
+                // Create a regex pattern to detect URLs with these domains
+                $pattern = '/(?:https?:\/\/)?(?:www\.)?(?:' . implode('|', array_map('preg_quote', $socialMediaDomains)) . ')/i';
+
+                if (preg_match($pattern, $value)) {
+
+                    session()->flash('error', "The {$attribute} field contains prohibited social media links.");
+                    $fail("The {$attribute} field contains prohibited social media links.");
+             
+                    // Alert::error('Error', "The {$attribute} field contains prohibited social media links");
+                    // $fail("The {$attribute} field contains prohibited social media links.");
+
+                }
+            },],
+
+
+          
             
         ]);
-        //return $validated;
+       
 
         if($validated){
             $request->request->add(['user_id' => auth()->user()->id]); 
             $portfolio = Portfolio::create($request->all());
+            // if($portfolio){
+            //     foreach($request->tools as $tool){
+            //         PortfolioTool::create(['portfolio_id' => $portfolio->id, 'tool_id' => $tool]);
+            //     }
+            // }
             if($portfolio){
-                foreach($request->tools as $tool){
-                    PortfolioTool::create(['portfolio_id' => $portfolio->id, 'tool_id' => $tool]);
-                }
+                Alert::success('Success', 'Portfolio added Successfully');
+                return back()->with('success', 'Portfolio added Successfully');    
             }
-
-            return back()->with('success', 'Portfolio Created Successfully');
-
+            
         }else{
-            return back()->with('error', 'An Erro occoured, please try again');
+            Alert::error('Error', 'An Error occoured, please try again');
+            return back()->with('error', 'An Error occoured, please try again');
+
+            // return back()->with('errors', 'An Error occoured, please try again');
         }
     }
 
