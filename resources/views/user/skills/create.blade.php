@@ -145,7 +145,7 @@
               </div>
 
               <div class="row mb-4">
-                <label class="form-label" for="dm-project-new-color">Price Range (in {{ baseCurrency() }}) <span class="text-danger">*</span> </label>
+                <label class="form-label" for="dm-project-new-color">Enter a Range of how much you will charge per Job (in {{ baseCurrency() }}) <span class="text-danger">*</span> </label>
                 <div class="col-md-6">
                   Minimum Price
                   <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->min_price }}" name="min_price" placeholder="Min. Price">
