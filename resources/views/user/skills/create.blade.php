@@ -30,20 +30,7 @@
     </div>
     <div class="block block-rounded block-bordered">
       <div class="block-content">
-        {{-- @if(!$skills) --}}
-       
-          <!-- Vital Info -->
-          <h2 class="content-heading pt-0">Vital Info</h2>
-          <form action="{{ route('setup.skill') }}" method="POST">
-            @csrf
-            <div class="row push">
-            <div class="col-lg-2">
-              <p class="text-muted">
-                Set up your profile to start getting Skilled Jobs
-              </p>
-            </div>
-            <div class="col-lg-10">
-              @if (session('success'))
+        @if (session('success'))
                   <script>
                       Swal.fire('Success!', '{{ session('success') }}', 'success');
                   </script>
@@ -85,8 +72,6 @@
                   </script>
               @endif
 
-
-
               @if ($errors->any())
                   @php
                       Alert::error('Validation Error', implode("\n", $errors->all()));
@@ -105,157 +90,172 @@
                     </div>
                 @endif
 
-                {{-- @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        @if(!@$skillAsset)
+       
+          <!-- Vital Info -->
+          <h2 class="content-heading pt-0">Vital Info</h2>
+            <form action="{{ route('setup.skill') }}" method="POST">
+              @csrf
+              <div class="row push">
+                <div class="col-lg-2">
+                  <p class="text-muted">
+                    Set up your profile to start getting Skilled Jobs
+                  </p>
                 </div>
-                @endif --}}
+                <div class="col-lg-10">
+                  
 
-              <div class="mb-4">
-                <label class="form-label" for="dm-project-new-name">
-                  Title <small> (What defines your skill)</small><span class="text-danger">*</span>
-                </label>
-                <input type="text" required class="form-control" id="dm-project-new-name" name="title" value="{{ @$skillAsset->title }}" placeholder="eg: software engineer, ui/ux, cv writer e.t.c">
-              </div>
-              <div class="row mb-4">
-                <div class="col-lg-12">
-                  <label class="form-label" for="dm-project-new-category">
-                    Select your Skillset<span class="text-danger">*</span>
-                  </label>
-                  <select class="form-select" required id="dm-project-new-category" name="skill_id">
-                    <option value="">Select a Skillset</option>
-                      @foreach ($skills as $skill)
-                        <option value="{{ $skill->id }}" {{ @$skillAsset->skill_id == $skill->id ? 'selected' : '' }}>{{ $skill->name }}</option>
-                      @endforeach
-                  </select>
-                </div>
-              </div>
-              <div class="row mb-4">
-                <div class="col-lg-12">
-                    <label class="form-label" for="dm-project-new-category">
-                        Brief Description of yourself and what you do <span class="text-danger">*</span>
+                    {{-- @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif --}}
+
+                  <div class="mb-4">
+                    <label class="form-label" for="dm-project-new-name">
+                      Title <small> (What defines your skill)</small><span class="text-danger">*</span>
                     </label>
-                    
-                    <textarea class="form-control" required name="description" rows="6" placeholder="e.g My Name is Joan, I have over 6 years experience as a UI/UX expert using Figma. I deliver averagely 20-30 screens in 6hours.">{{ @$skillAsset->description }}</textarea>
+                    <input type="text" required class="form-control" id="dm-project-new-name" name="title" value="{{ @$skillAsset->title }}" placeholder="eg: software engineer, ui/ux, cv writer e.t.c">
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-lg-12">
+                      <label class="form-label" for="dm-project-new-category">
+                        Select your Skillset<span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" required id="dm-project-new-category" name="skill_id">
+                        <option value="">Select a Skillset</option>
+                          @foreach ($skills as $skill)
+                            <option value="{{ $skill->id }}" {{ @$skillAsset->skill_id == $skill->id ? 'selected' : '' }}>{{ $skill->name }}</option>
+                          @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-lg-12">
+                        <label class="form-label" for="dm-project-new-category">
+                            Brief Description of yourself and what you do <span class="text-danger">*</span>
+                        </label>
+                        
+                        <textarea class="form-control" required name="description" rows="6" placeholder="e.g My Name is Joan, I have over 6 years experience as a UI/UX expert using Figma. I deliver averagely 20-30 screens in 6hours.">{{ @$skillAsset->description }}</textarea>
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <label class="form-label" for="dm-project-new-color">Enter a Range of how much you will charge per Job (in {{ baseCurrency() }}) <span class="text-danger">*</span> </label>
+                    <div class="col-md-6">
+                      Minimum Price
+                      <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->min_price }}" name="min_price" placeholder="Min. Price">
+                    </div>
+                    <div class="col-md-6">
+                      Maximum Price
+                        <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->max_price }}" name="max_price" placeholder="Max. Price">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-lg-12">
+                      <label class="form-label" for="dm-project-new-category">
+                        Level of Proficiency<span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" required id="dm-project-new-category" name="profeciency_level">
+                        <option value="">Select a category</option>
+                      
+                        @foreach ($profeciencies as $prof)
+                          <option value="{{ $prof->id }}" {{ @$skillAsset->profeciency_level == $prof->id ? 'selected' : '' }}>{{ $prof->name }}</option>
+                        @endforeach
+                      
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-lg-12">
+                      <label class="form-label" for="dm-project-new-category">
+                        Years of Experience<span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" required id="dm-project-new-category" name="year_experience">
+                        <option value="">Select a  One</option>
+                        <option value="0-2" {{ @$skillAsset->year_experience == '0-2' ? 'selected' : '' }}>0-2 years</option>
+                        <option value="3-5" {{ @$skillAsset->year_experience == '3-5' ? 'selected' : '' }}>3-5 years</option>
+                        <option value="6-10" {{ @$skillAsset->year_experience == '6-10' ? 'selected' : '' }}>6-10 years</option>
+                        <option value="10+" {{ @$skillAsset->year_experience == '10+' ? 'selected' : '' }}>10+ years</option>
+
+                      </select>
+                    </div>
+                  </div>
+
+
+
+                  {{-- <div class="row mb-4">
+                    <div class="col-lg-12">
+                      <label class="form-label" for="dm-project-new-category">
+                        Payment Model<span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" required id="dm-project-new-category" name="payment_mode">
+                        <option value="">Select a category</option>
+                        <option value="pay_per_hour">Pay per Hour</option>
+                        <option value="pay_per_project">Pay per Project</option>
+                        <option value="pay_per_milestone">Pay per Milestone</option>
+                        
+                      </select>
+                    </div>
+                  </div> --}}
+
+                  <div class="mb-4">
+                    <label class="form-label" for="dm-project-new-name">
+                      Location <small></small><span class="text-danger">*</span>
+                    </label>
+                    <input type="text" required class="form-control" id="dm-project-new-name" name="location" value="{{ @$skillAsset->location }}" placeholder="eg: Lagos, Port Harcourt, ">
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-lg-12">
+                      <label class="form-label" for="dm-project-new-category">
+                        Availability<span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" required id="dm-project-new-category" name="availability">
+                        <option value="">Select a category</option>
+                        {{--<option value="remote">Remote</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="physical">Physical</option> --}}
+
+                        <option value="remote" {{ @$skillAsset->availability == 'remote' ? 'selected' : '' }}>Remote</option>
+                        <option value="hybrid" {{ @$skillAsset->availability == 'hybrid' ? 'selected' : '' }}>Hybrid</option>
+                        <option value="physical" {{ @$skillAsset->availability == 'physical' ? 'selected' : '' }}>Physical</option>
+                        {{-- <option value="10+" {{ request('year_experience') == '10+' ? 'selected' : '' }}>10+ years</option> --}}
+
+                        
+                      </select>
+                    </div>
+                  </div>
+
                 </div>
               </div>
-
-              <div class="row mb-4">
-                <label class="form-label" for="dm-project-new-color">Enter a Range of how much you will charge per Job (in {{ baseCurrency() }}) <span class="text-danger">*</span> </label>
-                <div class="col-md-6">
-                  Minimum Price
-                  <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->min_price }}" name="min_price" placeholder="Min. Price">
+                <!-- END Vital Info -->
+                <!-- Submit -->
+                <div class="row push">
+                  <div class="col-lg-10 col-xl-5 offset-lg-2">
+                    <div class="mb-4">
+                      @if(@$skillAsset)
+                      <button type="submit" class="btn btn-alt-primary">
+                        <i class="fa fa-check-circle me-1 opacity-50"></i>  Update
+                      </button>
+                      @else
+                      <button type="submit" class="btn btn-alt-primary">
+                        <i class="fa fa-plus-circle me-1 opacity-50"></i>  Submit
+                      </button>
+                      @endif
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-6">
-                  Maximum Price
-                    <input type="number" required class="form-control" id="dm-project-new-color" value="{{ @$skillAsset->max_price }}" name="max_price" placeholder="Max. Price">
-                </div>
-              </div>
-
-              <div class="row mb-4">
-                <div class="col-lg-12">
-                  <label class="form-label" for="dm-project-new-category">
-                    Level of Proficiency<span class="text-danger">*</span>
-                  </label>
-                  <select class="form-select" required id="dm-project-new-category" name="profeciency_level">
-                    <option value="">Select a category</option>
-                   
-                    @foreach ($profeciencies as $prof)
-                      <option value="{{ $prof->id }}" {{ @$skillAsset->profeciency_level == $prof->id ? 'selected' : '' }}>{{ $prof->name }}</option>
-                    @endforeach
-                   
-                  </select>
-                </div>
-              </div>
-
-              <div class="row mb-4">
-                <div class="col-lg-12">
-                  <label class="form-label" for="dm-project-new-category">
-                    Years of Experience<span class="text-danger">*</span>
-                  </label>
-                  <select class="form-select" required id="dm-project-new-category" name="year_experience">
-                    <option value="">Select a  One</option>
-                    <option value="0-2" {{ @$skillAsset->year_experience == '0-2' ? 'selected' : '' }}>0-2 years</option>
-                    <option value="3-5" {{ @$skillAsset->year_experience == '3-5' ? 'selected' : '' }}>3-5 years</option>
-                    <option value="6-10" {{ @$skillAsset->year_experience == '6-10' ? 'selected' : '' }}>6-10 years</option>
-                    <option value="10+" {{ @$skillAsset->year_experience == '10+' ? 'selected' : '' }}>10+ years</option>
-
-                  </select>
-                </div>
-              </div>
-
-
-
-              {{-- <div class="row mb-4">
-                <div class="col-lg-12">
-                  <label class="form-label" for="dm-project-new-category">
-                    Payment Model<span class="text-danger">*</span>
-                  </label>
-                  <select class="form-select" required id="dm-project-new-category" name="payment_mode">
-                    <option value="">Select a category</option>
-                    <option value="pay_per_hour">Pay per Hour</option>
-                    <option value="pay_per_project">Pay per Project</option>
-                    <option value="pay_per_milestone">Pay per Milestone</option>
-                    
-                  </select>
-                </div>
-              </div> --}}
-
-              <div class="mb-4">
-                <label class="form-label" for="dm-project-new-name">
-                  Location <small></small><span class="text-danger">*</span>
-                </label>
-                <input type="text" required class="form-control" id="dm-project-new-name" name="location" value="{{ @$skillAsset->location }}" placeholder="eg: Lagos, Port Harcourt, ">
-              </div>
-
-              <div class="row mb-4">
-                <div class="col-lg-12">
-                  <label class="form-label" for="dm-project-new-category">
-                    Availability<span class="text-danger">*</span>
-                  </label>
-                  <select class="form-select" required id="dm-project-new-category" name="availability">
-                     <option value="">Select a category</option>
-                    {{--<option value="remote">Remote</option>
-                    <option value="hybrid">Hybrid</option>
-                    <option value="physical">Physical</option> --}}
-
-                    <option value="remote" {{ @$skillAsset->availability == 'remote' ? 'selected' : '' }}>Remote</option>
-                    <option value="hybrid" {{ @$skillAsset->availability == 'hybrid' ? 'selected' : '' }}>Hybrid</option>
-                    <option value="physical" {{ @$skillAsset->availability == 'physical' ? 'selected' : '' }}>Physical</option>
-                    {{-- <option value="10+" {{ request('year_experience') == '10+' ? 'selected' : '' }}>10+ years</option> --}}
-
-                    
-                  </select>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <!-- END Vital Info -->
-           <!-- Submit -->
-           <div class="row push">
-            <div class="col-lg-10 col-xl-5 offset-lg-2">
-              <div class="mb-4">
-                @if(@$skillAsset)
-                <button type="submit" class="btn btn-alt-primary">
-                  <i class="fa fa-check-circle me-1 opacity-50"></i>  Update
-                </button>
-                @else
-                <button type="submit" class="btn btn-alt-primary">
-                  <i class="fa fa-plus-circle me-1 opacity-50"></i>  Submit
-                </button>
-                @endif
-              </div>
-            </div>
-          </div>
-          <!-- END Submit -->
-          </form>
+                <!-- END Submit -->
+            </form>
           
-          {{-- @else --}}
+          @else
 
           @if(@$skillAsset)
           <!-- Optional Info -->
@@ -326,14 +326,14 @@
                                 <div class="col-md-12">
                                 <label class="form-label" for="dm-project-new-color">Project Title</label>
                                 <p>{{ $port->title }} </p>
-                                {{-- <input type="text" class="form-control" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project"> --
+                                { <input type="text" class="form-control" id="dm-project-new-color" name="title" placeholder="Brief Title of the Project"> --
                                 </div>
                             </div>
 
                             <div class="mb-2">
                                 <label class="form-label" for="dm-project-new-description">Description of the Project</label>
                                 <p>{!! $port->description !!} </p>
-                                {{-- <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What is this project about?"></textarea> --
+                                <textarea class="form-control" id="dm-project-new-description" name="description" rows="6" placeholder="What is this project about?"></textarea> --
                             </div>
                             <div class="mb-2">
                                 <label class="form-label" for="dm-project-new-description">Skills</label>
@@ -349,9 +349,9 @@
                         @endforeach
                     </div>
                 </div>
-              @endif --}}
+              @endif  --}}
 
-          {{-- @endif --}}
+          @endif
 
       </div>
     </div>

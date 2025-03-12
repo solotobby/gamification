@@ -69,16 +69,18 @@ class SkillsController extends Controller
 
 
     public function create(){
-        // $skillCategory = ProfessionalCategory::all();
-        // $skill = Skill::where('user_id', auth()->user()->id)->first();
-        // $tools = Tool::all();
-        // $portfolio = Portfolio::where('user_id', auth()->user()->id)->get();
 
         $profeciencies = ProfessionalProficiencyLevel::all();
         $skills = Skill::all();
         $skillAsset = SkillAsset::where('user_id', auth()->user()->id)->first();
+        // $portfolio = Portfolio::where('skill_id', $skillAsset->id)->get();
 
-        return view('user.skills.create', ['skills' => $skills, 'profeciencies' => $profeciencies, 'skillAsset' => $skillAsset]);
+        return view('user.skills.create', 
+                    ['skills' => $skills, 
+                    'profeciencies' => $profeciencies, 
+                    'skillAsset' => $skillAsset
+                    // 'portfolio' => $portfolio
+                ]);
     }
 
     public function storeSkill(Request $request){
@@ -164,9 +166,6 @@ class SkillsController extends Controller
 
                 }
             },],
-
-
-          
             
         ]);
        
@@ -181,6 +180,7 @@ class SkillsController extends Controller
             // }
             if($portfolio){
                 Alert::success('Success', 'Portfolio added Successfully');
+                //return redirect()->url('home');
                 return back()->with('success', 'Portfolio added Successfully');    
             }
             
