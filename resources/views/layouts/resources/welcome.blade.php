@@ -18,7 +18,7 @@
                   <i class="fa fa-award fa-3x text-muted my-4"></i>
                   <h3 class="fs-2 fw-light mb-2">Welcome to Freebyz!</h3>
                   <p class="text-muted">
-                    Your global remote jobs and affiliate marketing platform to earn online daily.
+                    Get Remote Tasks and Jobs to Earn. Hire the best online workers to work for you.
                   </p>
                   <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
                     Continue <i class="fa fa-arrow-right ms-1"></i>
@@ -27,9 +27,14 @@
                 <div class="slick-slide p-5">
                   <h3 class="fs-2 fw-light mb-2">How to Earn</h3>
                   <p class="text-muted">
-                    Complete tasks and earn money. 
-                    Your fastest way to earn is to refer your friends. Copy your referral code below to invite your friends and earn ($0.5) N500 on each friend you refer.
-                  </p>
+                    
+                    1.⁠ ⁠Complete Tasks to Earn<br>
+                    2.⁠ ⁠Get Hired. Find Remote/Full Time Jobs & Gigs<br>
+                    3.⁠ ⁠Make Review videos to earn<br>
+                    3.⁠ ⁠Play Games & Spin the wheel to earn<br>
+                    4.⁠ ⁠Refer your friends to earn. Copy your referral link to earn ($0.5) 1000 on each friend your refer<br>
+                    
+                       </p>
                   <center>
                     <div class="col-md-12 mb-2">
                       <div class="input-group">
@@ -40,9 +45,9 @@
                       </div>
                     </div>
                   </center>
-                  <h3 class="fs-2 fw-light mb-2">Hire Online Workers</h3>
+                  <h3 class="fs-2 fw-light mb-2"> Hire a Remote/Full Time Worker </h3>
                   <p class="text-muted">
-                    Promote your affiliate links, grow your Youtube, Tiktok and other social media pages to earn more money online. 
+                    Hire the best remote/full time workers to complete tasks or work for you online/on-site.
                   </p>
                   <a href="{{ url('complete/welcome') }}" class="btn btn-alt-primary mb-4">
                     Start Earning Now! <i class="fa fa-arrow-right ms-1"></i>
