@@ -394,7 +394,7 @@ class UserController extends Controller
                 $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
 
                 if($upgrdate){
-                    // Mail::to($user->email)->send(new UpgradeUser($user));
+                    Mail::to($user->email)->send(new UpgradeUser($user));
                 }
                 
             }
