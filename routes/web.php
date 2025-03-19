@@ -29,7 +29,7 @@ Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage'])
 Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessPage']);
 
 //  Test api
-// Route::get('api/test/1', [\App\Http\Controllers\GeneralController::class, 'testapi']);
+Route::get('api/test', [\App\Http\Controllers\GeneralController::class, 'testapi']);
 // Route::get('api/test/2', [\App\Http\Controllers\GeneralController::class, 'testapi1']);
 
 ///oonboarding skillset

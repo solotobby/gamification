@@ -1082,7 +1082,7 @@ class GeneralController extends Controller
 
 
     public function testapi(){
-        return getWeeklyReport();
+        return User::where('is_verified', 0)->count();
     }
 
 
