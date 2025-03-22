@@ -6,14 +6,14 @@
 
     <title>Freebyz - Login</title>
 
-    <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="description" content="Freebyz - Login">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework">
-    <meta property="og:site_name" content="Dashmix">
-    <meta property="og:description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:title" content="Freebyz - Login">
+    <meta property="og:site_name" content="Freebyz">
+    <meta property="og:description" content="Freebyz - Login">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
@@ -181,7 +181,7 @@
             <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
               <div class="p-3">
                 <p class="display-4 fw-bold text-white mb-3">
-                  Welcome to the future of possibilities
+                  Start Earning, Hire or Get Hired Today
                 </p>
                 <p class="fs-lg fw-semibold text-white-75 mb-0">
                   Copyright &copy; <span data-toggle="year-copy"></span>

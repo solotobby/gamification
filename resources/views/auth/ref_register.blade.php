@@ -6,14 +6,14 @@
 
     <title>Freebyz - Register</title>
 
-    <meta name="description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="description" content="Freebyz - Login">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework">
+    <meta property="og:title" content="Freebyz - Login">
     <meta property="og:site_name" content="Dashmix">
-    <meta property="og:description" content="Dashmix - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:description" content="Freebyz - Login">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
