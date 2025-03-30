@@ -7,6 +7,7 @@ use App\Models\ProfessionalCategory;
 use App\Models\ProfessionalJob;
 use App\Models\ProfessionalSubCategories;
 use App\Models\Skill;
+use App\Models\SkillAsset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -64,5 +65,12 @@ class ProfessionalController extends Controller
     public function storeProfessionalSkillset(Request $request){
         Skill::create(['name' => $request->name]);
         return back()->with('success', 'Skillset Created');
+    }
+
+    public function listProfessional(){
+        $skillAsset = SkillAsset::query();
+        $list = $skillAsset->orderBy('created_at', 'DESC')->paginate(20);
+        $total = $skillAsset->count();
+        return view('admin.professional.list', ['skillAsset' => $list, 'total' => $total]);   
     }
 }
