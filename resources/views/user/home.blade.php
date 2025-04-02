@@ -309,22 +309,23 @@
       @endif --}}
 
     
-        <a href="https://payhankey.com" target="_blank">
+         <a href="{{url('view/posts')}}" target="_blank">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
               <div class="d-md-flex justify-content-md-between align-items-md-center">
                 <div class="col-12">
                   <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
-                  <h3 class="h4 fw-bold mb-1" style="color: #191918">Payhankey</h3>
+                  <h3 class="h4 fw-bold mb-1" style="color: #191918">Gistgroove</h3>
                   <p class="fs-sm text-muted">
-                    <i class="fa fa-heart me-1"></i>Monetize your Posts on Payhankey
-                          Earn up to $500 daily. Monetize every comment, likes and views.
+                    <i class="fa fa-heart me-1"></i>Earn from what's trending around you. Share gists around you to earn from Gistgroove.
                   </p>
                 </div>
               </div>
             </div>
           </div> 
         </a> 
+
+
 
         {{-- <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
