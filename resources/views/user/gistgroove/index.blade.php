@@ -19,6 +19,12 @@
 
 
   <div class="content">
+    <div class="alert alert-info">
+      {{-- <li class="fa fa-info"></li> --}}
+      Freebyz has partnered with GISTGROOVE BLOG to help you earn from trending news and gist around you. 
+      When you share what's trending, Gistgroove will pay you for the views you get on your post. 
+      Gistgroove pays up to $30 for every 1000 unique views your post get on Gistgroove. Payment calculated monthly.
+    </div>
     <!-- Full Table -->
     <div class="block block-rounded">
         <div class="block-header block-header-default">
@@ -55,10 +61,10 @@
                     <label class="form-label" for="dm-post-add-title">Select A Category</label>
                    <select name="category_id" class="form-control" required>
                         <option value="">Select One</option>
-                    @foreach ($categories as $cate)
-                        <option value="{{ $cate->id }}">{{ $cate->name }}</option>
-                    @endforeach
-                   </select>
+                        @foreach ($categories as $cate)
+                            <option value="{{ $cate->id }}">{{ $cate->name }}</option>
+                        @endforeach
+                    </select>
                     @error('title') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
 
@@ -92,8 +98,9 @@
        
             
         <div class="alert alert-info">
-            You will get paid on every 1000 unique views yo get on Gist Groove. Payment will be calculated monthly.
-            {{-- <li class="fa fa-info"></li>  --}}
+          <li class="fa fa-info"></li> 
+          Earn from every 1000 unique views your post get on Gistgroove. Payment will be calculated monthly.
+            
             {{-- You'll get 50 points on every daily login. Accumulated points can be converted to cash which will be credited into your wallet. Every 1,000 points is equivalent to &#8358;50  --}}
         </div>
         <div class="table-responsive">
