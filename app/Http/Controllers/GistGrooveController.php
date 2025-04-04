@@ -41,8 +41,21 @@ class GistGrooveController extends Controller
             'body' => $request->body
         ]);
 
-        return back()->with('success', 'Post successfully sent to Gist Groove');
+        return redirect('success/'.$slug);
+
+        // return back()->with('success', 'Post successfully sent to Gist Groove');
 
 
+    }
+
+    public function savePostSuccess($slug){
+        $checkPost = Post::where('slug', $slug)->first();
+        // $status = '';
+        // if($checkPost){
+        //     return $status = true;
+        // }else{
+        //     return $status = false;
+        // }
+        return view('user.gistgroove.success', ['slug' => $slug]);
     }
 }

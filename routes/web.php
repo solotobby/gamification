@@ -337,6 +337,7 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 Route::get('view/posts', [\App\Http\Controllers\GistGrooveController::class, 'index']);
 
 Route::post('post', [\App\Http\Controllers\GistGrooveController::class, 'savePost'])->name('save.post');
+Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class, 'savePostSuccess']);
 
 
 

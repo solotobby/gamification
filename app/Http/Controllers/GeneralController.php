@@ -8,18 +8,38 @@ use App\Helpers\PaystackHelpers;
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
 use App\Mail\MassMail;
+use App\Models\ActivityLog;
 use App\Models\Answer;
+use App\Models\BankInformation;
+use App\Models\Banner;
+use App\Models\BannerClick;
+use App\Models\BannerImpression;
 use App\Models\Business;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\DisputedJobs;
+use App\Models\FastestFinger;
+use App\Models\FastestFingerPool;
+use App\Models\Feedback;
+use App\Models\FeedbackReplies;
 use App\Models\Games;
+use App\Models\LoginPoints;
+use App\Models\LoginPointsRedeemed;
+use App\Models\MembershipBadge;
+use App\Models\Notification;
+use App\Models\OTP;
 use App\Models\PartnershipBeneficiary;
 use App\Models\PartnershipSubscriber;
 use App\Models\PartnerSubscription;
 use App\Models\PaymentTransaction;
+use App\Models\Profile;
+use App\Models\Rating;
+use App\Models\Referral;
+use App\Models\SpinScore;
 use App\Models\Staff;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserLocation;
 use App\Models\UserScore;
 use App\Models\VirtualAccount;
 use App\Models\Wallet;
@@ -1082,7 +1102,38 @@ class GeneralController extends Controller
 
 
     public function testapi(){
-        return User::where('is_verified', 0)->count();
+        $user = User::where('is_verified', 0)->where('role', 'regular')->orderby('created_at')->limit(2000)->first();
+
+        //remove wallet
+        $wallet = Wallet::where('user_id', $user->id)->frist();
+        $profile = Profile::where('user_id', $user->id)->frist();
+        $transaction = PaymentTransaction::where('user_id', $user->id)->frist();
+        $activityLOg = ActivityLog::where('user_id', $user->id)->frist();
+        $bankInfo = BankInformation::where('user_id', $user->id)->frist();
+        $bannerClicks = BannerClick::where('user_id', $user->id)->frist();
+        $bannerImpresion = BannerImpression::where('user_id', $user->id)->frist();
+        $banners = Banner::where('user_id', $user->id)->frist();
+        $business = Business::where('user_id', $user->id)->frist();
+        $campaignWorkers = CampaignWorker::where('user_id', $user->id)->frist();
+        $campaigns = Campaign::where('user_id', $user->id)->frist();
+        $disputedJobs = DisputedJobs::where('user_id', $user->id)->frist();
+        $fastestFingerPool = FastestFingerPool::where('user_id', $user->id)->frist();
+        $fastestFinger = FastestFinger::where('user_id', $user->id)->frist();
+        $feedback = Feedback::where('user_id', $user->id)->frist();
+        $feedbackRep = FeedbackReplies::where('user_id', $user->id)->frist();
+        $loc = UserLocation::where('user_id', $user->id)->frist();
+        $loginPoint = LoginPoints::where('user_id', $user->id)->frist();
+        $pointsRedeemed = LoginPointsRedeemed::where('user_id', $user->id)->frist();
+        $badge = MembershipBadge::where('user_id', $user->id)->frist();
+        $notification = Notification::where('user_id', $user->id)->frist();
+        $otp = OTP::where('user_id', $user->id)->frist();
+        $ratings = Rating::where('user_id', $user->id)->frist();
+        $ref = Referral::where('user_id', $user->id)->frist();
+        $spinScore = SpinScore::where('user_id', $user->id)->frist();
+        $userinterest = \DB::table('user_interest')->where('user_id',$user->id)->first();
+        $virtualAccount = VirtualAccount::where('user_id', $user->id)->frist();
+
+
     }
 
 

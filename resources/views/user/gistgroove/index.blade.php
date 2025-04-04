@@ -23,7 +23,7 @@
       {{-- <li class="fa fa-info"></li> --}}
       Freebyz has partnered with GISTGROOVE BLOG to help you earn from trending news and gist around you. 
       When you share what's trending, Gistgroove will pay you for the views you get on your post. 
-      Gistgroove pays up to $30 for every 1000 unique views your post get on Gistgroove. Payment calculated monthly.
+      Gistgroove pays up to $30 for every 1000 unique views your post get on Gistgroove. Payment is calculated monthly.
     </div>
     <!-- Full Table -->
     <div class="block block-rounded">
@@ -120,7 +120,7 @@
                      {{ \Carbon\Carbon::parse($point->created_at)->format('d F, Y') }}
                     </td> --}}
                     <td>
-                        <a href="http://gistgroove.com/details.php?slug={{ $point->slug }}" target="_blank"> {{ $point->title }} </a>
+                        <a href="https://gistgroove.com/details.php?slug={{ $point->slug }}" target="_blank"> {{ $point->title }} </a>
                     </td>
                     <td>
                         {{ $point->pageViews()->count() }}
@@ -129,13 +129,16 @@
                         {{ $point->pageViews()->distinct('ip_address')->count() }}
                     </td>
                     <td>
-                      <a href="" class="btn btn-sm btn-secondary">
+                      <a href="https://api.whatsapp.com/send?text={{ $point->slug }}" target="_blank" class="btn btn-success btn-sm">
+                        <i class="fab fa-whatsapp"></i> 
+                      </a>
+                      <a class="btn btn-sm btn-secondary" href="https://twitter.com/intent/tweet?url=https://gistgroove.com/?slug={{ $point->slug }}" target="_blank">
                         <span class="si si-social-twitter lg"></span>
                       </a>
-                      <a class="btn btn-sm btn-primary" href="https://www.facebook.com/sharer/sharer.php?u=http://gistgroove.com/?slug={{ $point->slug }}" target="_blank">
+                      <a class="btn btn-sm btn-primary" href="https://www.facebook.com/sharer/sharer.php?u=https://gistgroove.com/?slug={{ $point->slug }}" target="_blank">
                         <span class="si si-social-facebook lg"></span>
                       </a>
-                      <a class="btn btn-sm btn-info" href="">
+                      <a class="btn btn-sm btn-info" href="https://www.linkedin.com/sharing/share-offsite/?url=https://gistgroove.com/?slug={{ $point->slug }}" target="_blank">
                         <span class="fab fa-linkedin-in lg"></span>
                       </a>
                       
