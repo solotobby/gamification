@@ -23,7 +23,7 @@
       {{-- <li class="fa fa-info"></li> --}}
       Freebyz has partnered with GISTGROOVE BLOG to help you earn from trending news and gist around you. 
       When you share what's trending, Gistgroove will pay you for the views you get on your post. 
-      Gistgroove pays up to $30 for every 1000 unique views your post get on Gistgroove. Payment calculated monthly.
+      Gistgroove pays up to $30 for every 1000 unique views your post get on Gistgroove. Payment is calculated monthly.
     </div>
     <!-- Full Table -->
     <div class="block block-rounded">
