@@ -561,6 +561,7 @@ Route::post('admin/professional/store', [\App\Http\Controllers\Admin\Professiona
 Route::get('admin/professional/category', [\App\Http\Controllers\Admin\ProfessionalController::class, 'professionalCategory']);
 Route::get('get/professional/category', [\App\Http\Controllers\Admin\ProfessionalController::class, 'loadProfessionalCategories']);
 Route::get('get/professional/sub/category/{id}', [\App\Http\Controllers\Admin\ProfessionalController::class, 'loadProfessionalSubCategories']);
+Route::get('admin/professional/list', [\App\Http\Controllers\Admin\ProfessionalController::class, 'listProfessional']);
 
 
 Route::post('professional/category/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalCategory'])->name('professional.store.category');

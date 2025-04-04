@@ -24,6 +24,11 @@
               <span class="nav-main-link-name">Category</span>
             </a>
           </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ url('admin/professional/list') }}">
+              <span class="nav-main-link-name">List</span>
+            </a>
+          </li>
         </ul>
       </li>
 
