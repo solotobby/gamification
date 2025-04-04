@@ -128,12 +128,12 @@
       </li> 
  --}}
 
-      {{-- <li class="nav-main-item">
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('view/posts') }}">
           <i class="nav-main-link-icon fa fa-list"></i>
           <span class="nav-main-link-name">Posts</span>
         </a>
-      </li> --}}
+      </li>
 
 
       @if(auth()->user()->wallet->base_currency == 'NGN')
