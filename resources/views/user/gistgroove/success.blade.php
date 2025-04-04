@@ -26,7 +26,7 @@
 
     <div class="alert alert-info">
       {{-- <li class="fa fa-info"></li> --}}
-      Fantastic! Share your post to get more views. Gistgroove pays you up to $30 per unique 1000 views. (include the whatsapp, facebook, and twitter share buttons)
+      Fantastic! Share your post to get more views. Gistgroove pays you up to $30 per unique 1000 views. (include the whatsapp, facebook, twitter and linkedin share buttons)
 
 
     </div>
@@ -35,11 +35,17 @@
     <a href="https://api.whatsapp.com/send?text={{ $message }}" target="_blank" class="btn btn-success">
         <i class="fab fa-whatsapp"></i> Share on WhatsApp
     </a>
-    <a href="https://api.whatsapp.com/send?text={{ $message }}" target="_blank" class="btn btn-success">
-        <i class="fab fa-whatsapp"></i> Share on WhatsApp
-    </a>
+    <a class="btn btn-sm btn-secondary" href="https://twitter.com/intent/tweet?url=https://gistgroove.com/?slug={{ $slug }}" target="_blank">
+        <span class="si si-social-twitter lg"></span> Share on X
+      </a>
+      <a class="btn btn-sm btn-primary" href="https://www.facebook.com/sharer/sharer.php?u=https://gistgroove.com/?slug={{ $slug }}" target="_blank">
+        <span class="si si-social-facebook lg"></span> Share on Facebook
+      </a>
+      <a class="btn btn-sm btn-info" href="https://www.linkedin.com/sharing/share-offsite/?url=https://gistgroove.com/?slug={{ $slug }}" target="_blank">
+        <span class="fab fa-linkedin-in lg"></span> Share on Linkedin
+      </a>
     <br><br>
-    <a href="{{ url('view/post') }}" class="btn btn-secondary"> Make another Post </a>
+    <a href="{{ url('view/posts') }}" class="btn btn-secondary"> Make another Post </a>
   </div>
 
 @endsection

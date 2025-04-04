@@ -129,6 +129,9 @@
                         {{ $point->pageViews()->distinct('ip_address')->count() }}
                     </td>
                     <td>
+                      <a href="https://api.whatsapp.com/send?text={{ $point->slug }}" target="_blank" class="btn btn-success btn-sm">
+                        <i class="fab fa-whatsapp"></i> 
+                      </a>
                       <a class="btn btn-sm btn-secondary" href="https://twitter.com/intent/tweet?url=https://gistgroove.com/?slug={{ $point->slug }}" target="_blank">
                         <span class="si si-social-twitter lg"></span>
                       </a>
