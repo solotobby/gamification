@@ -96,7 +96,7 @@
                 <div class="input mb-2">
                   <label class="mb-2">Funding Channel</label>
                   <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
-                    <option value="">Select a Funding Channel</option>
+                    <option value="">Select Funding Channel</option>
                     <option value="va">Virtual Account</option>
                     <option value="kora">Other Payment Channel</option>
                   </select>
@@ -137,12 +137,14 @@
                 <div id="kora">
 
                   <div class=" mb-2">
-                    <label class="mb-1">Processor</label>
+                    <label class="mb-1">Payment Processor</label>
                         <select class="form-control" name="channel" required>
                           <option value="">Select One</option>
-                            @if(auth()->user()->email == 'solotobby@gmail.com')
-                                <option value="paystack">Paystack</option>
-                            @endif
+                          @if(auth()->user()->email == 'solotobby@gmail.com')
+                                  {{-- @if(!auth()->user()->virtualAccount) --}}
+                                      <option value="paystack">Paystack</option>
+                                  {{-- @endif --}}
+                          @endif
                           <option value="kora">Kora Pay</option>
                         </select>
                     </select>
