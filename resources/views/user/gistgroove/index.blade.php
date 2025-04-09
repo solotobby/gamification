@@ -1,4 +1,13 @@
 @extends('layouts.main.master')
+@section('style')
+{{-- <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js" referrerpolicy="origind"></script> --}}
+<script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
+@endsection
 @section('content')
 
  <!-- Hero -->
@@ -69,9 +78,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Body</label>
-                    <textarea name="body" rows="5" class="form-control" required></textarea>
-                </div>
+                  <label class="form-label" for="post-files"> Body </label>
+                  <textarea class="form-control" rows="5" name="body" id="js-ckeditor5-classic" required> {{ old('body') }}</textarea>
+              </div>
 
                 <div class="mb-4">
                     <button type="submit" class="btn btn-alt-primary"  >
@@ -161,3 +170,13 @@
 
 
   @endsection
+  @section('script')
+
+ <!-- Page JS Plugins -->
+ <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
+ {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
+ {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <!-- Page JS Helpers (CKEditor 5 plugins) -->
+ <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
+ @endsection

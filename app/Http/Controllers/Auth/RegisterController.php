@@ -149,10 +149,10 @@ class RegisterController extends Controller
         //     userLocation('Registeration');
         // }
 
-        if ($location == 'Nigeria') {
-            $phone = '234' . substr($request->phone, 1);
-            generateVirtualAccountOnboarding($user, $phone);
-        }
+        // if ($location == 'Nigeria') {
+        //     $phone = '234' . substr($request->phone, 1);
+        //     generateVirtualAccountOnboarding($user, $phone);
+        // }
 
         $subject = 'Welcome to Freebyz';
         Mail::to($request->email)->send(new Welcome($user,  $subject, ''));

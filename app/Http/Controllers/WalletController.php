@@ -140,7 +140,7 @@ class WalletController extends Controller
             return redirect('wallet/fund')->with('success', 'Wallet successfully funded');
 
         }else{
-            return redirect('wallet/fund')->with('error', 'Action ended');
+            return redirect('wallet/fund')->with('error', 'Transaction Terminated by '.auth()->user()->name);
         }
 
     }
@@ -176,6 +176,7 @@ class WalletController extends Controller
                     return redirect($url);
                 }else{
 
+                    ///Kora Pay
                     $payloadNGN = [
                         "amount"=> $request->balance, //$amount,
                         "redirect_url"=> url('wallet/fund/redirect'),
@@ -469,11 +470,6 @@ class WalletController extends Controller
             return redirect('wallet/fund');
         }
 
-        
-    //    return info($session);
-  
-        // return redirect()->route('stripe.index')
-        //                  ->with('success', 'Payment successful.');
     }
 
     public function cancelUrl($ref){
@@ -533,51 +529,66 @@ class WalletController extends Controller
 
     public function walletTop()
     {
-
-
+        //paystack handler
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
 
         $ref = $params['trxref']; //paystack
-         $res = verifyTransaction($ref); //
+        $res = verifyTransaction($ref); //paystack external api
 
-        return paymentUpdate($res['data']['reference'], 'successful', $res['data']['amount']); 
+        $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
 
-        activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+        if($verifyPayment){
 
-        return back()->with('success', 'Payment Completed. Your wallet will be credited!');
+            $verifyPayment->status = 'successfull';
+            $verifyPayment->save();
+
+            creditWallet(auth()->user(), 'NGN', $res['data']['amount']);
+
+            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+            
+            return back()->with('success', 'Payment Completed. Your wallet will be credited!');
+        }
+
+
+
+        // return paymentUpdate($res['data']['reference'], 'successful', $res['data']['amount']); 
+
+       
+
+        
 
 
 
         
    
-        $amount = $res['data']['amount'];
+    //     $amount = $res['data']['amount'];
 
-        $percent = 2.90/100 * $amount;
-        $formatedAm = $percent;
-        $newamount = $amount - $formatedAm; //verify transaction
-        $creditAmount = $newamount / 100;
+    //     $percent = 2.90/100 * $amount;
+    //     $formatedAm = $percent;
+    //     $newamount = $amount - $formatedAm; //verify transaction
+    //     $creditAmount = $newamount / 100;
         
-        $user = Auth::user();
+    //     $user = Auth::user();
 
-       if($res['data']['status'] == 'success') //success - paystack
-       {
-            //update transaction
+    //    if($res['data']['status'] == 'success') //success - paystack
+    //    {
+    //         //update transaction
             
-            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            $wallet->balance += $creditAmount;
-            $wallet->save();
+    //         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+    //         $wallet->balance += $creditAmount;
+    //         $wallet->save();
             
-            $name = auth()->user()->name;
-            activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+    //         $name = auth()->user()->name;
+    //         activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
             
-            systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
+    //         systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
 
-            return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
-       }else{
-        return redirect('error');
-       }
+    //         return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
+    //    }else{
+    //     return redirect('error');
+    //    }
     }
 
     public function flutterwaveWalletTopUp(){

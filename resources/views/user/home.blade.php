@@ -396,10 +396,10 @@
 
 
 
-    @elseif(auth()->user()->wallet->base_currency == 'NGN' && @auth()->user()->virtualAccount->bank_name == 'Wema Bank')
+    {{-- @elseif(auth()->user()->wallet->base_currency == 'NGN' && @auth()->user()->virtualAccount->bank_name == 'Wema Bank')
     
 
-     @include('layouts.resources.virtualaccount')
+     @include('layouts.resources.virtualaccount') --}}
 
       {{-- @include('layouts.resources.unverified') --}}
 
