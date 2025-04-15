@@ -321,6 +321,7 @@ Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'top
 Route::get('test/campaign', [\App\Http\Controllers\HomeController::class, 'testCampaignList']);
 ///skills 
 Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
+Route::get('view/skill/{id}',[\App\Http\Controllers\SkillsController::class, 'viewSkill']);
 Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
 Route::post('store/skill',[\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
 Route::get('my/skill',[\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
