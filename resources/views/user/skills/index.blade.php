@@ -79,7 +79,7 @@
          <div class="block block-rounded block-bordered">
           <div class="block-content">
             @if ($searchResult->isEmpty())
-                <p>No results found.</p>
+                {{-- <p>No results found.</p> --}}
             @else
             <table class="table table-striped table-borderless table-vcenter">
               <tbody>
@@ -136,7 +136,7 @@
             </div>
 
 
-            @endforeach
+            @endif
             
 
           </div>
