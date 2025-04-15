@@ -1341,10 +1341,6 @@ class AdminController extends Controller
         return back()->with('success', 'VA removed - ');
     }
 
- 
-
-
-
     public function listFlutterwaveTrf(){
         return listFlutterwaveTransaction();
     }
