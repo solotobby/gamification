@@ -53,7 +53,7 @@ class FraudController extends Controller
         'u.email',
         'u.phone',
         'u.id',
-        DB::raw('COUNT(*) OVER (PARTITION BY b.account_number) as total_occurrences')
+        DB::raw('COUNT(*) OVER (PARTITION BY b.account_number) as total')
     )
     ->whereIn('b.account_number', function ($query) {
         $query->select('account_number')
