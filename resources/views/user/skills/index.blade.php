@@ -17,6 +17,9 @@
   </div>
   <!-- END Hero -->
 
+
+  
+
   <div class="content">
       <h2 class="content-heading pt-0">Filter Search </h2>
         <form action="{{ url('skills') }}" method="GET">
@@ -53,11 +56,6 @@
                     <option value="3-5" {{ request('year_experience') == '3-5' ? 'selected' : '' }}>3-5 years</option>
                     <option value="6-10" {{ request('year_experience') == '6-10' ? 'selected' : '' }}>6-10 years</option>
                     <option value="10+" {{ request('year_experience') == '10+' ? 'selected' : '' }}>10+ years</option>
-
-                {{-- <option value="0-2">0-2 years</option>
-                <option value="3-5">3-5 years</option>
-                <option value="6-10">6-10 years</option>
-                <option value="10+">10+ years</option> --}}
               </select>
             </div>
             
@@ -76,7 +74,75 @@
 
           </div>
         </form>
-        <div class="row items-push">
+
+         <!-- Lessons -->
+         <div class="block block-rounded block-bordered">
+          <div class="block-content">
+            <table class="table table-striped table-borderless table-vcenter">
+              <tbody>
+                @foreach ($searchResult as $index => $result)
+                <tr>
+               
+
+                  <td class="text-center w-25 d-none d-md-table-cell">
+                    <a class="item item-circle bg-primary text-white fs-2 mx-auto" href="">
+                        <span class="fa fa-file-alt"></span>
+                    </a>
+                    </td>
+
+                 
+
+
+                  <td>
+                    <div class="py-4">
+                      <div class="fs-sm fw-bold text-uppercase mb-2">
+                        <span class="text-muted me-3">{{ $result->user->name }}</span>
+                       
+                        <span class="text-primary">
+                              <i class="fa fa-file"></i> {{ $result->year_experience }} years
+                        </span>
+                        -
+                        <span class="text-primary">
+                          <i class="fa fa-cogs"></i> {{  $result->profeciencyLevel->name }} 
+                        </span>
+                      </div>
+                      <a class="link-fx h4 mb-2 d-inline-block text-dark" href="#">
+                        {{-- {{ $result->title }} --}}
+                        {{ $result->skill->name }}
+                      </a>
+                      <span class="text-primary">
+                          {{-- <i class="fa fa-file"></i> --}}
+                          {{-- @if (!in_array($chapter->id, $reads))
+                            
+                          @else
+                              <i class="fa fa-check"></i>
+                          @endif --}}
+                        </span>
+                      <p class="text-muted mb-0">
+                       
+                          {!! \Illuminate\Support\Str::words($result->description, 35) !!}
+                      </p>
+                     
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+                
+              </tbody>
+            </table>
+
+
+            
+
+          </div>
+
+          
+
+        </div>
+        <!-- END Lessons -->
+
+
+        {{-- <div class="row items-push">
           <div class="mt-4">
             <h4>Search Results</h4>
             @if ($searchResult->isEmpty())
@@ -106,7 +172,7 @@
                 </table>
             @endif
           </div>
-        </div>
+        </div> --}}
 
 
   </div>
