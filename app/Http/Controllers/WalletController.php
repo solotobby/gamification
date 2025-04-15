@@ -735,6 +735,8 @@ class WalletController extends Controller
 
     public function processWithdrawals($request, $currency, $channel, $payload){
 
+        return fraudDetection(auth()->user()->id);
+        
         $amount = $request->balance;
         $percent = 7.5/100 * $amount;
         $formatedAm = $percent;

@@ -2667,3 +2667,16 @@ if(!function_exists('walletBalance')){
        }
     }
 }
+
+if(!function_exists('fraudDetection')){
+    function  fraudDetection($userId){
+
+        //check last 3 months transaction
+       return  $recentUsers = DB::select("
+            SELECT * FROM payment_transactions 
+            WHERE user_id = ".$userId.",
+            WHERE created_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+        ");
+
+    }
+}
