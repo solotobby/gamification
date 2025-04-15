@@ -68,6 +68,7 @@ $duplicates = DB::table('bank_information as b')
         'u.name as user_name',
         'u.email',
         'u.phone',
+        'u.id',
         DB::raw('COUNT(*) OVER (PARTITION BY b.account_number) as total')
     )
     ->orderBy('b.account_number')
