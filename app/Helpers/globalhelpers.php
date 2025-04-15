@@ -2647,8 +2647,8 @@ if(!function_exists('currencyConverter')){
 
         $convertedAmount = $rate * $amount;
 
-        return ceil($convertedAmount);
-        // return number_format($convertedAmount,2);
+        // return ceil($convertedAmount);
+        return number_format($convertedAmount,2);
 
     }
 }
