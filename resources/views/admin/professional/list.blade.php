@@ -117,6 +117,10 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="d-flex">
+                {!! $skillAsset->links('pagination::bootstrap-4') !!}
+              </div>
             </div>
         </div>
 
