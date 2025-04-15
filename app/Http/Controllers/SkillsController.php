@@ -52,7 +52,7 @@ class SkillsController extends Controller
             }
         }
 
-        $searchResult = $query->get(); // Get filtered data
+        $searchResult = $query->paginate(10); // Get filtered data
     }
 
         $skills = Skill::all();
@@ -64,6 +64,13 @@ class SkillsController extends Controller
             'searchResult' => $searchResult // Fixed typo
         ]);
     
+    }
+
+    public function viewSkill($id){
+       
+        $query = SkillAsset::where('id', $id)->first();
+        $portfolio = Portfolio::where('user_id', $query->user_id)->get();
+        return view('user.skills.view_skill', ['skill' => $query, 'portfolio' => $portfolio]);
     }
 
 

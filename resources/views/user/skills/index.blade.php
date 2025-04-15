@@ -85,13 +85,10 @@
                
 
                   <td class="text-center w-25 d-none d-md-table-cell">
-                    <a class="item item-circle bg-primary text-white fs-2 mx-auto" href="">
+                    <a class="item item-circle bg-primary text-white fs-2 mx-auto" href="{{ url('view/skill/'.$result->id) }}">
                         <span class="fa fa-file-alt"></span>
                     </a>
-                    </td>
-
-                 
-
+                  </td>
 
                   <td>
                     <div class="py-4">
@@ -130,6 +127,10 @@
                 
               </tbody>
             </table>
+
+            <div class="d-flex">
+              {!! $searchResult->links('pagination::bootstrap-4') !!}
+            </div>
 
 
             
