@@ -342,8 +342,18 @@ class AdminController extends Controller
     }
 
     public function userList(){
+
         $users = User::where('role', 'regular')->orderBy('id', 'DESC')->paginate(500);
         return view('admin.users.list', ['users' => $users]);
+    }
+
+    public function userCurrencySearch(Request $request){
+
+        if(isset($request)){
+             $users= Wallet::with('user')->where('base_currency', $request->currency)->get();
+        }
+
+        return view('admin.users.user_currency_search', ['users' => $users, 'curr' => $request->currency]);
     }
 
     public function userSearch(Request $request){
