@@ -57,6 +57,7 @@
                 <tbody>
                     <tr>
                         <th scope="row">{{ $row->id }}</th>
+                        <th scope="row">{{ $row->account_name }}</th>
                         <th scope="row">{{ $row->bank_name }}</th>
                         <th scope="row">{{ $row->account_number }}</th>
                         <th scope="row">{{ $row->user_name }}</th>
