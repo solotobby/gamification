@@ -69,8 +69,15 @@ class ProfessionalController extends Controller
 
     public function listProfessional(){
         $skillAsset = SkillAsset::query();
-        $list = $skillAsset->orderBy('created_at', 'DESC')->paginate(20);
+        $list = $skillAsset->where('status', 'active')->orderBy('created_at', 'DESC')->paginate(20);
         $total = $skillAsset->count();
         return view('admin.professional.list', ['skillAsset' => $list, 'total' => $total]);   
+    }
+
+    public function updateStatus($id){
+        $skilAsset = SkillAsset::where('id', $id)->first();
+        $skilAsset->status = 'inactive';
+        $skilAsset->save();
+        return back()->with('success', 'Deactivated Successfully');
     }
 }

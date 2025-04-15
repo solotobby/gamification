@@ -52,7 +52,8 @@ class SkillsController extends Controller
             }
         }
 
-        $searchResult = $query->paginate(50); // Get filtered data
+        $searchResult = $query->where('status', 'active')->paginate(50); // Get filtered data
+
     }
 
         $skills = Skill::all();

@@ -9,7 +9,7 @@ class SkillAsset extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'description', 'skill_id', 'profeciency_level', 'year_experience', 'location', 'availability', 'max_price', 'min_price'];
+    protected $fillable = ['user_id', 'title', 'description', 'skill_id', 'profeciency_level', 'year_experience', 'location', 'availability', 'max_price', 'min_price', 'status'];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
