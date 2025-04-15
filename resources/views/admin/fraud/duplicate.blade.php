@@ -41,12 +41,13 @@
               <thead>
                   <tr>
                       <th>#</th>
+                      <th>Count</th>
                       <th>Account Name</th>
                       <th>Account Number</th>
                       <th>User Name</th>
                       <th>Email</th>
                       <th>Phone Number</th>
-                      <th>Count</th>
+                     
                       {{-- <th>Country</th> --}}
                       {{-- <th>When Created</th> --}}
                       </tr>
@@ -57,13 +58,15 @@
                 <tbody>
                     <tr>
                         <th scope="row">{{ $row->id }}</th>
+                        <th scope="row">{{ $row->total }}</th>
                         <th scope="row">{{ $row->account_name }}</th>
                         <th scope="row">{{ $row->bank_name }}</th>
                         <th scope="row">{{ $row->account_number }}</th>
+                        <th scope="row">{{ $row->created_at }}</th>
                         <th scope="row">{{ $row->user_name }}</th>
                         <th scope="row">{{ $row->email }}</th>
                         <th scope="row">{{ $row->phone }}</th>
-                        <th scope="row">{{ $row->total }}</th>
+                        
                     </tr>
 
                 </tbody>

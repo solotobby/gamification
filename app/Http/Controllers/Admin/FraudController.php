@@ -64,6 +64,7 @@ $duplicates = DB::table('bank_information as b')
     ->select(
         'b.account_number',
         'b.bank_name',
+        'b.created_at',
         'b.name as account_name',
         'u.name as user_name',
         'u.email',
