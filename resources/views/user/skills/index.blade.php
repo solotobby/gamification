@@ -78,6 +78,9 @@
          <!-- Lessons -->
          <div class="block block-rounded block-bordered">
           <div class="block-content">
+            @if ($searchResult->isEmpty())
+                <p>No results found.</p>
+            @else
             <table class="table table-striped table-borderless table-vcenter">
               <tbody>
                 @foreach ($searchResult as $index => $result)
@@ -133,6 +136,7 @@
             </div>
 
 
+            @endforeach
             
 
           </div>
