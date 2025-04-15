@@ -28,6 +28,7 @@ class FraudController extends Controller
                 'b.account_number',
                 'b.bank_name',
                 'u.name as user_name',
+                'u.id',
                 'u.email',
                 'u.phone',
                 DB::raw('COUNT(*) OVER (PARTITION BY b.account_number) as total')
