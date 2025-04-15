@@ -37,6 +37,12 @@
                 List of Skill set
             </p>
             <div class="table-responsive">
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
             <table class="table table-bordered table-striped table-vcenter">
                 <thead>
                 <tr>
@@ -58,7 +64,7 @@
                         <td>{{ $s->skill->name }}</td>
                         <td>{{ $s->user->name }}</td>
                         <td>{{ $s->profeciency_level }}</td>
-                        <td>{{ $s->user->year_experience }}</td>
+                        <td>{{ $s->year_experience }} years</td>
                         <td>{{ $s->location }}</td>
                         <td>
                             <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $s->id }}">View</button>
@@ -77,11 +83,26 @@
                                     <!-- With Badges -->
                                     <div class="block block-rounded">
                                     
-                                    <div class="block-content">
-                                        {!! $s->description !!}
-                                    </div>
+                                        <div class="block-content">
+                                            {!! $s->description !!}
+                                        </div>
+                                        <?php $portfolio = App\Models\Portfolio::where('user_id', $s->user_id)->get(); ?>
+                                        <hr>
+                                        <h4>Portfolios</h4>
+                                        @foreach($portfolio as $port)
+
+                                        <div class="block-content">
+                                            <h5>{{ $port->title }}</h5>
+                                            <p>
+                                            {!! $port->description !!}
+                                            </p>
+                                        </div>
+
+                                        @endforeach
                                     </div>
                                     <!-- END With Badges -->
+
+                                    <a href="{{ url('admin/professional/update/'.$s->id) }}" class="btn btn-danger">Deactivate</a>
                                 </div>
                                 
                             </div>
