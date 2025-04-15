@@ -26,7 +26,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Duplicate Account Numbers with Different User account</h3>
+        <h3 class="block-title">Duplicate Account Numbers with Different User account - {{ $duplicates->count() }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -40,12 +40,12 @@
             <table class="table table-bordered table-striped table-vcenter">
               <thead>
                   <tr>
-                      <th>#</th>
+                      {{-- <th>#</th> --}}
                       <th>Account Name</th>
-                      {{-- <th>Account Number</th> --}}
+                      <th>Account Number</th>
                       <th>User Name</th>
-                      {{-- <th>Balance</th> --}}
-                      {{-- <th>Ref. Count</th> --}}
+                      <th>Email</th>
+                      <th>Phone Number</th>
                       <th>Count</th>
                       {{-- <th>Country</th> --}}
                       {{-- <th>When Created</th> --}}
@@ -56,8 +56,11 @@
             
                 <tbody>
                     <tr>
+                        <th scope="row">{{ $row->bank_name }}</th>
                         <th scope="row">{{ $row->account_number }}</th>
-                        <th scope="row">{{ $row->name }}</th>
+                        <th scope="row">{{ $row->user_name }}</th>
+                        <th scope="row">{{ $row->email }}</th>
+                        <th scope="row">{{ $row->phone }}</th>
                         <th scope="row">{{ $row->total }}</th>
                     </tr>
 
