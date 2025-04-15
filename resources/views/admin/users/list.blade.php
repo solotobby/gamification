@@ -35,16 +35,26 @@
         </div>
       </div>
       <div class="block-content">
-        {{-- <form action="{{ url('users') }}" method="GET">
+        <form action="{{ url('user/currency/search') }}" method="GET">
           <div class="mb-4">
             <div class="input-group">
-              <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search Name, Phone, Email or Referral code" required>
+              {{-- <input type="text" class="form-control" id="example-group3-input1" name="search" value="{{ old('search') }}" placeholder="Search with only " required>
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search me-1"></i> Search
+              </button> --}}
+              <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
+                  <option value="">Select Country</option>
+                  @foreach (currencyList(null,true) as $currency)
+                    <option value="{{$currency->code}}">{{$currency->country}}</option>
+                  @endforeach
+                  <option value="USD,Other">Others</option>
+              </select>
               <button type="submit" class="btn btn-primary">
                 <i class="fa fa-search me-1"></i> Search
               </button>
             </div>
           </div>
-        </form> --}}
+        </form>
         <div class="table-responsive">
           {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
           <table class="table table-bordered table-striped table-vcenter">
