@@ -40,7 +40,7 @@
             <table class="table table-bordered table-striped table-vcenter">
               <thead>
                   <tr>
-                      {{-- <th>#</th> --}}
+                      <th>#</th>
                       <th>Account Name</th>
                       <th>Account Number</th>
                       <th>User Name</th>
@@ -56,6 +56,7 @@
             
                 <tbody>
                     <tr>
+                        <th scope="row">{{ $row->id }}</th>
                         <th scope="row">{{ $row->bank_name }}</th>
                         <th scope="row">{{ $row->account_number }}</th>
                         <th scope="row">{{ $row->user_name }}</th>
