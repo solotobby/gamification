@@ -14,7 +14,7 @@
 <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">List Professionals</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3"> {{ ucfirst($status) }} Professionals</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"> Home </li>
@@ -28,7 +28,7 @@
 <div class="content">
     <div class="block block-rounded">
         <div class="block-header block-header-default">
-          <h3 class="block-title">Total Professionals - {{ $total }}</h3>
+          <h3 class="block-title">Total {{ ucfirst($status) }} Professionals - {{ $total }}</h3>
         </div>
 
 
@@ -47,7 +47,7 @@
                 <thead>
                 <tr>
                     {{-- <th>#</th> --}}
-                    <th>Title</th>
+                    {{-- <th>Title</th> --}}
                     <th>Skill</th>
                     <th>Name</th>
                     <th>Prof. Level</th>
@@ -60,7 +60,7 @@
                     <?php $i = 1; ?>
                     @foreach ($skillAsset as $s)
                     <tr>
-                        <td>{{$s->title}}</td>
+                        {{-- <td>{{$s->title}}</td> --}}
                         <td>{{ $s->skill->name }}</td>
                         <td>{{ $s->user->name }}</td>
                         <td>{{ $s->profeciency_level }}</td>
@@ -102,7 +102,12 @@
                                     </div>
                                     <!-- END With Badges -->
 
-                                    <a href="{{ url('admin/professional/update/'.$s->id) }}" class="btn btn-danger">Deactivate</a>
+                                    @if($status == 'pending')
+                                    <a href="{{ url('admin/professional/update/active/'.$s->id) }}" class="btn btn-success">Activate</a>
+                                    <a href="{{ url('admin/professional/update/inactive/'.$s->id) }}" class="btn btn-danger">Deactivate</a>
+                                    @else
+
+                                    @endif
                                 </div>
                                 
                             </div>

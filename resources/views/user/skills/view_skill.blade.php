@@ -42,7 +42,7 @@
                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Point Required </div>
                 @if(auth()->user()->point > 0)
                 <span class="btn btn-hero btn-primary">
-                  <i class="fa fa-arrow-right opacity-50 me-1"></i> View Information 
+                  <i class="fa fa-arrow-right opacity-50 me-1"></i> View Professional's Information 
                 </span>
                 @else
                 <span class="btn btn-hero btn-primary">

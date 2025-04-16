@@ -127,7 +127,8 @@ class SkillsController extends Controller
                 'location' => $request->location, 
                 'availability' => $request->availability,
                 'max_price' => $request->max_price, 
-                'min_price' => $request->min_price
+                'min_price' => $request->min_price,
+                'status' => 'pending'
                 ]
             );
 
