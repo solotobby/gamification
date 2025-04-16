@@ -25,8 +25,13 @@
             </a>
           </li>
           <li class="nav-main-item">
-            <a class="nav-main-link" href="{{ url('admin/professional/list') }}">
-              <span class="nav-main-link-name">List</span>
+            <a class="nav-main-link" href="{{ url('admin/professional/list/pending') }}">
+              <span class="nav-main-link-name">Pending List</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ url('admin/professional/list/active') }}">
+              <span class="nav-main-link-name">Active List</span>
             </a>
           </li>
         </ul>

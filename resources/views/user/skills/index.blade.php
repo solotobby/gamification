@@ -89,7 +89,7 @@
 
                   <td class="text-center w-25 d-none d-md-table-cell">
                     <a class="item item-circle bg-primary text-white fs-2 mx-auto" href="{{ url('view/skill/'.$result->id) }}">
-                        <span class="fa fa-file-alt"></span>
+                        <span class="fa fa-user"></span>
                     </a>
                   </td>
 
