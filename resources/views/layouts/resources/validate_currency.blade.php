@@ -55,7 +55,7 @@
         </div>
         <div class="modal-body">
             <h4 class="fw-normal text-muted text-center">
-                Kindly select your country of origin to continue
+                Kindly select your Country of residence
             </h4>
             <div class="alert alert-warning"> This will enable us pay you in your local currency.</div>
 

@@ -59,7 +59,9 @@
   <!-- END Hero Section -->
 
   <div class="content content-boxed">
-
+    <div class="alert alert-warning">
+     <strong> Note: You need 1 point to view this professional information which is equivalent to {{ baseCurrency() }} {{ currencyConverter('NGN', baseCurrency(), 500); }} </strong>
+    </div>
     <div class="col-md-12 order-md-0">
         
         @if (session('success'))
@@ -103,14 +105,6 @@
                             You cannot do this campaign because you created it.
                         </div> --}}
 
-                      
-
-
-
-
-
-                     
-
                         <div class="row items-push">
                             @foreach($portfolio as $port)
                                 <div class="col-lg-3">
@@ -123,14 +117,25 @@
                                 {{$port->description}}
                                 </div>
                             @endforeach
-                            <div class="col-lg-3"></div>
-                            <div class="col-lg-9">
-                                <div class="mb-4">
-                                    <button type="submit" class="btn btn-alt-primary">
-                                        <i class="fa fa-arrow-right opacity-50 me-1"></i> View Information
-                                    </button>
-                               </div>
-                            </div>
+
+                            @if($checkExist)
+                              <div class="col-lg-3">Professional Basic Information</div>
+                              <div class="col-lg-9">
+                                Email Address:  {{ $skill->user->email }} <br>
+                                Phone Number:  {{ $skill->user->phone }} <br>
+                              </div>
+                            @else
+
+                              <div class="col-lg-3"></div>
+                              <div class="col-lg-9">
+                                
+                                  <div class="mb-4">
+                                      <a href="{{ url('view/point/'.$port->id) }}" class="btn btn-alt-primary">
+                                          <i class="fa fa-arrow-right opacity-50 me-1"></i> View Professional Information
+                                      </a>
+                                </div>
+                              </div>
+                            @endif
                            
                         </div>
                 </div>

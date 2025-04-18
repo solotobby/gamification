@@ -742,7 +742,6 @@ class HomeController extends Controller
         $country = $currencyRequest[1];
 
         
-        
        $profile = Profile::where('user_id', auth()->user()->id)->first();
        $profile->country = $country;
        $profile->currency_code = $currencyCode;
@@ -755,5 +754,20 @@ class HomeController extends Controller
        
        return back();
        
+    }
+
+    public function pathway($pathway){
+
+        $profile = Profile::where('user_id', auth()->user()->id)->first();
+        $profile->pathway = $pathway;
+        $profile->save();
+
+        if($pathway == 'hire'){
+            return redirect('skills');
+        }elseif($pathway == 'setup'){
+            return redirect('create/skill');
+        }else{
+            return redirect('home');
+        }
     }
 }
