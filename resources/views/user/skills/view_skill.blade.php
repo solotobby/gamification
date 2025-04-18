@@ -130,7 +130,7 @@
                               <div class="col-lg-9">
                                 
                                   <div class="mb-4">
-                                      <a href="{{ url('view/point/'.$port->id) }}" class="btn btn-alt-primary">
+                                      <a href="{{ url('view/point/'.$skill->id) }}" class="btn btn-alt-primary">
                                           <i class="fa fa-arrow-right opacity-50 me-1"></i> View Professional Information
                                       </a>
                                 </div>
