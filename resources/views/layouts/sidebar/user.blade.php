@@ -14,15 +14,15 @@
 
     
       @if(auth()->user()->wallet->base_currency == 'NGN')
-      <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ route('spin') }}">
-          <i class="nav-main-link-icon fa fa-spinner"></i>
-          <span class="nav-main-link-name">Spin & Win</span>
-          {{-- <span class="nav-main-link-badge badge rounded-pill "> 
-            <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> 
-          </span> --}}
-        </a>
-      </li>
+        <li class="nav-main-item">
+          <a class="nav-main-link" href="{{ route('spin') }}">
+            <i class="nav-main-link-icon fa fa-spinner"></i>
+            <span class="nav-main-link-name">Spin & Win</span>
+            {{-- <span class="nav-main-link-badge badge rounded-pill "> 
+              <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> 
+            </span> --}}
+          </a>
+        </li>
       
         <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('fastest/finger') }}">
@@ -47,6 +47,7 @@
             <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> </span>
           </a>
         </li>   --}}
+      @endif
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -68,9 +69,6 @@
         </ul>
       </li>
     
-
-
-      @endif
 
     {{-- <li class="nav-main-item">
       <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">

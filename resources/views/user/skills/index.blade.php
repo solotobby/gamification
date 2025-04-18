@@ -22,6 +22,9 @@
 
   <div class="content">
       <h2 class="content-heading pt-0">Filter Search </h2>
+      <div class="alert alert-info">
+        Filter skilled worker based on your preferences
+      </div>
         <form action="{{ url('skills') }}" method="GET">
           {{-- @csrf --}}
           <div class="row items-push">
@@ -41,18 +44,29 @@
                 @endforeach
               </select>
             </div>
-            <div class="col-sm-6 col-xl-3">
+
+            {{-- <div class="col-sm-6 col-xl-3">
               <select class="form-select" id="dm-projects-filter" name="profeciency_level">
                 <option value="all">Experience Level</option>
                 @foreach ($experience as $skill)
                   <option value="{{ $skill->id }}" {{ request('profeciency_level') == $skill->id ? 'selected' : '' }}>{{ $skill->name }} </option>
                 @endforeach
               </select>
+            </div> --}}
+
+            <div class="col-sm-6 col-xl-3">
+              <select class="form-select" id="dm-projects-filter" name="availability">
+                    <option value="all">Availability</option>
+                    <option value="remote" {{ request('availability') == 'remote' ? 'selected' : '' }}>Remote</option>
+                    <option value="hybrid" {{ request('availability') == 'hybrid' ? 'selected' : '' }}>Hybrid</option>
+                    <option value="physical" {{ request('availability') == 'physical' ? 'selected' : '' }}>Physical</option>
+              </select>
             </div>
+
             <div class="col-sm-6 col-xl-3">
               <select class="form-select" id="dm-projects-filter" name="year_experience">
-                <option value="all">Years of Experience</option>
-                <option value="0-2" {{ request('year_experience') == '0-2' ? 'selected' : '' }}>0-2 years</option>
+                    <option value="all">Years of Experience</option>
+                    <option value="0-2" {{ request('year_experience') == '0-2' ? 'selected' : '' }}>0-2 years</option>
                     <option value="3-5" {{ request('year_experience') == '3-5' ? 'selected' : '' }}>3-5 years</option>
                     <option value="6-10" {{ request('year_experience') == '6-10' ? 'selected' : '' }}>6-10 years</option>
                     <option value="10+" {{ request('year_experience') == '10+' ? 'selected' : '' }}>10+ years</option>
@@ -88,7 +102,7 @@
                
 
                   <td class="text-center w-25 d-none d-md-table-cell">
-                    <a class="item item-circle bg-primary text-white fs-2 mx-auto" href="{{ url('view/skill/'.$result->id) }}">
+                    <a class="item item-circle bg-primary text-white fs-2 mx-auto" target="_blank" href="{{ url('view/skill/'.$result->id) }}">
                         <span class="fa fa-user"></span>
                     </a>
                   </td>
@@ -103,10 +117,10 @@
                         </span>
                         -
                         <span class="text-primary">
-                          <i class="fa fa-cogs"></i> {{  $result->profeciencyLevel->name }} 
+                          <i class="fa fa-compass"></i> {{  $result->availability }} 
                         </span>
                       </div>
-                      <a class="link-fx h4 mb-2 d-inline-block text-dark" href="#">
+                      <a class="link-fx h4 mb-2 d-inline-block text-dark" target="_blank" href="{{ url('view/skill/'.$result->id) }}">
                         {{-- {{ $result->title }} --}}
                         {{ $result->skill->name }}
                       </a>

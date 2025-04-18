@@ -634,6 +634,7 @@ class WalletController extends Controller
         if( $baseCurrency == 'NGN'){
           
 
+           
             $request->validate([
                 'balance' => 'required|numeric|min:2500',
             ], [
@@ -644,6 +645,8 @@ class WalletController extends Controller
             if($request->balance >= 50000){
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
             }
+
+           
 
             $check = PaymentTransaction::where('user_id', auth()->user()->id)
                     ->where('type', 'cash_withdrawal')
@@ -665,17 +668,19 @@ class WalletController extends Controller
             if($accountCreationDate->diffInDays(Carbon::now()) <= 10){
                 return back()->with('error', 'You cannot make withdrawal at the moment');
             }
-
+          
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-
+          
             if($wallet->balance < $request->balance)
             {
                 return back()->with('error', 'Insufficient balance');
             }
-
+          
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
+           
             if($bankInformation){
                  $this->processWithdrawals($request, 'NGN', 'paystack', '');
+                 
                 return back()->with('success', 'Withdrawal Successfully queued');
                 //  $bankList = PaystackHelpers::bankList();
                 //  return view('user.bank_information', ['bankList' => $bankList]);
@@ -735,7 +740,7 @@ class WalletController extends Controller
 
     public function processWithdrawals($request, $currency, $channel, $payload){
 
-        return fraudDetection(auth()->user()->id);
+        // return fraudDetection(auth()->user()->id);
         
         $amount = $request->balance;
         $percent = 7.5/100 * $amount;

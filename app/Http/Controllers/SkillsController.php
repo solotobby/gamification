@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentTransaction;
 use App\Models\Portfolio;
 use App\Models\PortfolioTool;
 use App\Models\ProfessionalCategory;
@@ -25,7 +26,7 @@ class SkillsController extends Controller
     public function index(Request $request){
         $searchResult = collect([]); // Always initialize as a collection
 
-    if ($request->isMethod('get') && $request->filled('skill_id') || $request->filled('proficiency_level') || $request->filled('year_experience')) {
+    if ($request->isMethod('get') && $request->filled('skill_id') || $request->filled('availability') || $request->filled('year_experience')) {
         $query = SkillAsset::query();
 
         // Filter by Skillset
@@ -34,8 +35,8 @@ class SkillsController extends Controller
         }
 
         // Filter by Experience Level
-        if ($request->filled('proficiency_level')) { // Fixed typo
-            $query->where('proficiency_level', $request->proficiency_level);
+        if ($request->filled('availability')) { // Fixed typo
+            $query->where('availability', $request->availability);
         }
 
         // Filter by Years of Experience
@@ -71,7 +72,8 @@ class SkillsController extends Controller
        
         $query = SkillAsset::where('id', $id)->first();
         $portfolio = Portfolio::where('user_id', $query->user_id)->get();
-        return view('user.skills.view_skill', ['skill' => $query, 'portfolio' => $portfolio]);
+        $checkifExist = \DB::table('skill_user')->where('skill_asset_id',$query->id)->where('user_id', auth()->user()->id)->first();
+        return view('user.skills.view_skill', ['skill' => $query, 'portfolio' => $portfolio, 'checkExist' => $checkifExist]);
     }
 
 
@@ -205,5 +207,49 @@ class SkillsController extends Controller
         $skill = SkillAsset::where('user_id', auth()->user()->id)->first();
        
         return view('user.skills.myskill', ['skill' => $skill]);
+    }
+
+    public function viewPoint($id){
+
+        $skill = SkillAsset::where('id', $id)->first();
+
+        if($skill){
+
+            $amount = currencyConverter('NGN', baseCurrency(), 500);
+            if(checkWalletBalance(auth()->user(), baseCurrency(), $amount)){
+               $debit = debitWallet(auth()->user(), baseCurrency(), $amount);
+               if($debit){
+                
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => '1',
+                        'reference' => time(),
+                        'amount' => $amount,
+                        'balance' => walletBalance(auth()->user()->id),
+                        'status' => 'successful', //$status,
+                        'currency' => baseCurrency(),
+                        'channel' => 'paystack',
+                        'type' => 'point_purchase',//'cash_transfer_top',
+                        'description' => auth()->user()->name.' purchased point',//'Cash transfer from '.$user->name,
+                        'tx_type' => 'Debit',//'Credit',
+                        'user_type' => 'regular'//'regular'
+                    ]);
+
+                    \DB::table('skill_user')->insert(['skill_asset_id' => $skill->id, 'user_id' => auth()->user()->id]);
+                       
+                    return back()->with('success', 'Point purchased successfully');
+               }
+    
+    
+                
+            }else{
+                return redirect('wallet/fund')->with('error', 'You do not have enough fund in your wallet to purchase the Point');
+            }
+
+        }
+        
+       
+
+        //$list->currency, baseCurrency(), $list->campaign_amoun
     }
 }

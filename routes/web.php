@@ -118,7 +118,7 @@ Route::post('save/phone/information', [\App\Http\Controllers\HomeController::cla
 
 Route::post('continue/country', [\App\Http\Controllers\HomeController::class, 'continueCountry'])->name('continue.country');
 
-
+Route::get('pathway/{path}', [\App\Http\Controllers\HomeController::class, 'pathway']);
 
 Route::post('send/phone/otp', [\App\Http\Controllers\OTPController::class, 'sendPhoneOTP'])->name('send.phone.otp');
 
@@ -325,6 +325,8 @@ Route::get('view/skill/{id}',[\App\Http\Controllers\SkillsController::class, 'vi
 Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
 Route::post('store/skill',[\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
 Route::get('my/skill',[\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
+
+Route::get('view/point/{id}',[\App\Http\Controllers\SkillsController::class, 'viewPoint'])->name('view.point');
 
 Route::post('create/portfolio', [\App\Http\Controllers\SkillsController::class, 'addPortfolio'])->name('add.portfolio');
 

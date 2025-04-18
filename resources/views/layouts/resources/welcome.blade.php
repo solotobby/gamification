@@ -18,7 +18,7 @@
                   <i class="fa fa-award fa-3x text-muted my-4"></i>
                   <h3 class="fs-2 fw-light mb-2">Welcome to Freebyz!</h3>
                   <p class="text-muted">
-                    Get Remote Tasks and Jobs to Earn. Hire the best online workers to work for you.
+                   Freebyz is available globally. Get Remote Tasks and Jobs to Earn in your local currency. <br>Hire the best online workers and professionals to work for you.
                   </p>
                   <button type="button" class="btn btn-alt-primary mb-4" onclick="jQuery('.js-slider').slick('slickGoTo', 1);">
                     Continue <i class="fa fa-arrow-right ms-1"></i>
