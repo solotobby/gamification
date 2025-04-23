@@ -490,7 +490,6 @@ class CampaignController extends Controller
                 $fileBanner = $request->file('proof');
                 $Bannername = time() . $fileBanner->getClientOriginalName();
                 $filePathBanner = 'proofs/' . $Bannername;
-        
                 Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
                 $proofUrl = Storage::disk('s3')->url($filePathBanner);
             }
@@ -612,25 +611,21 @@ class CampaignController extends Controller
            $workSubmitted->reason = $request->reason;
            $workSubmitted->save();
 
-           //update completed action
-        //    $campaign->completed_count += 1;
-        //    $campaign->pending_count -= 1;
-        //    $campaign->save();
+        //    setIsComplete($workSubmitted->campaign_id);
 
-           setIsComplete($workSubmitted->campaign_id);
-
-           if($campaign->currency == 'NGN'){
+           if(baseCurrency($user) == 'NGN'){
                $currency = 'NGN';
                $channel = 'paystack';
                creditWallet($user, 'NGN', $workSubmitted->amount);
-           }elseif($campaign->currency == 'USD'){
+           }elseif(baseCurrency($user) == 'USD'){
                $currency = 'USD';
                $channel = 'paypal';
                creditWallet($user, 'USD', $workSubmitted->amount);
-            }elseif($campaign->currency == null){
-               $currency = baseCurrency();
+            }else{
+                
+               $currency = baseCurrency($user);
                $channel = 'flutterwave';
-               creditWallet($user, baseCurrency(), $workSubmitted->amount);
+               creditWallet($user, baseCurrency($user), $workSubmitted->amount);
            }
 
 
