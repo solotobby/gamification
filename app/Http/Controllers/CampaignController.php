@@ -611,7 +611,7 @@ class CampaignController extends Controller
            $workSubmitted->reason = $request->reason;
            $workSubmitted->save();
 
-           setIsComplete($workSubmitted->campaign_id);
+        //    setIsComplete($workSubmitted->campaign_id);
 
            if(baseCurrency($user) == 'NGN'){
                $currency = 'NGN';
