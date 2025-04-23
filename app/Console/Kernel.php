@@ -146,19 +146,20 @@ class Kernel extends ConsoleKernel
                     $currency = 'NGN';
                     $channel = 'paystack';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->balance += (int)$amountCredited;
+                    // $wallet->balance += (int)$amountCredited;
+                    $wallet->balance += $amountCredited;
                     $wallet->save();
                 }elseif($camp->currency == 'USD'){
                     $currency = 'USD';
                     $channel = 'paypal';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->usd_balance += (int)$amountCredited;
+                    $wallet->usd_balance += $amountCredited;
                     $wallet->save();
                 }else{
                     $currency = baseCurrency($user);
                     $channel = 'flutterwave';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
-                    $wallet->base_currency_balance += (int)$amountCredited;
+                    $wallet->base_currency_balance += $amountCredited;
                     $wallet->save();
                 }
     
