@@ -70,10 +70,10 @@
                       {{ @$list->user->email }}
                     </td>
                     <td>
-                        {{ number_format($list->amount) }}
+                        {{ ]$list->amount }}
                     </td>
                     <td>
-                      {{ number_format($list->balance) }}
+                      {{ $list->balance }}
                     </td>
                     <td>
                         {{ $list->currency }}
