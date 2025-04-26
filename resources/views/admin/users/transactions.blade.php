@@ -65,11 +65,11 @@
                         {{ $list->type }}
                       </td>
                       <td>
-                        {{ number_format($list->amount,2) }}
+                        {{ $list->amount }}
                         
                       </td>
                       <td>
-                        {{ number_format($list->balance,2) }}
+                        {{ $list->balance }}
                         
                       </td>
                       <td>
