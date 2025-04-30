@@ -280,14 +280,14 @@ class GeneralController extends Controller
 
     public function landingPage()
     {  
-        dailyVisit('LandingPage');
-        return redirect('https://freebyz.com/');
+        // dailyVisit('LandingPage');
+        // return redirect('https://freebyz.com/');
         // dailyVisit('LandingPage');
         // // $users = User::where('role', 'regular')->count();
         // // $workers = CampaignWorker::all()->count();
         // $transactions = PaymentTransaction::inRandomOrder()->limit(10)->where('amount', '>', 5000)->where('type', 'cash_withdrawal')->select(['user_id','amount','description'])->get();
        
-        // return view('landingPage', ['transactions' => $transactions ]);// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
+        return view('landingPage');// ['prizesWon' => $prizesWon, 'gameplayed' => $gameplayed, 'user' => $user]);
     }
 
     public function ladingpageApi(){
