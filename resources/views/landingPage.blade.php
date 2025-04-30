@@ -244,13 +244,13 @@
 											  </tr>
 											</thead>
 											<tbody>
-												@foreach ($transactions as $trx)
+												{{-- @foreach ($transactions as $trx)
 													<tr>
-														{{-- <td>{{ \App\Helpers\SystemActivities::getInitials(@$trx->user->name) }}</td> --}}
+														
 														<td>&#8358;{{ number_format($trx->amount) }}</td>
 														<td>Cash Withdrawals</td>
 													</tr>
-											    @endforeach
+											    @endforeach --}}
 											</tbody>
 										  </table>
 										</div>
