@@ -586,11 +586,11 @@ class AdminController extends Controller
             ]);
         
         }
-        systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+        // systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
         
         $name = $getUser->name;
         activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
         
@@ -698,13 +698,13 @@ class AdminController extends Controller
 
         }
 
-        systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
+        // systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
         
         $name = $getUser->name;
 
         activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
          
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return response()->json(); $getUser;
 
