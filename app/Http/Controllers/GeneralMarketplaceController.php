@@ -140,7 +140,7 @@ class GeneralMarketplaceController extends Controller
         $content = 'Thank you for your purchase on Freebyz Marketplace. Please follow the link below to download the resource. Note: You can only download the resource twice before the link become inactive. Thank you for choosing Freebyz.com';
         $subject = 'Freebyz MarketPlace - Resources Purchase';
 
-        Mail::to($updatePayment->email)->send(new MarketPlaceMail($updatePayment, $content, $subject));
+        // Mail::to($updatePayment->email)->send(new MarketPlaceMail($updatePayment, $content, $subject));
         return redirect('marketplace/payment/completion');
 
         }else{

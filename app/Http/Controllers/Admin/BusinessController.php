@@ -39,7 +39,7 @@ class BusinessController extends Controller
         $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
             
 
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Business Selection successful!');
 
@@ -64,7 +64,7 @@ class BusinessController extends Controller
         $subject = 'Freebyz Business Promotion - Business '.$business->status;
         $content = 'Your business is now '.$business->status.' on Freebyz Business Promotion.';
             
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Business Status Updated successfully!');
     }
