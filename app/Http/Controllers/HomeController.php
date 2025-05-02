@@ -162,6 +162,10 @@ class HomeController extends Controller
         return view('user.documentation.how_to_approve');
     }
 
+    public function adminNewHome(){
+        return view('admin.new_index');
+    }
+
     public function adminHome()
     {
         // $retention = retentionRate();
