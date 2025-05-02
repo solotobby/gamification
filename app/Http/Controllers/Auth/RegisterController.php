@@ -10,6 +10,7 @@ use App\Jobs\SendMassEmail;
 use App\Mail\GeneralMail;
 use App\Mail\Welcome;
 use App\Models\AccountInformation;
+use App\Models\AuthCheck;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Wallet;
@@ -203,7 +204,8 @@ class RegisterController extends Controller
                 
                 if($user->id == '1'){
                     $token = Str::random(36);
-                    \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
+                    AuthCheck::create(['email' => $user->email, 'token' => $token]);
+                    //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
                     // $token = 
                     return redirect('login/otp/'.$token);
                 }else{

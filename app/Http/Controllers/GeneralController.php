@@ -10,6 +10,7 @@ use App\Mail\JobBroadcast;
 use App\Mail\MassMail;
 use App\Models\ActivityLog;
 use App\Models\Answer;
+use App\Models\AuthCheck;
 use App\Models\BankInformation;
 use App\Models\Banner;
 use App\Models\BannerClick;
@@ -56,7 +57,8 @@ class GeneralController extends Controller
 
     public function otp($token){
         // $user = User::where('email', $request->email)->first();
-        $valToekn = \DB::table('password_resets')->where('token', $token)->first();
+       // $valToekn = \DB::table('password_resets')->where('token', $token)->first();
+       $valToekn = AuthCheck::where('token', $token)->first();
         if($valToekn){
             return view('phone', ['liv' => $token]);
         }else{
@@ -75,7 +77,7 @@ class GeneralController extends Controller
 
             $tk =  $request->tk;
 
-            $val = \DB::table('password_resets')->where('token', $tk)->first();
+            $val = AuthCheck::where('token', $tk)->first(); //\DB::table('password_resets')->where('token', $tk)->first();
             if($val){
                 //return $val->email;
                 $user = User::where('email', $val->email)->first();
