@@ -95,6 +95,11 @@
             @endif
 
           @endif
+
+          <div class="alert alert-info">
+            We apologize for any glitch you're experiencing on our system. We are fixing some bugs and we'll soon be back perfectly. 
+            Thank you
+          </div>
       </div>
 
       <div class="col-12">
