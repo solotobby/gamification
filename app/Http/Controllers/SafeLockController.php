@@ -95,7 +95,7 @@ class SafeLockController extends Controller
         $safeLockCreated = SafeLock::create($request->all());
         $subject = 'Freebyz SafeLock Created';
         $content = 'Your SafeLock has been created successfully with a total amount of NGN'.$amount_locked.' which span for a period of '. $duration.' months at an interest of '.$interest_rate.'% giving a total pay out of NGN'.$total_payment.' on '.$maturity_date.'.'; //auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-        Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+        // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
         return $safeLockCreated; 
     }
 

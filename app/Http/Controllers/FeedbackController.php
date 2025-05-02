@@ -92,7 +92,7 @@ class FeedbackController extends Controller
 
             $subject = 'Feedback Received';
             $user = User::where('id', auth()->user()->id)->first();
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             return back()->with('success', 'Thank you for your feedback, we will look into it.');
 
