@@ -116,6 +116,8 @@
                 <div class="row g-0 justify-content-center">
                   <div class="col-sm-8 col-xl-6">
 
+                  
+
                     @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
