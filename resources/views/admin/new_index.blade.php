@@ -2,6 +2,6 @@
 
 @section('content')
 
-Here is the temporary admin Page. 
+<h1> Here is the temporary admin Page. </h1>
 
 @endsection
