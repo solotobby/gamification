@@ -96,10 +96,7 @@
 
           @endif
 
-          <div class="alert alert-info">
-            We apologize for any glitch you're experiencing on our system. We are fixing some bugs and we'll soon be back perfectly. 
-            Thank you
-          </div>
+          
       </div>
 
       <div class="col-12">
@@ -393,6 +390,8 @@
 
 
 
+   @include('layouts.resources.pathway')
+
    <!-- END Call to Action -->
     @if(auth()->user()->profile->is_welcome == 0)
     
@@ -403,8 +402,8 @@
        
         @include('layouts.resources.validate_currency')  
 
-    @elseif(auth()->user()->profile->pathway  == null)
-    @include('layouts.resources.choice') 
+    @elseif(auth()->user()->profile->pathway  == null )
+      @include('layouts.resources.choice') 
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "NGN")
             @include('layouts.resources.account_details') 
