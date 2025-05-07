@@ -763,6 +763,7 @@ class HomeController extends Controller
     public function pathway($pathway){
 
         $profile = Profile::where('user_id', auth()->user()->id)->first();
+      
         $profile->pathway = $pathway;
         $profile->save();
 
