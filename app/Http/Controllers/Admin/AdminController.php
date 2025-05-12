@@ -844,7 +844,7 @@ class AdminController extends Controller
         // ->orderBy('created_at', 'DESC')->paginate(200);
 
      
-        $yesterday = Carbon::yesterday();
+        $yesterday = Carbon::today()->subDays(15); //Carbon::yesterday();
         $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
                ->whereDate('created_at', $yesterday)
                ->paginate(50);
