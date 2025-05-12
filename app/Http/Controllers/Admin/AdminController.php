@@ -846,7 +846,7 @@ class AdminController extends Controller
      
         $yesterday = Carbon::today()->subDays(15); //Carbon::yesterday();
         $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-            //    ->whereDate('created_at', $yesterday)
+               ->whereDate('created_at', $yesterday)
                ->paginate(50);
 
         return view('admin.unapproved_list', ['campaigns' => $list]); 
