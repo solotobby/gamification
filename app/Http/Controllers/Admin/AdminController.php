@@ -201,7 +201,7 @@ class AdminController extends Controller
     }
 
     public function campaignDisputes(){
-         $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(100);
+        $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(100);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
@@ -444,9 +444,6 @@ class AdminController extends Controller
         $campaigns = $user->myCampaigns->sortByDesc('created_at');
         return view('admin.users.campaigns', ['campaigns' => $campaigns, 'user' => $user]);
     }
-   
-   
-   
 
     public function withdrawalRequest(){
         $withdrawal = Withrawal::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
@@ -864,51 +861,55 @@ class AdminController extends Controller
         }
 
        foreach($ids as $id){
-        $ca = CampaignWorker::where('id', $id)->first();
-        $ca->status = 'Approved';
-        $ca->save();
 
-        $camp = Campaign::where('id', $ca->campaign_id)->first();
-        $camp->completed_count += 1;
-        $camp->pending_count -= 1;
-        $camp->save();
+            $ca = CampaignWorker::where('id', $id)->first();
+            $ca->status = 'Approved';
+            $ca->reason = 'Auto-approval';
+            $ca->save();
+
+            $camp = Campaign::where('id', $ca->campaign_id)->first();
+            checkCampaignCompletedStatus($camp->id);
+
+            $user = User::where('id', $ca->user_id)->first();
+                $baseCurrency = baseCurrency($user);
+                $amountCredited = $ca->amount;
+                if($baseCurrency == 'NGN'){
+                    $currency = 'NGN';
+                    $channel = 'paystack';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    // $wallet->balance += (int)$amountCredited;
+                    $wallet->balance += $amountCredited;
+                    $wallet->save();
+                }elseif($camp->currency == 'USD'){
+                    $currency = 'USD';
+                    $channel = 'paypal';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    $wallet->usd_balance += $amountCredited;
+                    $wallet->save();
+                }else{
+                    $currency = baseCurrency($user);
+                    $channel = 'flutterwave';
+                    $wallet = Wallet::where('user_id', $ca->user_id)->first();
+                    $wallet->base_currency_balance += $amountCredited;
+                    $wallet->save();
+                }
+    
+                $ref = time();
         
-        if($camp->currency == 'NGN'){
-            $currency = 'NGN';
-            $channel = 'paystack';
-            $wallet = Wallet::where('user_id', $ca->user_id)->first();
-            $wallet->balance += $ca->amount;
-            $wallet->save();
-        }else{
-            $currency = 'USD';
-            $channel = 'paypal';
-            $wallet = Wallet::where('user_id', $ca->user_id)->first();
-            $wallet->usd_balance += $ca->amount;
-            $wallet->save();
-        }
-
-       
-        $ref = time();
-
-        setIsComplete($ca->campaign_id);
-
-        PaymentTransaction::create([
-            'user_id' => $ca->user_id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => $ca->amount,
-            'status' => 'successful',
-            'currency' => $currency,
-            'channel' => $channel,
-            'type' => 'campaign_payment',
-            'description' => 'Campaign Payment for '.$ca->campaign->post_title,
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
-
-    //    $subject = 'Job Approved';
-    //    $status = 'Approved';
-    //    Mail::to($ca->user->email)->send(new ApproveCampaign($ca, $subject, $status));
+                PaymentTransaction::create([
+                    'user_id' => $ca->user_id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $amountCredited,
+                    'balance' => walletBalance($ca->user_id),
+                    'status' => 'successful',
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => 'campaign_payment',
+                    'description' => 'Campaign Payment for '.$ca->campaign->post_title,
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
 
        }
        return back()->with('success', 'Mass Approval Successful');

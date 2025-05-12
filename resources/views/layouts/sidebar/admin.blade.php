@@ -114,6 +114,11 @@
             <a class="nav-main-link" href="{{ route('campaign.creator.list') }}">
               <span class="nav-main-link-name">Creator List</span>
             </a>
+
+            <a class="nav-main-link" href="{{ route('unapproved') }}">
+              <span class="nav-main-link-name">Unapproved Jobs</span>
+            </a>
+
           </li>
         </ul>
       </li>
