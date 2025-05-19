@@ -289,8 +289,8 @@ Route::get('ad/{id}/view', [\App\Http\Controllers\BannerController::class, 'adVi
 //stripe integration
 Route::get('stripe/checkout/success', [\App\Http\Controllers\WalletController::class, 'stripeCheckoutSuccess'])->name('stripe.checkout.success');
 //badge
-Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->name('badge');
-Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
+// Route::get('badge', [\App\Http\Controllers\BadgeController::class, 'index'])->name('badge');
+// Route::get('redeem/badge', [\App\Http\Controllers\BadgeController::class, 'redeemBadge'])->name('redeem.badge');
 Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
 Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
 
