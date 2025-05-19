@@ -334,12 +334,12 @@
       </li> --}}
 
       @if(auth()->user()->wallet->base_currency == 'NGN')
-       <li class="nav-main-item">
+       {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('badge') }}">
           <i class="nav-main-link-icon si si-badge"></i>
           <span class="nav-main-link-name">Badge</span>
         </a>
-      </li>
+      </li> --}}
 
       {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('converter') }}">
