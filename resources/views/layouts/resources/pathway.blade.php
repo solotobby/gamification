@@ -39,16 +39,16 @@
 
                   </h4>
 
-                  {{-- <h4 class="fw-normal text-muted text-center">
+                  <h4 class="fw-normal text-muted text-center">
                     Start making money from Micro Jobs
                     <center>
-                      <a class="btn btn-hero btn-primary mt-3" href="{{url('home')}}" data-toggle="click-ripple">
+                      <a class="btn btn-hero btn-primary mt-3" data-bs-dismiss="modal" aria-label="Close" data-toggle="click-ripple">
                         Start Earning
                       </a>
                       <br> 
                     </center>
 
-                  </h4> --}}
+                  </h4>
 
               </div>
             </div>
