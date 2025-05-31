@@ -143,8 +143,6 @@
                 <div class="input-group">
                   {{-- <span class="form-control form-control-alt">Coming Soon!</span>  --}}
                   @if(auth()->user()->wallet->base_currency == 'NGN')
-      
-                  
 
                       @if(@auth()->user()->virtualAccount)
 
