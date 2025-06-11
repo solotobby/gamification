@@ -42,26 +42,6 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
-            
-
-        // $schedule->call(function(){
-
-        //     \DB::table('wallets')
-        //     ->where(function($query) {
-        //         $query->whereNull('base_currency')
-        //               ->orWhere('base_currency', 'Naira')
-        //               ->orWhere('base_currency', 'Dollar');
-        //     })
-        //     ->update([
-        //         'base_currency' => \DB::raw("CASE 
-        //             WHEN base_currency IS NULL THEN 'NGN' 
-        //             WHEN base_currency = 'Naira' THEN 'NGN' 
-        //             WHEN base_currency = 'Dollar' THEN 'USD' 
-        //             ELSE base_currency END")
-        //     ]);
-
-        // })->dailyAt('20:30');
-
 
         $schedule->call(function(){
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
@@ -215,6 +195,12 @@ class Kernel extends ConsoleKernel
             // $subject = 'New Business Promotion selected';
             // $content = 'Automatic Business Promotion Selected';
             // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
+
+        })->daily();
+
+
+        $schedule->call(function(){
 
 
         })->daily();
