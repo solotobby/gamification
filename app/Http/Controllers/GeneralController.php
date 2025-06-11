@@ -1173,6 +1173,15 @@ class GeneralController extends Controller
                 'DESC'
             )->paginate(500, ['*'], 'page', $page);
     }
+    
+
+    public function testapiva(){
+
+      $users = User::with(['wallet:id,base_currency','virtualAccount'])->get();
+      
+      return $users;
+
+    }
 
 
 }

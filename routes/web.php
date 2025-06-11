@@ -30,6 +30,7 @@ Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessP
 
 //  Test api
 Route::get('api/test', [\App\Http\Controllers\GeneralController::class, 'testapi']);
+Route::get('api/test/va', [\App\Http\Controllers\GeneralController::class, 'testapiva']);
 // Route::get('api/test/2', [\App\Http\Controllers\GeneralController::class, 'testapi1']);
 
 ///oonboarding skillset

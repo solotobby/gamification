@@ -491,11 +491,19 @@ class AdminController extends Controller
         $getUser->save();
 
         $ref = time();
+
+        $userBaseCurrency = baseCurrency($getUser);
+
+        $currencyParams = currencyParameter($userBaseCurrency);
+        $upgradeAmount = $currencyParams->upgrade_fee;
+        $referral_commission = $currencyParams->referral_commission;
+
+
         PaymentTransaction::create([
             'user_id' => $getUser->id,
             'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => 1000,
+            'amount' => $upgradeAmount,
             'balance' => walletBalance($getUser->id),
             'status' => 'successful',
             'currency' => 'NGN',
@@ -513,7 +521,7 @@ class AdminController extends Controller
             if(!$refereeInfo){
             
                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
-                $wallet->balance += 500;
+                $wallet->balance += $referral_commission;
                 $wallet->save();
 
                 $refereeUpdate = Referral::where('user_id', $getUser->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
@@ -526,7 +534,7 @@ class AdminController extends Controller
                     'user_id' => $referee_user->id,///auth()->user()->id,
                     'campaign_id' => '1',
                     'reference' => $ref,
-                    'amount' => 500,
+                    'amount' => $referral_commission,
                     'balance' => walletBalance($referee_user->id),
                     'status' => 'successful',
                     'currency' => 'NGN',
@@ -536,14 +544,14 @@ class AdminController extends Controller
                 ]);
 
                 $adminWallet = Wallet::where('user_id', '1')->first();
-                $adminWallet->balance += 500;
+                $adminWallet->balance += $referral_commission;
                 $adminWallet->save();
                 //Admin Transaction Table
                 PaymentTransaction::create([
                     'user_id' => 1,
                     'campaign_id' => '1',
                     'reference' => $ref,
-                    'amount' => 500,
+                    'amount' => $referral_commission,
                     'balance' => walletBalance('1'),
                     'status' => 'successful',
                     'currency' => 'NGN',
