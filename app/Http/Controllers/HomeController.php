@@ -471,7 +471,8 @@ class HomeController extends Controller
         if($responseData['status'] == true){
             return back()->with('success', 'Freebyz Personal Account Created Successfully');
         }else{
-            return back()->with('error', 'An error occoured while creating account, please contact admin by clicking Talk to Us on the side menu');
+            return back()->with('error', 'Sorry, we couldn\'t generate your virtual account for top up at the moment. You can pay manually via
+                                6667335193 (Moniepoint BANK- Freebyz Technologies LTD).');
         }
     }
 
