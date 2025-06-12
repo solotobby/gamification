@@ -25,7 +25,7 @@
 					</div>
 					<div class="copyright mt-20">
 						<p>All copyright © reserved by <a href="{{ url('/') }}"><span class="icon-happy"></span> Freebyz</a> <?php echo date('Y') ?></p> 
-						<p><span class="icon-happy"></span> Freebyz By <b>Dominahl Technology LLC</b></p>
+						{{-- <p><span class="icon-happy"></span> Freebyz By <b>Dominahl Technology LLC</b></p> --}}
 					</div>
 				</div>
 			</div>
