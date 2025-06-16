@@ -13,7 +13,7 @@
         <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">UnApproved</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">UnApproved</li>
+            <li class="breadcrumb-item">UnApproved Jobs</li>
             <li class="breadcrumb-item active" aria-current="page">List</li>
           </ol>
         </nav>
@@ -49,6 +49,32 @@
                     {{ session('error') }}
                 </div>
             @endif
+
+            <form action="{{ url('unapproved') }}" method="GET">
+              <div class="row mb-3">
+                <div class="col-md-6"> 
+                  <input type="date" class="form-control" name="start" value="{{ request('start') }}" required>
+                </div>
+              
+                <div class="col-md-6">
+                  <input type="date" class="form-control" name="end" value="{{ request('end') }}" required>
+                </div>
+
+                 <div class="col-md-4 mt-3">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fa fa-search me-1"></i> Search
+                    </button>
+                    @if(request()->has(['start', 'end']))
+                      <a href="{{ url('unapproved') }}" class="btn btn-warning">
+                        <i class="fa fa-cogs me-1"></i> Reset
+                      </a>
+                    @endif
+                 </div>
+                 <div class="col-md-4">
+                    
+                 </div>
+              </div>
+        </form>
 
 
         <form action="{{ url('mass/approval') }}" method="POST">

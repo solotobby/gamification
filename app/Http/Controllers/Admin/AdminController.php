@@ -842,7 +842,7 @@ class AdminController extends Controller
         return back()->with('success', 'Completed status changed!');
     }
 
-    public function unapprovedJobs(){
+    public function unapprovedJobs(Request $request){
         
         // $currentTime = Carbon::now();
         // $twentyFourHoursAgo = $currentTime->subHours(24);
@@ -851,13 +851,46 @@ class AdminController extends Controller
         // // ->whereDate('created_at', '<=', $twentyFourHoursAgo)->paginate(200);
         // ->orderBy('created_at', 'DESC')->paginate(200);
 
-     
-        $yesterday = Carbon::yesterday(); //Carbon::today()->subDays(15);
-        $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-               ->whereDate('created_at', $yesterday)
-               ->paginate(50);
+        // $request->validate([
+        //     'start' => 'required|date',
+        //     'end' => 'required|date|after_or_equal:start',
+        // ]);
 
-        return view('admin.unapproved_list', ['campaigns' => $list]); 
+        //     $list = collect();
+        // if($request->has(['start', 'end'])){
+        //      $startDate = $request->start;
+        //      $endDate = $request->end;
+
+        //      $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
+        //        ->whereDate('created_at', '>=', $startDate)
+        //        ->whereDate('created_at', '<=', $endDate)
+        //        ->paginate(50);
+        // }else{
+        //      $yesterday = Carbon::yesterday(); //Carbon::today()->subDays(15);
+        //      $list =  CampaignWorker::where('status', 'Pending')->where('reason', null)
+        //        ->whereDate('created_at', $yesterday)
+        //        ->paginate(50);
+        // }
+
+
+         $query = CampaignWorker::where('status', 'Pending')->whereNull('reason');
+
+    if ($request->filled(['start', 'end'])) {
+        $startDate = $request->start;
+        $endDate = $request->end;
+
+        $query->whereDate('created_at', '>=', $startDate)
+              ->whereDate('created_at', '<=', $endDate);
+    } else {
+        $yesterday = Carbon::yesterday()->toDateString();
+        $query->whereDate('created_at', $yesterday);
+    }
+
+    $list = $query->paginate(50);
+
+
+        return view('admin.unapproved_list', ['campaigns' => $list,  'start' => $request->start,
+        'end' => $request->end]); 
     }
 
 
