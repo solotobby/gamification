@@ -487,18 +487,22 @@ class CampaignController extends Controller
         // if($request->hasFile('proof')){
             $proofUrl = '';
             if($request->hasFile('proof')){
-                $fileBanner = $request->file('proof');
-                $Bannername = time() . $fileBanner->getClientOriginalName();
-                $filePathBanner = 'proofs/' . $Bannername;
-                Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-                $proofUrl = Storage::disk('s3')->url($filePathBanner);
+                  $imageName = time().'.'.$request->proof->extension();
+                  $request->proof->move(public_path('images'), $imageName);
+
+                // $fileBanner = $request->file('proof');
+                // $Bannername = time() . $fileBanner->getClientOriginalName();
+                // $filePathBanner = 'proofs/' . $Bannername;
+                // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+                // $proofUrl = Storage::disk('s3')->url($filePathBanner);
+               
             }
 
             $campaignWorker['user_id'] = auth()->user()->id;
             $campaignWorker['campaign_id'] = $request->campaign_id;
             $campaignWorker['comment'] = $request->comment;
             $campaignWorker['amount'] = $request->amount; 
-            $campaignWorker['proof_url'] = $proofUrl == '' ? 'no image' : $proofUrl;
+            $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName;
             $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
            
             $campaignWork = CampaignWorker::create($campaignWorker);
