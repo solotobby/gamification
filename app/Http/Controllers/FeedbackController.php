@@ -76,18 +76,21 @@ class FeedbackController extends Controller
 
         if($request->hasFile('proof')){
          
-            $fileBanner = $request->file('proof');
-            $Bannername = time() . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'feedbacks/' . $Bannername;
+            // $fileBanner = $request->file('proof');
+            // $Bannername = time() . $fileBanner->getClientOriginalName();
+            // $filePathBanner = 'feedbacks/' . $Bannername;
     
-            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            $proofUrl = Storage::disk('s3')->url($filePathBanner);
+            // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            // $proofUrl = Storage::disk('s3')->url($filePathBanner);
+
+            $imageName = time().'.'.$request->proof->extension();
+            $request->proof->move(public_path('images'), $imageName);
 
             $feedback['user_id'] = auth()->user()->id;
             $feedback['category'] = $request->category;
             $feedback['message'] = $request->message;
             $feedback['status'] = false;
-            $feedback['proof_url'] = $proofUrl;
+            $feedback['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName; //$proofUrl;
             Feedback::create($feedback);
 
             $subject = 'Feedback Received';
