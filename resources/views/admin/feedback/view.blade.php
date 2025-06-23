@@ -62,7 +62,7 @@
           <div class="row g-sm">
               <div class="col-6 col-sm-4 col-md-5 col-lg-4 col-xl-3">
               <div class="options-container fx-item-zoom-in">
-                  <img class="img-fluid options-item" src="{{$feedback->proof_url}}" alt="">
+                  <img class="img-fluid options-item" src="{{asset($feedback->proof_url)}}" alt="">
                   <div class="options-overlay bg-black-75">
                   {{-- <div class="options-overlay-content">
                       <a class="btn btn-sm btn-primary" href="javascript:void(0)">
