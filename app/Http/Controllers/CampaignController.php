@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class CampaignController extends Controller
 {
@@ -487,8 +488,56 @@ class CampaignController extends Controller
         // if($request->hasFile('proof')){
             $proofUrl = '';
             if($request->hasFile('proof')){
-                  $imageName = time().'.'.$request->proof->extension();
-                  $request->proof->move(public_path('images'), $imageName);
+            //      $image = $request->file('proof');
+            //       $imageName = time().'.'.$request->proof->extension();
+            //    $destinationPath = $request->proof->move(public_path('images'), $imageName);
+
+               // Load image using GD
+                 $file = $request->file('proof');
+
+                    $extension = strtolower($file->getClientOriginalExtension());
+                    $imageName = time() . '.jpg'; // Save as JPEG
+                    $destination = public_path('images/' . $imageName);
+
+                    // Get temporary file path BEFORE moving or doing anything else
+                    $tempPath = $file->getRealPath();
+
+                    // Load image from temp file using GD
+                    switch ($extension) {
+                        case 'jpg':
+                        case 'jpeg':
+                            $source = imagecreatefromjpeg($tempPath);
+                            break;
+                        case 'png':
+                            $source = imagecreatefrompng($tempPath);
+                            break;
+                        case 'gif':
+                            $source = imagecreatefromgif($tempPath);
+                            break;
+                        default:
+                            return back()->with('error', 'Unsupported image type.');
+                    }
+
+                        // Resize if width > 800px
+                        // $width = imagesx($source);
+                        // $height = imagesy($source);
+                        // $maxWidth = 800;
+
+                        // if ($width > $maxWidth) {
+                        //     $newWidth = $maxWidth;
+                        //     $newHeight = intval($height * ($maxWidth / $width));
+                        //     $resized = imagecreatetruecolor($newWidth, $newHeight);
+                        //     imagecopyresampled($resized, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                        // } else {
+                        //     $resized = $source;
+                        // }
+
+                    // Compress and save as JPEG (quality 70%)
+                    imagejpeg($source, $destination, 70);
+
+               
+                //    dd('Upload done');
+
 
                 // $fileBanner = $request->file('proof');
                 // $Bannername = time() . $fileBanner->getClientOriginalName();

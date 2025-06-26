@@ -13,6 +13,7 @@
         "flutterwavedev/flutterwave-v3": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "2.7",
         "joelbutcher/facebook-graph-sdk": "^6.0",
         "kris/laravel-form-builder": "^1.53",
         "laravel/framework": "^8.54",

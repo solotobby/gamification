@@ -190,7 +190,8 @@
         {{-- <h4 class="fw-light mb-0">Ad</h4><br> --}}
         @if($ads)
                 <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
-                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                  <img src="{{ asset($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                    {{-- <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive"> --}}
                 </a>
         @else
 

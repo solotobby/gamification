@@ -86,13 +86,15 @@ class BannerController extends Controller
         if($request->hasFile('banner_url')){
 
             //s3 bucket processing
-            $fileBanner = $request->file('banner_url');
-            $Bannername = time();// . $fileBanner->getClientOriginalName();
-            $filePathBanner = 'ad/' . $Bannername.'.'.$fileBanner->extension();
+            // $fileBanner = $request->file('banner_url');
+            // $Bannername = time();// . $fileBanner->getClientOriginalName();
+            // $filePathBanner = 'ad/' . $Bannername.'.'.$fileBanner->extension();
             
-            Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            $bannerUrl = Storage::disk('s3')->url($filePathBanner);
+            // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            // $bannerUrl = Storage::disk('s3')->url($filePathBanner);
             
+            $imageName = time().'.'.$request->banner_url->extension();
+            $request->banner_url->move(public_path('images'), $imageName);
 
             // $fileBanner = $request->file('banner_url');
             // //process local storage
@@ -111,7 +113,7 @@ class BannerController extends Controller
             $banner['country'] = 'all';//$request->country;
             $banner['status'] = false;
             $banner['amount'] = $request->budget; //$finalTotal;
-            $banner['banner_url'] = $bannerUrl;
+            $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName; //$bannerUrl;
             $banner['impression'] = 0;
             $banner['impression_count'] = 0;
             $banner['clicks'] = $request->budget / 40.5;
@@ -146,7 +148,7 @@ class BannerController extends Controller
             $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
             $subject = 'Ad Banner Placement - Under Review';
 
-            Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
+            //Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));  
             return back()->with('success', 'Banner Ad Created Successfully');
 
         }else{
