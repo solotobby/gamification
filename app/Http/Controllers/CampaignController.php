@@ -487,36 +487,36 @@ class CampaignController extends Controller
 
         // if($request->hasFile('proof')){
             $proofUrl = '';
-            if($request->hasFile('proof')){
-            //      $image = $request->file('proof');
-            //       $imageName = time().'.'.$request->proof->extension();
-            //    $destinationPath = $request->proof->move(public_path('images'), $imageName);
+            // if($request->hasFile('proof')){
+            // //      $image = $request->file('proof');
+            // //       $imageName = time().'.'.$request->proof->extension();
+            // //    $destinationPath = $request->proof->move(public_path('images'), $imageName);
 
-               // Load image using GD
-                 $file = $request->file('proof');
+            //    // Load image using GD
+            //      $file = $request->file('proof');
 
-                    $extension = strtolower($file->getClientOriginalExtension());
-                    $imageName = time() . '.jpg'; // Save as JPEG
-                    $destination = public_path('images/' . $imageName);
+            //         $extension = strtolower($file->getClientOriginalExtension());
+            //         $imageName = time() . '.jpg'; // Save as JPEG
+            //         $destination = public_path('images/' . $imageName);
 
-                    // Get temporary file path BEFORE moving or doing anything else
-                    $tempPath = $file->getRealPath();
+            //         // Get temporary file path BEFORE moving or doing anything else
+            //         $tempPath = $file->getRealPath();
 
-                    // Load image from temp file using GD
-                    switch ($extension) {
-                        case 'jpg':
-                        case 'jpeg':
-                            $source = imagecreatefromjpeg($tempPath);
-                            break;
-                        case 'png':
-                            $source = imagecreatefrompng($tempPath);
-                            break;
-                        case 'gif':
-                            $source = imagecreatefromgif($tempPath);
-                            break;
-                        default:
-                            return back()->with('error', 'Unsupported image type.');
-                    }
+            //         // Load image from temp file using GD
+            //         switch ($extension) {
+            //             case 'jpg':
+            //             case 'jpeg':
+            //                 $source = imagecreatefromjpeg($tempPath);
+            //                 break;
+            //             case 'png':
+            //                 $source = imagecreatefrompng($tempPath);
+            //                 break;
+            //             case 'gif':
+            //                 $source = imagecreatefromgif($tempPath);
+            //                 break;
+            //             default:
+            //                 return back()->with('error', 'Unsupported image type.');
+            //         }
 
                         // Resize if width > 800px
                         // $width = imagesx($source);
@@ -533,10 +533,7 @@ class CampaignController extends Controller
                         // }
 
                     // Compress and save as JPEG (quality 70%)
-                    imagejpeg($source, $destination, 70);
-
-               
-                //    dd('Upload done');
+                    // imagejpeg($source, $destination, 70);
 
 
                 // $fileBanner = $request->file('proof');
@@ -545,13 +542,13 @@ class CampaignController extends Controller
                 // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
                 // $proofUrl = Storage::disk('s3')->url($filePathBanner);
                
-            }
+            // }
 
             $campaignWorker['user_id'] = auth()->user()->id;
             $campaignWorker['campaign_id'] = $request->campaign_id;
             $campaignWorker['comment'] = $request->comment;
             $campaignWorker['amount'] = $request->amount; 
-            $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName;
+            $campaignWorker['proof_url'] = 'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
             $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
            
             $campaignWork = CampaignWorker::create($campaignWorker);
