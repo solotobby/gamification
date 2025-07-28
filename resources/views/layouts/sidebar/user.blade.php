@@ -14,31 +14,29 @@
 
     
       @if(auth()->user()->wallet->base_currency == 'NGN')
-        <li class="nav-main-item">
+        {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ route('spin') }}">
             <i class="nav-main-link-icon fa fa-spinner"></i>
             <span class="nav-main-link-name">Spin & Win</span>
-            {{-- <span class="nav-main-link-badge badge rounded-pill "> 
-              <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> 
-            </span> --}}
+          
           </a>
-        </li>
+        </li> --}}
       
-        <li class="nav-main-item">
+        {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('fastest/finger') }}">
             <i class="nav-main-link-icon fa fa-fingerprint"></i>
             <span class="nav-main-link-name">Fastest Finger</span>   
             <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
           </a>
-        </li> 
+        </li>  --}}
 
-        <li class="nav-main-item">
+        {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('user/business') }}">
             <i class="nav-main-link-icon fa fa-briefcase"></i>
             <span class="nav-main-link-name">Promote Business</span>   
             <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> </span>
           </a>
-        </li>  
+        </li>   --}}
 
          
       @endif
@@ -127,12 +125,12 @@
       </li> 
  --}}
 
-      <li class="nav-main-item">
+      {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('view/posts') }}">
           <i class="nav-main-link-icon fa fa-list"></i>
           <span class="nav-main-link-name">Post & Earn</span>
         </a>
-      </li>
+      </li> --}}
 
 
       @if(auth()->user()->wallet->base_currency == 'NGN')

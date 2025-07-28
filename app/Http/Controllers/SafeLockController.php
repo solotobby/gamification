@@ -48,56 +48,60 @@ class SafeLockController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:50000'
-        ]);
 
-        $interest_rate = 5;
-        $amount_locked = $request->amount;
-        $duration = $request->duration;
-        $interest_accrued = 0.05 * $amount_locked;
-        $total_payment = $amount_locked + $interest_accrued;
-        $start_date = Carbon::now();
-        $maturity_date = Carbon::now()->addMonth($request->duration);
-        if($request->source == 'wallet'){
+         return back()->with('error', 'This service is temporarily unavailable!');
 
-            if(auth()->user()->wallet->balance < $amount_locked){
-                return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
-                // or use the paystack option
-            }
+
+        // $request->validate([
+        //     'amount' => 'required|numeric|min:50000'
+        // ]);
+
+        // $interest_rate = 5;
+        // $amount_locked = $request->amount;
+        // $duration = $request->duration;
+        // $interest_accrued = 0.05 * $amount_locked;
+        // $total_payment = $amount_locked + $interest_accrued;
+        // $start_date = Carbon::now();
+        // $maturity_date = Carbon::now()->addMonth($request->duration);
+        // if($request->source == 'wallet'){
+
+        //     if(auth()->user()->wallet->balance < $amount_locked){
+        //         return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
+        //         // or use the paystack option
+        //     }
         
-            debitWallet(auth()->user(), 'NGN', $amount_locked);
-            $created = $this->createSafeLock($request, $interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date);
-            if($created){
-                PaymentTransaction::create([
-                    'user_id' => auth()->user()->id,
-                    'campaign_id' => 1,
-                    'reference' => time(),
-                    'amount' => $amount_locked,
-                    'balance' => walletBalance(auth()->user()->id),
-                    'status' => 'successful',
-                    'currency' => 'NGN',
-                    'channel' => 'internal',
-                    'type' => 'safelock_created',
-                    'tx_type' => 'Debit',
-                    'description' => 'Created a SafeLock'
-                ]);
+        //     debitWallet(auth()->user(), 'NGN', $amount_locked);
+        //     $created = $this->createSafeLock($request, $interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date);
+        //     if($created){
+        //         PaymentTransaction::create([
+        //             'user_id' => auth()->user()->id,
+        //             'campaign_id' => 1,
+        //             'reference' => time(),
+        //             'amount' => $amount_locked,
+        //             'balance' => walletBalance(auth()->user()->id),
+        //             'status' => 'successful',
+        //             'currency' => 'NGN',
+        //             'channel' => 'internal',
+        //             'type' => 'safelock_created',
+        //             'tx_type' => 'Debit',
+        //             'description' => 'Created a SafeLock'
+        //         ]);
 
-                return back()->with('success', 'Safelock Created Successfully');
-            }
-        }else{
+        //         return back()->with('success', 'Safelock Created Successfully');
+        //     }
+        // }else{
 
-        }
+        // }
     }
 
-    public function createSafeLock($request,$interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date){
-        $request->request->add(['user_id' => auth()->user()->id,'amount_locked' => $amount_locked, 'interest_rate' => $interest_rate, '$duration' => $duration, 'interest_accrued' => $interest_accrued, 'total_payment' => $total_payment, 'start_date' => $start_date, 'maturity_date' => $maturity_date]);
-        $safeLockCreated = SafeLock::create($request->all());
-        $subject = 'Freebyz SafeLock Created';
-        $content = 'Your SafeLock has been created successfully with a total amount of NGN'.$amount_locked.' which span for a period of '. $duration.' months at an interest of '.$interest_rate.'% giving a total pay out of NGN'.$total_payment.' on '.$maturity_date.'.'; //auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-        // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
-        return $safeLockCreated; 
-    }
+    // public function createSafeLock($request,$interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date){
+    //     $request->request->add(['user_id' => auth()->user()->id,'amount_locked' => $amount_locked, 'interest_rate' => $interest_rate, '$duration' => $duration, 'interest_accrued' => $interest_accrued, 'total_payment' => $total_payment, 'start_date' => $start_date, 'maturity_date' => $maturity_date]);
+    //     $safeLockCreated = SafeLock::create($request->all());
+    //     $subject = 'Freebyz SafeLock Created';
+    //     $content = 'Your SafeLock has been created successfully with a total amount of NGN'.$amount_locked.' which span for a period of '. $duration.' months at an interest of '.$interest_rate.'% giving a total pay out of NGN'.$total_payment.' on '.$maturity_date.'.'; //auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
+    //     // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+    //     return $safeLockCreated; 
+    // }
 
     /**
      * Display the specified resource.

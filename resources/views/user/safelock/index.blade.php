@@ -18,18 +18,9 @@
 
   <!-- Page Content -->
   <div class="content">
-    <div class="block block-rounded">
+    {{-- <div class="block block-rounded">
         <div class="block-content">
-            @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session('error') }}
-                </div>
-            @endif
+            
             
             <div class="alert alert-info">
               Lock funds to earn up to 5% interest in 3-6 months.
@@ -59,7 +50,7 @@
                       <label class="form-label" for="example-text-input">Source of Fund</label>
                       <select name="source" class="form-control" required>
                         <option value="wallet">Wallet Balance</option>
-                        {{-- <option value="paystack">Paystack</option> --}}
+                        
                       </select>
                     </div>
                     <div class="mb-4">
@@ -70,7 +61,7 @@
             </div>
         </form>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Full Table -->
     <div class="block block-rounded">
@@ -83,6 +74,9 @@
         </div>
       </div>
       <div class="block-content">
+         <div class="alert alert-info">
+            Safelock is temporarily unavailable, your funds can be withdrawn at maturity.
+          </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
               <thead>
