@@ -131,18 +131,18 @@ Route::get('generate/updated/virtual/account', [\App\Http\Controllers\HomeContro
 
 ////promote business
 
-Route::get('user/business', function () {
-    return redirect('business');
-});
+// Route::get('user/business', function () {
+//     return redirect('business');
+// });
 
-Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
-Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
-Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
+// Route::get('business', [\App\Http\Controllers\PromoteBusinessController::class, 'create']);
+// Route::post('store/business', [\App\Http\Controllers\PromoteBusinessController::class, 'store'])->name('store.business');
+// Route::post('product', [\App\Http\Controllers\PromoteBusinessController::class, 'createProduct'])->name('create.product');
 
-Route::get('product/edit/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'editProduct']);
-Route::get('product/delete/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'deleteProduct']);
+// Route::get('product/edit/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'editProduct']);
+// Route::get('product/delete/{id}', [\App\Http\Controllers\PromoteBusinessController::class, 'deleteProduct']);
 
-Route::post('product/edit', [\App\Http\Controllers\PromoteBusinessController::class, 'processProductEdit'])->name('edit.business.product');
+// Route::post('product/edit', [\App\Http\Controllers\PromoteBusinessController::class, 'processProductEdit'])->name('edit.business.product');
 
 
 ////Referral Routes
@@ -178,9 +178,9 @@ Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 
 
 Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRating'])->name('job.rating');
 //spin the wheel
-Route::get('spin', [\App\Http\Controllers\SpinController::class, 'index'])->name('spin');
-Route::post('spin-wheel', [\App\Http\Controllers\SpinController::class, 'spinWheel'])->name('spin.wheel');
-Route::get('spin/attempt', [\App\Http\Controllers\SpinController::class, 'attempt'])->name('spin.attempt');
+// Route::get('spin', [\App\Http\Controllers\SpinController::class, 'index'])->name('spin');
+// Route::post('spin-wheel', [\App\Http\Controllers\SpinController::class, 'spinWheel'])->name('spin.wheel');
+// Route::get('spin/attempt', [\App\Http\Controllers\SpinController::class, 'attempt'])->name('spin.attempt');
 ///paystack payment 
 // Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 // Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
@@ -295,9 +295,9 @@ Route::get('stripe/checkout/success', [\App\Http\Controllers\WalletController::c
 Route::get('christmas/bonus', [\App\Http\Controllers\UserController::class, 'christmasBundle']);
 Route::post('christmas', [\App\Http\Controllers\UserController::class, 'storeChristmasBundle']);
 
-Route::get('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'index']);
-Route::post('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'declareInterest'])->name('fastest.finger');
-Route::post('enter/pool', [\App\Http\Controllers\FastestFingerController::class, 'enterPool'])->name('enter.pool');
+// Route::get('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'index']);
+// Route::post('fastest/finger', [\App\Http\Controllers\FastestFingerController::class, 'declareInterest'])->name('fastest.finger');
+// Route::post('enter/pool', [\App\Http\Controllers\FastestFingerController::class, 'enterPool'])->name('enter.pool');
 
 //webhook handling
 
@@ -338,7 +338,7 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 // Route::get('api/flutterwave/list/banks/{countryCode}', [\App\Http\Controllers\WithdrawalController::class, 'listBanks']);
 // Route::get('api/brail/rates', [\App\Http\Controllers\WithdrawalController::class, 'rates']);
 
-Route::get('view/posts', [\App\Http\Controllers\GistGrooveController::class, 'index']);
+// Route::get('view/posts', [\App\Http\Controllers\GistGrooveController::class, 'index']);
 
 Route::post('post', [\App\Http\Controllers\GistGrooveController::class, 'savePost'])->name('save.post');
 Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class, 'savePostSuccess']);

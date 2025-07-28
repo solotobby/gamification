@@ -186,22 +186,22 @@
     </div>
 
 
-    <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-        {{-- <h4 class="fw-light mb-0">Ad</h4><br> --}}
+    {{-- <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+        <h4 class="fw-light mb-0">Ad</h4><br>
         @if($ads)
                 <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
                   <img src="{{ asset($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
-                    {{-- <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive"> --}}
+                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
                 </a>
         @else
 
-                {{-- <a href="{{ url('banner/create')}}" target="_blank">
+                <a href="{{ url('banner/create')}}" target="_blank">
                   <img src="https://freebyz.s3.us-east-1.amazonaws.com/ad/1701380428.jpg" width="100%" height="300" class="img-responsive">
-                </a> --}}
+                </a>
 
                 <iframe width="1060" height="315" src="https://www.youtube.com/embed/XAjXvFri0Z4?si=XCPZbkHroL7qfh2j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         @endif
-    </div>
+    </div> --}}
 
     
     <!-- VPS -->
