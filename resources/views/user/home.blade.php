@@ -167,7 +167,8 @@
                         </button> --}}
 
                             <span class="form-control form-control-alt">
-                              <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Activate Freebyz Personal Account</a>
+                              {{-- <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Fund your Wallet</a> --}}
+                              <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm">Click Here to Fund Wallet</a>
                             </span>
 
                       @endif
