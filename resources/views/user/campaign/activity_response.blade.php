@@ -81,14 +81,16 @@
               </div>
             
 
-              @if($campaign['proof_url'] != null)
-                <hr>
-                <h5>Proof of work Image</h5>
-                <img src="{{ asset($campaign['proof_url']) }}" class="img-thumbnail rounded float-left " alt="Proof">
-                @else
-                <div class="alert alert-warning text-small">
+              @if($campaign['proof_url'] == 'no image')
+              <div class="alert alert-warning text-small">
                   No Image attached
                 </div>
+                @else
+                  <hr>
+                  <h5>Proof of work Image</h5>
+              
+                  <img src="{{ asset($campaign['proof_url']) }}" class="img-thumbnail rounded float-left " alt="Proof">
+                
               @endif
              
               <div class="mb-4 mt-4">

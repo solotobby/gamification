@@ -485,12 +485,12 @@ class CampaignController extends Controller
 
         $data['campaign'] = $campaign;
 
-        // if($request->hasFile('proof')){
+        if($request->hasFile('proof')){
             $proofUrl = '';
             // if($request->hasFile('proof')){
-            // //      $image = $request->file('proof');
-            // //       $imageName = time().'.'.$request->proof->extension();
-            // //    $destinationPath = $request->proof->move(public_path('images'), $imageName);
+                //   $image = $request->file('proof');
+                //   $imageName = time().'.'.$request->proof->extension();
+                //   $destinationPath = $request->proof->move(public_path('images'), $imageName);
 
             //    // Load image using GD
             //      $file = $request->file('proof');
@@ -541,14 +541,17 @@ class CampaignController extends Controller
                 // $filePathBanner = 'proofs/' . $Bannername;
                 // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
                 // $proofUrl = Storage::disk('s3')->url($filePathBanner);
-               
-            // }
+               $imageName = time().'.'.$request->proof->extension();
+               $request->proof->move(public_path('images'), $imageName);
+            }
+
+              
 
             $campaignWorker['user_id'] = auth()->user()->id;
             $campaignWorker['campaign_id'] = $request->campaign_id;
             $campaignWorker['comment'] = $request->comment;
             $campaignWorker['amount'] = $request->amount; 
-            $campaignWorker['proof_url'] = 'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
+            $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName;//'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
             $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
            
             $campaignWork = CampaignWorker::create($campaignWorker);
