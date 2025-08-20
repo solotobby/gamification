@@ -1783,7 +1783,7 @@ if(!function_exists('filterCampaign')){
             }
 
             // Optimize sorting and paginate
-            $campaigns = $query->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+            $campaigns = $query->orderByRaw("CASE WHEN approved = 'Priotized' THEN 1 ELSE 2 END")
                 ->orderBy('created_at', 'DESC')
                 ->paginate(15 );
 
