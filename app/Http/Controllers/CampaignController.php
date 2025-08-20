@@ -485,6 +485,7 @@ class CampaignController extends Controller
 
         $data['campaign'] = $campaign;
 
+        $imageName = '';
         if($request->hasFile('proof')){
             $proofUrl = '';
             // if($request->hasFile('proof')){
