@@ -98,9 +98,9 @@
               
             </tbody>
           </table>
-          {{-- <div class="d-flex">
+          <div class="d-flex">
             {!! $campaigns->links('pagination::bootstrap-4') !!}
-          </div> --}}
+          </div>
         </div>
       </div>
     </div>
