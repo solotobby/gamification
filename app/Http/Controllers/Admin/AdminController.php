@@ -728,7 +728,7 @@ class AdminController extends Controller
     }
 
     public function campaignList(){
-        $campaigns = Campaign::where('status', 'Live')->orderBy('id', 'DESC')->paginate(10);
+        $campaigns = Campaign::where('status', 'Live')->orderBy('id', 'DESC')->paginate(200);
         
         // \DB::select('SELECT * FROM campaigns WHERE status = ? ORDER BY created_at DESC', ['Live']); 
         
@@ -771,7 +771,7 @@ class AdminController extends Controller
     }
 
     public function deniedCampaigns(){
-        $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->get();
+        $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->paginate(10);
         return view('admin.denied_list', ['campaigns' => $list]); 
     }
 

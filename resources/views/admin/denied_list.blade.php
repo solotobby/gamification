@@ -44,6 +44,7 @@
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
             <thead>
+              
                 <tr>
                     <th>#</th>
                     <th>Creator</th>
@@ -52,11 +53,15 @@
                     <th>Unit Price</th>
                     <th>Total</th>
                     <th>When Created</th>
-                    </tr>
+                </tr>
+
             </thead>
             <tbody>
+
                 <?php $i = 1; ?>
+
                 @foreach ($campaigns as $camp)
+
                     <tr>
                         <th scope="row">{{ $i++ }}.</th>
                         <td class="fw-semibold"><a href="#" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a></td>
@@ -128,7 +133,8 @@
                           </div>
                       </div>
                       </div>
-                  </div>
+                    </div>
+
                 @endforeach
               
             </tbody>
