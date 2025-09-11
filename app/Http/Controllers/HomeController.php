@@ -709,6 +709,7 @@ class HomeController extends Controller
         $this->validate($request, [
             'account_number' => 'numeric|required|digits:10'
         ]);
+
         $accountInformation = resolveBankName($request->account_number, $request->bank_code);
 
         if ($accountInformation['status'] == 'true') {
