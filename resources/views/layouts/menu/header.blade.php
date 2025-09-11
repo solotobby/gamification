@@ -20,7 +20,7 @@
       <!-- END Open Search Section -->
      
       <strong>Welcome {{ short_name(auth()->user()->name) }} 
-        @if(auth()->user()->wallet->base_currency == 'Naira')
+        @if(auth()->user()->wallet->base_currency == 'NGN')
             @if(auth()->user()->is_verified)
                 <i class="fa fa-check opacity-75 me-1"></i>
             @endif

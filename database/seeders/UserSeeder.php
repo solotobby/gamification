@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -22,7 +23,8 @@ class UserSeeder extends Seeder
 
         foreach($users as $user)
         {
-             User::updateOrCreate($user);
+            $user= User::updateOrCreate($user);
+             Wallet::create(['user_id' => $user->id, 'balance'=>'0.00', 'base_currency' => 'USD']);
         }
     }
 }
