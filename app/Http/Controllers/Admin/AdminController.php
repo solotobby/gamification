@@ -1352,7 +1352,7 @@ class AdminController extends Controller
 
     public function updateUserAccountDetails(Request $request){
 
-            return $accountInformation = resolveBankName($request->account_number, $request->bank_code);
+            $accountInformation = resolveBankName($request->account_number, $request->bank_code);
 
             if($accountInformation['status'] == 'true')
             {
