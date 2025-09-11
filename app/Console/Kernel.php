@@ -202,6 +202,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function(){
 
+            $remove = Question::where('correct_answer', null)->delete();
 
         })->daily();
 
