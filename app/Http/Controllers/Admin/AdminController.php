@@ -391,7 +391,7 @@ class AdminController extends Controller
         return view('admin.users.campaign_creator', ['verifiedUsers' => $usersWithPosts]);
     }
     public function verifiedUserList(){
-        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->get();
+        $verifiedUsers = User::where('role', 'regular')->where('is_verified', '1')->orderBy('created_at', 'desc')->paginate(100);
         return view('admin.verified_user', ['verifiedUsers' => $verifiedUsers]);
     }
     public function usdVerifiedUserList(){
