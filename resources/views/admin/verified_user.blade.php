@@ -26,7 +26,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Verified Users List - {{ $verifiedUsers->count() }}</h3>
+        <h3 class="block-title">Verified Users List - {{ $verifiedUsers->total() }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>

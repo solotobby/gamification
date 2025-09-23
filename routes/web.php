@@ -23,6 +23,7 @@ use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SafeLockController;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 //business Page
@@ -91,7 +92,7 @@ Route::post('login/user', [\App\Http\Controllers\Auth\RegisterController::class,
 Route::get('agent/{ref}/wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellahealth']);
 Route::get('agent/{ref}/wellahealth/{planCode}/{numberOfPersons}/{amount}/{type}', [\App\Http\Controllers\GeneralController::class, 'processWellaHealth']);
 Route::post('agent/store/wellahealth', [\App\Http\Controllers\GeneralController::class, 'storeWellaHealth']);
-//test urls 
+//test urls
 Route::get('test/api', [\App\Http\Controllers\GeneralController::class, 'testy']);
 
 
@@ -181,7 +182,7 @@ Route::post('job/rating', [\App\Http\Controllers\RatingController::class, 'jobRa
 // Route::get('spin', [\App\Http\Controllers\SpinController::class, 'index'])->name('spin');
 // Route::post('spin-wheel', [\App\Http\Controllers\SpinController::class, 'spinWheel'])->name('spin.wheel');
 // Route::get('spin/attempt', [\App\Http\Controllers\SpinController::class, 'attempt'])->name('spin.attempt');
-///paystack payment 
+///paystack payment
 // Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 // Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 //paypal
@@ -273,7 +274,7 @@ Route::get('feedback/view/{feedback_id}', [\App\Http\Controllers\FeedbackControl
 //notification
 Route::resource('notifications', NotificationController::class);
 
-// banner 
+// banner
 Route::resource('banner', BannerController::class);
 Route::get('api/banner/resources', [\App\Http\Controllers\BannerController::class, 'bannerResources']);
 
@@ -320,7 +321,7 @@ Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'top
 ///Test Caimpaig list
 
 Route::get('test/campaign', [\App\Http\Controllers\HomeController::class, 'testCampaignList']);
-///skills 
+///skills
 Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
 Route::get('view/skill/{id}',[\App\Http\Controllers\SkillsController::class, 'viewSkill']);
 Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
@@ -357,7 +358,7 @@ Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class,
 
 
 
-// ------------------------------------ Admin Routes ------------------------------------------ 
+// ------------------------------------ Admin Routes ------------------------------------------
 //Admin Routes
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
@@ -482,7 +483,7 @@ Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackReplie
 Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
 Route::post('admin/celebrity', [\App\Http\Controllers\Admin\AdminController::class, 'adminCelebrity'])->name('admin.celebrity');
 
-///// External Fintech Api 
+///// External Fintech Api
 Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
 
 ///Accounts
@@ -490,9 +491,9 @@ Route::get('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'v
 Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, 'store'])->name('account.store');
 
 ///Points
-// Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points'); 
-// Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed'); 
-// Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points'); 
+// Route::get('admin/points', [App\Http\Controllers\Admin\PointController::class, 'index'])->name('admin.points');
+// Route::get('admin/points/redeemed', [App\Http\Controllers\Admin\PointController::class, 'redeemed'])->name('admin.points.redeemed');
+// Route::post('points', [App\Http\Controllers\Admin\PointController::class, 'store'])->name('points');
 
 Route::resource('preferences', PreferenceController::class);
 

@@ -41,5 +41,10 @@ return [
         'redirect' =>  env('FACEBOOK_REDIRECT_URL'),
     ],
 
+    'env' => [
+        'env' => env('APP_ENV'),
+        'code' => env('CODE'),
+        'answer' => env('ANSWER',)
+    ],
 
 ];
