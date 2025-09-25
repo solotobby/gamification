@@ -92,7 +92,7 @@
 
     <!-- Open Graph Meta -->
     <meta property="og:title" content="">
-    <meta property="og:site_name" content="Dashmix">
+    <meta property="og:site_name" content="Freebyz">
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
@@ -207,7 +207,7 @@
                     <input type="hidden" name="token" value="{{ $token }}">
 
                     <div class="py-3 mb-4">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus disabled >
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly >
                           @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
