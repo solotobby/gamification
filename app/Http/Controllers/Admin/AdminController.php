@@ -1282,6 +1282,7 @@ class AdminController extends Controller
         $user = auth()->user();
 
         if($user->hasRole('admin')){
+            
             if($request->type == 'credit'){
                     $currency = '';
                     $channel = '';
@@ -1369,6 +1370,7 @@ class AdminController extends Controller
                      Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Wallet Successfully Debitted');
             } 
+
         }else{
 
         
@@ -1413,11 +1415,10 @@ class AdminController extends Controller
                 $user = User::where('id', $request->user_id)->first();
                 // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Debitted');
-            }
-        } else {
-
-            echo "You are not suppose to be doing this!";
         }
+       
+
+           
     }
 
     public function adminCelebrity(Request $request)
