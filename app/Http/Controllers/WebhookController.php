@@ -65,7 +65,7 @@ class WebhookController extends Controller
                     if($transaction){
                         $subject = 'Wallet Credited';
                         $content = 'Congratulations, your wallet has been credited with ₦'.$amount;
-                        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
+                         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
                     }
 
                     //check wallet stat
@@ -86,7 +86,7 @@ class WebhookController extends Controller
                                 $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
 
                                 if($upgrdate){
-                                    // Mail::to($user->email)->send(new UpgradeUser($user));
+                                     Mail::to($user->email)->send(new UpgradeUser($user));
                                 }
                                 
                             }
@@ -100,7 +100,7 @@ class WebhookController extends Controller
                                     $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
     
                                     if($upgrdate){
-                                        // Mail::to($user->email)->send(new UpgradeUser($user));
+                                         Mail::to($user->email)->send(new UpgradeUser($user));
                                     }
                                     
                                 }

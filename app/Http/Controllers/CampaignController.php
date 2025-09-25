@@ -127,7 +127,7 @@ class CampaignController extends Controller
                 'description' => 'Extend Campaign Payment'
             ]);
            
-            // Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
+             Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
             return back()->with('success', 'Campaign Updated Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
@@ -305,7 +305,7 @@ class CampaignController extends Controller
             $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$iniAmount+$prAmount);
             if($debitWallet){
                 $processedCampaign = $this->processCampaign($total+$iniAmount+$prAmount,$request,$job_id,$percent,$allowUpload,$priotize);
-                // Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
+                Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
             
@@ -576,7 +576,7 @@ class CampaignController extends Controller
             $user = User::where('id', $campaign->user->id)->first();
             $subject = 'Job Submission';
             $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             return back()->with('success', 'Job Submitted Successfully');
 
@@ -704,7 +704,7 @@ class CampaignController extends Controller
            
            $subject = 'Job Approved';
            $status = 'Approved';
-        //    Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+           Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
            
            return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
             
@@ -758,7 +758,7 @@ class CampaignController extends Controller
 
             $subject = 'Job Denied';
             $status = 'Denied';
-            // Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+             Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
           
 
             return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign has been denied');
@@ -816,7 +816,7 @@ class CampaignController extends Controller
             $subject = 'New Dispute Raised';
             $content = 'A despute has been raised by '.auth()->user()->name.' on a Job. Please follow the link below to attend to it.';
             $url = 'admin/campaign/disputes/'.$workDone->id;
-            // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+             Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
             return back()->with('success', 'Dispute Submitted Successfully');
         }
     }
@@ -889,7 +889,7 @@ class CampaignController extends Controller
                         $content = "You have successfully increased the number of your workers.";
                         $subject = "Add More Worker";
                         $user = User::where('id', auth()->user()->id)->first();
-                        // Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                         Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                         return back()->with('success', 'Worker Updated Successfully');
                 }
 
@@ -963,7 +963,7 @@ class CampaignController extends Controller
                     $content = "You have successfully increased the number of your workers.";
                     $subject = "Add More Worker";
                     $user = User::where('id', auth()->user()->id)->first();
-                    // Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                     Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Worker Updated Successfully');
                 }
 
@@ -1043,7 +1043,7 @@ class CampaignController extends Controller
                 $content = "You have successfully increased the number of your workers.";
                 $subject = "Add More Worker";
                 $user = User::where('id', auth()->user()->id)->first();
-                // Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Worker Updated Successfully');
 
             }else{

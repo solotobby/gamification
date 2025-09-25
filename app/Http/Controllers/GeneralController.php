@@ -121,12 +121,7 @@ class GeneralController extends Controller
 
 
 
-        $content = 'Show us the way';
-        $subject = 'Feedback Reply from Oluwatobi Solomon';
-        $user['name'] = 'Oluwatobi Solomon';
-        Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
-
-        return 'Sent';
+      
       
         // $user = User::where('is_verified', 0)
         //  ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
