@@ -50,6 +50,8 @@ Route::get('login/otp/{token}', [\App\Http\Controllers\GeneralController::class,
 
 Route::post('fix/otp', [\App\Http\Controllers\GeneralController::class, 'fixOtp'])->name('fix.otp');
 
+Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
+
 // Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);

@@ -38,7 +38,7 @@ class GeneralMail extends Mailable
     public function build()
     {
         return $this->markdown('emails.general')->subject($this->subject)->with([
-            'name' => $this->user->name,
+            'name' => '$this->user->name',
             'content' => $this->content,
             'url' => isset($this->url) && $this->url ? $this->url : 'home'
         ]);
