@@ -155,8 +155,8 @@ class RegisterController extends Controller
         //     generateVirtualAccountOnboarding($user, $phone);
         // }
 
-        // $subject = 'Welcome to Freebyz';
-        // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        $subject = 'Welcome to Freebyz';
+        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         // if ($location == 'Nigeria') {
         //     $phone = '234' . substr($request->phone, 1);
