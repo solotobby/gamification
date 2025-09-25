@@ -115,7 +115,7 @@
 
     <!-- Open Graph Meta -->
     <meta property="og:title" content="">
-    <meta property="og:site_name" content="Dashmix">
+    <meta property="og:site_name" content="Freebyz">
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
