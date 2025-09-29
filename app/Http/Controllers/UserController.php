@@ -104,6 +104,8 @@ class UserController extends Controller
             systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
 
             // Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+
+             Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
         return redirect('success');
 
     }
@@ -134,7 +136,7 @@ class UserController extends Controller
 
                 systemNotification($user, 'success', 'Verification', 'Dollar Account Verification Successful');
 
-                // Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+                 Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
                return redirect('success');
 
                 //$referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
@@ -193,7 +195,7 @@ class UserController extends Controller
                 $upgrade = userForeignUpgrade($user, $currency, $parameter->upgrade_fee, $parameter->referral_commission);
 
                 if($upgrade){
-                    // Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
+                     Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
                     return back()->with('success', 'Upgrade Successful');
                 }else{
                     return back()->with('error', 'An Error occoured while upgrading your Account');
@@ -235,7 +237,7 @@ class UserController extends Controller
                 if($debitWallet){
                     $upgrade = userDollaUpgrade($user);
                     if($upgrade){
-                        // Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
+                         Mail::to(auth()->user()->email)->send(new UpgradeUser(auth()->user()));
                         return back()->with('success', 'Upgrade Successful');
                     }
                 }
@@ -394,7 +396,7 @@ class UserController extends Controller
                 $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
 
                 if($upgrdate){
-                    // Mail::to($user->email)->send(new UpgradeUser($user));
+                     Mail::to($user->email)->send(new UpgradeUser($user));
                 }
 
             }

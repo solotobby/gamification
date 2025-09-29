@@ -234,52 +234,56 @@ class AdminController extends Controller
                 return back()->with('error', 'Job has reached its maximum number of staff');
             }
 
-            //update completed action
-            $campaign->completed_count += 1;
-            $campaign->pending_count -= 1;
-            $campaign->save();
 
-            setIsComplete($workDone->campaign_id);
-            $user = User::where('id', $workDone->user_id)->first();
-            if ($campaign->currency == 'NGN') {
-                $currency = 'NGN';
-                $channel = 'paystack';
-                creditWallet($user, $currency, $workDone->amount);
-            } elseif ($campaign->currency == 'USD') {
-                $currency = 'USD';
-                $channel = 'paypal';
-                creditWallet($user, $currency, $workDone->amount);
-            } else {
-                $currency = baseCurrency($user);
-                $channel = 'flutterwave';
-                creditWallet($user, $currency, $workDone->amount);
-            }
+              //update completed action
+           $campaign->completed_count += 1;
+           $campaign->pending_count -= 1;
+           $campaign->save();
 
-
-            $ref = time();
-
-            PaymentTransaction::create([
-                'user_id' =>  $workDone->user_id,
-                'campaign_id' =>  $workDone->campaign->id,
-                'reference' => $ref,
-                'amount' =>  $workDone->amount,
-                'balance' => walletBalance($workDone->user_id),
-                'status' => 'successful',
-                'currency' => $currency,
-                'channel' => $channel,
-                'type' => 'campaign_payment_dispute_resolved',
-                'description' => 'Campaign Dispute Resolution for ' . $workDone->campaign->post_title,
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
-
-            $subject = 'Job ' . $request->status;
-            $status = $request->status;
-            //    Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+           setIsComplete($workDone->campaign_id);
+           $user = User::where('id', $workDone->user_id)->first();
+           if($campaign->currency == 'NGN'){
+               $currency = 'NGN';
+               $channel = 'paystack';
+               creditWallet($user, $currency, $workDone->amount);
+           }elseif($campaign->currency == 'USD'){
+               $currency = 'USD';
+               $channel = 'paypal';
+               creditWallet($user, $currency, $workDone->amount);
+            }else{
+               $currency = baseCurrency($user);
+               $channel = 'flutterwave';
+               creditWallet($user, $currency, $workDone->amount);
+           }
 
 
-            return back()->with('success', 'Dispute resolved Successfully');
-        } else {
+           $ref = time();
+
+           PaymentTransaction::create([
+               'user_id' =>  $workDone->user_id,
+               'campaign_id' =>  $workDone->campaign->id,
+               'reference' => $ref,
+               'amount' =>  $workDone->amount,
+               'balance' => walletBalance($workDone->user_id),
+               'status' => 'successful',
+               'currency' => $currency,
+               'channel' => $channel,
+               'type' => 'campaign_payment_dispute_resolved',
+               'description' => 'Campaign Dispute Resolution for '. $workDone->campaign->post_title,
+               'tx_type' => 'Credit',
+               'user_type' => 'regular'
+           ]);
+
+           $subject = 'Job '.$request->status;
+           $status = $request->status;
+            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+
+
+           return back()->with('success', 'Dispute resolved Successfully');
+
+            
+
+        }else{
 
             $workDone->status = 'Denied';
             $workDone->save();
@@ -320,7 +324,11 @@ class AdminController extends Controller
 
             $subject = 'Disputed Job ' . $request->status;
             $status = $request->status;
-            // Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+
+             Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+           
+            return back()->with('success', 'Dispute resolved Successfully');
+
 
             return back()->with('success', 'Dispute resolved Successfully');
         }
@@ -349,7 +357,7 @@ class AdminController extends Controller
     {
 
         if (isset($request)) {
-            $users = Wallet::with('user')->where('base_currency', $request->currency)->get();
+            $users = Wallet::with('user')->where('base_currency', $request->currency)->paginate(100);
         }
 
         return view('admin.users.user_currency_search', ['users' => $users, 'curr' => $request->currency]);
@@ -624,8 +632,9 @@ class AdminController extends Controller
         // systemNotification(Auth::user(), 'success', 'User Verification',  $getUser->name.' was manually verified');
 
         $name = $getUser->name;
-        activityLog($getUser, 'account_verification', $name . ' account verification', 'regular');
-        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+
+        activityLog($getUser, 'account_verification', $name .' account verification', 'regular');
+         Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
     }
@@ -736,7 +745,11 @@ class AdminController extends Controller
 
         $name = $getUser->name;
 
-        activityLog($getUser, 'dollar_account_verification', $name . ' account verification', 'regular');
+
+        activityLog($getUser, 'dollar_account_verification', $name .' account verification', 'regular');
+         
+         Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+
 
         // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
@@ -861,8 +874,10 @@ class AdminController extends Controller
 
         $user = User::where('id', $campaignAmount->user_id)->first();
         $subject = 'Job Reversal';
-        $content = 'Your request to for job reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
-        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+        $content = 'Your request to for job reversal is successful. A total of NGN' .$campaignAmount->campaign_amount . ' has been credited to your wallet from '.$campaignAmount->post_title.' job';
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
         return back()->with('success', 'Reversal Successful');
     }
 
@@ -1081,9 +1096,11 @@ class AdminController extends Controller
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Reason: ' . $request->reason . '.';
             $subject = 'Campaign Declined';
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-            return redirect('campaigns/pending')->with('error', 'Campaign is Declined');
-        } else {
+
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));   
+            return redirect('campaigns/pending')->with('error', 'Campaign is Declined'); 
+        }else{
+
             $camp->status = $request->status;
             $camp->post_title = $request->post_title;
             $camp->post_link = $request->post_link;
@@ -1093,7 +1110,7 @@ class AdminController extends Controller
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Live!!!';
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return redirect('campaigns/pending')->with('success', 'Campaign is Live!!!');
         }
 
@@ -1180,7 +1197,7 @@ class AdminController extends Controller
 
                     $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                     $subject = 'Withdrawal Request Granted';
-                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawal Error');
@@ -1200,7 +1217,7 @@ class AdminController extends Controller
                     //send mail
                     $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                     $subject = 'Withdrawal Request Granted';
-                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                     Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawals Error');
@@ -1225,7 +1242,7 @@ class AdminController extends Controller
 
         $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
-        // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+         Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawals Updated');
     }
 
@@ -1263,52 +1280,100 @@ class AdminController extends Controller
     {
 
         $user = auth()->user();
-        if ($user->hasRole('admin')) {
-            if ($request->type == 'credit') {
-                $currency = '';
-                $channel = '';
-                if ($request->currency == 'NGN') {
-                    $currency = 'NGN';
-                    $channel = 'paystack';
-                    $wallet = Wallet::where('user_id', $request->user_id)->first();
-                    $wallet->balance += $request->amount;
-                    $wallet->save();
-                } elseif ($request->currency == 'USD') {
-                    $currency = 'USD';
-                    $channel = 'paypal';
-                    $wallet = Wallet::where('user_id', $request->user_id)->first();
-                    $wallet->usd_balance += $request->amount;
-                    $wallet->save();
-                } else {
-                    $currency = $request->currency;
-                    $channel = 'flutterwave';
-                    $wallet = Wallet::where('user_id', $request->user_id)->first();
-                    $wallet->base_currency_balance += $request->amount;
-                    $wallet->save();
-                }
 
-                PaymentTransaction::create([
-                    'user_id' => $request->user_id,
-                    'campaign_id' => '1',
-                    'reference' => time(),
-                    'amount' => $request->amount,
-                    'balance' => walletBalance($request->user_id),
-                    'status' => 'successful',
-                    'currency' => $currency,
-                    'channel' => $channel,
-                    'type' => 'wallet_topup',
-                    'description' => 'Manual Wallet Topup',
-                    'tx_type' => 'Credit',
-                    'user_type' => 'regular'
-                ]);
+        if($user->hasRole('admin')){
+            
+            if($request->type == 'credit'){
+                    $currency = '';
+                    $channel = '';
+                    if($request->currency == 'NGN'){
+                        $currency = 'NGN';
+                        $channel = 'paystack';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->balance += $request->amount;
+                        $wallet->save();
+                    }elseif($request->currency == 'USD'){
+                        $currency = 'USD';
+                        $channel = 'paypal';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->usd_balance += $request->amount;
+                        $wallet->save();
+                    }else{
+                        $currency = $request->currency;
+                        $channel = 'flutterwave';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->base_currency_balance += $request->amount;
+                        $wallet->save();
+                    }
+                
+                    PaymentTransaction::create([
+                        'user_id' => $request->user_id,
+                        'campaign_id' => '1',
+                        'reference' => time(),
+                        'amount' => $request->amount,
+                        'balance' => walletBalance($request->user_id),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'wallet_topup',
+                        'description' => 'Manual Wallet Topup',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
 
-                // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
-                $content = 'Your wallet has been succesfully credited with NGN' . $request->amount . '. Thank you for choosing Freebyz.com';
-                $subject = 'Wallet Topup';
-                $user = User::where('id', $request->user_id)->first();
-                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-                return back()->with('success', 'Wallet Successfully Funded');
-            } else {
+                    // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
+                    $content = 'Your wallet has been succesfully credited with NGN'.$request->amount.'. Thank you for choosing Freebyz.com';
+                    $subject = 'Wallet Topup';
+                    $user = User::where('id', $request->user_id)->first();
+                     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Wallet Successfully Funded');
+            }else{
+                    $currency = '';
+                    $channel = '';
+                    if($request->currency == 'NGN'){
+                        $currency = 'NGN';
+                        $channel = 'paystack';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->balance -= $request->amount;
+                        $wallet->save();
+                    }elseif($request->currency == 'USD'){
+                        $currency = 'USD';
+                        $channel = 'paypal';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->usd_balance -= $request->amount;
+                        $wallet->save();
+                    }else{
+                        $currency = $request->currency;
+                        $channel = 'flutterwave';
+                        $wallet = Wallet::where('user_id', $request->user_id)->first(); 
+                        $wallet->base_currency_balance -= $request->amount;
+                        $wallet->save();
+                    }
+                
+                    PaymentTransaction::create([
+                        'user_id' => $request->user_id,
+                        'campaign_id' => '1',
+                        'reference' => time(),
+                        'amount' => $request->amount,
+                        'balance' => walletBalance($request->user_id),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'wallet_debit',
+                        'description' => 'Admin manual Wallet Debit',
+                        'tx_type' => 'Debit',
+                        'user_type' => 'regular'
+                    ]);
+                    $content = $request->reason;
+                    $subject = 'Wallet Debit';
+                    $user = User::where('id', $request->user_id)->first();
+                     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Wallet Successfully Debitted');
+            } 
+
+        }else{
+
+        
                 $currency = '';
                 $channel = '';
                 if ($request->currency == 'NGN') {
@@ -1350,10 +1415,10 @@ class AdminController extends Controller
                 $user = User::where('id', $request->user_id)->first();
                 // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Debitted');
-            }
-        } else {
-            echo "You are not suppose to be doing this!";
         }
+       
+
+           
     }
 
     public function adminCelebrity(Request $request)
@@ -1418,10 +1483,12 @@ class AdminController extends Controller
             $bankInfor->save();
         }
 
-        $user = User::where('id', $request->user_id)->first();
-        $subject = 'Account Details Updated';
-        $content = 'Congratulations, your account details has been updated on Freebyz.';
-        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+             $user = User::where('id', $request->user_id)->first();
+            $subject = 'Account Details Updated';
+            $content = 'Congratulations, your account details has been updated on Freebyz.';
+             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
 
         return back()->with('success', 'Account Details Upated');
     }

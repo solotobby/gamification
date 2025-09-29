@@ -51,7 +51,7 @@ class FeedbackController extends Controller
         // $content = $request->message;
         // $subject = 'Feedback Reply from '.auth()->user()->name;
         // $user = User::where('role', 'staff')->where('id', $fedbackRespondent->respondent_id)->firstOrFail();
-        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Thank you for your reply, we will get back to you soon.');
     }
 
@@ -95,7 +95,7 @@ class FeedbackController extends Controller
 
             $subject = 'Feedback Received';
             $user = User::where('id', auth()->user()->id)->first();
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             return back()->with('success', 'Thank you for your feedback, we will look into it.');
 

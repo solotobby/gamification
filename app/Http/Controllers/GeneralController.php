@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Analytics;
 use App\Helpers\CapitalSage;
 use App\Helpers\PaystackHelpers;
+use App\Mail\ApproveCampaign;
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
 use App\Mail\MassMail;
@@ -119,6 +120,8 @@ class GeneralController extends Controller
     public function fix(){
 
 
+
+      
         // $user = User::where('is_verified', 0)
         //  ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
 
