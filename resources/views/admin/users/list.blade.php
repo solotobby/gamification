@@ -60,13 +60,13 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     {{-- <th>Balance</th> --}}
                     {{-- <th>Ref. Count</th> --}}
-                    <th>Ref. Code</th>
+                    <th>Entry Mode</th>
                     <th>Status</th>
                     <th>Country</th>
                     <th>When Created</th>
@@ -76,13 +76,13 @@
                 {{-- <?php $i = 1; ?> --}}
                 @foreach ($users as $user)
                     <tr>
-                        <th scope="row">{{ $user->id }}.</th>
+                        {{-- <th scope="row">{{ $user->id }}.</th> --}}
                         <td class="fw-semibold"><a href="{{ url('user/'.$user->id.'/info') }}" target="_blank"> {{$user->name }}</a></td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
                         {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
                         {{-- <td>{{ @$user->referees->count() }}</td> --}}
-                        <td>{{ @$user->referral_code}}</td>
+                        <td>{{ @$user->source}}</td>
                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
                         <td>{{ $user->country }}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }}</td>

@@ -357,7 +357,7 @@ class AdminController extends Controller
     {
 
         if (isset($request)) {
-            $users = Wallet::with('user')->where('base_currency', $request->currency)->get();
+            $users = Wallet::with('user')->where('base_currency', $request->currency)->paginate(100);
         }
 
         return view('admin.users.user_currency_search', ['users' => $users, 'curr' => $request->currency]);

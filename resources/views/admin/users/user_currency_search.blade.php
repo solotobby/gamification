@@ -37,8 +37,8 @@
 
 
         <div class="table-responsive">
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-            {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
+            {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+            <table class="table table-bordered table-striped table-vcenter">
               <thead>
                   <tr>
                      
@@ -74,9 +74,9 @@
                   @endforeach
               </tbody>
             </table>
-            {{-- <div class="d-flex">
+            <div class="d-flex">
               {!! $users->links('pagination::bootstrap-4') !!}
-            </div> --}}
+            </div>
           </div>
         </div>
       </div>
