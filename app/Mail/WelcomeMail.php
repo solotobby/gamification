@@ -20,6 +20,6 @@ class WelcomeMail extends Mailable
     public function build()
     {
         return $this->subject("Congratulations, You've got a Side hustle to pay your Bills")
-                    ->view('emails.welcome');
+                    ->view('emails.welcome-new');
     }
 }

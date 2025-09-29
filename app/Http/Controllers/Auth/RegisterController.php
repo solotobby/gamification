@@ -9,17 +9,20 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendMassEmail;
 use App\Mail\GeneralMail;
 use App\Mail\Welcome;
+use App\Mail\WelcomeMail;
 use App\Models\AccountInformation;
 use App\Models\AuthCheck;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Wallet;
+use Exception;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
@@ -60,18 +63,18 @@ class RegisterController extends Controller
         if ($ref_id != '') {
             $name = User::where('referral_code', $ref_id)->first();
             if (!$name) {
-               
+
                 return view('auth.error', ['error' => 'Invalid referral code']);
-            }  
+            }
         }
-        
+
         $curLocation = '';
         if(env('APP_ENV')  == 'local_test'){
             $curLocation = 'United Kingdom';
         }else{
             $curLocation = currentLocation();
         }
-      
+
         if ($curLocation == 'Nigeria') {
             $request->validate([
                 'first_name' => ['required', 'string', 'max:255'],
@@ -103,6 +106,14 @@ class RegisterController extends Controller
              Auth::login($user);
              setProfile($user); //set profile page
              activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+
+              try {
+            Mail::to($user->email)->send(new WelcomeMail($user->name));
+        } catch (Exception $e) {
+            // Optionally log the error
+            Log::error('Failed to send welcome email: ' . $e->getMessage());
+        }
+
              return redirect('/home');
 
 
@@ -145,7 +156,7 @@ class RegisterController extends Controller
         $wall->base_currency_set = $location == "Nigeria" ? true : false;
         $wall->save();
 
-       
+
         // if(env('APP_ENV') == 'production'){
         //     userLocation('Registeration');
         // }
@@ -167,16 +178,16 @@ class RegisterController extends Controller
         // if(env('APP_ENV')  == 'local_test'){
         //    // $curLocation = 'United Kingdom';
         // }else{
-           
+
         // }
 
-        
+
         return $user;
     }
 
-   
 
-   
+
+
 
 
     public function loginUser(Request $request)
@@ -189,7 +200,7 @@ class RegisterController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if($user){
-            
+
         $role = $user->role;
 
         switch ($role) {
@@ -201,12 +212,12 @@ class RegisterController extends Controller
                 if ($user->is_blacklisted == true) {
                     return view('blocked');
                 }
-                
+
                 if($user->id == '1'){
                     $token = Str::random(36);
                     AuthCheck::create(['email' => $user->email, 'token' => $token]);
                     //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
-                    // $token = 
+                    // $token =
                     return redirect('login/otp/'.$token);
                 }else{
                     return redirect('/');
@@ -220,7 +231,7 @@ class RegisterController extends Controller
 
             break;
         case "regular":
-            
+
             // return "Regular ";
             if ($user) {
 
@@ -233,28 +244,28 @@ class RegisterController extends Controller
                             $user->save();
                     }
                     if (Hash::check($request->password, $user->password)) {
-                            
+
                             Auth::login($user); //log user in
-            
+
                             if ($user->role == 'staff') {
                                 null;
                             } else {
-                                
+
                                 // setWalletBaseCurrency();
                             }
-            
+
                             //set base currency if not set
                             if(env('APP_ENV') == 'production'){
-                                setProfile($user); //set profile page 
+                                setProfile($user); //set profile page
                                 userLocation('Login');
                                 // setWalletBaseCurrency();
-                                
+
                             }
                             // setProfile($user);
-                          
+
                             activityLog($user, 'login', $user->name . ' Logged In', 'regular');
                             return redirect('home'); //redirect to home
-            
+
                         } else {
                             return back()->with('error', 'Email or Password is incorrect');
                         }
@@ -291,9 +302,9 @@ class RegisterController extends Controller
         //         //     if($location == "United States"){ //check if the person is in Nigeria
         //         //         if($user->is_wallet_transfered == false){
         //         //             //activate sendmonny wallet and fund wallet
-        //         //             if(walletHandler() == 'sendmonny'){ 
+        //         //             if(walletHandler() == 'sendmonny'){
         //         //                 if($user->is_wallet_transfered == false){
-        //         //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny 
+        //         //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny
         //         //                 }
         //         //             }
         //         //         }
@@ -305,19 +316,19 @@ class RegisterController extends Controller
         //         if ($user->role == 'staff') {
         //             null;
         //         } else {
-                    
+
         //             setWalletBaseCurrency();
         //         }
 
-              
+
 
 
         //         //set base currency if not set
         //         if(env('APP_ENV') == 'production'){
-        //             setProfile($user); //set profile page 
+        //             setProfile($user); //set profile page
         //             PaystackHelpers::userLocation('Login');
         //         }
-              
+
         //         // SystemActivities::loginPoints($user);
 
         //         SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
