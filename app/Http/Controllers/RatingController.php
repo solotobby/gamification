@@ -15,7 +15,7 @@ class RatingController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
 
@@ -27,16 +27,16 @@ class RatingController extends Controller
         ]);
 
         $workDone =  CampaignWorker::where('campaign_id', $request->campaign_id)->where('user_id', auth()->user()->id)->firstOrFail();
-        
+
         Rating::create([
-            'user_id'=>auth()->user()->id, 
-            'campaign_id' =>$request->campaign_id, 
+            'user_id'=>auth()->user()->id,
+            'campaign_id' =>$request->campaign_id,
             'campaign_worker_id'=>$workDone->id,
             'rating' => $request->rating,
             'comment' => $request->comment,
             'type' => 'job'
         ]);
-        
+
         return back()->with('success', 'Thank you for taking the time to rate this job, we really appreciate it');
     }
 }

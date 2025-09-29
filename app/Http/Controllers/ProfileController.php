@@ -19,7 +19,7 @@ class ProfileController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
     /**
      * Display a listing of the resource.
@@ -29,10 +29,10 @@ class ProfileController extends Controller
     public function index()
     {
         // return currentLocation();
-    
+
 
          $bankList = bankList();
-         
+
         //  return ['countries'=>$countries, 'banks'=>$bankList];
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
         $badge = badge();

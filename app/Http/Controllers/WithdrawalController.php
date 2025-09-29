@@ -8,7 +8,7 @@ class WithdrawalController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function listBanks($countryCode){
@@ -21,7 +21,7 @@ class WithdrawalController extends Controller
         }elseif($countryCode == 'KE'){
             $data = [
                 ['code' => 'MPS', 'name' => 'M-Pesa', 'currency' => 'KES'],
-                ['code' => 'MPX', 'name' => 'Airtel Kenya', 'currency' => 'KES'], 
+                ['code' => 'MPX', 'name' => 'Airtel Kenya', 'currency' => 'KES'],
             ];
         }else{
             $data = [

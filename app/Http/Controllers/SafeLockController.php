@@ -16,7 +16,7 @@ class SafeLockController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     /**
@@ -69,7 +69,7 @@ class SafeLockController extends Controller
         //         return back()->with('error', 'Insurficent balance, please top up wallet to continue!');
         //         // or use the paystack option
         //     }
-        
+
         //     debitWallet(auth()->user(), 'NGN', $amount_locked);
         //     $created = $this->createSafeLock($request, $interest_rate, $amount_locked, $duration, $interest_accrued, $total_payment, $start_date, $maturity_date);
         //     if($created){
@@ -100,7 +100,7 @@ class SafeLockController extends Controller
     //     $subject = 'Freebyz SafeLock Created';
     //     $content = 'Your SafeLock has been created successfully with a total amount of NGN'.$amount_locked.' which span for a period of '. $duration.' months at an interest of '.$interest_rate.'% giving a total pay out of NGN'.$total_payment.' on '.$maturity_date.'.'; //auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
     //     // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
-    //     return $safeLockCreated; 
+    //     return $safeLockCreated;
     // }
 
     /**
@@ -156,7 +156,7 @@ class SafeLockController extends Controller
          $user = User::where('id', $getSafeLock->user_id)->first();
         //get user bank information
         return $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
-        if($bankInfo){   
+        if($bankInfo){
             $transfter = transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
             if($transfter['status'] == true){
 

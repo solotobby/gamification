@@ -16,7 +16,7 @@ class FormBuilderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function create(){
@@ -27,7 +27,7 @@ class FormBuilderController extends Controller
     public function survey($survey_code){
         $surevey = Survey::where('survey_code', $survey_code)->first();// $survey_code;
         return view('user.form_builder.builder', ['survey' => $surevey]);
-        
+
     }
 
     public function buildForm(Request $request){
@@ -36,7 +36,7 @@ class FormBuilderController extends Controller
         $name = $request->name;
         $choices = $request->choices;
         $required = $request->required;
-       
+
         $data = [];
         foreach($type as $key => $value){
 
@@ -65,7 +65,7 @@ class FormBuilderController extends Controller
     }
 
     public function storeForm(Request $request){
-    
+
         // $lissy = [];
         // foreach($request->count as $res){
         //     $lissy[] = explode("|",$res);
@@ -84,15 +84,15 @@ class FormBuilderController extends Controller
         $survey = Survey::create([
             'user_id' => auth()->user()->id,
             'survey_code' => Str::random(16),
-            'category_id' => '1', 
-            'sub_category_id' => '1', 
-            'title' => $request->title, 
-            'description' => $request->description, 
-            'amount' => '3', 
-            'total_amount' => '600', 
-            'currency' => 'USD', 
-            'number_of_response' => $request->number_of_response, 
-            'number_of_response_submitted' => '0', 
+            'category_id' => '1',
+            'sub_category_id' => '1',
+            'title' => $request->title,
+            'description' => $request->description,
+            'amount' => '3',
+            'total_amount' => '600',
+            'currency' => 'USD',
+            'number_of_response' => $request->number_of_response,
+            'number_of_response_submitted' => '0',
             'status' => 'in_progress'
         ]);
 
@@ -102,10 +102,10 @@ class FormBuilderController extends Controller
         //     // \DB::table('survey_interests')->insert(['survey_id' => $survey->id, 'interest_id' => $id['id'], 'unit' => $id['unit'], 'created_at' => now(), 'updated_at' => now()]);
         // }
 
-       
+
           return redirect('survey/'.$survey->survey_code);
-           
-      
+
+
     }
 
     public function previewForm(FormBuilder $formBuilder, $survey_code){

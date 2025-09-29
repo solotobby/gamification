@@ -13,13 +13,13 @@ class BadgeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
         return back();
         $badge = badge();
-        return view('user.badge.index', ['badge' => $badge]); 
+        return view('user.badge.index', ['badge' => $badge]);
     }
 
     public function redeemBadge(){
@@ -31,12 +31,12 @@ class BadgeController extends Controller
         // }
 
         // $check = MembershipBadge::where('user_id', auth()->user()->id)->where('duration', $badge['duration'])->first();
-        
+
         // if($check){
         //     return back()->with('error', 'You already redeem membership badge bonus for '.$date);
         // }
         // creditWallet(auth()->user(), 'NGN', $badge['amount']);
-        
+
         // PaymentTransaction::create([
         //     'user_id' => auth()->user()->id,
         //     'campaign_id' => '1',

@@ -15,7 +15,7 @@ class FeedbackController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
@@ -75,11 +75,11 @@ class FeedbackController extends Controller
         }
 
         if($request->hasFile('proof')){
-         
+
             // $fileBanner = $request->file('proof');
             // $Bannername = time() . $fileBanner->getClientOriginalName();
             // $filePathBanner = 'feedbacks/' . $Bannername;
-    
+
             // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             // $proofUrl = Storage::disk('s3')->url($filePathBanner);
 

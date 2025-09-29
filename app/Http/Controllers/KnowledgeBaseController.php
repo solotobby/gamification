@@ -10,7 +10,7 @@ class KnowledgeBaseController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function adminList(){
@@ -25,7 +25,7 @@ class KnowledgeBaseController extends Controller
     public function index()
     {
         $listKnowledgeBase = KnowledgeBase::where('status', true)->get();
-       
+
         foreach ($listKnowledgeBase as $question) {
             $category = $question['category'];
             $groupedQuestions[$category][] = $question;

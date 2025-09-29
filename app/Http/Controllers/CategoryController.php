@@ -10,9 +10,9 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -101,11 +101,11 @@ class CategoryController extends Controller
     }
 
     public function updateSubcategory(Request $request){
-        
+
         for ($i = 0; $i < count($request->id); $i++) {
             $id = $request->id[$i];
             $usd = $request->usd[$i];
-            $record = SubCategory::find($id); 
+            $record = SubCategory::find($id);
             if ($record) {
                 $record->usd = $usd;
                 $record->save();
@@ -118,7 +118,7 @@ class CategoryController extends Controller
         for ($i = 0; $i < count($request->id); $i++) {
             $id = $request->id[$i];
             $amount = $request->amount[$i];
-            $record = SubCategory::find($id); 
+            $record = SubCategory::find($id);
             if ($record) {
                 $record->amount = $amount;
                 $record->save();

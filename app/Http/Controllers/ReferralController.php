@@ -10,7 +10,7 @@ class ReferralController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function viewAll()
@@ -22,9 +22,9 @@ class ReferralController extends Controller
     }
 
     public function usdReferee(){
-           
+
         $user = auth()->user();
-       
+
     //     $ids = Usdverified::all()->pluck('user_id')->toArray();  //where('user_id', $user->id)->first();
     //    return $user->referees()->whereIn('referee_id', $ids)->get();
         // foreach($user->referees as $ref){

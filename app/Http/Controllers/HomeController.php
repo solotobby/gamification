@@ -48,7 +48,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     /**
@@ -74,7 +74,7 @@ class HomeController extends Controller
 
     public function userHome()
     {
-        
+
         dailyVisit('Dashboard');
         if (env('APP_ENV') == 'production') {
             setProfile(auth()->user());
@@ -93,10 +93,10 @@ class HomeController extends Controller
 
 
 
-       
+
 
         $balance = '';
-       
+
         $badgeCount = badgeCount();
 
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('status', 'Approved')->count();
@@ -108,22 +108,22 @@ class HomeController extends Controller
 
         $businessPromotion = Business::where('is_live', true)->first();
 
-        
+
         return view('user.home', [
-            'badgeCount' => $badgeCount, 
-            // 'available_jobs' => $available_jobs, 
-            'completed' => $completed,  
-            'user' => auth()->user(), 
-            'balance' => $balance, 
-            'announcement' => $announcement, 
-            'ads' => $ads, 
+            'badgeCount' => $badgeCount,
+            // 'available_jobs' => $available_jobs,
+            'completed' => $completed,
+            'user' => auth()->user(),
+            'balance' => $balance,
+            'announcement' => $announcement,
+            'ads' => $ads,
             'categories' => $categories,
             'promotion' => $businessPromotion,
         ]);
     }
 
     public function newHome(){
-        
+
         $categoryID = 0;
        return $campaigns = Campaign::where('status', 'Live')
        ->where('is_completed', false)
@@ -136,7 +136,7 @@ class HomeController extends Controller
         ->paginate(10);
 
 
-        
+
         // return $this->listCategories();
     }
 
@@ -175,16 +175,16 @@ class HomeController extends Controller
         // $user = User::where('role', 'regular')->get();
         // $loginPoints = LoginPoints::where('is_redeemed', false)->get();
 
-        $wallet = 
+        $wallet =
         \DB::select('
-                SELECT 
+                SELECT
                 SUM(balance) AS total_balance,
                 SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
                 SUM(usd_balance) AS total_usd_balance
                 FROM wallets
         ');
         //Wallet::where('user_id', '!=', '1')->get();
-      
+
         //this wwee
         $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
         $end_week = Carbon::now()->endOfWeek();
@@ -226,7 +226,7 @@ class HomeController extends Controller
         //revenue channel
         $revenueChannel = revenueChannel();
 
-        //revenue 
+        //revenue
         $revenue = monthlyRevenue();
 
         $weeklyRegistrationChannel = weeklyRegistrationChannel();
@@ -293,7 +293,7 @@ class HomeController extends Controller
         $data = [];
 
         $date = \Carbon\Carbon::today()->subDays($period);
-      
+
 
         $start_date = Carbon::now()->subDays(30)->startOfDay()->format('Y-m-d');
         $end_date = Carbon::now()->endOfDay()->format('Y-m-d');
@@ -319,7 +319,7 @@ class HomeController extends Controller
         //     'end_date' => 'required|date|after_or_equal:start_date'
         // ]);
 
-        
+
 
         // $startDate = Carbon::parse($start_date)->startOfDay();
         // $endDate = Carbon::parse($end_date)->endOfDay();
@@ -341,7 +341,7 @@ class HomeController extends Controller
         ]);
 
 
-        
+
 
 
 
@@ -362,7 +362,7 @@ class HomeController extends Controller
 
         // // Generate complete date range
         // $period = CarbonPeriod::create($start_date, $end_date);
-        
+
         // // Build results with all dates in range
         // $results = [];
         // foreach ($period as $date) {
@@ -413,12 +413,12 @@ class HomeController extends Controller
         $registrationChannel = registrationChannel();
 
         return view('staff.home', [
-            'users' => $user, 
-            'campaigns' => $campaigns, 
-            'workers' => $campaignWorker, 
-            'wallet' => $wallet, 
-            'ref_rev' => $ref_rev, 
-            'tx' => $transactions, 
+            'users' => $user,
+            'campaigns' => $campaigns,
+            'workers' => $campaignWorker,
+            'wallet' => $wallet,
+            'ref_rev' => $ref_rev,
+            'tx' => $transactions,
             'wal' => $Wal])
             ->with('visitor', json_encode($dailyActivity))
             ->with('daily', json_encode($dailyVisits))
@@ -455,7 +455,7 @@ class HomeController extends Controller
             ]
         ];
 
-        
+
 
        return $redirectUrl = initializeKorayPay($payloadNGN);
 
@@ -464,7 +464,7 @@ class HomeController extends Controller
     }
 
     public function generateVirtualAccount(){
-        
+
         $res = reGenerateVirtualAccount(auth()->user());
         $responseData = $res->getData(true);
 
@@ -489,7 +489,7 @@ class HomeController extends Controller
         $phoneFormated = '234' . $newRandPhone;
 
 
-        $updateVa = reGenerateUpdatedVirtualAccount($newEmail, $phoneFormated, auth()->user()); 
+        $updateVa = reGenerateUpdatedVirtualAccount($newEmail, $phoneFormated, auth()->user());
 
         if($updateVa){
             return back()->with('success', 'Freebyz Personal Account Created Successfully');
@@ -504,7 +504,7 @@ class HomeController extends Controller
     }
 
     public function replaceMiddleDigits($phoneNumber) {
-       
+
         $firstPart = substr($phoneNumber, 0, 3);
         $lastPart = substr($phoneNumber, 7);
 
@@ -515,8 +515,8 @@ class HomeController extends Controller
        return $modifiedNumber = $firstPart . $randomDigits . $lastPart;
 
     }
-    
-   
+
+
 
     public function savePhoneInformation(Request $request)
     {
@@ -666,7 +666,7 @@ class HomeController extends Controller
             //$phone = '+234'.substr(auth()->user()->phone, 1);
             $amount = $parameters->amount;
             $phone = auth()->user()->phone;
-            return $airtime = $this->sendAirtime($phone, $amount); //['data'];              
+            return $airtime = $this->sendAirtime($phone, $amount); //['data'];
             // if($airtime->errorMessage == "None")
             // {
 
@@ -682,12 +682,12 @@ class HomeController extends Controller
             //             'reference' => time(), //$transfer['data']['reference'],
             //             'transfer_code' => time(),//$transfer['data']['transfer_code'],
             //             'recipient' => time(), //$airtime->responses['phoneNumber']
-            //             'status' => 'success', //$airtime->responses['status'], 
+            //             'status' => 'success', //$airtime->responses['status'],
             //             'currency' => "NGN"
             //         ]);
             //         return redirect('score/list')->with('status', 'Airtime Successfully Sent to your Number');
             // }else{
-            //    return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later'); 
+            //    return redirect('score/list')->with('error', 'There was an error while sending airtime, please try again later');
             // }
 
         } else {
@@ -747,7 +747,7 @@ class HomeController extends Controller
         $currencyCode = $currencyRequest[0];
         $country = $currencyRequest[1];
 
-        
+
        $profile = Profile::where('user_id', auth()->user()->id)->first();
        $profile->country = $country;
        $profile->currency_code = $currencyCode;
@@ -757,15 +757,15 @@ class HomeController extends Controller
        $wallet->base_currency = $currencyCode;
        $wallet->base_currency_set = true;
        $wallet->Save();
-       
+
        return back();
-       
+
     }
 
     public function pathway($pathway){
 
         $profile = Profile::where('user_id', auth()->user()->id)->first();
-      
+
         $profile->pathway = $pathway;
         $profile->save();
 

@@ -16,7 +16,7 @@ class PromoteBusinessController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
 
@@ -39,22 +39,22 @@ class PromoteBusinessController extends Controller
             // 'instagram_link' => 'string',
             // 'tiktok_link' => 'string',
             // 'pinterest_link' => 'string',
-           
+
         ]);
         $request->request->add(['user_id' => auth()->user()->id, 'status' => 'PENDING', 'business_link' => $request->business_link,]);
-        
+
         $business = Business::create($request->all());
 
         if($business){
             $subject = 'Freebyz Business Promotion - Business Created Successfully';
             $content = 'Your business will soon be activated. Once activated, you can add products and share your links freely on your social media.';
-            
+
             // Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
 
             return back()->with('success', 'Business Created Successfully');
         }
 
-       
+
     }
 
     public function createProduct(Request $request){
@@ -64,16 +64,16 @@ class PromoteBusinessController extends Controller
             'price' => 'required|string',
             'description' => 'required|string',
         ]);
-        
 
-       
+
+
             if($request->hasFile('img')){
                 $fileBanner = $request->file('img');
                 $Bannername = time() . $fileBanner->getClientOriginalName();
                 $filePathBanner = 'products/' . $Bannername;
-        
+
                 Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-             
+
                 BusinessProduct::create([
                     'business_id' => $request->business_id,
                     'name' => $request->name,
@@ -86,7 +86,7 @@ class PromoteBusinessController extends Controller
 
                 return back()->with('success', 'Product added Successfully');
             }
-           
+
     }
 
     public function editProduct($id){

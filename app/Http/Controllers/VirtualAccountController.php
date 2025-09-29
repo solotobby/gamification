@@ -10,14 +10,14 @@ class VirtualAccountController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(Request $request){
         // $request->validate([
         //     'bvn' => 'required|numeric|digits:10'
         // ]);
-        
+
         $payload = [
             // "email"=> auth()->user()->email,
             // "first_name"=> $name[0],
@@ -32,7 +32,7 @@ class VirtualAccountController extends Controller
         $res = createCustomer($payload);
 
         $data = [
-            "customer"=> $res['data']['customer_code'], 
+            "customer"=> $res['data']['customer_code'],
             "preferred_bank"=>"test-bank"
         ];
 
@@ -47,8 +47,8 @@ class VirtualAccountController extends Controller
         // ];
 
 
-     
-    
+
+
       $response = PaystackHelpers::virtualAccount($data);
 
       $datas['res'] = $res;
@@ -58,15 +58,15 @@ class VirtualAccountController extends Controller
 
       return back()->with('success', 'Account Created Succesfully');
 
-       
+
 
         // if($res['status'] == true){
         //     // $VirtualAccount = VirtualAccount::create(['user_id' => auth()->user()->id, 'channel' => 'paystack', 'customer_id'=>$res['data']['customer_code'], 'customer_intgration'=> $res['data']['integration']]);
         //     $data = [
-        //             "customer"=> $res['data']['customer_code'], 
+        //             "customer"=> $res['data']['customer_code'],
         //             "preferred_bank"=>"wema-bank"
         //         ];
-            
+
         //     return $response = PaystackHelpers::virtualAccount($data);
 
         //     // $VirtualAccount->bank_name = $response['data']['bank']['name'];
@@ -80,13 +80,13 @@ class VirtualAccountController extends Controller
         // }else{
         //     return back()->with('error', 'Error occured while processing');
         // }
-  
+
     }
 
     function RandomString($n) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
-     
+
         for ($i = 0; $i < $n; $i++) {
             $index = rand(0, strlen($characters) - 1);
             $randomString .= $characters[$index];

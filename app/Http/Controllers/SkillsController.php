@@ -19,7 +19,7 @@ class SkillsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
 
@@ -59,17 +59,17 @@ class SkillsController extends Controller
 
         $skills = Skill::all();
         $experience = ProfessionalProficiencyLevel::all();
-    
+
         return view('user.skills.index', [
             'skills' => $skills,
             'experience' => $experience,
             'searchResult' => $searchResult // Fixed typo
         ]);
-    
+
     }
 
     public function viewSkill($id){
-       
+
         $query = SkillAsset::where('id', $id)->first();
         $portfolio = Portfolio::where('user_id', $query->user_id)->get();
         $checkifExist = \DB::table('skill_user')->where('skill_asset_id',$query->id)->where('user_id', auth()->user()->id)->first();
@@ -85,9 +85,9 @@ class SkillsController extends Controller
         $skillAsset = SkillAsset::where('user_id', auth()->user()->id)->first();
         // $portfolio = Portfolio::where('skill_id', $skillAsset->id)->get();
 
-        return view('user.skills.create', 
-                    ['skills' => $skills, 
-                    'profeciencies' => $profeciencies, 
+        return view('user.skills.create',
+                    ['skills' => $skills,
+                    'profeciencies' => $profeciencies,
                     'skillAsset' => $skillAsset
                     // 'portfolio' => $portfolio
                 ]);
@@ -122,13 +122,13 @@ class SkillsController extends Controller
                 ['user_id' => auth()->user()->id],
                 [
                 'title' => $request->title,
-                'description' => $request->description , 
-                'skill_id' => $request->skill_id, 
-                'profeciency_level' => $request->profeciency_level, 
-                'year_experience' => $request->year_experience, 
-                'location' => $request->location, 
+                'description' => $request->description ,
+                'skill_id' => $request->skill_id,
+                'profeciency_level' => $request->profeciency_level,
+                'year_experience' => $request->year_experience,
+                'location' => $request->location,
                 'availability' => $request->availability,
-                'max_price' => $request->max_price, 
+                'max_price' => $request->max_price,
                 'min_price' => $request->min_price,
                 'status' => 'pending'
                 ]
@@ -136,19 +136,19 @@ class SkillsController extends Controller
 
             Alert::success('Success', 'Skill Updated Successfully');
             return back()->with('success', 'Skill Updated Successfully');
-        
-        
+
+
         }else{
             Alert::error('Error', 'Something happened, please try again later');
             return back()->with('error', 'Something happened, please try again later');
         }
-        
+
     }
 
     public function addPortfolio(Request $request){
        $validated =  $this->validate($request, [
             'title' => 'required|string',
-            
+
             'description' => [
             'required',
             function ($attribute, $value, $fail) {
@@ -171,18 +171,18 @@ class SkillsController extends Controller
 
                     session()->flash('error', "The {$attribute} field contains prohibited social media links.");
                     $fail("The {$attribute} field contains prohibited social media links.");
-             
+
                     // Alert::error('Error', "The {$attribute} field contains prohibited social media links");
                     // $fail("The {$attribute} field contains prohibited social media links.");
 
                 }
             },],
-            
+
         ]);
-       
+
 
         if($validated){
-            $request->request->add(['user_id' => auth()->user()->id]); 
+            $request->request->add(['user_id' => auth()->user()->id]);
             $portfolio = Portfolio::create($request->all());
             // if($portfolio){
             //     foreach($request->tools as $tool){
@@ -192,9 +192,9 @@ class SkillsController extends Controller
             if($portfolio){
                 Alert::success('Success', 'Portfolio added Successfully');
                 //return redirect()->url('home');
-                return back()->with('success', 'Portfolio added Successfully');    
+                return back()->with('success', 'Portfolio added Successfully');
             }
-            
+
         }else{
             Alert::error('Error', 'An Error occoured, please try again');
             return back()->with('error', 'An Error occoured, please try again');
@@ -205,7 +205,7 @@ class SkillsController extends Controller
 
     public function mySkill(){
         $skill = SkillAsset::where('user_id', auth()->user()->id)->first();
-       
+
         return view('user.skills.myskill', ['skill' => $skill]);
     }
 
@@ -219,7 +219,7 @@ class SkillsController extends Controller
             if(checkWalletBalance(auth()->user(), baseCurrency(), $amount)){
                $debit = debitWallet(auth()->user(), baseCurrency(), $amount);
                if($debit){
-                
+
                     PaymentTransaction::create([
                         'user_id' => auth()->user()->id,
                         'campaign_id' => '1',
@@ -236,19 +236,19 @@ class SkillsController extends Controller
                     ]);
 
                     \DB::table('skill_user')->insert(['skill_asset_id' => $skill->id, 'user_id' => auth()->user()->id]);
-                       
+
                     return back()->with('success', 'Point purchased successfully');
                }
-    
-    
-                
+
+
+
             }else{
                 return redirect('wallet/fund')->with('error', 'You do not have enough fund in your wallet to purchase the Point');
             }
 
         }
-        
-       
+
+
 
         //$list->currency, baseCurrency(), $list->campaign_amoun
     }

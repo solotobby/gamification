@@ -10,7 +10,7 @@ class CurrencyConverterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
@@ -25,10 +25,10 @@ class CurrencyConverterController extends Controller
         return dollar_naira();
     }
 
-   
+
 
     public function makeConversion(Request $request){
-     
+
         $label = $request->label;
         if($label == 'naira'){
 
@@ -77,9 +77,9 @@ class CurrencyConverterController extends Controller
                 ]);
             }
 
-            
-           
- 
+
+
+
             return back()->with('success', 'Conversion Successful');
 
 
@@ -87,7 +87,7 @@ class CurrencyConverterController extends Controller
             $request->validate([
                 'usd' => 'required|numeric|min:2'
             ]);
-    
+
             $balance=auth()->user()->wallet->usd_balance;
             if($request->usd > $balance){
                 return back()->with('error', 'Insufficient fund');
@@ -127,7 +127,7 @@ class CurrencyConverterController extends Controller
                 ]);
             }
 
-            
+
 
            return back()->with('success', 'Conversioin Successful');
         }

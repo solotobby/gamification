@@ -11,7 +11,7 @@ class PaystackPaymentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
 
@@ -79,7 +79,7 @@ class PaystackPaymentController extends Controller
             return back()->with('error', 'Payment Not Successful');
         }
 
-        
+
     }
 
 
