@@ -80,7 +80,7 @@ class EmailVerificationController extends Controller
 
         session()->forget(['verification_code', 'verification_code_expires']);
 
-        return redirect('/user/home');
+        return redirect('/login');
 
     }
 }

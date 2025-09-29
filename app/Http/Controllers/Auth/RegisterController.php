@@ -69,9 +69,9 @@ class RegisterController extends Controller
         }
 
         $curLocation = '';
-        if(env('APP_ENV')  == 'local_test'){
+        if (env('APP_ENV')  == 'local_test') {
             $curLocation = 'United Kingdom';
-        }else{
+        } else {
             $curLocation = currentLocation();
         }
 
@@ -98,27 +98,16 @@ class RegisterController extends Controller
         }
 
 
-         $user = $this->createUser($request);
+        $user = $this->createUser($request);
         if ($user == 'Error') {
             return view('auth.error', ['error' => 'Invalid Referral code']);
-        }else{
-             // return $user;
-             Auth::login($user);
-             setProfile($user); //set profile page
-             activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
-
-              try {
-            Mail::to($user->email)->send(new WelcomeMail($user->name));
-        } catch (Exception $e) {
-            // Optionally log the error
-            Log::error('Failed to send welcome email: ' . $e->getMessage());
+        } else {
+            // return $user;
+            Auth::login($user);
+            setProfile($user); //set profile page
+            activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+            return redirect('/home');
         }
-
-             return redirect('/home');
-
-
-        }
-
     }
 
     public function createUser($request)
@@ -166,12 +155,19 @@ class RegisterController extends Controller
         //     generateVirtualAccountOnboarding($user, $phone);
         // }
 
-        $subject = 'Welcome to Freebyz';
-        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        // $subject = 'Welcome to Freebyz';
+        // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+
+        try {
+            Mail::to($user->email)->send(new WelcomeMail($user->name));
+        } catch (Exception $e) {
+            // Optionally log the error
+            Log::error('Failed to send welcome email: ' . $e->getMessage());
+        }
 
         // if ($location == 'Nigeria') {
         //     $phone = '234' . substr($request->phone, 1);
-            // generateVirtualAccountOnboarding($user, $phone);
+        // generateVirtualAccountOnboarding($user, $phone);
         // }
 
         // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
@@ -199,51 +195,49 @@ class RegisterController extends Controller
         // $location = PaystackHelpers::getLocation(); //get user location dynamically
         $user = User::where('email', $request->email)->first();
 
-        if($user){
+        if ($user) {
 
-        $role = $user->role;
+            $role = $user->role;
 
-        switch ($role) {
-        case "admin":
-            // return "Admin";
+            switch ($role) {
+                case "admin":
+                    // return "Admin";
 
-            if ($user) {
+                    if ($user) {
 
-                if ($user->is_blacklisted == true) {
-                    return view('blocked');
-                }
+                        if ($user->is_blacklisted == true) {
+                            return view('blocked');
+                        }
 
-                if($user->id == '1'){
-                    $token = Str::random(36);
-                    AuthCheck::create(['email' => $user->email, 'token' => $token]);
-                    //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
-                    // $token =
-                    return redirect('login/otp/'.$token);
-                }else{
-                    return redirect('/');
-                }
-
-
-            }else{
-                return back()->with('error', 'Email or Password is incorrect');
-            }
+                        if ($user->id == '1') {
+                            $token = Str::random(36);
+                            AuthCheck::create(['email' => $user->email, 'token' => $token]);
+                            //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
+                            // $token =
+                            return redirect('login/otp/' . $token);
+                        } else {
+                            return redirect('/');
+                        }
+                    } else {
+                        return back()->with('error', 'Email or Password is incorrect');
+                    }
 
 
-            break;
-        case "regular":
+                    break;
+                case "regular":
 
-            // return "Regular ";
-            if ($user) {
+                    // return "Regular ";
+                    if ($user) {
 
-                if ($user->is_blacklisted == true) {
-                    return view('blocked');
-                }
+                        if ($user->is_blacklisted == true) {
+                            return view('blocked');
+                        }
 
-                    if ($user->referral_code == null) {
+                        if ($user->referral_code == null) {
                             $user->referral_code = Str::random(7);
                             $user->save();
-                    }
-                    if (Hash::check($request->password, $user->password)) {
+                        }
+                        if (Hash::check($request->password, $user->password)) {
 
                             Auth::login($user); //log user in
 
@@ -255,7 +249,7 @@ class RegisterController extends Controller
                             }
 
                             //set base currency if not set
-                            if(env('APP_ENV') == 'production'){
+                            if (env('APP_ENV') == 'production') {
                                 setProfile($user); //set profile page
                                 userLocation('Login');
                                 // setWalletBaseCurrency();
@@ -269,22 +263,20 @@ class RegisterController extends Controller
                         } else {
                             return back()->with('error', 'Email or Password is incorrect');
                         }
-
                     } else {
                         return back()->with('error', 'Email or Password is incorrect');
+                    }
+
+                    break;
+                case "staff":
+                    return "Staff Account";
+                    break;
+                default:
+                    return "Not applicable";
             }
-
-            break;
-        case "staff":
-            return "Staff Account";
-            break;
-        default:
-            return "Not applicable";
+        } else {
+            return back()->with('error', 'Email or Password is incorrect');
         }
-
-    }else{
-        return back()->with('error', 'Email or Password is incorrect');
-    }
 
 
         // if ($user) {
