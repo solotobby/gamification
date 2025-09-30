@@ -121,7 +121,7 @@ class GeneralController extends Controller
 
 
 
-      
+
         // $user = User::where('is_verified', 0)
         //  ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
 
