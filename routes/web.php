@@ -105,6 +105,11 @@ Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleController:
 //FACEBOOK AUTH
 Route::get('auth/facebook', [\App\Http\Controllers\Auth\FacebookController::class, 'redirectToFacebook']);
 Route::get('auth/facebook/callback', [\App\Http\Controllers\Auth\FacebookController::class, 'handleFacebookCallback']);
+
+// Email Verification Routes
+Route::post('/verification/send', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'sendCode'])->name('verification.send');
+Route::post('/verification/verify', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'verify'])->name('verification.verify');
+
 //Take Quiz
 Route::get('instruction', [\App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
 Route::get('take/quiz', [\App\Http\Controllers\HomeController::class, 'takeQuiz'])->name('take.quiz');

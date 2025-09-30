@@ -16,7 +16,7 @@ class SpinController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index() : View{
@@ -39,27 +39,27 @@ class SpinController extends Controller
             if ($userBalance < 10000) {
                 return response()->json(['error' => 'Insufficient balance to spin'], 403);
             }
-        
+
             // Track daily spins and payouts
             $today = now()->toDateString();
-            
+
             $spinTracker = SpinTracker::firstOrCreate(['date' => $today]);
-        
+
             if ($spinTracker->total_spins >= $dailyLimitSpins) {
                 return response()->json(['error' => true, 'message' =>'Daily spin limit reached'], 403);
             }
-        
+
             if ($spinTracker->total_payout >= $dailyLimitPayout) {
                 return response()->json(['error' => true, 'message' =>'Daily payout limit reached'], 403);
             }
-    
+
             // Track already won high-value prizes this month
             $alreadyWonHighValue = SpinScore::where('user_id', $user->id)
                                             ->whereIn('score', $monthlyLimitPrizes)
                                             ->whereMonth('created_at', now()->month)
                                             ->exists();
 
-        
+
             // Define outcomes
             $prizes = [
                 ['degreeOffset' => 0, 'score' => 10, 'prize' => 'You win ₦10 🎉🎉'],
@@ -99,7 +99,7 @@ class SpinController extends Controller
                 ]);
 
                     creditWallet(auth()->user(), baseCurrency(), $selectedPrize['score']);
-            
+
                     PaymentTransaction::create([
                         'user_id' => auth()->user()->id,
                         'campaign_id' => '1',
@@ -123,7 +123,7 @@ class SpinController extends Controller
                 ]);
 
                     creditWallet(auth()->user(), baseCurrency(), $selectedPrize['score']);
-                
+
                     PaymentTransaction::create([
                         'user_id' => auth()->user()->id,
                         'campaign_id' => '1',
@@ -146,7 +146,7 @@ class SpinController extends Controller
 
         }catch(Exception $exception){
             return response()->json(['status' => false,  'error'=> $exception->getMessage(), 'message' => 'Error processing request'], 500);
-  
+
         }
 
         // Return prize
@@ -155,11 +155,11 @@ class SpinController extends Controller
             'prize' => $selectedPrize['prize'],
             // 'prize_check' => $check,
         ]);
-        
+
     }
 
     public function attempt(){
-        
+
         $check = SpinScore::where('user_id', auth()->user()->id)->whereDate('created_at', Carbon::today())->first();
         if($check){
             $count = 0;

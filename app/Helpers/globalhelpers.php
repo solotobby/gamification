@@ -1341,8 +1341,6 @@ if(!function_exists('userNairaUpgrade')){
         $userInfo->is_verified = 1;
         $userInfo->save();
 
-
-
        $transaction =  PaymentTransaction::create([
             'user_id' => $user->id,
             'campaign_id' => 1,

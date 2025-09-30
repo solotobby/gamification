@@ -11,7 +11,7 @@ class GistGrooveController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
@@ -26,18 +26,18 @@ class GistGrooveController extends Controller
 
         $request->validate([
             'title' => 'required|string',
-            'body' => 'required|string'    
+            'body' => 'required|string'
         ]);
 
         $slug = Str::slug($request->title);
         $categoryName = PostCategory::where('id', $request->category_id)->first();
         Post::create([
-            'user_id' => auth()->user()->id, 
-            'username' => auth()->user()->name, 
-            'category_id' => $request->category_id, 
-            'category_name' => $categoryName->name, 
+            'user_id' => auth()->user()->id,
+            'username' => auth()->user()->name,
+            'category_id' => $request->category_id,
+            'category_name' => $categoryName->name,
             'slug' => $slug,
-            'title' => $request->title, 
+            'title' => $request->title,
             'body' => $request->body
         ]);
 

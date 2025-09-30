@@ -19,9 +19,9 @@ class NotificationController extends Controller
 
      public function __construct()
      {
-         $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
      }
-     
+
     public function index()
     {
         Notification::where('user_id', auth()->user()->id)->update(['is_read' => true]);
@@ -118,7 +118,7 @@ class NotificationController extends Controller
     }
 
     public function storeNotification(Request $request){
-        
+
         switch ($request->type) {
             case 'announcement':
                     Announcement::orderBy('id', 'DESC')->update(['status' => false]);

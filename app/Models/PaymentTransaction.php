@@ -11,17 +11,33 @@ class PaymentTransaction extends Model
 
     protected $table = 'payment_transactions';
 
-    protected $fillable = ['reference', 'user_id', 'campaign_id', 'amount', 'balance', 'currency', 'status', 'channel', 'type', 'description', 'tx_type', 'user_type'];
+    protected $fillable = [
+        'reference',
+        'user_id',
+        'campaign_id',
+        'amount',
+        'balance',
+        'currency',
+        'status',
+        'channel',
+        'type',
+        'description',
+        'tx_type',
+        'user_type'
+    ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function userName(){
+    public function userName()
+    {
         return $this->belongsTo(User::class, 'user_id')->select(['name']);
     }
 
-    public function referee(){
+    public function referee()
+    {
         return $this->hasMany(User::class, 'referral', 'user_id');
     }
 }

@@ -15,7 +15,7 @@ class MarketplaceController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
@@ -38,7 +38,7 @@ class MarketplaceController extends Controller
 
         //&& $request->hasFile('product')
         if($request->hasFile('banner')){
-         
+
             $fileBanner = $request->file('banner');
             // $fileProduct = $request->file('product');
 
@@ -54,7 +54,7 @@ class MarketplaceController extends Controller
             $storeBanner = Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             $bannerUrl = Storage::disk('s3')->url($filePathBanner);
 
-            
+
             // $storeProduct = Storage::disk('s3')->put($filePathProduct, file_get_contents($fileProduct), 'public');
             // $prodductUrl = Storage::disk('s3')->url($filePathProduct);
 

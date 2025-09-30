@@ -11,12 +11,12 @@ class WellaHealthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
-    public function index() {    
+    public function index() {
       return view('user.partner.wellahealth.index');
     }
 
-   
+
 }

@@ -26,13 +26,15 @@ class User extends Authenticatable
         'twitter_id',
         'avatar',
         'role',
-        'referral_code', 
-        'source', 
+        'referral_code',
+        'source',
         'phone',
         'country',
         'age_range',
         'gender',
-        'base_currency'
+        'base_currency',
+        'is_verified',
+        'email_verified_at'
     ];
 
     /**
@@ -113,7 +115,7 @@ class User extends Authenticatable
     public function myFeedBackList(){
         return $this->hasMany(Feedback::class,  'user_id');
     }
-    
+
     public function myFeedBackReplies(){
         return $this->hasMany(FeedbackReplies::class,  'user_id');
     }
@@ -158,5 +160,5 @@ class User extends Authenticatable
         return $this->hasOne(SkillAsset::class, 'user_id');
     }
 
-    
+
 }

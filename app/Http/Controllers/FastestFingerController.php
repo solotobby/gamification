@@ -13,7 +13,7 @@ class FastestFingerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'email']);
     }
 
     public function index(){
@@ -22,7 +22,7 @@ class FastestFingerController extends Controller
         $Info=FastestFinger::where('user_id', $user->id)->first();
         $checkTodayPool = FastestFingerPool::where(['user_id'=> $user->id, 'date' => Carbon::today()->format('Y-m-d')])->first();
         // return $user->referees;
-       
+
         return view('user.finger.index', ['refCount' => $refCount, 'Info' => $Info, 'checkTodayPool' =>$checkTodayPool]);
     }
 
@@ -40,10 +40,10 @@ class FastestFingerController extends Controller
     }
 
     public function enterPool(Request $request){
-        
+
         $user = Auth::user();
         $refCount =  Referral::where('referee_id', $user->id)->where('updated_at', '>=', Carbon::now()->subDays(10))->count();
-      
+
         if($refCount >= 10){
             FastestFingerPool::create(['user_id' => $user->id, 'date' => Carbon::today()->format('Y-m-d')]);
             return back()->with('success', 'Pool Submitted successfully!');
