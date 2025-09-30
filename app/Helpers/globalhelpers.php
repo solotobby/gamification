@@ -2373,7 +2373,6 @@ if(!function_exists('bulkFundTransfer')){
 if(!function_exists('initiateTrasaction')){
     function  initiateTrasaction($ref, $amount, $redirect_url){
 
-        
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2381,7 +2380,7 @@ if(!function_exists('initiateTrasaction')){
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => $amount*100,
-            'channels' => ['card', 'bank', 'ussd'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
+            'channels' => ['card', 'bank', 'ussd', 'transfer'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
             'currency' => 'NGN',
             'reference' => $ref,
             'callback_url' => url($redirect_url),
