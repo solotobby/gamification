@@ -92,11 +92,6 @@ class GeneralController extends Controller
         }else{
             return 'You do not have to be doing this';
         }
-        // if($request->pass_code === $pas && $request->se == $sec){
-        //     return 'oka';
-        // }else{
-        //     return 'You do not have to be doing this';
-        // }
 
     }
 
