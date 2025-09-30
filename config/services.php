@@ -44,7 +44,7 @@ return [
     'env' => [
         'env' => env('APP_ENV'),
         'code' => env('CODE'),
-        'answer' => env('ANSWER',)
+        'answer' => env('ANSWER')
     ],
 
 ];

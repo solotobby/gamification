@@ -2373,10 +2373,11 @@ if(!function_exists('bulkFundTransfer')){
 if(!function_exists('initiateTrasaction')){
     function  initiateTrasaction($ref, $amount, $redirect_url){
 
+        
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => $amount*100,
@@ -2399,7 +2400,7 @@ if(!function_exists('verifyTransaction')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2411,7 +2412,7 @@ if(!function_exists('virtualAccount')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->post('https://api.paystack.co/dedicated_account', $data);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2425,7 +2426,7 @@ if(!function_exists('createCustomer')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->post('https://api.paystack.co/customer', $data);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2440,7 +2441,7 @@ if(!function_exists('fetchCustomer')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->get('https://api.paystack.co/customer/'.$email);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2455,7 +2456,7 @@ if(!function_exists('updateCustomer')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer '.config('paystack.secretKey')
         ])->put('https://api.paystack.co/customer/'.$email, $payload);
 
         return json_decode($res->getBody()->getContents(), true);
