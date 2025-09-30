@@ -309,13 +309,14 @@
         </ul> --}}
       </li>
 
-      {{-- <li class="nav-main-item">
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('mass.mail') }}">
           <i class="nav-main-link-icon fa fa-envelope"></i>
           <span class="nav-main-link-name">Mass Mail</span>
           <span class="nav-main-link-badge badge rounded-pill bg-default">8</span>
         </a>
-      </li> --}}
+      </li>
+      
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/banner/list') }}">
           <i class="nav-main-link-icon fa fa-envelopes"></i>
