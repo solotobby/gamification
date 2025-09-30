@@ -126,13 +126,11 @@ class CampaignController extends Controller
                 'type' => 'edit_campaign_payment',
                 'description' => 'Extend Campaign Payment'
             ]);
-<<<<<<< HEAD
 
-            // Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
-=======
-           
              Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
->>>>>>> ba7cb99d019028f2f8c9168062ebf680b46d1e82
+
+           
+
             return back()->with('success', 'Campaign Updated Successfully');
         }else{
             return back()->with('error', 'You do not have suficient funds in your wallet');
@@ -709,13 +707,10 @@ class CampaignController extends Controller
 
            $subject = 'Job Approved';
            $status = 'Approved';
-<<<<<<< HEAD
-        //    Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
 
-=======
            Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
            
->>>>>>> ba7cb99d019028f2f8c9168062ebf680b46d1e82
+
            return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
 
 
@@ -768,13 +763,10 @@ class CampaignController extends Controller
 
             $subject = 'Job Denied';
             $status = 'Denied';
-<<<<<<< HEAD
-            // Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
 
-=======
              Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
           
->>>>>>> ba7cb99d019028f2f8c9168062ebf680b46d1e82
+
 
             return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign has been denied');
 
