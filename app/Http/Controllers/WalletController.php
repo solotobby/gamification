@@ -156,7 +156,7 @@ class WalletController extends Controller
 
                 if($request->channel == 'paystack'){
 
-                    $url = initiateTrasaction(time(), $amount, '/wallet/topup');
+                    $url = initiateTrasaction($ref, $amount, '/wallet/topup');
 
                     PaymentTransaction::create([
                         'user_id' => auth()->user()->id,
@@ -166,7 +166,7 @@ class WalletController extends Controller
                         'balance' => walletBalance(auth()->user()->id),
                         'status' => 'unsuccessful',
                         'currency' => $baseCurrency,
-                        'channel' => 'kora',
+                        'channel' => 'paystack',
                         'type' => 'wallet_topup',
                         'description' => 'Wallet Top Up',
                         'tx_type' => 'Credit',
@@ -174,6 +174,7 @@ class WalletController extends Controller
                     ]);
 
                     return redirect($url);
+
                 }else{
 
                     ///Kora Pay
@@ -537,6 +538,10 @@ class WalletController extends Controller
         $ref = $params['trxref']; //paystack
         $res = verifyTransaction($ref); //paystack external api
 
+        if($res['status'] != true){
+            return back()->with('error', 'Transaction not successful '.auth()->user()->name);
+        }
+
         $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
 
         if($verifyPayment){
@@ -544,18 +549,15 @@ class WalletController extends Controller
             $verifyPayment->status = 'successfull';
             $verifyPayment->save();
 
-            creditWallet(auth()->user(), 'NGN', $res['data']['amount']);
+            //check if user has a virtual account
+            if(!auth()->user()->virtualAccount){
+                creditWallet(auth()->user(), 'NGN', $verifyPayment->amount);
+            }
 
             activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
 
             return back()->with('success', 'Payment Completed. Your wallet will be credited!');
         }
-
-
-
-        // return paymentUpdate($res['data']['reference'], 'successful', $res['data']['amount']);
-
-
 
 
 

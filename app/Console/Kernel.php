@@ -162,13 +162,12 @@ class Kernel extends ConsoleKernel
                     'tx_type' => 'Credit',
                     'user_type' => 'regular'
                 ]);
-    
             }
 
-            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'Batched Job Approval - Notification';
-            $content = 'Job Automatic Approval of '.$lists->count();
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            //$user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            //$subject = 'Batched Job Approval - Notification';
+           // $content = 'Job Automatic Approval of '.$lists->count();
+            //Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
         })->hourly();
 
