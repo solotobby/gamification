@@ -57,14 +57,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
+                {{-- <div class="modal-footer border-0 pt-0">
                     <form action="{{ route('logout') }}" method="POST" class="w-100">
                         @csrf
                         <button type="submit" class="btn btn-secondary w-100">
                             <i class="fa fa-sign-out me-2"></i> Logout
                         </button>
                     </form>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -104,7 +104,7 @@ $('#verificationForm').on('submit', function(e) {
         success: function(response) {
             showSuccess('Email verified successfully! Redirecting...');
             setTimeout(() => {
-                window.location.href = '{{ url("/") }}';
+                window.location.href = '{{ url("/home") }}';
             }, 1500);
         },
         error: function(xhr) {
