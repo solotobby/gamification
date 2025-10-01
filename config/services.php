@@ -45,7 +45,7 @@ return [
         'env' => env('APP_ENV'),
         'code' => env('CODE'),
         'answer' => env('ANSWER'),
-        'kora_sec' => env('KORA_SEC'),
+        'kora_sec' => getenv('KORA_SEC'),
     ],
 
 ];
