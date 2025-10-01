@@ -196,7 +196,7 @@ class WalletController extends Controller
                         // ]
                     ];
 
-                    $redirectUrl = initializeKorayPay($payloadNGN);
+                    return $redirectUrl = initializeKorayPay($payloadNGN);
 
                     PaymentTransaction::create([
                             'user_id' => auth()->user()->id,
