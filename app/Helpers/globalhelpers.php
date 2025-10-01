@@ -34,61 +34,7 @@ use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-if (!function_exists('GetSendmonnyUserId')) {  //sendmonny user idauthenticated user
-    function GetSendmonnyUserId()
-    {
-       return AccountInformation::where('user_id', auth()->user()->id)->first()->_user_id;
-    }
-}
-if (!function_exists('GetSendmonnyUserWalletId')) { //sendmonny wallet id of authenticated user
-    function GetSendmonnyUserWalletId()
-    {
-       return AccountInformation::where('user_id', auth()->user()->id)->first()->wallet_id;
-    }
-}
 
-if(!function_exists('adminCollection')){
-    function adminCollection(){
-        $walletId = env('COLLECTIION_WALLET_ID');
-        $userId = env('COLLECTIION_USER_ID');
-
-        $data['wallet_id'] = $walletId;
-        $data['user_id'] = $userId;
-
-        return $data;
-    }
-}
-
-if(!function_exists('adminRevenue')){
-    function adminRevenue(){
-        $walletId = env('REVENUE_WALLET_ID');
-        $userId = env('REVENUE_USER_ID');
-
-        $data['wallet_id'] = $walletId;
-        $data['user_id'] = $userId;
-
-        return $data;
-    }
-}
-
-if(!function_exists('accessToken')){
-    function accessToken(){
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post(env('SENDMONNY_URL').'authenticate', [
-            "phone_number"=>env('PHONE'),
-	        "password"=>env('PASS')
-        ]);
-        return json_decode($res->getBody()->getContents(), true)['data']['token'];
-    }
-}
-
-if(!function_exists('userWalletId')){
-    function userWalletId($id){
-        return AccountInformation::where('user_id', $id)->first()->wallet_id;
-    }
-}
 
 if(!function_exists('isBlacklisted')){
     function isBlacklisted($user){
@@ -101,11 +47,7 @@ if(!function_exists('isBlacklisted')){
     }
 }
 
-if(!function_exists('walletHandler')){
-    function walletHandler(){
-        return Settings::where('status', true)->first()->name;
-    }
-}
+
 
 if(!function_exists('setWalletBaseCurrency')){
     function setWalletBaseCurrency(){
@@ -391,7 +333,7 @@ if(!function_exists('initializeKorayPay')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('KORA_SEC')
+            'Authorization' => 'Bearer '.config('services.env.kora_sec')
         ])->post('https://api.korapay.com/merchant/api/v1/charges/initialize', $payloadNGN)->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data']['checkout_url'];
