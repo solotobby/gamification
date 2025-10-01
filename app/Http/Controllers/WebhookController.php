@@ -123,13 +123,42 @@ class WebhookController extends Controller
     public function korayPayWebhook(Request $request){
         
         $event = $request['event'];
-        Question::create(['content' => $request]);
+       
+        if($event == 'charge.success'){
 
-        return response()->json(['status' => 'success'], 200);
+            // $amount = $request['data']['amount'];
+            // $status = $request['data']['transaction_status'];
+            $korapayReference = $request['data']['reference']; //from koraypay
+            $paymentReference = $request['data']['meta']['payment_reference']; //our reference
+            $currency = $request['data']['currency'];
 
-        // if($event == 'charge.success'){
+            $validateTransaction = PaymentTransaction::where('reference', $paymentReference)->first();
+            if($validateTransaction){
 
-        // }
+                $validateTransaction->reference;
+                //fetch user
+                $user = User::where('id', $validateTransaction->user_id)->first();
+
+                $creditUser = creditWallet($user, 'NGN', $validateTransaction->amount);
+                if($creditUser){
+
+                    $validateTransaction->status = 'successful';
+                    $validateTransaction->save();
+
+                    $subject = 'Wallet Credited';
+                    $content = 'Congratulations, your wallet has been credited with ₦'.$validateTransaction->amount;
+                    Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, '')); 
+                    
+                     return response()->json(['status' => 'success'], 200);   
+
+                }
+
+            }else{
+                return response()->json(['status' => 'error', 'message' => 'Transaction not successful'], 501);
+            }
+           
+
+        }
 
 
     }

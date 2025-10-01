@@ -129,15 +129,7 @@ class WalletController extends Controller
 
         if($res['data']['status'] == 'success'){
 
-            $credit = creditWallet(auth()->user(), 'NGN', $res['data']['amount_paid']);
-
-            if($credit){
-                $PaymentTransaction = PaymentTransaction::where('reference', $res['data']['reference'])->first();
-                $PaymentTransaction->status = 'successful';
-                $PaymentTransaction->save();
-            }
-
-            return redirect('wallet/fund')->with('success', 'Wallet successfully funded');
+             return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
 
         }else{
             return redirect('wallet/fund')->with('error', 'Transaction Terminated by '.auth()->user()->name);
