@@ -330,12 +330,10 @@ if(!function_exists('short_name')){
 if(!function_exists('initializeKorayPay')){
     function initializeKorayPay($payloadNGN){
 
-        return env('KORA_SEC'); //config('services.env.kora_sec');
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('KORA_SEC')//config('services.env.kora_sec')
+            'Authorization' => 'Bearer '.config('services.env.kora_sec')
         ])->post('https://api.korapay.com/merchant/api/v1/charges/initialize', $payloadNGN)->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data']['checkout_url'];
