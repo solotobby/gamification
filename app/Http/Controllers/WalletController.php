@@ -118,7 +118,8 @@ class WalletController extends Controller
         return  view('user.wallet.withdraw');
     }
 
-    public function koraPayRedirect(){
+    public function koraPayRedirect()
+    {
 
         $url = request()->fullUrl();
         $url_components = parse_url($url);
@@ -127,149 +128,55 @@ class WalletController extends Controller
         $ref = $params['reference'];
         $res = verifyKorayPay($ref);
 
-        if($res['data']['status'] == 'success'){
+        if ($res['data']['status'] == 'success') {
 
-             return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
+            $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
 
-        }else{
-            return redirect('wallet/fund')->with('error', 'Transaction Terminated by '.auth()->user()->name);
+            if ($verifyPayment->status == 'unsuccessful') {
+
+                //fetch user
+                $user = User::where('id', $verifyPayment->user_id)->first();
+                creditWallet($user, 'NGN', $verifyPayment->amount);
+                $verifyPayment->status = 'successful';
+                $verifyPayment->save();
+
+                activityLog($user, 'wallet_topup', $user->name . ' topped up wallet ', 'regular');
+
+                $subject = 'Wallet Credited';
+                $content = 'Congratulations, your wallet has been credited with ₦' .$verifyPayment->amount;
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+                return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
+            } else {
+                return redirect('wallet/fund')->with('info', 'Transaction already processed by ' . auth()->user()->name);
+            }
+        } else {
+            return redirect('wallet/fund')->with('error', 'Transaction Terminated by ' . auth()->user()->name);
         }
-
     }
 
     public function storeFund(Request $request)
     {
 
-            $baseCurrency = auth()->user()->wallet->base_currency;
-            $amount = amountCalculator($request->balance);
-            $ref = Str::random(16);
+        $baseCurrency = auth()->user()->wallet->base_currency;
+        $amount = amountCalculator($request->balance);
+        $ref = Str::random(16);
 
-            if($baseCurrency == 'NGN'){
+        if ($baseCurrency == 'NGN') {
 
-                if($request->channel == 'paystack'){
+            if ($request->channel == 'paystack') {
 
-                    $url = initiateTrasaction($ref, $amount, '/wallet/topup');
-
-                    PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => '1',
-                        'reference' => $ref,
-                        'amount' => $request->balance,
-                        'balance' => walletBalance(auth()->user()->id),
-                        'status' => 'unsuccessful',
-                        'currency' => $baseCurrency,
-                        'channel' => 'paystack',
-                        'type' => 'wallet_topup',
-                        'description' => 'Wallet Top Up',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'regular'
-                    ]);
-
-                    return redirect($url);
-
-                }else{
-
-                    ///Kora Pay
-                    $payloadNGN = [
-                        "amount"=> $request->balance, //$amount,
-                        "redirect_url"=> url('wallet/fund/redirect'),
-                        "currency"=> "NGN",
-                        "reference"=> $ref,
-                        "narration"=> "Wallet top up",
-                        "channels"=> [
-                            "card",
-                            "bank_transfer",
-                            "pay_with_bank"
-                        ],
-                        // "default_channel"=> "card",
-                        "customer"=> [
-                            "name"=> auth()->user()->name,
-                            "email"=> auth()->user()->email
-                        ],
-                        "notification_url"=> "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
-                        // "metadata"=>[
-                        //     "key0"=> "test0",
-                        //     "key1"=> "test1",
-                        //     "key2"=> "test2",
-                        //     "key3"=> "test3",
-                        //     "key4"=> "test4"
-                        // ]
-                    ];
-
-                    $redirectUrl = initializeKorayPay($payloadNGN);
-
-                    PaymentTransaction::create([
-                            'user_id' => auth()->user()->id,
-                            'campaign_id' => '1',
-                            'reference' => $ref,
-                            'amount' => $request->balance,
-                            'balance' => walletBalance(auth()->user()->id),
-                            'status' => 'unsuccessful',
-                            'currency' => $baseCurrency,
-                            'channel' => 'kora',
-                            'type' => 'wallet_topup',
-                            'description' => 'Wallet Top Up',
-                            'tx_type' => 'Credit',
-                            'user_type' => 'regular'
-                        ]);
-
-                    return redirect($redirectUrl);
-
-                }
-
-            }else{
-
-
-                if($baseCurrency == 'GHS'){
-                    $paymentOption = 'mobilemoneyghana';
-
-                }elseif($baseCurrency == 'KES'){
-                    $paymentOption = 'mpesa';
-
-                }elseif($baseCurrency == 'RWF'){
-                    $paymentOption = 'mobilemoneyrwanda';
-
-                }elseif($baseCurrency == 'TZS'){
-                    $paymentOption = 'mobilemoneytanzania';
-
-                }elseif($baseCurrency == 'MWK'){
-                    $paymentOption = 'mobilemoneymalawi';
-
-                }else{
-                    $paymentOption = null;
-                }
-
-                $payload = [
-                    'tx_ref' => $ref,
-                    'amount'=> $amount,
-                    'currency'=> $baseCurrency, //"USD",
-                    'redirect_url'=> url('flutterwave/wallet/top'),
-                    'payment_options'=> 'card ,'. $paymentOption,
-                    'meta'=> [
-                        'consumer_id' => auth()->user()->id,
-                        'consumer_mac'=> ''
-                    ],
-                    'customer'=> [
-                        'email'=> auth()->user()->email,
-                        'phonenumber'=> auth()->user()->phone,
-                        'name'=> auth()->user()->name,
-                    ],
-                    'customizations'=>[
-                        'title'=> "Wallet Top Up",
-                        // 'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
-                    ]
-                ];
-                $url = flutterwavePaymentInitiation($payload)['data']['link'];
+                $url = initiateTrasaction($ref, $amount, '/wallet/topup');
 
                 PaymentTransaction::create([
                     'user_id' => auth()->user()->id,
                     'campaign_id' => '1',
                     'reference' => $ref,
-                    'amount' => $amount,
+                    'amount' => $request->balance,
                     'balance' => walletBalance(auth()->user()->id),
                     'status' => 'unsuccessful',
                     'currency' => $baseCurrency,
-                    'channel' => 'flutterwave',
+                    'channel' => 'paystack',
                     'type' => 'wallet_topup',
                     'description' => 'Wallet Top Up',
                     'tx_type' => 'Credit',
@@ -277,8 +184,110 @@ class WalletController extends Controller
                 ]);
 
                 return redirect($url);
+            } else {
 
+                ///Kora Pay
+                $payloadNGN = [
+                    "amount" => $request->balance, //$amount,
+                    "redirect_url" => url('wallet/fund/redirect'),
+                    "currency" => "NGN",
+                    "reference" => $ref,
+                    "narration" => "Wallet top up",
+                    "channels" => [
+                        "card",
+                        "bank_transfer",
+                        "pay_with_bank"
+                    ],
+                    // "default_channel"=> "card",
+                    "customer" => [
+                        "name" => auth()->user()->name,
+                        "email" => auth()->user()->email
+                    ],
+                    "notification_url" => "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
+                    // "metadata"=>[
+                    //     "key0"=> "test0",
+                    //     "key1"=> "test1",
+                    //     "key2"=> "test2",
+                    //     "key3"=> "test3",
+                    //     "key4"=> "test4"
+                    // ]
+                ];
+
+                $redirectUrl = initializeKorayPay($payloadNGN);
+
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => $request->balance,
+                    'balance' => walletBalance(auth()->user()->id),
+                    'status' => 'unsuccessful',
+                    'currency' => $baseCurrency,
+                    'channel' => 'kora',
+                    'type' => 'wallet_topup',
+                    'description' => 'Wallet Top Up',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+
+                return redirect($redirectUrl);
             }
+        } else {
+
+
+            if ($baseCurrency == 'GHS') {
+                $paymentOption = 'mobilemoneyghana';
+            } elseif ($baseCurrency == 'KES') {
+                $paymentOption = 'mpesa';
+            } elseif ($baseCurrency == 'RWF') {
+                $paymentOption = 'mobilemoneyrwanda';
+            } elseif ($baseCurrency == 'TZS') {
+                $paymentOption = 'mobilemoneytanzania';
+            } elseif ($baseCurrency == 'MWK') {
+                $paymentOption = 'mobilemoneymalawi';
+            } else {
+                $paymentOption = null;
+            }
+
+            $payload = [
+                'tx_ref' => $ref,
+                'amount' => $amount,
+                'currency' => $baseCurrency, //"USD",
+                'redirect_url' => url('flutterwave/wallet/top'),
+                'payment_options' => 'card ,' . $paymentOption,
+                'meta' => [
+                    'consumer_id' => auth()->user()->id,
+                    'consumer_mac' => ''
+                ],
+                'customer' => [
+                    'email' => auth()->user()->email,
+                    'phonenumber' => auth()->user()->phone,
+                    'name' => auth()->user()->name,
+                ],
+                'customizations' => [
+                    'title' => "Wallet Top Up",
+                    // 'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
+                ]
+            ];
+            $url = flutterwavePaymentInitiation($payload)['data']['link'];
+
+            PaymentTransaction::create([
+                'user_id' => auth()->user()->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $amount,
+                'balance' => walletBalance(auth()->user()->id),
+                'status' => 'unsuccessful',
+                'currency' => $baseCurrency,
+                'channel' => 'flutterwave',
+                'type' => 'wallet_topup',
+                'description' => 'Wallet Top Up',
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+
+            return redirect($url);
+        }
 
 
 
@@ -311,13 +320,13 @@ class WalletController extends Controller
         //             'logo'=> "http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png"
         //         ]
         //     ];
-            // $url = flutterwavePaymentInitiation($payload)['data']['link'];
+        // $url = flutterwavePaymentInitiation($payload)['data']['link'];
 
-            // $url = initiateTrasaction($ref, $amount, '/wallet/topup');
+        // $url = initiateTrasaction($ref, $amount, '/wallet/topup');
 
-            // paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
+        // paymentTrasanction(auth()->user()->id, '1', $ref, $request->balance, 'unsuccessful', 'wallet_topup', 'Wallet Topup', 'Payment_Initiation', 'regular');
 
-            // return redirect($url);
+        // return redirect($url);
 
 
 
@@ -330,11 +339,11 @@ class WalletController extends Controller
 
         // }else{
 
-            // $curLocation = currentLocation();
+        // $curLocation = currentLocation();
 
-            // if($curLocation == 'Nigeria'){
-            //     return back()->with('error', 'You are not allowed to use this feature. Kindly top up with your Virtual Account.');
-            // }
+        // if($curLocation == 'Nigeria'){
+        //     return back()->with('error', 'You are not allowed to use this feature. Kindly top up with your Virtual Account.');
+        // }
 
         //     $percent = 5/100 * $request->balance;
         //     $amount = $request->balance + $percent + 0.4;
@@ -436,12 +445,13 @@ class WalletController extends Controller
 
     }
 
-    public function stripeCheckoutSuccess(Request $request){
+    public function stripeCheckoutSuccess(Request $request)
+    {
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 
         $session = $stripe->checkout->sessions->retrieve($request->session_id);
 
-        if($session['payment_status'] == 'paid' && $session['status'] == 'complete'){
+        if ($session['payment_status'] == 'paid' && $session['status'] == 'complete') {
 
             // $amount = $session['amount_total']/10;
             // $percent = 2.90/100 * $amount;
@@ -450,7 +460,7 @@ class WalletController extends Controller
             // $creditAmount = $newamount / 100;
 
             $trx = PaymentTransaction::where('reference', $session['client_reference_id'])->first();
-            if($trx){
+            if ($trx) {
                 $wallet = Wallet::where('user_id', auth()->user()->id)->first();
                 $wallet->usd_balance += $trx->amount;
                 $wallet->save();
@@ -459,30 +469,31 @@ class WalletController extends Controller
                 $trx->save();
             }
             return redirect()->route('fund')->with('success', 'Payment successful and you wallet credited.');
-        }else{
+        } else {
             return redirect('wallet/fund');
         }
-
     }
 
-    public function cancelUrl($ref){
+    public function cancelUrl($ref)
+    {
         PaymentTransaction::where('reference', $ref)->delete();
 
         return redirect()->route('fund')
-        ->with('error', 'Payment Cancelled');
+            ->with('error', 'Payment Cancelled');
     }
 
-    public function capturePaypal(){
+    public function capturePaypal()
+    {
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
 
         $id = $params['token'];
 
-          $response = capturePaypalPayment($id);
+        $response = capturePaypalPayment($id);
 
-          $user = Auth::user();
-        if($response['status'] == 'COMPLETED'){
+        $user = Auth::user();
+        if ($response['status'] == 'COMPLETED') {
 
             //$ref = $response['purchase_units'][0]['reference_id'];
 
@@ -510,12 +521,12 @@ class WalletController extends Controller
             $wallet->usd_balance += $update->amount;
             $wallet->save();
 
-            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
 
-            systemNotification($user, 'success', 'Wallet Topup', '$'.$update->amount.' Wallet Topup Successful');
+            systemNotification($user, 'success', 'Wallet Topup', '$' . $update->amount . ' Wallet Topup Successful');
 
             return redirect('success');
-        }else{
+        } else {
             return redirect('error');
         }
     }
@@ -530,23 +541,23 @@ class WalletController extends Controller
         $ref = $params['trxref']; //paystack
         $res = verifyTransaction($ref); //paystack external api
 
-        if($res['status'] != true){
-            return back()->with('error', 'Transaction not successful '.auth()->user()->name);
+        if ($res['status'] != true) {
+            return back()->with('error', 'Transaction not successful ' . auth()->user()->name);
         }
 
         $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
 
-        if($verifyPayment){
+        if ($verifyPayment) {
 
             $verifyPayment->status = 'successfull';
             $verifyPayment->save();
 
             //check if user has a virtual account
-            if(!auth()->user()->virtualAccount){
+            if (!auth()->user()->virtualAccount) {
                 creditWallet(auth()->user(), 'NGN', $verifyPayment->amount);
             }
 
-            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name .' topped up wallet ', 'regular');
+            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
 
             return back()->with('success', 'Payment Completed. Your wallet will be credited!');
         }
@@ -557,75 +568,74 @@ class WalletController extends Controller
 
 
 
-    //     $amount = $res['data']['amount'];
+        //     $amount = $res['data']['amount'];
 
-    //     $percent = 2.90/100 * $amount;
-    //     $formatedAm = $percent;
-    //     $newamount = $amount - $formatedAm; //verify transaction
-    //     $creditAmount = $newamount / 100;
+        //     $percent = 2.90/100 * $amount;
+        //     $formatedAm = $percent;
+        //     $newamount = $amount - $formatedAm; //verify transaction
+        //     $creditAmount = $newamount / 100;
 
-    //     $user = Auth::user();
+        //     $user = Auth::user();
 
-    //    if($res['data']['status'] == 'success') //success - paystack
-    //    {
-    //         //update transaction
+        //    if($res['data']['status'] == 'success') //success - paystack
+        //    {
+        //         //update transaction
 
-    //         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-    //         $wallet->balance += $creditAmount;
-    //         $wallet->save();
+        //         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+        //         $wallet->balance += $creditAmount;
+        //         $wallet->save();
 
-    //         $name = auth()->user()->name;
-    //         activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+        //         $name = auth()->user()->name;
+        //         activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
 
-    //         systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
+        //         systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
 
-    //         return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
-    //    }else{
-    //     return redirect('error');
-    //    }
+        //         return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
+        //    }else{
+        //     return redirect('error');
+        //    }
     }
 
-    public function flutterwaveWalletTopUp(){
+    public function flutterwaveWalletTopUp()
+    {
 
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
         $status = $params['status'];
-        if($status == 'cancelled'){
+        if ($status == 'cancelled') {
             return back()->with('error', 'Transaction terminated');
         }
         $tx_id = $params['transaction_id'];
         $ref = $params['tx_ref'];
         $res = flutterwaveVeryTransaction($tx_id);
 
-        if($res['status'] == 'success'){
+        if ($res['status'] == 'success') {
             $ver = paymentUpdate($ref, 'successful', $res['data']['amount_settled']);
 
             // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
             // $wallet->balance += $res['data']['amount_settled'];//->amount;
             // $wallet->save();
 
-            if($ver){
+            if ($ver) {
                 $currency = auth()->user()->wallet->base_currency;
 
-                 creditWallet(auth()->user(), $currency, $res['data']['amount_settled']);
+                creditWallet(auth()->user(), $currency, $res['data']['amount_settled']);
 
                 $name = auth()->user()->name;
-                activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
+                activityLog(auth()->user(), 'wallet_topup', $name . ' topped up wallet ', 'regular');
 
-                systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN'.$ver->amount.' Wallet Topup Successful');
+                systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN' . $ver->amount . ' Wallet Topup Successful');
 
                 return back()->with('success', 'Wallet Topup Successful');
-
             }
-
         }
     }
 
     public function storeWithdraw(Request $request)
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
-        if( $baseCurrency == 'NGN'){
+        if ($baseCurrency == 'NGN') {
 
 
 
@@ -636,22 +646,22 @@ class WalletController extends Controller
             ]);
 
 
-            if($request->balance >= 50000){
+            if ($request->balance >= 50000) {
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
             }
 
 
 
             $check = PaymentTransaction::where('user_id', auth()->user()->id)
-                    ->where('type', 'cash_withdrawal')
-                    ->whereDate('created_at', Carbon::today())
-                    ->get(['id', 'amount', 'type']);
+                ->where('type', 'cash_withdrawal')
+                ->whereDate('created_at', Carbon::today())
+                ->get(['id', 'amount', 'type']);
 
-            if(count($check) > 1){
+            if (count($check) > 1) {
                 return back()->with('error', 'This transaction is not allowed count, contact customer care');
             }
 
-            if($check->sum('amount') >= '50000'){
+            if ($check->sum('amount') >= '50000') {
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
             }
 
@@ -659,101 +669,97 @@ class WalletController extends Controller
 
             $accountCreationDate = new Carbon($user->created_at);
 
-            if($accountCreationDate->diffInDays(Carbon::now()) <= 10){
+            if ($accountCreationDate->diffInDays(Carbon::now()) <= 10) {
                 return back()->with('error', 'You cannot make withdrawal at the moment');
             }
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
 
-            if($wallet->balance < $request->balance)
-            {
+            if ($wallet->balance < $request->balance) {
                 return back()->with('error', 'Insufficient balance');
             }
 
             $bankInformation = BankInformation::where('user_id', auth()->user()->id)->first();
 
-            if($bankInformation){
-                 $this->processWithdrawals($request, 'NGN', 'paystack', '');
+            if ($bankInformation) {
+                $this->processWithdrawals($request, 'NGN', 'paystack', '');
 
                 return back()->with('success', 'Withdrawal Successfully queued');
                 //  $bankList = PaystackHelpers::bankList();
                 //  return view('user.bank_information', ['bankList' => $bankList]);
-            }else{
+            } else {
                 return redirect('profile')->with('info', 'Please scroll down to Bank Account Details to update your information');
             }
-
-        }else{
+        } else {
 
             $request->validate([
                 'balance' => 'required',
             ]);
 
             $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            if($baseCurrency == 'USD'){
-                if($wallet->usd_balance < $request->balance)
-                {
+            if ($baseCurrency == 'USD') {
+                if ($wallet->usd_balance < $request->balance) {
                     return back()->with('error', 'Insufficient balance');
                 }
-            }else{
-                if($wallet->base_currency_balance < $request->balance)
-                {
+            } else {
+                if ($wallet->base_currency_balance < $request->balance) {
                     return back()->with('error', 'Insufficient balance');
                 }
             }
 
 
-            if($baseCurrency == 'GHS'){
+            if ($baseCurrency == 'GHS') {
                 $accountBank = $request->account_bank;
-            }else{
+            } else {
                 $accountBank = 'MPS';
             }
 
             $payload = [
-                 "account_bank" => $accountBank,
-                  "account_number" => $request->account_number,
-                  "amount" => $request->balance,
-                  "currency" => $baseCurrency,
-                  "beneficiary_name" => $request->beneficiary_name,
-                  "narration" => 'Freebyz Withdrawal',
-                  "meta" => [
-                        "sender" => "Flutterwave Developers",
-                        "sender_country" => "NG",
-                        "mobile_number" => "23457558595"
-                   ]
+                "account_bank" => $accountBank,
+                "account_number" => $request->account_number,
+                "amount" => $request->balance,
+                "currency" => $baseCurrency,
+                "beneficiary_name" => $request->beneficiary_name,
+                "narration" => 'Freebyz Withdrawal',
+                "meta" => [
+                    "sender" => "Flutterwave Developers",
+                    "sender_country" => "NG",
+                    "mobile_number" => "23457558595"
+                ]
             ];
 
             // return flutterwaveTransfer($payload);
 
-        //    return $this->processForeignWithdrawal($payload);
-           $this->processWithdrawals($request, $baseCurrency, 'flutterwave', $payload);
+            //    return $this->processForeignWithdrawal($payload);
+            $this->processWithdrawals($request, $baseCurrency, 'flutterwave', $payload);
 
             return back()->with('success', 'Withdrawal Successfully queued');
-
         }
     }
 
-    public function processWithdrawals($request, $currency, $channel, $payload){
+    public function processWithdrawals($request, $currency, $channel, $payload)
+    {
 
         // return fraudDetection(auth()->user()->id);
 
         $amount = $request->balance;
-        $percent = 7.5/100 * $amount;
+        $percent = 7.5 / 100 * $amount;
         $formatedAm = $percent;
         $newamount_to_be_withdrawn = $amount - $formatedAm;
 
-        $referral_amount = 2/100 * $amount;
+        $referral_amount = 2 / 100 * $amount;
 
         $ref = time();
 
-        if(Carbon::now()->format('l') == 'Friday'){
+        if (Carbon::now()->format('l') == 'Friday') {
             $nextFriday = Carbon::now()->endOfDay();
-        }else{
+        } else {
             $nextFriday = Carbon::now()->next('Friday')->format('Y-m-d h:i:s');
         }
 
         $debitWallet =  debitWallet(auth()->user(), 'NGN', $request->balance);
         //  return $payload;
-        if($debitWallet){
+        if ($debitWallet) {
             $withdrawal = Withrawal::create([
                 'user_id' => auth()->user()->id,
                 'amount' => $newamount_to_be_withdrawn,
@@ -775,7 +781,7 @@ class WalletController extends Controller
                 'currency' => $currency,
                 'channel' => $channel,
                 'type' => 'cash_withdrawal',
-                'description' => 'Cash Withdrawal from '.auth()->user()->name,
+                'description' => 'Cash Withdrawal from ' . auth()->user()->name,
                 'tx_type' => 'Debit',
                 'user_type' => 'regular'
             ]);
@@ -785,105 +791,103 @@ class WalletController extends Controller
 
             $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
 
-                if($referee){
+            if ($referee) {
 
-                     $referreUser = User::with('wallet')->where('id', $referee->referee_id)->first();
-                    $referreUser->wallet->base_currency;
-                    // return [$amount, $percent, $referral_amount];
-                    $referral_converted_amount = currencyConverter($currency, $referreUser->wallet->base_currency, $referral_amount);
-                    $creditreferral = creditWallet($referreUser, $referreUser->wallet->base_currency, $referral_converted_amount);
+                $referreUser = User::with('wallet')->where('id', $referee->referee_id)->first();
+                $referreUser->wallet->base_currency;
+                // return [$amount, $percent, $referral_amount];
+                $referral_converted_amount = currencyConverter($currency, $referreUser->wallet->base_currency, $referral_amount);
+                $creditreferral = creditWallet($referreUser, $referreUser->wallet->base_currency, $referral_converted_amount);
 
-                    if($creditreferral){
-                        PaymentTransaction::create([
-                            'user_id' => $referreUser->id,
-                            'campaign_id' => '1',
-                            'reference' => $ref,
-                            'amount' => (int) $referral_converted_amount,
-                            'balance' => walletBalance($referreUser->id),
-                            'status' => 'successful',
-                            'currency' => $referreUser->wallet->base_currency,
-                            'channel' => $channel,
-                            'type' => 'referral_withdrawal_commission',
-                            'description' => 'Referral Withdrwal Commission from '.auth()->user()->name,
-                            'tx_type' => 'Credit',
-                            'user_type' => 'regular'
-                        ]);
-                    }
-
-                    $adminUser = User::find('1');
-
-                      $adjustedAdminAmount = (int) $percent - (int) $referral_converted_amount;
-
-                     $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
-
-                    $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
-
-
-                    if($creditAdmin){
-                        PaymentTransaction::create([
-                            'user_id' => 1,
-                            'campaign_id' => '1',
-                            'reference' => $ref,
-                            'amount' => (int) $admin_referral_converted_amount,
-                            'balance' => walletBalance('1'),
-                            'status' => 'successful',
-                            'currency' => $adminUser->wallet->base_currency,
-                            'channel' => $channel,
-                            'type' => 'withdrawal_commission',
-                            'description' => 'Withdrwal Commission from '.auth()->user()->name,
-                            'tx_type' => 'Credit',
-                            'user_type' => 'admin'
-                        ]);
-                    }
-
-                }else{
-
-                    //if there is no referral
-                    $adminUser = User::find('1');
-                    // $adminWallet = Wallet::where('user_id', '1')->first();
-                      $adjustedAdminAmount = $percent;
-
-                     $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
-
-                    $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
-
-
-                    if($creditAdmin){
-                        PaymentTransaction::create([
-                            'user_id' => 1,
-                            'campaign_id' => '1',
-                            'reference' => $ref,
-                            'amount' => (int) $admin_referral_converted_amount,
-                            'balance' => walletBalance('1'),
-                            'status' => 'successful',
-                            'currency' => $adminUser->wallet->base_currency,
-                            'channel' => $channel,
-                            'type' => 'withdrawal_commission',
-                            'description' => 'Withdrwal Commission from '.auth()->user()->name,
-                            'tx_type' => 'Credit',
-                            'user_type' => 'admin'
-                        ]);
-
-                    }
+                if ($creditreferral) {
+                    PaymentTransaction::create([
+                        'user_id' => $referreUser->id,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => (int) $referral_converted_amount,
+                        'balance' => walletBalance($referreUser->id),
+                        'status' => 'successful',
+                        'currency' => $referreUser->wallet->base_currency,
+                        'channel' => $channel,
+                        'type' => 'referral_withdrawal_commission',
+                        'description' => 'Referral Withdrwal Commission from ' . auth()->user()->name,
+                        'tx_type' => 'Credit',
+                        'user_type' => 'regular'
+                    ]);
                 }
 
+                $adminUser = User::find('1');
 
-            activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name .'sent a withdrawal request of NGN'.number_format($amount), 'regular');
+                $adjustedAdminAmount = (int) $percent - (int) $referral_converted_amount;
+
+                $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
+
+                $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
+
+
+                if ($creditAdmin) {
+                    PaymentTransaction::create([
+                        'user_id' => 1,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => (int) $admin_referral_converted_amount,
+                        'balance' => walletBalance('1'),
+                        'status' => 'successful',
+                        'currency' => $adminUser->wallet->base_currency,
+                        'channel' => $channel,
+                        'type' => 'withdrawal_commission',
+                        'description' => 'Withdrwal Commission from ' . auth()->user()->name,
+                        'tx_type' => 'Credit',
+                        'user_type' => 'admin'
+                    ]);
+                }
+            } else {
+
+                //if there is no referral
+                $adminUser = User::find('1');
+                // $adminWallet = Wallet::where('user_id', '1')->first();
+                $adjustedAdminAmount = $percent;
+
+                $admin_referral_converted_amount = currencyConverter($currency, $adminUser->wallet->base_currency, $adjustedAdminAmount);
+
+                $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $admin_referral_converted_amount);
+
+
+                if ($creditAdmin) {
+                    PaymentTransaction::create([
+                        'user_id' => 1,
+                        'campaign_id' => '1',
+                        'reference' => $ref,
+                        'amount' => (int) $admin_referral_converted_amount,
+                        'balance' => walletBalance('1'),
+                        'status' => 'successful',
+                        'currency' => $adminUser->wallet->base_currency,
+                        'channel' => $channel,
+                        'type' => 'withdrawal_commission',
+                        'description' => 'Withdrwal Commission from ' . auth()->user()->name,
+                        'tx_type' => 'Credit',
+                        'user_type' => 'admin'
+                    ]);
+                }
+            }
+
+
+            activityLog(auth()->user(), 'withdrawal_request', auth()->user()->name . 'sent a withdrawal request of NGN' . number_format($amount), 'regular');
             $cur = $currency == 'USD' ? '$' : 'NGN';
-            systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur.$request->balance.' was debited from your wallet');
+            systemNotification(Auth::user(), 'success', 'Withdrawal Request', $cur . $request->balance . ' was debited from your wallet');
 
             return $withdrawal;
-
-        }else{
+        } else {
             return false;
         }
     }
 
 
 
-    public function switchWallet(Request $request){
+    public function switchWallet(Request $request)
+    {
         auth()->user()->wallet()->update(['base_currency' => $request->currency]);
-        systemNotification(Auth::user(), 'success', 'Currency Switch', 'Currency switched to '.$request->currency);
+        systemNotification(Auth::user(), 'success', 'Currency Switch', 'Currency switched to ' . $request->currency);
 
         return back()->with('success', 'Currency switched successfully');
     }
