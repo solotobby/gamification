@@ -346,7 +346,7 @@ if(!function_exists('verifyKorayPay')){
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.env('KORA_SEC')
+            'Authorization' => 'Bearer '.config('services.env.kora_sec')
         ])->get('https://api.korapay.com/merchant/api/v1/charges/'.$referee)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
