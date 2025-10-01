@@ -330,6 +330,8 @@ if(!function_exists('short_name')){
 if(!function_exists('initializeKorayPay')){
     function initializeKorayPay($payloadNGN){
 
+        return config('services.env.kora_sec');
+        
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
