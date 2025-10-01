@@ -16,7 +16,7 @@ class WebhookController extends Controller
 {
     public function handle(Request $request){
 
-        Question::create(['content' => $request]);
+       
 
         $event = $request['event'];
 
@@ -121,7 +121,8 @@ class WebhookController extends Controller
     }
 
     public function korayPayWebhook(Request $request){
-        
+         Question::create(['content' => $request]);
+         
         $event = $request['event'];
        
         if($event == 'charge.success'){
