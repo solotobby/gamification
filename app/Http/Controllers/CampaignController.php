@@ -102,7 +102,7 @@ class CampaignController extends Controller
 
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
 
-        if($wallet->balance >= $total){
+        if ($wallet->balance >= $total) {
             $wallet->balance -= $total;
             $wallet->save();
             $camp = $camp = Campaign::where('id', $request->post_id)->first();
@@ -127,15 +127,14 @@ class CampaignController extends Controller
                 'description' => 'Extend Campaign Payment'
             ]);
 
-             Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
+            Mail::to(auth()->user()->email)->send(new CreateCampaign($camp));
 
-           
+
 
             return back()->with('success', 'Campaign Updated Successfully');
-        }else{
+        } else {
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
-
     }
 
     /**
@@ -159,16 +158,15 @@ class CampaignController extends Controller
 
         $baseCurrency = auth()->user()->wallet->base_currency;
 
-        if($baseCurrency == 'NGN'){
+        if ($baseCurrency == 'NGN') {
 
             return SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
-
-        }elseif($baseCurrency == 'USD'){
+        } elseif ($baseCurrency == 'USD') {
 
             // $rate = nairaConversion($baseCurrency);
             $subCates = SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
             $list = [];
-            foreach($subCates as $sub){
+            foreach ($subCates as $sub) {
                 $list[] = [
                     'id' => $sub->id,
                     'amount' => $sub->usd,
@@ -179,12 +177,11 @@ class CampaignController extends Controller
                 ];
             }
             return $list;
-
-        }else{
+        } else {
 
             $subCates = SubCategory::where('category_id', $id)->orderBy('name', 'DESC')->get();
             $list = [];
-            foreach($subCates as $sub){
+            foreach ($subCates as $sub) {
                 // $convertedAmount = $sub->amount * $rate;
                 $list[] = [
                     'id' => $sub->id,
@@ -196,24 +193,21 @@ class CampaignController extends Controller
                 ];
             }
             return $list;
-
         }
-
     }
     public function getSubcategoriesInfo($id)
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
 
-        if($baseCurrency == 'NGN'){
+        if ($baseCurrency == 'NGN') {
             return SubCategory::where('id', $id)->first();
-
-        }elseif($baseCurrency == 'USD'){
+        } elseif ($baseCurrency == 'USD') {
 
             $subCate = SubCategory::where('id', $id)->first();
             // $rate = nairaConversion($baseCurrency);
             // $convertedAmount = $subCate->amount * $rate;
 
-           return  $list = [
+            return  $list = [
                 'id' => $subCate->id,
                 'name' => $subCate->name,
                 'amount' =>  $subCate->usd,
@@ -221,21 +215,19 @@ class CampaignController extends Controller
                 '_currency' => $baseCurrency,
                 '_channel' => 'other'
             ];
-
-
-        }else{
-             $subCate = SubCategory::where('id', $id)->first();
+        } else {
+            $subCate = SubCategory::where('id', $id)->first();
 
             //  $rate = nairaConversion($baseCurrency);
             //  $convertedAmount = $subCate->amount * $rate;
-             $list = [
-                 'id' => $subCate->id,
-                 'name' => $subCate->name,
-                 'amount' => CurrencyConverter('NGN', baseCurrency(), $subCate->amount),
-                 'category_id' => $subCate->category_id,
-                 '_currency' => $baseCurrency,
-                 '_channel' => 'other'
-             ];
+            $list = [
+                'id' => $subCate->id,
+                'name' => $subCate->name,
+                'amount' => CurrencyConverter('NGN', baseCurrency(), $subCate->amount),
+                'category_id' => $subCate->category_id,
+                '_currency' => $baseCurrency,
+                '_channel' => 'other'
+            ];
 
             return $list;
         }
@@ -244,7 +236,7 @@ class CampaignController extends Controller
     public function postCampaign(Request $request)
     {
 
-        if($request->allow_upload == true){
+        if ($request->allow_upload == true) {
             $request->validate([
                 'description' => 'required|string',
                 'proof' => 'required|string',
@@ -254,7 +246,7 @@ class CampaignController extends Controller
                 'campaign_amount' => 'required|numeric',
                 'validate' => 'required'
             ]);
-        }else{
+        } else {
             $request->validate([
                 'description' => 'required|string',
                 'proof' => ['required', new ProhibitedWords()],
@@ -271,24 +263,22 @@ class CampaignController extends Controller
         $priotize = '';
         $baseCurrency = auth()->user()->wallet->base_currency;
 
-        if($request->priotize == true){
+        if ($request->priotize == true) {
 
             $amountPriotize = currencyParameter(baseCurrency())->priotize;
             $prAmount = $amountPriotize;
             $priotize = 'Priotize';
-
-        }else{
+        } else {
             $prAmount =  0;
             $priotize = 'Pending';
         }
 
         $iniAmount = '';
-        if($request->allow_upload == true){
+        if ($request->allow_upload == true) {
 
             $iniAmount = $request->number_of_staff * currencyParameter(baseCurrency())->allow_upload;
             $allowUpload = true;
-
-        }elseif($request->allow_upload == ''){
+        } elseif ($request->allow_upload == '') {
             $iniAmount = 0;
             $allowUpload = false;
         }
@@ -299,173 +289,167 @@ class CampaignController extends Controller
 
 
         [$est_amount, $percent, $total];
-        $job_id = Str::random(7);//rand(10000,10000000);
+        $job_id = Str::random(7); //rand(10000,10000000);
 
-        $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total+$iniAmount+$prAmount);
+        $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
 
-        if($walletValidity){
+        if ($walletValidity) {
 
-            $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$iniAmount+$prAmount);
-            if($debitWallet){
-                $processedCampaign = $this->processCampaign($total+$iniAmount+$prAmount,$request,$job_id,$percent,$allowUpload,$priotize);
+            $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
+            if ($debitWallet) {
+                $processedCampaign = $this->processCampaign($total + $iniAmount + $prAmount, $request, $job_id, $percent, $allowUpload, $priotize);
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
-
-        }else{
+        } else {
             return back()->with('error', 'You do not have suficient funds in your wallet');
         }
-
     }
 
 
 
-    public function processCampaign($total, $request, $job_id, $percent,$allowUpload, $priotize)
+    public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize)
     {
 
         $currency = '';
         $channel = '';
 
         $baseCurrency = auth()->user()->wallet->base_currency;
-        if($baseCurrency == "NGN"){
+        if ($baseCurrency == "NGN") {
             $currency = 'NGN';
             $channel = 'paystack';
-        }elseif($baseCurrency == "USD"){
+        } elseif ($baseCurrency == "USD") {
             $currency = 'USD';
             $channel = 'paypal';
-        }else{
+        } else {
             $currency = $baseCurrency;
             $channel = 'flutterwave';
         }
 
-        $request->request->add(['user_id' => auth()->user()->id,'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload, 'approved' => $priotize]);
+        $request->request->add(['user_id' => auth()->user()->id, 'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload, 'approved' => $priotize]);
         $campaign = Campaign::create($request->all());
 
         $ref = time();
+        PaymentTransaction::create([
+            'user_id' => auth()->user()->id,
+            'campaign_id' => $campaign->id,
+            'reference' => $ref,
+            'amount' => $total,
+            'balance' => walletBalance(auth()->user()->id),
+            'status' => 'successful',
+            'currency' => $currency,
+            'channel' => $channel,
+            'type' => 'campaign_posted',
+            'description' => $campaign->post_title . ' Campaign',
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+
+        //CREDIT ADMIN
+        $adminUser = User::where('id', 1)->first();
+        $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
+
+        if ($creditAdminWallet) {
+            //Admin Transaction Tablw
             PaymentTransaction::create([
-                'user_id' => auth()->user()->id,
-                'campaign_id' => $campaign->id,
+                'user_id' => 1,
+                'campaign_id' => '1',
                 'reference' => $ref,
-                'amount' => $total,
-                'balance' => walletBalance(auth()->user()->id),
+                'amount' => $percent,
+                'balance' => walletBalance('1'),
                 'status' => 'successful',
                 'currency' => $currency,
                 'channel' => $channel,
-                'type' => 'campaign_posted',
-                'description' => $campaign->post_title.' Campaign',
-                'tx_type' => 'Debit',
-                'user_type' => 'regular'
+                'type' => 'campaign_revenue',
+                'description' => 'Campaign revenue from ' . auth()->user()->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
             ]);
-
-            //CREDIT ADMIN
-            $adminUser = User::where('id', 1)->first();
-            $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
-
-            if($creditAdminWallet){
-                //Admin Transaction Tablw
-                PaymentTransaction::create([
-                    'user_id' => 1,
-                    'campaign_id' => '1',
-                    'reference' => $ref,
-                    'amount' => $percent,
-                    'balance' => walletBalance('1'),
-                    'status' => 'successful',
-                    'currency' => $currency,
-                    'channel' => $channel,
-                    'type' => 'campaign_revenue',
-                    'description' => 'Campaign revenue from '.auth()->user()->name,
-                    'tx_type' => 'Credit',
-                    'user_type' => 'admin'
-                ]);
-            }
-
-            return $campaign;
-    }
-
-    private function checkUserVerified($baseCurrency){
-
-        if($baseCurrency == 'NGN'){
-           return auth()->user()->is_verified == true ? 'Verified' : 'Not_Verified';
-        }else{
-            return auth()->user()->USD_verified == true ? 'Verified' : 'Not_Verified';
         }
 
+        return $campaign;
+    }
+
+    private function checkUserVerified($baseCurrency)
+    {
+
+        if ($baseCurrency == 'NGN') {
+            return auth()->user()->is_verified == true ? 'Verified' : 'Not_Verified';
+        } else {
+            return auth()->user()->USD_verified == true ? 'Verified' : 'Not_Verified';
+        }
     }
 
     public function viewCampaign($job_id)
     {
 
-        if(!auth()->user()->skill()->exists()){
+        if (!auth()->user()->skill()->exists()) {
             return redirect()->route('create.skill');
         }
-        if($job_id == null){
+        if ($job_id == null) {
             abort(400);
         }
 
-        if($job_id == 'Pt4bZz0'){
+        if ($job_id == 'Pt4bZz0') {
             return $this->premiumCampaign($job_id);
         }
 
         $userBaseCurrency = baseCurrency();
 
-         $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+        $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
 
-            $getCampaign = viewCampaign($job_id);
-
-
+        $getCampaign = viewCampaign($job_id);
 
 
-            //CHECK IF USER IS VERIFIED IN NGN
-            if($checkIsVerified == 'Verified'){
 
-                if($getCampaign['is_completed'] == true){
+
+        //CHECK IF USER IS VERIFIED IN NGN
+        if ($checkIsVerified == 'Verified') {
+
+            if ($getCampaign['is_completed'] == true) {
+                return redirect('home');
+            } else {
+                $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                $checkRating = isset($rating) ? true : false;
+                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+            }
+        } else {
+
+
+            $currencyParams = currencyParameter($userBaseCurrency);
+            $minUpgradeAmount = $currencyParams->min_upgrade_amount;
+
+            $campaignLocalAmount = $getCampaign['local_converted_amount'];
+
+            if ($campaignLocalAmount >= $minUpgradeAmount) {
+                return redirect('info');
+            } else {
+                if ($getCampaign['is_completed'] == true) {
                     return redirect('home');
-                }else{
+                } else {
+
                     $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
                     $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
                     $checkRating = isset($rating) ? true : false;
                     return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
                 }
-
-             }else{
-
-
-                $currencyParams = currencyParameter($userBaseCurrency);
-                $minUpgradeAmount = $currencyParams->min_upgrade_amount;
-
-                $campaignLocalAmount = $getCampaign['local_converted_amount'];
-
-                if($campaignLocalAmount >= $minUpgradeAmount){
-                    return redirect('info');
-                }else{
-                    if($getCampaign['is_completed'] == true){
-                        return redirect('home');
-                    }else{
-
-                        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                        $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                        $checkRating = isset($rating) ? true : false;
-                        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-
-                    }
-
-                }
-
-             }
-
+            }
+        }
     }
 
-    private function premiumCampaign($job_id){
+    private function premiumCampaign($job_id)
+    {
 
         $getCampaign = viewCampaign($job_id);
         $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
         $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
         $checkRating = isset($rating) ? true : false;
         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-
     }
 
-    public function submitWork(Request $request){
+    public function submitWork(Request $request)
+    {
 
 
         $this->validate($request, [
@@ -474,7 +458,7 @@ class CampaignController extends Controller
         ]);
 
         $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
-        if($check){
+        if ($check) {
             return back()->with('error', 'You have comppleted this campaign before');
         }
 
@@ -489,12 +473,12 @@ class CampaignController extends Controller
         $data['campaign'] = $campaign;
 
         $imageName = '';
-        if($request->hasFile('proof')){
+        if ($request->hasFile('proof')) {
             $proofUrl = '';
             // if($request->hasFile('proof')){
-                //   $image = $request->file('proof');
-                //   $imageName = time().'.'.$request->proof->extension();
-                //   $destinationPath = $request->proof->move(public_path('images'), $imageName);
+            //   $image = $request->file('proof');
+            //   $imageName = time().'.'.$request->proof->extension();
+            //   $destinationPath = $request->proof->move(public_path('images'), $imageName);
 
             //    // Load image using GD
             //      $file = $request->file('proof');
@@ -522,66 +506,66 @@ class CampaignController extends Controller
             //                 return back()->with('error', 'Unsupported image type.');
             //         }
 
-                        // Resize if width > 800px
-                        // $width = imagesx($source);
-                        // $height = imagesy($source);
-                        // $maxWidth = 800;
+            // Resize if width > 800px
+            // $width = imagesx($source);
+            // $height = imagesy($source);
+            // $maxWidth = 800;
 
-                        // if ($width > $maxWidth) {
-                        //     $newWidth = $maxWidth;
-                        //     $newHeight = intval($height * ($maxWidth / $width));
-                        //     $resized = imagecreatetruecolor($newWidth, $newHeight);
-                        //     imagecopyresampled($resized, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                        // } else {
-                        //     $resized = $source;
-                        // }
+            // if ($width > $maxWidth) {
+            //     $newWidth = $maxWidth;
+            //     $newHeight = intval($height * ($maxWidth / $width));
+            //     $resized = imagecreatetruecolor($newWidth, $newHeight);
+            //     imagecopyresampled($resized, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+            // } else {
+            //     $resized = $source;
+            // }
 
-                    // Compress and save as JPEG (quality 70%)
-                    // imagejpeg($source, $destination, 70);
-
-
-                // $fileBanner = $request->file('proof');
-                // $Bannername = time() . $fileBanner->getClientOriginalName();
-                // $filePathBanner = 'proofs/' . $Bannername;
-                // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-                // $proofUrl = Storage::disk('s3')->url($filePathBanner);
-               $imageName = time().'.'.$request->proof->extension();
-               $request->proof->move(public_path('images'), $imageName);
-            }
+            // Compress and save as JPEG (quality 70%)
+            // imagejpeg($source, $destination, 70);
 
 
+            // $fileBanner = $request->file('proof');
+            // $Bannername = time() . $fileBanner->getClientOriginalName();
+            // $filePathBanner = 'proofs/' . $Bannername;
+            // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+            // $proofUrl = Storage::disk('s3')->url($filePathBanner);
+            $imageName = time() . '.' . $request->proof->extension();
+            $request->proof->move(public_path('images'), $imageName);
+        }
 
-            $campaignWorker['user_id'] = auth()->user()->id;
-            $campaignWorker['campaign_id'] = $request->campaign_id;
-            $campaignWorker['comment'] = $request->comment;
-            $campaignWorker['amount'] = $request->amount;
-            $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName;//'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
-            $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
 
-            $campaignWork = CampaignWorker::create($campaignWorker);
 
-            //activity log
-            // $campaign->pending_count += 1;
-            // $campaign->save();
+        $campaignWorker['user_id'] = auth()->user()->id;
+        $campaignWorker['campaign_id'] = $request->campaign_id;
+        $campaignWorker['comment'] = $request->comment;
+        $campaignWorker['amount'] = $request->amount;
+        $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
+        $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
 
-            // setPendingCount($campaign->id);
+        $campaignWork = CampaignWorker::create($campaignWorker);
 
-            $campaignStatus = checkCampaignCompletedStatus($campaign->id);
+        //activity log
+        // $campaign->pending_count += 1;
+        // $campaign->save();
 
-            // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
-            // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
-            // $campaign->save();
+        // setPendingCount($campaign->id);
 
-            // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+        $campaignStatus = checkCampaignCompletedStatus($campaign->id);
 
-            //$campaign = Campaign::where('id', $request->campaign_id)->first();
+        // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
+        // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
+        // $campaign->save();
 
-            $user = User::where('id', $campaign->user->id)->first();
-            $subject = 'Job Submission';
-            $content = auth()->user()->name.' submitted a response to the your campaign - '.$campaign->post_title.'. Please login to review.';
-             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
 
-            return back()->with('success', 'Job Submitted Successfully');
+        //$campaign = Campaign::where('id', $request->campaign_id)->first();
+
+        $user = User::where('id', $campaign->user->id)->first();
+        $subject = 'Job Submission';
+        $content = auth()->user()->name . ' submitted a response to the your campaign - ' . $campaign->post_title . '. Please login to review.';
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+        return back()->with('success', 'Job Submitted Successfully');
 
         // }else{
         //     return back()->with('error', 'Upload an image');
@@ -590,25 +574,23 @@ class CampaignController extends Controller
 
     public function mySubmittedCampaign($id)
     {
-         $work = CampaignWorker::where('id', $id)->first();
-        if($work){
+        $work = CampaignWorker::where('id', $id)->first();
+        if ($work) {
 
             $campaignStat = checkCampaignCompletedStatus($work->campaign->id);
             // $c = @$campaignStat['Pending'] + @$campaignStat['Approved'];
             // $c >= $work->campaign->number_of_staff ? true : false;
 
-            return view('user.campaign.my_submitted_campaign', ['work' => $work, 'check' =>$campaignStat]);
-
-        }else{
+            return view('user.campaign.my_submitted_campaign', ['work' => $work, 'check' => $campaignStat]);
+        } else {
             return redirect('home');
         }
-
     }
 
     public function activities($id)
     {
         $cam = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
-        if(!$cam){
+        if (!$cam) {
             return redirect('home');
         }
 
@@ -619,102 +601,101 @@ class CampaignController extends Controller
 
         $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
 
-       return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount, 'campaignStat' => $campaignStat]);
-
+        return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount, 'campaignStat' => $campaignStat]);
     }
 
-    public function activitiesResponse($id){
+    public function activitiesResponse($id)
+    {
         $campaignResponse = CampaignWorker::with(['campaign', 'user'])->where('id', $id)->first();
         return view('user.campaign.activity_response', ['campaign' => $campaignResponse]);
     }
 
-    public function pauseCampaign($id){
+    public function pauseCampaign($id)
+    {
         $campaign = Campaign::where('job_id', $id)->where('user_id', auth()->user()->id)->first();
-        if($campaign->status == 'Live'){
+        if ($campaign->status == 'Live') {
             $campaign->status = 'Paused';
             $campaign->save();
-        }elseif($campaign->status == 'Decline'){
-
-        }else{
+        } elseif ($campaign->status == 'Decline') {
+        } else {
             $campaign->status = 'Live';
             $campaign->save();
         }
         return back()->with('success', 'Campaign status updated!');
     }
 
-    public function campaignDecision(Request $request){
+    public function campaignDecision(Request $request)
+    {
         $request->validate([
             'reason' => 'required|string',
         ]);
 
         $workSubmitted = CampaignWorker::where('id', $request->id)->first();
 
-        if($workSubmitted->reason != null){
+        if ($workSubmitted->reason != null) {
             return back()->with('error', 'Campaign has been attended to');
         }
 
         $campaign = Campaign::where('id', $workSubmitted->campaign_id)->first();
 
-        if($request->action == 'approve'){
+        if ($request->action == 'approve') {
 
-           $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
-           if($completed_campaign >= $campaign->number_of_staff){
+            $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
+            if ($completed_campaign >= $campaign->number_of_staff) {
                 return back()->with('error', 'Campaign has reached its maximum capacity');
-           }
+            }
 
-           $user = User::where('id', $workSubmitted->user_id)->first();
+            $user = User::where('id', $workSubmitted->user_id)->first();
 
-           $workSubmitted->status = 'Approved';
-           $workSubmitted->reason = $request->reason;
-           $workSubmitted->save();
+            $workSubmitted->status = 'Approved';
+            $workSubmitted->reason = $request->reason;
+            $workSubmitted->save();
 
-        //    setIsComplete($workSubmitted->campaign_id);
+            //    setIsComplete($workSubmitted->campaign_id);
 
-           if(baseCurrency($user) == 'NGN'){
-               $currency = 'NGN';
-               $channel = 'paystack';
-               creditWallet($user, 'NGN', $workSubmitted->amount);
-           }elseif(baseCurrency($user) == 'USD'){
-               $currency = 'USD';
-               $channel = 'paypal';
-               creditWallet($user, 'USD', $workSubmitted->amount);
-            }else{
+            if (baseCurrency($user) == 'NGN') {
+                $currency = 'NGN';
+                $channel = 'paystack';
+                creditWallet($user, 'NGN', $workSubmitted->amount);
+            } elseif (baseCurrency($user) == 'USD') {
+                $currency = 'USD';
+                $channel = 'paypal';
+                creditWallet($user, 'USD', $workSubmitted->amount);
+            } else {
 
-               $currency = baseCurrency($user);
-               $channel = 'flutterwave';
-               creditWallet($user, baseCurrency($user), $workSubmitted->amount);
-           }
-
-
-           $ref = time();
-
-           PaymentTransaction::create([
-               'user_id' =>  $workSubmitted->user_id,
-               'campaign_id' =>  $workSubmitted->campaign->id,
-               'reference' => $ref,
-               'amount' =>  $workSubmitted->amount,
-               'balance' => walletBalance($workSubmitted->user_id),
-               'status' => 'successful',
-               'currency' => $currency,
-               'channel' => $channel,
-               'type' => 'campaign_payment',
-               'description' => 'Campaign Payment for '. $workSubmitted->campaign->post_title,
-               'tx_type' => 'Credit',
-               'user_type' => 'regular'
-           ]);
-
-           activityLog($user, 'campaign_payment', $user->name .' earned a campaign payment of NGN'.number_format( $workSubmitted->amount), 'regular');
-
-           $subject = 'Job Approved';
-           $status = 'Approved';
-
-           Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
-           
-
-           return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
+                $currency = baseCurrency($user);
+                $channel = 'flutterwave';
+                creditWallet($user, baseCurrency($user), $workSubmitted->amount);
+            }
 
 
-        }else{
+            $ref = time();
+
+            PaymentTransaction::create([
+                'user_id' =>  $workSubmitted->user_id,
+                'campaign_id' =>  $workSubmitted->campaign->id,
+                'reference' => $ref,
+                'amount' =>  $workSubmitted->amount,
+                'balance' => walletBalance($workSubmitted->user_id),
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => $channel,
+                'type' => 'campaign_payment',
+                'description' => 'Campaign Payment for ' . $workSubmitted->campaign->post_title,
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+
+            activityLog($user, 'campaign_payment', $user->name . ' earned a campaign payment of NGN' . number_format($workSubmitted->amount), 'regular');
+
+            $subject = 'Job Approved';
+            $status = 'Approved';
+
+            Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+
+
+            return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
+        } else {
 
             //check if the
             // $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
@@ -730,13 +711,13 @@ class CampaignController extends Controller
             // $campaign = Campaign::where('id', $deny->campaign_id)->first();
             // $campaingOwner = User::where('id', $campaign->user_id)->first();
 
-            if($campaign->currency == 'NGN'){
+            if ($campaign->currency == 'NGN') {
                 $currency = 'Naira';
                 $channel = 'paystack';
-            }elseif($campaign->currency == 'USD'){
+            } elseif ($campaign->currency == 'USD') {
                 $currency = 'Dollar';
                 $channel = 'paypal';
-            }elseif($campaign->currency == null){
+            } elseif ($campaign->currency == null) {
                 $currency = 'Naira';
                 $channel = 'paystack';
             }
@@ -764,17 +745,17 @@ class CampaignController extends Controller
             $subject = 'Job Denied';
             $status = 'Denied';
 
-             Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
-          
+            Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
 
 
-            return redirect('campaign/activities/'.$request->campaign_job_id)->with('success', 'Campaign has been denied');
 
+            return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign has been denied');
         }
     }
 
 
-    public function removePendingCountAfterDenial($id){
+    public function removePendingCountAfterDenial($id)
+    {
         $campaign = Campaign::where('id', $id)->first();
         $campaign->pending_count -= 1;
         $campaign->save();
@@ -806,12 +787,13 @@ class CampaignController extends Controller
         return view('user.campaign.disputed_jobs', ['lists' => $disputedJobs]);
     }
 
-    public function processDisputedJobs(Request $request){
+    public function processDisputedJobs(Request $request)
+    {
         $workDone = CampaignWorker::where('id', $request->id)->first();
         $workDone->is_dispute = true;
         $workDone->save();
 
-       $disputedJob = DisputedJobs::create([
+        $disputedJob = DisputedJobs::create([
             'campaign_worker_id' => $workDone->id,
             'campaign_id' => $workDone->campaign_id,
             'user_id' => auth()->user()->id,
@@ -819,16 +801,17 @@ class CampaignController extends Controller
         ]);
 
 
-        if($disputedJob){
+        if ($disputedJob) {
             $subject = 'New Dispute Raised';
-            $content = 'A despute has been raised by '.auth()->user()->name.' on a Job. Please follow the link below to attend to it.';
-            $url = 'admin/campaign/disputes/'.$workDone->id;
-             Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+            $content = 'A despute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
+            $url = 'admin/campaign/disputes/' . $workDone->id;
+            Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
             return back()->with('success', 'Dispute Submitted Successfully');
         }
     }
 
-    public function addMoreWorkers(Request $request){
+    public function addMoreWorkers(Request $request)
+    {
 
         $est_amount = $request->new_number * $request->amount;
         $percent = (60 / 100) * $est_amount;
@@ -836,90 +819,89 @@ class CampaignController extends Controller
         //[$est_amount, $percent, $total];
         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
 
-        if(baseCurrency() == 'NGN'){
+        if (baseCurrency() == 'NGN') {
+
             $campaign = Campaign::where('job_id', $request->id)->first();
             $uploadFee = '';
-            if($campaign->allow_upload == 1){
+            if ($campaign->allow_upload == 1) {
                 $uploadFee = $request->new_number * 5;
-            }else{
+            } else {
                 $uploadFee = 0;
             }
 
-            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total+$uploadFee);
-            if($walletValidity){
+            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $uploadFee);
 
-                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$uploadFee);
-                if($debitWallet){
-                        $campaign->number_of_staff += $request->new_number;
-                        $campaign->total_amount += $est_amount;
-                        $campaign->is_completed = false;
-                        $campaign->save();
 
-                        $currency = 'NGN';
-                        $channel = 'paystack';
+            if ($walletValidity) {
 
-                        $ref = time();
-                            PaymentTransaction::create([
-                                'user_id' => auth()->user()->id,
-                                'campaign_id' => $campaign->id,
-                                'reference' => $ref,
-                                'amount' => $total,
-                                'balance' => walletBalance(auth()->user()->id),
-                                'status' => 'successful',
-                                'currency' => $currency,
-                                'channel' => $channel,
-                                'type' => 'added_more_worker',
-                                'description' => 'Added worker for '.$campaign->post_title.' campaign',
-                                'tx_type' => 'Debit',
-                                'user_type' => 'regular'
-                            ]);
+                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $uploadFee);
+                if ($debitWallet) {
+                    $campaign->number_of_staff += $request->new_number;
+                    $campaign->total_amount += $est_amount;
+                    $campaign->is_completed = false;
+                    $campaign->save();
 
-                            //credit admin
-                            $adminWallet = Wallet::where('user_id', '1')->first();
-                            $adminWallet->balance += $percent;
-                            $adminWallet->save();
-                            PaymentTransaction::create([
-                                'user_id' => '1',
-                                'campaign_id' => $campaign->id,
-                                'reference' => $ref,
-                                'amount' => $percent,
-                                'balance' => walletBalance('1'),
-                                'status' => 'successful',
-                                'currency' => $currency,
-                                'channel' => $channel,
-                                'type' => 'campaign_revenue_add',
-                                'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
-                                'tx_type' => 'Credit',
-                                'user_type' => 'admin'
-                            ]);
+                    $currency = 'NGN';
+                    $channel = 'paystack';
 
-                        $content = "You have successfully increased the number of your workers.";
-                        $subject = "Add More Worker";
-                        $user = User::where('id', auth()->user()->id)->first();
-                         Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
-                        return back()->with('success', 'Worker Updated Successfully');
+                    $ref = time();
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => $campaign->id,
+                        'reference' => $ref,
+                        'amount' => $total,
+                        'balance' => walletBalance(auth()->user()->id),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'added_more_worker',
+                        'description' => 'Added worker for ' . $campaign->post_title . ' campaign',
+                        'tx_type' => 'Debit',
+                        'user_type' => 'regular'
+                    ]);
+
+                    //credit admin
+                    $adminWallet = Wallet::where('user_id', '1')->first();
+                    $adminWallet->balance += $percent;
+                    $adminWallet->save();
+                    PaymentTransaction::create([
+                        'user_id' => '1',
+                        'campaign_id' => $campaign->id,
+                        'reference' => $ref,
+                        'amount' => $percent,
+                        'balance' => walletBalance('1'),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'campaign_revenue_add',
+                        'description' => 'Revenue for worker added on ' . $campaign->post_title . ' campaign',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'admin'
+                    ]);
+
+                    $content = "You have successfully increased the number of your workers.";
+                    $subject = "Add More Worker";
+                    $user = User::where('id', auth()->user()->id)->first();
+                    Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    return back()->with('success', 'Worker Updated Successfully');
                 }
-
-
-            }else{
+            } else {
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
-
-
-        }elseif(baseCurrency() == 'USD'){
+        } elseif (baseCurrency() == 'USD') {
             $campaign = Campaign::where('job_id', $request->id)->first();
             $uploadFee = '';
-            if($campaign->allow_upload == 1){
+            if ($campaign->allow_upload == 1) {
                 $uploadFee = $request->new_number * 0.01;
-            }else{
+            } else {
                 $uploadFee = 0;
             }
 
-            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total+$uploadFee);
-            if($walletValidity){
+            $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $uploadFee);
+            if ($walletValidity) {
 
-                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total+$uploadFee);
-                if($debitWallet){
+                $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $uploadFee);
+                if ($debitWallet) {
 
                     $campaign->number_of_staff += $request->new_number;
                     $campaign->total_amount += $est_amount;
@@ -931,67 +913,65 @@ class CampaignController extends Controller
                     $channel = 'paypal';
 
                     $ref = time();
-                        PaymentTransaction::create([
-                            'user_id' => auth()->user()->id,
-                            'campaign_id' => $campaign->id,
-                            'reference' => $ref,
-                            'amount' => $total,
-                            'balance' => walletBalance(auth()->user()->id),
-                            'status' => 'successful',
-                            'currency' => $currency,
-                            'channel' => $channel,
-                            'type' => 'added_more_worker',
-                            'description' => 'Added worker for '.$campaign->post_title.' campaign',
-                            'tx_type' => 'Debit',
-                            'user_type' => 'regular'
-                        ]);
+                    PaymentTransaction::create([
+                        'user_id' => auth()->user()->id,
+                        'campaign_id' => $campaign->id,
+                        'reference' => $ref,
+                        'amount' => $total,
+                        'balance' => walletBalance(auth()->user()->id),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'added_more_worker',
+                        'description' => 'Added worker for ' . $campaign->post_title . ' campaign',
+                        'tx_type' => 'Debit',
+                        'user_type' => 'regular'
+                    ]);
 
-                        //credit admin
-                        $adminWallet = Wallet::where('user_id', '1')->first();
-                        $adminWallet->usd_balance += $percent;
-                        $adminWallet->save();
+                    //credit admin
+                    $adminWallet = Wallet::where('user_id', '1')->first();
+                    $adminWallet->usd_balance += $percent;
+                    $adminWallet->save();
 
-                        PaymentTransaction::create([
-                            'user_id' => '1',
-                            'campaign_id' => $campaign->id,
-                            'reference' => $ref,
-                            'amount' => $percent,
-                            'balance' => walletBalance('1'),
-                            'status' => 'successful',
-                            'currency' => $currency,
-                            'channel' => $channel,
-                            'type' => 'campaign_revenue_add',
-                            'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
-                            'tx_type' => 'Credit',
-                            'user_type' => 'admin'
-                        ]);
+                    PaymentTransaction::create([
+                        'user_id' => '1',
+                        'campaign_id' => $campaign->id,
+                        'reference' => $ref,
+                        'amount' => $percent,
+                        'balance' => walletBalance('1'),
+                        'status' => 'successful',
+                        'currency' => $currency,
+                        'channel' => $channel,
+                        'type' => 'campaign_revenue_add',
+                        'description' => 'Revenue for worker added on ' . $campaign->post_title . ' campaign',
+                        'tx_type' => 'Credit',
+                        'user_type' => 'admin'
+                    ]);
 
 
                     $content = "You have successfully increased the number of your workers.";
                     $subject = "Add More Worker";
                     $user = User::where('id', auth()->user()->id)->first();
-                     Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Worker Updated Successfully');
                 }
-
-            }else{
+            } else {
 
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
+        } else {
 
-        }else{
-
-            if($wallet->base_currency_balance >= $total){
+            if ($wallet->base_currency_balance >= $total) {
                 $campaign = Campaign::where('job_id', $request->id)->first();
                 $uploadFee = '';
-                 $allowUpload = currencyParameter( baseCurrency() )->allow_upload;
-                if($campaign->allow_upload == 1){
+                $allowUpload = currencyParameter(baseCurrency())->allow_upload;
+                if ($campaign->allow_upload == 1) {
                     $uploadFee = $request->new_number * $allowUpload;
-                }else{
+                } else {
                     $uploadFee = 0;
                 }
 
-                $wallet->base_currency_balance -= $total+$uploadFee;
+                $wallet->base_currency_balance -= $total + $uploadFee;
                 $wallet->save();
 
                 $campaign->number_of_staff += $request->new_number;
@@ -1004,47 +984,47 @@ class CampaignController extends Controller
                 $channel = 'flutterwave';
 
                 $ref = time();
-                    PaymentTransaction::create([
-                        'user_id' => auth()->user()->id,
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $total,
-                        'balance' => walletBalance(auth()->user()->id),
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'added_more_worker',
-                        'description' => 'Added worker for '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Debit',
-                        'user_type' => 'regular'
-                    ]);
+                PaymentTransaction::create([
+                    'user_id' => auth()->user()->id,
+                    'campaign_id' => $campaign->id,
+                    'reference' => $ref,
+                    'amount' => $total,
+                    'balance' => walletBalance(auth()->user()->id),
+                    'status' => 'successful',
+                    'currency' => $currency,
+                    'channel' => $channel,
+                    'type' => 'added_more_worker',
+                    'description' => 'Added worker for ' . $campaign->post_title . ' campaign',
+                    'tx_type' => 'Debit',
+                    'user_type' => 'regular'
+                ]);
 
-                    //credit admin
-                    $adminWallet = Wallet::where('user_id', '1')->first();
-                    $adminInfo = User::find('1');
-                    if($adminWallet->base_currency == 'Naira'){
-                        $baseCurr = 'NGN';
-                    }elseif($adminWallet->base_currency == 'Dollar'){
-                        $baseCurr = 'USD';
-                    }else{
-                        $baseCurr = $adminWallet->base_currency;
-                    }
-                    creditWallet($adminInfo, $baseCurr, $percent);
+                //credit admin
+                $adminWallet = Wallet::where('user_id', '1')->first();
+                $adminInfo = User::find('1');
+                if ($adminWallet->base_currency == 'Naira') {
+                    $baseCurr = 'NGN';
+                } elseif ($adminWallet->base_currency == 'Dollar') {
+                    $baseCurr = 'USD';
+                } else {
+                    $baseCurr = $adminWallet->base_currency;
+                }
+                creditWallet($adminInfo, $baseCurr, $percent);
 
-                    PaymentTransaction::create([
-                        'user_id' => '1',
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $percent,
-                        'balance' => walletBalance('1'),
-                        'status' => 'successful',
-                        'currency' => $baseCurr,
-                        'channel' => $channel,
-                        'type' => 'campaign_revenue_add',
-                        'description' => 'Revenue for worker added on '.$campaign->post_title.' campaign',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'admin'
-                    ]);
+                PaymentTransaction::create([
+                    'user_id' => '1',
+                    'campaign_id' => $campaign->id,
+                    'reference' => $ref,
+                    'amount' => $percent,
+                    'balance' => walletBalance('1'),
+                    'status' => 'successful',
+                    'currency' => $baseCurr,
+                    'channel' => $channel,
+                    'type' => 'campaign_revenue_add',
+                    'description' => 'Revenue for worker added on ' . $campaign->post_title . ' campaign',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'admin'
+                ]);
 
 
                 $content = "You have successfully increased the number of your workers.";
@@ -1052,16 +1032,14 @@ class CampaignController extends Controller
                 $user = User::where('id', auth()->user()->id)->first();
                 Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Worker Updated Successfully');
-
-            }else{
+            } else {
                 return back()->with('error', 'You do not have suficient funds in your wallet');
             }
-
         }
-
     }
 
-    public function adminActivities($id){
+    public function adminActivities($id)
+    {
 
         $cam = Campaign::where('job_id', $id)->first();
 
@@ -1072,6 +1050,5 @@ class CampaignController extends Controller
         $count =  $remainingNumber;
 
         return view('admin.campaign_mgt.admin_activities', ['lists' => $cam, 'count' => $count]);
-
     }
 }

@@ -140,13 +140,8 @@
                     <label class="mb-1">Payment Processor</label>
                         <select class="form-control" name="channel" required>
                           <option value="">Select One</option>
-                          {{--@if(auth()->user()->email == 'solotobby@gmail.com')
-                                   @if(!auth()->user()->virtualAccount) 
-                                      <option value="paystack">Paystack</option>
-                                    @endif
-                          @endif--}}
-                          <option value="paystack">Paystack</option>
-                          {{-- <option value="kora">Kora Pay</option> --}}
+                          {{-- <option value="paystack">Paystack</option> --}}
+                          <option value="kora">Kora Pay</option>
                         </select>
                     </select>
                     </div>
