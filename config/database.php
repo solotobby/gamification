@@ -119,29 +119,33 @@ return [
 
     'redis' => [
 
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
+        'client' => env('REDIS_CLIENT', 'predis'),
 
         'default' => [
-            'url' => env('REDIS_URL'),
+            'scheme' => 'tls',   // 👈 important: use TLS
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_DB', 0),
+            'ssl' => [
+                'cafile' => env('REDIS_CA', null),
+                'verify_peer' => true,
+            ],
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
+            'scheme' => 'tls',   // 👈 also add here
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_CACHE_DB', 1),
+            'ssl' => [
+                'cafile' => env('REDIS_CA', null),
+                'verify_peer' => true,
+            ],
         ],
 
     ],
+
 
 ];

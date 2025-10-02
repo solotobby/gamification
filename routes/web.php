@@ -464,6 +464,9 @@ Route::get('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'massS
 Route::get('mass/sms/preview', [\App\Http\Controllers\Admin\SMSController::class, 'massSMSPreview'])->name('mass.sms.preview');
 Route::post('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'send_massSMS'])->name('send.mass.sms');
 
+Route::post('/admin/preview-audience', [\App\Http\Controllers\Admin\AdminController::class, 'previewAudience'])->name('preview.audience');
+Route::post('/admin/send-mass-communication', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassCommunication'])->name('send.mass.communication');
+
 Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'unapprovedJobs'])->name('unapproved');
 Route::get('approved', [\App\Http\Controllers\Admin\AdminController::class, 'approvedJobs'])->name('approved');
 Route::get('reverse/transaction/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'jobReversal']);
