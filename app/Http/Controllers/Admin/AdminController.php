@@ -350,6 +350,19 @@ class AdminController extends Controller
         return view('admin.users.list', ['users' => $users]);
     }
 
+    public function userEmailVerified()
+    {
+
+        $users = User::where(
+            'role',
+            'regular'
+        )->whereNotNull('email_verified_at')
+            ->latest()
+            ->paginate(100);
+
+        return view('admin.users.email_verified_list', ['users' => $users]);
+    }
+
     public function userCurrencySearch(Request $request)
     {
 
@@ -360,24 +373,46 @@ class AdminController extends Controller
         return view('admin.users.user_currency_search', ['users' => $users, 'curr' => $request->currency]);
     }
 
+    // public function userSearch(Request $request)
+    // {
+
+    //     if (isset($request)) {
+    //         $users = User::where(
+    //         'role',
+    //         'regular'
+    //     )->where([
+    //             [function ($query) use ($request) {
+    //                 if (($search = $request->q)) {
+    //                     $query->orWhere('name', 'LIKE', '%' . $search . '%')
+    //                         ->orWhere('email', 'LIKE', '%' . $search . '%')
+    //                         ->orWhere('phone', 'LIKE', '%' . $search . '%')
+    //                         ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
+    //                         ->get();
+    //                 }
+    //             }]
+    //         ])->paginate(100);
+    //     }
+    //     return view('admin.users.search_result', ['users' => $users]);
+    // }
+
     public function userSearch(Request $request)
     {
+        $search = $request->input('search');
 
-        if (isset($request)) {
-            $users = User::where([
-                [function ($query) use ($request) {
-                    if (($search = $request->q)) {
-                        $query->orWhere('name', 'LIKE', '%' . $search . '%')
-                            ->orWhere('email', 'LIKE', '%' . $search . '%')
-                            ->orWhere('phone', 'LIKE', '%' . $search . '%')
-                            ->orWhere('referral_code', 'LIKE', '%' . $search . '%')
-                            ->get();
-                    }
-                }]
-            ])->get();
-        }
-        return view('admin.users.search_result', ['users' => $users]);
+        $users = User::where('role', 'regular')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%")
+                        ->orWhere('phone', 'LIKE', "%{$search}%")
+                        ->orWhere('referral_code', 'LIKE', "%{$search}%");
+                });
+            })
+            ->paginate(100);
+
+        return view('admin.users.search_result', compact('users'));
     }
+
 
     public function campaignCreatorList()
     {

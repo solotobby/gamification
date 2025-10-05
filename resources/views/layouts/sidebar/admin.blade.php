@@ -198,6 +198,9 @@
             <a class="nav-main-link" href="{{ route('verified.user.list') }}">
               <span class="nav-main-link-name">Verified</span>
             </a>
+            <a class="nav-main-link" href="{{ route('user.email.verified') }}">
+              <span class="nav-main-link-name">Email Verified</span>
+            </a>
             <a class="nav-main-link" href="{{ route('usd.verified.user.list') }}">
               <span class="nav-main-link-name">USD Verified</span>
             </a>

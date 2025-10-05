@@ -6,14 +6,15 @@
 @endsection
 
 @section('content')
+
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Verified Users</h1>
+                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Users - Email Verified List</h1>
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">Users</li>
-                        <li class="breadcrumb-item active" aria-current="page">Users List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Email List</li>
                     </ol>
                 </nav>
             </div>
@@ -26,7 +27,7 @@
         <!-- Full Table -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Verified Users List - {{ $verifiedUsers->total() }}</h3>
+                <h3 class="block-title">Email Verified Users List - {{ $users->total() }}</h3>
                 <div class="block-options">
                     <button type="button" class="btn-block-option">
                         <i class="si si-settings"></i>
@@ -34,7 +35,7 @@
                 </div>
             </div>
             <div class="block-content">
-                 <form action="{{ url('users/search') }}" method="GET">
+                <form action="{{ url('users/search') }}" method="GET">
                     <div class="mb-4">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" value="{{ old('search') }}"
@@ -46,50 +47,55 @@
                     </div>
                 </form>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-vcenter">
-                        {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+                    {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
+                        <table class="table table-bordered table-striped table-vcenter">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    {{-- <th>#</th> --}}
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    {{-- <th>Balance</th>--}}
-                                    {{-- <th>Ref. No</th> --}}
-                                    {{-- <th>Status</th> --}}
-                                    <th>Reg. Channel</th>
-                                    <th>When Verified</th>
+                                    {{-- <th>Balance</th> --}}
+                                    {{-- <th>Ref. Count</th> --}}
+                                    <th>Entry Mode</th>
+                                    <th>Account Status</th>
+                                    <th>Country</th>
+                                    <th>Email Verified At</th>
                                     <th>When Created</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1; ?>
-                                @foreach ($verifiedUsers as $user)
+                                {{--
+                                <?php $i = 1; ?> --}}
+                                @foreach ($users as $user)
                                     <tr>
-                                        <th scope="row">{{ $i++ }}.</th>
+                                        {{-- <th scope="row">{{ $user->id }}.</th> --}}
                                         <td class="fw-semibold"><a href="{{ url('user/' . $user->id . '/info') }}" target="_blank">
                                                 {{$user->name }}</a></td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                         {{-- <td>&#8358;{{ number_format(@$user->wallet->balance) }}</td> --}}
                                         {{-- <td>{{ @$user->referees->count() }}</td> --}}
-                                        {{-- <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td> --}}
-                                        <td>{{ $user->source }}</td>
+                                        <td>{{ @$user->source}}</td>
+                                        <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
+                                        <td>{{ $user->country }}</td>
                                         <td>
-                                            {{ $user->verified_at ? \Carbon\Carbon::parse($user->verified_at)->format('d/m/Y @ h:i:s a') : '' }}
+                                            {{ $user->email_verified_at ? \Carbon\Carbon::parse($user->email_verified_at)->format('d/m/Y @ h:i:s a') : '' }}
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y @ h:i:s a') }}</td>
+
+                                        <td>{{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         <div class="d-flex">
-                            {!! $verifiedUsers->links('pagination::bootstrap-4') !!}
+                            {!! $users->links('pagination::bootstrap-4') !!}
                         </div>
                 </div>
             </div>
         </div>
         <!-- END Full Table -->
+
     </div>
 @endsection
 
