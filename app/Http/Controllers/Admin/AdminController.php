@@ -1029,58 +1029,62 @@ class AdminController extends Controller
 
     public function previewAudience(Request $request)
     {
-        // Create cache key from filters
+        $query = User::where('role', 'regular');
+
+        // Filter by audience type
+        if ($request->type === 'verified') {
+            $query->where('is_verified', 1)->whereNotNull('verified_at');
+        } elseif ($request->type === 'email_verified') {
+            $query->whereNotNull('email_verified_at');
+        }
+
+        // Filter by date range
+        if ($request->days) {
+            $date = now()->subDays($request->days);
+
+            if ($request->type === 'verified') {
+                $query->where('verified_at', '>=', $date);
+            } elseif ($request->type === 'email_verified') {
+                $query->where('email_verified_at', '>=', $date);
+            } else {
+                $query->where('created_at', '>=', $date);
+            }
+        }
+
+        // Filter by country
+        if ($request->country) {
+            $query->where('country', $request->country);
+        }
+
         $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
 
-        // Cache for 5 minutes
-        return Cache::remember($cacheKey, 300, function () use ($request) {
-            $query = User::where('role', 'regular');
-
-            // Filter by audience type
-            if ($request->type === 'verified') {
-                $query->where('is_verified', 1)->whereNotNull('verified_at');
-            } elseif ($request->type === 'email_verified') {
-                $query->whereNotNull('email_verified_at');
-            }
-
-            // Filter by date range
-            if ($request->days) {
-                $date = now()->subDays($request->days);
-
-                if ($request->type === 'verified') {
-                    $query->where('verified_at', '>=', $date);
-                } elseif ($request->type === 'email_verified') {
-                    $query->where('email_verified_at', '>=', $date);
-                } else {
-                    $query->where('created_at', '>=', $date);
-                }
-            }
-
-            // Filter by country
-            if ($request->country) {
-                $query->where('country', $request->country);
-            }
-
-            // Use single query with conditional counts for better performance
+        if (!app()->environment(['local', 'local_test'])) {
+            $result = Cache::remember($cacheKey, 300, function () use ($query) {
+                return $query->selectRaw('
+                COUNT(*) as total,
+                SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+                SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+            ')->first();
+            });
+        } else {
             $result = $query->selectRaw('
             COUNT(*) as total,
             SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
             SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
         ')->first();
+        }
 
-            return response()->json([
-                'total' => $result->total,
-                'with_email' => $result->with_email,
-                'with_phone' => $result->with_phone
-            ]);
-        });
+        return response()->json([
+            'total' => $result->total,
+            'with_email' => $result->with_email,
+            'with_phone' => $result->with_phone
+        ]);
     }
 
     public function sendMassCommunication(Request $request)
     {
         $query = User::where('role', 'regular');
 
-        // Apply same filters as preview
         if ($request->type === 'verified') {
             $query->where('is_verified', 1)->whereNotNull('verified_at');
         } elseif ($request->type === 'email_verified') {
@@ -1103,27 +1107,37 @@ class AdminController extends Controller
             $query->where('country', $request->country);
         }
 
-        // Send email
+        // Send email using chunk
         if ($request->send_email) {
-            $users = (clone $query)->whereNotNull('email')->get(['email', 'name']);
-            foreach ($users as $user) {
-                dispatch(new SendMassEmail($user, $request->message, $request->subject));
-            }
+            (clone $query)
+                ->whereNotNull('email')
+                ->select('id')
+                ->chunk(900, function ($users) use ($request) {
+                    $userIds = $users->pluck('id')->toArray();
+                    dispatch(new SendMassEmail($userIds, $request->message, $request->subject));
+                });
         }
 
-        // Send SMS
+        // Send SMS in bulk
         if ($request->send_sms) {
-            $phones = (clone $query)->whereNotNull('phone')->pluck('phone')->toArray();
-            if (!empty($phones)) {
-                $process = PaystackHelpers::sendBulkSMS($phones, $request->sms_message);
-                if ($process['code'] !== 'ok') {
-                    return back()->with('error', 'SMS sending failed');
-                }
-            }
+            (clone $query)
+                ->whereNotNull('phone')
+                ->select('phone')
+                ->chunk(900, function ($users) use ($request) {
+                    $phones = $users->pluck('phone')->toArray();
+
+                    if (!empty($phones)) {
+                        $process = PaystackHelpers::sendBulkSMS($phones, $request->sms_message);
+                        if ($process['code'] !== 'ok') {
+                            return back()->with('error', 'SMS sending failed');
+                        }
+                    }
+                });
         }
 
-        return back()->with('success', 'Communication sent successfully');
+        return back()->with('success', 'Communication queued successfully');
     }
+
     public function sendMassMail(Request $request)
     {
         if ($request->type == 'all') {

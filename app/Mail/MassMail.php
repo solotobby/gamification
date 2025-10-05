@@ -13,33 +13,24 @@ class MassMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
+    public $name;
+    public $mailMessage;
+    public $subject;
 
-     public $user;
-     public $message;
-     public $subject;
-
-    public function __construct($user, $message, $subject)
+    public function __construct($name, $mailMessage, $subject)
     {
-        $this->user = $user;
-        $this->message = $message;
+        $this->name = $name;
+        $this->mailMessage = $mailMessage;
         $this->subject = $subject;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->markdown('emails.mass_mail.content')->subject($this->subject)->with([
-            'name' => $this->user->name,
-            'message' => $this->message
-        ]);
+        return $this->markdown('emails.mass_mail.content')
+            ->subject($this->subject)
+            ->with([
+                'name' => $this->name,
+                'message' => $this->mailMessage
+            ]);
     }
 }
