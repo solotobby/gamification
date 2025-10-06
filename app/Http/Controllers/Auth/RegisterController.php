@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -136,7 +137,7 @@ class RegisterController extends Controller
                 //return view('auth.error', ['error' => 'Invalid referral code']);
             }
 
-            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' =>  $name->id]);
+            DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' =>  $name->id]);
         }
 
         $location = getLocation(); //get user location dynamically
@@ -180,10 +181,6 @@ class RegisterController extends Controller
 
         return $user;
     }
-
-
-
-
 
 
     public function loginUser(Request $request)
