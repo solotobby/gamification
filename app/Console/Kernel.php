@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Jobs\BackfillVerifiedAt;
 use App\Mail\GeneralMail;
 use App\Mail\JobBroadcast;
 use App\Mail\MassMail;

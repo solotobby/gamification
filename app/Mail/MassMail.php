@@ -26,7 +26,7 @@ class MassMail extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.mass_mail.content')
+        return $this->markdown('emails.mass_mail.content_new')
             ->subject($this->subject)
             ->with([
                 'name' => $this->name,

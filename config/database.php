@@ -121,31 +121,30 @@ return [
 
         'client' => env('REDIS_CLIENT', 'predis'),
 
+        'options' => [
+            'ssl' => [
+                'verify_peer' => false,
+            ],
+        ],
+
         'default' => [
-            'scheme' => 'tls',   // 👈 important: use TLS
+            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME', null),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
-            'database' => env('REDIS_DB', 0),
-            'ssl' => [
-                'cafile' => env('REDIS_CA', null),
-                'verify_peer' => true,
-            ],
+            'database' => 0,
         ],
 
         'cache' => [
-            'scheme' => 'tls',   // 👈 also add here
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
-            'database' => env('REDIS_CACHE_DB', 1),
-            'ssl' => [
-                'cafile' => env('REDIS_CA', null),
-                'verify_peer' => true,
-            ],
+            'url' => env('REDIS_URL'),
+            'database' => 1,
         ],
 
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'database' => 2,
+        ],
     ],
-
 
 ];

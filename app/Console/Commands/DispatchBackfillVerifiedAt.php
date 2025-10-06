@@ -4,29 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Jobs\BackfillVerifiedAt;
-use Illuminate\Support\Facades\DB;
 
 class DispatchBackfillVerifiedAt extends Command
 {
-    protected $signature = 'backfill:verified-at {chunkSize=50000}';
-    protected $description = 'Dispatch jobs to backfill verified_at for verified users in chunks';
+    protected $signature = 'backfill:verified-at {--chunk-size=20000}';
+    protected $description = 'Start the self-chaining backfill process for verified_at';
 
     public function handle()
     {
-        $minId = DB::table('users')->min('id');
-        $maxId = DB::table('users')->max('id');
-        $chunkSize = (int) $this->argument('chunkSize');
+        $chunkSize = (int) $this->option('chunk-size');
 
-        $this->info("Dispatching jobs from ID {$minId} to {$maxId} in chunks of {$chunkSize}...");
+        $this->info("Starting backfill process with chunk size of {$chunkSize}...");
 
-        for ($startId = $minId; $startId <= $maxId; $startId += $chunkSize) {
-            $endId = $startId + $chunkSize - 1;
+        BackfillVerifiedAt::dispatch(0, $chunkSize);
 
-            BackfillVerifiedAt::dispatch($startId, $endId);
-
-            $this->line("Dispatched chunk: {$startId} - {$endId}");
-        }
-
-        $this->info("All jobs dispatched!");
+        $this->info("Initial job dispatched! The job will automatically process all records in chunks.");
+        $this->line("Monitor your queue workers to track progress.");
     }
 }

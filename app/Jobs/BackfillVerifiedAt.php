@@ -13,17 +13,35 @@ class BackfillVerifiedAt implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $startId;
-    public $endId;
+    public $lastProcessedId;
+    public $chunkSize;
 
-    public function __construct($startId, $endId)
+    public function __construct($lastProcessedId = 0, $chunkSize = 20000)
     {
-        $this->startId = $startId;
-        $this->endId = $endId;
+        $this->lastProcessedId = $lastProcessedId;
+        $this->chunkSize = $chunkSize;
     }
 
     public function handle()
     {
+        // Get the next chunk of user IDs that need processing
+        $nextChunk = DB::table('users')
+            ->where('id', '>', $this->lastProcessedId)
+            ->where('is_verified', 1)
+            ->whereNull('verified_at')
+            ->orderBy('id')
+            ->limit($this->chunkSize)
+            ->pluck('id');
+
+        if ($nextChunk->isEmpty()) {
+            // No more records to process
+            return;
+        }
+
+        $minId = $nextChunk->first();
+        $maxId = $nextChunk->last();
+
+        // Process this chunk using prepared statement
         DB::statement("
             UPDATE users
             JOIN (
@@ -36,7 +54,10 @@ class BackfillVerifiedAt implements ShouldQueue
             SET users.verified_at = pt.verified_date
             WHERE users.is_verified = 1
               AND users.verified_at IS NULL
-              AND users.id BETWEEN {$this->startId} AND {$this->endId}
-        ");
+              AND users.id BETWEEN ? AND ?
+        ", [$minId, $maxId]);
+
+        // Dispatch next chunk
+        self::dispatch($maxId, $this->chunkSize);
     }
 }

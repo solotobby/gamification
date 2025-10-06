@@ -1161,17 +1161,20 @@ class AdminController extends Controller
                 ->chunk(900, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
 
+                    $phones = PaystackHelpers::formatAndArrange($phones);
                     if (!empty($phones)) {
                         $process = PaystackHelpers::sendBulkSMS($phones, $request->sms_message);
-                        if ($process['code'] !== 'ok') {
-                            return back()->with('error', 'SMS sending failed');
+                        $code = is_array($process) ? $process['code'] : $process->code;
+
+                        if ($code !== 'ok') {
+                            return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
                         }
                     }
                 });
         }
-
-        return back()->with('success', 'Communication queued successfully');
+        return back()->with('success', 'Communication sent successfully');
     }
+
 
     public function sendMassMail(Request $request)
     {

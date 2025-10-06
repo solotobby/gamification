@@ -561,8 +561,6 @@ if (!function_exists('countryList')) {
 if (!function_exists('sendSMS')) {
     function sendSMS($phone)
     {
-
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
