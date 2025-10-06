@@ -276,7 +276,7 @@ class HomeController extends Controller
   public function adminHome(Request $request)
 {
     // Increase max execution time to 120 seconds for this method
-    set_time_limit(120);
+    // set_time_limit(120);
 
     // Get period from request, default to 7 days
     $period = $request->get('period', 7);
@@ -285,15 +285,13 @@ class HomeController extends Controller
     $startDate = Carbon::now()->subDays($period)->startOfDay();
     $endDate = Carbon::now()->endOfDay();
 
-    $wallet = Cache::remember('admin_wallet_stats', 1800, function () {
-        return DB::select('
+    $wallet = DB::select('
             SELECT
                 SUM(balance) AS total_balance,
                 SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
                 SUM(usd_balance) AS total_usd_balance
             FROM wallets
         ');
-    });
 
     // Single optimized query for all withdrawal metrics using period dates
     $withdrawalMetrics = DB::table('withrawals')
@@ -304,23 +302,21 @@ class HomeController extends Controller
         ', [$startDate, $endDate])
         ->first();
 
-    $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
+    // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
 
     // Cache successful transactions sum (updates less frequently)
-    $transactions = Cache::remember($cacheKey, 6000, function () use ($startDate, $endDate) {
-        return DB::select('
-            SELECT SUM(amount) AS total_successful_transactions
-            FROM payment_transactions
-            WHERE status = ?
-            AND created_at BETWEEN ? AND ?
-        ', ['successful', $startDate, $endDate]);
-    });
+    // $transactions = DB::select('
+    //         SELECT SUM(amount) AS total_successful_transactions
+    //         FROM payment_transactions
+    //         WHERE status = ?
+    //         AND created_at BETWEEN ? AND ?
+    //     ', ['successful', $startDate, $endDate]);
 
     return view('admin.index_new', [
         'wallet' => $wallet,
         'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
         'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
-        'transactions' => $transactions,
+        'transactions' => $transactions ?? 0.00,
         'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
         'av_count' => 0,
         'period' => $period

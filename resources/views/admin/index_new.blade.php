@@ -40,7 +40,7 @@
             <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a>
             <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>
 
-            <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a>
+            {{-- <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a> --}}
             <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
             <br> Period Payment (Last {{ $period }} days) - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($periodPayment,2)}}</a>
 
@@ -164,7 +164,8 @@
     <!-- View Analytics Button -->
     <div class="row mt-4">
       <div class="col-12 text-center">
-        <a href="{{ url('admin/home/analytics') }}?period={{ $period }}" class="btn btn-lg btn-primary">
+        {{-- <a href="{{ url('admin/home/analytics') }}?period={{ $period }}" class="btn btn-lg btn-primary"> --}}
+        <a href="" class="btn btn-lg btn-primary">
           <i class="fa fa-chart-bar me-2"></i>
           View Detailed Analytics
         </a>

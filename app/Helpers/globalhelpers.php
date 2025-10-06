@@ -466,7 +466,7 @@ if (!function_exists('listPreferences')) {
     function listPreferences()
     {
         $lists = Preference::all();
-        $totalInterest = \DB::table('user_interest')->count();
+        $totalInterest = DB::table('user_interest')->count();
         $lis = [];
         foreach ($lists as $list) {
             $count = $list->users()->count();
@@ -490,7 +490,7 @@ if (!function_exists('listPreferences')) {
 if (!function_exists('countryList')) {
     function countryList()
     {
-        $users = User::select('country', \DB::raw('COUNT(*) as total'))->where('role', 'regular')->groupBy('country')->get();
+        $users = User::select('country', DB::raw('COUNT(*) as total'))->where('role', 'regular')->groupBy('country')->get();
         return $users;
     }
 }
@@ -656,7 +656,7 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                         'bank_name' => $response['data']['bank']['name'],
                         'account_name' => $response['data']['account_name'],
                         'account_number' => $response['data']['account_number'],
-                        'account_name' => $response['data']['account_name'],
+                        // 'account_name' => $response['data']['account_name'],
                         'currency' => 'NGN'
                     ]);
                 }
@@ -705,7 +705,7 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                         'bank_name' => $response['data']['bank']['name'],
                         'account_name' => $response['data']['account_name'],
                         'account_number' => $response['data']['account_number'],
-                        'account_name' => $response['data']['account_name'],
+                        // 'account_name' => $response['data']['account_name'],
                         'currency' => 'NGN'
                     ]);
                 }
@@ -767,7 +767,7 @@ if (!function_exists('generateVirtualAccount')) {
                         'bank_name' => $response['data']['bank']['name'],
                         'account_name' => $response['data']['account_name'],
                         'account_number' => $response['data']['account_number'],
-                        'account_name' => $response['data']['account_name'],
+                        // 'account_name' => $response['data']['account_name'],
                         'currency' => 'NGN'
                     ]);
                 }
@@ -815,7 +815,7 @@ if (!function_exists('generateVirtualAccount')) {
                         'bank_name' => $response['data']['bank']['name'],
                         'account_name' => $response['data']['account_name'],
                         'account_number' => $response['data']['account_number'],
-                        'account_name' => $response['data']['account_name'],
+                        // 'account_name' => $response['data']['account_name'],
                         'currency' => 'NGN'
                     ]);
                 }
@@ -900,7 +900,7 @@ if (!function_exists('reGenerateVirtualAccount')) {
 
         try {
 
-            $data = \DB::transaction(function () use ($user) {
+            $data = DB::transaction(function () use ($user) {
                 // Fetch the object within the transaction
 
                 //check if user exist, if yes, update informatioon
@@ -946,7 +946,7 @@ if (!function_exists('reGenerateVirtualAccount')) {
                                 'bank_name' => $response['data']['bank']['name'],
                                 'account_name' => $response['data']['account_name'],
                                 'account_number' => $response['data']['account_number'],
-                                'account_name' => $response['data']['account_name'],
+                                // 'account_name' => $response['data']['account_name'],
                                 'currency' => 'NGN'
                             ]);
                         }
@@ -997,7 +997,7 @@ if (!function_exists('reGenerateVirtualAccount')) {
                                 'bank_name' => $response['data']['bank']['name'],
                                 'account_name' => $response['data']['account_name'],
                                 'account_number' => $response['data']['account_number'],
-                                'account_name' => $response['data']['account_name'],
+                                // 'account_name' => $response['data']['account_name'],
                                 'currency' => 'NGN'
                             ]);
                         }
@@ -1279,7 +1279,7 @@ if (!function_exists('userNairaUpgrade')) {
         ]);
 
 
-        $referee = \DB::table('referral')->where('user_id',  $user->id)->first();
+        $referee = DB::table('referral')->where('user_id',  $user->id)->first();
 
         if ($referee) {
             $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
@@ -2077,9 +2077,9 @@ if (!function_exists('checkCampaignCompletedStatus')) {
             'Approved' => 0,
             'Pending' => 0,
             'Denied' => 0,
-        ], \DB::table('campaign_workers')
+        ], DB::table('campaign_workers')
             ->where('campaign_id', $campaignId)
-            ->select('status', \DB::raw('COUNT(*) as count'))
+            ->select('status', DB::raw('COUNT(*) as count'))
             ->groupBy('status')
             ->pluck('count', 'status')->toArray());
 
