@@ -39,7 +39,7 @@
                     <div class="mb-4">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" value="{{ old('search') }}"
-                                placeholder="Search user..." required>
+                                placeholder="Search user by name, email, phone number, referral_code" required>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search me-1"></i> Search
                             </button>

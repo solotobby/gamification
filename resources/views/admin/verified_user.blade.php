@@ -34,11 +34,11 @@
                 </div>
             </div>
             <div class="block-content">
-                 <form action="{{ url('users/search') }}" method="GET">
+                <form action="{{ url('users/search') }}" method="GET">
                     <div class="mb-4">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" value="{{ old('search') }}"
-                                placeholder="Search user..." required>
+                                placeholder="Search user by name, email, phone number, referral_code" required>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search me-1"></i> Search
                             </button>
@@ -67,7 +67,8 @@
                                 @foreach ($verifiedUsers as $user)
                                     <tr>
                                         <th scope="row">{{ $i++ }}.</th>
-                                        <td class="fw-semibold"><a href="{{ url('user/' . $user->id . '/info') }}" target="_blank">
+                                        <td class="fw-semibold"><a href="{{ url('user/' . $user->id . '/info') }}"
+                                                target="_blank">
                                                 {{$user->name }}</a></td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
