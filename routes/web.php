@@ -53,6 +53,10 @@ Route::post('fix/otp', [\App\Http\Controllers\GeneralController::class, 'fixOtp'
 
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 
+//webhook routes
+Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
+Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook']);
+
 // Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
@@ -71,8 +75,8 @@ Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController
 
 
 
-Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
-Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook']);
+
+
 Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
 Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);

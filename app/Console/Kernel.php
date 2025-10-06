@@ -43,13 +43,13 @@ class Kernel extends ConsoleKernel
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
 
-        $schedule->call(function () {
+        $schedule->call(function(){
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
 
             $list = [];
-            foreach ($campaigns as $key => $value) {
+            foreach($campaigns as $key => $value){
 
-                $c = $value->pending_count + $value->completed_count;
+               $c = $value->pending_count + $value->completed_count;
                 //$div = $c / $value->number_of_staff;
                 // $progress = $div * 100;
 
@@ -85,23 +85,24 @@ class Kernel extends ConsoleKernel
             $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
 
             // $user = User::where('id', 1)->first();
-            foreach ($usersLastWeek as $user) {
+            foreach($usersLastWeek as $user){
                 $subject = 'Fresh Campaign';
                 Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
             }
+
         })->daily(); //does this daily
 
-        $schedule->call(function () {
+        $schedule->call(function(){
             // $yesterday = Carbon::yesterday();
             // Get the start and end time for 24 hours ago
             $startTime = Carbon::now()->subDays(1)->startOfHour();
             $endTime = Carbon::now()->subDays(1)->endOfHour();
             $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-                ->whereBetween('created_at', [$startTime, $endTime])
-                //->whereDate('created_at', $yesterday)
-                ->get();
+                    ->whereBetween('created_at', [$startTime, $endTime])
+                    //->whereDate('created_at', $yesterday)
+                    ->get();
 
-            foreach ($lists as $list) {
+            foreach($lists as $list){
 
                 $ca = CampaignWorker::where('id', $list->id)->first();
                 $ca->status = 'Approved';
@@ -122,20 +123,20 @@ class Kernel extends ConsoleKernel
                 $user = User::where('id', $ca->user_id)->first();
                 $baseCurrency = baseCurrency($user);
                 $amountCredited = $ca->amount;
-                if ($baseCurrency == 'NGN') {
+                if($baseCurrency == 'NGN'){
                     $currency = 'NGN';
                     $channel = 'paystack';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
                     // $wallet->balance += (int)$amountCredited;
                     $wallet->balance += $amountCredited;
                     $wallet->save();
-                } elseif ($camp->currency == 'USD') {
+                }elseif($camp->currency == 'USD'){
                     $currency = 'USD';
                     $channel = 'paypal';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
                     $wallet->usd_balance += $amountCredited;
                     $wallet->save();
-                } else {
+                }else{
                     $currency = baseCurrency($user);
                     $channel = 'flutterwave';
                     $wallet = Wallet::where('user_id', $ca->user_id)->first();
@@ -157,19 +158,20 @@ class Kernel extends ConsoleKernel
                     'currency' => $currency,
                     'channel' => $channel,
                     'type' => 'campaign_payment',
-                    'description' => 'Campaign Payment for ' . $ca->campaign->post_title,
+                    'description' => 'Campaign Payment for '.$ca->campaign->post_title,
                     'tx_type' => 'Credit',
                     'user_type' => 'regular'
                 ]);
             }
 
-            $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            $subject = 'Batched Job Approval - Notification';
-            $content = 'Job Automatic Approval of ' . $lists->count();
-            Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+            //$user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+            //$subject = 'Batched Job Approval - Notification';
+           // $content = 'Job Automatic Approval of '.$lists->count();
+            //Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
         })->hourly();
 
-        $schedule->call(function () {
+        $schedule->call(function(){
 
 
             Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
@@ -197,14 +199,15 @@ class Kernel extends ConsoleKernel
         })->daily();
 
 
-        $schedule->call(function () {
+        $schedule->call(function(){
 
-            $remove = Question::where('correct_answer', null)->delete();
-        })->daily();
+            $remove = Question::where('option_A', null)->delete();
+
+        })->hourly();
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
         //remove after tonight
         // $schedule->call(function(){
@@ -332,7 +335,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

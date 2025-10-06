@@ -48,9 +48,7 @@
         "files": [
             "app/Helpers/globalhelpers.php",
             "app/Helpers/wellahealthApiIntegration.php",
-            "app/Helpers/brails.php",
-            "app/Helpers/flutterwave.php",
-            "app/Helpers/bloq.php"
+            "app/Helpers/flutterwave.php"
         ]
     },
     "autoload-dev": {
