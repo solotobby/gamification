@@ -10,11 +10,11 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Users</h1>
+                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Users - Email Verified List</h1>
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">Users</li>
-                        <li class="breadcrumb-item active" aria-current="page">Users List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Email List</li>
                     </ol>
                 </nav>
             </div>
@@ -27,7 +27,7 @@
         <!-- Full Table -->
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Users List - {{ $users->total() }}</h3>
+                <h3 class="block-title">Email Verified Users List - {{ $users->total() }}</h3>
                 <div class="block-options">
                     <button type="button" class="btn-block-option">
                         <i class="si si-settings"></i>
@@ -46,24 +46,6 @@
                         </div>
                     </div>
                 </form>
-
-                <form action="{{ url('user/currency/search') }}" method="GET">
-                    <div class="mb-4">
-                        <div class="input-group">
-                            <select name="currency" class="form-control @error('currency') is-invalid @enderror" required>
-                                <option value="">Select Country</option>
-                                @foreach (currencyList(null, true) as $currency)
-                                    <option value="{{ $currency->code }}">{{ $currency->country }}</option>
-                                @endforeach
-                                <option value="USD,Other">Others</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search me-1"></i> Search
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
                 <div class="table-responsive">
                     {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
                         <table class="table table-bordered table-striped table-vcenter">
@@ -76,8 +58,9 @@
                                     {{-- <th>Balance</th> --}}
                                     {{-- <th>Ref. Count</th> --}}
                                     <th>Entry Mode</th>
-                                    <th>Status</th>
+                                    <th>Account Status</th>
                                     <th>Country</th>
+                                    <th>Email Verified At</th>
                                     <th>When Created</th>
                                 </tr>
                             </thead>
@@ -96,6 +79,10 @@
                                         <td>{{ @$user->source}}</td>
                                         <td>{{ $user->is_verified == "1" ? 'Verified' : 'unverified' }}</td>
                                         <td>{{ $user->country }}</td>
+                                        <td>
+                                            {{ $user->email_verified_at ? \Carbon\Carbon::parse($user->email_verified_at)->format('d/m/Y @ h:i:s a') : '' }}
+                                        </td>
+
                                         <td>{{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }}</td>
                                     </tr>
                                 @endforeach

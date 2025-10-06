@@ -1,7 +1,7 @@
 <div class="content-side">
     <ul class="nav-main">
-      
-      
+
+
       <li class="nav-main-heading">Main Menu</li>
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('home') }}">
@@ -69,7 +69,7 @@
           <span class="nav-main-link-name">Preferences</span>
         </a>
       </li>
-      
+
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-list"></i>
@@ -82,6 +82,9 @@
             </a>
             <a class="nav-main-link" href="{{ route('verified.user.list') }}">
               <span class="nav-main-link-name">Verified</span>
+            </a>
+            <a class="nav-main-link" href="{{ route('user.email.verified') }}">
+              <span class="nav-main-link-name">Email Verified</span>
             </a>
           </li>
         </ul>

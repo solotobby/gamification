@@ -374,7 +374,9 @@ Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class,
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
-Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminNewHome'])->name('admin.home');
+Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('admin/home/analytics', [\App\Http\Controllers\HomeController::class, 'analytics'])->name('admin.analytics');
+// Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminNewHome'])->name('admin.home');
 Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
 
 
@@ -430,6 +432,7 @@ Route::post('edit/subcategories/naira', [\App\Http\Controllers\CategoryControlle
 Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 'userSearch'])->name('user.search');
 Route::get('user/currency/search', [\App\Http\Controllers\Admin\AdminController::class, 'userCurrencySearch'])->name('user.currency.search');
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
+Route::get('users/email-verified', [\App\Http\Controllers\Admin\AdminController::class, 'userEmailVerified'])->name('user.email.verified');
 
 Route::get('campaign/creator/list', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCreatorList'])->name('campaign.creator.list');
 Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'verifiedUserList'])->name('verified.user.list');
@@ -467,6 +470,9 @@ Route::post('send/mass/mail', [\App\Http\Controllers\Admin\AdminController::clas
 Route::get('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'massSMS'])->name('mass.sms');
 Route::get('mass/sms/preview', [\App\Http\Controllers\Admin\SMSController::class, 'massSMSPreview'])->name('mass.sms.preview');
 Route::post('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'send_massSMS'])->name('send.mass.sms');
+
+Route::post('/admin/preview-audience', [\App\Http\Controllers\Admin\AdminController::class, 'previewAudience'])->name('preview.audience');
+Route::post('/admin/send-mass-communication', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassCommunication'])->name('send.mass.communication');
 
 Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'unapprovedJobs'])->name('unapproved');
 Route::get('approved', [\App\Http\Controllers\Admin\AdminController::class, 'approvedJobs'])->name('approved');

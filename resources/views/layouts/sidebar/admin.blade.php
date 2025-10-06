@@ -64,27 +64,27 @@
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Safelock Mgt</span>
         </a>
-      </li> 
+      </li>
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/spin') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Spinner</span>
         </a>
-      </li> 
+      </li>
 
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/finger') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Fastest Finger</span>
         </a>
-      </li> 
+      </li>
 
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/partner') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
           <span class="nav-main-link-name">Partners</span>
         </a>
-      </li> 
+      </li>
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -198,16 +198,19 @@
             <a class="nav-main-link" href="{{ route('verified.user.list') }}">
               <span class="nav-main-link-name">Verified</span>
             </a>
+            <a class="nav-main-link" href="{{ route('user.email.verified') }}">
+              <span class="nav-main-link-name">Email Verified</span>
+            </a>
             <a class="nav-main-link" href="{{ route('usd.verified.user.list') }}">
               <span class="nav-main-link-name">USD Verified</span>
             </a>
-            
-            
+
+
           </li>
         </ul>
       </li>
 
-      
+
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -309,25 +312,25 @@
         </ul> --}}
       </li>
 
-      {{-- <li class="nav-main-item">
+      <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('mass.mail') }}">
           <i class="nav-main-link-icon fa fa-envelope"></i>
           <span class="nav-main-link-name">Mass Mail</span>
           <span class="nav-main-link-badge badge rounded-pill bg-default">8</span>
         </a>
-      </li> --}}
+      </li>
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('admin/banner/list') }}">
           <i class="nav-main-link-icon fa fa-envelopes"></i>
           <span class="nav-main-link-name">Banner Ad</span>
-          <?php 
+          <?php
             $count = \App\Models\Banner::where('status', false)->count();
           ?>
           <span class="nav-main-link-badge badge rounded-pill bg-default">{{ $count }}</span>
         </a>
       </li>
 
-      
+
 
       {{-- <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -352,10 +355,10 @@
         <a class="nav-main-link" href="{{ route('mass.sms') }}">
           <i class="nav-main-link-icon fa fa-envelope"></i>
           <span class="nav-main-link-name">BroadCast SMS</span>
-         
+
         </a>
       </li> --}}
-     
+
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('audit/trail') }}">
           <i class="nav-main-link-icon fa fa-th"></i>
@@ -369,7 +372,7 @@
           <span class="nav-main-link-name">Task Mgt.</span>
         </a>
       </li>
-     
+
 
        {{-- <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('settings') }}">
@@ -402,7 +405,7 @@
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon si si-note"></i>
           <span class="nav-main-link-name">Fraud Mgt</span>
-         
+
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
