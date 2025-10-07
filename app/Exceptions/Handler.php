@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
             if ($this->shouldReport($exception)) {
                 $errorMessage = $exception->getMessage();
                 $errorTrace = $exception->getTraceAsString();
-                Mail::to('solotobz5@gmail.com')->send(new ErrorNotification($errorMessage, $errorTrace));
+                // Mail::to('solotobz5@gmail.com')->send(new ErrorNotification($errorMessage, $errorTrace));
             }
         }
         parent::report($exception);

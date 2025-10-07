@@ -16,7 +16,8 @@ class BannerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'email']);
+        //  // $this->middleware(['auth', 'email']);
+        $this->middleware('auth');
     }
 
     /**
@@ -79,11 +80,11 @@ class BannerController extends Controller
         // $parameters =  array_sum($unit) + $request->ad_placement + $request->age_bracket + $request->duration + $request->country;
         // $finalTotal = $parameters * 25;
 
-        if($request->budget > auth()->user()->wallet->balance){
+        if ($request->budget > auth()->user()->wallet->balance) {
             return back()->with('error', 'Insurficient Balance');
         }
 
-        if($request->hasFile('banner_url')){
+        if ($request->hasFile('banner_url')) {
 
             //s3 bucket processing
             // $fileBanner = $request->file('banner_url');
@@ -93,7 +94,7 @@ class BannerController extends Controller
             // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             // $bannerUrl = Storage::disk('s3')->url($filePathBanner);
 
-            $imageName = time().'.'.$request->banner_url->extension();
+            $imageName = time() . '.' . $request->banner_url->extension();
             $request->banner_url->move(public_path('images'), $imageName);
 
             // $fileBanner = $request->file('banner_url');
@@ -109,11 +110,11 @@ class BannerController extends Controller
             $banner['ad_placement_point'] = 0; //$request->ad_placement;
             $banner['adplacement_position'] = 'top'; //$request->adplacement;
             $banner['age_bracket'] = '18'; //$request->age_bracket;
-            $banner['duration'] = '1';//$request->duration;
-            $banner['country'] = 'all';//$request->country;
+            $banner['duration'] = '1'; //$request->duration;
+            $banner['country'] = 'all'; //$request->country;
             $banner['status'] = false;
             $banner['amount'] = $request->budget; //$finalTotal;
-            $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName; //$bannerUrl;
+            $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //$bannerUrl;
             $banner['impression'] = 0;
             $banner['impression_count'] = 0;
             $banner['clicks'] = $request->budget / 40.5;
@@ -121,8 +122,8 @@ class BannerController extends Controller
 
             $createdBanner = Banner::create($banner);
 
-            if($createdBanner){
-                debitWallet(auth()->user(),'NGN', $request->budget);
+            if ($createdBanner) {
+                debitWallet(auth()->user(), 'NGN', $request->budget);
                 //transaction log
                 PaymentTransaction::create([
                     'user_id' => auth()->user()->id,
@@ -134,7 +135,7 @@ class BannerController extends Controller
                     'currency' => 'NGN',
                     'channel' => 'internal',
                     'type' => 'ad_banner',
-                    'description' => 'Ad Banner Placement by '.auth()->user()->name,
+                    'description' => 'Ad Banner Placement by ' . auth()->user()->name,
                     'tx_type' => 'Debit',
                     'user_type' => 'regular'
                 ]);
@@ -150,8 +151,7 @@ class BannerController extends Controller
 
             //Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
             return back()->with('success', 'Banner Ad Created Successfully');
-
-        }else{
+        } else {
             return back()->with('error', 'Please upload a banner');
         }
     }
@@ -201,18 +201,20 @@ class BannerController extends Controller
         //
     }
 
-    public function bannerResources(){
+    public function bannerResources()
+    {
         return auth()->user()->wallet->balance;
     }
 
-    public function adView($bannerId){
+    public function adView($bannerId)
+    {
         $ban = Banner::where('banner_id', $bannerId)->first();
         // $ban->impression += 1;
         // $ban->clicks -= 1;
         $ban->click_count += 1;
         $ban->save();
 
-        if($ban->click_count >= $ban->clicks){
+        if ($ban->click_count >= $ban->clicks) {
             $ban->live_state = 'Ended';
             $ban->banner_end_date = Carbon::now();
             $ban->save();

@@ -19,7 +19,8 @@ class NotificationController extends Controller
 
      public function __construct()
      {
-        $this->middleware(['auth', 'email']);
+         // $this->middleware(['auth', 'email']);
+        $this->middleware('auth');
      }
 
     public function index()

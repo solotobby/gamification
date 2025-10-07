@@ -70,7 +70,7 @@ class SafeLockController extends Controller
          if($getSafeLock->status == 'Redeemed'){
             return back()->with('error', 'Safelock redeemed');
          }
-         
+
          $user = User::where('id', $getSafeLock->user_id)->first();
          $getSafeLock->status = 'Redeemed';
          $getSafeLock->is_paid = true;
@@ -92,12 +92,12 @@ class SafeLockController extends Controller
 
          $subject = 'Freebyz SafeLock Redeemed';
          $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
-         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
          return back()->with('success', 'Safelock redeemed, and your account has been funded.');
 
         // $bankInfo = BankInformation::where('user_id', $getSafeLock->user_id)->first();
-        // if($bankInfo){   
+        // if($bankInfo){
         //      $transfter = transferFund((int)$getSafeLock->total_payment*100, $bankInfo->recipient_code, 'Freebyz SafeLock Redeemption');
         //     if($transfter['status'] == true){
 

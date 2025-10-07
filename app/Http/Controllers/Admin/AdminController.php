@@ -276,7 +276,7 @@ class AdminController extends Controller
 
             $subject = 'Job ' . $request->status;
             $status = $request->status;
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            // Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
 
 
             return back()->with('success', 'Dispute resolved Successfully');
@@ -322,7 +322,7 @@ class AdminController extends Controller
             $subject = 'Disputed Job ' . $request->status;
             $status = $request->status;
 
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            // Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
 
             return back()->with('success', 'Dispute resolved Successfully');
 
@@ -460,12 +460,18 @@ class AdminController extends Controller
 
     public function adminTransaction()
     {
-        $list = PaymentTransaction::where('user_type', 'admin')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
+        $list = PaymentTransaction::where(
+            'user_type',
+            'admin'
+        )->where('status', 'successful')->latest()->paginate(50);
         return view('admin.admin_transactions', ['lists' => $list]);
     }
     public function userTransaction()
     {
-        $list = PaymentTransaction::where('user_type', 'regular')->where('status', 'successful')->orderBy('created_at', 'DESC')->paginate(50);
+        $list = PaymentTransaction::where(
+            'user_type',
+            'regular'
+        )->where('status', 'successful')->latest()->paginate(50);
         return view('admin.users.user_transactions', ['lists' => $list]);
     }
 
@@ -666,7 +672,7 @@ class AdminController extends Controller
         $name = $getUser->name;
 
         activityLog($getUser, 'account_verification', $name . ' account verification', 'regular');
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
     }
@@ -780,7 +786,7 @@ class AdminController extends Controller
 
         activityLog($getUser, 'dollar_account_verification', $name . ' account verification', 'regular');
 
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
 
         // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
@@ -908,7 +914,7 @@ class AdminController extends Controller
         $subject = 'Job Reversal';
 
         $content = 'Your request to for job reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Reversal Successful');
     }
@@ -1143,15 +1149,15 @@ class AdminController extends Controller
         }
 
         // Send email using chunk
-        if ($request->send_email) {
-            (clone $query)
-                ->whereNotNull('email')
-                ->select('id')
-                ->chunk(900, function ($users) use ($request) {
-                    $userIds = $users->pluck('id')->toArray();
-                    dispatch(new SendMassEmail($userIds, $request->message, $request->subject));
-                });
-        }
+        // if ($request->send_email) {
+        //     (clone $query)
+        //         ->whereNotNull('email')
+        //         ->select('id')
+        //         ->chunk(900, function ($users) use ($request) {
+        //             $userIds = $users->pluck('id')->toArray();
+        //             dispatch(new SendMassEmail($userIds, $request->message, $request->subject));
+        //         });
+        // }
 
         // Send SMS in bulk
         if ($request->send_sms) {
@@ -1161,9 +1167,9 @@ class AdminController extends Controller
                 ->chunk(900, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
 
-                    $phones = PaystackHelpers::formatAndArrange($phones);
+                    $phones = formatAndArrange($phones);
                     if (!empty($phones)) {
-                        $process = PaystackHelpers::sendBulkSMS($phones, $request->sms_message);
+                        $process = sendBulkSMS($phones, $request->sms_message);
                         $code = is_array($process) ? $process['code'] : $process->code;
 
                         if ($code !== 'ok') {
@@ -1256,7 +1262,7 @@ class AdminController extends Controller
             $content = 'Reason: ' . $request->reason . '.';
             $subject = 'Campaign Declined';
 
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return redirect('campaigns/pending')->with('error', 'Campaign is Declined');
         } else {
 
@@ -1269,7 +1275,7 @@ class AdminController extends Controller
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Live!!!';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return redirect('campaigns/pending')->with('success', 'Campaign is Live!!!');
         }
 
@@ -1356,7 +1362,7 @@ class AdminController extends Controller
 
                     $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                     $subject = 'Withdrawal Request Granted';
-                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawal Error');
@@ -1376,7 +1382,7 @@ class AdminController extends Controller
                     //send mail
                     $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
                     $subject = 'Withdrawal Request Granted';
-                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawals Error');
@@ -1401,7 +1407,7 @@ class AdminController extends Controller
 
         $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
-        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawals Updated');
     }
 
@@ -1484,7 +1490,7 @@ class AdminController extends Controller
                 $content = 'Your wallet has been succesfully credited with NGN' . $request->amount . '. Thank you for choosing Freebyz.com';
                 $subject = 'Wallet Topup';
                 $user = User::where('id', $request->user_id)->first();
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Funded');
             } else {
                 $currency = '';
@@ -1526,7 +1532,7 @@ class AdminController extends Controller
                 $content = $request->reason;
                 $subject = 'Wallet Debit';
                 $user = User::where('id', $request->user_id)->first();
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Debitted');
             }
         } else {
@@ -1642,7 +1648,7 @@ class AdminController extends Controller
         $user = User::where('id', $request->user_id)->first();
         $subject = 'Account Details Updated';
         $content = 'Congratulations, your account details has been updated on Freebyz.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
 
         return back()->with('success', 'Account Details Upated');

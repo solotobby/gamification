@@ -28,11 +28,11 @@ class FeedbackRepliesController extends Controller
 
     public function view($id){
         // $feedbacks = Feedback::where('status', false)->orderBy('created_at', 'DESC')->take(10)->get();
-        
+
         $feedback = Feedback::where('id', $id)->firstOrFail();
         // $replies = FeedbackReplies::where('user_id', $feedback->user_id)->where('feedback_id', $id)->firstOrFail();
         // $feedback->replies()->where('feedback_id', $id)->where('user_id', $feedbackReplies->respondent_id)->where('status', 1)->update(['status' => 0]);
-        
+
         $feedback->status = true;
         $feedback->save();
         return view('admin.feedback.view', ['feedback' => $feedback]);
@@ -53,7 +53,7 @@ class FeedbackRepliesController extends Controller
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
         $url = 'feedback/view/'.$request->feedback_id;
-         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
+        //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
         return back()->with('success', 'Reply sent');
     }
 }

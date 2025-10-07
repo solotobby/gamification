@@ -16,7 +16,8 @@ class FormBuilderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'email']);
+         // $this->middleware(['auth', 'email']);
+        $this->middleware('auth');
     }
 
     public function create(){
