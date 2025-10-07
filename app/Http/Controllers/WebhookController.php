@@ -16,7 +16,7 @@ class WebhookController extends Controller
 {
     public function handle(Request $request){
 
-       
+
 
         $event = $request['event'];
 
@@ -36,17 +36,17 @@ class WebhookController extends Controller
                 $user = User::where('id', $virtualAccount->user_id)->first();
 
                 // $creditUser = creditWallet($user, 'NGN', $amount);
-                
+
                 $walletCredit =  Wallet::where('user_id', $user->id)->first();
                 $walletCredit->balance += $amount;
                 $walletCredit->save();
-               
+
 
 
                 if($walletCredit){
 
                     // $transaction = transactionProcessor($user, $reference, $amount, 'successful', $currency, $channel, 'transfer_topup', 'Cash transfer from '.$user->name, 'Credit', 'regular');
-                    
+
                     $transaction =  PaymentTransaction::create([
                         'user_id' => $user->id,
                         'campaign_id' => 1,
@@ -65,7 +65,7 @@ class WebhookController extends Controller
                     if($transaction){
                         $subject = 'Wallet Credited';
                         $content = 'Congratulations, your wallet has been credited with ₦'.$amount;
-                         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));    
+                        //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     }
 
                     //check wallet stat
@@ -78,17 +78,17 @@ class WebhookController extends Controller
 
                     if($user->is_verified == false){
                         if($amount >= $upgradeAmount){
-                            
+
                             $debitWallet = debitWallet($user, 'NGN', $upgradeAmount);
-                            
+
                             if($debitWallet){
-                                
+
                                 $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
 
                                 if($upgrdate){
-                                     Mail::to($user->email)->send(new UpgradeUser($user));
+                                    //  Mail::to($user->email)->send(new UpgradeUser($user));
                                 }
-                                
+
                             }
                         }else{
 
@@ -96,21 +96,21 @@ class WebhookController extends Controller
                             if($walletCredit->balance >= $upgradeAmount){
                                 $debitWallet = debitWallet($user, 'NGN', $upgradeAmount);
                                 if($debitWallet){
-                                
+
                                     $upgrdate = userNairaUpgrade($user, $upgradeAmount, $referral_commission);
-    
+
                                     if($upgrdate){
-                                         Mail::to($user->email)->send(new UpgradeUser($user));
+                                        //  Mail::to($user->email)->send(new UpgradeUser($user));
                                     }
-                                    
+
                                 }
                             }
 
                         }
                     }
-                    
+
                 }
-                 
+
             }
             return response()->json(['status' => 'success'], 200);
 
@@ -124,7 +124,7 @@ class WebhookController extends Controller
          Question::create(['content' => $request]);
 
         $event = $request['event'];
-       
+
         if($event == 'charge.success'){
 
             // $amount = $request['data']['amount'];
@@ -148,16 +148,16 @@ class WebhookController extends Controller
 
                 //     $subject = 'Wallet Credited';
                 //     $content = 'Congratulations, your wallet has been credited with ₦'.$validateTransaction->amount;
-                //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, '')); 
-                    
-                //      return response()->json(['status' => 'success'], 200);   
+                //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+                //      return response()->json(['status' => 'success'], 200);
 
                 // }
 
             }else{
                 return response()->json(['status' => 'error', 'message' => 'Transaction not successful'], 501);
             }
-           
+
 
         }
 

@@ -1,5 +1,5 @@
 @extends('layouts.main.master')
-@section('style')
+{{-- @section('style')
 <style>
 #loading-overlay {
     display: none;
@@ -14,19 +14,19 @@
     align-items: center;
 }
 </style>
-@endsection
+@endsection --}}
 
 @section('content')
 
 <!-- Loading Overlay -->
-<div id="loading-overlay">
+{{-- <div id="loading-overlay">
     <div style="text-align: center; color: white;">
         <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
             <span class="visually-hidden">Loading...</span>
         </div>
         <p class="mt-3">Loading dashboard data...</p>
     </div>
-</div>
+</div> --}}
 
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
@@ -192,8 +192,8 @@ $(document).ready(function(){
 
         $('#selected-option').text(text);
 
-        // Show loading overlay
-        $('#loading-overlay').css('display', 'flex');
+        // Show loading overlay (if you uncomment it in the view)
+        // $('#loading-overlay').css('display', 'flex');
 
         // Reload page with period parameter
         window.location.href = '{{ url("admin/home") }}?period=' + period;
@@ -201,37 +201,53 @@ $(document).ready(function(){
 
     // Load initial stats via API
     function loadDashboardStats(period) {
-        // Show loading
-        $('#loading-overlay').css('display', 'flex');
+        // Show loading (if you uncomment the overlay)
+        // $('#loading-overlay').css('display', 'flex');
 
         $.ajax({
             url: '{{ url("admin/dashboard/api/default") }}',
             method: 'GET',
             data: { period: period },
             success: function(response) {
-                var totalUsers = response.registeredUser;
-                var verifiedUsers = response.verifiedUser;
-                var campaigns = response.campaigns;
-                var campaignValue = response.campaignValue;
-                var campaignWorker = response.campaignWorker;
-                var activeUsers = response.activeUsers.original;
-                var activeReg = activeUsers.active_users;
-                var regUser = activeUsers.registered_users;
+                // Parse response data
+                var totalUsers = parseInt(response.registeredUser) || 0;
+                var verifiedUsers = parseInt(response.verifiedUser) || 0;
+                var campaigns = parseInt(response.campaigns) || 0;
+                var campaignValue = parseFloat(response.campaignValue) || 0;
+                var campaignWorker = parseFloat(response.campaignWorker) || 0;
+                var activeReg = parseInt(response.activeUsers) || 0;
 
-                document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
-                document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
-                document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
-                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US').format(campaignValue.toFixed(1));
-                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
-                document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
+                // Update DOM elements
+                document.getElementById("totalUsers").innerHTML = Intl.NumberFormat('en-US').format(totalUsers);
+                document.getElementById("verifiedUsers").innerHTML = Intl.NumberFormat('en-US').format(verifiedUsers);
+                document.getElementById("campaigns").innerHTML = Intl.NumberFormat('en-US').format(campaigns);
+                document.getElementById("campaignValue").innerHTML = Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(campaignValue);
+                document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(campaignWorker);
+                document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg);
 
                 // Hide loading after data loads
-                $('#loading-overlay').fadeOut(300);
+                // $('#loading-overlay').fadeOut(300);
             },
             error: function(xhr, status, error) {
-                console.error(status);
+                console.error('Error loading dashboard stats:', error);
+                console.error('Response:', xhr.responseText);
+
+                // Set default values on error
+                document.getElementById("totalUsers").innerHTML = '0';
+                document.getElementById("verifiedUsers").innerHTML = '0';
+                document.getElementById("campaigns").innerHTML = '0';
+                document.getElementById("campaignValue").innerHTML = '0.00';
+                document.getElementById("campaignWorker").innerHTML = '0.00';
+                document.getElementById("activeReg").innerHTML = '0';
+
                 // Hide loading on error
-                $('#loading-overlay').fadeOut(300);
+                // $('#loading-overlay').fadeOut(300);
             }
         });
     }

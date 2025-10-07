@@ -50,7 +50,8 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'email']);
+        // $this->middleware(['auth', 'email']);
+        $this->middleware('auth');
     }
 
     /**
@@ -273,19 +274,19 @@ class HomeController extends Controller
     // }
 
 
-  public function adminHome(Request $request)
-{
-    // Increase max execution time to 120 seconds for this method
-    // set_time_limit(120);
+    public function adminHome(Request $request)
+    {
+        // Increase max execution time to 120 seconds for this method
+        // set_time_limit(120);
 
-    // Get period from request, default to 7 days
-    $period = $request->get('period', 7);
+        // Get period from request, default to 7 days
+        $period = $request->get('period', 7);
 
-    // Calculate date range based on period
-    $startDate = Carbon::now()->subDays($period)->startOfDay();
-    $endDate = Carbon::now()->endOfDay();
+        // Calculate date range based on period
+        $startDate = Carbon::now()->subDays($period)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
 
-    $wallet = DB::select('
+        $wallet = DB::select('
             SELECT
                 SUM(balance) AS total_balance,
                 SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
@@ -293,62 +294,62 @@ class HomeController extends Controller
             FROM wallets
         ');
 
-    // Single optimized query for all withdrawal metrics using period dates
-    $withdrawalMetrics = DB::table('withrawals')
-        ->selectRaw('
+        // Single optimized query for all withdrawal metrics using period dates
+        $withdrawalMetrics = DB::table('withrawals')
+            ->selectRaw('
             SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
             SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
             SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
         ', [$startDate, $endDate])
-        ->first();
+            ->first();
 
-    // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
+        // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
 
-    // Cache successful transactions sum (updates less frequently)
-    // $transactions = DB::select('
-    //         SELECT SUM(amount) AS total_successful_transactions
-    //         FROM payment_transactions
-    //         WHERE status = ?
-    //         AND created_at BETWEEN ? AND ?
-    //     ', ['successful', $startDate, $endDate]);
+        // Cache successful transactions sum (updates less frequently)
+        // $transactions = DB::select('
+        //         SELECT SUM(amount) AS total_successful_transactions
+        //         FROM payment_transactions
+        //         WHERE status = ?
+        //         AND created_at BETWEEN ? AND ?
+        //     ', ['successful', $startDate, $endDate]);
 
-    return view('admin.index_new', [
-        'wallet' => $wallet,
-        'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
-        'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
-        'transactions' => $transactions ?? 0.00,
-        'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
-        'av_count' => 0,
-        'period' => $period
-    ]);
-}
+        return view('admin.index_new', [
+            'wallet' => $wallet,
+            'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
+            'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
+            'transactions' => $transactions ?? 0.00,
+            'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
+            'av_count' => 0,
+            'period' => $period
+        ]);
+    }
 
-public function analytics(Request $request)
-{
-    // Increase max execution time to 120 seconds for this method
-    set_time_limit(120);
+    public function analytics(Request $request)
+    {
+        // Increase max execution time to 120 seconds for this method
+        // set_time_limit(120);
 
-    // Get period from request, default to 7 days
-    $period = $request->get('period', 7);
+        // Get period from request, default to 7 days
+        $period = $request->get('period', 7);
 
-    // Prepare chart data with caching for expensive operations
-    $chartData = [
-        'visitor' => Cache::remember('chart_daily_activities_' . $period, 300, fn() => dailyActivities()),
-        'daily' => Cache::remember('chart_daily_stats_' . $period, 300, fn() => dailyStats()),
-        'monthly' => Cache::remember('chart_monthly_visits_' . $period, 300, fn() => monthlyVisits()),
-        'revenue' => Cache::remember('chart_revenue_channel_' . $period, 300, fn() => revenueChannel()),
-        'country' => Cache::remember('chart_country_dist_' . $period, 1800, fn() => countryDistribution()),
-        'age' => Cache::remember('chart_age_dist_' . $period, 1800, fn() => ageDistribution()),
-        'currency' => Cache::remember('chart_currency_dist_' . $period, 1800, fn() => currencyDistribution()),
-        'monthlyRevenue' => Cache::remember('chart_monthly_revenue_' . $period, 300, fn() => monthlyRevenue()),
-        'weeklyRegistrationChannel' => Cache::remember('chart_weekly_reg_' . $period, 300, fn() => weeklyRegistrationChannel()),
-        'weeklyVerificationChannel' => Cache::remember('chart_weekly_verif_' . $period, 300, fn() => weeklyVerificationChannel())
-    ];
+        // Prepare chart data with caching for expensive operations
+        $chartData = [
+            'visitor' => Cache::remember('chart_daily_activities_' . $period, 300, fn() => dailyActivities()),
+            'daily' => Cache::remember('chart_daily_stats_' . $period, 300, fn() => dailyStats()),
+            'monthly' => Cache::remember('chart_monthly_visits_' . $period, 300, fn() => monthlyVisits()),
+            'revenue' => Cache::remember('chart_revenue_channel_' . $period, 300, fn() => revenueChannel()),
+            'country' => Cache::remember('chart_country_dist_' . $period, 1800, fn() => countryDistribution()),
+            'age' => Cache::remember('chart_age_dist_' . $period, 1800, fn() => ageDistribution()),
+            'currency' => Cache::remember('chart_currency_dist_' . $period, 1800, fn() => currencyDistribution()),
+            'monthlyRevenue' => Cache::remember('chart_monthly_revenue_' . $period, 300, fn() => monthlyRevenue()),
+            'weeklyRegistrationChannel' => Cache::remember('chart_weekly_reg_' . $period, 300, fn() => weeklyRegistrationChannel()),
+            'weeklyVerificationChannel' => Cache::remember('chart_weekly_verif_' . $period, 300, fn() => weeklyVerificationChannel())
+        ];
 
-    return view('admin.analytics', [
-        'period' => $period
-    ])->with(array_map('json_encode', $chartData));
-}
+        return view('admin.analytics', [
+            'period' => $period
+        ])->with(array_map('json_encode', $chartData));
+    }
 
     public function adminApi(Request $request)
     {
@@ -371,107 +372,180 @@ public function analytics(Request $request)
         return $data;
     }
 
+    // public function adminApiDefault(Request $request)
+    // {
+    //     $period = $request->period;
+
+    //     $data = [];
+
+    //     $date = \Carbon\Carbon::today()->subDays($period);
+
+    //     $camp = Campaign::where('status', 'Live')->where('created_at', '>=', $date)->get();
+    //     $data['campaigns'] = $camp->count();
+    //     $data['campaignValue'] = $camp->sum('total_amount');
+    //     $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at', '>=', $date)->sum('amount');
+    //     $data['registeredUser'] = User::where('role', 'regular')->where('created_at', '>=', $date)->count();
+    //     $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at', '>=', $date)->count();
+    //     $data['activeUsers'] =  $this->getDailyReport($start_date, $end_date);
+    //     // $data['activeUsers'] =  [
+    //     //                             'registered_users' => 0, //$registeredUsersCount,
+    //     //                             'active_users'     => 0
+    //     //                         ];
+    //     // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
+    //     // $data['loginPointsValue'] = $data['loginPoints']/5;
+
+    //     // $data['monthlyVisits'] = monthlyVisits();
+    //     return $data;
+    // }
+
+    // public function getDailyReport($start_date, $end_date)
+    // {
+    //     // $validated = $request->validate([
+    //     //     'start_date' => 'required|date',
+    //     //     'end_date' => 'required|date|after_or_equal:start_date'
+    //     // ]);
+
+
+
+    //     // $startDate = Carbon::parse($start_date)->startOfDay();
+    //     // $endDate = Carbon::parse($end_date)->endOfDay();
+
+    //     // $registeredUsersCount = ActivityLog::where('activity_type', 'account_creation')
+    //     // ->whereBetween('created_at', [$start_date, $end_date])
+    //     // ->distinct('user_id')
+    //     // ->count('user_id');
+
+    //     $activeUsersCount = ActivityLog::whereIn('activity_type', ['login'])
+    //         ->whereBetween('created_at', [$start_date, $end_date])
+    //         ->distinct('user_id')
+    //         ->count('user_id');
+
+    //     return response()->json([
+    //         'registered_users' => 0, //$registeredUsersCount,
+    //         'active_users'     => $activeUsersCount,
+    //     ]);
+
+
+
+
+
+
+    //     // Get registered users per day
+    //     // $registered = ActivityLog::where('activity_type', 'account_creation')
+    //     //     ->whereBetween('created_at', [$start_date, $end_date])
+    //     //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as registered')
+    //     //     ->groupBy('date')
+    //     //     ->get()
+    //     //     ->keyBy('date');
+
+    //     // // Get active users per day
+    //     // $active = ActivityLog::whereBetween('created_at', [$start_date, $end_date])
+    //     //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active')
+    //     //     ->groupBy('date')
+    //     //     ->get()
+    //     //     ->keyBy('date');
+
+    //     // // Generate complete date range
+    //     // $period = CarbonPeriod::create($start_date, $end_date);
+
+    //     // // Build results with all dates in range
+    //     // $results = [];
+    //     // foreach ($period as $date) {
+    //     //     $dateStr = $date->format('d-m-Y');
+    //     //     $results[] = [
+    //     //         'date' => $dateStr,
+    //     //         'registered' => $registered->get($dateStr)->registered ?? 0,
+    //     //         'active' => $active->get($dateStr)->active ?? 0,
+    //     //     ];
+    //     // }
+
+
+
+    //     // return response()->json([
+    //     //     // 'data' => $results,
+    //     //     'meta' => [
+    //     //         'total_registered' => $registered->sum('registered'),
+    //     //         'total_active' => $active->sum('active')
+    //     //     ]
+    //     // ]);
+    // }
+
+
     public function adminApiDefault(Request $request)
     {
-        $period = $request->period;
+        $period = (int) $request->period ?? 7;
+        $startDate = Carbon::today()->subDays($period);
+        $endDate = Carbon::today();
 
-        $data = [];
+        $cacheKey = "admin_dashboard_stats_{$period}";
 
-        $date = \Carbon\Carbon::today()->subDays($period);
+        // Cache for 30 minutes (600 seconds)
+        return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate) {
+            // --- Campaign stats ---
+            $campaignStats = Campaign::where('status', 'Live')
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('COUNT(*) as total, COALESCE(SUM(total_amount), 0) as total_value')
+                ->first();
 
+            // --- Campaign worker stats ---
+            $campaignWorkerSum = CampaignWorker::where('status', 'Approved')
+                ->where('created_at', '>=', $startDate)
+                ->sum('amount');
 
-        $start_date = Carbon::now()->subDays(30)->startOfDay()->format('Y-m-d');
-        $end_date = Carbon::now()->endOfDay()->format('Y-m-d');
+            // --- User stats ---
+            $userStats = User::selectRaw("
+                COUNT(*) as registered,
+                SUM(CASE WHEN is_verified = 1 THEN 1 ELSE 0 END) as verified
+            ")
+                ->where('role', 'regular')
+                ->where('created_at', '>=', $startDate)
+                ->first();
 
-        $camp = Campaign::where('status', 'Live')->where('created_at', '>=', $date)->get();
-        $data['campaigns'] = $camp->count();
-        $data['campaignValue'] = $camp->sum('total_amount');
-        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->where('created_at', '>=', $date)->sum('amount');
-        $data['registeredUser'] = User::where('role', 'regular')->where('created_at', '>=', $date)->count();
-        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->where('created_at', '>=', $date)->count();
-        $data['activeUsers'] =  $this->getDailyReport($start_date, $end_date);
-        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->where('created_at','>=',$date)->sum('point');
-        // $data['loginPointsValue'] = $data['loginPoints']/5;
+            // --- Active users ---
+            // $activeUsers = $this->getDailyReport($startDate, $endDate);
 
-        // $data['monthlyVisits'] = monthlyVisits();
-        return $data;
+            $activeUsersCount = DB::table('user_activities')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->distinct('user_id')
+                ->count('user_id');
+
+            $registeredUsersCount = User::where('role', 'regular')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+            // --- Prepare response ---
+            $data = [
+                'campaigns' => (int) $campaignStats->total,
+                'campaignValue' => (float) $campaignStats->total_value,
+                'campaignWorker' => (float) $campaignWorkerSum,
+                'registeredUser' => (int) $userStats->registered,
+                'verifiedUser' => (int) $userStats->verified,
+                'activeUsers' => $activeUsersCount,
+                'registeredUsers' => $registeredUsersCount,
+            ];
+
+            return $data;
+        });
     }
-
-    public function getDailyReport($start_date, $end_date)
+    public function getDailyReport($startDate, $endDate)
     {
-        // $validated = $request->validate([
-        //     'start_date' => 'required|date',
-        //     'end_date' => 'required|date|after_or_equal:start_date'
-        // ]);
+        $cacheKey = "daily_report_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
 
-
-
-        // $startDate = Carbon::parse($start_date)->startOfDay();
-        // $endDate = Carbon::parse($end_date)->endOfDay();
-
-        // $registeredUsersCount = ActivityLog::where('activity_type', 'account_creation')
-        // ->whereBetween('created_at', [$start_date, $end_date])
-        // ->distinct('user_id')
-        // ->count('user_id');
-
-        $activeUsersCount = ActivityLog::whereIn('activity_type', ['login'])
-            ->whereBetween('created_at', [$start_date, $end_date])
-            ->distinct('user_id')
-            ->count('user_id');
-
-        return response()->json([
-            'registered_users' => 0, //$registeredUsersCount,
-            'active_users'     => $activeUsersCount,
-        ]);
-
-
-
-
-
-
-        // Get registered users per day
-        // $registered = ActivityLog::where('activity_type', 'account_creation')
-        //     ->whereBetween('created_at', [$start_date, $end_date])
-        //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as registered')
-        //     ->groupBy('date')
-        //     ->get()
-        //     ->keyBy('date');
-
-        // // Get active users per day
-        // $active = ActivityLog::whereBetween('created_at', [$start_date, $end_date])
-        //     ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active')
-        //     ->groupBy('date')
-        //     ->get()
-        //     ->keyBy('date');
-
-        // // Generate complete date range
-        // $period = CarbonPeriod::create($start_date, $end_date);
-
-        // // Build results with all dates in range
-        // $results = [];
-        // foreach ($period as $date) {
-        //     $dateStr = $date->format('d-m-Y');
-        //     $results[] = [
-        //         'date' => $dateStr,
-        //         'registered' => $registered->get($dateStr)->registered ?? 0,
-        //         'active' => $active->get($dateStr)->active ?? 0,
-        //     ];
-        // }
-
-
-
-        // return response()->json([
-        //     // 'data' => $results,
-        //     'meta' => [
-        //         'total_registered' => $registered->sum('registered'),
-        //         'total_active' => $active->sum('active')
-        //     ]
-        // ]);
+        // Cache for 30 minutes
+        return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate) {
+            return DB::table('user_activities')
+                ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active_users')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->groupBy(DB::raw('DATE(created_at)'))
+                ->orderBy('date', 'asc')
+                ->get()
+                ->map(function ($row) {
+                    return [
+                        'date' => Carbon::parse($row->date)->format('Y-m-d'),
+                        'active_users' => (int) $row->active_users,
+                    ];
+                });
+        });
     }
-
-
-
-
 
     public function staffHome()
     {

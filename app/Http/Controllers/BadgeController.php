@@ -13,16 +13,19 @@ class BadgeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'email']);
+        //  // $this->middleware(['auth', 'email']);
+        $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         return back();
         $badge = badge();
         return view('user.badge.index', ['badge' => $badge]);
     }
 
-    public function redeemBadge(){
+    public function redeemBadge()
+    {
         return back();
         // $badge = badge();
         // $date = Carbon::now()->subMonth()->format('M, Y');

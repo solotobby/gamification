@@ -341,7 +341,7 @@ if (!function_exists('initializeKorayPay')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('services.env.kora_sec')
+            'Authorization' => 'Bearer ' . config('services.env.kora_sec')
         ])->post('https://api.korapay.com/merchant/api/v1/charges/initialize', $payloadNGN)->throw();
 
         return json_decode($res->getBody()->getContents(), true)['data']['checkout_url'];
@@ -354,8 +354,8 @@ if (!function_exists('verifyKorayPay')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('services.env.kora_sec')
-        ])->get('https://api.korapay.com/merchant/api/v1/charges/'.$referee)->throw();
+            'Authorization' => 'Bearer ' . config('services.env.kora_sec')
+        ])->get('https://api.korapay.com/merchant/api/v1/charges/' . $referee)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2378,10 +2378,10 @@ if (!function_exists('initiateTrasaction')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
-            'amount' => $amount*100,
+            'amount' => $amount * 100,
             'channels' => ['card', 'bank', 'ussd', 'transfer'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
             'currency' => 'NGN',
             'reference' => $ref,
@@ -2401,8 +2401,8 @@ if (!function_exists('verifyTransaction')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
-        ])->get('https://api.paystack.co/transaction/verify/'.$ref)->throw();
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
+        ])->get('https://api.paystack.co/transaction/verify/' . $ref)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2413,7 +2413,7 @@ if (!function_exists('virtualAccount')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/dedicated_account', $data);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2427,7 +2427,7 @@ if (!function_exists('createCustomer')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/customer', $data);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2442,8 +2442,8 @@ if (!function_exists('fetchCustomer')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
-        ])->get('https://api.paystack.co/customer/'.$email);
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
+        ])->get('https://api.paystack.co/customer/' . $email);
 
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2457,8 +2457,8 @@ if (!function_exists('updateCustomer')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('paystack.secretKey')
-        ])->put('https://api.paystack.co/customer/'.$email, $payload);
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
+        ])->put('https://api.paystack.co/customer/' . $email, $payload);
 
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2494,7 +2494,48 @@ if (!function_exists('initiateFlutterwavePayment')) {
     }
 }
 
+if (!function_exists('sendBulkSMS')) {
+    function sendBulkSMS($number, $message)
+    {
+        $res = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post('https://v3.api.termii.com/api/sms/send/bulk', [
+            // "to"=> $number,
+            "to" => $number,
+            "from" => "Freebyz",
+            "sms" => $message,
+            "type" => "plain",
+            "channel" => "generic",
+            "api_key" => config('services.env.termii')
+        ]);
+        Log::info($res->json());
 
+        return $res->json();
+    }
+}
+
+if (!function_exists('formatAndArrange')) {
+    function formatAndArrange($phones)
+    {
+        $formatted = [];
+
+        foreach ($phones as $phone) {
+            if (empty($phone)) {
+                continue;
+            }
+
+            $clean = preg_replace('/\D/', '', $phone);
+            $formattedPhone = Str::startsWith($clean, '234')
+                ? '+' . $clean
+                : '+234' . ltrim($clean, '0');
+
+            $formatted[] = $formattedPhone;
+        }
+
+        return array_values(array_unique($formatted));
+    }
+}
 
 if (!function_exists('getLocation')) {
     function  getLocation()

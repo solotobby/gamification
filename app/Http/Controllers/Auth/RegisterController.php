@@ -160,7 +160,7 @@ class RegisterController extends Controller
         // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         try {
-            Mail::to($user->email)->send(new WelcomeMail($user->name));
+            // Mail::to($user->email)->send(new WelcomeMail($user->name));
         } catch (Exception $e) {
             // Optionally log the error
             Log::error('Failed to send welcome email: ' . $e->getMessage());

@@ -27,26 +27,26 @@ class BannerController extends Controller
         if(auth()->user()->hasRole('admin')){
             $banner = Banner::where('id', $id)->first();
             if($banner->status == false){
-                
+
                  $banner->status = true;
                  $banner->live_state = 'Started';
                  $banner->banner_end_date = Carbon::now()->addDays($banner->duration);
                  $banner->save();
-     
+
                  $user = User::where('id', $banner->user_id)->first();
                  $content = 'Congratulations, your ad is Live on Freebyz.';
                  $subject = 'Ad Banner Placement - Live!';
-                 Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));  
-     
+                //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
                  return back()->with('success', 'Ad Banner is Live!');
             }else{
                  return back()->with('success', 'Ad Banner is Live!');
             }
-     
+
         }else{
             return 'unauthorized';
         }
-       
+
     }
 
     public function rejectBanner($id){
@@ -56,7 +56,7 @@ class BannerController extends Controller
             $banner->live_state = 'Rejected';
             $banner->save();
 
-            
+
 
             $user = User::where('id', $banner->user_id)->first();
             creditWallet($user, 'NGN', $banner->amount);
@@ -79,7 +79,7 @@ class BannerController extends Controller
 
             $content = 'Ad Banner Placement - Rejected!d';
             $subject = 'Sorry, your banner ads was rejected, this is because it is against our advertising regulatory policies. Your ad is in one or all of these categories, Betting Apps, spamming websites, investment apps and links we think are unsafe for our users. ';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             return back()->with('success', 'Ad Banner Rejected!');
 
