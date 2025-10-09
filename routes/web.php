@@ -374,7 +374,7 @@ Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class,
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'userHome'])->name('user.home');
-Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home');
+Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminNewHome'])->name('admin.home');
 Route::get('admin/home/analytics', [\App\Http\Controllers\HomeController::class, 'analytics'])->name('admin.analytics');
 // Route::get('admin/home', [\App\Http\Controllers\HomeController::class, 'adminNewHome'])->name('admin.home');
 Route::get('staff/home', [\App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home');
