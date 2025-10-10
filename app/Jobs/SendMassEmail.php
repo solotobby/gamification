@@ -33,9 +33,9 @@ class SendMassEmail implements ShouldQueue
 
         Log::info($users);
         foreach ($users as $user) {
-            // Mail::to($user->email)->queue(
-            //     new MassMail($user->name, $this->mailMessage, $this->subject)
-            // );
+            Mail::to($user->email)->queue(
+                new MassMail($user->name, $this->mailMessage, $this->subject)
+            );
         }
     }
 }

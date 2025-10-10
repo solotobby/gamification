@@ -52,11 +52,11 @@
         <!-- Sidebar -->
         <!--
           Sidebar Mini Mode - Display Helper classes
-  
+
           Adding 'smini-hide' class to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
           Adding 'smini-show' class to an element will make it visible (opacity: 1) when the sidebar is in mini mode
             If you would like to disable the transition animation, make sure to also add the 'no-transition' class to your element
-  
+
           Adding 'smini-hidden' to an element will hide it when the sidebar is in mini mode
           Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
           Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
@@ -75,7 +75,7 @@
                 </span>
               </a>
               <!-- END Logo -->
-  
+
               <!-- Options -->
               <div>
                 <!-- Toggle Sidebar Style -->
@@ -85,7 +85,7 @@
                   <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
                 </button>
                 <!-- END Toggle Sidebar Style -->
-  
+
                 <!-- Close Sidebar, Visible only on mobile screens -->
                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
                 <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout" data-action="sidebar_close">
@@ -97,7 +97,7 @@
             </div>
           </div>
           <!-- END Side Header -->
-  
+
           <!-- Sidebar Scrolling -->
           <div class="js-sidebar-scroll">
             <!-- Side Navigation -->
@@ -197,7 +197,7 @@
           <!-- END Sidebar Scrolling -->
         </nav>
         <!-- END Sidebar -->
-  
+
         <!-- Header -->
         {{-- <header id="page-header">
           <!-- Header Content -->
@@ -211,7 +211,7 @@
               <!-- END Logo -->
             </div>
             <!-- END Left Section -->
-  
+
             <!-- Right Section -->
             <div class="d-flex align-items-center">
               <!-- Menu -->
@@ -307,7 +307,7 @@
                 </ul>
               </div>
               <!-- END Menu -->
-  
+
               <!-- Toggle Sidebar -->
               <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
               <button type="button" class="btn btn-alt-secondary d-lg-none ms-1" data-toggle="layout" data-action="sidebar_toggle">
@@ -318,7 +318,7 @@
             <!-- END Right Section -->
           </div>
           <!-- END Header Content -->
-  
+
           <!-- Header Search -->
           <div id="page-header-search" class="overlay-header bg-primary">
             <div class="content-header">
@@ -334,7 +334,7 @@
             </div>
           </div>
           <!-- END Header Search -->
-  
+
           <!-- Header Loader -->
           <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
           <div id="page-header-loader" class="overlay-header bg-primary-darker">
@@ -347,10 +347,10 @@
           <!-- END Header Loader -->
         </header> --}}
         <!-- END Header -->
-  
+
         <!-- Main Container -->
         <main id="main-container">
-        
+
             <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo21@2x.jpg')}}');">
                 {{-- <div class="bg-image" style="background-image: url('{{asset('src/assets/media/photos/photo17@2x.jpg')}});"> --}}
                  <div class="bg-black-25">
@@ -359,38 +359,38 @@
                        {{-- <a class="img-link" href="be_pages_generic_profile.html">
                          <img class="img-avatar img-avatar96 img-avatar-thumb" src="assets/media/avatars/avatar10.jpg" alt="">
                        </a> --}}
-                       <h1 class="fw-bold my-2 text-white"> {{ isset($business) ? $business->business_name : 'SignUp your Business for Freebyz Promotion'; }}</h1>
+                       <h1 class="fw-bold my-2 text-white"> {{ isset($business) ? $business->business_name : 'SignUp your Business for Freebyz Promotion' }}</h1>
                        @if($business)
                        <h2 class="h4 fw-bold text-white-75">
-                         
+
                          Business Page <a class="text-primary-lighter" href="{{url('m/'.$business->business_link) }}" target="_blank">{{url('m/'.$business->business_link) }}</a>
                        </h2>
                        @else
-             
-             
+
+
                        @endif
-                      
+
                      </div>
                    </div>
                  </div>
                </div>
-          
+
                <div class="content content-full content-boxed">
-                    
+
                     <div class="col-md-12 col-xl-12">
                         <div class="block block-rounded">
                             <div class="block block-rounded justify-content-center">
-                         
+
                              <div class="block-content block-content-full">
                                 <i class="si si-briefcase me-1"></i> Business Information
                                 <hr>
 
                                  {!! $business->description !!}
                              </div>
-                            
+
                             </div>
                         </div>
-                        
+
                     </div>
 
 
@@ -398,15 +398,15 @@
                     <h2 class="content-heading">
                         <i class="si si-list me-1"></i> My Product
                     </h2>
-                   
+
 
                     <div class="row">
                         @foreach ($business->products as $product)
-                       
-                        
-                            
-                            
-                     <div class="col-md-6 col-xl-4"> 
+
+
+
+
+                     <div class="col-md-6 col-xl-4">
                             <div class="block block-rounded text-center">
                               {{-- <div class="block-content block-content-full bg-image" style="background-image: url({{$product->img}});">
                                  </div> --}}
@@ -425,18 +425,18 @@
                               </div>
                             </div>
                           </div>
-                        @endforeach 
+                        @endforeach
 
-                       
+
                       </div>
 
                       @endif
-                     
+
                       <h2 class="content-heading">
                         <i class="si si-note me-1"></i> Connect With Me
                       </h2>
 
-                      
+
 
                     <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ url('m/'.$business->business_link) }}">
                         <div class="block-content block-content-full d-flex align-items-center justify-content-between">
@@ -448,7 +448,7 @@
                         </p>
                         </div>
                     </a>
-            
+
                   <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->facebook_link == null ? '#' :  $business->facebook_link }}">
                     <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                       <h4 class="fs-base text-primary mb-0">
@@ -466,8 +466,8 @@
                         <i class="fab fa-instagram-square text-muted me-1"></i> Contact Business
                       </h4>
                       <p class="fs-sm text-muted mb-0 ms-2 text-end">
-                       
-                        {{ substr($business->business_phone, 0, 5) . "*****";
+
+                        {{ substr($business->business_phone, 0, 5) . "*****"
  }}
                       </p>
                     </div>
@@ -483,18 +483,18 @@
                       </p>
                     </div>
                   </a>
-            
+
                   <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->x_link == null ? '#' :  $business->x_link }}">
                     <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                       <h4 class="fs-base text-primary mb-0">
-                        <i class="fab fa-x-twitter text-muted me-1"></i> X 
+                        <i class="fab fa-x-twitter text-muted me-1"></i> X
                       </h4>
                       <p class="fs-sm text-muted mb-0 ms-2 text-end">
                         {{ $business->x_link == null ? 'Not set' : $business->x_link }}
                       </p>
                     </div>
                   </a>
-            
+
                   <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->tiktok_link == null ? '#' :  $business->tiktok_link }}">
                     <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                       <h4 class="fs-base text-primary mb-0">
@@ -505,7 +505,7 @@
                       </p>
                     </div>
                   </a>
-            
+
                   <a class="block block-rounded block-link-shadow mb-3" target="_blank" href="{{ $business->pinterest_link == null ? '#' :  $business->pinterest_link }}">
                     <div class="block-content block-content-full d-flex align-items-center justify-content-between">
                       <h4 class="fs-base text-primary mb-0">
@@ -521,18 +521,18 @@
 
 
                </div>
-          
-            
+
+
           </div>
           <!-- END Section 1 -->
-  
-  
-  
-          
+
+
+
+
         </main>
         <!-- END Main Container -->
-  
-       
+
+
         <!-- Footer -->
         <footer id="page-footer" class="footer-static bg-body-extra-light">
           <div class="content py-3">
@@ -551,10 +551,10 @@
         <!-- END Footer -->
       </div>
       <!-- END Page Container -->
-  
+
       <!--
         Dashmix JS
-  
+
         Core libraries and functionality
         webpack is putting everything together at assets/_js/main/app.js
       -->
@@ -563,7 +563,7 @@
       <script src="{{ asset('src/assets/js/plugins/select2/js/select2.full.min.js')}}"></script>
       <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script>
       <script>Dashmix.helpersOnLoad([ 'jq-select2', 'js-simplemde']);</script>
-  
+
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     </body>
@@ -574,4 +574,3 @@
 
 
   </html>
-  

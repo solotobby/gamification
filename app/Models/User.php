@@ -34,6 +34,7 @@ class User extends Authenticatable
         'gender',
         'base_currency',
         'is_verified',
+        'verified_at',
         'email_verified_at'
     ];
 

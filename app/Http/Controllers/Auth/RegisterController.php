@@ -148,7 +148,7 @@ class RegisterController extends Controller
 
 
         // if(env('APP_ENV') == 'production'){
-        //     userLocation('Registeration');
+        //     userLocation('Registration');
         // }
 
         // if ($location == 'Nigeria') {
@@ -160,7 +160,7 @@ class RegisterController extends Controller
         // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         try {
-            // Mail::to($user->email)->send(new WelcomeMail($user->name));
+            Mail::to($user->email)->send(new WelcomeMail($user->name));
         } catch (Exception $e) {
             // Optionally log the error
             Log::error('Failed to send welcome email: ' . $e->getMessage());
@@ -171,7 +171,7 @@ class RegisterController extends Controller
         // generateVirtualAccountOnboarding($user, $phone);
         // }
 
-        // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+        // $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
         // if(env('APP_ENV')  == 'local_test'){
         //    // $curLocation = 'United Kingdom';
         // }else{
@@ -369,7 +369,7 @@ class RegisterController extends Controller
         $user->save();
         Wallet::create(['user_id' => $user->id, 'balance' => '0.00']);
         if ($ref_id != 'null') {
-            \DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
+            DB::table('referral')->insert(['user_id' => $user->id, 'referee_id' => $ref_id]);
         }
 
         return $user;

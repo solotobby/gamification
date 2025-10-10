@@ -1079,6 +1079,7 @@ if (!function_exists('userForeignUpgrade')) {
         if ($debitWallet) {
             $getUser = User::where('id', $user->id)->first();
             $getUser->is_verified = 1;
+            $getUser->verified_at = now();
             $getUser->save();
 
             $usd_Verified =  Usdverified::create(['user_id' => $getUser->id]);
@@ -1190,6 +1191,7 @@ if (!function_exists('userDollaUpgrade')) {
 
         $getUser = User::where('id', $user->id)->first();
         $getUser->is_verified = 1;
+        $getUser->verified_at = now();
         $getUser->save();
 
         $usd_Verified =  Usdverified::create(['user_id' => $getUser->id]);
@@ -1261,6 +1263,7 @@ if (!function_exists('userNairaUpgrade')) {
         $ref = time();
         $userInfo = User::where('id', $user->id)->first();
         $userInfo->is_verified = 1;
+        $userInfo->verified_at = now();
         $userInfo->save();
 
         $transaction =  PaymentTransaction::create([

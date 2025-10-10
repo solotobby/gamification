@@ -16,8 +16,8 @@ class SafeLockController extends Controller
 {
     public function __construct()
     {
-         // $this->middleware(['auth', 'email']);
-        $this->middleware('auth');
+         $this->middleware(['auth', 'email']);
+        // $this->middleware('auth');
     }
 
     /**
@@ -181,7 +181,7 @@ class SafeLockController extends Controller
 
                 $subject = 'Freebyz SafeLock Redeemed';
                 $content = 'Your SafeLock has been redeemed successfully. A total amount of NGN '.$getSafeLock->total_payment.' has been sent to your account.';
-                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
                 return back()->with('success', 'Safelock redeemed, and your account has been funded.');
 
