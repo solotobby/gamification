@@ -19,8 +19,8 @@ class SkillsController extends Controller
 {
     public function __construct()
     {
-         // $this->middleware(['auth', 'email']);
-        $this->middleware('auth');
+         $this->middleware(['auth', 'email']);
+        // $this->middleware('auth');
     }
 
 
