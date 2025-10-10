@@ -15,6 +15,7 @@ use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -790,7 +791,7 @@ class WalletController extends Controller
 
 
 
-            $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
+            $referee = DB::table('referral')->where('user_id',  auth()->user()->id)->first();
 
             if ($referee) {
 

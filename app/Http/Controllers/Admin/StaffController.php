@@ -11,6 +11,7 @@ use App\Models\StaffPayment;
 use App\Models\StaffPaymentLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class StaffController extends Controller
@@ -84,7 +85,7 @@ class StaffController extends Controller
                 $staff_payment = StaffPayment::create(['user_id'=>auth()->user()->id, 'date' => now()->format('F, Y'), 'number_paid' => $staffList->count(), 'total_salary_paid' => $staffList->sum('basic_salary')]);
                 Accounts::create(['user_id' => auth()->user()->id, 'name' => 'Salary for '.now()->format('F, Y'), 'amount' => $staffList->sum('basic_salary'), 'type' => 'Debit', 'description' => 'Staff salary payment for '.now()->format('F, Y'), 'date' => now()->format('Y-m-d')]);
                 foreach($staffList as $list){
-                    \DB::table('staff_paid')->insert(['staff_payment_id' => $staff_payment->id, 'user_id' => $list->id, 'created_at' => now(), 'updated_at' => now()]);
+                    DB::table('staff_paid')->insert(['staff_payment_id' => $staff_payment->id, 'user_id' => $list->id, 'created_at' => now(), 'updated_at' => now()]);
                     StaffPaymentLog::create(['staff_id' => $list->id, 'date' => now()->format('F, Y'), 'amount' => $list->basic_salary, 'payment_type' => 'salary']);
                 }
                 return  back()->with('success', 'Transfers Successfully');
