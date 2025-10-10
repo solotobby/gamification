@@ -52,6 +52,7 @@ class UserController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
         $user->is_verified = true;
+        $user->verified_at = now();
         $user->save(); //naira verification
 
         $usd_Verified = Usdverified::create(['user_id' => auth()->user()->id]);
@@ -128,6 +129,7 @@ class UserController extends Controller
 
                 $user = User::where('id', auth()->user()->id)->first();
                 $user->is_verified = true;
+                $user->verified_at = now();
                 $user->save(); //naira verification
 
                 Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
@@ -285,6 +287,7 @@ class UserController extends Controller
 
         //     $user = User::where('id', auth()->user()->id)->first();
         //     $user->is_verified = true;
+        //     $user->verified_at = now();
         //     $user->save();
         //     Usdverified::create(['user_id' => auth()->user()->id]); //usd verification
         //     $name = SystemActivities::getInitials(auth()->user()->name);
@@ -317,6 +320,8 @@ class UserController extends Controller
         //         SystemActivities::activityLog(auth()->user(), 'account_verification', $name .' account verification', 'regular');
         //         $user = User::where('id', auth()->user()->id)->first();
         //         $user->is_verified = true;
+        //         $user->verified_at = now();
+
         //         $user->save();
 
         //         $referee = \DB::table('referral')->where('user_id',  auth()->user()->id)->first();
@@ -433,6 +438,7 @@ class UserController extends Controller
 
         //         $user = User::where('id', auth()->user()->id)->first();
         //         $user->is_verified = true;
+            //     $user->verified_at = now();
         //         $user->save();
         //         return redirect('success');
         //     }
@@ -459,6 +465,7 @@ class UserController extends Controller
 
         //  $user = User::where('id', auth()->user()->id)->first();
         //  $user->is_verified = true;
+        //  $user->verified_at = now();
         //  $user->save();
 
 
