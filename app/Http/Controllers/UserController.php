@@ -106,7 +106,7 @@ class UserController extends Controller
 
             // Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
 
-            //  Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
+             Mail::to(auth()->user()->email)->send(new UpgradeUser($user));
         return redirect('success');
 
     }

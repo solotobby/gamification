@@ -87,7 +87,7 @@ class Kernel extends ConsoleKernel
             // $user = User::where('id', 1)->first();
             foreach($usersLastWeek as $user){
                 $subject = 'Fresh Campaign';
-                // Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
+                Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
             }
 
         })->daily(); //does this daily
@@ -187,7 +187,7 @@ class Kernel extends ConsoleKernel
             $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
 
-            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
 
             // $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';

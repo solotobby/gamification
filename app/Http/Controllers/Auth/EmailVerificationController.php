@@ -27,7 +27,7 @@ class EmailVerificationController extends Controller
         ]);
 
         try {
-            // Mail::to($user->email)->send(new VerificationCodeMail($code, $user->name));
+            Mail::to($user->email)->send(new VerificationCodeMail($code, $user->name));
 
             return view('auth.email_verification', [
                 'success' => 'Verification code sent successfully.'

@@ -145,7 +145,7 @@ class WalletController extends Controller
 
                 $subject = 'Wallet Credited';
                 $content = 'Congratulations, your wallet has been credited with ₦' .$verifyPayment->amount;
-                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
                 return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
             } else {
