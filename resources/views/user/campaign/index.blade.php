@@ -82,14 +82,10 @@
                         @endif --}}
                                         {{ baseCurrency() }}
                                         {{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}
-                                        {{-- {{$list->currency}} {{ $list->campaign_amount }} --}}
+                                      
                                     </td>
                                     <td>
-                                        {{-- @if ($list->currency == 'NGN')
-                        &#8358;{{ number_format($list->total_amount) }}
-                        @else
-                        ${{ number_format($list->total_amount, 2) }}
-                        @endif --}}
+                                        
 
                                         {{ baseCurrency() }}
                                         {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
@@ -115,9 +111,9 @@
                                             <a href="{{ url('campaign/activities/pause/' . $list->job_id) }}"
                                                 class="btn btn-warning btn-sm"> Pause Campaign </a>
                                         @endif
-                                        <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal"
+                                        {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#modal-default-popout-{{ $list->job_id }}">Add More
-                                            Workers</button>
+                                            Workers</button> --}}
                                         {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Modify Workers</a>  --}}
                                         {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Edit</a>  --}}
                                     </td>
@@ -143,13 +139,7 @@
                                                 {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
                                                 <br>
 
-                                                {{-- @if ($list->currency == 'NGN')
-                          Value per Job  - {{$list->currency}} {{ number_format($list->campaign_amount) }} <br>
-                          Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
-                          @else
-                          Value per Job  - ${{ number_format($list->campaign_amount, 2) }} <br>
-                          Total Value of Job  - ${{ number_format($list->total_amount, 2) }} <br>
-                          @endif --}}
+                                              
                                                 <hr>
                                                 <form action="{{ route('addmore.workers') }}" method="POST">
                                                     @csrf
@@ -160,8 +150,19 @@
                                                             required>
                                                     </div>
                                                     <input type="hidden" name="id" value="{{ $list->job_id }}">
-                                                    <input type="hidden" name="amount"
+                                                    <input type="hidden" name="amount" id="amount"
                                                         value="{{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}">
+                                                    
+                                                        @php
+                                                            $walletbalance = 5000;
+                                                            $number_of_staff = 50;
+                                                            $price_perjob = 30;
+
+                                                            $total_cost = $number_of_staff * $price_perjob;
+                                                            $disableButton = $total_cost > $walletbalance;
+                                                        @endphp
+
+
                                                     <div class="mb-4">
                                                         <button class="btn btn-primary" type="submit">Add</button>
                                                     </div>
@@ -195,4 +196,6 @@
 
 @section('script')
     <script src="{{ asset('src/assets/js/pages/be_ui_progress.min.js') }}"></script>
+
+
 @endsection
