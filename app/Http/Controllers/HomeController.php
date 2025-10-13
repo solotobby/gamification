@@ -504,7 +504,7 @@ class HomeController extends Controller
             // --- Active users ---
             // $activeUsers = $this->getDailyReport($startDate, $endDate);
 
-            $activeUsersCount = DB::table('user_activities')
+            $activeUsersCount = DB::table('activity_logs')
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->distinct('user_id')
                 ->count('user_id');
@@ -532,7 +532,7 @@ class HomeController extends Controller
 
         // Cache for 30 minutes
         return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate) {
-            return DB::table('user_activities')
+            return DB::table('activity_logs')
                 ->selectRaw('DATE(created_at) as date, COUNT(DISTINCT user_id) as active_users')
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->groupBy(DB::raw('DATE(created_at)'))

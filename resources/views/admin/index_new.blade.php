@@ -48,9 +48,9 @@
 
             <br> Total Pending Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPendingPayout,2) }}</a>
 
-            @if(env('APP_ENV') == 'production')
+            {{-- @if(env('APP_ENV') == 'production')
                 <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
-            @endif
+            @endif --}}
         </p>
       </div>
       <div class="mt-4 mt-md-0">
@@ -164,8 +164,8 @@
     <!-- View Analytics Button -->
     <div class="row mt-4">
       <div class="col-12 text-center">
-        {{-- <a href="{{ url('admin/home/analytics') }}?period={{ $period }}" class="btn btn-lg btn-primary"> --}}
-        <a href="" class="btn btn-lg btn-primary">
+        <a href="{{ url('admin/home/analytics') }}?period={{ $period }}" class="btn btn-lg btn-primary">
+        {{-- <a href="" class="btn btn-lg btn-primary"> --}}
           <i class="fa fa-chart-bar me-2"></i>
           View Detailed Analytics
         </a>
