@@ -295,13 +295,13 @@ class HomeController extends Controller
         // ');
 
         // Single optimized query for all withdrawal metrics using period dates
-        $withdrawalMetrics = DB::table('withrawals')
-            ->selectRaw('
-            SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
-            SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
-            SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
-        ', [$startDate, $endDate])
-            ->first();
+        // $withdrawalMetrics = DB::table('withrawals')
+        //     ->selectRaw('
+        //     SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
+        //     SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
+        //     SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
+        // ', [$startDate, $endDate])
+        //     ->first();
 
         // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
 
