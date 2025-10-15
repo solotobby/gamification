@@ -315,11 +315,11 @@ class HomeController extends Controller
 
         return view('admin.index_new', [
             // 'wallet' => $wallet,
-            'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
-            'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
-            'transactions' => $transactions ?? 0.00,
-            'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
-            'av_count' => 0,
+            // 'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
+            // 'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
+            // 'transactions' => $transactions ?? 0.00,
+            // 'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
+            // 'av_count' => 0,
             'period' => $period
         ]);
     }
