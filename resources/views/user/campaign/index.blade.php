@@ -82,14 +82,10 @@
                         @endif --}}
                                         {{ baseCurrency() }}
                                         {{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}
-                                        {{-- {{$list->currency}} {{ $list->campaign_amount }} --}}
+                                      
                                     </td>
                                     <td>
-                                        {{-- @if ($list->currency == 'NGN')
-                        &#8358;{{ number_format($list->total_amount) }}
-                        @else
-                        ${{ number_format($list->total_amount, 2) }}
-                        @endif --}}
+                                        
 
                                         {{ baseCurrency() }}
                                         {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
@@ -115,11 +111,13 @@
                                             <a href="{{ url('campaign/activities/pause/' . $list->job_id) }}"
                                                 class="btn btn-warning btn-sm"> Pause Campaign </a>
                                         @endif
-                                        <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#modal-default-popout-{{ $list->job_id }}">Add More
-                                            Workers</button>
-                                        {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Modify Workers</a>  --}}
-                                        {{-- <a href="{{ url('campaign/'.$list->job_id.'/edit') }}" class="btn btn-warning btn-sm">Edit</a>  --}}
+                                        <a type="button" class="btn btn-alt-primary btn-sm" href="{{ url('campaign/' . $list->job_id .'/edit') }}">
+                                            Add More Workers
+                                            </a>
+                                        {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modal-default-popout-{{ $list->job_id }}">
+                                            Add More Workers
+                                        </button> --}}
                                     </td>
                                 </tr>
 
@@ -143,28 +141,39 @@
                                                 {{ currencyConverter($list->currency, baseCurrency(), $list->total_amount) }}
                                                 <br>
 
-                                                {{-- @if ($list->currency == 'NGN')
-                          Value per Job  - {{$list->currency}} {{ number_format($list->campaign_amount) }} <br>
-                          Total Value of Job  - &#8358;{{ number_format($list->total_amount) }} <br>
-                          @else
-                          Value per Job  - ${{ number_format($list->campaign_amount, 2) }} <br>
-                          Total Value of Job  - ${{ number_format($list->total_amount, 2) }} <br>
-                          @endif --}}
+                                            
+                                              
                                                 <hr>
                                                 <form action="{{ route('addmore.workers') }}" method="POST">
                                                     @csrf
                                                     <div class="mb-4">
                                                         <label class="form-label" for="post-files">Number of
                                                             Worker</small></label>
-                                                        <input class="form-control" name="new_number" type="number"
+                                                        <input class="form-control" name="new_number" id="staff" type="number"
                                                             required>
                                                     </div>
                                                     <input type="hidden" name="id" value="{{ $list->job_id }}">
-                                                    <input type="hidden" name="amount"
+                                                    <input type="text" name="amount" 
                                                         value="{{ currencyConverter($list->currency, baseCurrency(), $list->campaign_amount) }}">
+                                                    
+                                                        <input type="text" name="wallet_balance" id="wallet_balance" 
+                                                        value="{{ walletBalance() }}">
+
+                                                        <input type="text" name="campaign_amount" id="campaignAmount" 
+                                                        value="{{ $list->campaign_amount }}">
+                                                       
+                                                        <input type="text" name="currency" id="currency" value="{{ baseCurrency() }}">
+
+                                                  <input type="text" id="total" name="total" value="0">
+
+                                                         <p id="totalDisplay" class="mb-2 fw-bold">Total: {{ baseCurrency() }} 0</p>
+
                                                     <div class="mb-4">
-                                                        <button class="btn btn-primary" type="submit">Add</button>
+                                                        <button class="btn btn-secondary" id="addBtn" type="submit">Add More Worker</button>
                                                     </div>
+
+                                                     <p id="message" class="text-danger mt-2" style="display:none;"></p>
+
                                                 </form>
 
 
@@ -195,4 +204,64 @@
 
 @section('script')
     <script src="{{ asset('src/assets/js/pages/be_ui_progress.min.js') }}"></script>
+
+<script>
+    
+    const pricePerJob = document.getElementById('campaignAmount').value;
+
+    const walletBalance = document.getElementById('wallet_balance').value;
+    const staffInput = document.getElementById('staff');
+    const addBtn = document.getElementById('addBtn');
+    const message = document.getElementById('message');
+    const totalDisplay = document.getElementById('totalDisplay');
+     const totalInput = document.getElementById('total');
+
+    const currencyElement = document.getElementById('currency');
+    const currency = String(currencyElement?.value || 'USD'); // default fallback
+
+    function checkBalance() {
+        const staffCount = parseInt(staffInput.value) || 0;
+        const totalCost = staffCount * pricePerJob;
+
+        // Update total display
+        // totalDisplay.textContent = `Total: $${totalCost.toLocaleString()}`;
+        totalDisplay.textContent = `Total: ${currency}${totalCost.toLocaleString()}`;
+         totalInput.value = totalCost; // numeric value stored for form submission
+
+        // Validation
+        if (staffCount <= 0) {
+            addBtn.disabled = true;
+            message.textContent = 'Please enter a valid number of staff.';
+            message.style.display = 'block';
+            return;
+        }
+
+        if (totalCost > walletBalance) {
+            addBtn.disabled = true;
+            const deficit = totalCost - walletBalance;
+            // message.textContent = `Insufficient balance — you need $${deficit.toLocaleString()} more.`;
+             message.textContent = `Insufficient balance — you need ${currency} ${deficit.toLocaleString()} more.`;
+            message.style.display = 'block';
+        } else {
+            addBtn.disabled = false;
+            message.style.display = 'none';
+        }
+    }
+
+    // Run check when typing
+    staffInput.addEventListener('keyup', checkBalance);
+    staffInput.addEventListener('input', checkBalance);
+
+    // Disabled by default
+    // addBtn.disabled = true;
+    // totalDisplay.textContent = `Total: ${currency}0`;
+
+     addBtn.disabled = true;
+    totalDisplay.textContent = `${currency}0`;
+    totalInput.value = 0;
+    
+
+    
+</script>
+
 @endsection
