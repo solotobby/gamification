@@ -295,13 +295,13 @@ class HomeController extends Controller
         // ');
 
         // Single optimized query for all withdrawal metrics using period dates
-        $withdrawalMetrics = DB::table('withrawals')
-            ->selectRaw('
-            SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
-            SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
-            SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
-        ', [$startDate, $endDate])
-            ->first();
+        // $withdrawalMetrics = DB::table('withrawals')
+        //     ->selectRaw('
+        //     SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
+        //     SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
+        //     SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
+        // ', [$startDate, $endDate])
+        //     ->first();
 
         // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
 
@@ -315,11 +315,11 @@ class HomeController extends Controller
 
         return view('admin.index_new', [
             // 'wallet' => $wallet,
-            'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
-            'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
-            'transactions' => $transactions ?? 0.00,
-            'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
-            'av_count' => 0,
+            // 'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
+            // 'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
+            // 'transactions' => $transactions ?? 0.00,
+            // 'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
+            // 'av_count' => 0,
             'period' => $period
         ]);
     }
