@@ -9,22 +9,22 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->total_balance,2)}}</a>
-            <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a>
-            <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a>
+          {{-- Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->total_balance,2)}}</a> --}}
+            {{-- <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a> --}}
+            {{-- <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a> --}}
             <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>
 
             {{-- <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a> --}}
-            <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
+            {{-- <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a> --}}
             <br> Period Payment (Last {{ $period }} days) - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($periodPayment,2)}}</a>
 
-            <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a>
+            {{-- <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a> --}}
 
             <br> Total Pending Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPendingPayout,2) }}</a>
 
-            {{-- @if(env('APP_ENV') == 'production')
+            @if(env('APP_ENV') == 'production')
                 <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
-            @endif --}}
+            @endif
         </p>
       </div>
       <div class="mt-4 mt-md-0">

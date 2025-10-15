@@ -35,7 +35,8 @@ class User extends Authenticatable
         'base_currency',
         'is_verified',
         'verified_at',
-        'email_verified_at'
+        'email_verified_at',
+        'email_verification_attempted_at'
     ];
 
     /**

@@ -29,6 +29,11 @@ class EmailVerificationController extends Controller
         try {
             Mail::to($user->email)->send(new VerificationCodeMail($code, $user->name));
 
+            if (is_null($user->email_verification_attempted_at)) {
+                $user->email_verification_attempted_at = now()->addDays(60);
+                $user->save();
+            }
+
             return view('auth.email_verification', [
                 'success' => 'Verification code sent successfully.'
             ]);
