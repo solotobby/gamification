@@ -240,7 +240,7 @@ $(document).ready(function(){
         $('#loading-overlay').css('display', 'flex');
 
         // Reload page with period parameter
-        window.location.href = '{{ url("admin/analytics") }}?period=' + period;
+        window.location.href = '{{ url("admin/home/analytics") }}?period=' + period;
     });
 
     // Hide loading overlay after page loads

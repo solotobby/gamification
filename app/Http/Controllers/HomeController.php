@@ -286,13 +286,13 @@ class HomeController extends Controller
         $startDate = Carbon::now()->subDays($period)->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
-        $wallet = DB::select('
-            SELECT
-                SUM(balance) AS total_balance,
-                SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
-                SUM(usd_balance) AS total_usd_balance
-            FROM wallets
-        ');
+        // $wallet = DB::select('
+        //     SELECT
+        //         SUM(balance) AS total_balance,
+        //         SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
+        //         SUM(usd_balance) AS total_usd_balance
+        //     FROM wallets
+        // ');
 
         // Single optimized query for all withdrawal metrics using period dates
         $withdrawalMetrics = DB::table('withrawals')
@@ -314,7 +314,7 @@ class HomeController extends Controller
         //     ', ['successful', $startDate, $endDate]);
 
         return view('admin.index_new', [
-            'wallet' => $wallet,
+            // 'wallet' => $wallet,
             'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
             'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
             'transactions' => $transactions ?? 0.00,

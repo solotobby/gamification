@@ -1,32 +1,6 @@
 @extends('layouts.main.master')
-{{-- @section('style')
-<style>
-#loading-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-}
-</style>
-@endsection --}}
 
 @section('content')
-
-<!-- Loading Overlay -->
-{{-- <div id="loading-overlay">
-    <div style="text-align: center; color: white;">
-        <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-3">Loading dashboard data...</p>
-    </div>
-</div> --}}
 
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
@@ -35,22 +9,22 @@
           Admin Dashboard
         </h1>
         <p class="fw-medium mb-0 text-muted">
-          Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->total_balance,2)}}</a>
-            <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a>
-            <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a>
+          {{-- Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->total_balance,2)}}</a> --}}
+            {{-- <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a> --}}
+            {{-- <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a> --}}
             <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>
 
             {{-- <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a> --}}
-            <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
+            {{-- <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a> --}}
             <br> Period Payment (Last {{ $period }} days) - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($periodPayment,2)}}</a>
 
-            <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a>
+            {{-- <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a> --}}
 
             <br> Total Pending Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPendingPayout,2) }}</a>
 
-            {{-- @if(env('APP_ENV') == 'production')
+            @if(env('APP_ENV') == 'production')
                 <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
-            @endif --}}
+            @endif
         </p>
       </div>
       <div class="mt-4 mt-md-0">
