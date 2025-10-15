@@ -82,7 +82,9 @@
                 &#8226; Country: {{ $info->country }}<br>
                 &#8226; Is Blocked: {{ @$info->profile->is_celebrity == true ? 'Yes' : 'No' }}<br>
                 &#8226; Phone Number Verified: {{ @$info->profile->phone_verified == true ? 'Yes' : 'No' }}<br>
+                &#8226; Email Verification: {{ @$info->email_verified_at == null ? 'Email Not Verified' : 'Email Verified' }}<br>
                 &#8226; Date Joined: {{ @$info->created_at }}<br>
+               
               </address>
             </div>
            
