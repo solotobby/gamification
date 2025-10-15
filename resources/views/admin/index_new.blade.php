@@ -1,32 +1,6 @@
 @extends('layouts.main.master')
-{{-- @section('style')
-<style>
-#loading-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-}
-</style>
-@endsection --}}
 
 @section('content')
-
-<!-- Loading Overlay -->
-{{-- <div id="loading-overlay">
-    <div style="text-align: center; color: white;">
-        <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-3">Loading dashboard data...</p>
-    </div>
-</div> --}}
 
 <div class="content">
     <div class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-start">
