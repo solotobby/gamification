@@ -431,22 +431,158 @@ class AdminController extends Controller
         //->paginate(10);
         return view('admin.users.campaign_creator', ['verifiedUsers' => $usersWithPosts]);
     }
-    public function verifiedUserList()
+    // public function verifiedUserList()
+    // {
+    //     $verifiedUsers = User::where(
+    //         'role',
+    //         'regular'
+    //     )->where(
+    //         'is_verified',
+    //         '1'
+    //     )->latest()
+    //         ->paginate(100);
+
+    //     return view(
+    //         'admin.verified_user',
+    //         ['verifiedUsers' => $verifiedUsers]
+    //     );
+    // }
+
+    // Controller
+    public function verifiedUserList(Request $request)
     {
-        $verifiedUsers = User::where(
-            'role',
-            'regular'
-        )->where(
-            'is_verified',
-            '1'
-        )->latest()
+        $query = User::where('role', 'regular')
+            ->where('is_verified', '1');
+
+        // Build income subquery with date filter
+        $incomeSubquery = PaymentTransaction::selectRaw('user_id, SUM(amount) as total_income')
+            ->where('tx_type', 'Credit')
+            ->where('user_type', 'regular')
+            ->where('status', 'successful');
+
+        if ($request->filled('date_range')) {
+            $days = match ($request->date_range) {
+                'last_30' => 30,
+                'last_6_months' => 180,
+                'last_1_year' => 365,
+                default => null
+            };
+
+            if ($days) {
+                $incomeSubquery->whereDate('created_at', '>=', now()->subDays($days));
+            }
+        }
+
+        $incomeSubquery->groupBy('user_id');
+
+        // Join with income subquery
+        $query->leftJoinSub($incomeSubquery, 'income_calc', function ($join) {
+            $join->on('users.id', '=', 'income_calc.user_id');
+        });
+
+        // Filter by amount range
+        if ($request->filled('amount_range')) {
+            [$min, $max] = match ($request->amount_range) {
+                'below_10k' => [0, 9999],
+                '10k_30k' => [10000, 30000],
+                '30k_70k' => [30000, 70000],
+                '70k_above' => [70000, PHP_INT_MAX],
+                default => [0, PHP_INT_MAX]
+            };
+
+            $query->whereBetween('income_calc.total_income', [$min, $max]);
+        }
+
+        $verifiedUsers = $query->selectRaw('users.*, COALESCE(income_calc.total_income, 0) as income')
+            ->latest('users.id')
             ->paginate(100);
 
-        return view(
-            'admin.verified_user',
-            ['verifiedUsers' => $verifiedUsers]
-        );
+        return view('admin.verified_user_new', ['verifiedUsers' => $verifiedUsers]);
     }
+
+    public function downloadVerifiedUsersCsv(Request $request)
+    {
+        $incomeSubquery = PaymentTransaction::selectRaw('user_id, SUM(amount) as total_income')
+            ->where('tx_type', 'Credit')
+            ->where('user_type', 'regular')
+            ->where('status', 'successful');
+
+        if ($request->filled('date_range')) {
+            $days = match ($request->date_range) {
+                'last_30' => 30,
+                'last_6_months' => 180,
+                'last_1_year' => 365,
+                default => null
+            };
+
+            if ($days) {
+                $incomeSubquery->whereDate('created_at', '>=', now()->subDays($days));
+            }
+        }
+
+        $incomeSubquery->groupBy('user_id');
+
+        $query = User::where('role', 'regular')
+            ->where('is_verified', '1')
+            ->leftJoinSub($incomeSubquery, 'income_calc', function ($join) {
+                $join->on('users.id', '=', 'income_calc.user_id');
+            });
+
+        if ($request->filled('amount_range')) {
+            [$min, $max] = match ($request->amount_range) {
+                'below_10k' => [0, 9999],
+                '10k_30k' => [10000, 30000],
+                '30k_70k' => [30000, 70000],
+                '70k_above' => [70000, PHP_INT_MAX],
+                default => [0, PHP_INT_MAX]
+            };
+
+            $query->whereBetween('income_calc.total_income', [$min, $max]);
+        }
+
+        $users = $query->selectRaw('users.*, COALESCE(income_calc.total_income, 0) as income')
+            ->latest('users.id')
+            ->with('wallet')
+            ->get();
+
+        $fileName = 'verified_users_' . now()->format('Y-m-d_H-i-s') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=$fileName",
+        ];
+
+        $callback = function () use ($users, $request) {
+            $file = fopen('php://output', 'w');
+             $dateRangeLabel = match($request->date_range) {
+            'last_30' => 'Last 30 Days',
+            'last_6_months' => 'Last 6 Months',
+            'last_1_year' => 'Last 1 Year',
+            default => 'All Time'
+        };
+            fputcsv($file, ["Users with income from: $dateRangeLabel"]);
+            fputcsv($file, []); // Empty row for spacing
+
+            fputcsv($file, ['#', 'Name', 'Email', 'Phone', 'Income', 'Currency', 'Channel']);
+
+            $i = 1;
+            foreach ($users as $user) {
+                fputcsv($file, [
+                    $i++,
+                    $user->name,
+                    $user->email,
+                    $user->phone,
+                    $user->income,
+                    $user->wallet->base_currency ?? 'NGN',
+                    $user->source,
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function usdVerifiedUserList()
     {
         $verifiedUsers = Usdverified::latest()->paginate(100);

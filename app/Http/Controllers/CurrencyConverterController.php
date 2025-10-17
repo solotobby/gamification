@@ -128,9 +128,7 @@ class CurrencyConverterController extends Controller
                 ]);
             }
 
-
-
-           return back()->with('success', 'Conversioin Successful');
+           return back()->with('success', 'Conversion Successful');
         }
 
 

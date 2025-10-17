@@ -66,7 +66,8 @@ class User extends Authenticatable
         return $this->role == $role;
     }
 
-    public function staff(){
+    public function staff()
+    {
         return $this->hasOne(Staff::class);
     }
 
@@ -114,19 +115,23 @@ class User extends Authenticatable
         return $this->hasOne(BankInformation::class,  'user_id');
     }
 
-    public function myFeedBackList(){
+    public function myFeedBackList()
+    {
         return $this->hasMany(Feedback::class,  'user_id');
     }
 
-    public function myFeedBackReplies(){
+    public function myFeedBackReplies()
+    {
         return $this->hasMany(FeedbackReplies::class,  'user_id');
     }
 
-    public function interests(){
+    public function interests()
+    {
         return $this->belongsToMany(Preference::class, 'user_interest', 'user_id');
     }
 
-    public function accountInfo(){
+    public function accountInfo()
+    {
         return $this->hasOne(AccountInformation::class, 'user_id');
     }
 
@@ -135,32 +140,47 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
-    public function profile(){
+    public function profile()
+    {
         return $this->hasOne(Profile::class, 'user_id');
     }
 
-    public function USD_verified(){
+    public function USD_verified()
+    {
         return $this->hasOne(Usdverified::class, 'user_id');
     }
 
-    public function USD_verifiedList(){
+    public function USD_verifiedList()
+    {
         return $this->hasOne(Usdverified::class, 'user_id');
     }
-    public function virtualAccount(){
+    public function virtualAccount()
+    {
         return $this->hasOne(VirtualAccount::class, 'user_id');
     }
 
-    public function myAttemptedJobs(){
+    public function myAttemptedJobs()
+    {
         return $this->hasMany(CampaignWorker::class, 'user_id');
     }
 
-    public function myRating(){
+    public function myRating()
+    {
         return $this->hasMany(Rating::class, 'campaign_id');
     }
 
-    public function skill(){
+    public function skill()
+    {
         return $this->hasOne(SkillAsset::class, 'user_id');
     }
 
+    public function paymentTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
 
+    public function getIncomeAttribute()
+    {
+        return $this->attributes['income'] ?? 0;
+    }
 }
