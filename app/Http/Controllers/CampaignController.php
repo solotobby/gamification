@@ -813,83 +813,84 @@ class CampaignController extends Controller
 
     public function addMoreWorkers(Request $request)
     {
-        
-        $request->validate([
-            'new_number' => 'required|numeric|min:1',
-            'amount' => 'required|numeric',
-            'revenue' => 'required|numeric',
-            'total' => 'required|numeric',
-            'id' => 'required'
-        ]);
+            return back()->with('error', 'Error adding more worker');
 
-        $campaign = Campaign::where('job_id', $request->id)->first();
-        $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $request->total);
+        // $request->validate([
+        //     'new_number' => 'required|numeric|min:1',
+        //     'amount' => 'required|numeric',
+        //     'revenue' => 'required|numeric',
+        //     'total' => 'required|numeric',
+        //     'id' => 'required'
+        // ]);
 
-        if ($walletValidity) {
-            $debitWallet = debitWallet(auth()->user(), baseCurrency(), $request->total);
-            if ($debitWallet) {
-                $basicAmount = $request->new_number * $request->campaign_amount;
-                $campaign->number_of_staff += $request->new_number;
-                $campaign->total_amount += $basicAmount;
-                $campaign->is_completed = false;
-                $campaign->save();
+        // $campaign = Campaign::where('job_id', $request->id)->first();
+        // $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $request->total);
 
-                $currency = baseCurrency();
-                if (baseCurrency() == 'NGN') {
-                    $channel = 'paystack';
-                } elseif (baseCurrency() == 'USD') {
-                    $channel = 'paypal';
-                } else {
-                    $channel = 'flutterwave';
-                }
-                $ref = time();
+        // if ($walletValidity) {
+        //     $debitWallet = debitWallet(auth()->user(), baseCurrency(), $request->total);
+        //     if ($debitWallet) {
+        //         $basicAmount = $request->new_number * $request->campaign_amount;
+        //         $campaign->number_of_staff += $request->new_number;
+        //         $campaign->total_amount += $basicAmount;
+        //         $campaign->is_completed = false;
+        //         $campaign->save();
 
-                PaymentTransaction::create([
-                    'user_id' => auth()->user()->id,
-                    'campaign_id' => $campaign->id,
-                    'reference' => $ref,
-                    'amount' => $basicAmount,
-                    'balance' => walletBalance(auth()->user()->id),
-                    'status' => 'successful',
-                    'currency' => $currency,
-                    'channel' => $channel,
-                    'type' => 'added_more_worker',
-                    'description' => 'Added worker for ' . $campaign->post_title . ' campaign',
-                    'tx_type' => 'Debit',
-                    'user_type' => 'regular'
-                ]);
+        //         $currency = baseCurrency();
+        //         if (baseCurrency() == 'NGN') {
+        //             $channel = 'paystack';
+        //         } elseif (baseCurrency() == 'USD') {
+        //             $channel = 'paypal';
+        //         } else {
+        //             $channel = 'flutterwave';
+        //         }
+        //         $ref = time();
 
-                //credit admin
-                $adminUser = User::where('id', 1)->first();
-                $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $request->revenue);
-                if ($creditAdmin) {
-                    PaymentTransaction::create([
-                        'user_id' => '1',
-                        'campaign_id' => $campaign->id,
-                        'reference' => $ref,
-                        'amount' => $request->revenue,
-                        'balance' => walletBalance('1'),
-                        'status' => 'successful',
-                        'currency' => $currency,
-                        'channel' => $channel,
-                        'type' => 'campaign_revenue_add',
-                        'description' => 'Revenue for worker added on ' . $campaign->post_title . ' campaign',
-                        'tx_type' => 'Credit',
-                        'user_type' => 'admin'
-                    ]);
-                }
+        //         PaymentTransaction::create([
+        //             'user_id' => auth()->user()->id,
+        //             'campaign_id' => $campaign->id,
+        //             'reference' => $ref,
+        //             'amount' => $basicAmount,
+        //             'balance' => walletBalance(auth()->user()->id),
+        //             'status' => 'successful',
+        //             'currency' => $currency,
+        //             'channel' => $channel,
+        //             'type' => 'added_more_worker',
+        //             'description' => 'Added worker for ' . $campaign->post_title . ' campaign',
+        //             'tx_type' => 'Debit',
+        //             'user_type' => 'regular'
+        //         ]);
+
+        //         //credit admin
+        //         $adminUser = User::where('id', 1)->first();
+        //         $creditAdmin = creditWallet($adminUser, $adminUser->wallet->base_currency, $request->revenue);
+        //         if ($creditAdmin) {
+        //             PaymentTransaction::create([
+        //                 'user_id' => '1',
+        //                 'campaign_id' => $campaign->id,
+        //                 'reference' => $ref,
+        //                 'amount' => $request->revenue,
+        //                 'balance' => walletBalance('1'),
+        //                 'status' => 'successful',
+        //                 'currency' => $currency,
+        //                 'channel' => $channel,
+        //                 'type' => 'campaign_revenue_add',
+        //                 'description' => 'Revenue for worker added on ' . $campaign->post_title . ' campaign',
+        //                 'tx_type' => 'Credit',
+        //                 'user_type' => 'admin'
+        //             ]);
+        //         }
 
 
-                $content = "You have successfully increased the number of your workers.";
-                $subject = "Add More Worker";
-                $user = User::where('id', auth()->user()->id)->first();
-                Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
+        //         $content = "You have successfully increased the number of your workers.";
+        //         $subject = "Add More Worker";
+        //         $user = User::where('id', auth()->user()->id)->first();
+        //         Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-                return back()->with('success', $request->new_number . ' Worker(s) Added Successfully');
-            }
-        } else {
-            return back()->with('error', 'You do not have suficient funds in your wallet');
-        }
+        //         return back()->with('success', $request->new_number . ' Worker(s) Added Successfully');
+        //     }
+        // } else {
+        //     return back()->with('error', 'You do not have suficient funds in your wallet');
+        // }
     }
 
     public function addMoreWorkersDpreciated(Request $request)
