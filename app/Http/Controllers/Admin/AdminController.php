@@ -448,7 +448,7 @@ class AdminController extends Controller
     //     );
     // }
 
-     public function verifiedUserList(Request $request)
+    public function verifiedUserList(Request $request)
     {
         $cacheKey = $this->getCacheKey($request);
         $page = $request->get('page', 1);
@@ -487,7 +487,7 @@ class AdminController extends Controller
 
         $callback = function () use ($users, $request) {
             $file = fopen('php://output', 'w');
-            $dateRangeLabel = match($request->date_range) {
+            $dateRangeLabel = match ($request->date_range) {
                 'last_30' => 'Last 30 Days',
                 'last_6_months' => 'Last 6 Months',
                 'last_1_year' => 'Last 1 Year',
@@ -544,7 +544,7 @@ class AdminController extends Controller
             ->where('status', 'successful');
 
         if ($request->filled('date_range')) {
-            $days = match($request->date_range) {
+            $days = match ($request->date_range) {
                 'last_30' => 30,
                 'last_6_months' => 180,
                 'last_1_year' => 365,
@@ -563,7 +563,7 @@ class AdminController extends Controller
         });
 
         if ($request->filled('amount_range')) {
-            [$min, $max] = match($request->amount_range) {
+            [$min, $max] = match ($request->amount_range) {
                 'below_10k' => [0, 9999],
                 '10k_30k' => [10000, 30000],
                 '30k_70k' => [30000, 70000],
