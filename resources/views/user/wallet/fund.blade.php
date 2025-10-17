@@ -98,7 +98,7 @@
                   <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select Funding Channel</option>
                     <option value="va">Virtual Account</option>
-                    <option value="kora">Other Payment Channel</option>
+                    {{-- <option value="kora">Other Payment Channel</option> --}}
                   </select>
                 </div>
 
