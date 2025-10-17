@@ -24,7 +24,7 @@ class WalletController extends Controller
 {
     public function __construct()
     {
-         $this->middleware(['auth', 'email']);
+        $this->middleware(['auth', 'email']);
         // $this->middleware('auth');
     }
     /**
@@ -145,7 +145,7 @@ class WalletController extends Controller
                 activityLog($user, 'wallet_topup', $user->name . ' topped up wallet ', 'regular');
 
                 $subject = 'Wallet Credited';
-                $content = 'Congratulations, your wallet has been credited with ₦' .$verifyPayment->amount;
+                $content = 'Congratulations, your wallet has been credited with ₦' . $verifyPayment->amount;
                 Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
                 return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
@@ -637,8 +637,18 @@ class WalletController extends Controller
     public function storeWithdraw(Request $request)
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
-        if ($baseCurrency == 'NGN') {
+        $user = auth()->user();
 
+        $withdrawalExists = PaymentTransaction::where('user_id', $user->id)
+            ->where('type', 'added_more_worker')
+            ->where('created_at', '>=', now()->subDays(3))
+            ->exists();
+
+        if ($withdrawalExists) {
+            return back()->with('error', 'This transaction is not allowed, contact customer care');
+        }
+
+        if ($baseCurrency == 'NGN') {
 
 
             $request->validate([
@@ -648,11 +658,10 @@ class WalletController extends Controller
             ]);
 
 
+
             if ($request->balance >= 50000) {
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
             }
-
-
 
             $check = PaymentTransaction::where('user_id', auth()->user()->id)
                 ->where('type', 'cash_withdrawal')
