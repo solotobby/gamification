@@ -92,8 +92,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Income</th>
                                 <th>Currency</th>
+                                <th>Income</th>
                                 <th>Channel</th>
                                 <th>Verified</th>
                             </tr>
@@ -108,10 +108,10 @@
                                     </td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
-                                    <td class="fw-semibold text-success">
-                                        ₦{{ number_format($user->income) }}
-                                    </td>
                                     <td>{{ $user->wallet->base_currency ?? 'NGN' }}</td>
+                                    <td class="fw-semibold text-success">
+                                        {{ number_format($user->income) }}
+                                    </td>
                                     <td>{{ $user->source }}</td>
                                     <td>{{ \Carbon\Carbon::parse($user->verified_at)->format('d/m/Y') }}</td>
                                 </tr>
