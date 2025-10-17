@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\PaystackHelpers;
-use App\Helpers\Sendmonny;
 use App\Helpers\SystemActivities;
 use App\Mail\GeneralMail;
 use App\Models\BankInformation;
@@ -650,14 +648,11 @@ class WalletController extends Controller
 
         if ($baseCurrency == 'NGN') {
 
-
             $request->validate([
                 'balance' => 'required|numeric|min:2500',
             ], [
                 'balance.min' => 'The amount must be at least 2500.',
             ]);
-
-
 
             if ($request->balance >= 50000) {
                 return back()->with('error', 'This transaction is not allowed, contact customer care');
@@ -751,8 +746,6 @@ class WalletController extends Controller
     public function processWithdrawals($request, $currency, $channel, $payload)
     {
 
-        // return fraudDetection(auth()->user()->id);
-
         $amount = $request->balance;
         $percent = 7.5 / 100 * $amount;
         $formatedAm = $percent;
@@ -796,9 +789,6 @@ class WalletController extends Controller
                 'tx_type' => 'Debit',
                 'user_type' => 'regular'
             ]);
-
-
-
 
             $referee = DB::table('referral')->where('user_id',  auth()->user()->id)->first();
 
