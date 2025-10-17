@@ -219,22 +219,6 @@ if (!function_exists('systemNotification')) {
     }
 }
 
-if (!function_exists('walletBalance')) {
-    function walletBalance()
-    {
-        $user = auth()->user();
-        $baseCurrency = baseCurrency();
-
-        if ($baseCurrency == 'NGN') {
-            return auth()->user()->wallet->balance;
-        } elseif ($baseCurrency == 'USD') {
-
-            return auth()->user()->wallet->usd_balance;
-        } else {
-            return auth()->user()->wallet->base_currency_balance;
-        }
-    }
-}
 
 if (!function_exists('checkWalletBalance')) {
     function checkWalletBalance($user, $type, $amount)
