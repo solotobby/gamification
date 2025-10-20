@@ -71,7 +71,15 @@ class ExportVerifiedUsersJob implements ShouldQueue
                 default => 'All Time'
             };
 
-            fputcsv($file, ["Users income from: $dateRangeLabel"]);
+            $amountRange = match ($this->filters['amount_range'] ?? null) {
+                'below_10k' => 'Below 10,000',
+                '10k_30k' => 'Between 10,000 and 30,000',
+                '30k_70k' => 'Between 30,000 and 70,000',
+                '70k_above' => 'Above 70,000',
+                default => 'Total income in selected date range'
+            };
+
+            fputcsv($file, ["Users with income from: $dateRangeLabel of Amount: $amountRange"]);
             fputcsv($file, []);
             fputcsv($file, ['', '#', 'UserId', 'Name', 'Email', 'Income', 'Currency']);
 
