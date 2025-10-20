@@ -39,8 +39,14 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaignList = Campaign::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->paginate(10);
-        return view('user.campaign.index', ['lists' => $campaignList]);
+        $user = auth()->user();
+        $campaignList = Campaign::where(
+            'user_id', $user->id)->orderBy(
+                'created_at', 'DESC')->paginate(10);
+        return view('user.campaign.index', [
+            'lists' => $campaignList,
+            'user' => $user
+        ]);
     }
 
     /**
@@ -813,7 +819,7 @@ class CampaignController extends Controller
 
     public function addMoreWorkers(Request $request)
     {
-            return back()->with('error', 'Contact support to add more workers to your campaign.');
+        return back()->with('error', 'Contact support to add more workers to your campaign.');
 
         // $request->validate([
         //     'new_number' => 'required|numeric|min:1',
