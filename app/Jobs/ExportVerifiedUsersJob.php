@@ -89,7 +89,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
             }
             fclose($file);
 
-            $downloadUrl = rtrim(config('app.url'), '/') . '/storage/exports/' . $fileName;
+            $downloadUrl = rtrim(config('services.env.url'), '/') . '/storage/exports/' . $fileName;
 
             Mail::raw("Your verified users CSV export is ready.\n\nDownload here: {$downloadUrl}", function ($message) {
                 $message->to($this->email)->subject('Freebyz Verified Users Export');
