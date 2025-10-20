@@ -22,7 +22,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
     protected $email;
     protected $filters;
 
-    public $timeout = 600; // 10 minutes
+    public $timeout = 600;
     public $tries = 1;
 
     public function __construct($exportJobId, $email, $filters = [])
@@ -89,8 +89,8 @@ class ExportVerifiedUsersJob implements ShouldQueue
             }
             fclose($file);
 
-            $downloadUrl = 'https://dashboard.freebyz.com/storage/exports/' . $fileName;
-            
+            $downloadUrl = rtrim(config('app.url'), '/') . '/storage/exports/' . $fileName;
+
             Mail::raw("Your verified users CSV export is ready.\n\nDownload here: {$downloadUrl}", function ($message) {
                 $message->to($this->email)->subject('Freebyz Verified Users Export');
             });
