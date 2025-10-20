@@ -21,6 +21,7 @@ use App\Models\CampaignWorker;
 use App\Models\DataBundle;
 use App\Models\DisputedJobs;
 use App\Models\Games;
+use App\Models\ExportJob;
 use App\Models\MarketPlaceProduct;
 use App\Models\PaymentTransaction;
 use App\Models\ProductType;
@@ -41,9 +42,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use App\Jobs\ExportVerifiedUsersJob;
+
 
 class AdminController extends Controller
 {
@@ -431,42 +434,64 @@ class AdminController extends Controller
         //->paginate(10);
         return view('admin.users.campaign_creator', ['verifiedUsers' => $usersWithPosts]);
     }
-    // public function verifiedUserList()
-    // {
-    //     $verifiedUsers = User::where(
-    //         'role',
-    //         'regular'
-    //     )->where(
-    //         'is_verified',
-    //         '1'
-    //     )->latest()
-    //         ->paginate(100);
-
-    //     return view(
-    //         'admin.verified_user',
-    //         ['verifiedUsers' => $verifiedUsers]
-    //     );
-    // }
-
-    public function verifiedUserList(Request $request)
+    public function verifiedUserList()
     {
-        $cacheKey = $this->getCacheKey($request);
-        $page = $request->get('page', 1);
+        $verifiedUsers = User::where(
+            'role',
+            'regular'
+        )->where(
+            'is_verified',
+            '1'
+        )->latest()
+            ->paginate(100);
 
-        // Cache paginated results for 1 hour
-        $verifiedUsers = Cache::remember(
-            "{$cacheKey}_page_{$page}",
-            now()->addHour(),
-            function () use ($request) {
-                return $this->getFilteredUsers($request);
-            }
+        return view(
+            'admin.verified_user',
+            ['verifiedUsers' => $verifiedUsers]
         );
-
-        return view('admin.verified_user_new', ['verifiedUsers' => $verifiedUsers]);
     }
 
-    public function downloadVerifiedUsersCsv(Request $request)
+    // public function verifiedUserList(Request $request)
+    // {
+    //     set_time_limit(120);
+    //     ini_set('memory_limit', '2048M');
+    //     $cacheKey = $this->getCacheKey($request);
+    //     $page = $request->get('page', 1);
+
+    //     // Cache paginated results for 1 hour
+    //     $verifiedUsers = Cache::remember(
+    //         "{$cacheKey}_page_{$page}",
+    //         now()->addHour(),
+    //         function () use ($request) {
+    //             return $this->getFilteredUsers($request);
+    //         }
+    //     );
+
+    //     return view('admin.verified_user_new', ['verifiedUsers' => $verifiedUsers]);
+    // }
+
+    public function exportVerifiedUsersCsv(Request $request)
     {
+        $exportJob = ExportJob::create([
+            'email' => $request->email ?? 'freebyzcom@gmail.com',
+            'status' => 'pending'
+        ]);
+
+        ExportVerifiedUsersJob::dispatch($exportJob->id, $exportJob->email, [
+            'amount_range' => $request->amount_range,
+            'date_range'   => $request->date_range
+        ]);
+
+        return response()->json([
+            'message' => 'Your export is being processed. You will receive an email shortly.',
+            'job_id' => $exportJob->id
+        ]);
+    }
+    public function downloadVerifiedUsersCsvOld(Request $request)
+    {
+        set_time_limit(120);
+        ini_set('memory_limit', '2048M');
+
         $cacheKey = $this->getCacheKey($request);
 
         // Cache full dataset for 1 hour
@@ -478,7 +503,7 @@ class AdminController extends Controller
             }
         );
 
-        $fileName = 'verified_users_' . now()->format('Y-m-d_H-i-s') . '.csv';
+        $fileName = 'freebyz_verified_users_' . now()->format('Y-m-d_H-i-s') . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv; charset=utf-8',

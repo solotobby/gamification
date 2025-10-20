@@ -437,6 +437,7 @@ Route::get('users/email-verified', [\App\Http\Controllers\Admin\AdminController:
 Route::get('campaign/creator/list', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCreatorList'])->name('campaign.creator.list');
 Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'verifiedUserList'])->name('verified.user.list');
 Route::get('verified/users/download', [\App\Http\Controllers\Admin\AdminController::class, 'downloadVerifiedUsersCsv']);
+Route::post('verified/users/email-csv', [\App\Http\Controllers\Admin\AdminController::class, 'exportVerifiedUsersCsv']);
 Route::get('usd/verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'usdVerifiedUserList'])->name('usd.verified.user.list');
 Route::get('admin/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'adminTransaction'])->name('admin.transaction');
 Route::get('user/transaction', [\App\Http\Controllers\Admin\AdminController::class, 'userTransaction'])->name('user.transaction');
