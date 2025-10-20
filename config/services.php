@@ -43,6 +43,7 @@ return [
 
     'env' => [
         'env' => env('APP_ENV'),
+        'url' => env('APP_URL'),
         'code' => env('CODE'),
         'answer' => env('ANSWER'),
         'kora_sec' => getenv('KORA_SEC'),
