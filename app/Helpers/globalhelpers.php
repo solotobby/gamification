@@ -258,21 +258,17 @@ if (!function_exists('creditWallet')) {
 
         if ($type == 'NGN') {
 
-
             $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->balance += (int) $amount;
             // $wallet->balance += (int) $amount;
             $wallet->save();
             return $wallet;
         } elseif ($type == 'USD') {
-
             $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->usd_balance += $amount;
             $wallet->save();
             return $wallet;
         } else {
-
-
             $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->base_currency_balance += $amount;
             $wallet->save();
