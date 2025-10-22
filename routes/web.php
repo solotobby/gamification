@@ -55,7 +55,7 @@ Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 
 //webhook routes
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
-Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook']);
+Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook'])->name('koraPay.webhook');
 
 // Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');

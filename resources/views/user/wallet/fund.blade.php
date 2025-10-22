@@ -37,15 +37,15 @@
 
           @elseif(auth()->user()->wallet->base_currency == 'USD')
           ${{ number_format(auth()->user()->wallet->usd_balance,2) }}
-         @else   
+         @else
          {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
           @endif
-          
+
           {{-- &#8358;{{ number_format(auth()->user()->wallet->balance) }} --}}
         </p>
         <p>Wallet Balance</p>
       </div>
-      
+
       <div class="row">
         <div class="col-lg-3"></div>
           <div class="col-lg-6">
@@ -79,14 +79,14 @@
                 </span>
                 <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
                   <option value="">Select a Funding Channel</option>
-                  
+
                   <option value="va">Virtual Account</option>
                   <option value="koray">Koray Pay</option>
                   <option value="KES">Kenya</option>
                   <option value="USD">Other</option>
                 </select>
               </div>
-              <small><i>Select other if your country is not listed</i></small> 
+              <small><i>Select other if your country is not listed</i></small>
             </div> --}}
 
 
@@ -98,7 +98,7 @@
                   <select name="channel" class="form-control @error('method') is-invalid @enderror" required>
                     <option value="">Select Funding Channel</option>
                     <option value="va">Virtual Account</option>
-                    {{-- <option value="kora">Other Payment Channel</option> --}}
+                    <option value="kora">Other Payment Channel</option>
                   </select>
                 </div>
 
@@ -107,7 +107,7 @@
                   <div class="alert alert-info">
                     <li class="fa fa-info"></li> Fund your wallet by making a transfer to the account details below. Your wallet get credited in less than 1min
                   </div>
-              
+
                       @if(auth()->user()->virtualAccount)
                             Account Name: {{ auth()->user()->virtualAccount->account_name }} <br>
                             Bank Name: {{ auth()->user()->virtualAccount->bank_name }} <br>
@@ -116,17 +116,17 @@
                             @if(auth()->user()->is_verified == '0')
                                   <center>
                                     <a href="{{ route('make.payment.wallet') }}" class="btn btn-hero btn-primary mt-1" data-toggle="click-ripple">
-                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}}
                                     </a>
                                   </center>
                             @else
                                   <center>
                                     <a href="#"" class="btn btn-hero btn-primary mt-1 disabled" data-toggle="click-ripple">
-                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}} 
+                                      <i class="fa fa-link opacity-50 me-1"></i> Verify with Wallet Balance &#8358;{{number_format(auth()->user()->wallet->balance)}}
                                     </a>
                                   </center>
                             @endif
-                      @else 
+                      @else
 
                             <a href="{{ route('generate.virtual.account') }}" class="btn btn-secondary"> Click here to Generate a Virtual Account</a>
 
@@ -150,8 +150,8 @@
                       <label class="mb-1">Amount</label>
                       <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="100" value="{{ old('balance') }}" placeholder="Enter Amount" required>
                   </div>
-                 
-  
+
+
                   <div class="mb-4">
                     <button type="submit" class="btn btn-primary">
                       <i class="si si-paper-plane opacity-50 me-1"></i> Fund Wallet
@@ -159,7 +159,7 @@
                   </div>
               </div>
 
-            
+
 
               {{-- <div class="input-group">
                 <span class="input-group-text">
@@ -180,11 +180,11 @@
 
               {{-- <div class="input-group mb-0">
                 <span class="input-group-text">
-                  Country 
+                  Country
                 </span>
                 <select name="currency" class="form-control @error('method') is-invalid @enderror" required>
                   <option value="">Select Country</option>
-                  
+
                   <option value="GHS">Ghana</option>
                   <option value="RWF">Rwanda</option>
                   <option value="KES">Kenya</option>
@@ -205,7 +205,7 @@
               </div> --}}
 
 
-             
+
                 <div class="input-group">
                   <span class="input-group-text">
 
@@ -213,16 +213,16 @@
                         &#8358;
                     @elseif(auth()->user()->wallet->base_currency == 'GHS')
                         &#8373;
-          
+
                     @elseif(auth()->user()->wallet->base_currency == 'KES')
-                        KES 
+                        KES
                     @elseif(auth()->user()->wallet->base_currency == 'TZS')
-                        TZS 
+                        TZS
                     @elseif(auth()->user()->wallet->base_currency == 'RWF')
-                        RWF 
+                        RWF
                     @elseif(auth()->user()->wallet->base_currency == 'MWK')
                         MWK
-                        
+
                     @elseif(auth()->user()->wallet->base_currency == 'ZAR')
                        ZAR
                     @elseif(auth()->user()->wallet->base_currency == 'UGX')
@@ -231,7 +231,7 @@
                         $
                     @endif
 
-                    
+
 
                   </span>
                   <input type="number" class="form-control @error('balance') is-invalid @enderror" id="reminder-credential" name="balance" min="2" value="{{ old('balance') }}" placeholder="Enter Amount" required>
@@ -258,7 +258,7 @@
             @endif
           </div>
           <div class="col-lg-3"></div>
-       
+
       </div>
       <!-- END Text -->
     </form>
@@ -273,22 +273,22 @@
  <!-- Page JS Code -->
  <script src="{{ asset('src/assets/js/pages/op_auth_reminder.min.js') }}"></script>
 
- <script> 
-  window.addEventListener('DOMContentLoaded', function() { 
-     
+ <script>
+  window.addEventListener('DOMContentLoaded', function() {
+
 
       // Get references to the select element and the divs
     const currencySelect = document.querySelector('select[name="channel"]');
     const vaDiv = document.getElementById('va');
     const koraDiv = document.getElementById('kora');
-   
+
 
 
     // Hide both divs by default
     vaDiv.style.display = 'none';
     koraDiv.style.display = 'none';
 
-   
+
 
     // Add an event listener for changes to the select element
     currencySelect.addEventListener('change', function() {
@@ -298,16 +298,16 @@
         if (selectedValue === 'va') {
             vaDiv.style.display = 'block';
             koraDiv.style.display = 'none';
-         
+
         } else if (selectedValue === 'kora') {
             vaDiv.style.display = 'none';
             koraDiv.style.display = 'block';
-           
-         
+
+
         } else {
             vaDiv.style.display = 'none';
             koraDiv.style.display = 'none';
-            
+
         }
     });
 

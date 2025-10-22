@@ -124,35 +124,44 @@ class WalletController extends Controller
         $url = request()->fullUrl();
         $url_components = parse_url($url);
         parse_str($url_components['query'], $params);
-
         $ref = $params['reference'];
         $res = verifyKorayPay($ref);
 
         if ($res['data']['status'] == 'success') {
-
-            $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
-
-            if ($verifyPayment->status == 'unsuccessful') {
-
-                //fetch user
-                $user = User::where('id', $verifyPayment->user_id)->first();
-                creditWallet($user, 'NGN', $verifyPayment->amount);
-                $verifyPayment->status = 'successful';
-                $verifyPayment->save();
-
-                activityLog($user, 'wallet_topup', $user->name . ' topped up wallet ', 'regular');
-
-                $subject = 'Wallet Credited';
-                $content = 'Congratulations, your wallet has been credited with ₦' . $verifyPayment->amount;
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-
-                return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
-            } else {
-                return redirect('wallet/fund')->with('info', 'Transaction already processed by ' . auth()->user()->name);
-            }
+            return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
+        } elseif ($res['data']['status'] == 'processing') {
+            return redirect('wallet/fund')->with('success', 'Payment Processing. Your wallet will be credited shortly!');
         } else {
-            return redirect('wallet/fund')->with('error', 'Transaction Terminated by ' . auth()->user()->name);
+            return redirect('wallet/fund')->with('error', 'Payment Failed!');
         }
+        // $ref = $params['reference'];
+        // $res = verifyKorayPay($ref);
+
+        // if ($res['data']['status'] == 'success') {
+
+        //     $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
+
+        //     if ($verifyPayment->status == 'unsuccessful') {
+
+        //         //fetch user
+        //         $user = User::where('id', $verifyPayment->user_id)->first();
+        //         creditWallet($user, 'NGN', $verifyPayment->amount);
+        //         $verifyPayment->status = 'successful';
+        //         $verifyPayment->save();
+
+        //         activityLog($user, 'wallet_topup', $user->name . ' topped up wallet ', 'regular');
+
+        //         $subject = 'Wallet Credited';
+        //         $content = 'Congratulations, your wallet has been credited with ₦' . $verifyPayment->amount;
+        //         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+        //         return redirect('wallet/fund')->with('success', 'Payment Completed. Your wallet will be credited!');
+        //     } else {
+        //         return redirect('wallet/fund')->with('info', 'Transaction already processed by ' . auth()->user()->name);
+        //     }
+        // } else {
+        //     return redirect('wallet/fund')->with('error', 'Transaction Terminated by ' . auth()->user()->name);
+        // }
     }
 
     public function storeFund(Request $request)
@@ -203,7 +212,8 @@ class WalletController extends Controller
                         "name" => auth()->user()->name,
                         "email" => auth()->user()->email
                     ],
-                    "notification_url" => "https://webhook.site/8d321d8d-397f-4bab-bf4d-7e9ae3afbd50",
+                    "notification_url" => config('services.env.env' === 'production') ? route('koraPay.webhook') : "https://webhook.site/d9458b90-f6bb-4775-9f58-eb8bebdca5b7",
+                    // "notification_url" =>  route('koraPay.webhook'),
                     // "metadata"=>[
                     //     "key0"=> "test0",
                     //     "key1"=> "test1",
