@@ -191,6 +191,7 @@ class WebhookController extends Controller
                         return response()->json(['status' => 'error', 'message' => 'User not found'], 200);
                     }
 
+                    $transaction->update(['status' => 'successful']);
                     // Credit wallet
                     creditWallet($user, $transaction->currency, $transaction->amount);
 
@@ -201,7 +202,6 @@ class WebhookController extends Controller
                     //     ''
                     // ));
 
-                    $transaction->update(['status' => 'successful']);
                     $webhook->update(['status' => 'processed', 'message' => 'Pay-in successful']);
 
                     break;
