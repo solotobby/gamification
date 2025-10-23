@@ -2702,7 +2702,8 @@ if (!function_exists('currencyConverter')) {
         $convertedAmount = $rate * $amount;
 
         // return ceil($convertedAmount);
-        return number_format($convertedAmount, 2);
+         return (float) round($rate * $amount, 2);
+        // return number_format($convertedAmount, 2);
     }
 }
 
