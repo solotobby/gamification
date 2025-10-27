@@ -488,6 +488,14 @@ class AdminController extends Controller
             'job_id' => $exportJob->id
         ]);
     }
+
+     private function getFilteredUsers(Request $request)
+    {
+        $query = $this->buildQuery($request);
+        return $query->selectRaw('users.*, COALESCE(income_calc.total_income, 0) as income')
+            ->latest('users.id')
+            ->paginate(100);
+    }
     public function downloadVerifiedUsersCsvOld(Request $request)
     {
         set_time_limit(120);
@@ -513,12 +521,21 @@ class AdminController extends Controller
 
         $callback = function () use ($users, $request) {
             $file = fopen('php://output', 'w');
-            $dateRangeLabel = match ($request->date_range) {
-                'last_30' => 'Last 30 Days',
-                'last_6_months' => 'Last 6 Months',
-                'last_1_year' => 'Last 1 Year',
-                default => 'All Time'
-            };
+
+            // Build date range label
+            if ($request->filled('date_from') || $request->filled('date_to')) {
+                $from = $request->date_from ?? 'Start';
+                $to = $request->date_to ?? 'End';
+                $dateRangeLabel = "Custom: $from to $to";
+            } else {
+                $dateRangeLabel = match ($request->date_range) {
+                    'last_30' => 'Last 30 Days',
+                    'last_6_months' => 'Last 6 Months',
+                    'last_1_year' => 'Last 1 Year',
+                    default => 'All Time'
+                };
+            }
+
             fputcsv($file, ["Users with income from: $dateRangeLabel"]);
             fputcsv($file, []);
 
@@ -542,14 +559,6 @@ class AdminController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-    private function getFilteredUsers(Request $request)
-    {
-        $query = $this->buildQuery($request);
-        return $query->selectRaw('users.*, COALESCE(income_calc.total_income, 0) as income')
-            ->latest('users.id')
-            ->paginate(100);
-    }
-
     private function getAllFilteredUsers(Request $request)
     {
         $query = $this->buildQuery($request);
@@ -569,7 +578,17 @@ class AdminController extends Controller
             ->where('user_type', 'regular')
             ->where('status', 'successful');
 
-        if ($request->filled('date_range')) {
+        // Handle date filtering
+        if ($request->filled('date_from') || $request->filled('date_to')) {
+            // Custom date range
+            if ($request->filled('date_from')) {
+                $incomeSubquery->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $incomeSubquery->whereDate('created_at', '<=', $request->date_to);
+            }
+        } elseif ($request->filled('date_range')) {
+            // Preset date range
             $days = match ($request->date_range) {
                 'last_30' => 30,
                 'last_6_months' => 180,
@@ -588,7 +607,15 @@ class AdminController extends Controller
             $join->on('users.id', '=', 'income_calc.user_id');
         });
 
-        if ($request->filled('amount_range')) {
+        // Handle amount filtering
+        if ($request->filled('amount_min') || $request->filled('amount_max')) {
+            // Custom amount range
+            $min = $request->filled('amount_min') ? $request->amount_min : 0;
+            $max = $request->filled('amount_max') ? $request->amount_max : PHP_INT_MAX;
+
+            $query->havingRaw('COALESCE(income_calc.total_income, 0) BETWEEN ? AND ?', [$min, $max]);
+        } elseif ($request->filled('amount_range')) {
+            // Preset amount range
             [$min, $max] = match ($request->amount_range) {
                 'below_10k' => [0, 9999],
                 '10k_30k' => [10000, 30000],
@@ -597,7 +624,7 @@ class AdminController extends Controller
                 default => [0, PHP_INT_MAX]
             };
 
-            $query->whereBetween('income_calc.total_income', [$min, $max]);
+            $query->havingRaw('COALESCE(income_calc.total_income, 0) BETWEEN ? AND ?', [$min, $max]);
         }
 
         return $query;
@@ -605,10 +632,62 @@ class AdminController extends Controller
 
     private function getCacheKey(Request $request)
     {
-        $dateRange = $request->get('date_range', 'all_time');
-        $amountRange = $request->get('amount_range', 'all_amount');
-        return "verified_users_{$dateRange}_{$amountRange}";
+        $dateRange = $request->get('date_range', $request->get('date_from') . '_' . $request->get('date_to'));
+        $amountRange = $request->get('amount_range', $request->get('amount_min') . '_' . $request->get('amount_max'));
+
+        return "verified_users_" . md5($dateRange . '_' . $amountRange);
     }
+
+    // private function buildQuery(Request $request)
+    // {
+    //     $query = User::where('role', 'regular')
+    //         ->where('is_verified', '1');
+
+    //     $incomeSubquery = PaymentTransaction::selectRaw('user_id, SUM(amount) as total_income')
+    //         ->where('tx_type', 'Credit')
+    //         ->where('user_type', 'regular')
+    //         ->where('status', 'successful');
+
+    //     if ($request->filled('date_range')) {
+    //         $days = match ($request->date_range) {
+    //             'last_30' => 30,
+    //             'last_6_months' => 180,
+    //             'last_1_year' => 365,
+    //             default => null
+    //         };
+
+    //         if ($days) {
+    //             $incomeSubquery->whereDate('created_at', '>=', now()->subDays($days));
+    //         }
+    //     }
+
+    //     $incomeSubquery->groupBy('user_id');
+
+    //     $query->leftJoinSub($incomeSubquery, 'income_calc', function ($join) {
+    //         $join->on('users.id', '=', 'income_calc.user_id');
+    //     });
+
+    //     if ($request->filled('amount_range')) {
+    //         [$min, $max] = match ($request->amount_range) {
+    //             'below_10k' => [0, 9999],
+    //             '10k_30k' => [10000, 30000],
+    //             '30k_70k' => [30000, 70000],
+    //             '70k_above' => [70000, PHP_INT_MAX],
+    //             default => [0, PHP_INT_MAX]
+    //         };
+
+    //         $query->whereBetween('income_calc.total_income', [$min, $max]);
+    //     }
+
+    //     return $query;
+    // }
+
+    // private function getCacheKey(Request $request)
+    // {
+    //     $dateRange = $request->get('date_range', 'all_time');
+    //     $amountRange = $request->get('amount_range', 'all_amount');
+    //     return "verified_users_{$dateRange}_{$amountRange}";
+    // }
 
     public function usdVerifiedUserList()
     {

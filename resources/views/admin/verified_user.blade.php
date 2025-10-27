@@ -99,6 +99,13 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Amount Range</label>
+                            <select name="amount_type" class="form-control" id="amountType">
+                                <option value="preset">Preset Range</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="presetAmount">
                             <select name="amount_range" class="form-control">
                                 <option value="">All Amount</option>
                                 <option value="below_10k">Below ₦10k</option>
@@ -107,8 +114,27 @@
                                 <option value="70k_above">₦70k+</option>
                             </select>
                         </div>
+
+                        <div class="mb-3 d-none" id="customAmount">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="number" name="amount_min" class="form-control" placeholder="Min amount">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name="amount_max" class="form-control" placeholder="Max amount">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">Date Range</label>
+                            <select name="date_type" class="form-control" id="dateType">
+                                <option value="preset">Preset Range</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="presetDate">
                             <select name="date_range" class="form-control">
                                 <option value="">All Time</option>
                                 <option value="last_30">Last 30 Days</option>
@@ -116,6 +142,18 @@
                                 <option value="last_1_year">Last 1 Year</option>
                             </select>
                         </div>
+
+                        <div class="mb-3 d-none" id="customDate">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="date" name="date_from" class="form-control">
+                                </div>
+                                <div class="col-6">
+                                    <input type="date" name="date_to" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">Email (optional)</label>
                             <input type="email" name="email" class="form-control" placeholder="Enter email to send file">
@@ -136,16 +174,54 @@
 
 @section('script')
     <script>
+        // Toggle amount fields
+        document.getElementById('amountType').addEventListener('change', function (e) {
+            if (e.target.value === 'custom') {
+                document.getElementById('presetAmount').classList.add('d-none');
+                document.getElementById('customAmount').classList.remove('d-none');
+                document.querySelector('[name="amount_range"]').value = '';
+            } else {
+                document.getElementById('presetAmount').classList.remove('d-none');
+                document.getElementById('customAmount').classList.add('d-none');
+                document.querySelector('[name="amount_min"]').value = '';
+                document.querySelector('[name="amount_max"]').value = '';
+            }
+        });
+
+        // Toggle date fields
+        document.getElementById('dateType').addEventListener('change', function (e) {
+            if (e.target.value === 'custom') {
+                document.getElementById('presetDate').classList.add('d-none');
+                document.getElementById('customDate').classList.remove('d-none');
+                document.querySelector('[name="date_range"]').value = '';
+            } else {
+                document.getElementById('presetDate').classList.remove('d-none');
+                document.getElementById('customDate').classList.add('d-none');
+                document.querySelector('[name="date_from"]').value = '';
+                document.querySelector('[name="date_to"]').value = '';
+            }
+        });
+
         document.getElementById('downloadForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
             const email = formData.get('email');
-            const params = new URLSearchParams({
-                amount_range: formData.get('amount_range'),
-                date_range: formData.get('date_range'),
-                email: email
-            });
+
+            // Build params with all fields
+            const params = new URLSearchParams();
+
+            // Add amount params
+            if (formData.get('amount_min')) params.append('amount_min', formData.get('amount_min'));
+            if (formData.get('amount_max')) params.append('amount_max', formData.get('amount_max'));
+            if (formData.get('amount_range')) params.append('amount_range', formData.get('amount_range'));
+
+            // Add date params
+            if (formData.get('date_from')) params.append('date_from', formData.get('date_from'));
+            if (formData.get('date_to')) params.append('date_to', formData.get('date_to'));
+            if (formData.get('date_range')) params.append('date_range', formData.get('date_range'));
+
+            if (email) params.append('email', email);
 
             if (email) {
                 // Send to backend to email the CSV
@@ -163,7 +239,7 @@
                     .catch(() => alert('Error sending CSV email.'));
             } else {
                 // Trigger direct download
-                // window.location.href = `{{ url('verified/users/download') }}?${params.toString()}`;
+                window.location.href = `{{ url('verified/users/download') }}?${params.toString()}`;
                 const modal = bootstrap.Modal.getInstance(document.getElementById('downloadModal'));
                 modal.hide();
             }
