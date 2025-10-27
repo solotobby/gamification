@@ -672,75 +672,53 @@ class AdminController extends Controller
     }
     public function adminUserTransactions($id)
     {
-        $user = User::where('id', $id)->first();
-        $transactions = [];
-        // $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->latest()->paginate(20); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
-        return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
+        // $user = User::where('id', $id)->first();
+        // $transactions = [];
+        // // $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->latest()->paginate(20); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
+        // return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
+
+        $user = User::findOrFail($id);
+
+        $transactions = $user->transactions()
+            ->where('status', 'successful')
+            ->latest()
+            ->get(); // Get all, DataTables handles pagination
+
+        return view('admin.users.transactions', compact('user', 'transactions'));
     }
 
-    public function verify($reference)
+    public function verify($id)
     {
-        // Log::info('Transaction verification started', ['reference' => $reference]);
+        Log::info('Verification started', ['id' => $id]);
 
         try {
-            $transaction = PaymentTransaction::where('reference', $reference)->first();
+            $transaction = PaymentTransaction::findOrFail($id);
 
-            if (!$transaction) {
-                // Log::warning('Transaction not found', ['reference' => $reference]);
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Transaction not found'
-                ], 404);
-            }
-
-            // Log::info('Transaction found', [
-            //     'reference' => $reference,
-            //     'type' => $transaction->type,
-            //     'payment_gateway' => $transaction->channel ?? 'not_set'
-            // ]);
-
-            // Determine which payment gateway
             $result = $transaction->channel === 'kora'
-                ? verifyKorayPay($reference)
-                : verifyTransaction($reference);
+                ? verifyKorayPay($transaction->reference)
+                : verifyTransaction($transaction->reference);
 
-            // Log::info('Payment gateway response', [
-            //     'reference' => $reference,
-            //     'gateway' => $transaction->channel ?? 'paystack',
-            //     'result' => $result
-            // ]);
-
-            // Check verification status
             $isVerified = $result['status'] === true || ($result['data']['status'] ?? null) === 'success';
 
             if ($isVerified) {
                 // $transaction->update(['is_verified' => true]);
-                // Log::info('Transaction marked as verified', ['reference' => $reference]);
-            } else {
-                // Log::warning('Transaction verification failed', [
-                //     'reference' => $reference,
-                //     'result' => $result
-                // ]);
             }
 
             return response()->json([
                 'success' => true,
                 'verified' => $isVerified,
-                'message' => $isVerified ? 'Transaction verified' : 'Verification failed'
+                'message' => $isVerified ? 'Verified' : 'Unverified'
             ]);
         } catch (\Exception $e) {
-            Log::error('Transaction verification exception', [
-                'reference' => $reference,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+            Log::error('Verification failed', ['id' => $id, 'error' => $e->getMessage()]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Verification failed',
+                'message' => 'Verification Failed'
             ], 500);
         }
     }
+
     public function adminUserCampaigns($id)
     {
         $user = User::where('id', $id)->first();
