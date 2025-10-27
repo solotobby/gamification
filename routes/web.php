@@ -445,6 +445,7 @@ Route::get('admin/user/referral/{id}', [\App\Http\Controllers\Admin\AdminControl
 Route::get('admin/user/transactions/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserTransactions']);
 Route::get('admin/user/campaigns/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserCampaigns']);
 Route::get('admin/user/jobs/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'adminUserJobs']);
+Route::post('admin/user/transactions/verify/{reference}', [\App\Http\Controllers\Admin\AdminController::class, 'verify'])->name('transactions.verify');
 
 
 

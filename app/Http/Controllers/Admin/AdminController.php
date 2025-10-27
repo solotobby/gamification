@@ -45,6 +45,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportVerifiedUsersJob;
 
 
@@ -672,8 +673,73 @@ class AdminController extends Controller
     public function adminUserTransactions($id)
     {
         $user = User::where('id', $id)->first();
-        $transactions = []; // PaymentTransaction::where('user_id', $id)->where('status', 'successful')->orderBy('created_at', 'DESC')->get(); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
+        $transactions = [];
+        // $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->latest()->paginate(20); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
         return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
+    }
+
+    public function verify($reference)
+    {
+        // Log::info('Transaction verification started', ['reference' => $reference]);
+
+        try {
+            $transaction = PaymentTransaction::where('reference', $reference)->first();
+
+            if (!$transaction) {
+                // Log::warning('Transaction not found', ['reference' => $reference]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Transaction not found'
+                ], 404);
+            }
+
+            // Log::info('Transaction found', [
+            //     'reference' => $reference,
+            //     'type' => $transaction->type,
+            //     'payment_gateway' => $transaction->channel ?? 'not_set'
+            // ]);
+
+            // Determine which payment gateway
+            $result = $transaction->channel === 'kora'
+                ? verifyKorayPay($reference)
+                : verifyTransaction($reference);
+
+            // Log::info('Payment gateway response', [
+            //     'reference' => $reference,
+            //     'gateway' => $transaction->channel ?? 'paystack',
+            //     'result' => $result
+            // ]);
+
+            // Check verification status
+            $isVerified = $result['status'] === true || ($result['data']['status'] ?? null) === 'success';
+
+            if ($isVerified) {
+                // $transaction->update(['is_verified' => true]);
+                // Log::info('Transaction marked as verified', ['reference' => $reference]);
+            } else {
+                // Log::warning('Transaction verification failed', [
+                //     'reference' => $reference,
+                //     'result' => $result
+                // ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'verified' => $isVerified,
+                'message' => $isVerified ? 'Transaction verified' : 'Verification failed'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Transaction verification exception', [
+                'reference' => $reference,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Verification failed',
+            ], 500);
+        }
     }
     public function adminUserCampaigns($id)
     {
