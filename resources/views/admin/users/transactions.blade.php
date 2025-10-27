@@ -48,19 +48,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($user->transactions->where('status', 'successful') as $list)
+                            @foreach ($transactions as $list)
                                 @if($list->tx_type == 'Credit')
                                     <tr style="color: forestgreen">
                                 @else
-                                        <tr style="color: chocolate">
-                                    @endif
+                                    <tr style="color: chocolate">
+                                @endif
                                     <td>{{ $list->reference }}</td>
                                     <td>{{ $list->type }}</td>
                                     <td>{{ $list->amount }}</td>
                                     <td>
-                                        @if($list->type === 'wallet_topup')
+                                        @if($list->type === 'wallet_topup' || $list->type === 'upgrade_payment')
                                             <button class="btn btn-sm btn-primary verify-btn"
-                                                data-reference="{{ $list->reference }}">
+                                                data-id="{{ $list->id }}">
                                                 Verify
                                             </button>
                                             <span class="verify-status"></span>
@@ -77,9 +77,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="d-flex">
-                        {{-- {!! $user->transactions->links('pagination::bootstrap-4') !!} --}}
-                    </div>
                 </div>
             </div>
         </div>
@@ -107,28 +104,26 @@
 
     <script>
         $(document).ready(function () {
-
             // Destroy existing DataTable if it exists
             if ($.fn.DataTable.isDataTable('.js-dataTable-buttons')) {
                 $('.js-dataTable-buttons').DataTable().destroy();
             }
+
             // Reinitialize with custom settings
             $('.js-dataTable-buttons').DataTable({
-                order: [[8, 'desc']],
-                paging: true,
+                order: [[8, 'desc']], // Sort by When column descending
+                pageLength: 20, // Show 20 records per page
                 searching: true
             });
+
             $('.verify-btn').on('click', function () {
                 const btn = $(this);
-                const reference = btn.data('reference');
+                const id = btn.data('id');
                 const statusSpan = btn.siblings('.verify-status');
-
-                // console.log('Verify button clicked for reference:', reference);
 
                 btn.prop('disabled', true).text('Verifying...');
 
-                const url = '{{ url("admin/user/transactions/verify") }}/' + reference;
-                // console.log('AJAX Request URL:', url);
+                const url = '{{ url("admin/user/transactions/verify") }}/' + id;
 
                 $.ajax({
                     url: url,
@@ -137,28 +132,26 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function () {
-                        // console.log('Sending verification request...');
+                        console.log('Sending verification request...');
                     },
                     success: function (response) {
-                        // console.log('Success response:', response);
+                        console.log('Success response:', response);
 
                         if (response.verified) {
-                            // console.log('Transaction verified successfully');
                             statusSpan.html('<span class="badge bg-success">Verified</span>');
                             btn.remove();
                         } else {
-                            // console.log('Transaction unverified');
                             statusSpan.html('<span class="badge bg-danger">Unverified</span>');
                             btn.prop('disabled', false).text('Verify');
                         }
                     },
                     error: function (xhr, status, error) {
-                        // console.error('AJAX Error:', {
-                        //     status: xhr.status,
-                        //     statusText: xhr.statusText,
-                        //     responseText: xhr.responseText,
-                        //     error: error
-                        // });
+                        console.error('AJAX Error:', {
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            responseText: xhr.responseText,
+                            error: error
+                        });
 
                         const errorMessage = xhr.responseJSON?.message || 'Verification failed';
                         alert('Error: ' + errorMessage);
