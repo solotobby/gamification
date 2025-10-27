@@ -17,6 +17,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="freebyz.com">
     <meta property="og:image" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
@@ -38,7 +40,7 @@
 
     {{-- <script src="https://alwingulla.com/88/tag.min.js" data-zone="115972" async data-cfasync="false"></script> --}}
     @include('sweetalert::alert')
-    
+
     <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -54,7 +56,7 @@
       <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=1039007980514258&ev=PageView&noscript=1"
       /></noscript>
-    
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7484162262282358"
                         crossorigin="anonymous"></script>
 
@@ -99,7 +101,7 @@
     </script>
 
     @yield('style')
-{{-- 
+{{--
     <!--Start of Tawk.to Script-->
 <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -212,7 +214,7 @@
         'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
     -->
     <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-fixed main-content-narrow">
-      
+
 
       <!-- Sidebar -->
       <!--
@@ -236,9 +238,9 @@
                     <span class="opacity-75">b</span>
               </span>
               <span class="smini-hidden">
-               
+
                     Free<span class="opacity-75">byz</span>
-                
+
               </span>
             </a>
             <!-- END Logo -->
@@ -281,7 +283,7 @@
                 @include('layouts.sidebar.staff')
             @else
                 @include('layouts.sidebar.user')
-            
+
             @endif
           <!-- END Side Navigation -->
         </div>
@@ -295,7 +297,7 @@
 
         @include('layouts.menu.header')
         <!-- END Header Content -->
-        
+
         <!-- END Header Loader -->
       </header>
       <!-- END Header -->
@@ -322,7 +324,7 @@
 
     @yield('script')
   </body>
-  
+
   <amp-auto-ads type="adsense"
         data-ad-client="ca-pub-7484162262282358">
   </amp-auto-ads>
