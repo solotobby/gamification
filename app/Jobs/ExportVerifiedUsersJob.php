@@ -66,6 +66,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
 
             $dateRangeLabel = match ($this->filters['date_range'] ?? null) {
                 'last_30' => 'Last 30 Days',
+                'last_3_months' => 'Last 3 Months',
                 'last_6_months' => 'Last 6 Months',
                 'last_1_year' => 'Last 1 Year',
                 default => 'All Time'
@@ -75,6 +76,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
                 'below_10k' => 'Below 10,000',
                 '10k_30k' => 'Between 10,000 and 30,000',
                 '30k_70k' => 'Between 30,000 and 70,000',
+                '50k_above' => 'Above 50,000',
                 '70k_above' => 'Above 70,000',
                 default => 'Total income in selected date range'
             };
@@ -141,6 +143,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
         if (!empty($this->filters['date_range'])) {
             $days = match ($this->filters['date_range']) {
                 'last_30' => 30,
+                'last_3_months' => 90,
                 'last_6_months' => 180,
                 'last_1_year' => 365,
                 default => null
@@ -161,6 +164,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
                 'below_10k' => [0, 9999],
                 '10k_30k' => [10000, 30000],
                 '30k_70k' => [30000, 70000],
+                '50k_above' => [50000, PHP_INT_MAX],
                 '70k_above' => [70000, PHP_INT_MAX],
                 default => [0, PHP_INT_MAX]
             };
