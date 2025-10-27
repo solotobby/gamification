@@ -58,7 +58,7 @@
                                     <td>{{ $list->type }}</td>
                                     <td>{{ $list->amount }}</td>
                                     <td>
-                                        @if($list->type === 'wallet_topup' || $list->type === 'upgrade_payment')
+                                        @if($list->type === 'wallet_topup' || $list->type === 'transfer_topup')
                                             <button class="btn btn-sm btn-primary verify-btn"
                                                 data-id="{{ $list->id }}">
                                                 Verify
