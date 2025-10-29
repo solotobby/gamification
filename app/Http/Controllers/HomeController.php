@@ -69,6 +69,9 @@ class HomeController extends Controller
         } elseif ($user->hasRole('staff')) {
             // return 'staff';
             return redirect()->route('staff.home');
+        } elseif ($user->hasRole('super_admin')) {
+            // return 'staff';
+            return redirect()->route('admin.home');
         } else {
             // return 'user';
             return redirect()->route('user.home');
@@ -274,62 +277,101 @@ class HomeController extends Controller
     // }
 
 
+    // public function adminHome(Request $request)
+    // {
+    //     // Increase max execution time to 120 seconds for this method
+    //     // set_time_limit(120);
+
+    //     // Get period from request, default to 7 days
+    //     $period = $request->get('period', 7);
+
+    //     // Calculate date range based on period
+    //     $startDate = Carbon::now()->subDays($period)->startOfDay();
+    //     $endDate = Carbon::now()->endOfDay();
+
+    //     // $wallet = DB::select('
+    //     //     SELECT
+    //     //         SUM(balance) AS total_balance,
+    //     //         SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
+    //     //         SUM(usd_balance) AS total_usd_balance
+    //     //     FROM wallets
+    //     // ');
+
+    //     // Single optimized query for all withdrawal metrics using period dates
+    //     // $withdrawalMetrics = DB::table('withrawals')
+    //     //     ->selectRaw('
+    //     //     SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
+    //     //     SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
+    //     //     SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
+    //     // ', [$startDate, $endDate])
+    //     //     ->first();
+
+    //     // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
+
+    //     // Cache successful transactions sum (updates less frequently)
+    //     // $transactions = DB::select('
+    //     //         SELECT SUM(amount) AS total_successful_transactions
+    //     //         FROM payment_transactions
+    //     //         WHERE status = ?
+    //     //         AND created_at BETWEEN ? AND ?
+    //     //     ', ['successful', $startDate, $endDate]);
+
+    //     return view('admin.index_new', [
+    //         // 'wallet' => $wallet,
+    //         // 'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
+    //         // 'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
+    //         // 'transactions' => $transactions ?? 0.00,
+    //         // 'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
+    //         // 'av_count' => 0,
+    //         'period' => $period
+    //     ]);
+    // }
+
     public function adminHome(Request $request)
     {
-        // Increase max execution time to 120 seconds for this method
-        // set_time_limit(120);
-
-        // Get period from request, default to 7 days
         $period = $request->get('period', 7);
-
-        // Calculate date range based on period
         $startDate = Carbon::now()->subDays($period)->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
-        // $wallet = DB::select('
-        //     SELECT
-        //         SUM(balance) AS total_balance,
-        //         SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
-        //         SUM(usd_balance) AS total_usd_balance
-        //     FROM wallets
-        // ');
+        $data = ['period' => $period];
 
-        // Single optimized query for all withdrawal metrics using period dates
-        // $withdrawalMetrics = DB::table('withrawals')
-        //     ->selectRaw('
-        //     SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
-        //     SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
-        //     SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
-        // ', [$startDate, $endDate])
-        //     ->first();
+        // Only show financial data to super_admin
+        if (auth()->user()->role === 'super_admin') {
+            $data['wallet'] = DB::select('
+                SELECT
+                    SUM(balance) AS total_balance,
+                    SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
+                    SUM(usd_balance) AS total_usd_balance
+                FROM wallets
+            ');
 
-        // $cacheKey = "admin_transactions_total_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
+            $withdrawalMetrics = DB::table('withrawals')
+                ->selectRaw('
+                    SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
+                    SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
+                    SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
+                ', [$startDate, $endDate])
+                ->first();
 
-        // Cache successful transactions sum (updates less frequently)
-        // $transactions = DB::select('
-        //         SELECT SUM(amount) AS total_successful_transactions
-        //         FROM payment_transactions
-        //         WHERE status = ?
-        //         AND created_at BETWEEN ? AND ?
-        //     ', ['successful', $startDate, $endDate]);
+            $data['withdrawalMetrics'] = $withdrawalMetrics;
+            $data['periodPayment'] = $withdrawalMetrics->period_payment ?? 0;
+            $data['totalPayout'] = $withdrawalMetrics->total_payout ?? 0;
+            $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
+            $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
 
-        return view('admin.index_new', [
-            // 'wallet' => $wallet,
-            // 'periodPayment' => $withdrawalMetrics->period_payment ?? 0,
-            // 'totalPayout' => $withdrawalMetrics->total_payout ?? 0,
-            // 'transactions' => $transactions ?? 0.00,
-            // 'totalPendingPayout' => $withdrawalMetrics->total_pending_payout ?? 0,
-            // 'av_count' => 0,
-            'period' => $period
-        ]);
+            $data['transactions'] = DB::select('
+                SELECT SUM(amount) AS total_successful_transactions
+                FROM payment_transactions
+                WHERE status = ?
+                AND created_at BETWEEN ? AND ?
+            ', ['successful', $startDate, $endDate]);
+        }
+
+        return view('admin.index_new', $data);
     }
 
     public function analytics(Request $request)
     {
-        // Increase max execution time to 120 seconds for this method
-        // set_time_limit(120);
-
-        // Get period from request, default to 7 days
         $period = $request->get('period', 7);
 
         // Prepare chart data with caching for expensive operations
@@ -351,25 +393,67 @@ class HomeController extends Controller
         ])->with(array_map('json_encode', $chartData));
     }
 
-    public function adminApi(Request $request)
+    public function adminApiDefault(Request $request)
     {
-        $data = [];
-        // $data['campaigns'] = Campaign::where('status', 'Live')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
-        // $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('amount');
-        // $data['user'] = User::where('role', 'regular')->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
-        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->get();
+        $period = (int) $request->period ?? 7;
+        $startDate = Carbon::today()->subDays($period);
+        $endDate = Carbon::today();
 
-        $camp = Campaign::where('status', 'Live')->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
-        $data['campaigns'] = $camp->count();
-        $data['campaignValue'] = $camp->sum('total_amount');
-        $data['campaignWorker'] = CampaignWorker::where('status', 'Approved')->whereBetween('created_at', [$request->start_date, $request->end_date])->sum('amount');
-        $data['registeredUser'] = User::where('role', 'regular')->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
-        $data['verifiedUser'] = User::where('role', 'regular')->where('is_verified', true)->whereBetween('created_at', [$request->start_date, $request->end_date])->count();
-        $data['activeUsers'] = $this->getDailyReport($request->start_date, $request->end_date);
-        // $data['loginPoints'] = LoginPoints::where('is_redeemed', false)->whereBetween('created_at',[$request->start_date, $request->end_date])->sum('point');
-        // $data['loginPointsValue'] = $data['loginPoints']/5;
+        $userRole = auth()->user()->role;
+        $cacheKey = "admin_dashboard_stats_{$period}_{$userRole}";
 
-        return $data;
+        // Cache for 30 minutes (1800 seconds)
+        return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate, $userRole) {
+            // --- User stats ---
+            $userStats = User::selectRaw("
+            COUNT(*) as registered,
+            SUM(CASE WHEN is_verified = 1 THEN 1 ELSE 0 END) as verified
+        ")
+                ->where('role', 'regular')
+                ->where('created_at', '>=', $startDate)
+                ->first();
+
+            // --- Campaign stats ---
+            $campaignStats = Campaign::where('status', 'Live')
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('COUNT(*) as total')
+                ->first();
+
+            // --- Active users ---
+            $activeUsersCount = DB::table('activity_logs')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->distinct('user_id')
+                ->count('user_id');
+
+            $registeredUsersCount = User::where('role', 'regular')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            // --- Prepare base response ---
+            $data = [
+                'campaigns' => (int) $campaignStats->total,
+                'registeredUser' => (int) $userStats->registered,
+                'verifiedUser' => (int) $userStats->verified,
+                'activeUsers' => $activeUsersCount,
+                'registeredUsers' => $registeredUsersCount,
+            ];
+
+            // --- Add financial data only for super_admin ---
+            if ($userRole === 'super_admin') {
+                $campaignValue = Campaign::where('status', 'Live')
+                    ->where('created_at', '>=', $startDate)
+                    ->sum('total_amount');
+
+                $campaignWorkerSum = CampaignWorker::where('status', 'Approved')
+                    ->where('created_at', '>=', $startDate)
+                    ->sum('amount');
+
+                $data['campaignValue'] = (float) $campaignValue;
+                $data['campaignWorker'] = (float) $campaignWorkerSum;
+            }
+
+            return $data;
+        });
     }
 
     // public function adminApiDefault(Request $request)
@@ -471,61 +555,6 @@ class HomeController extends Controller
     // }
 
 
-    public function adminApiDefault(Request $request)
-    {
-        $period = (int) $request->period ?? 7;
-        $startDate = Carbon::today()->subDays($period);
-        $endDate = Carbon::today();
-
-        $cacheKey = "admin_dashboard_stats_{$period}";
-
-        // Cache for 30 minutes (600 seconds)
-        return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate) {
-            // --- Campaign stats ---
-            $campaignStats = Campaign::where('status', 'Live')
-                ->where('created_at', '>=', $startDate)
-                ->selectRaw('COUNT(*) as total, COALESCE(SUM(total_amount), 0) as total_value')
-                ->first();
-
-            // --- Campaign worker stats ---
-            $campaignWorkerSum = CampaignWorker::where('status', 'Approved')
-                ->where('created_at', '>=', $startDate)
-                ->sum('amount');
-
-            // --- User stats ---
-            $userStats = User::selectRaw("
-                COUNT(*) as registered,
-                SUM(CASE WHEN is_verified = 1 THEN 1 ELSE 0 END) as verified
-            ")
-                ->where('role', 'regular')
-                ->where('created_at', '>=', $startDate)
-                ->first();
-
-            // --- Active users ---
-            // $activeUsers = $this->getDailyReport($startDate, $endDate);
-
-            $activeUsersCount = DB::table('activity_logs')
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->distinct('user_id')
-                ->count('user_id');
-
-            $registeredUsersCount = User::where('role', 'regular')
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->count();
-            // --- Prepare response ---
-            $data = [
-                'campaigns' => (int) $campaignStats->total,
-                'campaignValue' => (float) $campaignStats->total_value,
-                'campaignWorker' => (float) $campaignWorkerSum,
-                'registeredUser' => (int) $userStats->registered,
-                'verifiedUser' => (int) $userStats->verified,
-                'activeUsers' => $activeUsersCount,
-                'registeredUsers' => $registeredUsersCount,
-            ];
-
-            return $data;
-        });
-    }
     public function getDailyReport($startDate, $endDate)
     {
         $cacheKey = "daily_report_{$startDate->format('Ymd')}_{$endDate->format('Ymd')}";
