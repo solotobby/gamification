@@ -191,9 +191,12 @@ class WebhookController extends Controller
                         return response()->json(['status' => 'error', 'message' => 'User not found'], 200);
                     }
 
-                    $transaction->update(['status' => 'successful']);
                     // Credit wallet
                     creditWallet($user, $transaction->currency, $transaction->amount);
+                    $transaction->update([
+                        'status' => 'successful',
+                        'balance' => walletBalance($user->id)
+                    ]);
 
                     // Mail::to($user->email)->send(new GeneralMail(
                     //     $user,

@@ -107,6 +107,12 @@ class RegisterController extends Controller
             Auth::login($user);
             setProfile($user); //set profile page
             activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+
+            $job_id = $request->query('redirect');
+            if ($job_id && auth()->check()) {
+                return redirect('campaign/' . $job_id);
+                // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+            }
             return redirect('/home');
         }
     }
@@ -349,43 +355,47 @@ class RegisterController extends Controller
             return view('blocked');
         }
 
-        // Handle by role
         switch ($user->role) {
-            // Correct syntax — separate cases
             case 'admin':
             case 'super_admin':
+                if (! Hash::check($request->password, $user->password)) {
+                    return back()->with('error', 'Email or Password is incorrect');
+                }
 
-                // Admin logic
-                // if ($user->id == 1) {
                 $token = Str::random(36);
                 AuthCheck::create([
                     'email' => $user->email,
                     'token' => $token,
                 ]);
+
                 return redirect('login/otp/' . $token);
-                // } else {
-                //     return redirect('/');
-                // }
 
             case 'regular':
                 // Regular user logic
-                if ($user->referral_code == null) {
-                    $user->referral_code = Str::random(7);
-                    $user->save();
-                }
-
                 if (! Hash::check($request->password, $user->password)) {
                     return back()->with('error', 'Email or Password is incorrect');
                 }
 
+                if (is_null($user->referral_code)) {
+                    $user->referral_code = Str::random(7);
+                    $user->save();
+                }
+
                 Auth::login($user);
 
-                if (env('APP_ENV') === 'Production') {
+                if (env('APP_ENV') === 'production') {
                     setProfile($user);
                     userLocation('Login');
                 }
 
                 activityLog($user, 'login', $user->name . ' Logged In', 'regular');
+
+                $job_id = $request->query('redirect');
+                if ($job_id && auth()->check()) {
+                    return redirect('campaign/' . $job_id);
+                    // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                }
+
                 return redirect('home');
 
             case 'staff':
@@ -395,6 +405,7 @@ class RegisterController extends Controller
                 return "Not applicable";
         }
     }
+
 
 
     /**

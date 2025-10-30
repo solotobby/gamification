@@ -90,6 +90,35 @@
       .rated > label:hover ~ input:checked ~ label {
       color: #c59b08;
       }
+
+      /* Share button styles */
+      .share-btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .share-btn {
+        padding: 8px 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      .share-btn i {
+        margin-right: 5px;
+      }
+      .copy-link-btn {
+        background: #6c757d;
+        color: white;
+      }
+      .copy-link-btn:hover {
+        background: #5a6268;
+      }
 </style>
 @endsection
 @section('content')
@@ -117,16 +146,8 @@
               <div class="block-content block-content-full px-5 py-4">
                 <div class="fs-2 fw-semibold text-white">
                   {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
-                  {{-- @if($campaign['currency'] == 'NGN')
-                    &#8358;{{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
-                    @else
-                    {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
-                  @endif --}}
                 </div>
                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Job</div>
-                {{-- <span class="btn btn-hero btn-primary">
-                  <i class="fa fa-arrow-right opacity-50 me-1"></i> Apply Now
-                </span> --}}
               </div>
             </a>
           </div>
@@ -147,13 +168,6 @@
           </div>
           <div class="block-content">
             <ul class="fa-ul list-icons">
-              {{-- <li>
-                <span class="fa-li text-primary">
-                  <i class="fa fa-map-marker-alt"></i>
-                </span>
-                <div class="fw-semibold">Location</div>
-                <div class="text-muted">New York</div>
-              </li> --}}
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-briefcase"></i>
@@ -174,11 +188,6 @@
                 </span>
                 <div class="fw-semibold">Amount per Campaign</div>
                 <div class="text-muted"> {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}</div>
-                {{-- @if($campaign['currency'] == 'NGN')
-                <div class="text-muted">&#8358;{{$campaign['campaign_amount']}}</div>
-                @else
-                <div class="text-muted">${{$campaign['campaign_amount']}}</div>
-                @endif --}}
               </li>
               <li>
                 <span class="fa-li text-primary">
@@ -187,12 +196,30 @@
                 <div class="fw-semibold">Number of Worker</div>
                 <div class="text-muted">{{$campaign['number_of_staff']}}</div>
               </li>
-              {{-- @if($campaign['user_id'] == auth()->user()->id)
-                <li>
-                  <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $campaign->job_id }}"> <i class="fa fa-plus opacity-50 me-1"></i> Add More Workers</button>
-                </li>
-              @endif --}}
             </ul>
+
+            <!-- Share Campaign Section -->
+            <div class="mt-4 pt-3 border-top">
+              <div class="fw-semibold mb-2">
+                <i class="fa fa-share-alt text-primary"></i> Share Campaign
+              </div>
+              <div class="share-btn-group flex-wrap">
+                <button class="share-btn copy-link-btn" onclick="copyShareLink()" title="Copy Link">
+                  <i class="fa fa-link"></i> Copy Link
+                </button>
+                <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #25D366; color: white;">
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=Check out this campaign on Freebyz!&url={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1DA1F2; color: white;">
+                  <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1877F2; color: white;">
+                  <i class="fab fa-facebook-f"></i> Facebook
+                </a>
+              </div>
+              <input type="hidden" id="shareLink" value="{{ url('campaign/public/'.$campaign['job_id']) }}">
+              <small class="text-muted d-block mt-2" id="copyMessage" style="display:none;"></small>
+            </div>
           </div>
         </div>
 
@@ -207,11 +234,6 @@
               <div class="modal-body pb-1">
                 Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
                 Current Value per Job  - {{ $campaign['local_converted_amount'] }} <br>
-                {{-- @if($campaign['currency'] == 'NGN')
-                Current Value  - &#8358;{{ number_format($campaign['total_amount']) }} <br>
-                @else
-                Current Value  - ${{ number_format($campaign['total_amount'],2) }} <br>
-                @endif --}}
                 <hr>
                 <form action="{{ route('addmore.workers') }}" method="POST">
                   @csrf
@@ -226,10 +248,9 @@
                   </div>
                  </form>
               </div>
-              
+
               <div class="modal-footer">
               <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-              {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
               </div>
           </div>
           </div>
@@ -240,7 +261,7 @@
       </div>
       <div class="col-md-8 order-md-0">
         <div class="alert alert-info">
-          <li class="fa fa-info"></li> Please note that this job must be approved before payment. 
+          <li class="fa fa-info"></li> Please note that this job must be approved before payment.
           We'll automatically approve it if it is not approved by poster after 24hours.
         </div>
         @if (session('success'))
@@ -263,7 +284,7 @@
             <h3 class="block-title">Campaign Description</h3>
           </div>
             <div class="block-content">
-              
+
 
               @if($campaign->post_link != '')
               Link: <a href="{{ $campaign->post_link }}" target="_blank" class="">{{ $campaign->post_link }}</a>
@@ -283,12 +304,12 @@
             <br>
           </div>
         <!-- END Job Description -->
-        
+
         <!-- Similar Jobs -->
             <div class="block block-rounded">
               <div class="block-header block-header-default">
                   <h3 class="block-title">Post Proof of Completion</h3>
-              </div>    
+              </div>
                       @if($campaign->user_id == auth()->user()->id)
                         <div class="block-content">
                             <div class="row">
@@ -301,11 +322,11 @@
                         </div>
                       @else
                           @if($completed)
-                              
+
                             <div class="block-content">
                               <div class="row">
                                 <div class="col-md-12">
-                                    
+
                                     <h4 class="fw-normal text-muted text-center">
                                         Opps!! You have completed this campaign
                                     </h4>
@@ -316,15 +337,15 @@
                                             <div class="modal-content rounded overflow-hidden bg-image bg-image-bottom border-0" style="background-image: url({{asset('src/assets/media/photos/photo23.jpg')}});">
                                               <div class="row">
                                                 <div class="col-md-12">
-                                                
+
                                                   <div class="modal-content">
                                                     <div class="modal-header">
-                                                          <h5 class="modal-title">Kindly rate your experience</h5> 
+                                                          <h5 class="modal-title">Kindly rate your experience</h5>
                                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                      
+
                                                     <div class="modal-body pb-1">
-                                            
+
                                                         <form action="{{ route('job.rating') }}" method="POST">
                                                           @csrf
                                                           <div class="col-md-6">
@@ -345,7 +366,7 @@
                                                                 </div>
                                                               </div>
                                                           </div>
-              
+
                                                           </div>
                                                           <br>
                                                           <div class="mb-3">
@@ -358,12 +379,11 @@
                                                             <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
                                                           </div>
                                                         </form>
-                                                        
+
                                                     </div>
-                                                    
+
                                                     <div class="modal-footer">
                                                     <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
-                                                    {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
                                                     </div>
                                                 </div>
 
@@ -374,33 +394,11 @@
                                         </div>
                                     <!-- END Onboarding Modal -->
                                     @endif
-                                    {{-- <center>
-                                        <a class="btn btn-hero btn-primary mb-4" href="{{url('campaign/my/submitted/'.$campaign->myCompleted->id)}}" data-toggle="click-ripple" >
-                                        View Work
-                                      </a>
-                                    </center> --}}
                                 </div>
                               </div>
                             </div>
 
                           @else
-                              <?php 
-                              // $completed_count = $campaign->completed()->where('status', '!=', 'Denied')->count();
-                              // $completed_count = $campaign->completed()->where('status', 'Approved')->count();
-                              ?>
-                              {{-- @if($completed_count >= $campaign->number_of_staff)
-                                <div class="block-content">
-                                  <div class="row">
-                                    <div class="col-md-12">
-                                        
-                                        <h4 class="fw-normal text-muted text-center">
-                                            This campaign has reached its maximum number of worker.
-                                        </h4>
-                                      
-                                    </div>
-                                  </div>
-                                </div>
-                              @else --}}
                                   <div class="block-content">
                                     <div class="row">
                                       <form action="{{ route('post.campaign.work') }}" method="POST" enctype="multipart/form-data">
@@ -429,36 +427,12 @@
                                           </div>
                                       </div>
 
-                                          {{-- @if(auth()->user()->is_verified)
-                                        
-                                         
-                                        @elseif(!auth()->user()->is_verified && $campaign->campaign_amount <= 10) --}}
-                                        {{-- <div class="row mb-4 mt-4">
-                                          <div class="col-lg-6">
-                                          <button type="submit" class="btn btn-alt-primary">
-                                              <i class="fa fa-plus opacity-50 me-1"></i> Submit
-                                          </button>
-                                          </div>
-                                        </div> --}}
-                                        {{-- @else --}}
-                                        {{-- <div class="row mb-4 mt-4">
-                                          <div class="col-lg-12">
-                                            <p> You are not verified yet. Please click the button below to get Verified!</p>
-                                            <a href="{{ url('upgrade') }}" class="btn btn-primary btn-sm"> <li class="fa fa-link"> </li> Get Verified! </a> --}}
-                                          {{-- <button type="button" class="btn btn-alt-primary">
-                                              <i class="fa fa-plus opacity-50 me-1 disabled"></i> Submit
-                                          </button> --}}
-                                          {{-- </div>
-                                        </div> --}}
-                                        {{-- @endif --}}
-                                          
                                       </form>
                                     </div>
-                                      
+
 
                                   </div>
-     
-                                {{-- @endif --}}
+
                           @endif
 
                       @endif
@@ -480,5 +454,27 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Page JS Helpers (CKEditor 5 plugins) -->
 <script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script>
+
+<script>
+function copyShareLink() {
+    const shareLink = document.getElementById('shareLink').value;
+    const copyMessage = document.getElementById('copyMessage');
+
+    // Use the Clipboard API
+    navigator.clipboard.writeText(shareLink).then(function() {
+        copyMessage.textContent = 'Link copied to clipboard!';
+        copyMessage.style.display = 'block';
+        copyMessage.style.color = '#28a745';
+
+        setTimeout(function() {
+            copyMessage.style.display = 'none';
+        }, 3000);
+    }, function(err) {
+        copyMessage.textContent = 'Failed to copy link';
+        copyMessage.style.display = 'block';
+        copyMessage.style.color = '#dc3545';
+    });
+}
+</script>
 
 @endsection
