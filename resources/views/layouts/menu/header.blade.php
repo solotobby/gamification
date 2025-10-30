@@ -26,14 +26,22 @@
             @endphp
 
             @if($isNaira)
+                {{-- For Naira users or Super Admin --}}
                 @if($user?->is_verified)
-                    <i class="fa fa-check opacity-75 me-1"></i>
+                    <i class="fa fa-check opacity-75 me-1 text-success" title="Verified NGN Account"></i>
                 @endif
             @else
+                {{-- For USD users --}}
                 @if($user?->USD_verified)
-                    <i class="fa fa-check-double opacity-75 me-1"></i>
+                    <i class="fa fa-check-double opacity-75 me-1 text-info" title="Verified USD Account"></i>
                 @endif
             @endif
+
+            @if($user?->is_business)
+                {{-- Business account icon --}}
+                <i class="fa fa-star text-warning ms-1" title="Business Account"></i>
+            @endif
+
 
 
             {{-- <i class="far fa-check-circle me-1"></i> --}}

@@ -649,6 +649,9 @@ class WalletController extends Controller
         $baseCurrency = auth()->user()->wallet->base_currency;
         $user = auth()->user();
 
+        if ($user->is_business) {
+            return back()->with('error', 'Business accounts cannot make withdrawals. Please contact support.');
+        }
         $withdrawalExists = PaymentTransaction::where('user_id', $user->id)
             ->where('type', 'added_more_worker')
             ->where('created_at', '>=', now()->subDays(3))

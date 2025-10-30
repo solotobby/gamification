@@ -34,9 +34,13 @@ class User extends Authenticatable
         'gender',
         'base_currency',
         'is_verified',
+        'is_blacklisted',
+        'is_business',
         'verified_at',
+        'is_wallet_transfered',
         'email_verified_at',
-        'email_verification_attempted_at'
+        'email_verification_attempted_at',
+        'username'
     ];
 
     /**
@@ -56,6 +60,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_business' => 'boolean',
+        'is_blacklisted' => 'boolean',
+        'is_wallet_transfered' => 'boolean',
+
     ];
 
     public function hasRole($role = []): bool

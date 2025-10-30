@@ -502,12 +502,14 @@ class CampaignController extends Controller
 
     public function submitWork(Request $request)
     {
-
-
         $this->validate($request, [
             'proof' => 'image|mimes:png,jpeg,gif,jpg',
             'comment' => 'required|string',
         ]);
+
+        if (auth()->user()->is_business) {
+            return back()->with('error', 'Business accounts cannot perform tasks.');
+        }
 
         $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
         if ($check) {
