@@ -419,13 +419,29 @@
                                             <input type="checkbox" name="validate" required class="">
                                             <span><small> I agree that I will wait for a maximum of 24hrs for this tasks to be approved by the advertiser. </small></span>
                                         </div>
-                                        <div class="row mb-4 mt-4">
-                                          <div class="col-lg-6">
-                                          <button type="submit" class="btn btn-alt-primary">
-                                              <i class="fa fa-plus opacity-50 me-1"></i> Submit
-                                          </button>
-                                          </div>
-                                      </div>
+                                         @if(auth()->user()->is_business)
+                {{-- Business Account Restriction --}}
+                <div class="block-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                <strong>Business Account Restriction:</strong> Business accounts cannot perform tasks or jobs.
+                                Please contact support if you need to change your account type.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
+
+                <div class="row mb-4 mt-4">
+                  <div class="col-lg-6">
+                  <button type="submit" class="btn btn-alt-primary">
+                      <i class="fa fa-plus opacity-50 me-1"></i> Submit
+                  </button>
+                  </div>
+              </div>
+                @endif
 
                                       </form>
                                     </div>

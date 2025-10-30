@@ -738,6 +738,18 @@ class AdminController extends Controller
 
     }
 
+    public function toggleBusinessAccount(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+
+        $user->is_business = !$user->is_business;
+        $user->save();
+
+        $status = $user->is_business ? 'activated' : 'deactivated';
+
+        return back()->with('success', "Business account {$status} successfully");
+    }
+
     public function adminUserReferrals($id)
     {
         $user = User::where('id', $id)->first();
