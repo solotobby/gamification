@@ -143,12 +143,14 @@ class GeneralController extends Controller
     public function fix(){
 
         $highestPayout = PaymentTransaction::with(['user:id,name,phone'])->select('user_id', \DB::raw('SUM(amount) as total_payout'))
-            ->where('user_type', 'regular')
-            ->where('tx_type', 'Credit')
-            ->where('status', 'successful')
-            ->groupBy('user_id')
-            ->orderByDesc('total_payout')
-            ->take('10')->get();
+                ->where('user_type', 'regular')
+                ->where('tx_type', 'Credit')
+                ->where('status', 'successful')
+                ->groupBy('user_id')
+                ->having('total_payout', '>', 5000)
+                ->orderByDesc('total_payout')
+                ->count();
+            //->take('10')->get();
 
             return $highestPayout;
 
