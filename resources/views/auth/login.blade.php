@@ -116,7 +116,7 @@
                 <div class="row g-0 justify-content-center">
                   <div class="col-sm-8 col-xl-6">
 
-                  
+
 
                     @if ($errors->any())
                     <div class="alert alert-danger">
@@ -133,8 +133,8 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    
-                    <form class="js-validation-signin" method="POST" action="{{ route('login.user') }}">
+
+                    <form class="js-validation-signin" method="POST" action="{{ route('login.user', request()->query()) }}">
                             @csrf
                       <div class="py-3">
                         <div class="mb-4">

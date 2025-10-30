@@ -107,6 +107,12 @@ class RegisterController extends Controller
             Auth::login($user);
             setProfile($user); //set profile page
             activityLog($user, 'account_creation', $user->name . ' Registered ', 'regular');
+
+            $job_id = $request->query('redirect');
+            if ($job_id && auth()->check()) {
+                return redirect('campaign/' . $job_id);
+                // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+            }
             return redirect('/home');
         }
     }
@@ -183,153 +189,225 @@ class RegisterController extends Controller
     }
 
 
+    // public function loginUser(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|max:255',
+    //         'password' => 'required',
+    //     ]);
+    //     // $location = PaystackHelpers::getLocation(); //get user location dynamically
+    //     $user = User::where('email', $request->email)->first();
+
+    //     if ($user) {
+
+    //         $role = $user->role;
+
+    //         switch ($role) {
+    //             case "admin" || "super_admin":
+    //                 // return "Admin";
+
+    //                 if ($user) {
+
+    //                     if ($user->is_blacklisted == true) {
+    //                         return view('blocked');
+    //                     }
+
+    //                     if ($user->id == '1') {
+    //                         $token = Str::random(36);
+    //                         AuthCheck::create(['email' => $user->email, 'token' => $token]);
+    //                         //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
+    //                         // $token =
+    //                         return redirect('login/otp/' . $token);
+    //                     } else {
+    //                         return redirect('/');
+    //                     }
+    //                 } else {
+    //                     return back()->with('error', 'Email or Password is incorrect');
+    //                 }
+
+
+    //                 break;
+    //             case "regular":
+
+    //                 // return "Regular ";
+    //                 if ($user) {
+
+    //                     if ($user->is_blacklisted == true) {
+    //                         return view('blocked');
+    //                     }
+
+    //                     if ($user->referral_code == null) {
+    //                         $user->referral_code = Str::random(7);
+    //                         $user->save();
+    //                     }
+    //                     if (Hash::check($request->password, $user->password)) {
+
+    //                         Auth::login($user); //log user in
+
+    //                         if ($user->role == 'staff') {
+    //                             null;
+    //                         } else {
+
+    //                             // setWalletBaseCurrency();
+    //                         }
+
+    //                         //set base currency if not set
+    //                         if (env('APP_ENV') == 'production') {
+    //                             setProfile($user); //set profile page
+    //                             userLocation('Login');
+    //                             // setWalletBaseCurrency();
+
+    //                         }
+    //                         // setProfile($user);
+
+    //                         activityLog($user, 'login', $user->name . ' Logged In', 'regular');
+    //                         return redirect('home'); //redirect to home
+
+    //                     } else {
+    //                         return back()->with('error', 'Email or Password is incorrect');
+    //                     }
+    //                 } else {
+    //                     return back()->with('error', 'Email or Password is incorrect');
+    //                 }
+
+    //                 break;
+    //             case "staff":
+    //                 return "Staff Account";
+    //                 break;
+    //             default:
+    //                 return "Not applicable";
+    //         }
+    //     } else {
+    //         return back()->with('error', 'Email or Password is incorrect');
+    //     }
+
+
+    //     // if ($user) {
+    //     //     if ($user->is_blacklisted == true) {
+    //     //         return view('blocked');
+    //     //     }
+
+    //     //     if ($user->referral_code == null) {
+    //     //         $user->referral_code = Str::random(7);
+    //     //         $user->save();
+    //     //     }
+    //     //     if (Hash::check($request->password, $user->password)) {
+    //     //         // if($user->role != 'admin'){
+    //     //         //     $location = PaystackHelpers::getLocation(); //get user specific location
+    //     //         //     if($location == "United States"){ //check if the person is in Nigeria
+    //     //         //         if($user->is_wallet_transfered == false){
+    //     //         //             //activate sendmonny wallet and fund wallet
+    //     //         //             if(walletHandler() == 'sendmonny'){
+    //     //         //                 if($user->is_wallet_transfered == false){
+    //     //         //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny
+    //     //         //                 }
+    //     //         //             }
+    //     //         //         }
+    //     //         //     }
+    //     //         // }
+
+    //     //         Auth::login($user); //log user in
+
+    //     //         if ($user->role == 'staff') {
+    //     //             null;
+    //     //         } else {
+
+    //     //             setWalletBaseCurrency();
+    //     //         }
+
+
+
+
+    //     //         //set base currency if not set
+    //     //         if(env('APP_ENV') == 'production'){
+    //     //             setProfile($user); //set profile page
+    //     //             PaystackHelpers::userLocation('Login');
+    //     //         }
+
+    //     //         // SystemActivities::loginPoints($user);
+
+    //     //         SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
+    //     //         return redirect('home'); //redirect to home
+
+    //     //     } else {
+    //     //         return back()->with('error', 'Email or Password is incorrect');
+    //     //     }
+    //     // } else {
+    //     //     return back()->with('error', 'Email or Password is incorrect');
+    //     // }
+    // }
+
     public function loginUser(Request $request)
     {
         $request->validate([
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
-        // $location = PaystackHelpers::getLocation(); //get user location dynamically
+
         $user = User::where('email', $request->email)->first();
 
-        if ($user) {
-
-            $role = $user->role;
-
-            switch ($role) {
-                case "admin":
-                    // return "Admin";
-
-                    if ($user) {
-
-                        if ($user->is_blacklisted == true) {
-                            return view('blocked');
-                        }
-
-                        if ($user->id == '1') {
-                            $token = Str::random(36);
-                            AuthCheck::create(['email' => $user->email, 'token' => $token]);
-                            //\DB::table('password_resets')->insert(['email' => $user->email, 'token' => $token]);
-                            // $token =
-                            return redirect('login/otp/' . $token);
-                        } else {
-                            return redirect('/');
-                        }
-                    } else {
-                        return back()->with('error', 'Email or Password is incorrect');
-                    }
-
-
-                    break;
-                case "regular":
-
-                    // return "Regular ";
-                    if ($user) {
-
-                        if ($user->is_blacklisted == true) {
-                            return view('blocked');
-                        }
-
-                        if ($user->referral_code == null) {
-                            $user->referral_code = Str::random(7);
-                            $user->save();
-                        }
-                        if (Hash::check($request->password, $user->password)) {
-
-                            Auth::login($user); //log user in
-
-                            if ($user->role == 'staff') {
-                                null;
-                            } else {
-
-                                // setWalletBaseCurrency();
-                            }
-
-                            //set base currency if not set
-                            if (env('APP_ENV') == 'production') {
-                                setProfile($user); //set profile page
-                                userLocation('Login');
-                                // setWalletBaseCurrency();
-
-                            }
-                            // setProfile($user);
-
-                            activityLog($user, 'login', $user->name . ' Logged In', 'regular');
-                            return redirect('home'); //redirect to home
-
-                        } else {
-                            return back()->with('error', 'Email or Password is incorrect');
-                        }
-                    } else {
-                        return back()->with('error', 'Email or Password is incorrect');
-                    }
-
-                    break;
-                case "staff":
-                    return "Staff Account";
-                    break;
-                default:
-                    return "Not applicable";
-            }
-        } else {
+        if (! $user) {
             return back()->with('error', 'Email or Password is incorrect');
         }
 
+        // Handle blacklisted users
+        if ($user->is_blacklisted) {
+            return view('blocked');
+        }
 
-        // if ($user) {
-        //     if ($user->is_blacklisted == true) {
-        //         return view('blocked');
-        //     }
+        switch ($user->role) {
+            case 'admin':
+            case 'super_admin':
+                if (! Hash::check($request->password, $user->password)) {
+                    return back()->with('error', 'Email or Password is incorrect');
+                }
 
-        //     if ($user->referral_code == null) {
-        //         $user->referral_code = Str::random(7);
-        //         $user->save();
-        //     }
-        //     if (Hash::check($request->password, $user->password)) {
-        //         // if($user->role != 'admin'){
-        //         //     $location = PaystackHelpers::getLocation(); //get user specific location
-        //         //     if($location == "United States"){ //check if the person is in Nigeria
-        //         //         if($user->is_wallet_transfered == false){
-        //         //             //activate sendmonny wallet and fund wallet
-        //         //             if(walletHandler() == 'sendmonny'){
-        //         //                 if($user->is_wallet_transfered == false){
-        //         //                     activateSendmonnyWallet($user, $request->password); //hand sendmonny
-        //         //                 }
-        //         //             }
-        //         //         }
-        //         //     }
-        //         // }
+                $token = Str::random(36);
+                AuthCheck::create([
+                    'email' => $user->email,
+                    'token' => $token,
+                ]);
 
-        //         Auth::login($user); //log user in
+                return redirect('login/otp/' . $token);
 
-        //         if ($user->role == 'staff') {
-        //             null;
-        //         } else {
+            case 'regular':
+                // Regular user logic
+                if (! Hash::check($request->password, $user->password)) {
+                    return back()->with('error', 'Email or Password is incorrect');
+                }
 
-        //             setWalletBaseCurrency();
-        //         }
+                if (is_null($user->referral_code)) {
+                    $user->referral_code = Str::random(7);
+                    $user->save();
+                }
 
+                Auth::login($user);
 
+                if (env('APP_ENV') === 'production') {
+                    setProfile($user);
+                    userLocation('Login');
+                }
 
+                activityLog($user, 'login', $user->name . ' Logged In', 'regular');
 
-        //         //set base currency if not set
-        //         if(env('APP_ENV') == 'production'){
-        //             setProfile($user); //set profile page
-        //             PaystackHelpers::userLocation('Login');
-        //         }
+                $job_id = $request->query('redirect');
+                if ($job_id && auth()->check()) {
+                    return redirect('campaign/' . $job_id);
+                    // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                }
 
-        //         // SystemActivities::loginPoints($user);
+                return redirect('home');
 
-        //         SystemActivities::activityLog($user, 'login', $user->name . ' Logged In', 'regular');
-        //         return redirect('home'); //redirect to home
+            case 'staff':
+                return "Staff Account";
 
-        //     } else {
-        //         return back()->with('error', 'Email or Password is incorrect');
-        //     }
-        // } else {
-        //     return back()->with('error', 'Email or Password is incorrect');
-        // }
+            default:
+                return "Not applicable";
+        }
     }
+
+
+
     /**
      * Get a validator for an incoming registration request.
      *

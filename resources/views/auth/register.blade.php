@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
@@ -33,8 +34,9 @@
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
     <!-- END Stylesheets -->
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- Page Container -->
     <!--
       Available classes for #page-container:
@@ -93,98 +95,106 @@
     -->
     <div id="page-container">
 
-      <!-- Main Container -->
-      <main id="main-container">
-        <!-- Page Content -->
-        <div class="bg-image" style="background-image: url('{{ asset('src/assets/media/photos/photo22@2x.jpg')}}');">
-          <div class="row g-0 bg-primary-op">
-            <!-- Main Section -->
-            <div class="hero-static col-md-6 d-flex align-items-center bg-body-extra-light">
-              <div class="p-3 w-100">
-                <!-- Header -->
-                <div class="mb-3 text-center">
-                  <a class="link-fx fw-bold fs-1" href="https://freebyz.com">
-                    <span class="text-dark">Free</span><span class="text-primary">byz</span>
-                  </a>
-                  <p class="text-uppercase fw-bold fs-sm text-muted">Sign Up</p>
-                </div>
-                <!-- END Header -->
-
-                <!-- Sign In Form -->
-                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
-                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
-                <div class="row g-0 justify-content-center">
-                  <div class="col-sm-8 col-xl-6">
-                    @if ($errors->any())
-                      <div class="alert alert-danger">
-                          <ul>
-                              @foreach ($errors->all() as $error)
-                                  <li>{{ $error }}</li>
-                              @endforeach
-                          </ul>
-                      </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ url('register/user') }}">
-                            @csrf
-                      <div class="py-3">
-
-                        @include('layouts.resources.reg')
-
-                        <div class="col-md-12 mb-3">
-                            <label>Referral Code (Optional)</label>
-                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_code">
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="form-check">
-                              <input type="checkbox" class="form-check-input" id="signup-terms" name="signup-terms" required>
-                              <label class="form-check-label" for="signup-terms">I agree to Terms &amp; Conditions</label>
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Page Content -->
+            <div class="bg-image"
+                style="background-image: url('{{ asset('src/assets/media/photos/photo22@2x.jpg')}}');">
+                <div class="row g-0 bg-primary-op">
+                    <!-- Main Section -->
+                    <div class="hero-static col-md-6 d-flex align-items-center bg-body-extra-light">
+                        <div class="p-3 w-100">
+                            <!-- Header -->
+                            <div class="mb-3 text-center">
+                                <a class="link-fx fw-bold fs-1" href="https://freebyz.com">
+                                    <span class="text-dark">Free</span><span class="text-primary">byz</span>
+                                </a>
+                                <p class="text-uppercase fw-bold fs-sm text-muted">Sign Up</p>
                             </div>
+                            <!-- END Header -->
+
+                            <!-- Sign In Form -->
+                            <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
+                            <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                            <div class="row g-0 justify-content-center">
+                                <div class="col-sm-8 col-xl-6">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    @if (session('error'))
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+
+                                    <form method="POST" action="{{ url('register/user') }}">
+                                        @csrf
+                                        <div class="py-3">
+
+                                            @include('layouts.resources.reg')
+                                            <input type="hidden" name="redirect" value="{{ request('redirect') }}">
+
+                                            <div class="col-md-12 mb-3">
+                                                <label>Referral Code (Optional)</label>
+                                                <input id="text" type="text"
+                                                    class="form-control intput-lg @error('name') is-invalid @enderror"
+                                                    name="referral_code">
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="signup-terms"
+                                                        name="signup-terms" required>
+                                                    <label class="form-check-label" for="signup-terms">I agree to Terms
+                                                        &amp; Conditions</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary">
+                                                    <i class="fa  fa-plus opacity-50 me-1"></i> Sign Up
+                                                </button>
+                                                <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
+
+                                                    <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"
+                                                        href="{{ url('login') }}">
+                                                        <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Sign In
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- END Sign In Form -->
                         </div>
-                        <div class="mb-4">
-                            <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary">
-                              <i class="fa  fa-plus opacity-50 me-1"></i> Sign Up
-                            </button>
-                            <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
-                              
-                              <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1" href="{{ url('login') }}">
-                                <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Sign In
-                              </a>
+                    </div>
+                    <!-- END Main Section -->
+
+                    <!-- Meta Info Section -->
+                    <div
+                        class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
+                        <div class="p-3">
+                            <p class="display-4 fw-bold text-white mb-3">
+                                Welcome to the future of possibilities
+                            </p>
+                            <p class="fs-lg fw-semibold text-white-75 mb-0">
+                                Copyright &copy; <span data-toggle="year-copy"></span>
                             </p>
                         </div>
-                      </div>
-                    </form>
-                  </div>
+                    </div>
+                    <!-- END Meta Info Section -->
                 </div>
-                <!-- END Sign In Form -->
-              </div>
             </div>
-            <!-- END Main Section -->
-
-            <!-- Meta Info Section -->
-            <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
-              <div class="p-3">
-                <p class="display-4 fw-bold text-white mb-3">
-                  Welcome to the future of possibilities
-                </p>
-                <p class="fs-lg fw-semibold text-white-75 mb-0">
-                  Copyright &copy; <span data-toggle="year-copy"></span>
-                </p>
-              </div>
-            </div>
-            <!-- END Meta Info Section -->
-          </div>
-        </div>
-        <!-- END Page Content -->
-      </main>
-      <!-- END Main Container -->
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->
     </div>
     <!-- END Page Container -->
 
@@ -204,5 +214,6 @@
 
     <!-- Page JS Code -->
     <script src="{{ asset('src/assets/js/pages/op_auth_signin.min.js')}}"></script>
-  </body>
+</body>
+
 </html>

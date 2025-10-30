@@ -173,7 +173,11 @@ Route::get('decline/get/sub/categories/info', [\App\Http\Controllers\Admin\Admin
 
 Route::get('extend/payment', [\App\Http\Controllers\CampaignController::class, 'campaign_extension_payment']);
 
-Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign'])->middleware(['auth', 'check.skills']);
+Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign'])->middleware(['auth', 'check.skills'])->name('campaign.view');
+
+
+// Public campaign route (no authentication required)
+Route::get('/campaign/public/{job_id}', [\App\Http\Controllers\GeneralController::class, 'viewPublicCampaign'])->name('campaign.public.view');
 
 Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'submitWork'])->name('post.campaign.work');
 Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');

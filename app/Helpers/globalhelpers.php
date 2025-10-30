@@ -2219,39 +2219,51 @@ if (!function_exists('badge')) {
 
 
 if (!function_exists('viewCampaign')) {
-    function viewCampaign($campaign_id)
+    function viewCampaign($campaign_id, $trackImpression = true)
     {
-
         if ($campaign_id == null) {
             return false;
         }
 
-
-
-        $campaign = Campaign::with(['campaignType', 'campaignCategory'])->where('job_id', $campaign_id)->first();
-
-
-        // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
-        // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
-        // $campaign->save();
+        $campaign = Campaign::with(['campaignType', 'campaignCategory'])
+            ->where('job_id', $campaign_id)
+            ->first();
 
         if ($campaign) {
-
-            $campaign->impressions += 1;
-            $campaign->save();
+            if ($trackImpression) {
+                $campaign->impressions += 1;
+                $campaign->save();
+            }
 
             checkCampaignCompletedStatus($campaign->id);
 
             $data = $campaign;
-            $data['current_user_id'] = auth()->user()->id;
-            $data['is_attempted'] = $campaign->completed()->where('user_id', auth()->user()->id)->first() != null ? true : false;
+
+            // Only add user-specific data if authenticated
+            if (auth()->check()) {
+                $data['current_user_id'] = auth()->user()->id;
+                $data['is_attempted'] = $campaign->completed()
+                    ->where('user_id', auth()->user()->id)
+                    ->first() != null ? true : false;
+                $baseCurrency = baseCurrency();
+            } else {
+                $data['current_user_id'] = null;
+                $data['is_attempted'] = false;
+                $baseCurrency = 'NGN'; // Default currency for guests
+            }
+
             $data['attempts'] = $campaign->completed()->count();
-            $data['local_converted_amount'] = currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount);
-            $data['local_converted_currency'] = baseCurrency();
+            $data['local_converted_amount'] = currencyConverter(
+                $campaign->currency,
+                $baseCurrency,
+                $campaign->campaign_amount
+            );
+            $data['local_converted_currency'] = $baseCurrency;
+
             return $data;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
 
@@ -2702,7 +2714,7 @@ if (!function_exists('currencyConverter')) {
         $convertedAmount = $rate * $amount;
 
         // return ceil($convertedAmount);
-         return (float) round($rate * $amount, 2);
+        return (float) round($rate * $amount, 2);
         // return number_format($convertedAmount, 2);
     }
 }

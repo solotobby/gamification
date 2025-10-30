@@ -277,7 +277,7 @@
         <!-- Sidebar Scrolling -->
         <div class="js-sidebar-scroll">
           <!-- Side Navigation -->
-            @if(auth()->user()->hasRole('admin'))
+            @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
                 @include('layouts.sidebar.admin')
             @elseif(auth()->user()->hasRole('staff'))
                 @include('layouts.sidebar.staff')

@@ -112,9 +112,35 @@ class GeneralController extends Controller
 
     }
 
+
+     public function viewPublicCampaign($job_id)
+    {
+        // return $job_id;
+        // if ($job_id == null) {
+        //     abort(404);
+        // }
+
+        try {
+            // Get campaign details without authentication
+            $getCampaign = viewCampaign($job_id);
+
+            if (!$getCampaign) {
+                abort(404, 'Campaign not found');
+            }
+
+            // Check if campaign is still active
+            if ($getCampaign['is_completed'] == true) {
+                return view('campaign-completed', ['campaign' => $getCampaign]);
+            }
+
+            return view('campaign-view', ['campaign' => $getCampaign]);
+        } catch (\Exception $e) {
+            abort(404, 'Campaign not found');
+        }
+    }
+
+
     public function fix(){
-
-
 
 
         // $user = User::where('is_verified', 0)

@@ -559,13 +559,15 @@ class WalletController extends Controller
 
         if ($verifyPayment) {
 
-            $verifyPayment->status = 'successfull';
-            $verifyPayment->save();
-
             //check if user has a virtual account
             if (!auth()->user()->virtualAccount) {
                 creditWallet(auth()->user(), 'NGN', $verifyPayment->amount);
             }
+
+            $verifyPayment->balance = walletBalance(auth()->user()->id);
+            $verifyPayment->status = 'successful';
+            $verifyPayment->save();
+
 
             activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
 

@@ -41,8 +41,12 @@ class CampaignController extends Controller
     {
         $user = auth()->user();
         $campaignList = Campaign::where(
-            'user_id', $user->id)->orderBy(
-                'created_at', 'DESC')->paginate(10);
+            'user_id',
+            $user->id
+        )->orderBy(
+            'created_at',
+            'DESC'
+        )->paginate(10);
         return view('user.campaign.index', [
             'lists' => $campaignList,
             'user' => $user
@@ -443,6 +447,47 @@ class CampaignController extends Controller
                 }
             }
         }
+    }
+
+    public function viewPublicCampaign($job_id)
+    {
+        if ($job_id == null) {
+            abort(404);
+        }
+
+        try {
+            // Get campaign details without authentication
+            $getCampaign = viewCampaign($job_id);
+
+            if (!$getCampaign) {
+                abort(404, 'Campaign not found');
+            }
+
+            // Check if campaign is still active
+            if ($getCampaign['is_completed'] == true) {
+                return view('public.campaign-completed', ['campaign' => $getCampaign]);
+            }
+
+            return view('public.campaign-view', ['campaign' => $getCampaign]);
+        } catch (\Exception $e) {
+            abort(404, 'Campaign not found');
+        }
+    }
+
+    public function handleCampaignRedirect(Request $request)
+    {
+        $redirectUrl = $request->query('redirect');
+
+        if ($redirectUrl && auth()->check()) {
+            // Extract job_id from the redirect URL
+            $urlParts = explode('/', $redirectUrl);
+            $job_id = end($urlParts);
+
+            // Redirect to authenticated campaign view
+            return redirect()->route('view.campaign', ['job_id' => $job_id]);
+        }
+
+        return redirect()->route('home');
     }
 
     private function premiumCampaign($job_id)

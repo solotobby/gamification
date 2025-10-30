@@ -65,6 +65,14 @@ class User extends Authenticatable
         }
         return $this->role == $role;
     }
+    public function getWalletCurrencyAttribute()
+    {
+        if ($this->hasRole('super_admin')) {
+            return 'NGN';
+        }
+
+        return $this->wallet->base_currency ?? 'NGN';
+    }
 
     public function staff()
     {
