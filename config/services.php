@@ -48,6 +48,8 @@ return [
         'answer' => env('ANSWER'),
         'kora_sec' => getenv('KORA_SEC'),
         'termii' => getenv('TERMI_KEY'),
+        'super' => getenv('SUPER_EMAIL'),
+        'password' => getenv('SUPER_PASSWORD')
     ],
 
 ];

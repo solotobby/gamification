@@ -18,10 +18,10 @@ class SuperAdminSeeder extends Seeder
 
         // Create or get super admin user
         $user = User::firstOrCreate(
-            ['email' => 'hello@freebyz.com'],
+            ['email' => config('services.env.super')],
             [
                 'name' => 'System Super Admin',
-                'password' => Hash::make('Admin@123'),
+                'password' => Hash::make(config('services.env.password')),
                 'email_verified_at' => now(),
                 'referral_code' => Str::random(7),
                 'is_blacklisted' => false,
