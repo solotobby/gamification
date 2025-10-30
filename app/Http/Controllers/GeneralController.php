@@ -142,13 +142,15 @@ class GeneralController extends Controller
 
     public function fix(){
 
-
-        $highestPayoutUser = Withrawal::with(['user:id,name'])->select('user_id', \DB::raw('SUM(amount) as total_payout'))
+        $highestPayout = PaymentTransaction::with(['user:id,name,phone'])->select('user_id', \DB::raw('SUM(amount) as total_payout'))
+            ->where('user_type', 'regular')
+            ->where('tx_type', 'Credit')
+            ->where('status', 'successful')
             ->groupBy('user_id')
             ->orderByDesc('total_payout')
             ->take('10')->get();
 
-            return $highestPayoutUser;
+            return $highestPayout;
 
 
 
