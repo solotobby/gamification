@@ -2318,7 +2318,7 @@ if (!function_exists('resolveBankName')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->get('https://api.paystack.co/bank/resolve?account_number=' . $account_number . '&bank_code=' . $bank_code);
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2333,7 +2333,7 @@ if (!function_exists('recipientCode')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/transferrecipient', [
             "type" => "nuban",
             "name" => $name,

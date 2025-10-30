@@ -386,9 +386,9 @@
                                 target="_blank" class="btn" style="background: #25D366; color: white;">
                                 <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
                             </a>
-                            <a href="https://twitter.com/intent/tweet?text=Earn money online with Freebyz!&url={{ urlencode(url()->current()) }}"
+                            <a href="https://x.com/intent/post?text=Check out this amazing campaign on Freebyz!&url={{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #1DA1F2; color: white;">
-                                <i class="fab fa-twitter me-2"></i>Share on Twitter
+                                <i class="fab fa-x me-2"></i>Share on X
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #1877F2; color: white;">

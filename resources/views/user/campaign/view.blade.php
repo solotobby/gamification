@@ -210,8 +210,8 @@
                 <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #25D366; color: white;">
                   <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <a href="https://twitter.com/intent/tweet?text=Check out this campaign on Freebyz!&url={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1DA1F2; color: white;">
-                  <i class="fab fa-twitter"></i> Twitter
+                <a href="https://x.com/intent/post?text=Check out this campaign on Freebyz!&url={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1DA1F2; color: white;">
+                  <i class="fab fa-x"></i> X
                 </a>
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1877F2; color: white;">
                   <i class="fab fa-facebook-f"></i> Facebook
