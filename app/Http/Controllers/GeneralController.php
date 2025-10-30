@@ -143,6 +143,15 @@ class GeneralController extends Controller
     public function fix(){
 
 
+        $highestPayoutUser = Withrawal::with(['user:id,name'])->select('user_id', \DB::raw('SUM(amount) as total_payout'))
+            ->groupBy('user_id')
+            ->orderByDesc('total_payout')
+            ->take('10')->get();
+
+            return $highestPayoutUser;
+
+
+
         // $user = User::where('is_verified', 0)
         //  ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
 
