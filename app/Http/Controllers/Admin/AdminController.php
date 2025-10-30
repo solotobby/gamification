@@ -399,9 +399,10 @@ class AdminController extends Controller
     //     return view('admin.users.search_result', ['users' => $users]);
     // }
 
-    public function userSearch(Request $request)
+    public function  userSearch(Request $request)
     {
         $search = $request->input('search');
+        $search = $request->input('q');
 
         $users = User::where('role', 'regular')
             ->when($search, function ($query, $search) {
@@ -411,7 +412,7 @@ class AdminController extends Controller
                         ->orWhere('phone', 'LIKE', "%{$search}%")
                         ->orWhere('referral_code', 'LIKE', "%{$search}%");
                 });
-            })
+            })->latest()
             ->paginate(100);
 
         return view('admin.users.search_result', compact('users'));
@@ -489,7 +490,7 @@ class AdminController extends Controller
         ]);
     }
 
-     private function getFilteredUsers(Request $request)
+    private function getFilteredUsers(Request $request)
     {
         $query = $this->buildQuery($request);
         return $query->selectRaw('users.*, COALESCE(income_calc.total_income, 0) as income')
@@ -1915,28 +1916,29 @@ class AdminController extends Controller
 
     public function updateUserAccountDetails(Request $request)
     {
-
         $accountInformation = resolveBankName($request->account_number, $request->bank_code);
-
+        // Log::info($accountInformation);
         if ($accountInformation['status'] == 'true') {
             $recipientCode = recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
-            $bankInfor = BankInformation::where('user_id', $request->user_id)->first();
-            $bankInfor->name = $accountInformation['data']['account_name'];
-            $bankInfor->bank_name = $recipientCode['data']['details']['bank_name'];
-            $bankInfor->account_number = $request->account_number;
-            $bankInfor->bank_code = $request->bank_code;
-            $bankInfor->recipient_code = $recipientCode['data']['recipient_code'];
-            $bankInfor->save();
+            BankInformation::updateOrCreate(
+                ['user_id' => $request->user_id],
+                [
+                    'name' => $accountInformation['data']['account_name'],
+                    'bank_name' => $recipientCode['data']['details']['bank_name'],
+                    'account_number' => $request->account_number,
+                    'bank_code' => $request->bank_code,
+                    'recipient_code' => $recipientCode['data']['recipient_code'],
+                ]
+            );
+
+            $user = User::where('id', $request->user_id)->first();
+            $subject = 'Account Details Updated';
+            $content = 'Congratulations, your account details has been updated on Freebyz.';
+
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            return back()->with('success', 'Account Details Upated');
         }
-
-
-        $user = User::where('id', $request->user_id)->first();
-        $subject = 'Account Details Updated';
-        $content = 'Congratulations, your account details has been updated on Freebyz.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-
-
-        return back()->with('success', 'Account Details Upated');
+        return back()->with('error', 'Account Updating Failed');
     }
 
     public function virtualAccountList()

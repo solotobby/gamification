@@ -452,7 +452,7 @@ class CampaignController extends Controller
     public function viewPublicCampaign($job_id)
     {
         if ($job_id == null) {
-            abort(404);
+            return view('campaign-not-found');
         }
 
         try {
@@ -460,7 +460,7 @@ class CampaignController extends Controller
             $getCampaign = viewCampaign($job_id);
 
             if (!$getCampaign) {
-                abort(404, 'Campaign not found');
+                return view('campaign-not-found');
             }
 
             // Check if campaign is still active
@@ -470,7 +470,7 @@ class CampaignController extends Controller
 
             return view('public.campaign-view', ['campaign' => $getCampaign]);
         } catch (\Exception $e) {
-            abort(404, 'Campaign not found');
+            return view('campaign-not-found');
         }
     }
 

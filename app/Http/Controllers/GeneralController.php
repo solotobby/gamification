@@ -125,7 +125,7 @@ class GeneralController extends Controller
             $getCampaign = viewCampaign($job_id);
 
             if (!$getCampaign) {
-                abort(404, 'Campaign not found');
+                return view('campaign-not-found');
             }
 
             // Check if campaign is still active
@@ -135,7 +135,7 @@ class GeneralController extends Controller
 
             return view('campaign-view', ['campaign' => $getCampaign]);
         } catch (\Exception $e) {
-            abort(404, 'Campaign not found');
+                return view('campaign-not-found');
         }
     }
 

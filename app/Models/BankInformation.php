@@ -11,7 +11,16 @@ class BankInformation extends Model
 
     protected $table = "bank_information";
 
-    protected $fillable = ['user_id', 'name', 'bank_name', 'account_number', 'bank_code', 'status', 'recipient_code', 'currency'];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'bank_name',
+        'account_number',
+        'bank_code',
+        'status',
+        'recipient_code',
+        'currency'
+    ];
 
     public function user()
     {
