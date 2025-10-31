@@ -53,6 +53,7 @@
                     <th>Completed</th>
                     <th>Unit Price</th>
                     <th>Total</th>
+                    <th>Impression</th>
                     <th>Complete?</th>
                     <th>Priotize</th>
                     <th>When Created</th>
@@ -86,6 +87,7 @@
                             {{ $camp->currency }} {{ $camp->total_amount }} 
                           @endif
                         </td>
+                        <td>{{ number_format($camp->impressions) }}</td>
                         <td>
                            <a href="{{ url('change/completed/'.$camp->id) }}"> {{$camp->is_completed == true ? 'YES' : 'NO' }}</a>
                         </td>
