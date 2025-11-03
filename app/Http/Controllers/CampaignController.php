@@ -295,7 +295,12 @@ class CampaignController extends Controller
         }
 
         $est_amount = $request->number_of_staff * $request->campaign_amount;
-        $percent = (60 / 100) * $est_amount;
+        if (auth()->user()->is_business) {
+            $percent = (50 / 100) * $est_amount;
+        } else {
+            $percent = (60 / 100) * $est_amount;
+        }
+            //  $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
 
 
@@ -313,7 +318,7 @@ class CampaignController extends Controller
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
         } else {
-            return back()->with('error', 'You do not have suficient funds in your wallet');
+            return back()->with('error', 'You do not have sufficient funds in your wallet');
         }
     }
 
