@@ -55,9 +55,9 @@
               </thead>
               <tbody>
                   {{-- <?php $i = 1; ?> --}}
-                  @foreach ($users as $user)
+                  @foreach ($users as $userlist)
                   {{-- {{ $user->user }} --}}
-                    @if($userlist = $user->user)
+                    {{-- @if($userlist = $user->user) --}}
                       <tr>
                          
                           <td class="fw-semibold"><a href="{{ url('user/'.$userlist->id.'/info') }}" target="_blank"> {{$userlist->name }}</a></td>
@@ -70,7 +70,7 @@
                           <td>{{ $userlist->country }}</td>
                           <td>{{ \Carbon\Carbon::parse($userlist->created_at)->diffForHumans() }}</td>
                       </tr>
-                      @endif
+                      {{-- @endif --}}
                   @endforeach
               </tbody>
             </table>
