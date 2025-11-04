@@ -53,7 +53,7 @@
                             <select name="currency" class="form-control @error('currency') is-invalid @enderror" required>
                                 <option value="">Select Country</option>
                                 @foreach (currencyList(null, true) as $currency)
-                                    <option value="{{ $currency->code }}">{{ $currency->country }}</option>
+                                    <option value="{{ $currency->country }}">{{ $currency->country }}</option>
                                 @endforeach
                                 <option value="USD,Other">Others</option>
                             </select>
