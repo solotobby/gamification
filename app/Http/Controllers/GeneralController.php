@@ -1202,7 +1202,7 @@ class GeneralController extends Controller
 
         try {
 
-            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender'])
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
