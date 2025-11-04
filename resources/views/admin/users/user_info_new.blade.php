@@ -469,6 +469,10 @@
                             <span class="badge {{ $info->is_business ? 'bg-success' : 'bg-secondary' }}">
                                 {{ $info->is_business ? 'Business Account' : 'Regular Account' }}
                             </span>
+                            <br>
+                            <strong>Api Key:</strong>
+                            <span><code>{{ $info->api_key ?? 'Null' }}</code></span>
+
                         </div>
 
 
