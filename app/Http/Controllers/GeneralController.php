@@ -1203,20 +1203,6 @@ class GeneralController extends Controller
         try {
 
 
-
-
-            // $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender'])
-            // ->select(
-            //     'user_id',
-            //     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
-            // )
-            // ->where('user_type', 'regular')
-            // ->groupBy('user_id')
-            // ->having('total_payout', '>', 50000)
-            // ->having('total_payout', '<', 2000000)
-            // // ->orderByDesc('total_payout')
-            // ->get();
-
             $highestPayout = PaymentTransaction::with(['user:id,name,phone,gender'])
                 ->select(
                     'user_id',
@@ -1227,7 +1213,7 @@ class GeneralController extends Controller
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
-                // ->take(2)
+                ->take(5000)
                 ->get()
                 ->map(function ($item) {
                     return [
