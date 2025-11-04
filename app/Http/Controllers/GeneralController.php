@@ -1216,6 +1216,7 @@ class GeneralController extends Controller
                 ])
                 ->with(['user:id,name,email,phone,gender'])
                 ->where('user_type', 'regular')
+                ->where('status', 'successful')
                 ->groupBy('user_id')
                 ->orderByDesc('total_payout')
                 ->limit(10)
