@@ -1227,6 +1227,11 @@ class GeneralController extends Controller
                     ];
                 });
 
+                $user = User::where('id', 1)->first();
+                $subject = 'API CALL SUCCESSFUL - HIGHEST PAYOUT USERS';
+                $content = 'Api Call Successful. Here is the list of users with highest payouts.';
+                Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
             return response()->json([
                 'message' => 'Users fetched successfully.',
                 'count' => $highestPayout->count(),
