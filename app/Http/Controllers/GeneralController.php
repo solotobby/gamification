@@ -1237,6 +1237,7 @@ class GeneralController extends Controller
             ->where('user_type', 'regular')
             ->groupBy('user_id')
             ->having('total_payout', '>', 50000)
+            ->having('total_payout', '<', 2000000)
             ->orderByDesc('total_payout')
             ->get();
 
