@@ -1208,6 +1208,9 @@ class GeneralController extends Controller
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
+                ->whereHas('user', function ($query) {
+                        $query->where('is_verified', 1);
+                    })
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
@@ -1217,6 +1220,7 @@ class GeneralController extends Controller
                 ->map(function ($item) {
                     return [
                         'name' => $item->user->name,
+                        'name' => $item->user->email,
                         'phone' => $item->user->phone,
                         'gender' => $item->user->gender ?? 'Male', // default to Male if null
                         'total_payout' => $item->total_payout,

@@ -37,8 +37,8 @@
 
 
         <div class="table-responsive">
-            {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
-            <table class="table table-bordered table-striped table-vcenter">
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+            {{-- <table class="table table-bordered table-striped table-vcenter"> --}}
               <thead>
                   <tr>
                      
