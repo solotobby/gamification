@@ -1227,7 +1227,7 @@ class GeneralController extends Controller
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
-                ->take(2)
+                // ->take(2)
                 ->get()
                 ->map(function ($item) {
                     return [
