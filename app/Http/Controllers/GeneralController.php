@@ -1219,8 +1219,7 @@ class GeneralController extends Controller
                 ->where('status', 'successful')
                 ->groupBy('user_id')
                 ->orderByDesc('total_payout')
-                ->limit(10)
-                ->get();
+                ->paginate(50);
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
