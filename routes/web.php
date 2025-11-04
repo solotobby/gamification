@@ -29,9 +29,14 @@ Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage'])
 //business Page
 Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessPage']);
 
+Route::middleware('auth.apikey')->group(function () {
+    Route::get('api/list', [\App\Http\Controllers\GeneralController::class, 'apiList']);
+});
+
+
 //  Test api
-Route::get('api/test', [\App\Http\Controllers\GeneralController::class, 'testapi']);
-Route::get('api/test/va', [\App\Http\Controllers\GeneralController::class, 'testapiva']);
+// Route::get('api/test', [\App\Http\Controllers\GeneralController::class, 'testapi']);
+// Route::get('api/test/va', [\App\Http\Controllers\GeneralController::class, 'testapiva']);
 // Route::get('api/test/2', [\App\Http\Controllers\GeneralController::class, 'testapi1']);
 
 ///oonboarding skillset

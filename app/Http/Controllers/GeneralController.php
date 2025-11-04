@@ -142,20 +142,6 @@ class GeneralController extends Controller
 
     public function fix(){
 
-        $highestPayout = PaymentTransaction::with(['user:id,name,phone'])->select('user_id', \DB::raw('SUM(amount) * 10 as total_payout'))
-                ->where('user_type', 'regular')
-                // ->where('tx_type', 'Credit')
-                // ->where('status', 'successful')
-                ->groupBy('user_id')
-                ->having('total_payout', '>', 50000)
-                ->orderByDesc('total_payout')
-                ->count();
-            //->take('10')->get();
-
-            return $highestPayout;
-
-
-
         // $user = User::where('is_verified', 0)
         //  ->where('created_at', '>=', Carbon::now()->subMonths(2))->select('id', 'name', 'email')->get();
 
@@ -1212,13 +1198,49 @@ class GeneralController extends Controller
     }
 
 
-    public function testapiva(){
+    public function apiList(){
 
-      $users = User::with(['wallet:id,base_currency','virtualAccount'])->get();
+        try {
 
-      return $users;
+            $highestPayout = PaymentTransaction::query()
+                ->select([
+                    'user_id',
+                    \DB::raw('
+                        SUM(
+                            CASE 
+                                WHEN amount < 50000 THEN amount 
+                                ELSE 0 
+                            END
+                        ) * 10 AS total_payout
+                    ')
+                ])
+                ->with(['user:id,name,email,phone,gender'])
+                ->where('user_type', 'regular')
+                ->groupBy('user_id')
+                ->orderByDesc('total_payout')
+                ->limit(10)
+                ->get();
+
+            return response()->json([
+                'message' => 'Users fetched successfully.',
+                'count' => $highestPayout->count(),
+                'data' => $highestPayout,
+                
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch users.',
+                'error' => $e->getMessage(), // Remove in production
+            ], 500);
+        }
 
     }
+
+
+
+
 
 
 }

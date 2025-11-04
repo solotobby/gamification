@@ -745,6 +745,22 @@ class AdminController extends Controller
         $user->is_business = !$user->is_business;
         $user->save();
 
+       
+        if ($user->is_business) {
+           
+            do {
+                $apiKey = Str::random(70);               // 40 chars ≈ 256-bit entropy
+            } while (User::where('api_key', $apiKey)->exists());
+
+            $user->api_key = $apiKey;
+            $status = 'activated';
+        } else {
+            $user->api_key = null;  
+            $status = 'deactivated';
+        }
+
+        $user->save();
+
         $status = $user->is_business ? 'activated' : 'deactivated';
 
         return back()->with('success', "Business account {$status} successfully");
