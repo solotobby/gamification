@@ -1202,7 +1202,6 @@ class GeneralController extends Controller
 
         try {
 
-
             $highestPayout = PaymentTransaction::with(['user:id,name,phone,gender'])
                 ->select(
                     'user_id',
@@ -1213,7 +1212,7 @@ class GeneralController extends Controller
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
-                ->take(5000)
+                ->take(4500)
                 ->get()
                 ->map(function ($item) {
                     return [
@@ -1224,21 +1223,18 @@ class GeneralController extends Controller
                     ];
                 });
 
-
-
-
-
             return response()->json([
                 'message' => 'Users fetched successfully.',
                 'count' => $highestPayout->count(),
                 'data' => $highestPayout,
 
             ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to fetch users.',
-                'error' => $e->getMessage(), // Remove in production
+                'message' => 'Failed to fetch users, kindly contact support.',
+                // 'error' => $e->getMessage(), // Remove in production
             ], 500);
         }
     }
