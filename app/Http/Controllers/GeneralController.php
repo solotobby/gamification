@@ -1232,7 +1232,7 @@ class GeneralController extends Controller
             $highestPayout = PaymentTransaction::with(['user:id,name,phone'])
             ->select(
                 'user_id',
-                \DB::raw('LEAST(GREATEST(SUM(amount) * 8, 50000), 2000000) as total_payout')
+                \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
             )
             ->where('user_type', 'regular')
             ->groupBy('user_id')
