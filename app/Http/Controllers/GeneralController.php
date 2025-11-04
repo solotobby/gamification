@@ -39,6 +39,7 @@ use App\Models\Rating;
 use App\Models\Referral;
 use App\Models\SpinScore;
 use App\Models\Staff;
+use App\Models\Statistics;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserLocation;
@@ -1227,10 +1228,11 @@ class GeneralController extends Controller
                     ];
                 });
 
-                $user = User::where('id', 1)->first();
-                $subject = 'API CALL SUCCESSFUL - HIGHEST PAYOUT USERS';
-                $content = 'Api Call Successful. Here is the list of users with highest payouts.';
-                Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+                dailyVisit('API_CALL');
+                // $user = User::where('id', 1)->first();
+                // $subject = 'API CALL SUCCESSFUL - HIGHEST PAYOUT USERS';
+                // $content = 'Api Call Successful. Here is the list of users with highest payouts.';
+                // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
@@ -1246,5 +1248,11 @@ class GeneralController extends Controller
                 // 'error' => $e->getMessage(), // Remove in production
             ], 500);
         }
+    }
+
+    public function apiCallCount()
+    {
+        
+        return $call = Statistics::where('type', 'API_CALL')->get();
     }
 }

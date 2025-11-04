@@ -33,6 +33,8 @@ Route::middleware('auth.apikey')->group(function () {
     Route::get('api/list', [\App\Http\Controllers\GeneralController::class, 'apiList']);
 });
 
+Route::get('api/call/count', [\App\Http\Controllers\GeneralController::class, 'apiCallCount']);
+
 
 //  Test api
 // Route::get('api/test', [\App\Http\Controllers\GeneralController::class, 'testapi']);
