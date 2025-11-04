@@ -1202,7 +1202,7 @@ class GeneralController extends Controller
 
         try {
 
-            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender'])
                 ->select(
                     'user_id',
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
@@ -1223,7 +1223,6 @@ class GeneralController extends Controller
                         'email' => $item->user->email,
                         'phone' => $item->user->phone,
                         'gender' => $item->user->gender ?? 'Male',
-                        'is_verified' => $item->user->is_verified, // default to Male if null
                         'total_payout' => $item->total_payout,
                     ];
                 });
