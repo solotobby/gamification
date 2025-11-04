@@ -1202,25 +1202,34 @@ class GeneralController extends Controller
 
         try {
 
-            $highestPayout = PaymentTransaction::query()
-                ->select([
-                    'user_id',
-                    \DB::raw('
-                        SUM(
-                            CASE 
-                                WHEN amount < 50000 THEN amount 
-                                ELSE 0 
-                            END
-                        ) * 10 AS total_payout
-                    ')
-                ])
-                ->with(['user:id,name,email,phone,gender'])
+            // $highestPayout = PaymentTransaction::query()
+            //     ->select([
+            //         'user_id',
+            //         \DB::raw('
+            //             SUM(
+            //                 CASE 
+            //                     WHEN amount < 50000 THEN amount 
+            //                     ELSE 0 
+            //                 END
+            //             ) * 10 AS total_payout
+            //         ')
+            //     ])
+            //     ->with(['user:id,name,email,phone,gender'])
+            //     ->where('user_type', 'regular')
+            //     ->where('status', 'successful')
+            //     ->groupBy('user_id')
+            //     ->orderByDesc('total_payout')
+            //     ->take(5000)
+            //     ->get();
+
+            $highestPayout = PaymentTransaction::with(['user:id,name,phone'])->select('user_id', \DB::raw('SUM(amount) * 10 as total_payout'))
                 ->where('user_type', 'regular')
-                ->where('status', 'successful')
                 ->groupBy('user_id')
+                ->having('total_payout', '>', 50000)
                 ->orderByDesc('total_payout')
-                ->take(5000)
                 ->get();
+
+
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
