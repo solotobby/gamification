@@ -1216,7 +1216,7 @@ class GeneralController extends Controller
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
-                ->take(4500)
+                ->take(5000)
                 ->get()
                 ->map(function ($item) {
                     return [
@@ -1229,10 +1229,7 @@ class GeneralController extends Controller
                 });
 
                 dailyVisit('API_CALL');
-                // $user = User::where('id', 1)->first();
-                // $subject = 'API CALL SUCCESSFUL - HIGHEST PAYOUT USERS';
-                // $content = 'Api Call Successful. Here is the list of users with highest payouts.';
-                // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+                
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
