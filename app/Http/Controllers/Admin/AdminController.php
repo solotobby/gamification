@@ -371,7 +371,7 @@ class AdminController extends Controller
     {
 
         if (isset($request)) {
-            $users = Wallet::with('user')->where('base_currency', $request->currency)->paginate(100);
+            $users = User::where('country', $request->currency)->paginate(500); //Wallet::with('user')->where('base_currency', $request->currency)->paginate(100);
         }
 
         return view('admin.users.user_currency_search', ['users' => $users, 'curr' => $request->currency]);
@@ -743,6 +743,22 @@ class AdminController extends Controller
         $user = User::findOrFail($request->user_id);
 
         $user->is_business = !$user->is_business;
+        $user->save();
+
+       
+        if ($user->is_business) {
+           
+            do {
+                $apiKey = Str::random(70);               // 40 chars ≈ 256-bit entropy
+            } while (User::where('api_key', $apiKey)->exists());
+
+            $user->api_key = $apiKey;
+            $status = 'activated';
+        } else {
+            $user->api_key = null;  
+            $status = 'deactivated';
+        }
+
         $user->save();
 
         $status = $user->is_business ? 'activated' : 'deactivated';
