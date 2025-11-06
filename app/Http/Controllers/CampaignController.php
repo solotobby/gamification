@@ -296,7 +296,7 @@ class CampaignController extends Controller
 
         $est_amount = $request->number_of_staff * $request->campaign_amount;
         if (auth()->user()->is_business) {
-            $percent = (50 / 100) * $est_amount;
+            $percent = (100 / 100) * $est_amount;
         } else {
             $percent = (60 / 100) * $est_amount;
         }
