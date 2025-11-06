@@ -334,7 +334,7 @@
                 var x = Number(y) * Number(z);
 
                 // Set percentToGet based on business status
-                var percentToGet = isBusiness ? 50 : 60;
+                var percentToGet = isBusiness ? 100 : 60;
                 var percent = (percentToGet / 100) * x;
 
                 document.getElementById("demo").innerHTML = x + percent;
