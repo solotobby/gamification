@@ -320,7 +320,7 @@
                         document.getElementById("amount_per_campaign").value = result.amount;
 
                         // Set percentToGet based on business status
-                        var percentToGet = isBusiness ? 50 : 60;
+                        var percentToGet = isBusiness ? 100 : 60;
                         var percent = (percentToGet / 100) * total_amount;
 
                         document.getElementById("demo").innerHTML = total_amount + percent;
