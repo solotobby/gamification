@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\GeneralMail;
 use App\Mail\UpgradeUser;
+use App\Models\MassEmailLog;
 use App\Models\PaymentTransaction;
 use App\Models\Question;
 use App\Models\User;
@@ -338,4 +339,61 @@ class WebhookController extends Controller
 
 
     // }
+
+    public function zeptoWebhook(Request $request)
+    {
+        $events = $request->all();
+
+        foreach ($events as $event) {
+            $messageId = $event['message_id'] ?? null;
+            $eventType = $event['event'] ?? null;
+
+            if (!$messageId || !$eventType) continue;
+
+            $log = MassEmailLog::where('message_id', $messageId)->first();
+
+            if (!$log) continue;
+
+            $campaign = $log->campaign;
+
+            switch ($eventType) {
+                case 'delivered':
+                    $log->update([
+                        'status' => 'delivered',
+                        'delivered_at' => now(),
+                    ]);
+                    $campaign->increment('delivered');
+                    break;
+
+                case 'open':
+                    if ($log->status !== 'opened') {
+                        $log->update([
+                            'status' => 'opened',
+                            'opened_at' => now(),
+                        ]);
+                        $campaign->increment('opened');
+                    }
+                    break;
+
+                case 'bounce':
+                    $log->update([
+                        'status' => 'bounced',
+                        'bounced_at' => now(),
+                        'error_message' => $event['reason'] ?? 'Email bounced',
+                    ]);
+                    $campaign->increment('bounced');
+                    break;
+
+                case 'failed':
+                    $log->update([
+                        'status' => 'failed',
+                        'error_message' => $event['reason'] ?? 'Email failed',
+                    ]);
+                    $campaign->increment('failed');
+                    break;
+            }
+        }
+
+        return response()->json(['status' => 'success']);
+    }
 }

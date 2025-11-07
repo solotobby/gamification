@@ -17,16 +17,16 @@ class CheckUserSkills
      */
     public function handle(Request $request, Closure $next)
     {
-        
+
             //ensure user is logged in
          $user = Auth::user();
 
-       
-         if (!$user->skill()->exists()) {
-            
-             return redirect()->route('create.skill');
-         }
-         
+
+        //  if (!$user->skill()->exists()) {
+
+        //      return redirect()->route('create.skill');
+        //  }
+
         return $next($request);
     }
 }

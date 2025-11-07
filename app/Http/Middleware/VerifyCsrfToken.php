@@ -14,5 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'virtual/account/webhook',
         'kora/pay/webhook',
+        'zeptomail/webhook',
+
     ];
 }
