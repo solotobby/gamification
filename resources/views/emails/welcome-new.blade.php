@@ -39,7 +39,7 @@
 
                 <h3 style="margin:20px 0 10px 0;">🔥 CLAIM YOUR FIRST OFFER OF 50K GIVEAWAY</h3>
                 <p style="margin:0 0 15px 0;">
-                    Every week until October 30, 2025, the user with the highest verified referrals will receive ₦50,000.
+                    Every week, the user with the highest verified referrals will receive ₦50,000.
                     It's simple to qualify, get at least 50 verified referrals within the week.
                 </p>
                 <p style="margin:0 0 15px 0;">
@@ -58,7 +58,7 @@
 
                 <p style="margin:20px 0 5px 0;">Regards,</p>
                 <p style="margin:0;"><strong>Dr. Farohunbi Samuel</strong><br>
-                    CEO, Dominahl Technologies LLC</p>
+                    CEO, Freebyz Technologies Ltd</p>
             </td>
         </tr>
     </tbody>
