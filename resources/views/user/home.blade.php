@@ -310,7 +310,7 @@
           @endif
       @endif --}}
 
-         <a href="https://bit.ly/propelfreebyz" target="_blank">
+         <a href="https://dashboard.freebyz.com/campaign/public/EbmFbEm" target="_blank">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
               <div class="d-md-flex justify-content-md-between align-items-md-center">
