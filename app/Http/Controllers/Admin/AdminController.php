@@ -37,6 +37,8 @@ use App\Models\UserScore;
 use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
+use App\Models\MassEmailLog;
+use App\Models\MassEmailCampaign;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -745,9 +747,9 @@ class AdminController extends Controller
         $user->is_business = !$user->is_business;
         $user->save();
 
-       
+
         if ($user->is_business) {
-           
+
             do {
                 $apiKey = Str::random(70);               // 40 chars ≈ 256-bit entropy
             } while (User::where('api_key', $apiKey)->exists());
@@ -755,7 +757,7 @@ class AdminController extends Controller
             $user->api_key = $apiKey;
             $status = 'activated';
         } else {
-            $user->api_key = null;  
+            $user->api_key = null;
             $status = 'deactivated';
         }
 
@@ -1436,6 +1438,7 @@ class AdminController extends Controller
         ]);
     }
 
+
     public function sendMassCommunication(Request $request)
     {
         $query = User::where('role', 'regular');
@@ -1448,7 +1451,6 @@ class AdminController extends Controller
 
         if ($request->days) {
             $date = now()->subDays($request->days);
-
             if ($request->type === 'verified') {
                 $query->where('verified_at', '>=', $date);
             } elseif ($request->type === 'email_verified') {
@@ -1462,15 +1464,44 @@ class AdminController extends Controller
             $query->where('country', $request->country);
         }
 
+        // Create campaign record
+        $campaign = MassEmailCampaign::create([
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'audience_type' => $request->type ?? 'registered',
+            'days_filter' => $request->days,
+            'country_filter' => $request->country,
+            'total_recipients' => 0,
+            'sent_by' => auth()->id(),
+        ]);
+
         // Send email using chunk
         if ($request->send_email) {
+            $totalRecipients = 0;
+
             (clone $query)
                 ->whereNotNull('email')
-                ->select('id')
-                ->chunk(900, function ($users) use ($request) {
+                ->select('id', 'email')
+                ->chunk(900, function ($users) use ($request, $campaign, &$totalRecipients) {
+                    $totalRecipients += $users->count();
+
+                    // Create log entries
+                    $logData = $users->map(fn($user) => [
+                        'campaign_id' => $campaign->id,
+                        'user_id' => $user->id,
+                        'email' => $user->email,
+                        'status' => 'pending',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ])->toArray();
+
+                    MassEmailLog::insert($logData);
+
                     $userIds = $users->pluck('id')->toArray();
-                    dispatch(new SendMassEmail($userIds, $request->message, $request->subject));
+                    dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
                 });
+
+            $campaign->update(['total_recipients' => $totalRecipients]);
         }
 
         // Send SMS in bulk
@@ -1480,7 +1511,6 @@ class AdminController extends Controller
                 ->select('phone')
                 ->chunk(900, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
-
                     $phones = formatAndArrange($phones);
                     if (!empty($phones)) {
                         $process = sendBulkSMS($phones, $request->sms_message);
@@ -1492,7 +1522,43 @@ class AdminController extends Controller
                     }
                 });
         }
-        return back()->with('success', 'Communication sent successfully');
+
+        return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
+    }
+
+    // List all campaigns
+    public function campaigns()
+    {
+        // Fetch campaigns with relationships (1 query)
+        $campaigns = MassEmailCampaign::with('sentBy')
+            ->latest()
+            ->paginate(20);
+
+        // Fetch all aggregate stats in a single query
+        $stats = MassEmailCampaign::selectRaw('
+        COUNT(*) as total_campaigns,
+        SUM(total_recipients) as total_sent,
+        SUM(delivered) as total_delivered,
+        SUM(opened) as total_opened,
+        SUM(bounced) as total_bounced,
+        SUM(failed) as total_failed
+    ')->first();
+
+        return view('admin.mass_mail_campaigns', compact('campaigns', 'stats'));
+    }
+
+
+    // Campaign details
+    public function campaignDetails($id)
+    {
+        $campaign = MassEmailCampaign::findOrFail($id);
+
+        $logs = MassEmailLog::where('campaign_id', $id)
+            ->with('user')
+            ->latest()
+            ->paginate(50);
+
+        return view('admin.mass_mail_campaign_details', compact('campaign', 'logs'));
     }
 
 

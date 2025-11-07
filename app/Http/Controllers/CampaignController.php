@@ -399,9 +399,9 @@ class CampaignController extends Controller
     public function viewCampaign($job_id)
     {
 
-        if (!auth()->user()->skill()->exists()) {
-            return redirect()->route('create.skill');
-        }
+        // if (!auth()->user()->skill()->exists()) {
+        //     return redirect()->route('create.skill');
+        // }
         if ($job_id == null) {
             abort(400);
         }

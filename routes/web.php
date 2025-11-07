@@ -63,6 +63,7 @@ Route::get('fix', [\App\Http\Controllers\GeneralController::class, 'fix']);
 //webhook routes
 Route::post('virtual/account/webhook', [\App\Http\Controllers\WebhookController::class, 'handle']);
 Route::post('kora/pay/webhook', [\App\Http\Controllers\WebhookController::class, 'korayPayWebhook'])->name('koraPay.webhook');
+Route::post('zeptomail/webhook', [\App\Http\Controllers\WebhookController::class, 'zeptoWebhook'])->name('webhook.zeptomail');
 
 // Route::get('games', [\App\Http\Controllers\GeneralController::class, 'gamelist'])->name('game.list');
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
@@ -487,6 +488,9 @@ Route::post('mass/sms', [\App\Http\Controllers\Admin\SMSController::class, 'send
 
 Route::post('/admin/preview-audience', [\App\Http\Controllers\Admin\AdminController::class, 'previewAudience'])->name('preview.audience');
 Route::post('/admin/send-mass-communication', [\App\Http\Controllers\Admin\AdminController::class, 'sendMassCommunication'])->name('send.mass.communication');
+
+Route::get('mass-mail/campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaigns'])->name('mass.mail.campaigns');
+Route::get('mass-mail/campaigns/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDetails'])->name('mass.mail.campaign.details');
 
 Route::get('unapproved', [\App\Http\Controllers\Admin\AdminController::class, 'unapprovedJobs'])->name('unapproved');
 Route::get('approved', [\App\Http\Controllers\Admin\AdminController::class, 'approvedJobs'])->name('approved');
