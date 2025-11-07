@@ -123,7 +123,7 @@
                         <img src="{{ url('src/assets/media/photos/freebyz-logo-white.png') }}" alt="Freebyz Logo"
                             style="height: 30px; width: auto; margin-right: 8px;">
                     </h5>
-                    <p>Your trusted platform for earning money online.</p>
+                    <p>Earn from micro and remote job.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p>&copy; {{ date('Y') }} Freebyz. All rights reserved.</p>
