@@ -300,7 +300,7 @@ class CampaignController extends Controller
         } else {
             $percent = (60 / 100) * $est_amount;
         }
-            //  $percent = (60 / 100) * $est_amount;
+        //  $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
 
 
@@ -406,18 +406,15 @@ class CampaignController extends Controller
             abort(400);
         }
 
-        if ($job_id == 'Pt4bZz0') {
-            return $this->premiumCampaign($job_id);
-        }
+        // if ($job_id == 'Pt4bZz0') {
+        //     return $this->premiumCampaign($job_id);
+        // }
 
         $userBaseCurrency = baseCurrency();
 
         $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
 
         $getCampaign = viewCampaign($job_id);
-
-
-
 
         //CHECK IF USER IS VERIFIED IN NGN
         if ($checkIsVerified == 'Verified') {
@@ -432,23 +429,35 @@ class CampaignController extends Controller
             }
         } else {
 
-
             $currencyParams = currencyParameter($userBaseCurrency);
             $minUpgradeAmount = $currencyParams->min_upgrade_amount;
 
             $campaignLocalAmount = $getCampaign['local_converted_amount'];
 
-            if ($campaignLocalAmount >= $minUpgradeAmount) {
-                return redirect('info');
+            $fetchUser = User::where('id', $getCampaign['user_id'])->first();
+            if ($fetchUser->is_business) {
+
+                $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                $checkRating = isset($rating) ? true : false;
+                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
             } else {
-                if ($getCampaign['is_completed'] == true) {
-                    return redirect('home');
+
+                if ($campaignLocalAmount >= $minUpgradeAmount) {
+
+                    return redirect('info');
                 } else {
 
-                    $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                    $checkRating = isset($rating) ? true : false;
-                    return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+                    if ($getCampaign['is_completed'] == true) {
+
+                        return redirect('home');
+                    } else {
+
+                        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                        $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+                        $checkRating = isset($rating) ? true : false;
+                        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+                    }
                 }
             }
         }
