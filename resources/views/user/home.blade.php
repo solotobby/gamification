@@ -6,15 +6,15 @@
 @section('content')
  <!-- Hero -->
  <div class="bg-image" style="background-image: url('https://i.natgeofe.com/n/9e7c6381-8205-4a0c-a3a6-e744bf86a751/climbing-8000-meters-first-winter-ascents-everest.jpg');">
- 
+
     <div class="bg-primary-dark-op">
       <div class="content content-full">
         <div class="row my-3">
           <div class="col-md-5 d-md-flex align-items-md-center">
             <div class="py-4 py-md-0 text-center text-md-start">
-              <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}} 
+              <h1 class="fs-2 text-white mb-2">{{auth()->user()->name}}
                 @if(auth()->user()->wallet->base_currency == 'NGN')
-                
+
                     @if(auth()->user()->is_verified)
                         <i class="fa fa-check opacity-75 me-1"></i>
                     @endif
@@ -25,7 +25,7 @@
                     @endif
 
                 @endif
-              
+
               </h1>
               <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Jobs and Get Paid!</h2>
             </div>
@@ -42,7 +42,7 @@
                          @else
                           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
                          @endif
-                     
+
                     </p>
                     <p class="fs-sm fw-semibold text-white-75 mb-0">
 
@@ -96,7 +96,7 @@
 
           @endif
 
-          
+
       </div>
 
       <div class="col-12">
@@ -147,7 +147,7 @@
                       @if(@auth()->user()->virtualAccount)
 
                         @if(@auth()->user()->virtualAccount->bank_name == 'Wema Bank')
-                        
+
                             <span class="form-control form-control-alt">
                               <a href="{{ route('create.updated.virtual.account') }}" class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
                             </span>
@@ -158,9 +158,9 @@
                               <i class="fa fa-copy"></i>
                             </button>
                         @endif
-                        
+
                       @else
-                    
+
                       {{-- <span class="form-control form-control-alt">VFD</span> <input type="text" value="4600066074" class="form-control form-control-alt" id="myInput-2" readonly>
                         <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                           <i class="fa fa-copy"></i>
@@ -204,7 +204,7 @@
         @endif
     </div> --}}
 
-    
+
     <!-- VPS -->
     <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
 
@@ -249,7 +249,7 @@
     </form>
 
 
-     
+
       {{-- <div class="block block-rounded block-fx-pop mb-2">
         <div class="block-content block-content-full border-start border-3 border-dark">
           <div class="d-md-flex justify-content-md-between align-items-md-center">
@@ -298,17 +298,33 @@
                         <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> <small><i style="color: goldenrod">Freebyz Business Promotion</i></small></div>
                         <h3 class="h4 fw-bold mb-1" style="color: #191918">{{ $promotion->business_name}}</h3>
                         <p class="fs-sm text-muted">
-                          
+
                             {!! $promotion->description !!}
                         </p>
                       </div>
-                      
+
                     </div>
                   </div>
-                </div> 
-              </a> 
+                </div>
+              </a>
           @endif
       @endif --}}
+
+         <a href="https://bit.ly/propelfreebyz" target="_blank">
+          <div class="block block-rounded block-fx-pop mb-2">
+            <div class="block-content block-content-full border-start border-3 border-dark">
+              <div class="d-md-flex justify-content-md-between align-items-md-center">
+                <div class="col-12">
+                  <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
+                  <h3 class="h4 fw-bold mb-1" style="color: #191918">NEW: Learn 2 Earn</h3>
+                  <p class="fs-sm text-muted">
+                    <i class="fa fa-heart me-1"></i> Get paid to build skills! Complete FREE courses from Propel and earn N500.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
 
       <a href="{{url('skills')}}" target="_blank">
         <div class="block block-rounded block-fx-pop mb-2">
@@ -323,8 +339,8 @@
               </div>
             </div>
           </div>
-        </div> 
-      </a> 
+        </div>
+      </a>
 
          <a href="{{url('view/posts')}}" target="_blank">
           <div class="block block-rounded block-fx-pop mb-2">
@@ -339,8 +355,8 @@
                 </div>
               </div>
             </div>
-          </div> 
-        </a> 
+          </div>
+        </a>
 
 
 
@@ -354,12 +370,12 @@
                   <p class="fs-sm text-muted">
                     <i class="fa fa-heart me-1"></i>Earn up to &#8358;2,800 daily by Selling Wellahealth Insurance
                   </p>
-                  
+
                 </div>
-                
+
               </div>
             </div>
-          </div> 
+          </div>
         </a>  --}}
           <a href="https://famlic.com" target="_blank">
           <div class="block block-rounded block-fx-pop mb-2">
@@ -375,7 +391,7 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </a>
 
         {{-- <a href="https://zireemilsoude.net/4/8562126" target="_blank">
@@ -391,7 +407,7 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </a>  --}}
 
 
@@ -410,45 +426,45 @@
 
    <!-- END Call to Action -->
     @if(auth()->user()->profile->is_welcome == 0)
-    
+
       {{-- Show welcome pop up --}}
       @include('layouts.resources.welcome')
 
     @elseif(auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set  == 0)
-       
-        @include('layouts.resources.validate_currency')  
+
+        @include('layouts.resources.validate_currency')
 
     @elseif(auth()->user()->profile->pathway  == null )
-      @include('layouts.resources.choice') 
+      @include('layouts.resources.choice')
     {{-- @elseif(!auth()->user()->accountDetails)
         @if(auth()->user()->wallet->base_currency == "NGN")
-            @include('layouts.resources.account_details') 
+            @include('layouts.resources.account_details')
         @endif --}}
 
     {{-- @elseif(!auth()->user()->profile->phone_verified)
 
         @if(auth()->user()->wallet->base_currency == "NGN")
-            @include('layouts.resources.account_details')      
+            @include('layouts.resources.account_details')
         @endif  --}}
 
 
 
     {{-- @elseif(auth()->user()->wallet->base_currency == 'NGN' && @auth()->user()->virtualAccount->bank_name == 'Wema Bank')
-    
+
 
      @include('layouts.resources.virtualaccount') --}}
 
       {{-- @include('layouts.resources.unverified') --}}
 
     {{-- @else
-    
+
       @include('layouts.resources.xmas') --}}
 
-     
+
 
     @endif
 
-    
+
 
 
 @endsection
@@ -466,19 +482,19 @@
 <script>
 function myFunction() {
     var copyText = document.getElementById("myInput");
-    
+
     copyText.select();
     copyText.setSelectionRange(0, 99999);
 
     console.log(navigator.clipboard.writeText(copyText.value));
-    
+
     // var tooltip = document.getElementById("myTooltip");
     // tooltip.innerHTML = "Copied: " + copyText.value;
   }
 
   function myFunction2(){
     var copyText = document.getElementById("myInput-2");
-    
+
     copyText.select();
     copyText.setSelectionRange(0, 99999);
 
@@ -511,20 +527,20 @@ function myFunction() {
     function renderJobs(jobs) {
         const container = $("#display-jobs");
         container.empty();
-       
-        
+
+
         if (jobs.length === 0) {
           $("#display-jobs").html(`<div class="alert alert-info mt-2">No jobs found for this category</div>`);
             // container.html(`<p class="text-muted">No jobs found.</p>`);
             return;
         }
 
-       
+
         // Filter out completed jobs from the data
         const filteredJobs = jobs.filter(job => !job.is_completed);
 
         console.log(filteredJobs);
-                
+
         filteredJobs.forEach(job => {
             const url = `${baseUrl}/${job.job_id}`;
             const jobHtml = `
@@ -669,7 +685,7 @@ function myFunction() {
 
 
   // $(document).ready(function() {
-          
+
 
   //           const baseApiUrl = '{{ url("available/jobs") }}';
   //           const baseUrl = '{{ url("campaign") }}';
@@ -730,7 +746,7 @@ function myFunction() {
   //               loadJobs(apiUrl);
   //           });
   // });
-    
+
 </script>
 
 @endsection
