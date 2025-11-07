@@ -323,7 +323,7 @@
                         {{ $campaign['local_converted_amount'] }}
                     </p>
                     <a href="{{ route('login') }}?redirect={{ $campaign->job_id }}" class="btn btn-primary cta-button">
-                        <i class="fas fa-sign-in-alt me-2"></i>Perform Tacks
+                        <i class="fas fa-sign-in-alt me-2"></i>Perform Tasks
                     </a>
                     <p class="mt-3">
                         Don't have an account?
@@ -409,10 +409,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>
-                        <img src="{{ url('src/assets/media/photos/freebyz-logo-white.png') }}" alt="Freebyz Logo"
+                        <img src="{{ url('src/assets/media/photos/Freebyz-logo-white.png') }}" alt="Freebyz Logo"
                             style="height: 30px; width: auto; margin-right: 8px;">
                     </h5>
-                    <p>Your trusted platform for earning money online.</p>
+                    <p>Earn from micro and remote job.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p>&copy; {{ date('Y') }} Freebyz. All rights reserved.</p>
