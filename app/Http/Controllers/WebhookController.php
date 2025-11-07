@@ -342,30 +342,41 @@ class WebhookController extends Controller
 
     public function zeptoWebhook(Request $request)
     {
-        $events = $request->all();
+        $signature = $request->header('producer-signature');
+        $authKey = config('services.zeptomail.webhook_auth_key');
+        $payload = $request->getContent();
 
-        foreach ($events as $event) {
-            $messageId = $event['message_id'] ?? null;
-            $eventType = $event['event'] ?? null;
+        if (!$this->isValidZeptoSignature($signature, $payload, $authKey)) {
+            return response()->json(['error' => 'Invalid signature'], 403);
+        }
 
-            if (!$messageId || !$eventType) continue;
+        $data = $request->json()->all();
+        $eventName = $data['event_name'][0] ?? null;
+        $messages = $data['event_message'] ?? [];
 
-            $log = MassEmailLog::where('message_id', $messageId)->first();
+        foreach ($messages as $message) {
+            $emailReference = $message['email_info']['email_reference'] ?? null;
+            $details = $message['event_data'][0]['details'][0] ?? [];
 
+            if (!$emailReference) continue;
+
+            $log = MassEmailLog::where('message_id', $emailReference)->first();
             if (!$log) continue;
 
             $campaign = $log->campaign;
 
-            switch ($eventType) {
-                case 'delivered':
+            switch ($eventName) {
+                case 'softbounce':
+                case 'hardbounce':
                     $log->update([
-                        'status' => 'delivered',
-                        'delivered_at' => now(),
+                        'status' => 'bounced',
+                        'bounced_at' => now(),
+                        'error_message' => $details['diagnostic_message'] ?? 'Email bounced',
                     ]);
-                    $campaign->increment('delivered');
+                    $campaign->increment('bounced');
                     break;
 
-                case 'open':
+                case 'email_open':
                     if ($log->status !== 'opened') {
                         $log->update([
                             'status' => 'opened',
@@ -375,25 +386,31 @@ class WebhookController extends Controller
                     }
                     break;
 
-                case 'bounce':
-                    $log->update([
-                        'status' => 'bounced',
-                        'bounced_at' => now(),
-                        'error_message' => $event['reason'] ?? 'Email bounced',
-                    ]);
-                    $campaign->increment('bounced');
-                    break;
-
-                case 'failed':
-                    $log->update([
-                        'status' => 'failed',
-                        'error_message' => $event['reason'] ?? 'Email failed',
-                    ]);
-                    $campaign->increment('failed');
+                case 'email_link_click':
+                    $log->increment('clicks');
                     break;
             }
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+
+
+    private function isValidZeptoSignature($headerSignature, $payload, $authKey)
+    {
+        if (!$headerSignature || !$authKey) {
+            return false;
+        }
+
+        // Parse header: ts=xxx;s=xxx;s-algorithm=HmacSHA256
+        preg_match('/ts=([^;]+);s=([^;]+);s-algorithm=(.+)/', $headerSignature, $matches);
+        if (count($matches) < 4) return false;
+
+        [$full, $ts, $signature, $algo] = $matches;
+
+        $computed = base64_encode(hash_hmac('sha256', $ts . $payload, $authKey, true));
+
+        return hash_equals($computed, $signature);
     }
 }

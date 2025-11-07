@@ -108,7 +108,6 @@ class Kernel extends ConsoleKernel
                 $ca->reason = 'Auto-approval';
                 $ca->save();
 
-
                 $camp = Campaign::where('id', $ca->campaign_id)->first();
                 checkCampaignCompletedStatus($camp->id);
 

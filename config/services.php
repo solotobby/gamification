@@ -52,4 +52,11 @@ return [
         'password' => getenv('SUPER_PASSWORD')
     ],
 
+    'zeptomail' => [
+        'webhook_auth_key' => env('ZEPTO_WEBHOOK_AUTH_KEY'),
+        'token' => env('ZEPTO_TOKEN'),
+        'from_email' => env('ZEPTO_FROM_EMAIL', 'no-reply@yourdomain.com'),
+        'from_name' => env('ZEPTO_FROM_NAME', 'Your App Name'),
+    ],
+
 ];

@@ -1391,6 +1391,12 @@ class AdminController extends Controller
         // Filter by audience type
         if ($request->type === 'verified') {
             $query->where('is_verified', 1)->whereNotNull('verified_at');
+        } elseif ($request->type === 'test_user') {
+            $result = (object)[
+                'total' => 1,
+                'with_email' => 1,
+                'with_phone' => 0
+            ];
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
         }
@@ -1447,7 +1453,10 @@ class AdminController extends Controller
             $query->where('is_verified', 1)->whereNotNull('verified_at');
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
+        } elseif ($request->type === 'test_user') {
+            $query = User::where('email', 'morakinyovictor1@gmail.com');
         }
+
 
         if ($request->days) {
             $date = now()->subDays($request->days);
@@ -1529,7 +1538,6 @@ class AdminController extends Controller
     // List all campaigns
     public function campaigns()
     {
-        // Fetch campaigns with relationships (1 query)
         $campaigns = MassEmailCampaign::with('sentBy')
             ->latest()
             ->paginate(20);

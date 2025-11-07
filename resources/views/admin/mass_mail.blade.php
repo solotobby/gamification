@@ -49,6 +49,7 @@
                             <option value="registered">All Registered Users</option>
                             <option value="verified">Account Verified Users</option>
                             <option value="email_verified">Email Verified Users</option>
+                            <option value="test_user">Test User</option>
                         </select>
                     </div>
                     <div class="col-md-4">

@@ -2747,3 +2747,63 @@ if (!function_exists('fraudDetection')) {
         ");
     }
 }
+
+
+if (!function_exists('sendZeptoMail')) {
+    function sendZeptoMail(string $toEmail, string $toName, string $subject, string $htmlBody)
+    {
+        $payload = [
+           'from' => [
+                'address' => config('services.zeptomail.from_email'),
+                'name' => config('services.zeptomail.from_name'),
+            ],
+            'to' => [[
+                'email_address' => [
+                    'address' => $toEmail,
+                    'name' => $toName,
+                ],
+            ]],
+            'subject' => $subject,
+            'htmlbody' => $htmlBody,
+        ];
+
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => config('services.zeptomail.token'),
+            ])->post('https://api.zeptomail.com/v1.1/email', $payload);
+
+            $data = $response->json();
+
+            // Check for success
+            if ($response->successful() && ($data['message'] ?? '') === 'OK') {
+                return [
+                    'status' => 'accepted',
+                    'message_id' => $data['request_id'] ?? uniqid('zepto_', true),
+                    'data' => $data,
+                ];
+            }
+
+            Log::error('ZeptoMail API returned error', [
+                'response' => $data,
+                'email' => $toEmail,
+            ]);
+
+            return [
+                'status' => 'failed',
+                'error' => $data,
+            ];
+        } catch (\Throwable $e) {
+            Log::error('ZeptoMail API Exception', [
+                'error' => $e->getMessage(),
+                'email' => $toEmail,
+            ]);
+
+            return [
+                'status' => 'failed',
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+}
