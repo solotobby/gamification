@@ -5,7 +5,7 @@
     tinymce.init({
       selector: '#mytextarea'
     });
-  </script>
+</script>
 @endsection
 @section('content')
 
