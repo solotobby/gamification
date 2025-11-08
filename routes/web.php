@@ -196,7 +196,7 @@ Route::get('campaign/activities/{id}/response', [\App\Http\Controllers\CampaignC
 Route::get('admin/campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'adminActivities']);
 Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
-Route::get('campaign/{id}/edit', [\App\Http\Controllers\CampaignController::class, 'edit']);
+Route::get('campaign/{id}/extraworker', [\App\Http\Controllers\CampaignController::class, 'edit']);
 
 Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 'welcomeUser']);
 
