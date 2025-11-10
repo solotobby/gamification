@@ -78,7 +78,7 @@
                             {{ currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}<br>
                             Total Value of Job - {{ baseCurrency() }}
                             {{ currencyConverter($campaign->currency, baseCurrency(), $campaign->total_amount) }} <br>
-                            Wallet Balance - {{ baseCurrency() }} {{ walletBalance() }} <br>
+                            Wallet Balance - {{ baseCurrency() }}  {{ walletBalance(auth()->user()->id) }}<br>
                             <br>
 
                             <hr>
@@ -95,7 +95,7 @@
                             <input type="hidden" name="amount"
                                 value="{{ currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}">
 
-                            <input type="hidden" name="wallet_balance" id="wallet_balance" value="{{ walletBalance() }}">
+                            <input type="hidden" name="wallet_balance" id="wallet_balance" value="{{ walletBalance(auth()->user()->id) }}">
 
                             <input type="hidden" name="campaign_amount" id="campaignAmount"
                                 value="{{currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}">

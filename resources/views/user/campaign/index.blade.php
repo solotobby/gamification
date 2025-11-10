@@ -112,10 +112,14 @@
                                             <a href="{{ url('campaign/activities/pause/' . $list->job_id) }}"
                                                 class="btn btn-warning btn-sm"> Pause Campaign </a>
                                         @endif
-                                        {{-- <a type="button" class="btn btn-alt-primary btn-sm"
-                                                                href="{{ url('campaign/' . $list->job_id .'/edit') }}">
-                                                                Add More Workers
-                                                            </a> --}}
+
+                                        @if(@$list->user->is_business)
+                                         <a type="button" class="btn btn-alt-primary btn-sm"
+                                            href="{{ url('campaign/' . $list->job_id .'/extraworker') }}">
+                                                Add More Workers
+                                        </a>
+                                        @endif
+
                                         {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-default-popout-{{ $list->job_id }}">
                                                                 Add More Workers
