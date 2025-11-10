@@ -96,9 +96,15 @@ class Kernel extends ConsoleKernel
             // Get the start and end time for 24 hours ago
             $startTime = Carbon::now()->subDays(1)->startOfHour();
             $endTime = Carbon::now()->subDays(1)->endOfHour();
-            $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
+            // $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
+            //     ->whereBetween('created_at', [$startTime, $endTime])
+            //     //->whereDate('created_at', $yesterday)
+            //     ->get();
+
+            $lists = CampaignWorker::where('status', 'Pending')
+                ->whereNull('reason')
+                ->where('campaign_id', '!=', 8099)
                 ->whereBetween('created_at', [$startTime, $endTime])
-                //->whereDate('created_at', $yesterday)
                 ->get();
 
             foreach ($lists as $list) {
