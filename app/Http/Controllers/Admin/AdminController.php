@@ -1521,6 +1521,7 @@ class AdminController extends Controller
                 ->chunk(900, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
                     $phones = formatAndArrange($phones);
+                    Log::info($phones);
                     if (!empty($phones)) {
                         $process = sendBulkSMS($phones, $request->sms_message);
                         $code = is_array($process) ? $process['code'] : $process->code;
