@@ -1518,7 +1518,7 @@ class AdminController extends Controller
             (clone $query)
                 ->whereNotNull('phone')
                 ->select('phone')
-                ->chunk(900, function ($users) use ($request) {
+                ->chunk(100, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
                     $phones = formatAndArrange($phones);
                     Log::info($phones);
