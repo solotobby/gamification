@@ -21,8 +21,8 @@
                     Add More Worker to Campaign
                 </h1>
                 {{-- <p class="fs-lg fw-normal text-white-75 mb-0">
-          1 more remaining, <a href="javascript:void(0)">upgrade your account today</a>!
-        </p> --}}
+                    1 more remaining, <a href="javascript:void(0)">upgrade your account today</a>!
+                </p> --}}
             </div>
         </div>
     </div>
@@ -78,7 +78,7 @@
                             {{ currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}<br>
                             Total Value of Job - {{ baseCurrency() }}
                             {{ currencyConverter($campaign->currency, baseCurrency(), $campaign->total_amount) }} <br>
-                            Wallet Balance - {{ baseCurrency() }}  {{ walletBalance(auth()->user()->id) }}<br>
+                            Wallet Balance - {{ baseCurrency() }} {{ walletBalance(auth()->user()->id) }}<br>
                             <br>
 
                             <hr>
@@ -89,13 +89,14 @@
                                 <input class="form-control" name="new_number" min="1" id="staff" type="number" required>
                             </div>
                             <input type="hidden" name="id" value="{{ $campaign->job_id }}">
-                           
+
 
                             <input type="hidden" name="id" value="{{ $campaign->job_id }}">
                             <input type="hidden" name="amount"
                                 value="{{ currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}">
 
-                            <input type="hidden" name="wallet_balance" id="wallet_balance" value="{{ walletBalance(auth()->user()->id) }}">
+                            <input type="hidden" name="wallet_balance" id="wallet_balance"
+                                value="{{ walletBalance(auth()->user()->id) }}">
 
                             <input type="hidden" name="campaign_amount" id="campaignAmount"
                                 value="{{currencyConverter($campaign->currency, baseCurrency(), $campaign->campaign_amount) }}">
@@ -107,7 +108,7 @@
                             <input type="hidden" id="uploadFeeAmount"
                                 value="{{ currencyParameter(baseCurrency())->allow_upload }}">
 
-                                <input type="hidden"  id="platformRevenueInput" name="revenue" />
+                            <input type="hidden" id="platformRevenueInput" name="revenue" />
 
 
                             <p id="totalDisplay" class="mb-2 fw-bolds">Estimated Cost: {{ baseCurrency() }} 0</p>
@@ -150,15 +151,20 @@
 @section('script')
 
     <!-- Page JS Plugins -->
-    {{-- <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script> --}}
-    {{-- <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
-    {{-- <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+    {{--
+    <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script> --}}
+    {{--
+    <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
+    {{--
+    <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
+    {{--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
-    {{-- <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
+    {{--
+    <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script> --}}
 
 
-    <script>
+    {{-- <script>
         const pricePerJob = document.getElementById('campaignAmount').value;
 
         const walletBalance = document.getElementById('wallet_balance').value;
@@ -180,7 +186,8 @@
             // const uploadFee = staffCount * uploadFeeInput.value;
             // const totalCost = total + percent + uploadFee;
 
-
+            const isBusiness = {{ auth()->user()->is_business ? 'true' : 'false' }};
+            const percentToGet = isBusiness ? 100 : 60;
 
             const staffCount = Number.parseInt(staffInput?.value) || 0;
             const uploadFeeValue = Number.parseFloat(uploadFeeInput?.value) || 0;
@@ -191,7 +198,8 @@
                 console.error("Invalid input detected. Please enter valid numbers.");
             } else {
                 const total = staffCount * pricePerJobValue;
-                const percent = 0.6 * total; // 60% of total
+                // const percent = 0.6 * total; // 60% of total
+                const percent = percentToGet;
                 const uploadFee = staffCount * uploadFeeValue;
                 const totalCost = total + percent + uploadFee;
                 const platformRevenue = percent + uploadFee;
@@ -236,9 +244,70 @@
         addBtn.disabled = true;
         totalDisplay.textContent = `Estimated Cost: ${currency} 0`;
         totalInput.value = 0;
-    </script>
+    </script> --}}
 
 
+    <script>
+    const pricePerJob = Number(document.getElementById('campaignAmount')?.value) || 0;
+    const walletBalance = Number(document.getElementById('wallet_balance')?.value) || 0;
+    const staffInput = document.getElementById('staff');
+    const addBtn = document.getElementById('addBtn');
+    const message = document.getElementById('message');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const totalInput = document.getElementById('total');
+    const uploadFeeInput = document.getElementById('uploadFeeAmount');
+    const currency = String(document.getElementById('currency')?.value || 'USD');
+
+    // Determine business user logic
+    const isBusiness = {{ auth()->user()->is_business ? 'true' : 'false' }};
+    const percentToGet = isBusiness ? 100 : 60;
+
+    function checkBalance() {
+        const staffCount = Number(staffInput?.value) || 0;
+        const uploadFeeValue = Number(uploadFeeInput?.value) || 0;
+
+        if (staffCount <= 0) {
+            addBtn.disabled = true;
+            message.textContent = 'Please enter a valid number of staff.';
+            message.style.display = 'block';
+            totalDisplay.textContent = `Estimated Cost: ${currency} 0`;
+            totalInput.value = 0;
+            return;
+        }
+
+        const total = staffCount * pricePerJob;
+        const percent = (percentToGet / 100) * total;
+        const uploadFee = staffCount * uploadFeeValue;
+        const totalCost = total + percent + uploadFee;
+        const platformRevenue = percent + uploadFee;
+
+        const platformRevenueInput = document.getElementById("platformRevenueInput");
+        if (platformRevenueInput) {
+            platformRevenueInput.value = platformRevenue.toFixed(2);
+        }
+
+        totalDisplay.textContent = `Total: ${currency}${totalCost.toLocaleString()}`;
+        totalInput.value = totalCost;
+
+        if (totalCost > walletBalance) {
+            addBtn.disabled = true;
+            const deficit = totalCost - walletBalance;
+            message.textContent = `Insufficient balance — you need ${currency} ${deficit.toLocaleString()} more.`;
+            message.style.display = 'block';
+        } else {
+            addBtn.disabled = false;
+            message.style.display = 'none';
+        }
+    }
+
+    staffInput.addEventListener('keyup', checkBalance);
+    staffInput.addEventListener('input', checkBalance);
+
+    // Initialize defaults
+    addBtn.disabled = true;
+    totalDisplay.textContent = `Estimated Cost: ${currency} 0`;
+    totalInput.value = 0;
+</script>
 
 
 @endsection
