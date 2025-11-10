@@ -1473,19 +1473,19 @@ class AdminController extends Controller
             $query->where('country', $request->country);
         }
 
-        // Create campaign record
-        $campaign = MassEmailCampaign::create([
-            'subject' => $request->subject,
-            'message' => $request->message,
-            'audience_type' => $request->type ?? 'registered',
-            'days_filter' => $request->days,
-            'country_filter' => $request->country,
-            'total_recipients' => 0,
-            'sent_by' => auth()->id(),
-        ]);
 
         // Send email using chunk
         if ($request->send_email) {
+            // Create campaign record
+            $campaign = MassEmailCampaign::create([
+                'subject' => $request->subject,
+                'message' => $request->message,
+                'audience_type' => $request->type ?? 'registered',
+                'days_filter' => $request->days,
+                'country_filter' => $request->country,
+                'total_recipients' => 0,
+                'sent_by' => auth()->id(),
+            ]);
             $totalRecipients = 0;
 
             (clone $query)
