@@ -1,4 +1,3 @@
-{{-- Save as: resources/views/admin/mass_mail_campaign_details.blade.php --}}
 @extends('layouts.main.master')
 
 @section('content')
@@ -20,7 +19,8 @@
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <div class="text-center">
-                        <div class="fs-2 fw-bold">{{ number_format($campaign->total_recipients) }}</div>
+                        {{-- <div class="fs-2 fw-bold">{{ number_format($campaign->total_recipients) }}</div> --}}
+                        <div class="fs-2 fw-bold">{{ number_format($totalSent) }}</div>
                         <div class="text-muted">Total Sent</div>
                     </div>
                 </div>
@@ -30,10 +30,12 @@
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <div class="text-center">
-                        <div class="fs-2 fw-bold text-success">{{ number_format($campaign->delivered) }}</div>
+                        {{-- <div class="fs-2 fw-bold text-success">{{ number_format($campaign->delivered) }}</div> --}}
+                        <div class="fs-2 fw-bold text-success">{{ number_format($delivered) }}</div>
                         <div class="text-muted">
                             Delivered
-                            <small>({{ $campaign->total_recipients > 0 ? round(($campaign->delivered/$campaign->total_recipients)*100, 1) : 0 }}%)</small>
+                                <small>({{ $totalSent > 0 ? round(($delivered/$totalSent)*100, 1) : 0 }}%)</small>
+                            {{-- <small>({{ $campaign->total_recipients > 0 ? round(($campaign->delivered/$campaign->total_recipients)*100, 1) : 0 }}%)</small> --}}
                         </div>
                     </div>
                 </div>
@@ -43,10 +45,12 @@
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <div class="text-center">
-                        <div class="fs-2 fw-bold text-primary">{{ number_format($campaign->opened) }}</div>
+                      <div class="fs-2 fw-bold text-primary">{{ number_format($opened) }}</div>
+                        {{-- <div class="fs-2 fw-bold text-primary">{{ number_format($campaign->opened) }}</div> --}}
                         <div class="text-muted">
                             Opened
-                            <small>({{ $campaign->delivered > 0 ? round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small>
+                                <small>({{ $delivered > 0 ? round(($opened/$delivered)*100, 1) : 0 }}%)</small>
+                            {{-- <small>({{ $campaign->delivered > 0 ? round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small> --}}
                         </div>
                     </div>
                 </div>
@@ -56,7 +60,8 @@
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
                     <div class="text-center">
-                        <div class="fs-2 fw-bold text-danger">{{ number_format($campaign->bounced + $campaign->failed) }}</div>
+                      <div class="fs-2 fw-bold text-danger">{{ number_format($failedBounced) }}</div>
+                        {{-- <div class="fs-2 fw-bold text-danger">{{ number_format($campaign->bounced + $campaign->failed) }}</div> --}}
                         <div class="text-muted">Bounced/Failed</div>
                     </div>
                 </div>

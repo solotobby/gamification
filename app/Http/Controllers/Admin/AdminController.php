@@ -1557,17 +1557,36 @@ class AdminController extends Controller
 
 
     // Campaign details
-    public function campaignDetails($id)
-    {
-        $campaign = MassEmailCampaign::findOrFail($id);
+   public function campaignDetails($id)
+{
+    $campaign = MassEmailCampaign::findOrFail($id);
 
-        $logs = MassEmailLog::where('campaign_id', $id)
-            ->with('user')
-            ->latest()
-            ->paginate(50);
+    // Fetch logs with pagination
+    $logs = MassEmailLog::where('campaign_id', $id)
+        ->with('user')
+        ->latest()
+        ->paginate(50);
 
-        return view('admin.mass_mail_campaign_details', compact('campaign', 'logs'));
-    }
+    // Single optimized aggregate query
+    $stats = MassEmailLog::where('campaign_id', $id)
+        ->selectRaw("
+            COUNT(*) as total_sent,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
+            SUM(CASE WHEN status = 'opened' THEN 1 ELSE 0 END) as opened,
+            SUM(CASE WHEN status IN ('failed', 'bounced') THEN 1 ELSE 0 END) as failed_bounced
+        ")
+        ->first();
+
+    return view('admin.mass_mail_campaign_details', [
+        'campaign' => $campaign,
+        'logs' => $logs,
+        'totalSent' => $stats->total_sent ?? 0,
+        'delivered' => $stats->delivered ?? 0,
+        'opened' => $stats->opened ?? 0,
+        'failedBounced' => $stats->failed_bounced ?? 0,
+    ]);
+}
+
 
 
     public function sendMassMail(Request $request)
