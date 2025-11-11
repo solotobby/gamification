@@ -396,68 +396,270 @@ class CampaignController extends Controller
         }
     }
 
+    // public function viewCampaign($job_id)
+    // {
+
+    //     // if (!auth()->user()->skill()->exists()) {
+    //     //     return redirect()->route('create.skill');
+    //     // }
+    //     if ($job_id == null) {
+    //         abort(400);
+    //     }
+
+    //     $userBaseCurrency = baseCurrency();
+
+    //     $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+
+    //     $getCampaign = viewCampaign($job_id);
+
+    //     //CHECK IF USER IS VERIFIED IN NGN
+    //     if ($checkIsVerified == 'Verified') {
+
+    //         if ($getCampaign['is_completed'] == true) {
+    //             return redirect('home');
+    //         } else {
+    //             $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //             $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //             $checkRating = isset($rating) ? true : false;
+    //             return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+    //         }
+    //     } else {
+
+    //         $currencyParams = currencyParameter($userBaseCurrency);
+    //         $minUpgradeAmount = $currencyParams->min_upgrade_amount;
+
+    //         $campaignLocalAmount = $getCampaign['local_converted_amount'];
+
+    //         $fetchUser = User::where('id', $getCampaign['user_id'])->first();
+    //         if ($fetchUser->is_business) {
+
+    //             $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //             $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //             $checkRating = isset($rating) ? true : false;
+    //             return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+    //         } else {
+
+    //             if ($campaignLocalAmount >= $minUpgradeAmount) {
+
+    //                 return redirect('info');
+    //             } else {
+
+    //                 if ($getCampaign['is_completed'] == true) {
+
+    //                     return redirect('home');
+    //                 } else {
+
+    //                     $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //                     $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
+    //                     $checkRating = isset($rating) ? true : false;
+    //                     return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public function viewCampaign($job_id)
+    // {
+    //     if ($job_id == null) {
+    //         abort(400);
+    //     }
+
+    //     $userBaseCurrency = baseCurrency();
+    //     $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+    //     $getCampaign = viewCampaign($job_id);
+
+    //     // Check user's campaign work status
+    //     $campaignWorker = CampaignWorker::where('user_id', auth()->user()->id)
+    //         ->where('campaign_id', $getCampaign->id)
+    //         ->first();
+
+    //     // Initialize variables
+    //     $deniedCount = 0;
+    //     $canResubmit = false;
+    //     $hasPending = false;
+
+    //     $userId = auth()->id();
+
+    //     if ($checkIsVerified == 'Verified') {
+    //         if ($getCampaign['is_completed'] == true && !$canResubmit) {
+    //             return redirect('home');
+    //         }
+
+    //         if ($getCampaign->id == 56 && $campaignWorker) {
+    //             $campaignId = $getCampaign->id;
+
+    //             // Fetch all statuses in one query
+    //             $hasPending = CampaignWorker::where('user_id', auth()->user()->id)
+    //                 ->where('campaign_id', $getCampaign->id)
+    //                 ->where('status', 'Pending')
+    //                 ->exists();
+
+    //             $approved = CampaignWorker::where('user_id', auth()->user()->id)
+    //                 ->where('campaign_id', $getCampaign->id)
+    //                 ->where('status', 'Approved')
+    //                 ->exists();
+
+    //             $deniedCount = CampaignWorker::where('user_id', auth()->user()->id)
+    //                 ->where('campaign_id', $getCampaign->id)
+    //                 ->where('status', 'Denied')
+    //                 ->count();
+
+    //             $canResubmit = !$hasPending &&
+    //                 // $campaignWorker->status === 'Denied' &&
+    //                 $deniedCount < 3;
+
+    //             // $completed = ($approved || (!$canResubmit && $hasPending && $deniedCount >= 3))
+    //             //     ? $campaignWorker
+    //             //     : null;
+    //             $completed = $campaignWorker && !$canResubmit && $approved || $hasPending ? $campaignWorker : null;
+    //         }
+
+    //         $completed = CampaignWorker::where('user_id', $userId)
+    //             ->where('campaign_id', $getCampaign->id)
+    //             ->first();
+
+    //         $rating = Rating::where('user_id', auth()->user()->id)
+    //             ->where('campaign_id', $getCampaign->id)
+    //             ->first();
+    //         $checkRating = isset($rating) ? true : false;
+
+    //         return view('user.campaign.view', [
+    //             'campaign' => $getCampaign,
+    //             'completed' => $completed,
+    //             'is_rated' => $checkRating,
+    //             'can_resubmit' => $canResubmit,
+    //             'denied_count' => $deniedCount,
+    //             'has_pending' => $hasPending
+    //         ]);
+    //     } else {
+    //         $currencyParams = currencyParameter($userBaseCurrency);
+    //         $minUpgradeAmount = $currencyParams->min_upgrade_amount;
+    //         $campaignLocalAmount = $getCampaign['local_converted_amount'];
+    //         $fetchUser = User::where('id', $getCampaign['user_id'])->first();
+
+    //         $completed = CampaignWorker::where('user_id', $userId)
+    //             ->where('campaign_id', $getCampaign->id)
+    //             ->first();
+    //         if ($fetchUser->is_business) {
+    //             $rating = Rating::where('user_id', auth()->user()->id)
+    //                 ->where('campaign_id', $getCampaign->id)
+    //                 ->first();
+    //             $checkRating = isset($rating) ? true : false;
+
+    //             return view('user.campaign.view', [
+    //                 'campaign' => $getCampaign,
+    //                 'completed' => $completed,
+    //                 'is_rated' => $checkRating,
+    //                 'can_resubmit' => $canResubmit,
+    //                 'denied_count' => $deniedCount,
+    //                 'has_pending' => $hasPending
+    //             ]);
+    //         } else {
+    //             if ($campaignLocalAmount >= $minUpgradeAmount) {
+    //                 return redirect('info');
+    //             }
+
+    //             if ($getCampaign['is_completed'] == true && !$canResubmit) {
+    //                 return redirect('home');
+    //             }
+
+    //             $rating = Rating::where('user_id', auth()->user()->id)
+    //                 ->where('campaign_id', $getCampaign->id)
+    //                 ->first();
+    //             $checkRating = isset($rating) ? true : false;
+
+    //             return view('user.campaign.view', [
+    //                 'campaign' => $getCampaign,
+    //                 'completed' => $completed,
+    //                 'is_rated' => $checkRating,
+    //                 'can_resubmit' => $canResubmit,
+    //                 'denied_count' => $deniedCount,
+    //                 'has_pending' => $hasPending
+    //             ]);
+    //         }
+    //     }
+    // }
+
     public function viewCampaign($job_id)
     {
-
-        // if (!auth()->user()->skill()->exists()) {
-        //     return redirect()->route('create.skill');
-        // }
-        if ($job_id == null) {
+        if (!$job_id) {
             abort(400);
         }
 
+        $userId = auth()->id();
         $userBaseCurrency = baseCurrency();
-
         $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+        $campaign = viewCampaign($job_id);
 
-        $getCampaign = viewCampaign($job_id);
+        // Fetch user's campaign worker record once
+        $campaignWorker = CampaignWorker::where('user_id', $userId)
+            ->where('campaign_id', $campaign->id)
+            ->first();
 
-        //CHECK IF USER IS VERIFIED IN NGN
-        if ($checkIsVerified == 'Verified') {
+        // Fetch rating once
+        $rating = Rating::where('user_id', $userId)
+            ->where('campaign_id', $campaign->id)
+            ->first();
+        $isRated = isset($rating);
 
-            if ($getCampaign['is_completed'] == true) {
+        $deniedCount = 0;
+        $canResubmit = false;
+        $hasPending = false;
+        $completed = $campaignWorker;
+
+        if ($checkIsVerified === 'Verified') {
+
+            if ($campaign->is_completed && !$canResubmit) {
                 return redirect('home');
-            } else {
-                $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $checkRating = isset($rating) ? true : false;
-                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
+            }
+
+            if ($campaign->id == 8099 && $campaignWorker) {
+                // Get counts in a single query
+                $statusCounts = CampaignWorker::where('user_id', $userId)
+                    ->where('campaign_id', $campaign->id)
+                    ->selectRaw("
+                    SUM(CASE WHEN status = 'Denied' THEN 1 ELSE 0 END) as denied_count,
+                    SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as pending_count,
+                    SUM(CASE WHEN status = 'Approved' THEN 1 ELSE 0 END) as approved_count
+                ")
+                    ->first();
+
+                $deniedCount = $statusCounts->denied_count;
+                $hasPending = $statusCounts->pending_count > 0;
+                $approved = $statusCounts->approved_count > 0;
+
+                $canResubmit = !$hasPending && $deniedCount < 3;
+
+                $completed = $campaignWorker && (!$canResubmit || $approved || $hasPending) ? $campaignWorker : null;
             }
         } else {
-
+            // Unverified user
             $currencyParams = currencyParameter($userBaseCurrency);
             $minUpgradeAmount = $currencyParams->min_upgrade_amount;
+            $campaignLocalAmount = $campaign->local_converted_amount;
+            $campaignOwner = User::find($campaign->user_id);
 
-            $campaignLocalAmount = $getCampaign['local_converted_amount'];
+            if (!$campaignOwner->is_business && $campaignLocalAmount >= $minUpgradeAmount) {
+                return redirect('info');
+            }
 
-            $fetchUser = User::where('id', $getCampaign['user_id'])->first();
-            if ($fetchUser->is_business) {
-
-                $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                $checkRating = isset($rating) ? true : false;
-                return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-            } else {
-
-                if ($campaignLocalAmount >= $minUpgradeAmount) {
-
-                    return redirect('info');
-                } else {
-
-                    if ($getCampaign['is_completed'] == true) {
-
-                        return redirect('home');
-                    } else {
-
-                        $completed = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                        $rating = Rating::where('user_id', auth()->user()->id)->where('campaign_id', $getCampaign->id)->first();
-                        $checkRating = isset($rating) ? true : false;
-                        return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
-                    }
-                }
+            if ($campaign->is_completed && !$canResubmit) {
+                return redirect('home');
             }
         }
+
+        return view('user.campaign.view', [
+            'campaign' => $campaign,
+            'completed' => $completed,
+            'is_rated' => $isRated,
+            'can_resubmit' => $canResubmit,
+            'denied_count' => $deniedCount,
+            'has_pending' => $hasPending
+        ]);
     }
+
+
 
     public function viewPublicCampaign($job_id)
     {
@@ -510,6 +712,133 @@ class CampaignController extends Controller
         return view('user.campaign.view', ['campaign' => $getCampaign, 'completed' => $completed, 'is_rated' => $checkRating]);
     }
 
+    // public function submitWork(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'proof' => 'image|mimes:png,jpeg,gif,jpg',
+    //         'comment' => 'required|string',
+    //     ]);
+
+    //     if (auth()->user()->is_business) {
+    //         return back()->with('error', 'Business accounts cannot perform tasks.');
+    //     }
+
+    //     $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
+    //     if ($check) {
+    //         return back()->with('error', 'You have comppleted this campaign before');
+    //     }
+
+    //     $campaign = Campaign::where('id', $request->campaign_id)->first();
+
+    //     // $campCount = $campaign->completed()->where('status', '!=', 'Denied')->count();
+
+    //     // if($campCount >= $campaign->number_of_staff){
+    //     //     return back()->with('error', 'This campaign has reach its maximum of workers');
+    //     // }
+
+    //     $data['campaign'] = $campaign;
+
+    //     $imageName = '';
+    //     if ($request->hasFile('proof')) {
+    //         $proofUrl = '';
+    //         // if($request->hasFile('proof')){
+    //         //   $image = $request->file('proof');
+    //         //   $imageName = time().'.'.$request->proof->extension();
+    //         //   $destinationPath = $request->proof->move(public_path('images'), $imageName);
+
+    //         //    // Load image using GD
+    //         //      $file = $request->file('proof');
+
+    //         //         $extension = strtolower($file->getClientOriginalExtension());
+    //         //         $imageName = time() . '.jpg'; // Save as JPEG
+    //         //         $destination = public_path('images/' . $imageName);
+
+    //         //         // Get temporary file path BEFORE moving or doing anything else
+    //         //         $tempPath = $file->getRealPath();
+
+    //         //         // Load image from temp file using GD
+    //         //         switch ($extension) {
+    //         //             case 'jpg':
+    //         //             case 'jpeg':
+    //         //                 $source = imagecreatefromjpeg($tempPath);
+    //         //                 break;
+    //         //             case 'png':
+    //         //                 $source = imagecreatefrompng($tempPath);
+    //         //                 break;
+    //         //             case 'gif':
+    //         //                 $source = imagecreatefromgif($tempPath);
+    //         //                 break;
+    //         //             default:
+    //         //                 return back()->with('error', 'Unsupported image type.');
+    //         //         }
+
+    //         // Resize if width > 800px
+    //         // $width = imagesx($source);
+    //         // $height = imagesy($source);
+    //         // $maxWidth = 800;
+
+    //         // if ($width > $maxWidth) {
+    //         //     $newWidth = $maxWidth;
+    //         //     $newHeight = intval($height * ($maxWidth / $width));
+    //         //     $resized = imagecreatetruecolor($newWidth, $newHeight);
+    //         //     imagecopyresampled($resized, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+    //         // } else {
+    //         //     $resized = $source;
+    //         // }
+
+    //         // Compress and save as JPEG (quality 70%)
+    //         // imagejpeg($source, $destination, 70);
+
+
+    //         // $fileBanner = $request->file('proof');
+    //         // $Bannername = time() . $fileBanner->getClientOriginalName();
+    //         // $filePathBanner = 'proofs/' . $Bannername;
+    //         // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+    //         // $proofUrl = Storage::disk('s3')->url($filePathBanner);
+    //         $imageName = time() . '.' . $request->proof->extension();
+    //         $request->proof->move(public_path('images'), $imageName);
+    //     }
+
+
+
+    //     $campaignWorker['user_id'] = auth()->user()->id;
+    //     $campaignWorker['campaign_id'] = $request->campaign_id;
+    //     $campaignWorker['comment'] = $request->comment;
+    //     $campaignWorker['amount'] = $request->amount;
+    //     $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
+    //     $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
+
+    //     $campaignWork = CampaignWorker::create($campaignWorker);
+
+    //     //activity log
+    //     // $campaign->pending_count += 1;
+    //     // $campaign->save();
+
+    //     // setPendingCount($campaign->id);
+
+    //     $campaignStatus = checkCampaignCompletedStatus($campaign->id);
+
+    //     // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
+    //     // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
+    //     // $campaign->save();
+
+    //     // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
+
+    //     //$campaign = Campaign::where('id', $request->campaign_id)->first();
+
+    //     $user = User::where('id', $campaign->user->id)->first();
+    //     $subject = 'Job Submission';
+    //     $content = auth()->user()->name . ' submitted a response to the your campaign - ' . $campaign->post_title . '. Please login to review.';
+    //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+    //     return back()->with('success', 'Job Submitted Successfully');
+
+    //     // }else{
+    //     //     return back()->with('error', 'Upload an image');
+    //     // }
+    // }
+
+
     public function submitWork(Request $request)
     {
         $this->validate($request, [
@@ -521,119 +850,71 @@ class CampaignController extends Controller
             return back()->with('error', 'Business accounts cannot perform tasks.');
         }
 
-        $check = CampaignWorker::where('user_id', auth()->user()->id)->where('campaign_id', $request->campaign_id)->first();
+        $check = CampaignWorker::where('user_id', auth()->user()->id)
+            ->where('campaign_id', $request->campaign_id)
+            ->first();
+
         if ($check) {
-            return back()->with('error', 'You have comppleted this campaign before');
+            if (in_array($request->campaign_id, [56])) {
+                // Check if has pending submission
+                $hasPending = CampaignWorker::where('user_id', auth()->user()->id)
+                    ->where('campaign_id', $request->campaign_id)
+                    ->where('status', 'Pending')
+                    ->exists();
+
+                if ($hasPending) {
+                    return back()->with('error', 'You have a pending submission for this campaign. Please wait for review.');
+                }
+
+                // Count denied attempts
+                $deniedCount = CampaignWorker::where('user_id', auth()->user()->id)
+                    ->where('campaign_id', $request->campaign_id)
+                    ->where('status', 'Denied')
+                    ->count();
+
+                // Check if last submission was denied and attempts < 3
+                if ($check->status === 'Denied' && $deniedCount < 3) {
+                    // Allow resubmission - continue with the code below
+                } elseif ($check->status === 'Approved') {
+                    return back()->with('error', 'You have already completed this campaign successfully.');
+                } elseif ($deniedCount >= 3) {
+                    return back()->with('error', 'You have exceeded the maximum number of attempts (3) for this campaign.');
+                } else {
+                    return back()->with('error', 'You have already submitted this campaign.');
+                }
+            } else {
+                return back()->with('error', 'You have completed this campaign before');
+            }
         }
 
         $campaign = Campaign::where('id', $request->campaign_id)->first();
-
-        // $campCount = $campaign->completed()->where('status', '!=', 'Denied')->count();
-
-        // if($campCount >= $campaign->number_of_staff){
-        //     return back()->with('error', 'This campaign has reach its maximum of workers');
-        // }
 
         $data['campaign'] = $campaign;
 
         $imageName = '';
         if ($request->hasFile('proof')) {
             $proofUrl = '';
-            // if($request->hasFile('proof')){
-            //   $image = $request->file('proof');
-            //   $imageName = time().'.'.$request->proof->extension();
-            //   $destinationPath = $request->proof->move(public_path('images'), $imageName);
-
-            //    // Load image using GD
-            //      $file = $request->file('proof');
-
-            //         $extension = strtolower($file->getClientOriginalExtension());
-            //         $imageName = time() . '.jpg'; // Save as JPEG
-            //         $destination = public_path('images/' . $imageName);
-
-            //         // Get temporary file path BEFORE moving or doing anything else
-            //         $tempPath = $file->getRealPath();
-
-            //         // Load image from temp file using GD
-            //         switch ($extension) {
-            //             case 'jpg':
-            //             case 'jpeg':
-            //                 $source = imagecreatefromjpeg($tempPath);
-            //                 break;
-            //             case 'png':
-            //                 $source = imagecreatefrompng($tempPath);
-            //                 break;
-            //             case 'gif':
-            //                 $source = imagecreatefromgif($tempPath);
-            //                 break;
-            //             default:
-            //                 return back()->with('error', 'Unsupported image type.');
-            //         }
-
-            // Resize if width > 800px
-            // $width = imagesx($source);
-            // $height = imagesy($source);
-            // $maxWidth = 800;
-
-            // if ($width > $maxWidth) {
-            //     $newWidth = $maxWidth;
-            //     $newHeight = intval($height * ($maxWidth / $width));
-            //     $resized = imagecreatetruecolor($newWidth, $newHeight);
-            //     imagecopyresampled($resized, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-            // } else {
-            //     $resized = $source;
-            // }
-
-            // Compress and save as JPEG (quality 70%)
-            // imagejpeg($source, $destination, 70);
-
-
-            // $fileBanner = $request->file('proof');
-            // $Bannername = time() . $fileBanner->getClientOriginalName();
-            // $filePathBanner = 'proofs/' . $Bannername;
-            // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            // $proofUrl = Storage::disk('s3')->url($filePathBanner);
             $imageName = time() . '.' . $request->proof->extension();
             $request->proof->move(public_path('images'), $imageName);
         }
-
-
 
         $campaignWorker['user_id'] = auth()->user()->id;
         $campaignWorker['campaign_id'] = $request->campaign_id;
         $campaignWorker['comment'] = $request->comment;
         $campaignWorker['amount'] = $request->amount;
-        $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //'no image'; //$imageName == '' ? 'no image' : 'images/'.$imageName;
-        $campaignWorker['currency'] = baseCurrency(); //$campaign->currency;
+        $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName;
+        $campaignWorker['currency'] = baseCurrency();
 
         $campaignWork = CampaignWorker::create($campaignWorker);
 
-        //activity log
-        // $campaign->pending_count += 1;
-        // $campaign->save();
-
-        // setPendingCount($campaign->id);
-
         $campaignStatus = checkCampaignCompletedStatus($campaign->id);
-
-        // $campaign->pending_count = $campaignStatus['Pending'] ?? 0;
-        // $campaign->completed_count = $campaignStatus['Approved'] ?? 0;
-        // $campaign->save();
-
-        // Mail::to(auth()->user()->email)->send(new SubmitJob($campaignWork)); //send email to the member
-
-        //$campaign = Campaign::where('id', $request->campaign_id)->first();
 
         $user = User::where('id', $campaign->user->id)->first();
         $subject = 'Job Submission';
-        $content = auth()->user()->name . ' submitted a response to the your campaign - ' . $campaign->post_title . '. Please login to review.';
+        $content = auth()->user()->name . ' submitted a response to your campaign - ' . $campaign->post_title . '. Please login to review.';
         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Job Submitted Successfully');
-
-        // }else{
-        //     return back()->with('error', 'Upload an image');
-        // }
     }
 
     public function mySubmittedCampaign($id)

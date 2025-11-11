@@ -307,7 +307,7 @@
               </a>
           @endif
       @endif --}}
-      
+
         @if (auth()->user())
             <a href="https://dashboard.freebyz.com/campaign/EbmFbEm">
             @else
@@ -415,10 +415,10 @@
     @include('layouts.resources.pathway')
 
     <!-- END Call to Action -->
-    @if (auth()->user()->profile->is_welcome == 0)
+    @if (auth()->user()->profile->is_welcome == false)
         {{-- Show welcome pop up --}}
         @include('layouts.resources.welcome')
-    @elseif(auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set == 0)
+    @elseif(auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set == false)
         @include('layouts.resources.validate_currency')
     @elseif(auth()->user()->profile->pathway == null)
         @include('layouts.resources.choice')
