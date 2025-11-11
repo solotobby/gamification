@@ -49,7 +49,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportVerifiedUsersJob;
-
+use App\Jobs\SendMassSms;
 
 class AdminController extends Controller
 {
@@ -1514,22 +1514,33 @@ class AdminController extends Controller
         }
 
         // Send SMS in bulk
+        // if ($request->send_sms) {
+        //     (clone $query)
+        //         ->whereNotNull('phone')
+        //         ->select('phone')
+        //         ->chunk(100, function ($users) use ($request) {
+        //             $phones = $users->pluck('phone')->toArray();
+        //             $phones = formatAndArrange($phones);
+        //             Log::info($phones);
+        //             if (!empty($phones)) {
+        //                 $process = sendBulkSMS($phones, $request->sms_message);
+        //                 $code = is_array($process) ? $process['code'] : $process->code;
+
+        //                 if ($code !== 'ok') {
+        //                     return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
+        //                 }
+        //             }
+        //         });
+        // }
+
+        // Send SMS using job
         if ($request->send_sms) {
             (clone $query)
                 ->whereNotNull('phone')
                 ->select('phone')
                 ->chunk(100, function ($users) use ($request) {
                     $phones = $users->pluck('phone')->toArray();
-                    $phones = formatAndArrange($phones);
-                    Log::info($phones);
-                    if (!empty($phones)) {
-                        $process = sendBulkSMS($phones, $request->sms_message);
-                        $code = is_array($process) ? $process['code'] : $process->code;
-
-                        if ($code !== 'ok') {
-                            return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
-                        }
-                    }
+                    dispatch(new SendMassSms($phones, $request->sms_message));
                 });
         }
 
@@ -1558,35 +1569,35 @@ class AdminController extends Controller
 
 
     // Campaign details
-   public function campaignDetails($id)
-{
-    $campaign = MassEmailCampaign::findOrFail($id);
+    public function campaignDetails($id)
+    {
+        $campaign = MassEmailCampaign::findOrFail($id);
 
-    // Fetch logs with pagination
-    $logs = MassEmailLog::where('campaign_id', $id)
-        ->with('user')
-        ->latest()
-        ->paginate(50);
+        // Fetch logs with pagination
+        $logs = MassEmailLog::where('campaign_id', $id)
+            ->with('user')
+            ->latest()
+            ->paginate(50);
 
-    // Single optimized aggregate query
-    $stats = MassEmailLog::where('campaign_id', $id)
-        ->selectRaw("
+        // Single optimized aggregate query
+        $stats = MassEmailLog::where('campaign_id', $id)
+            ->selectRaw("
             COUNT(*) as total_sent,
             SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
             SUM(CASE WHEN status = 'opened' THEN 1 ELSE 0 END) as opened,
             SUM(CASE WHEN status IN ('failed', 'bounced') THEN 1 ELSE 0 END) as failed_bounced
         ")
-        ->first();
+            ->first();
 
-    return view('admin.mass_mail_campaign_details', [
-        'campaign' => $campaign,
-        'logs' => $logs,
-        'totalSent' => $stats->total_sent ?? 0,
-        'delivered' => $stats->delivered ?? 0,
-        'opened' => $stats->opened ?? 0,
-        'failedBounced' => $stats->failed_bounced ?? 0,
-    ]);
-}
+        return view('admin.mass_mail_campaign_details', [
+            'campaign' => $campaign,
+            'logs' => $logs,
+            'totalSent' => $stats->total_sent ?? 0,
+            'delivered' => $stats->delivered ?? 0,
+            'opened' => $stats->opened ?? 0,
+            'failedBounced' => $stats->failed_bounced ?? 0,
+        ]);
+    }
 
 
 
