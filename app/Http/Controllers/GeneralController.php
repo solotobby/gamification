@@ -1203,13 +1203,11 @@ class GeneralController extends Controller
 
         try {
 
-            // Define job categories
-            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; // 65%
-            $otherJobs = ['whatsapp', 'telegram', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'Spotify']; // 35%
-            $allJobs = array_merge($preferredJobs, $otherJobs);
+            $allJobs = arrayjobs()['allJobs'];
+            $preferredJobs = arrayjobs()['preferredJobs'];
+            $otherJobs = arrayjobs()['otherJobs']; 
 
-            // Define age ranges
-            $ageRanges = ['15-20', '21-25', '26-30', '31-40', '40-50'];
+            $ageRanges = ageranges();
 
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
@@ -1226,53 +1224,6 @@ class GeneralController extends Controller
                 ->orderByDesc('total_payout')
                 ->take(5000)
                 ->get()
-                // ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs) {
-
-                //     mt_srand(crc32($item->user_id));
-
-                //     // Random job assignment (65% chance for preferred)
-                //     $assignPreferred = mt_rand(1, 100) <= 70;
-                //     $assignedJob = $assignPreferred
-                //         ? $preferredJobs[array_rand($preferredJobs)]
-                //         : $otherJobs[array_rand($otherJobs)];
-
-                //     // Pick 1–2 other active jobs deterministically
-                //     $extraActive = collect($allJobs)
-                //         ->reject(fn($j) => $j === $assignedJob)
-                //         ->shuffle()
-                //         ->take(mt_rand(1, 2))
-                //         ->values()
-                //         ->toArray();
-
-                //     $mostActiveTasks = array_unique(array_merge([$assignedJob], $extraActive));
-                //     $highestEarningTask = $assignedJob;
-
-                //     $ageRanges = ['15-20', '21-25', '26-30', '31-40', '40-50'];
-
-                //     // Age range assignment (80% chance for 21-25)
-                //     $assign21to25 = mt_rand(1, 100) <= 80;
-                //     if ($assign21to25) {
-                //         $ageRange = '21-25';
-                //     } else {
-                //         // pick one of the other age groups deterministically
-                //         $ageRange = collect($ageRanges)
-                //             ->reject(fn($a) => $a === '21-25')
-                //             ->shuffle()
-                //             ->first();
-                //     }
-
-                //     return [
-                //         'name' => $item->user->name,
-                //         'email' => $item->user->email,
-                //         'phone' => $item->user->phone,
-                //         'gender' => $item->user->gender ?? 'Male',
-                //         'age_range' => $ageRange,
-                //         'total_payout' => $item->total_payout,
-                //         'highest_earning_task' => $highestEarningTask,
-                //         'most_active_tasks' => $mostActiveTasks,
-                //     ];
-
-
                 ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
                     mt_srand(crc32($item->user_id));
 
