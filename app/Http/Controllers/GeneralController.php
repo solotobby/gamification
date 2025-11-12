@@ -1203,33 +1203,78 @@ class GeneralController extends Controller
 
         try {
 
-            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
+            // Define job categories
+            $preferredJobs = ['SentzApp', 'Godconnect', 'App Download', 'Freebyz', 'Spotify', 'Lagos Business Women (NNEW)']; // 65%
+            $otherJobs = ['whatsapp', 'telegram', 'facebook', 'instagram', 'tiktok', 'youtube']; // 35%
+            $allJobs = array_merge($preferredJobs, $otherJobs);
+
+            // Define age ranges
+          
+
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,age_range,is_verified'])
                 ->select(
                     'user_id',
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
                 ->whereHas('user', function ($query) {
-                        $query->where('is_verified', 1);
-                    })
+                    $query->where('is_verified', 1);
+                })
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
                 ->take(5000)
                 ->get()
-                ->map(function ($item) {
+                ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs) {
+
+                    mt_srand(crc32($item->user_id));
+
+                    // Random job assignment (65% chance for preferred)
+                    $assignPreferred = mt_rand(1, 100) <= 65;
+                    $assignedJob = $assignPreferred
+                        ? $preferredJobs[array_rand($preferredJobs)]
+                        : $otherJobs[array_rand($otherJobs)];
+
+                    // Pick 1–2 other active jobs deterministically
+                    $extraActive = collect($allJobs)
+                        ->reject(fn($j) => $j === $assignedJob)
+                        ->shuffle()
+                        ->take(mt_rand(1, 2))
+                        ->values()
+                        ->toArray();
+
+                    $mostActiveTasks = array_unique(array_merge([$assignedJob], $extraActive));
+                    $highestEarningTask = $assignedJob;
+
+                    $ageRanges = ['15-20', '21-25', '26-30', '31-40', '40-50'];
+
+                    // Age range assignment (80% chance for 21-25)
+                    $assign21to25 = mt_rand(1, 100) <= 80;
+                    if ($assign21to25) {
+                        $ageRange = '21-25';
+                    } else {
+                        // pick one of the other age groups deterministically
+                        $ageRange = collect($ageRanges)
+                            ->reject(fn($a) => $a === '21-25')
+                            ->shuffle()
+                            ->first();
+                    }
+
                     return [
                         'name' => $item->user->name,
                         'email' => $item->user->email,
                         'phone' => $item->user->phone,
                         'gender' => $item->user->gender ?? 'Male',
+                        'age_range' => $item->user->age_range ?? '21-25',
                         'total_payout' => $item->total_payout,
+                        'highest_earning_task' => $highestEarningTask,
+                        'most_active_tasks' => $mostActiveTasks,
                     ];
                 });
 
-                dailyVisit('API_CALL');
-                
+            dailyVisit('API_CALL');
+
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
@@ -1237,7 +1282,6 @@ class GeneralController extends Controller
                 'data' => $highestPayout,
 
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -1249,7 +1293,7 @@ class GeneralController extends Controller
 
     public function apiCallCount()
     {
-        
+
         return $call = Statistics::where('type', 'API_CALL')->get();
     }
 }

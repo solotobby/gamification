@@ -876,7 +876,6 @@ class CampaignController extends Controller
 
     public function addMoreWorkers(Request $request)
     {
-        // return back()->with('error', 'Contact support to add more workers to your campaign.');
 
         $request->validate([
             'new_number' => 'required|numeric|min:1',
