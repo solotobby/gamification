@@ -1211,7 +1211,7 @@ class GeneralController extends Controller
             // Define age ranges
           
 
-            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,genderis_verified'])
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
@@ -1286,7 +1286,7 @@ class GeneralController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch users, kindly contact support.',
-                // 'error' => $e->getMessage(), // Remove in production
+                'error' => $e->getMessage(), // Remove in production
             ], 500);
         }
     }
