@@ -2753,7 +2753,7 @@ if (!function_exists('sendZeptoMail')) {
     function sendZeptoMail(string $toEmail, string $toName, string $subject, string $htmlBody)
     {
         $payload = [
-           'from' => [
+            'from' => [
                 'address' => config('services.zeptomail.from_email'),
                 'name' => config('services.zeptomail.from_name'),
             ],
@@ -2804,6 +2804,27 @@ if (!function_exists('sendZeptoMail')) {
                 'status' => 'failed',
                 'error' => $e->getMessage(),
             ];
+        }
+    }
+
+    if (!function_exists('arrayjobs')) {
+        function  arrayjobs() {
+            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; 
+            $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify']; 
+             $allJobs = array_merge($preferredJobs, $otherJobs);
+
+            $data['preferredJobs'] = $preferredJobs;
+            $data['otherJobs'] = $otherJobs;
+            $data['allJobs'] = $allJobs;
+            return $data;
+
+        }
+    }
+
+    if( !function_exists('ageranges')) {
+        function  ageranges() {
+          
+            return ['15-20', '21-25', '26-30', '31-40', '40-50'];
         }
     }
 }

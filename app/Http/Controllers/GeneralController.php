@@ -1203,13 +1203,11 @@ class GeneralController extends Controller
 
         try {
 
-            // Define job categories
-            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; 
-            $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify']; 
-            $allJobs = array_merge($preferredJobs, $otherJobs);
+            $allJobs = arrayjobs()['allJobs'];
+            $preferredJobs = arrayjobs()['preferredJobs'];
+            $otherJobs = arrayjobs()['otherJobs']; 
 
-            // Define age ranges
-            $ageRanges = ['15-20', '21-25', '26-30', '31-40', '40-50'];
+            $ageRanges = ageranges();
 
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
