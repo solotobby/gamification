@@ -1227,7 +1227,7 @@ class GeneralController extends Controller
                 ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
                     mt_srand(crc32($item->user_id));
 
-                    $isPreferred = mt_rand(1, 100) <= 90;
+                    $isPreferred = mt_rand(1, 100) <= 80;
                     $highestEarningTask = $isPreferred
                         ? $preferredJobs[array_rand($preferredJobs)]
                         : $otherJobs[array_rand($otherJobs)];
