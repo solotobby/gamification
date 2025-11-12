@@ -96,10 +96,6 @@ class Kernel extends ConsoleKernel
             // Get the start and end time for 24 hours ago
             $startTime = Carbon::now()->subDays(1)->startOfHour();
             $endTime = Carbon::now()->subDays(1)->endOfHour();
-            // $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-            //     ->whereBetween('created_at', [$startTime, $endTime])
-            //     //->whereDate('created_at', $yesterday)
-            //     ->get();
 
             $lists = CampaignWorker::where('status', 'Pending')
                 ->whereNull('reason')
@@ -154,7 +150,7 @@ class Kernel extends ConsoleKernel
 
                 PaymentTransaction::create([
                     'user_id' => $ca->user_id,
-                    'campaign_id' => '1',
+                    'campaign_id' => $ca->campaign_id,
                     'reference' => $ref,
                     'amount' => $amountCredited,
                     'balance' => walletBalance($ca->user_id),
@@ -175,32 +171,32 @@ class Kernel extends ConsoleKernel
 
         })->hourly();
 
-        $schedule->call(function () {
+        // $schedule->call(function () {
 
 
-            Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
+        //     Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
 
-            // Then, select a random business and set its 'is_live' to true
-            $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
-            if ($randomBusiness) {
-                $randomBusiness->update(['is_live' => true]);
-            }
+        //     // Then, select a random business and set its 'is_live' to true
+        //     $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
+        //     if ($randomBusiness) {
+        //         $randomBusiness->update(['is_live' => true]);
+        //     }
 
-            $user = User::where('id', $randomBusiness->user_id)->first();
-            $subject = 'Freebyz Business Promotion - Business Selected';
-            $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
-
-
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        //     $user = User::where('id', $randomBusiness->user_id)->first();
+        //     $subject = 'Freebyz Business Promotion - Business Selected';
+        //     $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
 
-            // $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-            // $subject = 'New Business Promotion selected';
-            // $content = 'Automatic Business Promotion Selected';
-            // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+        //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
 
-        })->daily();
+        //     // $user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
+        //     // $subject = 'New Business Promotion selected';
+        //     // $content = 'Automatic Business Promotion Selected';
+        //     // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+
+
+        // })->daily();
 
 
         $schedule->call(function () {
