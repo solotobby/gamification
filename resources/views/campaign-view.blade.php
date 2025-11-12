@@ -272,17 +272,20 @@
                         <i class="fas fa-file-alt me-2"></i>Campaign Description
                     </div>
                     <div class="card-body">
-                        @if($campaign->post_link != '')
+                        {{-- @if($campaign->post_link != '')
                             <div class="alert alert-info">
                                 <i class="fas fa-link me-2"></i>
                                 <strong>Campaign Link:</strong>
-                                <a href="{{ $campaign->post_link }}" target="_blank">{{ $campaign->post_link }}</a>
+                                <a href="{{ $campaign->post_link }}" target="_blank"></a>
                             </div>
-                        @endif
+                        @endif --}}
 
                         <div class="campaign-description">
                             {!! $campaign->description !!}
                         </div>
+
+                        
+
                     </div>
                 </div>
 
@@ -292,8 +295,17 @@
                     </div>
                     <div class="card-body">
                         {!! $campaign->proof !!}
+
+                        
                     </div>
+
+                    
+
                 </div>
+
+                <a href="{{ route('login') }}?redirect={{ $campaign->job_id }}" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Perform Task 
+                    </a>
 
                 <!-- Features Section -->
                 <div class="features-section">
