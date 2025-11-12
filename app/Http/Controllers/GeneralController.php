@@ -1205,13 +1205,13 @@ class GeneralController extends Controller
 
             // Define job categories
             $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; // 65%
-            $otherJobs = ['whatsapp', 'telegram', 'SentzApp', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'Spotify']; // 35%
+            $otherJobs = ['whatsapp', 'telegram', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'Spotify']; // 35%
             $allJobs = array_merge($preferredJobs, $otherJobs);
 
             // Define age ranges
           
 
-            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,age_range,is_verified'])
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,genderis_verified'])
                 ->select(
                     'user_id',
                     \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
@@ -1266,7 +1266,7 @@ class GeneralController extends Controller
                         'email' => $item->user->email,
                         'phone' => $item->user->phone,
                         'gender' => $item->user->gender ?? 'Male',
-                        'age_range' => $item->user->age_range ?? '21-25',
+                        'age_range' => $ageRange,
                         'total_payout' => $item->total_payout,
                         'highest_earning_task' => $highestEarningTask,
                         'most_active_tasks' => $mostActiveTasks,
