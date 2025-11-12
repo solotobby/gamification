@@ -1204,8 +1204,8 @@ class GeneralController extends Controller
         try {
 
             // Define job categories
-            $preferredJobs = ['SentzApp', 'Godconnect', 'App Download', 'Freebyz', 'Spotify', 'Lagos Business Women (NNEW)']; // 65%
-            $otherJobs = ['whatsapp', 'telegram', 'facebook', 'instagram', 'tiktok', 'youtube']; // 35%
+            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; // 65%
+            $otherJobs = ['whatsapp', 'telegram', 'SentzApp', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'Spotify']; // 35%
             $allJobs = array_merge($preferredJobs, $otherJobs);
 
             // Define age ranges
@@ -1231,7 +1231,7 @@ class GeneralController extends Controller
                     mt_srand(crc32($item->user_id));
 
                     // Random job assignment (65% chance for preferred)
-                    $assignPreferred = mt_rand(1, 100) <= 65;
+                    $assignPreferred = mt_rand(1, 100) <= 70;
                     $assignedJob = $assignPreferred
                         ? $preferredJobs[array_rand($preferredJobs)]
                         : $otherJobs[array_rand($otherJobs)];
