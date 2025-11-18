@@ -121,6 +121,8 @@ Route::get('auth/facebook/callback', [\App\Http\Controllers\Auth\FacebookControl
 // Email Verification Routes
 Route::post('/verification/send', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'sendCode'])->name('verification.send');
 Route::post('/verification/verify', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/verification/send-new-email-code', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'sendNewEmailCode'])->name('verification.send-new-email');
+Route::post('/verification/update-email', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'updateEmail'])->name('verification.update-email');
 
 //Take Quiz
 Route::get('instruction', [\App\Http\Controllers\HomeController::class, 'instruction'])->name('instruction');
