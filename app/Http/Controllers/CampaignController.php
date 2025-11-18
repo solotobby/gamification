@@ -244,49 +244,189 @@ class CampaignController extends Controller
         }
     }
 
+    // public function postCampaign(Request $request)
+    // {
+
+    //     if ($request->allow_upload == true) {
+    //         $request->validate([
+    //             'description' => 'required|string',
+    //             'proof' => 'required|string',
+    //             'post_title' => 'required|string',
+    //             'post_link' => 'required|string',
+    //             'number_of_staff' => 'required|numeric',
+    //             'campaign_amount' => 'required|numeric',
+    //             'validate' => 'required'
+    //         ]);
+    //     } else {
+    //         $request->validate([
+    //             'description' => 'required|string',
+    //             'proof' => ['required', new ProhibitedWords()],
+    //             'post_title' => 'required|string',
+    //             'post_link' => 'required|string',
+    //             'number_of_staff' => 'required|numeric',
+    //             'campaign_amount' => 'required|numeric',
+    //             'validate' => 'required'
+    //         ]);
+    //     }
+
+
+    //     $prAmount = '';
+    //     $priotize = '';
+    //     $baseCurrency = auth()->user()->wallet->base_currency;
+
+    //     if ($request->priotize == true) {
+
+    //         $amountPriotize = currencyParameter(baseCurrency())->priotize;
+    //         $prAmount = $amountPriotize;
+    //         $priotize = 'Priotize';
+    //     } else {
+    //         $prAmount =  0;
+    //         $priotize = 'Pending';
+    //     }
+
+    //     $iniAmount = '';
+    //     if ($request->allow_upload == true) {
+
+    //         $iniAmount = $request->number_of_staff * currencyParameter(baseCurrency())->allow_upload;
+    //         $allowUpload = true;
+    //     } elseif ($request->allow_upload == '') {
+    //         $iniAmount = 0;
+    //         $allowUpload = false;
+    //     }
+
+    //     $est_amount = $request->number_of_staff * $request->campaign_amount;
+    //     if (auth()->user()->is_business) {
+    //         $percent = (100 / 100) * $est_amount;
+    //     } else {
+    //         $percent = (60 / 100) * $est_amount;
+    //     }
+    //     //  $percent = (60 / 100) * $est_amount;
+    //     $total = $est_amount + $percent;
+
+
+    //     [$est_amount, $percent, $total];
+    //     $job_id = Str::random(9); //rand(10000,10000000);
+
+    //     $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
+
+    //     if ($walletValidity) {
+
+    //         $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
+    //         if ($debitWallet) {
+    //             $processedCampaign = $this->processCampaign($total + $iniAmount + $prAmount, $request, $job_id, $percent, $allowUpload, $priotize);
+    //             Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
+    //             return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
+    //         }
+    //     } else {
+    //         return back()->with('error', 'You do not have sufficient funds in your wallet');
+    //     }
+    // }
+
+    // public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize)
+    // {
+
+    //     $currency = '';
+    //     $channel = '';
+
+    //     $baseCurrency = auth()->user()->wallet->base_currency;
+    //     if ($baseCurrency == "NGN") {
+    //         $currency = 'NGN';
+    //         $channel = 'paystack';
+    //     } elseif ($baseCurrency == "USD") {
+    //         $currency = 'USD';
+    //         $channel = 'paypal';
+    //     } else {
+    //         $currency = $baseCurrency;
+    //         $channel = 'flutterwave';
+    //     }
+
+    //     $request->request->add(['user_id' => auth()->user()->id, 'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload, 'approved' => $priotize]);
+    //     $campaign = Campaign::create($request->all());
+
+    //     $ref = time();
+    //     PaymentTransaction::create([
+    //         'user_id' => auth()->user()->id,
+    //         'campaign_id' => $campaign->id,
+    //         'reference' => $ref,
+    //         'amount' => $total,
+    //         'balance' => walletBalance(auth()->user()->id),
+    //         'status' => 'successful',
+    //         'currency' => $currency,
+    //         'channel' => $channel,
+    //         'type' => 'campaign_posted',
+    //         'description' => $campaign->post_title . ' Campaign',
+    //         'tx_type' => 'Debit',
+    //         'user_type' => 'regular'
+    //     ]);
+
+    //     //CREDIT ADMIN
+    //     $adminUser = User::where('id', 1)->first();
+    //     $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
+
+    //     if ($creditAdminWallet) {
+    //         //Admin Transaction Tablw
+    //         PaymentTransaction::create([
+    //             'user_id' => 1,
+    //             'campaign_id' => '1',
+    //             'reference' => $ref,
+    //             'amount' => $percent,
+    //             'balance' => walletBalance('1'),
+    //             'status' => 'successful',
+    //             'currency' => $currency,
+    //             'channel' => $channel,
+    //             'type' => 'campaign_revenue',
+    //             'description' => 'Campaign revenue from ' . auth()->user()->name,
+    //             'tx_type' => 'Credit',
+    //             'user_type' => 'admin'
+    //         ]);
+    //     }
+
+    //     return $campaign;
+    // }
+
+
     public function postCampaign(Request $request)
     {
+        // Validation rules based on account type and upload option
+        $rules = [
+            'description' => 'required|string',
+            'post_title' => 'required|string',
+            'post_link' => 'required|string',
+            'number_of_staff' => 'required|numeric',
+            'campaign_amount' => 'required|numeric',
+        ];
 
+        // Add proof validation
         if ($request->allow_upload == true) {
-            $request->validate([
-                'description' => 'required|string',
-                'proof' => 'required|string',
-                'post_title' => 'required|string',
-                'post_link' => 'required|string',
-                'number_of_staff' => 'required|numeric',
-                'campaign_amount' => 'required|numeric',
-                'validate' => 'required'
-            ]);
+            $rules['proof'] = 'required|string';
         } else {
-            $request->validate([
-                'description' => 'required|string',
-                'proof' => ['required', new ProhibitedWords()],
-                'post_title' => 'required|string',
-                'post_link' => 'required|string',
-                'number_of_staff' => 'required|numeric',
-                'campaign_amount' => 'required|numeric',
-                'validate' => 'required'
-            ]);
+            $rules['proof'] = ['required', new ProhibitedWords()];
         }
 
+        // Add validation based on account type
+        if (auth()->user()->is_business) {
+            $rules['approval_time'] = 'required|numeric|in:24,36,48,56,72';
+        } else {
+            $rules['validate'] = 'required';
+        }
+
+        $request->validate($rules);
 
         $prAmount = '';
         $priotize = '';
         $baseCurrency = auth()->user()->wallet->base_currency;
 
         if ($request->priotize == true) {
-
             $amountPriotize = currencyParameter(baseCurrency())->priotize;
             $prAmount = $amountPriotize;
             $priotize = 'Priotize';
         } else {
-            $prAmount =  0;
+            $prAmount = 0;
             $priotize = 'Pending';
         }
 
         $iniAmount = '';
         if ($request->allow_upload == true) {
-
             $iniAmount = $request->number_of_staff * currencyParameter(baseCurrency())->allow_upload;
             $allowUpload = true;
         } elseif ($request->allow_upload == '') {
@@ -300,20 +440,30 @@ class CampaignController extends Controller
         } else {
             $percent = (60 / 100) * $est_amount;
         }
-        //  $percent = (60 / 100) * $est_amount;
         $total = $est_amount + $percent;
 
-
         [$est_amount, $percent, $total];
-        $job_id = Str::random(7); //rand(10000,10000000);
+        $job_id = Str::random(9);
+
+        // Set approval time based on account type
+        $approvalTime = auth()->user()->is_business
+            ? $request->approval_time
+            : 24;
 
         $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
 
         if ($walletValidity) {
-
             $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
             if ($debitWallet) {
-                $processedCampaign = $this->processCampaign($total + $iniAmount + $prAmount, $request, $job_id, $percent, $allowUpload, $priotize);
+                $processedCampaign = $this->processCampaign(
+                    $total + $iniAmount + $prAmount,
+                    $request,
+                    $job_id,
+                    $percent,
+                    $allowUpload,
+                    $priotize,
+                    $approvalTime
+                );
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
@@ -322,11 +472,8 @@ class CampaignController extends Controller
         }
     }
 
-
-
-    public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize)
+    public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime)
     {
-
         $currency = '';
         $channel = '';
 
@@ -342,7 +489,19 @@ class CampaignController extends Controller
             $channel = 'flutterwave';
         }
 
-        $request->request->add(['user_id' => auth()->user()->id, 'total_amount' => $total, 'job_id' => $job_id, 'currency' => $currency, 'impressions' => 0, 'pending_count' => 0, 'completed_count' => 0, 'allow_upload' => $allowUpload, 'approved' => $priotize]);
+        $request->request->add([
+            'user_id' => auth()->user()->id,
+            'total_amount' => $total,
+            'job_id' => $job_id,
+            'currency' => $currency,
+            'impressions' => 0,
+            'pending_count' => 0,
+            'completed_count' => 0,
+            'allow_upload' => $allowUpload,
+            'approved' => $priotize,
+            'approval_time' => $approvalTime
+        ]);
+
         $campaign = Campaign::create($request->all());
 
         $ref = time();
@@ -366,7 +525,7 @@ class CampaignController extends Controller
         $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
 
         if ($creditAdminWallet) {
-            //Admin Transaction Tablw
+            //Admin Transaction Table
             PaymentTransaction::create([
                 'user_id' => 1,
                 'campaign_id' => '1',
@@ -385,7 +544,6 @@ class CampaignController extends Controller
 
         return $campaign;
     }
-
     private function checkUserVerified($baseCurrency)
     {
 

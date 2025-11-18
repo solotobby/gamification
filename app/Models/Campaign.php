@@ -32,7 +32,9 @@ class Campaign extends Model
         'pending_count',
         'impressions',
         'completed_count',
-        'allow_upload'
+        'allow_upload',
+        'approval_time'
+
     ];
 
 
