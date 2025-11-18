@@ -20,7 +20,7 @@
                     <b>Campaign Name:</b> {{ $campaign_name }} <br>
                     <b>Campaign Type:</b> {{ $type }} <br>
                     <b>Campaign Category:</b> {{ $category }} <br>
-                    @if(auth()->user()->wallet->base_currency == "Naira")
+                    @if(auth()->user()->wallet->base_currency == "NGN")
                     <b>Amount per Job:</b> &#8358;{{ $amount }} <br>
                     @else
                     <b>Amount per Job:</b> ${{ $amount }} <br>

@@ -1770,14 +1770,54 @@ if (!function_exists('filterCampaign')) {
         // $jobfilter = '';
         $campaigns = '';
 
+        // $query = Campaign::query()
+        //     ->where('status', 'Live')
+        //     ->where('is_completed', false)
+        //     ->whereNotIn('id', function ($query) use ($user) {
+        //         $query->select('campaign_id')
+        //             ->from('campaign_workers')
+        //             ->where('user_id', $user->id);
+        //     });
+
         $query = Campaign::query()
             ->where('status', 'Live')
             ->where('is_completed', false)
-            ->whereNotIn('id', function ($query) use ($user) {
-                $query->select('campaign_id')
-                    ->from('campaign_workers')
-                    ->where('user_id', $user->id);
+            ->where(function ($q) use ($user) {
+                $q->whereNotIn('id', function ($query) use ($user) {
+                    $query->select('campaign_id')
+                        ->from('campaign_workers')
+                        ->where('user_id', $user->id);
+                })
+                    ->orWhere(function ($q) use ($user) {
+                        $q->whereIn('id', [8099])
+                            // Exclude campaigns with any approved submissions
+                            ->whereNotExists(function ($query) use ($user) {
+                                $query->select(DB::raw(1))
+                                    ->from('campaign_workers')
+                                    ->whereColumn('campaign_id', 'campaigns.id')
+                                    ->where('user_id', $user->id)
+                                    ->where('status', 'Approved');
+                            })
+                            // Allow campaigns with Denied < 3
+                            ->whereExists(function ($query) use ($user) {
+                                $query->select(DB::raw(1))
+                                    ->from('campaign_workers')
+                                    ->whereColumn('campaign_id', 'campaigns.id')
+                                    ->where('user_id', $user->id)
+                                    ->where('status', 'Denied')
+                                    ->havingRaw('COUNT(*) < 3');
+                            })
+                            // Ensure no pending submissions
+                            ->whereNotExists(function ($query) use ($user) {
+                                $query->select(DB::raw(1))
+                                    ->from('campaign_workers')
+                                    ->whereColumn('campaign_id', 'campaigns.id')
+                                    ->where('user_id', $user->id)
+                                    ->where('status', 'Pending');
+                            });
+                    });
             });
+
 
         if ($categoryID != 0) {
             $query->where('campaign_type', $categoryID);

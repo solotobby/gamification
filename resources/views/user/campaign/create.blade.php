@@ -3,9 +3,6 @@
 @section('title', 'Create Campaign')
 
 @section('style')
-    {{--
-    <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js"
-        referrerpolicy="origind"></script> --}}
     <script src="https://cdn.tiny.cloud/1/no-api/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
@@ -30,9 +27,6 @@
     <!-- Page Content -->
     <div class="content content-boxed">
         <!-- Post Job form -->
-        {{-- <h2 class="content-heading">
-            <i class="fa fa-plus text-success me-1"></i> Create Campaign
-        </h2> --}}
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
@@ -133,13 +127,6 @@
                                 <h4>Estimated Cost: $<span id="demo"></span></h4>
                             @endif
 
-                            {{-- @if(auth()->user()->wallet->base_currency == "Naira" ||
-                            auth()->user()->wallet->base_currency == "NGN")
-                            <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
-                            @else
-                            <h4>Estimated Cost: $<span id="demo"></span></h4>
-                            @endif --}}
-
                         </div>
                     </div>
                 </div>
@@ -182,7 +169,6 @@
                                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request
                                         for social
                                         media handle, email or other means of identifying the worker)</small></label>
-                                {{-- <iframe name="server_answer" style="display:none"></iframe> --}}
                                 <textarea id="mytextareao" class="form-control" name="proof"
                                     required>{{ old('proof') }}</textarea>
                             </div>
@@ -203,11 +189,25 @@
 
                             </div>
 
-                            <div class="mb-2">
-                                <input type="checkbox" name="validate" required class="">
-                                <span><small> I agree that this campaign will be automatically approved after 24 hours If I
-                                        fail to approve it. </small></span>
-                            </div>
+                            @if(auth()->user()->is_business)
+                                <div class="mb-4">
+                                    <label class="form-label" for="approval-time">Auto-Approval Time</label>
+                                    <select class="form-select" id="approval-time" name="approval_time" required>
+                                        <option value="24" selected>24 Hours</option>
+                                        <option value="36">36 Hours</option>
+                                        <option value="48">48 Hours</option>
+                                        <option value="56">56 Hours</option>
+                                        <option value="72">72 Hours</option>
+                                    </select>
+                                    <small><i>Select when your campaign submissions should be automatically approved if you don't review them.</i></small>
+                                </div>
+                            @else
+                                <div class="mb-2">
+                                    <input type="checkbox" name="validate" required class="">
+                                    <span><small> I agree that this campaign will be automatically approved after 24 hours If I
+                                            fail to approve it. </small></span>
+                                </div>
+                            @endif
 
                         </div>
                     </div>
@@ -238,10 +238,6 @@
 
     <!-- Page JS Plugins -->
     <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>
-    {{--
-    <script src="{{asset('src/assets/js/plugins/ckeditor/ckeditor.js')}}"></script> --}}
-    {{--
-    <script src="{{ asset('src/assets/js/plugins/simplemde/simplemde.min.js')}}"></script> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
     <script>Dashmix.helpersOnLoad(['js-ckeditor5', 'js-simplemde']);</script>
@@ -255,13 +251,10 @@
                 url: '{{ url("api/get/categories") }}',
                 type: "GET",
                 data: {
-                    //  country_id: country_id,
                     _token: '{{csrf_token()}}'
                 },
                 dataType: 'json',
-                // context: document.body,
                 success: function (result) {
-                    // console.log(result);
                     $('#post-type').html('<option value="">Select Type</option>');
                     $.each(result, function (key, value) {
                         $("#post-type").append('<option value="' + value.id + '">' + value.name + '</option>');
@@ -277,7 +270,6 @@
                     url: '{{ url("api/get/sub/categories") }}/' + encodeURI(typeID),
                     type: "GET",
                     data: {
-                        //  country_id: country_id,
                         _token: '{{csrf_token()}}'
                     },
                     dataType: 'json',
@@ -293,28 +285,23 @@
                             document.getElementById("number-of-staff").value = value.amount;
                             $("#post-category").append('<option value="' + value.id + '">' + value.name + '</option>');
                         });
-                        // $('#city-dropdown').html('<option value="">Select Region/State First</option>');
                     }
                 });
             });
 
             $('#post-category').change(function () {
                 var categoryID = this.value;
-                // api/get/sub/categories/info/{id}
                 $.ajax({
-                    // url: ' url("api/get/sub/categories/info") }}/' + encodeURI(typeID))',
                     url: '{{ url("api/get/sub/categories/info") }}/' + encodeURI(categoryID),
                     type: "GET",
                     data: {
-                        //  country_id: country_id,
                         _token: '{{csrf_token()}}'
                     },
                     dataType: 'json',
                     success: function (result) {
 
                         var amount = result.amount;
-                        var num_staff = document.getElementById("number-of-staff").value; //amount_per_campaign
-                        // var amount_per_campaign = document.getElementById("amount_per_campaign").result.amount;
+                        var num_staff = document.getElementById("number-of-staff").value;
                         var total_amount = Number(amount) * Number(num_staff);
 
                         document.getElementById("amount_per_campaign").value = result.amount;
@@ -338,7 +325,6 @@
                 var percent = (percentToGet / 100) * x;
 
                 document.getElementById("demo").innerHTML = x + percent;
-                // alert(x);
             });
         });
     </script>

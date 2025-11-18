@@ -186,6 +186,7 @@ class Kernel extends ConsoleKernel
         //     $subject = 'Freebyz Business Promotion - Business Selected';
         //     $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
+        $schedule->command('command:task')->daily();
 
         //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
@@ -314,17 +315,17 @@ class Kernel extends ConsoleKernel
         // //     'total_reduced_amount' => number_format($totalReducedAmount, 2)
         // // ];
 
-        // $user = User::where('id', '4')->first();
-        // $subject = 'Dispute Auto - credit';
-        // $content = 'Sent a total of reduced NGN'.number_format($totalReducedAmount, 2). ' of total value NGN'.number_format($totalAmount, 2);
-        // Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
+        $schedule->command('campaigns:send-weekly-broadcast')->daily();
 
-        // // return $result;
+        $schedule->command('campaigns:auto-approve-24hours')->hourly();
 
+        $schedule->command('campaigns:auto-approve-business')->hourly();
 
-        // })->dailyAt('21:50');
+        $schedule->command('campaigns:auto-approve-7days')->daily();
 
+        $schedule->command('business:rotate-promotion')->daily();
 
+        $schedule->command('questions:cleanup-invalid')->hourly();
     }
 
     /**

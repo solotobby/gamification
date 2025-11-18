@@ -321,6 +321,11 @@
                         </div>
                         </div>
                       @else
+                       @if($can_resubmit)
+                            <div class="alert alert-warning">
+                                Your submission was denied. You have {{ 3 - $denied_count }} attempts remaining.
+                            </div>
+                        @endif
                           @if($completed)
 
                             <div class="block-content">
