@@ -45,17 +45,17 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('command:task')->daily();
 
-        $schedule->command('campaigns:send-weekly-broadcast')->daily();
+        $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('08:30');
 
         $schedule->command('campaigns:auto-approve-24hours')->hourly();
 
         $schedule->command('campaigns:auto-approve-business')->hourly();
 
-        $schedule->command('campaigns:auto-approve-7days')->daily();
+        $schedule->command('campaigns:auto-approve-7days')->dailyAt('04:00');
 
-        $schedule->command('business:rotate-promotion')->daily();
+        $schedule->command('business:rotate-promotion')->dailyAt('03:00');
 
-        $schedule->command('questions:cleanup-invalid')->hourly();
+        $schedule->command('questions:cleanup-invalid')->dailyAt('03:00');
     }
 
     /**
