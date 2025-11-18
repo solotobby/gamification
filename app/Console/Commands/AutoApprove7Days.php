@@ -13,22 +13,37 @@ use Illuminate\Console\Command;
 class AutoApprove7Days extends Command
 {
     protected $signature = 'campaigns:auto-approve-7days';
-    protected $description = 'Auto-approve all pending campaign workers after 7 days';
+    protected $description = 'Auto-approve all pending campaign workers after 7 days (excluding jobs older than 6 months)';
 
     public function handle()
     {
         $sevenDaysAgo = Carbon::now()->subDays(7);
+        $sixMonthsAgo = Carbon::now()->subMonths(6);
 
         $lists = CampaignWorker::where('status', 'Pending')
             ->whereNull('reason')
             ->where('created_at', '<=', $sevenDaysAgo)
+            ->where('created_at', '>=', $sixMonthsAgo)
             ->get();
 
+        $approvedCount = 0;
+        $skippedCount = 0;
+
         foreach ($lists as $list) {
-            $this->approveCampaignWorker($list);
+            // Double check if campaign is not older than 6 months
+            if ($list->created_at->greaterThanOrEqualTo($sixMonthsAgo)) {
+                $this->approveCampaignWorker($list);
+                $approvedCount++;
+            } else {
+                $skippedCount++;
+            }
         }
 
-        $this->info('Auto-approved ' . $lists->count() . ' campaign workers (7 days).');
+        $this->info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
+
+        if ($skippedCount > 0) {
+            $this->warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
+        }
     }
 
     private function approveCampaignWorker($ca)
