@@ -2846,4 +2846,24 @@ if (!function_exists('sendZeptoMail')) {
             ];
         }
     }
+
+    if (!function_exists('arrayjobs')) {
+        function  arrayjobs() {
+            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; 
+            $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify']; 
+            $allJobs = array_merge($preferredJobs, $otherJobs);
+
+            $data['preferredJobs'] = $preferredJobs;
+            $data['otherJobs'] = $otherJobs;
+            $data['allJobs'] = $allJobs;
+            return $data;
+
+        }
+    }
+
+    if( !function_exists('ageranges')) {
+        function  ageranges() {
+            return ['15-20', '21-25', '26-30', '31-40', '40-50'];
+        }
+    }
 }

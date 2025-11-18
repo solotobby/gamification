@@ -1203,6 +1203,12 @@ class GeneralController extends Controller
 
         try {
 
+            $allJobs = arrayjobs()['allJobs'];
+            $preferredJobs = arrayjobs()['preferredJobs'];
+            $otherJobs = arrayjobs()['otherJobs']; 
+
+            $ageRanges = ageranges();
+
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
@@ -1210,26 +1216,57 @@ class GeneralController extends Controller
                 )
                 ->where('user_type', 'regular')
                 ->whereHas('user', function ($query) {
-                        $query->where('is_verified', 1);
-                    })
+                    $query->where('is_verified', 1);
+                })
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
                 ->take(5000)
                 ->get()
-                ->map(function ($item) {
+                ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
+                    mt_srand(crc32($item->user_id));
+
+                    $isPreferred = mt_rand(1, 100) <= 90;
+                    $highestEarningTask = $isPreferred
+                        ? $preferredJobs[array_rand($preferredJobs)]
+                        : $otherJobs[array_rand($otherJobs)];
+
+
+                    $remainingJobs = collect($allJobs)
+                        ->reject(fn($j) => $j === $highestEarningTask)
+                        ->shuffle()
+                        ->take(2)
+                        ->values()
+                        ->toArray();
+
+                    $mostActiveTasks = array_merge([$highestEarningTask], $remainingJobs);
+
+
+                    $assign21to25 = mt_rand(1, 100) <= 80;
+                    if ($assign21to25) {
+                        $ageRange = '21-25';
+                    } else {
+                        $ageRange = collect($ageRanges)
+                            ->reject(fn($a) => $a === '21-25')
+                            ->shuffle()
+                            ->first();
+                    }
+
                     return [
                         'name' => $item->user->name,
                         'email' => $item->user->email,
                         'phone' => $item->user->phone,
                         'gender' => $item->user->gender ?? 'Male',
+                        'age_range' => $ageRange,
                         'total_payout' => $item->total_payout,
+                        'highest_earning_task' => $highestEarningTask,
+                        'most_active_tasks' => $mostActiveTasks, // always 3 total
                     ];
                 });
 
-                dailyVisit('API_CALL');
-                
+            dailyVisit('API_CALL');
+
 
             return response()->json([
                 'message' => 'Users fetched successfully.',
@@ -1237,19 +1274,18 @@ class GeneralController extends Controller
                 'data' => $highestPayout,
 
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch users, kindly contact support.',
-                // 'error' => $e->getMessage(), // Remove in production
+                'error' => $e->getMessage(), // Remove in production
             ], 500);
         }
     }
 
     public function apiCallCount()
     {
-        
+
         return $call = Statistics::where('type', 'API_CALL')->get();
     }
 }
