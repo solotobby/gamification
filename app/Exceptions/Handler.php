@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
 
 
     public function report(Throwable $exception){
-        if(env('APP_ENV') == 'production' || env('APP_ENV') == 'local'){
+        if(config('app.env') == 'production' || config('app.env') == 'local'){
             if ($this->shouldReport($exception)) {
                 $errorMessage = $exception->getMessage();
                 $errorTrace = $exception->getTraceAsString();

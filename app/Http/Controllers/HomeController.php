@@ -82,7 +82,7 @@ class HomeController extends Controller
     {
 
         dailyVisit('Dashboard');
-        if (env('APP_ENV') == 'production') {
+        if (config('app.env') == 'production') {
             setProfile(auth()->user());
             // setWalletBaseCurrency();
         }
