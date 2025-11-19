@@ -836,23 +836,64 @@ class AdminController extends Controller
         return view('admin.users.campaigns', ['campaigns' => $campaigns, 'user' => $user]);
     }
 
-    public function withdrawalRequest()
+
+    public function withdrawalRequest(Request $request)
     {
-        $withdrawal = Withrawal::where('status', '1')->orderBy('created_at', 'DESC')->paginate(50);
+        $query = Withrawal::where('status', '1')->orderBy('created_at', 'DESC');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            })->orWhere('amount', 'like', '%' . $search . '%')
+                ->orWhere('paypal_email', 'like', '%' . $search . '%');
+        }
+
+        $withdrawal = $query->paginate(50);
         return view('admin.withdrawals.sent', ['withdrawals' => $withdrawal]);
     }
-    public function withdrawalRequestQueued()
+
+    public function withdrawalRequestQueued(Request $request)
     {
-        $withdrawal = Withrawal::where('status', '0')->orderBy('created_at', 'DESC')->paginate(50);
+        $query = Withrawal::where('status', '0')->orderBy('created_at', 'DESC');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            })->orWhere('amount', 'like', '%' . $search . '%')
+                ->orWhere('paypal_email', 'like', '%' . $search . '%');
+        }
+
+        $withdrawal = $query->paginate(50);
         return view('admin.withdrawals.queued', ['withdrawals' => $withdrawal]);
     }
 
-    public function withdrawalRequestQueuedCurrent()
+    public function withdrawalRequestQueuedCurrent(Request $request)
     {
-        $start_week = Carbon::now()->startOfWeek(); //->format('Y-m-d h:i:s');//next('Friday')->format('Y-m-d h:i:s');
+        $start_week = Carbon::now()->startOfWeek();
         $end_week = Carbon::now()->endOfWeek();
-        $withdrawal = Withrawal::where('status', false)->whereBetween('created_at', [$start_week, $end_week])->paginate(10);
+
         //$withdrawal = Withrawal::where('status', '0')->orderBy('created_at', 'DESC')->paginate(50);
+
+        $query = Withrawal::where('status', false)
+            ->whereBetween('created_at', [$start_week, $end_week]);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            })->orWhere('amount', 'like', '%' . $search . '%')
+                ->orWhere('paypal_email', 'like', '%' . $search . '%');
+        }
+
+        $withdrawal = $query->paginate(10);
         return view('admin.withdrawals.current_week', ['withdrawals' => $withdrawal]);
     }
 
