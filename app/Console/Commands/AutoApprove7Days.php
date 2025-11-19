@@ -19,7 +19,7 @@ class AutoApprove7Days extends Command
     public function handle()
     {
         $sevenDaysAgo = Carbon::now()->subDays(7);
-        $sixMonthsAgo = Carbon::now()->subMonths(6);
+        $sixMonthsAgo = Carbon::now()->subMonths(9);
 
         $lists = CampaignWorker::where('status', 'Pending')
             ->whereNull('reason')
