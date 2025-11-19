@@ -40,11 +40,11 @@ class AutoApprove7Days extends Command
             }
         }
 
-        Log::info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
+        // Log::info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
 
-        if ($skippedCount > 0) {
-            Log::warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
-        }
+        // if ($skippedCount > 0) {
+        //     Log::warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
+        // }
     }
 
     private function approveCampaignWorker($ca)
