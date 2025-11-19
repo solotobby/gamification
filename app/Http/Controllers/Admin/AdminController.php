@@ -787,16 +787,38 @@ class AdminController extends Controller
         // // $transactions = PaymentTransaction::where('user_id', $id)->where('status', 'successful')->latest()->paginate(20); //$user->transactions->where('status', 'successful')->orderBy('created_at', 'DESC');
         // return view('admin.users.transactions', ['transactions' => $transactions, 'user' => $user]);
 
+        // $user = User::findOrFail($id);
+
+        // $transactions = $user->transactions()
+        //     ->where('status', 'successful')
+        //     ->latest()
+        //     ->get(); // Get all, DataTables handles pagination
+
+        // return view('admin.users.transactions', compact('user', 'transactions'));
+
         $user = User::findOrFail($id);
+        return view('admin.users.transactions', compact('user'));
+    }
+
+    public function adminUserTransactionsPaginate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $perPage = 20;
+        $page = $request->get('page', 1);
 
         $transactions = $user->transactions()
             ->where('status', 'successful')
             ->latest()
-            ->get(); // Get all, DataTables handles pagination
+            ->paginate($perPage, ['*'], 'page', $page);
 
-        return view('admin.users.transactions', compact('user', 'transactions'));
+        return response()->json([
+            'data' => $transactions->items(),
+            'current_page' => $transactions->currentPage(),
+            'last_page' => $transactions->lastPage(),
+            'has_more' => $transactions->hasMorePages(),
+            'total' => $transactions->total()
+        ]);
     }
-
     public function verify($id)
     {
         Log::info('Verification started', ['id' => $id]);

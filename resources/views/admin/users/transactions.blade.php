@@ -1,7 +1,18 @@
 @extends('layouts.main.master')
 @section('style')
-    <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
-    <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}">
+<style>
+    #loader {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+    .transaction-row.credit {
+        color: forestgreen;
+    }
+    .transaction-row.debit {
+        color: chocolate;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -32,8 +43,19 @@
                 </div>
             </div>
             <div class="block-content">
+                <!-- Search Box -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="text" id="searchInput" class="form-control"
+                               placeholder="Search by reference, type, description...">
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="badge bg-info">Total: <span id="totalCount">0</span> transactions</span>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+                    <table class="table table-bordered table-striped table-vcenter">
                         <thead>
                             <tr>
                                 <th>Reference</th>
@@ -47,36 +69,21 @@
                                 <th>When</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($transactions as $list)
-                                @if($list->tx_type == 'Credit')
-                                    <tr style="color: forestgreen">
-                                @else
-                                    <tr style="color: chocolate">
-                                @endif
-                                    <td>{{ $list->reference }}</td>
-                                    <td>{{ $list->type }}</td>
-                                    <td>{{ $list->amount }}</td>
-                                    <td>
-                                        @if($list->type === 'wallet_topup' || $list->type === 'transfer_topup')
-                                            <button class="btn btn-sm btn-primary verify-btn"
-                                                data-id="{{ $list->id }}">
-                                                Verify
-                                            </button>
-                                            <span class="verify-status"></span>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>{{ $list->balance }}</td>
-                                    <td>{{ $list->currency }}</td>
-                                    <td>{{ $list->status }}</td>
-                                    <td>{{ $list->description }}</td>
-                                    <td>{{ $list->created_at }}</td>
-                                </tr>
-                            @endforeach
+                        <tbody id="transactionTable">
+                            <!-- Transactions will be loaded here -->
                         </tbody>
                     </table>
+                </div>
+
+                <div id="loader">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading more transactions...</p>
+                </div>
+
+                <div id="noMoreData" style="display: none; text-align: center; padding: 20px;">
+                    <p class="text-muted">No more transactions to load</p>
                 </div>
             </div>
         </div>
@@ -85,58 +92,140 @@
 @endsection
 
 @section('script')
-    <!-- jQuery (required for DataTables plugin) -->
     <script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
 
-    <!-- Page JS Plugins -->
-    <script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons-jszip/jszip.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-    <script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
-
-    <!-- Page JS Code -->
-    <script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script>
-
     <script>
-        $(document).ready(function () {
-            // Destroy existing DataTable if it exists
-            if ($.fn.DataTable.isDataTable('.js-dataTable-buttons')) {
-                $('.js-dataTable-buttons').DataTable().destroy();
-            }
+        let page = 1;
+        let loading = false;
+        let hasMore = true;
+        let allTransactions = [];
+        let filteredTransactions = [];
+        const userId = {{ $user->id }};
 
-            // Reinitialize with custom settings
-            $('.js-dataTable-buttons').DataTable({
-                order: [[8, 'desc']], // Sort by When column descending
-                pageLength: 20, // Show 20 records per page
-                searching: true
+        $(document).ready(function() {
+            loadTransactions();
+
+            // Infinite scroll
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                    if (!loading && hasMore) {
+                        loadTransactions();
+                    }
+                }
             });
 
-            $('.verify-btn').on('click', function () {
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                const searchTerm = $(this).val().toLowerCase();
+
+                if (searchTerm === '') {
+                    filteredTransactions = [...allTransactions];
+                } else {
+                    filteredTransactions = allTransactions.filter(function(transaction) {
+                        return transaction.reference.toLowerCase().includes(searchTerm) ||
+                               transaction.type.toLowerCase().includes(searchTerm) ||
+                               transaction.description.toLowerCase().includes(searchTerm) ||
+                               transaction.amount.toString().includes(searchTerm);
+                    });
+                }
+
+                renderTransactions(filteredTransactions, true);
+            });
+        });
+
+        function loadTransactions() {
+            if (loading || !hasMore) return;
+
+            loading = true;
+            $('#loader').show();
+
+            $.ajax({
+                url: '{{ route("admin.user.transactions.paginate", $user->id) }}',
+                method: 'GET',
+                data: {
+                    page: page
+                },
+                success: function(response) {
+                    if (response.data.length > 0) {
+                        allTransactions = allTransactions.concat(response.data);
+                        filteredTransactions = [...allTransactions];
+                        renderTransactions(response.data, false);
+                        page++;
+
+                        if (!response.has_more) {
+                            hasMore = false;
+                            $('#noMoreData').show();
+                        }
+                    } else {
+                        hasMore = false;
+                        if (page === 1) {
+                            $('#transactionTable').html('<tr><td colspan="9" class="text-center">No transactions found</td></tr>');
+                        } else {
+                            $('#noMoreData').show();
+                        }
+                    }
+
+                    updateCount();
+                    loading = false;
+                    $('#loader').hide();
+                },
+                error: function() {
+                    loading = false;
+                    $('#loader').hide();
+                    alert('Error loading transactions');
+                }
+            });
+        }
+
+        function renderTransactions(transactions, clearTable) {
+            if (clearTable) {
+                $('#transactionTable').empty();
+            }
+
+            $.each(transactions, function(index, transaction) {
+                const rowClass = transaction.tx_type === 'Credit' ? 'credit' : 'debit';
+
+                const actionHtml = (transaction.type === 'wallet_topup' || transaction.type === 'transfer_topup')
+                    ? `<button class="btn btn-sm btn-primary verify-btn" data-id="${transaction.id}">Verify</button>
+                       <span class="verify-status"></span>`
+                    : '-';
+
+                const row = `
+                    <tr class="transaction-row ${rowClass}">
+                        <td>${transaction.reference}</td>
+                        <td>${transaction.type}</td>
+                        <td>${transaction.amount}</td>
+                        <td>${actionHtml}</td>
+                        <td>${transaction.balance}</td>
+                        <td>${transaction.currency}</td>
+                        <td>${transaction.status}</td>
+                        <td>${transaction.description}</td>
+                        <td>${formatDate(transaction.created_at)}</td>
+                    </tr>
+                `;
+
+                $('#transactionTable').append(row);
+            });
+
+            // Reattach verify button handlers
+            attachVerifyHandlers();
+        }
+
+        function attachVerifyHandlers() {
+            $('.verify-btn').off('click').on('click', function() {
                 const btn = $(this);
                 const id = btn.data('id');
                 const statusSpan = btn.siblings('.verify-status');
 
                 btn.prop('disabled', true).text('Verifying...');
 
-                const url = '{{ url("admin/user/transactions/verify") }}/' + id;
-
                 $.ajax({
-                    url: url,
+                    url: '{{ url("admin/user/transactions/verify") }}/' + id,
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: function () {
-                        console.log('Sending verification request...');
-                    },
-                    success: function (response) {
-                        console.log('Success response:', response);
-
+                    success: function(response) {
                         if (response.verified) {
                             statusSpan.html('<span class="badge bg-success">Verified</span>');
                             btn.remove();
@@ -145,20 +234,22 @@
                             btn.prop('disabled', false).text('Verify');
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX Error:', {
-                            status: xhr.status,
-                            statusText: xhr.statusText,
-                            responseText: xhr.responseText,
-                            error: error
-                        });
-
+                    error: function(xhr) {
                         const errorMessage = xhr.responseJSON?.message || 'Verification failed';
                         alert('Error: ' + errorMessage);
                         btn.prop('disabled', false).text('Verify');
                     }
                 });
             });
-        });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString();
+        }
+
+        function updateCount() {
+            $('#totalCount').text(allTransactions.length);
+        }
     </script>
 @endsection
