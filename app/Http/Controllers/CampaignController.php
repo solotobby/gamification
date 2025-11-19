@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ApproveCampaign;
 use App\Mail\CreateCampaign;
+use App\Mail\AdminCampaignPosted;
 use App\Mail\GeneralMail;
 use App\Mail\SubmitJob;
 use App\Models\Campaign;
@@ -32,11 +33,7 @@ class CampaignController extends Controller
         // $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $user = auth()->user();
@@ -47,63 +44,39 @@ class CampaignController extends Controller
             'created_at',
             'DESC'
         )->paginate(10);
+
         return view('user.campaign.index', [
             'lists' => $campaignList,
             'user' => $user
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('user.campaign.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Campaign $campaign)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $campaign = Campaign::where('job_id', $id)->first();
         return view('user.campaign.edit', ['campaign' => $campaign]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Campaign $campaign)
     {
         $est_amount = $request->number_of_staff * $request->campaign_amount;
@@ -148,12 +121,6 @@ class CampaignController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Campaign $campaign)
     {
         //
@@ -465,6 +432,10 @@ class CampaignController extends Controller
                     $approvalTime
                 );
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
+                if(config('app.env') == 'Production'){
+
+                    Mail::to('victor@freebyztechnologies.com')->cc('victorolumorakinyo@gmail.com')->send(new AdminCampaignPosted($processedCampaign));
+                }
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
         } else {
