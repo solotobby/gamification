@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class AutoApprove7Days extends Command
 {
@@ -39,10 +40,10 @@ class AutoApprove7Days extends Command
             }
         }
 
-        $this->info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
+        Log::info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
 
         if ($skippedCount > 0) {
-            $this->warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
+            Log::warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
         }
     }
 
