@@ -70,29 +70,29 @@
           Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->total_balance,2)}}</a>
             <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a>
             <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a>
-            <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a> 
-                  
+            <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>
+
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a>
             <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
             <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
-            
-            <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a> 
 
-            <br> Total Payout (Nov 1st, '24 - Jan 14th, '25) - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout_,2) }}</a> 
-           
-            @if(env('APP_ENV') == 'production')
+            <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a>
+
+            <br> Total Payout (Nov 1st, '24 - Jan 14th, '25) - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout_,2) }}</a>
+
+            @if(config('app.env') == 'Production')
                 <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
-            @endif 
-            
+            @endif
+
             {{--Wallet Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->sum('balance'),2)}}</a>
             <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet->where('balance', '>=', 2500)->sum('balance'),2)}} </a>
             <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet->sum('usd_balance'),2)}}</a>
-            <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>  
+            <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>
             // <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions,2)}}</a>
             <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
             <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a>
-              @if(env('APP_ENV') == 'production')
+              @if(config('app.env') == 'Production')
                   <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
               @endif
             --}}
@@ -115,11 +115,11 @@
           </div>
         </div>
       </div>
-      
-      
+
+
     </div>
   </div>
-  
+
   <div class="content">
 
     <form action="{{ url('users') }}" method="GET">
@@ -144,12 +144,12 @@
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
-             {{-- {{ App\Helpers\SystemActivities::numberFormat($users->count()) }}  --}} 
+             {{-- {{ App\Helpers\SystemActivities::numberFormat($users->count()) }}  --}}
               <span id="totalUsers"></span></div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              {{-- {{ number_format($users->where('is_verified')->count()) }} -  --}} 
+              {{-- {{ number_format($users->where('is_verified')->count()) }} -  --}}
               <span id="verifiedUsers"></span>
             </div>
           </div>
@@ -171,7 +171,7 @@
             <div class="text-muted mb-3">Total Campaigns</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              
+
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -188,7 +188,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title=""> 
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
               {{-- {{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }} --}}
               &#8358;<span id="campaignValue"></span>
               </div>
@@ -196,7 +196,7 @@
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
               &#8358; <span id="campaignWorker"></span>
-              
+
               {{-- {{ App\Helpers\SystemActivities::numberFormat($workers) }} --}}
             </div>
           </div>
@@ -216,7 +216,7 @@
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
-             
+
               <span id="activeReg"></span>
               </div>
             <div class="text-muted mb-3">Active Users</div>
@@ -224,7 +224,7 @@
               <i class="fa fa-caret-up me-1"></i>
 
                <span id="regUser"></span>
-             
+
             </div> --}}
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -237,7 +237,7 @@
       </div>
 
 
-      
+
 
      {{-- <div class="col-sm-6 col-xl-3">
         <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
@@ -249,9 +249,9 @@
             <div class="text-muted mb-3">Referral Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-             
+
               {{ $tx->where('type', 'referer_bonus')->count() }}
-              
+
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -268,14 +268,14 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-           
+
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{$tx->where('type', 'direct_referer_bonus')->sum('amount')}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($tx->where('type', 'direct_referer_bonus')->sum('amount')) }}</div>
             <div class="text-muted mb-3">Direct Reg. Revenue</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-             
+
               {{ $tx->where('type', 'direct_referer_bonus')->count() }}
-              
+
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -292,12 +292,12 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-wallet fa-lg text-primary"></i>
             </div>
-           
+
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="{{number_format($wal->balance)}}"> &#8358;{{ App\Helpers\PaystackHelpers::numberFormat($wal->balance) }}</div>
             <div class="text-muted mb-3">Wallet Balance</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-             
+
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -324,22 +324,22 @@
       </div>
       <hr>
       <div class="col-xl-12">
-       <div id="linechart" style="width: 100%; height: 500px"></div> 
+       <div id="linechart" style="width: 100%; height: 500px"></div>
       </div>
       <hr>
-      
+
       <div class="col-xl-12">
-       <div id="chart_div_weekly_rev_channel" style="width: 100%; height: 500px"></div> 
+       <div id="chart_div_weekly_rev_channel" style="width: 100%; height: 500px"></div>
       </div>
       <div class="col-xl-12">
-       <div id="chart_div_weekly_verification_channel" style="width: 100%; height: 500px"></div> 
+       <div id="chart_div_weekly_verification_channel" style="width: 100%; height: 500px"></div>
       </div>
-     
+
 
        {{--<div class="col-xl-12">
           <div id="donutchart" style="width: 100%; height: 500px;"></div>
       </div> --}}
-      
+
       <hr>
        <div class="col-xl-12 mb-3">
           <div id="donutchart_revenue" style="width: 100%; height: 500px;"></div>
@@ -356,12 +356,12 @@
        <div class="col-xl-12 mb-3">
           <div id="currency_distribution" style="width: 100%; height: 500px;"></div>
       </div>
-      
+
 
     </div>
   </div>
 
-    
+
 @endsection
 
 @section('script')
@@ -373,7 +373,7 @@
 
   <script>
     $(document).ready(function(){
-      
+
           // Get the dropdown items
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
@@ -391,7 +391,7 @@
 
       function handleClick() {
           var id = this.id;
-         
+
           $.ajax({
               url: '{{ url("admin/dashboard/api/default") }}',
               method: 'GET',
@@ -407,12 +407,12 @@
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
                 var activeUsers = response.activeUsers.original;
-                       
+
                 var activeReg = activeUsers.active_users;
                 var regUser = activeUsers.registered_users;
                 // var loginPoints = response.loginPoints;
                 // var loginPointsValue = response.loginPointsValue;
-               
+
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
@@ -422,7 +422,7 @@
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                 document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
                 document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
-                          
+
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
 
@@ -437,7 +437,7 @@
       // var day_1 = document.getElementById('1');
       var day_7 = document.getElementById('7');
       var day_14 = document.getElementById('14');
-      
+
       // day_1.addEventListener('click', handleClick);
       day_7.addEventListener('click', handleClick);
       day_14.addEventListener('click', handleClick);
@@ -457,8 +457,8 @@
                 var campaignValue = response.campaignValue;
                 var campaignWorker = response.campaignWorker;
                 var activeUsers = response.activeUsers.original;
-                       
-                
+
+
                 var activeReg = activeUsers.active_users;
                 var regUser = activeUsers.registered_users;
                 // var activeUsers = response.activeUsers;
@@ -476,7 +476,7 @@
                 document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                 document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
                 document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
-                          
+
                 // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                 // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
                 // document.getElementById("monthly").innerHTML = monthly.toFixed(2);
@@ -486,7 +486,7 @@
               }
         });
 
-       
+
 
         // $('#post-type').change(function(){
         //     console.log('load');
@@ -512,11 +512,11 @@
                           var campaignValue = response.campaignValue;
                           var campaignWorker = response.campaignWorker;
                           var activeUsers = response.activeUsers.original;
-                       
-                
+
+
                         var activeReg = activeUsers.active_users;
                         var regUser = activeUsers.registered_users;
-                       
+
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                           document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
                           document.getElementById("campaigns").innerHTML = campaigns.toFixed(2);
@@ -524,10 +524,10 @@
                           document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                           document.getElementById("activeReg").innerHTML = Intl.NumberFormat('en-US').format(activeReg.toFixed(1));
                           document.getElementById("regUser").innerHTML = Intl.NumberFormat('en-US').format(regUser.toFixed(1));
-                          
+
                           // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                           // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
-                         
+
                         },
                         error: function(xhr, status, error) {
                             console.error(status);

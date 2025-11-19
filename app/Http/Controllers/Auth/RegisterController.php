@@ -153,7 +153,7 @@ class RegisterController extends Controller
         $wall->save();
 
 
-        // if(env('APP_ENV') == 'production'){
+        // if(config('app.env') == 'production'){
         //     userLocation('Registration');
         // }
 
@@ -252,7 +252,7 @@ class RegisterController extends Controller
     //                         }
 
     //                         //set base currency if not set
-    //                         if (env('APP_ENV') == 'production') {
+    //                         if (config('app.env') == 'production') {
     //                             setProfile($user); //set profile page
     //                             userLocation('Login');
     //                             // setWalletBaseCurrency();
@@ -319,7 +319,7 @@ class RegisterController extends Controller
 
 
     //     //         //set base currency if not set
-    //     //         if(env('APP_ENV') == 'production'){
+    //     //         if(config('app.env') == 'production'){
     //     //             setProfile($user); //set profile page
     //     //             PaystackHelpers::userLocation('Login');
     //     //         }
@@ -383,7 +383,7 @@ class RegisterController extends Controller
 
                 Auth::login($user);
 
-                if (env('APP_ENV') === 'production') {
+                if (config('app.env') === 'production') {
                     setProfile($user);
                     userLocation('Login');
                 }

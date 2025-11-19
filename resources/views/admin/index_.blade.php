@@ -14,17 +14,17 @@
             <br>Withdrawable Balance - <a class="fw-medium" href="javascript:void(0)">&#8358;{{number_format($wallet[0]->balance_gt_200,2)}} </a>
             <br> Dollar Wallet - <a class="fw-medium" href="javascript:void(0)">${{number_format($wallet[0]->total_usd_balance,2)}}</a>
             {{-- <br> Total Payout - <a class="fw-medium" href="javascript:void(0)">&#8358;{{ number_format($totalPayout,2) }}</a>   --}}
-           
+
             <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($transactions[0]->total_successful_transactions,2)}}</a>
             <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a>
             {{-- <br> This Week Payment - <a class="fw-medium" href="javascript:void(0)"> &#8358;{{number_format($weekPayment,2)}}</a>
              --}}
              {{-- <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }} </a> --}}
-             
-              @if(env('APP_ENV') == 'production')
+
+              @if(config('app.env') == 'Production')
                   <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
-              @endif 
-            
+              @endif
+
         </p>
       </div>
       {{--Wallet Balance - &#8358;{{ number_format($wallet) }}  <span id="monthly"></span>--}}
@@ -42,11 +42,11 @@
           </div>
         </div>
       </div>
-      
-      
+
+
     </div>
   </div>
-  
+
   <div class="content">
 
     <form action="{{ url('users') }}" method="GET">
@@ -71,12 +71,12 @@
               <i class="fa fa-users fa-lg text-primary"></i>
             </div>
             <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
-             {{-- {{ App\Helpers\SystemActivities::numberFormat($users->count()) }}  --}} 
+             {{-- {{ App\Helpers\SystemActivities::numberFormat($users->count()) }}  --}}
               <span id="totalUsers"></span></div>
             <div class="text-muted mb-3">Registered Users</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
-              {{-- {{ number_format($users->where('is_verified')->count()) }} -  --}} 
+              {{-- {{ number_format($users->where('is_verified')->count()) }} -  --}}
               <span id="verifiedUsers"></span>
             </div>
           </div>
@@ -98,7 +98,7 @@
             <div class="text-muted mb-3">Total Campaigns</div>
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-down me-1"></i>
-              
+
             </div>
           </div>
           <div class="block-content block-content-full block-content-sm bg-body-light fs-sm">
@@ -115,7 +115,7 @@
             <div class="item rounded-3 bg-body mx-auto my-3">
               <i class="fa fa-chart-line fa-lg text-primary"></i>
             </div>
-            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title=""> 
+            <div class="fs-1 fw-bold" data-toggle="tooltip" data-placement="top" title="">
               {{-- {{ App\Helpers\SystemActivities::numberFormat($campaigns->sum('total_amount')) }} --}}
               &#8358;<span id="campaignValue"></span>
               </div>
@@ -123,7 +123,7 @@
             <div class="d-inline-block px-3 py-1 rounded-pill fs-sm fw-semibold text-success bg-success-light">
               <i class="fa fa-caret-up me-1"></i>
               &#8358; <span id="campaignWorker"></span>
-              
+
               {{-- {{ App\Helpers\SystemActivities::numberFormat($workers) }} --}}
             </div>
           </div>
@@ -149,7 +149,7 @@
 
   <script>
     $(document).ready(function(){
-      
+
           // Get the dropdown items
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
@@ -167,7 +167,7 @@
 
       function handleClick() {
           var id = this.id;
-         
+
           $.ajax({
               url: '{{ url("admin/dashboard/api/default") }}',
               method: 'GET',
@@ -184,7 +184,7 @@
                 var campaignWorker = response.campaignWorker;
                 // var loginPoints = response.loginPoints;
                 // var loginPointsValue = response.loginPointsValue;
-               
+
                 //  var amount = length*2;
 
                 document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
@@ -206,7 +206,7 @@
       // var day_1 = document.getElementById('1');
       var day_7 = document.getElementById('7');
       var day_14 = document.getElementById('14');
-      
+
       // day_1.addEventListener('click', handleClick);
       day_7.addEventListener('click', handleClick);
       day_14.addEventListener('click', handleClick);
@@ -244,7 +244,7 @@
               }
         });
 
-       
+
 
         // $('#post-type').change(function(){
         //     console.log('load');
@@ -271,7 +271,7 @@
                           var campaignWorker = response.campaignWorker;
                           // var loginPoints = response.loginPoints;
                           // var loginPointsValue = response.loginPointsValue;
-                        
+
 
                           document.getElementById("totalUsers").innerHTML = totalUsers.toFixed(2);
                           document.getElementById("verifiedUsers").innerHTML = verifiedUsers.toFixed(2);
@@ -280,7 +280,7 @@
                           document.getElementById("campaignWorker").innerHTML = Intl.NumberFormat('en-US').format(campaignWorker.toFixed(1));
                           // document.getElementById("loginPoints").innerHTML = loginPoints.toFixed(2);
                           // document.getElementById("loginPointsValue").innerHTML = loginPointsValue.toFixed(2);
-                         
+
                         },
                         error: function(xhr, status, error) {
                             console.error(status);

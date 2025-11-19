@@ -35,7 +35,7 @@
                             href="javascript:void(0)">&#8358;{{ number_format($totalPendingPayout, 2) }}</a>
                     @endif
 
-                    @if(env('APP_ENV') == 'production')
+                    @if(config('app.env') == 'Production')
                         <br> Location - <a class="fw-medium" href="javascript:void(0)">{{ currentLocation() }}</a>
                     @endif
                 </p>
