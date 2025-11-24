@@ -1554,7 +1554,7 @@ class AdminController extends Controller
             (clone $query)
                 ->whereNotNull('email')
                 ->select('id', 'email')
-                ->chunk(100, function ($users) use ($request, $campaign, &$totalRecipients) {
+                ->chunk(50, function ($users) use ($request, $campaign, &$totalRecipients) {
                     $totalRecipients += $users->count();
 
                     // Create log entries

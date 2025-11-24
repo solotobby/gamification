@@ -15,9 +15,9 @@ class SendMassEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 3;
-    public $timeout = 300; 
-    public $maxExceptions = 3;
+    public $tries = 2;
+    public $timeout = 180;
+    public $maxExceptions = 2;
 
     protected $userIds;
     protected $message;
@@ -34,12 +34,30 @@ class SendMassEmail implements ShouldQueue
 
     public function handle(): void
     {
-        $users = User::whereIn('id', $this->userIds)
+        $pendingLogs = MassEmailLog::where('campaign_id', $this->campaignId)
+            ->whereIn('user_id', $this->userIds)
+            ->where('status', 'pending')
+            ->pluck('user_id')
+            ->toArray();
+
+        if (empty($pendingLogs)) {
+            return; // All emails already sent
+        }
+
+        $users = User::whereIn('id', $pendingLogs)
             ->select('id', 'email', 'name')
             ->get();
 
         foreach ($users as $user) {
             try {
+                $log = MassEmailLog::where('campaign_id', $this->campaignId)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if ($log->status !== 'pending') {
+                    continue;
+                }
+
                 $formattedMessage = nl2br($this->message);
 
                 $htmlBody = view('emails.mass_mail.content_new', [
@@ -70,9 +88,6 @@ class SendMassEmail implements ShouldQueue
                         'sent_at' => $status === 'sent' ? now() : null,
                         'error_message' => $response['error'] ?? null,
                     ]);
-
-                // Add small delay to avoid rate limits
-                usleep(100000); // 0.1 second delay
 
             } catch (\Throwable $e) {
                 Log::error('Mass email failed', [
