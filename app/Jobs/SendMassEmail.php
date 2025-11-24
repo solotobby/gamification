@@ -15,6 +15,10 @@ class SendMassEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+    public $timeout = 300; 
+    public $maxExceptions = 3;
+
     protected $userIds;
     protected $message;
     protected $subject;
@@ -50,18 +54,6 @@ class SendMassEmail implements ShouldQueue
                     $htmlBody
                 );
 
-                // $htmlBody = view('emails.mass_mail.content_new', [
-                //     'name' => $user->name,
-                //     'message' => $this->message,
-                // ])->render();
-
-                // $response = sendZeptoMail(
-                //     $user->email,
-                //     $user->name,
-                //     $this->subject,
-                //     $htmlBody
-                // );
-
                 if ($response['status'] === 'accepted') {
                     $messageId = $response['message_id'];
                     $status = 'sent';
@@ -78,6 +70,10 @@ class SendMassEmail implements ShouldQueue
                         'sent_at' => $status === 'sent' ? now() : null,
                         'error_message' => $response['error'] ?? null,
                     ]);
+
+                // Add small delay to avoid rate limits
+                usleep(100000); // 0.1 second delay
+
             } catch (\Throwable $e) {
                 Log::error('Mass email failed', [
                     'user_id' => $user->id,
