@@ -36,9 +36,11 @@ class SendMassEmail implements ShouldQueue
 
         foreach ($users as $user) {
             try {
+                $formattedMessage = nl2br($this->message);
+
                 $htmlBody = view('emails.mass_mail.content_new', [
                     'name' => $user->name,
-                    'message' => $this->message,
+                    'message' => $formattedMessage,
                 ])->render();
 
                 $response = sendZeptoMail(
@@ -47,6 +49,18 @@ class SendMassEmail implements ShouldQueue
                     $this->subject,
                     $htmlBody
                 );
+
+                // $htmlBody = view('emails.mass_mail.content_new', [
+                //     'name' => $user->name,
+                //     'message' => $this->message,
+                // ])->render();
+
+                // $response = sendZeptoMail(
+                //     $user->email,
+                //     $user->name,
+                //     $this->subject,
+                //     $htmlBody
+                // );
 
                 if ($response['status'] === 'accepted') {
                     $messageId = $response['message_id'];
