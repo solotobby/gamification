@@ -803,7 +803,7 @@ class AdminController extends Controller
     public function adminUserTransactionsPaginate(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $perPage = 20;
+        $perPage = 50;
         $page = $request->get('page', 1);
 
         $transactions = $user->transactions()
