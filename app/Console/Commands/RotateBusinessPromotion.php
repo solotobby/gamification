@@ -6,6 +6,7 @@ use App\Mail\GeneralMail;
 use App\Models\Business;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class RotateBusinessPromotion extends Command
@@ -15,6 +16,9 @@ class RotateBusinessPromotion extends Command
 
     public function handle()
     {
+
+        Log::info('Rotate business promotion - select random business for 24-hour promotion started');
+
         Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
 
         $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
@@ -29,8 +33,10 @@ class RotateBusinessPromotion extends Command
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             $this->info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
+            Log::info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
         } else {
             $this->warn('No active business found for promotion.');
+            Log::warn('No active business found for promotion.');
         }
     }
 

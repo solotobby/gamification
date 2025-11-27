@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendWeeklyBroadcast extends Command
@@ -16,6 +17,9 @@ class SendWeeklyBroadcast extends Command
 
     public function handle()
     {
+
+        Log::info('Send weekly campaign broadcast to users registered last week started');
+        
         $campaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
             ->orderBy('created_at', 'DESC')

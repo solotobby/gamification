@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Jobs\BackfillVerifiedAt;
+use Illuminate\Support\Facades\Log;
 
 class DispatchBackfillVerifiedAt extends Command
 {
@@ -12,6 +13,8 @@ class DispatchBackfillVerifiedAt extends Command
 
     public function handle()
     {
+        Log::info('Start the self-chaining backfill process for verified_at');
+
         $chunkSize = (int) $this->option('chunk-size');
 
         $this->info("Starting backfill process with chunk size of {$chunkSize}...");

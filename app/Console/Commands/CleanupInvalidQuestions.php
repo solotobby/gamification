@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Question;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CleanupInvalidQuestions extends Command
 {
@@ -16,6 +17,7 @@ class CleanupInvalidQuestions extends Command
         Question::where('option_A', null)->delete();
 
         $this->info('Deleted ' . $count . ' invalid questions.');
+        Log::info('Deleted ' . $count . ' invalid questions.');
     }
 
         //  $schedule->call(function () {

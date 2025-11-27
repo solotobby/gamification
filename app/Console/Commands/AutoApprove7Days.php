@@ -18,6 +18,9 @@ class AutoApprove7Days extends Command
 
     public function handle()
     {
+
+        Log::info(message: 'Jobs pending more than 7days auto approval started.');
+
         $sevenDaysAgo = Carbon::now()->subDays(7);
         $sixMonthsAgo = Carbon::now()->subMonths(9);
 
@@ -41,9 +44,11 @@ class AutoApprove7Days extends Command
         }
 
         $this->info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
+        Log::info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
 
         if ($skippedCount > 0) {
             $this->warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
+            Log::warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
         }
     }
 

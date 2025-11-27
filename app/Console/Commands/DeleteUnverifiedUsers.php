@@ -32,7 +32,7 @@ class DeleteUnverifiedUsers extends Command
         $this->info('Starting deletion of unverified users...');
 
         // Log start
-        Log::info('User cleanup started.');
+        Log::info(message: 'User cleanup started.');
 
         $count = 0;
 
