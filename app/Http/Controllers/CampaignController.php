@@ -432,7 +432,7 @@ class CampaignController extends Controller
                     $approvalTime
                 );
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
-                if(config('app.env') == 'Production'){
+                if (config('app.env') == 'Production') {
 
                     Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new AdminCampaignPosted($processedCampaign));
                 }
@@ -741,6 +741,10 @@ class CampaignController extends Controller
 
             if ($campaign->is_completed && !$canResubmit) {
                 return redirect('home');
+            }
+
+            if (!auth()->user()->accountDetails) {
+                return redirect('profile')->with('info', 'You are about to take on a high-paying job. Please scroll down to Bank Account Details to update your information.');
             }
 
             if ($campaign->id == 8099 && $campaignWorker) {

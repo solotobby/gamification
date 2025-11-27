@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class AutoApprove24Hours extends Command
 {
@@ -17,6 +18,8 @@ class AutoApprove24Hours extends Command
 
     public function handle()
     {
+        Log::info(message: 'Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
+
         $startTime = Carbon::now()->subDays(1)->startOfHour();
         $endTime = Carbon::now()->subDays(1)->endOfHour();
 
@@ -34,6 +37,7 @@ class AutoApprove24Hours extends Command
         }
 
         $this->info('Auto-approved ' . $lists->count() . ' campaign workers (24 hours).');
+        Log::info('Auto-approved ' . $lists->count() . ' campaign workers (24 hours).');
     }
 
     private function approveCampaignWorker($ca)

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class AutoApproveBusiness extends Command
 {
@@ -17,6 +18,9 @@ class AutoApproveBusiness extends Command
 
     public function handle()
     {
+
+        Log::info(message: 'Auto-approve business account campaigns based on their approval time setting started');
+
         $campaigns = Campaign::whereHas('user', function($query) {
             $query->where('is_business', true);
         })->where('approval_time', '>', 0)->get();
@@ -40,6 +44,7 @@ class AutoApproveBusiness extends Command
         }
 
         $this->info('Auto-approved ' . $totalApproved . ' business campaign workers.');
+        Log::info('Auto-approved ' . $totalApproved . ' business campaign workers.');
     }
 
     private function approveCampaignWorker($ca)

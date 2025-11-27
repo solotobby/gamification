@@ -10,8 +10,6 @@ class CustomTask extends Command
 {
 
     protected $signature = 'command:task';
-
-
     protected $description = 'Command description';
 
 

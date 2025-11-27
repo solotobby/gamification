@@ -2344,7 +2344,7 @@ if (!function_exists('bankList')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->get($url)->throw();
 
         return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
@@ -2360,6 +2360,7 @@ if (!function_exists('resolveBankName')) {
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->get('https://api.paystack.co/bank/resolve?account_number=' . $account_number . '&bank_code=' . $bank_code);
+        // Log::info($res);
         return json_decode($res->getBody()->getContents(), true);
     }
 }
@@ -2849,8 +2850,8 @@ if (!function_exists('sendZeptoMail')) {
 
     if (!function_exists('arrayjobs')) {
         function  arrayjobs() {
-            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz']; 
-            $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify']; 
+            $preferredJobs = ['Godconnect', 'App Download', 'Freebyz'];
+            $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify'];
             $allJobs = array_merge($preferredJobs, $otherJobs);
 
             $data['preferredJobs'] = $preferredJobs;

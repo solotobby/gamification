@@ -38,6 +38,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Nette\Utils\Random;
 use Illuminate\Support\Str;
 
@@ -54,11 +55,7 @@ class HomeController extends Controller
         // $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+
     public function index()
     {
         $user = auth()->user();
@@ -894,37 +891,132 @@ class HomeController extends Controller
         return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'otp' => $otp]);
     }
 
-    public function saveBankInformation(Request $request)
+    public function validateBankAccount(Request $request)
     {
-
-        $this->validate($request, [
-            'account_number' => 'numeric|required|digits:10'
+        $request->validate([
+            'account_number' => 'required|digits:10|numeric',
+            'bank_code'      => 'required|string',
         ]);
 
-        $accountInformation = resolveBankName($request->account_number, $request->bank_code);
+        // Log::info("Validating account: " . $request->account_number);
 
-        if ($accountInformation['status'] == 'true') {
-            $recipientCode = recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
-            $bankInfor = BankInformation::create([
-                'user_id' => auth()->user()->id,
-                'name' => $accountInformation['data']['account_name'],
-                'bank_name' => $recipientCode['data']['details']['bank_name'],
-                'account_number' => $request->account_number,
-                'bank_code' => $request->bank_code,
-                'recipient_code' => $recipientCode['data']['recipient_code'],
-                'currency' => 'NGN'
-            ]);
+        $accountInfo = resolveBankName($request->account_number, $request->bank_code);
 
-            if (auth()->user()->profile->phone_verified == true && $bankInfor) {
-                generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
+        // Log::info($accountInfo);
+
+        if (!isset($accountInfo['status']) || $accountInfo['status'] != true) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid account details'
+            ], 400);
+        }
+
+        $validatedName = $accountInfo['data']['account_name'];
+
+        return response()->json([
+            'success'      => true,
+            'account_name' => $validatedName,
+            'bank_name'    => $accountInfo['data']['bank_name'] ?? null,
+            'name_match'   => strtolower(trim($validatedName)) === strtolower(trim(auth()->user()->name)),
+            'current_name' => auth()->user()->name
+        ]);
+    }
+
+    public function saveBankInformation(Request $request)
+    {
+        $request->validate([
+            'account_number' => 'required|digits:10|numeric',
+            'bank_code'      => 'required|string',
+            'validated_name' => 'required|string',
+            'bank_name'      => 'required|string',
+        ]);
+
+        // Check if same account exists for another user
+        // $duplicate = BankInformation::where('account_number', $request->account_number)
+        //     ->where('name', $request->validated_name)
+        //     ->where('user_id', '!=', auth()->id())
+        //     ->exists();
+
+        // if ($duplicate) {
+        //     auth()->user()->update(['is_blacklisted' => true]);
+        //     // return back()->with(key: 'error', 'Account already exists for another user. You have been flagged for review.');
+        // }
+
+        try {
+            // Create recipient code
+            $recipientCode = recipientCode(
+                $request->validated_name,
+                $request->account_number,
+                $request->bank_code
+            );
+
+            // Create or update bank info
+            $bankInfo = BankInformation::updateOrCreate(
+                ['user_id' => auth()->id()],
+                [
+                    'name'           => $request->validated_name,
+                    'bank_name'      => $request->bank_name,
+                    'account_number' => $request->account_number,
+                    'bank_code'      => $request->bank_code,
+                    'recipient_code' => $recipientCode['data']['recipient_code'] ?? null,
+                    'currency'       => 'NGN',
+                    'status'         => true
+                ]
+            );
+
+            // Update user name if it does not match
+            if (strtolower(trim(auth()->user()->name)) !== strtolower(trim($request->validated_name))) {
+                auth()->user()->update(['name' => $request->validated_name]);
             }
 
-            return back()->with('success', 'Account Details Added');
-            //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
-        } else {
-            return back()->with('error', 'Your bank account is not valid');
+            // Generate virtual account only if user phone is verified
+            if (auth()->user()->profile->phone_verified && $bankInfo) {
+                generateVirtualAccount($request->validated_name, auth()->user()->phone);
+            }
+
+            return back()->with('success', 'Bank details saved successfully.');
+        } catch (\Exception $e) {
+            Log::error("Bank info saving failed: " . $e->getMessage());
+            return back()->with('error', 'Failed to save bank details. Please try again.');
         }
     }
+
+    // public function saveBankInformation(Request $request)
+    // {
+
+    //     $this->validate($request, [
+    //         'account_number' => 'numeric|required|digits:10'
+    //     ]);
+
+    //     $accountInformation = resolveBankName($request->account_number, $request->bank_code);
+
+    //     if ($accountInformation['status'] == 'true') {
+    //         $recipientCode = recipientCode($accountInformation['data']['account_name'], $request->account_number, $request->bank_code);
+    //         $bankInfor = BankInformation::updateOrCreate(
+    //             [
+    //                 'user_id' => auth()->id(),
+    //             ],
+    //             [
+    //                 'name' => $accountInformation['data']['account_name'],
+    //                 'bank_name' => $recipientCode['data']['details']['bank_name'],
+    //                 'account_number' => $request->account_number,
+    //                 'bank_code' => $request->bank_code,
+    //                 'recipient_code' => $recipientCode['data']['recipient_code'],
+    //                 'currency' => 'NGN',
+    //             ]
+    //         );
+
+
+    //         if (auth()->user()->profile->phone_verified == true && $bankInfor) {
+    //             generateVirtualAccount($accountInformation['data']['account_name'], auth()->user()->phone);
+    //         }
+
+    //         return back()->with('success', 'Account Details Added');
+    //         //return redirect('wallet/withdraw')->with('success', 'Withdrawal Successfully queued');
+    //     } else {
+    //         return back()->with('error', 'Your bank account is not valid');
+    //     }
+    // }
 
     public function transferFund($amount, $recipient)
     {
