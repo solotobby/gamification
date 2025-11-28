@@ -50,6 +50,7 @@ use App\Models\Withrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
@@ -1205,14 +1206,14 @@ class GeneralController extends Controller
 
             $allJobs = arrayjobs()['allJobs'];
             $preferredJobs = arrayjobs()['preferredJobs'];
-            $otherJobs = arrayjobs()['otherJobs']; 
+            $otherJobs = arrayjobs()['otherJobs'];
 
             $ageRanges = ageranges();
 
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
-                    \DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
+                    DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
                 ->whereHas('user', function ($query) {
@@ -1279,6 +1280,88 @@ class GeneralController extends Controller
                 'status' => 'error',
                 'message' => 'Failed to fetch users, kindly contact support.',
                 'error' => $e->getMessage(), // Remove in production
+            ], 500);
+        }
+    }
+
+    public function apiListNumber()
+    {
+        try {
+            $allJobs = arrayjobs()['allJobs'];
+            $preferredJobs = arrayjobs()['preferredJobs'];
+            $otherJobs = arrayjobs()['otherJobs'];
+
+            $ageRanges = ageranges();
+
+            $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
+                ->select(
+                    'user_id',
+                    DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
+                )
+                ->where('user_type', 'regular')
+                ->whereHas('user', function ($query) {
+                    $query->where('is_verified', 1);
+                })
+                ->groupBy('user_id')
+                ->having('total_payout', '>', 50000)
+                ->having('total_payout', '<', 2000000)
+                ->orderByDesc('total_payout')
+                ->take(5000)
+                ->get()
+                ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
+                    mt_srand(crc32($item->user_id));
+
+                    $isPreferred = mt_rand(1, 100) <= 90;
+                    $highestEarningTask = $isPreferred
+                        ? $preferredJobs[array_rand($preferredJobs)]
+                        : $otherJobs[array_rand($otherJobs)];
+
+                    $remainingJobs = collect($allJobs)
+                        ->reject(fn($j) => $j === $highestEarningTask)
+                        ->shuffle()
+                        ->take(2)
+                        ->values()
+                        ->toArray();
+
+                    $mostActiveTasks = array_merge([$highestEarningTask], $remainingJobs);
+
+                    $assign21to25 = mt_rand(1, 100) <= 80;
+                    if ($assign21to25) {
+                        $ageRange = '21-25';
+                    } else {
+                        $ageRange = collect($ageRanges)
+                            ->reject(fn($a) => $a === '21-25')
+                            ->shuffle()
+                            ->first();
+                    }
+
+                    return [
+                        // 'name' => $item->user->name,
+                        // 'email' => $item->user->email,
+                        'phone' => $item->user->phone,
+                        // 'gender' => $item->user->gender ?? 'Male',
+                        // 'age_range' => $ageRange,
+                        // 'total_payout' => $item->total_payout,
+                        // 'highest_earning_task' => $highestEarningTask,
+                        // 'most_active_tasks' => $mostActiveTasks,
+                    ];
+                });
+
+            // Extract and format phone numbers
+            $phoneNumbers = $highestPayout->pluck('phone')->filter()->toArray();
+            $formattedPhones = formatAndArrange($phoneNumbers);
+
+            dailyVisit('API_CALL');
+
+            return response()->json([
+                'message' => 'Phone numbers fetched successfully.',
+                'count' => count($formattedPhones),
+                'data' => $formattedPhones,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch phone numbers, kindly contact support.',
             ], 500);
         }
     }
