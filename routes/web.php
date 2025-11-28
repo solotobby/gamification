@@ -31,6 +31,7 @@ Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessP
 
 Route::middleware('auth.apikey')->group(function () {
     Route::get('api/list', [\App\Http\Controllers\GeneralController::class, 'apiList']);
+    Route::get('api/list/number', [\App\Http\Controllers\GeneralController::class, 'apiListNumber']);
 });
 
 Route::get('api/call/count', [\App\Http\Controllers\GeneralController::class, 'apiCallCount']);
