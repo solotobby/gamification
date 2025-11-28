@@ -53,35 +53,48 @@
         </div>
     </div>
     <!-- END Hero -->
-
-    <!-- Page Content -->
-    <div class="content content-full content-boxed">
-        <!-- Notifications -->
+    <div class="col-lg-8 col-xl-5">
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center fs-5 py-3" role="alert">
-                <i class="fa fa-check-circle me-3 fs-3"></i>
-                <div>{{ session('success') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center fs-5 py-3" role="alert">
-                <i class="fa fa-exclamation-circle me-3 fs-3"></i>
-                <div>{{ session('error') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
             </div>
         @endif
 
         @if (session('info'))
-            <div class="alert alert-info alert-dismissible fade show d-flex align-items-center fs-5 py-3" role="alert">
-                <i class="fa fa-info-circle me-3 fs-3"></i>
-                <div>{{ session('info') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-info" role="alert">
+                {{ session('info') }}
             </div>
         @endif
-        <!-- END Notifications -->
 
+        <div class="mb-4">
+            <label class="form-label">Email Address</label>
+            <p>{{ auth()->user()->email }}</p>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Referral Code</label>
+            <p>@ {{auth()->user()->referral_code}}</p>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Gender</label>
+            <p>{{ auth()->user()->gender }}</p>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Age Bracket</label>
+            <p>{{ auth()->user()->age_range }}</p>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Base Currency</label>
+            <p>{{ auth()->user()->wallet->base_currency }}</p>
+        </div>
+    </div>
+    <!-- Page Content -->
+    <div class="content content-full content-boxed">
         <div class="block block-rounded">
             <div class="block-content">
 
@@ -95,39 +108,18 @@
                             Your account's vital info.
                         </p>
                     </div>
-                    <div class="col-lg-8 col-xl-5">
-                        <div class="mb-4">
-                            <label class="form-label">Email Address</label>
-                            <p class="fw-semibold">{{ auth()->user()->email }}</p>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Referral Code</label>
-                            <p class="fw-semibold">@ {{auth()->user()->referral_code}}</p>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Gender</label>
-                            <p class="fw-semibold">{{ auth()->user()->gender }}</p>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Age Bracket</label>
-                            <p class="fw-semibold">{{ auth()->user()->age_range }}</p>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Base Currency</label>
-                            <p class="fw-semibold">{{ auth()->user()->wallet->base_currency }}</p>
-                        </div>
-                    </div>
+
                 </div>
                 <!-- END User Profile -->
 
                 <!-- Bank Account Information -->
                 @if(!$bankInfo)
                     <h2 class="content-heading pt-0">
-                        <i class="fa fa-fw fa-university text-muted me-1"></i> Add Bank Account
+                        <i class="fa fa-fw fa-asterisk text-muted me-1"></i> Add Bank Account
                     </h2>
                     <div class="row push">
                         <div class="col-lg-4">
-                            <p class="text-muted">Add your bank details for withdrawals</p>
+                            <p class="text-muted">Add your bank details</p>
                         </div>
                         <div class="col-lg-8 col-xl-5">
                             <form id="bankForm" action="{{ url('save/bank/information') }}" method="POST">
@@ -137,7 +129,7 @@
 
                                 <div class="mb-4">
                                     <label class="form-label">Select Bank</label>
-                                    <select class="form-control form-control-lg" name="bank_code" id="bank_code" required>
+                                    <select class="form-control" name="bank_code" id="bank_code" required>
                                         <option value="">Select Bank</option>
                                         @foreach ($bankList as $bank)
                                             <option value="{{ $bank['code'] }}" data-name="{{ $bank['name'] }}">
@@ -149,23 +141,21 @@
 
                                 <div class="mb-4">
                                     <label class="form-label">Enter Account Number</label>
-                                    <input type="text" class="form-control form-control-lg" name="account_number" id="account_number"
-                                        maxlength="10" pattern="\d{10}" placeholder="0000000000" required>
+                                    <input type="text" class="form-control" name="account_number" id="account_number"
+                                        maxlength="10" pattern="\d{10}" required>
                                     <small class="text-muted">Account number must be exactly 10 digits</small>
                                 </div>
 
                                 <div class="mb-4" id="accountNameDiv" style="display:none;">
                                     <label class="form-label">Account Name</label>
-                                    <div class="alert alert-success mb-0">
-                                        <p id="accountName" class="fw-bold mb-0"></p>
-                                    </div>
+                                    <p id="accountName" class="fw-bold text-success"></p>
                                 </div>
 
                                 <div class="mb-4">
-                                    <button type="button" class="btn btn-lg btn-alt-primary" id="validateBtn" disabled>
+                                    <button type="button" class="btn btn-alt-primary" id="validateBtn" disabled>
                                         <i class="fa fa-check me-1"></i> Validate Account
                                     </button>
-                                    <button type="submit" class="btn btn-lg btn-primary" id="saveBtn" style="display:none;">
+                                    <button type="submit" class="btn btn-primary" id="saveBtn" style="display:none;">
                                         <i class="fa fa-save me-1"></i> Save Bank Details
                                     </button>
                                 </div>
@@ -174,29 +164,69 @@
                     </div>
                 @else
                     <h2 class="content-heading pt-0">
-                        <i class="fa fa-fw fa-university text-muted me-1"></i> Bank Details
+                        <i class="fa fa-fw fa-asterisk text-muted me-1"></i> Bank Details
                     </h2>
                     <div class="row push">
                         <div class="col-lg-4">
-                            <p class="text-muted">Your saved bank details (cannot be modified)</p>
+                            <p class="text-muted">Your bank details (cannot be modified)</p>
                         </div>
                         <div class="col-lg-8 col-xl-5">
                             <div class="mb-4">
                                 <label class="form-label">Bank Name</label>
-                                <p class="fw-semibold">{{ $bankInfo->bank_name }}</p>
+                                <p>{{ $bankInfo->bank_name }}</p>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Account Name</label>
-                                <p class="fw-semibold">{{ $bankInfo->name }}</p>
+                                <p>{{ $bankInfo->name }}</p>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Account Number</label>
-                                <p class="fw-semibold">{{ $bankInfo->masked_account }}</p>
+                                <p>{{ $bankInfo->masked_account }}</p>
                             </div>
                         </div>
                     </div>
                 @endif
+
                 <!-- END Bank Account Information -->
+
+
+                <!-- Change Password -->
+                {{-- <h2 class="content-heading pt-0">
+                    <i class="fa fa-fw fa-briefcase text-muted me-1"></i> Account Information
+                </h2>
+                <div class="row push">
+                    <div class="col-lg-4">
+                        <p class="text-muted">
+                            Make a transfer to this account to fund your wallet
+                        </p>
+                    </div>
+                    <div class="col-lg-8 col-xl-5">
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-password">Account Name</label>
+                            <p>{{ @auth()->user()->virtualAccount->account_name }}</p>
+                            <input type="password" class="form-control" id="d /m-profile-edit-password"
+                                name="dm-profile-edit-password">
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label" for="dm-profile-edit-password-new">Account Number</label>
+                                <p>{{ @auth()->user()->virtualAccount->account_number }}</p>
+                                <input type="password" class="form-control" id="dm-profile-edit-password-new"
+                                    name="dm-profile-edit-password-new">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label" for="dm-profile-edit-password-new-confirm">Bank Name</label>
+                                <p>{{ @auth()->user()->virtualAccount->bank_name }}</p>
+                                <input type="password" class="form-control" id="dm-profile-edit-password-new-confirm"
+                                    name="dm-profile-edit-password-new-confirm">
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
+                <!-- END Change Password -->
+
 
                 <!-- Preferences -->
                 <h2 class="content-heading pt-0">
@@ -223,6 +253,76 @@
                 </div>
                 <!-- END Preferences -->
 
+                <!-- Billing Information -->
+                {{-- <h2 class="content-heading pt-0">
+                    <i class="fab fa-fw fa-paypal text-muted me-1"></i> Billing Information
+                </h2>
+                <div class="row push">
+                    <div class="col-lg-4">
+                        <p class="text-muted">
+                            Your billing information is never shown to other users and only used for creating your
+                            invoices.
+                        </p>
+                    </div>
+                    <div class="col-lg-8 col-xl-5">
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-company-name">Company Name (Optional)</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-company-name"
+                                name="dm-profile-edit-company-name">
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <label class="form-label" for="dm-profile-edit-firstname">Firstname</label>
+                                <input type="text" class="form-control" id="dm-profile-edit-firstname"
+                                    name="dm-profile-edit-firstname">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="dm-profile-edit-lastname">Lastname</label>
+                                <input type="text" class="form-control" id="dm-profile-edit-lastname"
+                                    name="dm-profile-edit-lastname">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-street-1">Street Address 1</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-street-1"
+                                name="dm-profile-edit-street-1">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-street-2">Street Address 2</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-street-2"
+                                name="dm-profile-edit-street-2">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-city">City</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-city" name="dm-profile-edit-city">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-postal">Postal code</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-postal"
+                                name="dm-profile-edit-postal">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="dm-profile-edit-vat">VAT Number</label>
+                            <input type="text" class="form-control" id="dm-profile-edit-vat" name="dm-profile-edit-vat"
+                                value="EA00000000" disabled>
+                        </div>
+                    </div>
+                </div> --}}
+                <!-- END Billing Information -->
+
+                <!-- Submit -->
+                {{-- <div class="row push">
+                    <div class="col-lg-8 col-xl-5 offset-lg-4">
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-alt-primary">
+                                <i class="fa fa-check-circle opacity-50 me-1"></i> Update Profile
+                            </button>
+                        </div>
+                    </div>
+                </div> --}}
+                <!-- END Submit -->
+                {{--
+                </form> --}}
             </div>
         </div>
     </div>
@@ -284,7 +384,7 @@
         // Handle account validation
         validateBtn.addEventListener('click', async function () {
             validateBtn.disabled = true;
-            validateBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Validating...';
+            validateBtn.textContent = "Validating...";
 
             const accountNumber = accountNumberInput.value.trim();
             const bankCode = bankCodeSelect.value.trim();
@@ -320,23 +420,23 @@
                     // Show warning if name mismatch, but still allow save
                     if (data.name_match === false) {
                         accountNameEl.innerHTML +=
-                            ' <small class="text-warning d-block mt-2"><i class="fa fa-exclamation-triangle me-1"></i> Name differs from your Freebyz account name. Your account name will be updated automatically to match your bank records.</small>';
+                            ' <small class="text-warning"><br> (Name differs from your Freebyz account name, your freebyz account name will be updated automatically to your bank name)</small>';
                     }
                 } else {
+                    accountNameEl.textContent = data.message || "Unable to validate account.";
                     accountNameDiv.style.display = "block";
-                    accountNameDiv.innerHTML = '<div class="alert alert-danger">' + (data.message || "Unable to validate account.") + '</div>';
                     saveBtn.style.display = "none";
                     saveBtn.disabled = true;
                 }
             } catch (err) {
                 console.error("Validation Error:", err);
+                accountNameEl.textContent = "Error validating account.";
                 accountNameDiv.style.display = "block";
-                accountNameDiv.innerHTML = '<div class="alert alert-danger">Error validating account. Please try again.</div>';
                 saveBtn.style.display = "none";
                 saveBtn.disabled = true;
             }
 
-            validateBtn.innerHTML = '<i class="fa fa-check me-1"></i> Validate Account';
+            validateBtn.textContent = "Validate Account";
             toggleValidateButton();
         });
     });
