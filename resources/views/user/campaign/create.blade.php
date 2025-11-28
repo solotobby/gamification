@@ -49,7 +49,7 @@
             </div>
         @endif
 
-        <form action="{{ route('post.campaign') }}" method="POST">
+        <form id="campaignForm" method="POST" action="{{ route('post.campaign') }}">
             @csrf
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
@@ -199,7 +199,8 @@
                                         <option value="56">56 Hours</option>
                                         <option value="72">72 Hours</option>
                                     </select>
-                                    <small><i>Select when your campaign submissions should be automatically approved if you don't review them.</i></small>
+                                    <small><i>Select when your campaign submissions should be automatically approved if you
+                                            don't review them.</i></small>
                                 </div>
                             @else
                                 <div class="mb-2">
@@ -219,15 +220,46 @@
                     <div class="row mb-2">
                         <div class="col-lg-3"></div>
                         <div class="col-lg-9">
-                            <button type="submit" class="btn btn-alt-primary">
+                            <button type="button" class="btn btn-alt-primary" data-bs-toggle="modal"
+                                data-bs-target="#fairnessModal">
                                 <i class="fa fa-plus opacity-50 me-1"></i> Post Campaign
                             </button>
                         </div>
                     </div>
                 </div>
+
                 <!-- END Submit Form -->
             </div>
         </form>
+
+        <!-- Fairness Warning Modal -->
+        <div class="modal fade" id="fairnessModal" tabindex="-1" aria-labelledby="fairnessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="fairnessModalLabel">
+                            <i class="fa fa-exclamation-triangle me-2"></i>Important Notice
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        To ensure fairness, kindly avoid denying task submissions without proper grounds.
+                        Repeated issues may lead to the campaign being suspended.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="button" id="agreeSubmitBtn" class="btn btn-primary">
+                            Agree & Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- END Post Job Form -->
     </div>
     <!-- END Page Content -->
@@ -235,6 +267,14 @@
 @endsection
 
 @section('script')
+
+
+    <script>
+        document.getElementById('agreeSubmitBtn').addEventListener('click', function () {
+            document.getElementById('campaignForm').submit();
+        });
+    </script>
+
 
     <!-- Page JS Plugins -->
     <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>

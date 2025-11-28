@@ -22,6 +22,13 @@
         <div class="alert alert-warning">
             Campaigns with Activity Status <b>Completed</b> will not be available on the dashboard.
         </div>
+             <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+        <i class="fa fa-exclamation-triangle me-2"></i>
+        <span>
+            To ensure fairness, kindly avoid denying task submissions without proper grounds. 
+            Repeated issues may lead to the campaign being suspended.
+        </span>
+    </div>
         <div class="block block-rounded">
             <div class="block-header block-header-default">
                 <h3 class="block-title">Campaign List</h3> <small><span style="color: chocolate"></span></small>
@@ -104,7 +111,7 @@
 
                                     {{-- <td>{{ $list->allow_upload == true ? 'Yes' : 'No' }}</td> --}}
                                     <td>
-                                        @if ($list->status == 'Offline')
+                                        @if ($list->status == 'Offline' || $list->status == 'Flagged')
                                             {{-- <a href="#" class="btn btn-primary btn-sm disabled"> Go Live </a> --}}
                                         @else
                                             <a href="{{ url('campaign/activities/' . $list->job_id) }}"

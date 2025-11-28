@@ -716,6 +716,9 @@ class CampaignController extends Controller
             abort(400);
         }
 
+        if (!auth()->user()->accountDetails) {
+            return redirect('profile')->with('info', 'You are about to take on a high-paying job. Please scroll down to Bank Account Details to update your information.');
+        }
         $userId = auth()->id();
         $userBaseCurrency = baseCurrency();
         $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
@@ -730,12 +733,13 @@ class CampaignController extends Controller
         $rating = Rating::where('user_id', $userId)
             ->where('campaign_id', $campaign->id)
             ->first();
-        $isRated = isset($rating);
+            $isRated = isset($rating);
 
-        $deniedCount = 0;
-        $canResubmit = false;
-        $hasPending = false;
-        $completed = $campaignWorker;
+            $deniedCount = 0;
+            $canResubmit = false;
+            $hasPending = false;
+            $completed = $campaignWorker;
+
 
         if ($checkIsVerified === 'Verified') {
 
@@ -743,9 +747,6 @@ class CampaignController extends Controller
                 return redirect('home');
             }
 
-            if (!auth()->user()->accountDetails) {
-                return redirect('profile')->with('info', 'You are about to take on a high-paying job. Please scroll down to Bank Account Details to update your information.');
-            }
 
             if ($campaign->id == 8099 && $campaignWorker) {
                 // Get counts in a single query

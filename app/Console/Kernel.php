@@ -56,6 +56,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('business:rotate-promotion')->dailyAt('03:00');
 
         $schedule->command('questions:cleanup-invalid')->dailyAt('03:00');
+        
+        $schedule->command('campaigns:flag-abusive')->twiceDaily(8, 20);
+
     }
 
     /**

@@ -22,8 +22,18 @@
       </div>
     </div>
   </div>
+
+  
+  
   <!-- Page Content -->
   <div class="content">
+      <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+        <i class="fa fa-exclamation-triangle me-2"></i>
+        <span>
+            To ensure fairness, kindly avoid denying task submissions without proper grounds. 
+            Repeated issues may lead to the campaign being suspended.
+        </span>
+    </div>
     <ol class="list-group list-group-numbered mb-3">
 
       <li class="list-group-item d-flex justify-content-between align-items-start">
