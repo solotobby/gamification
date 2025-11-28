@@ -2590,6 +2590,28 @@ if (!function_exists('formatAndArrange')) {
     }
 }
 
+if (!function_exists('formatAndArrangeNew')) {
+    function formatAndArrangeNew($phones)
+    {
+        $formatted = [];
+
+        foreach ($phones as $phone) {
+            if (empty($phone)) {
+                continue;
+            }
+
+            $clean = preg_replace('/\D/', '', $phone);
+            $formattedPhone = Str::startsWith($clean, '234')
+                ? $clean
+                : '234' . ltrim($clean, '0');
+
+            $formatted[] = $formattedPhone;
+        }
+
+        return array_values(array_unique($formatted));
+    }
+}
+
 if (!function_exists('getLocation')) {
     function  getLocation()
     {
@@ -2849,7 +2871,8 @@ if (!function_exists('sendZeptoMail')) {
     }
 
     if (!function_exists('arrayjobs')) {
-        function  arrayjobs() {
+        function  arrayjobs()
+        {
             $preferredJobs = ['Godconnect', 'App Download', 'Freebyz'];
             $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify'];
             $allJobs = array_merge($preferredJobs, $otherJobs);
@@ -2858,12 +2881,12 @@ if (!function_exists('sendZeptoMail')) {
             $data['otherJobs'] = $otherJobs;
             $data['allJobs'] = $allJobs;
             return $data;
-
         }
     }
 
-    if( !function_exists('ageranges')) {
-        function  ageranges() {
+    if (!function_exists('ageranges')) {
+        function  ageranges()
+        {
             return ['15-20', '21-25', '26-30', '31-40', '40-50'];
         }
     }
