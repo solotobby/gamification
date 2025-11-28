@@ -25,8 +25,8 @@
              <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
         <i class="fa fa-exclamation-triangle me-2"></i>
         <span>
-            To ensure fairness, kindly avoid denying task submissions without proper grounds. 
-            Repeated issues may lead to the campaign being suspended.
+           To ensure fairness, kindly avoid denying task submissions without genuine reasons.
+           Repeated denials will lead to your campaigns being suspended without refund.
         </span>
     </div>
         <div class="block block-rounded">
