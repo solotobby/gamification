@@ -479,8 +479,12 @@ Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'ca
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
 Route::get('campaigns/completed', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCompleted'])->name('campaign.completed');
 Route::get('campaigns/denied', [\App\Http\Controllers\Admin\AdminController::class, 'deniedCampaigns']);
+Route::get('campaigns/flagged', [\App\Http\Controllers\Admin\AdminController::class, 'flaggedCampaigns']);
+Route::post('campaigns/{id}/unflag', [\App\Http\Controllers\Admin\AdminController::class, 'unflagCampaigns']);
 Route::get('campaign/info/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignInfo']);
 Route::get('campaign/delete/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDelete']);
+ Route::get('campaigns/denial-stats', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDenialStats'])
+        ->name('admin.campaigns.denial-stats');
 
 // Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::post('campaign/status', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus'])->name('campaign.status');

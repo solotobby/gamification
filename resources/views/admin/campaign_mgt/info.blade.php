@@ -180,7 +180,7 @@
     </form>
     <!-- END Post Job Form -->
   </div>
-@if($campaign->status == 'Live')
+@if($campaign->status == 'Live' || $campaign->status == 'Flagged')
 
   <div class="content content-boxed">
     <div class="block block-rounded">

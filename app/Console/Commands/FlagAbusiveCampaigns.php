@@ -90,7 +90,10 @@ class FlagAbusiveCampaigns extends Command
             $content = "{$count} campaigns were flagged for excessive worker denials (70%+ denial rate).";
             
             try {
-                Mail::to('solotobby@gmail.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
+                 if (config('app.env') == 'Production') {
+
+                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
+                 }
             } catch (\Exception $e) {
                 $this->error("Failed to send admin notification: " . $e->getMessage());
             }
