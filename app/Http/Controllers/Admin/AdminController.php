@@ -1702,6 +1702,94 @@ class AdminController extends Controller
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
 
+    // Add these methods to your Admin Controller
+
+    public function flaggedCampaigns()
+    {
+        $campaigns = Campaign::where('status', 'Flagged')
+            ->with(['user', 'attempts'])
+            ->orderBy('flagged_at', 'DESC')
+            ->paginate(20);
+
+        return view('admin.flagged_campaigns', compact('campaigns'));
+    }
+
+    public function unflagCampaigns(Request $request, $id)
+    {
+        $request->validate([
+            'new_status' => 'required|in:Pending,Live,Paused',
+            'unflag_reason' => 'required|string|max:500'
+        ]);
+
+        $campaign = Campaign::findOrFail($id);
+
+        // Only admins can unflag
+        // if (!auth()->user()->hasRole('admin') || !auth()->user()->hasRole('super_admin')) {
+        //     return back()->with('error', 'Unauthorized action.');
+        // }
+
+        $campaign->status = $request->new_status;
+        $campaign->flagged_at = null;
+        $campaign->flagged_reason = null;
+        $campaign->save();
+
+        // Log the action (optional - create admin_logs table)
+        // AdminLog::create([
+        //     'admin_id' => auth()->user()->id,
+        //     'action' => 'unflag_campaign',
+        //     'campaign_id' => $campaign->id,
+        //     'reason' => $request->unflag_reason
+        // ]);
+
+        // Notify campaign owner
+        $user = User::find($campaign->user_id);
+        if ($user) {
+            $subject = 'Campaign Unflagged';
+            $content = "Your campaign '{$campaign->post_title}' has been reviewed and unflagged. 
+                    New status: {$request->new_status}. 
+                    Reason: {$request->unflag_reason}";
+
+            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        }
+
+        // $this->flaggedCampaigns();
+        //         return view('admin.flagged_campaigns', compact('campaigns'));
+
+        return back()->with('success', 'Campaign unflagged successfully.');
+    }
+
+    public function campaignDenialStats()
+    {
+        $campaigns = Campaign::whereIn('status', ['Live', 'Completed'])
+            ->withCount([
+                'attempts as total_workers',
+                'attempts as denied_workers' => function ($query) {
+                    $query->where('status', 'Denied');
+                }
+            ])
+            ->get()
+            ->map(function ($campaign) {
+                $denialRate = $campaign->total_workers > 0
+                    ? round(($campaign->denied_workers / $campaign->total_workers) * 100, 2)
+                    : 0;
+
+                return [
+                    'id' => $campaign->id,
+                    'job_id' => $campaign->job_id,
+                    'title' => $campaign->post_title,
+                    'owner' => $campaign->user->name,
+                    'total_workers' => $campaign->total_workers,
+                    'denied_workers' => $campaign->denied_workers,
+                    'denial_rate' => $denialRate,
+                    'status' => $campaign->status,
+                    'at_risk' => $denialRate >= 60 && $denialRate < 70
+                ];
+            })
+            ->sortByDesc('denial_rate');
+
+        return view('admin.campaigns.denial-stats', compact('campaigns'));
+    }
+
     public function campaignStatus(Request $request)
     {
 

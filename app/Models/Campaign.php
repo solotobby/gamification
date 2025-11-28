@@ -33,11 +33,17 @@ class Campaign extends Model
         'impressions',
         'completed_count',
         'allow_upload',
-        'approval_time'
+        'approval_time',
+         'flagged_at',
+        'flagged_reason'
 
     ];
 
 
+     protected $casts = [
+        'flagged_at' => 'datetime',
+    ];
+    
     // Accessor for percentage progress
     public function getPercentageProgressAttribute()
     {

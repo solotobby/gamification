@@ -102,6 +102,9 @@
             <a class="nav-main-link" href="{{ url('campaigns/denied') }}">
               <span class="nav-main-link-name">Denied</span>
             </a>
+            <a class="nav-main-link" href="{{ url('campaigns/flagged') }}">
+              <span class="nav-main-link-name">Flagged</span>
+            </a>
             <a class="nav-main-link" href="{{ url('campaigns/completed') }}">
               <span class="nav-main-link-name">Completed</span>
             </a>
