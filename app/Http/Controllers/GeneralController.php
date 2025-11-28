@@ -1349,7 +1349,11 @@ class GeneralController extends Controller
 
             // Extract and format phone numbers
             $phoneNumbers = $highestPayout->pluck('phone')->filter()->toArray();
-            $formattedPhones = formatAndArrange($phoneNumbers);
+            $formattedPhones = formatAndArrangeNew($phoneNumbers);
+
+            $formattedPhones = array_map('intval', $formattedPhones);
+
+            dailyVisit('API_CALL');
 
             dailyVisit('API_CALL');
 
