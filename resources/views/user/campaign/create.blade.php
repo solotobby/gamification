@@ -244,8 +244,8 @@
                     </div>
 
                     <div class="modal-body">
-                        To ensure fairness, kindly avoid denying task submissions without proper grounds.
-                        Repeated issues may lead to the campaign being suspended.
+                       To ensure fairness, kindly avoid denying task submissions without genuine reasons.
+                       Repeated denials will lead to your campaigns being suspended without refund.
                     </div>
 
                     <div class="modal-footer">

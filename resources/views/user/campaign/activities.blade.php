@@ -23,15 +23,15 @@
     </div>
   </div>
 
-  
-  
+
+
   <!-- Page Content -->
   <div class="content">
       <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
         <i class="fa fa-exclamation-triangle me-2"></i>
         <span>
-            To ensure fairness, kindly avoid denying task submissions without proper grounds. 
-            Repeated issues may lead to the campaign being suspended.
+          To ensure fairness, kindly avoid denying task submissions without genuine reasons.
+          Repeated denials will lead to your campaigns being suspended without refund.
         </span>
     </div>
     <ol class="list-group list-group-numbered mb-3">
@@ -52,30 +52,30 @@
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Pending</div>
-         
+
         </div>
         <span class="badge bg-primary rounded-pill">{{ @$campaignStat['counts']['Pending'] }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Denied</div>
-        
+
         </div>
         <span class="badge bg-primary rounded-pill">{{ @$campaignStat['counts']['Denied'] }}</span>
       </li>
-     
+
 
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Campaign Amount</div>
-        
+
         </div>
         <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ $amount }}</span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Amount Spent</div>
-        
+
         </div>
         <span class="badge bg-primary rounded-pill">{{ baseCurrency() }} {{ number_format(@$campaignStat['counts']['Approved']  * $amount) }} / {{ baseCurrency() }} {{ number_format($amount * $lists->number_of_staff) }}</span>
       </li>
@@ -83,9 +83,9 @@
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Campaign Status</div>
-        
+
         </div>
-       
+
         <span class="badge bg-primary rounded-pill">  {{ @$campaignStat['is_completed'] ? 'Completed' : 'Not Completed' }}  </span>
       </li>
 
@@ -94,7 +94,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title"> 
+        <h3 class="block-title">
 
         </h3>
         <div class="block-options">
@@ -129,7 +129,7 @@
             <tbody>
 
                   {{-- @foreach ($lists->completed()->orderBy('created_at', 'DESC')->get() as $list) --}}
-                  @foreach ($responses as $list)    
+                  @foreach ($responses as $list)
                   <tr>
                           <td>
                               {{ @$list->user->name }}
@@ -149,11 +149,11 @@
                           <td>{{ $list->status }}</td>
                           <td>
                               @if($list->status == 'Pending')
-                              
+
                                   @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
                                       <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
                                   @else
-                                  
+
                                   <a  href="{{ url('campaign/activities/'.$list->id.'/response') }}" class="btn btn-alt-primary btn-sm" > View Response </a>
                                       {{-- <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $list->id }}">View</button> --}}
                                   @endif
