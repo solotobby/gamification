@@ -11,7 +11,7 @@
                     {!! $message !!}
                 </div>
                 <br>
-                <img src="https://res.cloudinary.com/movic/image/upload/v1763999839/Freebyz-image-ad2_mpkcvz.jpg"
+                <img src="https://res.cloudinary.com/movic/image/upload/v1764664018/Freebyz_earn_xmpeep.jpg"
                      alt="Freebyz"
                      style="max-width: 500px; width: 100%; height: auto;">
             </td>
