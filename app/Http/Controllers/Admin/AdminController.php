@@ -1447,59 +1447,122 @@ class AdminController extends Controller
         return view('admin.mass_mail', compact('countries'));
     }
 
+    // public function previewAudience(Request $request)
+    // {
+    //     $query = User::where('role', 'regular');
+
+    //     // Filter by audience type
+    //     if ($request->type === 'verified') {
+    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
+    //     } elseif ($request->type === 'test_user') {
+    //         $result = (object)[
+    //             'total' => 1,
+    //             'with_email' => 1,
+    //             'with_phone' => 0
+    //         ];
+    //     } elseif ($request->type === 'email_verified') {
+    //         $query->whereNotNull('email_verified_at');
+    //     }
+
+    //     // Filter by date range
+    //     if ($request->days) {
+    //         $date = now()->subDays($request->days);
+
+    //         if ($request->type === 'verified') {
+    //             $query->where('verified_at', '>=', $date);
+    //         } elseif ($request->type === 'email_verified') {
+    //             $query->where('email_verified_at', '>=', $date);
+    //         } else {
+    //             $query->where('created_at', '>=', $date);
+    //         }
+    //     }
+
+    //     // Filter by country
+    //     if ($request->country) {
+    //         $query->where('country', $request->country);
+    //     }
+
+    //     $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
+
+    //     if (!app()->environment(['local', 'local_test'])) {
+    //         $result = Cache::remember($cacheKey, 300, function () use ($query) {
+    //             return $query->selectRaw('
+    //             COUNT(*) as total,
+    //             SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+    //             SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+    //         ')->first();
+    //         });
+    //     } else {
+    //         $result = $query->selectRaw('
+    //         COUNT(*) as total,
+    //         SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+    //         SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+    //     ')->first();
+    //     }
+
+    //     return response()->json([
+    //         'total' => $result->total,
+    //         'with_email' => $result->with_email,
+    //         'with_phone' => $result->with_phone
+    //     ]);
+    // }
+
     public function previewAudience(Request $request)
     {
         $query = User::where('role', 'regular');
 
-        // Filter by audience type
-        if ($request->type === 'verified') {
-            $query->where('is_verified', 1)->whereNotNull('verified_at');
-        } elseif ($request->type === 'test_user') {
-            $result = (object)[
+        if ($request->type === 'test_user') {
+            return response()->json([
                 'total' => 1,
                 'with_email' => 1,
-                'with_phone' => 0
-            ];
+                'with_phone' => 1,
+            ]);
+        }
+
+        if ($request->type === 'verified') {
+            $query->where('is_verified', 1)->whereNotNull('verified_at');
+        } elseif ($request->type === 'phone_verified') {
+            $query->whereHas('profile', function ($q) {
+                $q->where('phone_verified', true);
+            });
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
         }
 
-        // Filter by date range
         if ($request->days) {
             $date = now()->subDays($request->days);
-
             if ($request->type === 'verified') {
                 $query->where('verified_at', '>=', $date);
             } elseif ($request->type === 'email_verified') {
                 $query->where('email_verified_at', '>=', $date);
+            } elseif ($request->type === 'phone_verified') {
+                $query->whereHas('profile', function ($q) use ($date) {
+                    $q->where('updated_at', '>=', $date);
+                });
             } else {
                 $query->where('created_at', '>=', $date);
             }
         }
 
-        // Filter by country
         if ($request->country) {
             $query->where('country', $request->country);
         }
 
         $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
 
-        if (!app()->environment(['local', 'local_test'])) {
-            $result = Cache::remember($cacheKey, 300, function () use ($query) {
-                return $query->selectRaw('
-                COUNT(*) as total,
-                SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-                SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+        if (!app()->environment(['local_test'])) {
+            $result = $query->selectRaw('
+            COUNT(*) as total,
+            SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+            SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
             ')->first();
-            });
         } else {
             $result = $query->selectRaw('
             COUNT(*) as total,
             SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
             SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-        ')->first();
+            ')->first();
         }
-
         return response()->json([
             'total' => $result->total,
             'with_email' => $result->with_email,
@@ -1507,19 +1570,22 @@ class AdminController extends Controller
         ]);
     }
 
-
     public function sendMassCommunication(Request $request)
     {
         $query = User::where('role', 'regular');
 
+        // Apply audience filters
         if ($request->type === 'verified') {
             $query->where('is_verified', 1)->whereNotNull('verified_at');
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
+        } elseif ($request->type === 'phone_verified') {
+            $query->whereHas('profile', function ($q) {
+                $q->where('phone_verified', true);
+            });
         } elseif ($request->type === 'test_user') {
             $query = User::where('email', 'morakinyovictor1@gmail.com');
         }
-
 
         if ($request->days) {
             $date = now()->subDays($request->days);
@@ -1527,6 +1593,10 @@ class AdminController extends Controller
                 $query->where('verified_at', '>=', $date);
             } elseif ($request->type === 'email_verified') {
                 $query->where('email_verified_at', '>=', $date);
+            } elseif ($request->type === 'phone_verified') {
+                $query->whereHas('profile', function ($q) use ($date) {
+                    $q->where('updated_at', '>=', $date);
+                });
             } else {
                 $query->where('created_at', '>=', $date);
             }
@@ -1536,32 +1606,39 @@ class AdminController extends Controller
             $query->where('country', $request->country);
         }
 
+        // Get channel from radio button
+        $channel = $request->input('send_channel', 'email');
 
-        // Send email using chunk
-        if ($request->send_email) {
-            // Create campaign record
-            $campaign = MassEmailCampaign::create([
-                'subject' => $request->subject,
-                'message' => $request->message,
-                'audience_type' => $request->type ?? 'registered',
-                'days_filter' => $request->days,
-                'country_filter' => $request->country,
-                'total_recipients' => 0,
-                'sent_by' => auth()->id(),
-            ]);
-            $totalRecipients = 0;
+        // Create unified campaign
+        $campaign = MassEmailCampaign::create([
+            'channel' => $channel,
+            'subject' => $request->subject ?? 'SMS Campaign',
+            'message' => $request->message,
+            'sms_message' => $request->sms_message,
+            'audience_type' => $request->type ?? 'registered',
+            'days_filter' => $request->days,
+            'country_filter' => $request->country,
+            'total_recipients' => 0,
+            'sms_recipients' => 0,
+            'sent_by' => auth()->id(),
+        ]);
 
+        $totalEmailRecipients = 0;
+        $totalSmsRecipients = 0;
+
+        // Send Email
+        if ($channel === 'email') {
             (clone $query)
                 ->whereNotNull('email')
                 ->select('id', 'email')
-                ->chunk(50, function ($users) use ($request, $campaign, &$totalRecipients) {
-                    $totalRecipients += $users->count();
+                ->chunk(50, function ($users) use ($request, $campaign, &$totalEmailRecipients) {
+                    $totalEmailRecipients += $users->count();
 
-                    // Create log entries
                     $logData = $users->map(fn($user) => [
                         'campaign_id' => $campaign->id,
                         'user_id' => $user->id,
                         'email' => $user->email,
+                        'channel' => 'email',
                         'status' => 'pending',
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -1572,43 +1649,146 @@ class AdminController extends Controller
                     $userIds = $users->pluck('id')->toArray();
                     dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
                 });
-
-            $campaign->update(['total_recipients' => $totalRecipients]);
         }
 
-        // Send SMS in bulk
-        // if ($request->send_sms) {
-        //     (clone $query)
-        //         ->whereNotNull('phone')
-        //         ->select('phone')
-        //         ->chunk(100, function ($users) use ($request) {
-        //             $phones = $users->pluck('phone')->toArray();
-        //             $phones = formatAndArrange($phones);
-        //             Log::info($phones);
-        //             if (!empty($phones)) {
-        //                 $process = sendBulkSMS($phones, $request->sms_message);
-        //                 $code = is_array($process) ? $process['code'] : $process->code;
-
-        //                 if ($code !== 'ok') {
-        //                     return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
-        //                 }
-        //             }
-        //         });
-        // }
-
-        // Send SMS using job
-        if ($request->send_sms) {
+        // Send SMS
+        if ($channel === 'sms') {
             (clone $query)
                 ->whereNotNull('phone')
-                ->select('phone')
-                ->chunk(100, function ($users) use ($request) {
+                ->select('id', 'phone')
+                ->chunk(100, function ($users) use ($request, $campaign, &$totalSmsRecipients) {
+                    $totalSmsRecipients += $users->count();
+
+                    // Create log entries for SMS
+                    // $logData = $users->map(fn($user) => [
+                    //     'campaign_id' => $campaign->id,
+                    //     'user_id' => $user->id,
+                    //     'phone' => $user->phone,
+                    //     'channel' => 'sms',
+                    //     'status' => 'pending',
+                    //     'created_at' => now(),
+                    //     'updated_at' => now(),
+                    // ])->toArray();
+
+                    // MassEmailLog::insert($logData);
+
+                    // Prepare data for job
+                    $userIds = $users->pluck('id')->toArray();
                     $phones = $users->pluck('phone')->toArray();
-                    dispatch(new SendMassSms($phones, $request->sms_message));
+
+                    dispatch(new SendMassSms($userIds, $phones, $request->sms_message, $campaign->id));
                 });
         }
 
+        $campaign->update([
+            'total_recipients' => $totalEmailRecipients,
+            'sms_recipients' => $totalSmsRecipients,
+        ]);
+
         return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
     }
+
+    // public function sendMassCommunication(Request $request)
+    // {
+    //     $query = User::where('role', 'regular');
+
+    //     if ($request->type === 'verified') {
+    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
+    //     } elseif ($request->type === 'email_verified') {
+    //         $query->whereNotNull('email_verified_at');
+    //     } elseif ($request->type === 'test_user') {
+    //         $query = User::where('email', 'morakinyovictor1@gmail.com');
+    //     }
+
+
+    //     if ($request->days) {
+    //         $date = now()->subDays($request->days);
+    //         if ($request->type === 'verified') {
+    //             $query->where('verified_at', '>=', $date);
+    //         } elseif ($request->type === 'email_verified') {
+    //             $query->where('email_verified_at', '>=', $date);
+    //         } else {
+    //             $query->where('created_at', '>=', $date);
+    //         }
+    //     }
+
+    //     if ($request->country) {
+    //         $query->where('country', $request->country);
+    //     }
+
+
+    //     // Send email using chunk
+    //     if ($request->send_email) {
+    //         // Create campaign record
+    //         $campaign = MassEmailCampaign::create([
+    //             'subject' => $request->subject,
+    //             'message' => $request->message,
+    //             'audience_type' => $request->type ?? 'registered',
+    //             'days_filter' => $request->days,
+    //             'country_filter' => $request->country,
+    //             'total_recipients' => 0,
+    //             'sent_by' => auth()->id(),
+    //         ]);
+    //         $totalRecipients = 0;
+
+    //         (clone $query)
+    //             ->whereNotNull('email')
+    //             ->select('id', 'email')
+    //             ->chunk(50, function ($users) use ($request, $campaign, &$totalRecipients) {
+    //                 $totalRecipients += $users->count();
+
+    //                 // Create log entries
+    //                 $logData = $users->map(fn($user) => [
+    //                     'campaign_id' => $campaign->id,
+    //                     'user_id' => $user->id,
+    //                     'email' => $user->email,
+    //                     'status' => 'pending',
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ])->toArray();
+
+    //                 MassEmailLog::insert($logData);
+
+    //                 $userIds = $users->pluck('id')->toArray();
+    //                 dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
+    //             });
+
+    //         $campaign->update(['total_recipients' => $totalRecipients]);
+    //     }
+
+    //     // Send SMS in bulk
+    //     // if ($request->send_sms) {
+    //     //     (clone $query)
+    //     //         ->whereNotNull('phone')
+    //     //         ->select('phone')
+    //     //         ->chunk(100, function ($users) use ($request) {
+    //     //             $phones = $users->pluck('phone')->toArray();
+    //     //             $phones = formatAndArrange($phones);
+    //     //             Log::info($phones);
+    //     //             if (!empty($phones)) {
+    //     //                 $process = sendBulkSMS($phones, $request->sms_message);
+    //     //                 $code = is_array($process) ? $process['code'] : $process->code;
+
+    //     //                 if ($code !== 'ok') {
+    //     //                     return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
+    //     //                 }
+    //     //             }
+    //     //         });
+    //     // }
+
+    //     // Send SMS using job
+    //     if ($request->send_sms) {
+    //         (clone $query)
+    //             ->whereNotNull('phone')
+    //             ->select('phone')
+    //             ->chunk(100, function ($users) use ($request) {
+    //                 $phones = $users->pluck('phone')->toArray();
+    //                 dispatch(new SendMassSms($phones, $request->sms_message));
+    //             });
+    //     }
+
+    //     return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
+    // }
 
     // List all campaigns
     public function campaigns()
@@ -1617,14 +1797,12 @@ class AdminController extends Controller
             ->latest()
             ->paginate(20);
 
-        // Fetch all aggregate stats in a single query
+        // Aggregate statistics
         $stats = MassEmailCampaign::selectRaw('
         COUNT(*) as total_campaigns,
         SUM(total_recipients) as total_sent,
-        SUM(delivered) as total_delivered,
-        SUM(opened) as total_opened,
-        SUM(bounced) as total_bounced,
-        SUM(failed) as total_failed
+        SUM(CASE WHEN channel = "sms" THEN 1 ELSE 0 END) as sms_campaigns,
+        SUM(CASE WHEN channel = "email" THEN 1 ELSE 0 END) as email_campaigns
     ')->first();
 
         return view('admin.mass_mail_campaigns', compact('campaigns', 'stats'));
@@ -1632,6 +1810,36 @@ class AdminController extends Controller
 
 
     // Campaign details
+    // public function campaignDetails($id)
+    // {
+    //     $campaign = MassEmailCampaign::findOrFail($id);
+
+    //     // Fetch logs with pagination
+    //     $logs = MassEmailLog::where('campaign_id', $id)
+    //         ->with('user')
+    //         ->latest()
+    //         ->paginate(50);
+
+    //     // Single optimized aggregate query
+    //     $stats = MassEmailLog::where('campaign_id', $id)
+    //         ->selectRaw("
+    //         COUNT(*) as total_sent,
+    //         SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
+    //         SUM(CASE WHEN status = 'opened' THEN 1 ELSE 0 END) as opened,
+    //         SUM(CASE WHEN status IN ('failed', 'bounced') THEN 1 ELSE 0 END) as failed_bounced
+    //     ")
+    //         ->first();
+
+    //     return view('admin.mass_mail_campaign_details', [
+    //         'campaign' => $campaign,
+    //         'logs' => $logs,
+    //         'totalSent' => $stats->total_sent ?? 0,
+    //         'delivered' => $stats->delivered ?? 0,
+    //         'opened' => $stats->opened ?? 0,
+    //         'failedBounced' => $stats->failed_bounced ?? 0,
+    //     ]);
+    // }
+
     public function campaignDetails($id)
     {
         $campaign = MassEmailCampaign::findOrFail($id);
@@ -1642,8 +1850,9 @@ class AdminController extends Controller
             ->latest()
             ->paginate(50);
 
-        // Single optimized aggregate query
-        $stats = MassEmailLog::where('campaign_id', $id)
+        // Separate stats for email and SMS
+        $emailStats = MassEmailLog::where('campaign_id', $id)
+            ->where('channel', 'email')
             ->selectRaw("
             COUNT(*) as total_sent,
             SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
@@ -1652,18 +1861,27 @@ class AdminController extends Controller
         ")
             ->first();
 
+        $smsStats = MassEmailLog::where('campaign_id', $id)
+            ->where('channel', 'sms')
+            ->selectRaw("
+            COUNT(*) as total_sent,
+            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
+            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed
+        ")
+            ->first();
+
         return view('admin.mass_mail_campaign_details', [
             'campaign' => $campaign,
             'logs' => $logs,
-            'totalSent' => $stats->total_sent ?? 0,
-            'delivered' => $stats->delivered ?? 0,
-            'opened' => $stats->opened ?? 0,
-            'failedBounced' => $stats->failed_bounced ?? 0,
+            'totalSent' => $emailStats->total_sent ?? 0,
+            'delivered' => $emailStats->delivered ?? 0,
+            'opened' => $emailStats->opened ?? 0,
+            'failedBounced' => $emailStats->failed_bounced ?? 0,
+            'smsTotalSent' => $smsStats->total_sent ?? 0,
+            'smsDelivered' => $smsStats->delivered ?? 0,
+            'smsFailed' => $smsStats->failed ?? 0,
         ]);
     }
-
-
-
     public function sendMassMail(Request $request)
     {
         if ($request->type == 'all') {
@@ -1745,8 +1963,8 @@ class AdminController extends Controller
         $user = User::find($campaign->user_id);
         if ($user) {
             $subject = 'Campaign Unflagged';
-            $content = "Your campaign '{$campaign->post_title}' has been reviewed and unflagged. 
-                    New status: {$request->new_status}. 
+            $content = "Your campaign '{$campaign->post_title}' has been reviewed and unflagged.
+                    New status: {$request->new_status}.
                     Reason: {$request->unflag_reason}";
 
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
