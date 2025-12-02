@@ -721,7 +721,8 @@ class CampaignController extends Controller
         }
         $userId = auth()->id();
         $userBaseCurrency = baseCurrency();
-        $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+        // $checkIsVerified = $this->checkUserVerified($userBaseCurrency);
+        $checkIsVerified = 'Verified';
         $campaign = viewCampaign($job_id);
 
         // Fetch user's campaign worker record once
@@ -792,6 +793,7 @@ class CampaignController extends Controller
             'has_pending' => $hasPending
         ]);
     }
+
 
 
 
