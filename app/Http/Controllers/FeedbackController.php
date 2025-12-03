@@ -15,18 +15,21 @@ class FeedbackController extends Controller
 
     public function __construct()
     {
-         $this->middleware(['auth', 'email']);
+        $this->middleware(['auth', 'email']);
         // $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $feedbacks = Feedback::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
         return view('user.feedback.index', ['feedbacks' => $feedbacks]);
     }
-    public function create(){
+    public function create()
+    {
         return view('user.feedback.create');
     }
-    public function view($feedback_id){
+    public function view($feedback_id)
+    {
         $feedbacks = Feedback::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
         $feedbackReplies = Feedback::where('id', $feedback_id)->first();
         $feedbackReplies->replies()->where('feedback_id', $feedback_id)->where('user_id', $feedbackReplies->respondent_id)->where('status', 1)->update(['status' => 0]);
@@ -39,7 +42,8 @@ class FeedbackController extends Controller
         return view('user.feedback.view', ['replies' => $feedbackReplies, 'feedbacks' => $feedbacks]);
     }
 
-    public function reply(Request $request){
+    public function reply(Request $request)
+    {
         $this->validate($request, [
             'message' => 'required|string',
         ]);
@@ -56,52 +60,96 @@ class FeedbackController extends Controller
         return back()->with('success', 'Thank you for your reply, we will get back to you soon.');
     }
 
-    public function store(Request $request){
+    // public function store(Request $request){
 
+    //     $this->validate($request, [
+    //         'proof' => 'image|mimes:png,jpeg,gif,jpg',
+    //         'category' => 'required',
+    //         'message' => 'required|string',
+    //     ]);
+
+    //     if($request->category == 'transfer_issue'){
+    //         $category = 'transfer issue';
+    //         $content = 'Thank you for taking the time to send this '.$category.'. We have received it and will act on it accordingly. Please send a screenshot of proof of payment to info@dominahl.com.  Thank you once again.';
+    //     }elseif($request->category == 'complaint'){
+    //         $category = 'complaint';
+    //         $content = 'Thank you for taking the time to send this '.$category.'. We have received it and will act on it accordingly. Thank you once again.';
+    //     }else{
+    //         $category = 'feedback';
+    //         $content = 'Thank you for taking the time to send this '.$category.'. We have received it and will act on it accordingly. Thank you once again.';
+    //     }
+
+    //     if($request->hasFile('proof')){
+
+    //         // $fileBanner = $request->file('proof');
+    //         // $Bannername = time() . $fileBanner->getClientOriginalName();
+    //         // $filePathBanner = 'feedbacks/' . $Bannername;
+
+    //         // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
+    //         // $proofUrl = Storage::disk('s3')->url($filePathBanner);
+
+    //         $imageName = time().'.'.$request->proof->extension();
+    //         $request->proof->move(public_path('images'), $imageName);
+
+    //         $feedback['user_id'] = auth()->user()->id;
+    //         $feedback['category'] = $request->category;
+    //         $feedback['message'] = $request->message;
+    //         $feedback['status'] = false;
+    //         $feedback['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName; //$proofUrl;
+    //         Feedback::create($feedback);
+
+    //         $subject = 'Feedback Received';
+    //         $user = User::where('id', auth()->user()->id)->first();
+    //         //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+    //         return back()->with('success', 'Thank you for your feedback, we will look into it.');
+
+    //     }else{
+    //         return back()->with('error', 'Image not uploaded');
+    //     }
+    // }
+
+    public function store(Request $request)
+    {
         $this->validate($request, [
-            'proof' => 'image|mimes:png,jpeg,gif,jpg',
-            'category' => 'required',
+            'proof' => 'nullable|image|mimes:png,jpeg,gif,jpg',
+            'category' => 'required|in:transfer_issue,complaint,feedback',
             'message' => 'required|string',
         ]);
 
-        if($request->category == 'transfer_issue'){
-            $category = 'transfer issue';
-            $content = 'Thank you for taking the time to send this '.$category.'. We have recieved it and will act on it accordingly. Please send a screenshot of proof of payment to info@dominahl.com.  Thank you once again.';
-        }elseif($request->category == 'complaint'){
-            $category = 'complaint';
-            $content = 'Thank you for taking the time to send this '.$category.'. We have recieved it and will act on it accordingly. Thank you once again.';
-        }else{
-            $category = 'feedback';
-            $content = 'Thank you for taking the time to send this '.$category.'. We have recieved it and will act on it accordingly. Thank you once again.';
+        // Category messages
+        $messages = [
+            'transfer_issue' => 'Thank you for taking the time to send this transfer issue. We have received it and will act on it accordingly. Please send a screenshot of proof of payment to info@dominahl.com. Thank you once again.',
+            'complaint'      => 'Thank you for taking the time to send this complaint. We have received it and will act on it accordingly. Thank you once again.',
+            'feedback'       => 'Thank you for taking the time to send this feedback. We have received it and will act on it accordingly. Thank you once again.',
+        ];
+
+        $content = $messages[$request->category];
+
+        $imageUrl = 'no image';
+
+        // If image is uploaded
+        if ($request->hasFile('proof')) {
+            $image = $request->file('proof');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+
+            $imageUrl = 'images/' . $imageName;
         }
 
-        if($request->hasFile('proof')){
+        // Save feedback
+        Feedback::create([
+            'user_id'   => auth()->id(),
+            'category'  => $request->category,
+            'message'   => $request->message,
+            'status'    => false,
+            'proof_url' => $imageUrl,
+        ]);
 
-            // $fileBanner = $request->file('proof');
-            // $Bannername = time() . $fileBanner->getClientOriginalName();
-            // $filePathBanner = 'feedbacks/' . $Bannername;
+        // Optional email
+        // $user = auth()->user();
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, 'Feedback Received'));
 
-            // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-            // $proofUrl = Storage::disk('s3')->url($filePathBanner);
-
-            $imageName = time().'.'.$request->proof->extension();
-            $request->proof->move(public_path('images'), $imageName);
-
-            $feedback['user_id'] = auth()->user()->id;
-            $feedback['category'] = $request->category;
-            $feedback['message'] = $request->message;
-            $feedback['status'] = false;
-            $feedback['proof_url'] = $imageName == '' ? 'no image' : 'images/'.$imageName; //$proofUrl;
-            Feedback::create($feedback);
-
-            $subject = 'Feedback Received';
-            $user = User::where('id', auth()->user()->id)->first();
-            //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-
-            return back()->with('success', 'Thank you for your feedback, we will look into it.');
-
-        }else{
-            return back()->with('error', 'Image not uploaded');
-        }
+        return back()->with('success', 'Thank you for your feedback, we will look into it.');
     }
 }

@@ -118,8 +118,9 @@ class User extends Authenticatable
 
     public function myJobs()
     {
-        return $this->hasMany(CampaignWorker::class);
+        return $this->hasMany(CampaignWorker::class, 'user_id');
     }
+
 
     public function myCampaigns()
     {

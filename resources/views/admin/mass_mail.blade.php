@@ -51,6 +51,7 @@
                                 <option value="verified">Account Verified Users</option>
                                 <option value="email_verified">Email Verified Users</option>
                                 <option value="phone_verified">Phone Verified Users</option>
+                                <option value="performed_job">Perform A Job</option>
                                 <option value="test_user">Test User</option>
                             </select>
                         </div>
@@ -62,8 +63,10 @@
                                 <option value="14">Last 14 Days</option>
                                 <option value="30">Last 30 Days</option>
                                 <option value="60">Last 60 Days</option>
-                                <option value="90">Last 90 Days</option>
-                                <option value="180">Last 180 Days</option>
+                                <option value="90">Last 3 months</option>
+                                <option value="180">Last 6 months</option>
+                                <option value="270">Last 9 months</option>
+                                <option value="365">Last 1 years</option>
                             </select>
                         </div>
                         <div class="col-md-4">

@@ -342,6 +342,18 @@ class WebhookController extends Controller
 
     public function zeptoWebhook(Request $request)
     {
+
+        $data = $request->json()->all();
+        $eventName = $data['event_name'][0] ?? null;
+        $messages = $data['event_message'] ?? [];
+
+        Webhook::create([
+            'provider' => 'zeptomail',
+            'event' => $eventName,
+            'payload' => $data,
+            'status' => 'pending',
+        ]);
+        
         $signature = $request->header('producer-signature');
         $authKey = config('services.zeptomail.webhook_auth_key');
         $payload = $request->getContent();
@@ -350,9 +362,6 @@ class WebhookController extends Controller
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
-        $data = $request->json()->all();
-        $eventName = $data['event_name'][0] ?? null;
-        $messages = $data['event_message'] ?? [];
 
         foreach ($messages as $message) {
             $emailReference = $message['email_info']['email_reference'] ?? null;

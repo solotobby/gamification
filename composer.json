@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.4.21|^8.1",
         "africastalking/africastalking": "^3.0",
+        "cloudinary-labs/cloudinary-laravel": "^2.1",
         "doctrine/dbal": "3.3",
         "facebook/graph-sdk": "^5.1",
         "flutterwavedev/flutterwave-v3": "^1.0",
