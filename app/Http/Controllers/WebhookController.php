@@ -342,18 +342,7 @@ class WebhookController extends Controller
 
     public function zeptoWebhook(Request $request)
     {
-
-        $data = $request->json()->all();
-        $eventName = $data['event_name'][0] ?? null;
-        $messages = $data['event_message'] ?? [];
-
-        Webhook::create([
-            'provider' => 'zeptomail',
-            'event' => $eventName,
-            'payload' => $data,
-            'status' => 'pending',
-        ]);
-        
+        // Validate signature first
         $signature = $request->header('producer-signature');
         $authKey = config('services.zeptomail.webhook_auth_key');
         $payload = $request->getContent();
@@ -362,50 +351,70 @@ class WebhookController extends Controller
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
+        $data = $request->json()->all();
+        $eventName = $data['event_name'][0] ?? null;
+        $messages = $data['event_message'] ?? [];
+
+        // Log webhook
+        Webhook::create([
+            'provider' => 'zeptomail',
+            'event' => $eventName,
+            'payload' => $data,
+            'status' => 'pending',
+        ]);
+
+        if (!$eventName) {
+            return response()->json(['error' => 'Missing event name'], 400);
+        }
 
         foreach ($messages as $message) {
             $emailReference = $message['email_info']['email_reference'] ?? null;
-            $details = $message['event_data'][0]['details'][0] ?? [];
 
             if (!$emailReference) continue;
 
-            $log = MassEmailLog::where('message_id', $emailReference)->first();
+            // Strip the @bounce-zem.freebyz.com part
+            $messageId = explode('@', $emailReference)[0];
+
+            $log = MassEmailLog::where('message_id', $messageId)->first();
             if (!$log) continue;
 
-            $campaign = $log->campaign;
-
-            switch ($eventName) {
-                case 'softbounce':
-                case 'hardbounce':
-                    $log->update([
-                        'status' => 'bounced',
-                        'bounced_at' => now(),
-                        'error_message' => $details['diagnostic_message'] ?? 'Email bounced',
-                    ]);
-                    $campaign->increment('bounced');
-                    break;
-
-                case 'email_open':
-                    if ($log->status !== 'opened') {
-                        $log->update([
-                            'status' => 'opened',
-                            'opened_at' => now(),
-                        ]);
-                        $campaign->increment('opened');
-                    }
-                    break;
-
-                case 'email_link_click':
-                    $log->increment('clicks');
-                    break;
-            }
+            $this->handleEvent($eventName, $log, $message);
         }
 
         return response()->json(['status' => 'success']);
     }
 
+    private function handleEvent(string $eventName, MassEmailLog $log, array $message): void
+    {
+        $campaign = $log->campaign;
+        $details = $message['event_data'][0]['details'][0] ?? [];
 
+        switch ($eventName) {
+            case 'softbounce':
+            case 'hardbounce':
+                $log->update([
+                    'status' => 'bounced',
+                    'bounced_at' => now(),
+                    'error_message' => $details['diagnostic_message'] ?? 'Email bounced',
+                ]);
+                $campaign->increment('bounced');
+                break;
 
+            case 'email_open':
+                if ($log->status !== 'opened') {
+                    $log->update([
+                        'status' => 'opened',
+                        'opened_at' => $details['time'] ?? now(),
+                    ]);
+                    $campaign->increment('opened');
+                }
+                break;
+
+            case 'email_link_click':
+                $log->increment('clicks');
+                break;
+        }
+    }
     private function isValidZeptoSignature($headerSignature, $payload, $authKey)
     {
         if (!$headerSignature || !$authKey) {
