@@ -356,12 +356,12 @@ class WebhookController extends Controller
         $message = $data['event_message'][0] ?? null;
 
         // Log webhook
-        Webhook::create([
-            'provider' => 'zeptomail',
-            'event' => $eventName,
-            'payload' => $data,
-            'status' => 'pending',
-        ]);
+        // Webhook::create([
+        //     'provider' => 'zeptomail',
+        //     'event' => $eventName,
+        //     'payload' => $data,
+        //     'status' => 'pending',
+        // ]);
 
         if (!$eventName || !$message) {
             return response()->json(['error' => 'Missing event data'], 400);
