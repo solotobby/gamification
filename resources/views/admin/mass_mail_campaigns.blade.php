@@ -74,6 +74,7 @@
                             <th>Total</th>
                             <th>Delivered</th>
                             <th>Opened</th>
+                            <th>Clicks</th>
                             <th>Bounced</th>
                             <th>Failed</th>
                             <th>Date</th>
@@ -98,11 +99,16 @@
                                 </td>
                                 <td>
                                     <span class="text-success">{{ number_format($campaign->delivered) }}</span>
-                                    <small class="text-muted">({{ $campaign->total_recipients > 0 ?
-                                        round(($campaign->delivered/$campaign->total_recipients)*100, 1) : 0 }}%)</small>
+                                    {{-- <small class="text-muted">({{ $campaign->total_recipients > 0 ?
+                                        round(($campaign->delivered/$campaign->total_recipients)*100, 1) : 0 }}%)</small> --}}
                                 </td>
                                 <td>
                                     <span class="text-primary">{{ number_format($campaign->opened) }}</span>
+                                    {{-- <small class="text-muted">({{ $campaign->delivered > 0 ?
+                                        round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small> --}}
+                                </td>
+                                 <td>
+                                    <span class="text-primary">{{ number_format($campaign->clicks) }}</span>
                                     {{-- <small class="text-muted">({{ $campaign->delivered > 0 ?
                                         round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small> --}}
                                 </td>
