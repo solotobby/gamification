@@ -353,7 +353,7 @@ class WebhookController extends Controller
 
         $data = $request->json()->all();
         $eventName = $data['event_name'][0] ?? null;
-        $messages = $data['event_message'] ?? [];
+        $message = $data['event_message'][0] ?? null;
 
         // Log webhook
         Webhook::create([
@@ -363,23 +363,24 @@ class WebhookController extends Controller
             'status' => 'pending',
         ]);
 
-        if (!$eventName) {
-            return response()->json(['error' => 'Missing event name'], 400);
+        if (!$eventName || !$message) {
+            return response()->json(['error' => 'Missing event data'], 400);
         }
 
-        foreach ($messages as $message) {
-            $emailReference = $message['email_info']['email_reference'] ?? null;
-
-            if (!$emailReference) continue;
-
-            // Strip the @bounce-zem.freebyz.com part
-            $messageId = explode('@', $emailReference)[0];
-
-            $log = MassEmailLog::where('message_id', $messageId)->first();
-            if (!$log) continue;
-
-            $this->handleEvent($eventName, $log, $message);
+        $emailReference = $message['email_info']['email_reference'] ?? null;
+        if (!$emailReference) {
+            return response()->json(['error' => 'Missing email reference'], 400);
         }
+
+        // Strip the @bounce-zem.freebyz.com part
+        $messageId = explode('@', $emailReference)[0];
+
+        $log = MassEmailLog::where('message_id', $messageId)->first();
+        if (!$log) {
+            return response()->json(['error' => 'Log not found'], 404);
+        }
+
+        $this->handleEvent($eventName, $log, $message);
 
         return response()->json(['status' => 'success']);
     }
