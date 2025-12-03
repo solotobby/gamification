@@ -22,7 +22,8 @@ class MassEmailCampaign extends Model
         'sms_recipients',
         'sms_delivered',
         'sms_failed',
-        'sent_by'
+        'sent_by',
+        'clicks',
     ];
 
     public function logs()

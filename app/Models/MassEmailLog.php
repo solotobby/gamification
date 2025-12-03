@@ -16,7 +16,8 @@ class MassEmailLog extends Model
         'delivered_at',
         'opened_at',
         'bounced_at',
-        'error_message'
+        'error_message',
+        'clicked_at',
     ];
 
     protected $casts = [
@@ -24,6 +25,7 @@ class MassEmailLog extends Model
         'delivered_at' => 'datetime',
         'opened_at' => 'datetime',
         'bounced_at' => 'datetime',
+        'clicked_at' => 'datetime',
     ];
 
     public function campaign()
