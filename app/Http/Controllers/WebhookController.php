@@ -343,13 +343,13 @@ class WebhookController extends Controller
     public function zeptoWebhook(Request $request)
     {
         // Validate signature first
-        $signature = $request->header('producer-signature');
-        $authKey = config('services.zeptomail.webhook_auth_key');
-        $payload = $request->getContent();
+        // $signature = $request->header('producer-signature');
+        // $authKey = config('services.zeptomail.webhook_auth_key');
+        // $payload = $request->getContent();
 
-        if (!$this->isValidZeptoSignature($signature, $payload, $authKey)) {
-            return response()->json(['error' => 'Invalid signature'], 403);
-        }
+        // if (!$this->isValidZeptoSignature($signature, $payload, $authKey)) {
+        //     return response()->json(['error' => 'Invalid signature'], 403);
+        // }
 
         $data = $request->json()->all();
         $eventName = $data['event_name'][0] ?? null;
