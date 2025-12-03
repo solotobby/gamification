@@ -1451,60 +1451,193 @@ class AdminController extends Controller
     // {
     //     $query = User::where('role', 'regular');
 
-    //     // Filter by audience type
-    //     if ($request->type === 'verified') {
-    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
-    //     } elseif ($request->type === 'test_user') {
-    //         $result = (object)[
+    //     if ($request->type === 'test_user') {
+    //         return response()->json([
     //             'total' => 1,
     //             'with_email' => 1,
-    //             'with_phone' => 0
-    //         ];
-    //     } elseif ($request->type === 'email_verified') {
-    //         $query->whereNotNull('email_verified_at');
+    //             'with_phone' => 1,
+    //         ]);
     //     }
 
-    //     // Filter by date range
+    //     if ($request->type === 'verified') {
+    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
+    //     } elseif ($request->type === 'phone_verified') {
+    //         $query->whereHas('profile', function ($q) {
+    //             $q->where('phone_verified', true);
+    //         });
+    //     } elseif ($request->type === 'email_verified') {
+    //         $query->whereNotNull('email_verified_at');
+    //     } elseif ($request->type === 'performed_job') {
+    //         $query->whereHas('myJobs');
+    //     }
+
     //     if ($request->days) {
     //         $date = now()->subDays($request->days);
-
     //         if ($request->type === 'verified') {
     //             $query->where('verified_at', '>=', $date);
     //         } elseif ($request->type === 'email_verified') {
     //             $query->where('email_verified_at', '>=', $date);
+    //         } elseif ($request->type === 'phone_verified') {
+    //             $query->whereHas('profile', function ($q) use ($date) {
+    //                 $q->where('updated_at', '>=', $date);
+    //             });
+    //         } elseif ($request->type === 'performed_job') {
+    //             $query->whereHas('myJobs', function ($q) use ($date) {
+    //                 $q->where('created_at', '>=', $date);
+    //             });
     //         } else {
     //             $query->where('created_at', '>=', $date);
     //         }
     //     }
 
-    //     // Filter by country
     //     if ($request->country) {
     //         $query->where('country', $request->country);
     //     }
 
     //     $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
 
-    //     if (!app()->environment(['local', 'local_test'])) {
-    //         $result = Cache::remember($cacheKey, 300, function () use ($query) {
-    //             return $query->selectRaw('
-    //             COUNT(*) as total,
-    //             SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-    //             SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+    //     if (!app()->environment(['local_test'])) {
+    //         $result = $query->selectRaw('
+    //         COUNT(*) as total,
+    //         SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+    //         SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
     //         ')->first();
-    //         });
     //     } else {
     //         $result = $query->selectRaw('
     //         COUNT(*) as total,
     //         SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
     //         SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-    //     ')->first();
+    //         ')->first();
     //     }
-
     //     return response()->json([
     //         'total' => $result->total,
     //         'with_email' => $result->with_email,
     //         'with_phone' => $result->with_phone
     //     ]);
+    // }
+
+    // public function sendMassCommunication(Request $request)
+    // {
+    //     $query = User::where('role', 'regular');
+
+    //     // Apply audience filters
+    //     if ($request->type === 'verified') {
+    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
+    //     } elseif ($request->type === 'email_verified') {
+    //         $query->whereNotNull('email_verified_at');
+    //     } elseif ($request->type === 'phone_verified') {
+    //         $query->whereHas('profile', function ($q) {
+    //             $q->where('phone_verified', true);
+    //         });
+    //     } elseif ($request->type === 'performed_job') {
+    //         $query->whereHas('myJobs');
+    //     } elseif ($request->type === 'test_user') {
+    //         $query = User::where('email', 'morakinyovictor1@gmail.com');
+    //     }
+
+    //     if ($request->days) {
+    //         $date = now()->subDays($request->days);
+    //         if ($request->type === 'verified') {
+    //             $query->where('verified_at', '>=', $date);
+    //         } elseif ($request->type === 'email_verified') {
+    //             $query->where('email_verified_at', '>=', $date);
+    //         } elseif ($request->type === 'phone_verified') {
+    //             $query->whereHas('profile', function ($q) use ($date) {
+    //                 $q->where('updated_at', '>=', $date);
+    //             });
+    //         } elseif ($request->type === 'performed_job') {
+    //             $query->whereHas('myJobs', function ($q) use ($date) {
+    //                 $q->where('created_at', '>=', $date);
+    //             });
+    //         } else {
+    //             $query->where('created_at', '>=', $date);
+    //         }
+    //     }
+
+    //     if ($request->country) {
+    //         $query->where('country', $request->country);
+    //     }
+
+    //     // Get channel from radio button
+    //     $channel = $request->input('send_channel', 'email');
+
+    //     // Create unified campaign
+    //     $campaign = MassEmailCampaign::create([
+    //         'channel' => $channel,
+    //         'subject' => $request->subject ?? 'SMS Campaign',
+    //         'message' => $request->message,
+    //         'sms_message' => $request->sms_message,
+    //         'audience_type' => $request->type ?? 'registered',
+    //         'days_filter' => $request->days,
+    //         'country_filter' => $request->country,
+    //         'total_recipients' => 0,
+    //         'sms_recipients' => 0,
+    //         'sent_by' => auth()->id(),
+    //     ]);
+
+    //     $totalEmailRecipients = 0;
+    //     $totalSmsRecipients = 0;
+
+    //     // Send Email
+    //     if ($channel === 'email') {
+    //         (clone $query)
+    //             ->whereNotNull('email')
+    //             ->select('id', 'email')
+    //             ->chunk(50, function ($users) use ($request, $campaign, &$totalEmailRecipients) {
+    //                 $totalEmailRecipients += $users->count();
+
+    //                 $logData = $users->map(fn($user) => [
+    //                     'campaign_id' => $campaign->id,
+    //                     'user_id' => $user->id,
+    //                     'email' => $user->email,
+    //                     'channel' => 'email',
+    //                     'status' => 'pending',
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ])->toArray();
+
+    //                 MassEmailLog::insert($logData);
+
+    //                 $userIds = $users->pluck('id')->toArray();
+    //                 dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
+    //             });
+    //     }
+
+    //     // Send SMS
+    //     if ($channel === 'sms') {
+    //         (clone $query)
+    //             ->whereNotNull('phone')
+    //             ->select('id', 'phone')
+    //             ->chunk(100, function ($users) use ($request, $campaign, &$totalSmsRecipients) {
+    //                 $totalSmsRecipients += $users->count();
+
+    //                 // Create log entries for SMS
+    //                 // $logData = $users->map(fn($user) => [
+    //                 //     'campaign_id' => $campaign->id,
+    //                 //     'user_id' => $user->id,
+    //                 //     'phone' => $user->phone,
+    //                 //     'channel' => 'sms',
+    //                 //     'status' => 'pending',
+    //                 //     'created_at' => now(),
+    //                 //     'updated_at' => now(),
+    //                 // ])->toArray();
+
+    //                 // MassEmailLog::insert($logData);
+
+    //                 // Prepare data for job
+    //                 $userIds = $users->pluck('id')->toArray();
+    //                 $phones = $users->pluck('phone')->toArray();
+
+    //                 dispatch(new SendMassSms($userIds, $phones, $request->sms_message, $campaign->id));
+    //             });
+    //     }
+
+    //     $campaign->update([
+    //         'total_recipients' => $totalEmailRecipients,
+    //         'sms_recipients' => $totalSmsRecipients,
+    //     ]);
+
+    //     return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
     // }
 
     public function previewAudience(Request $request)
@@ -1531,44 +1664,19 @@ class AdminController extends Controller
             $query->whereHas('myJobs');
         }
 
-        if ($request->days) {
-            $date = now()->subDays($request->days);
-            if ($request->type === 'verified') {
-                $query->where('verified_at', '>=', $date);
-            } elseif ($request->type === 'email_verified') {
-                $query->where('email_verified_at', '>=', $date);
-            } elseif ($request->type === 'phone_verified') {
-                $query->whereHas('profile', function ($q) use ($date) {
-                    $q->where('updated_at', '>=', $date);
-                });
-            } elseif ($request->type === 'performed_job') {
-                $query->whereHas('myJobs', function ($q) use ($date) {
-                    $q->where('created_at', '>=', $date);
-                });
-            } else {
-                $query->where('created_at', '>=', $date);
-            }
-        }
+        // Handle date filtering
+        $this->applyDateFilter($query, $request);
 
         if ($request->country) {
             $query->where('country', $request->country);
         }
 
-        $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
+        $result = $query->selectRaw('
+        COUNT(*) as total,
+        SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+        SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+    ')->first();
 
-        if (!app()->environment(['local_test'])) {
-            $result = $query->selectRaw('
-            COUNT(*) as total,
-            SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-            SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-            ')->first();
-        } else {
-            $result = $query->selectRaw('
-            COUNT(*) as total,
-            SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-            SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-            ')->first();
-        }
         return response()->json([
             'total' => $result->total,
             'with_email' => $result->with_email,
@@ -1595,24 +1703,8 @@ class AdminController extends Controller
             $query = User::where('email', 'morakinyovictor1@gmail.com');
         }
 
-        if ($request->days) {
-            $date = now()->subDays($request->days);
-            if ($request->type === 'verified') {
-                $query->where('verified_at', '>=', $date);
-            } elseif ($request->type === 'email_verified') {
-                $query->where('email_verified_at', '>=', $date);
-            } elseif ($request->type === 'phone_verified') {
-                $query->whereHas('profile', function ($q) use ($date) {
-                    $q->where('updated_at', '>=', $date);
-                });
-            } elseif ($request->type === 'performed_job') {
-                $query->whereHas('myJobs', function ($q) use ($date) {
-                    $q->where('created_at', '>=', $date);
-                });
-            } else {
-                $query->where('created_at', '>=', $date);
-            }
-        }
+        // Handle date filtering
+        $this->applyDateFilter($query, $request);
 
         if ($request->country) {
             $query->where('country', $request->country);
@@ -1630,6 +1722,8 @@ class AdminController extends Controller
             'audience_type' => $request->type ?? 'registered',
             'days_filter' => $request->days,
             'country_filter' => $request->country,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
             'total_recipients' => 0,
             'sms_recipients' => 0,
             'sent_by' => auth()->id(),
@@ -1671,20 +1765,6 @@ class AdminController extends Controller
                 ->chunk(100, function ($users) use ($request, $campaign, &$totalSmsRecipients) {
                     $totalSmsRecipients += $users->count();
 
-                    // Create log entries for SMS
-                    // $logData = $users->map(fn($user) => [
-                    //     'campaign_id' => $campaign->id,
-                    //     'user_id' => $user->id,
-                    //     'phone' => $user->phone,
-                    //     'channel' => 'sms',
-                    //     'status' => 'pending',
-                    //     'created_at' => now(),
-                    //     'updated_at' => now(),
-                    // ])->toArray();
-
-                    // MassEmailLog::insert($logData);
-
-                    // Prepare data for job
                     $userIds = $users->pluck('id')->toArray();
                     $phones = $users->pluck('phone')->toArray();
 
@@ -1700,107 +1780,49 @@ class AdminController extends Controller
         return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
     }
 
-    // public function sendMassCommunication(Request $request)
-    // {
-    //     $query = User::where('role', 'regular');
+    private function applyDateFilter($query, $request)
+    {
+        $dateRangeType = $request->date_range_type ?? 'all';
 
-    //     if ($request->type === 'verified') {
-    //         $query->where('is_verified', 1)->whereNotNull('verified_at');
-    //     } elseif ($request->type === 'email_verified') {
-    //         $query->whereNotNull('email_verified_at');
-    //     } elseif ($request->type === 'test_user') {
-    //         $query = User::where('email', 'morakinyovictor1@gmail.com');
-    //     }
+        if ($dateRangeType === 'preset' && $request->days) {
+            $date = now()->subDays($request->days);
+            $this->applyDateCondition($query, $request->type, $date);
+        } elseif ($dateRangeType === 'custom' && $request->start_date && $request->end_date) {
+            $this->applyCustomDateRange($query, $request->type, $request->start_date, $request->end_date);
+        }
+    }
 
+    private function applyDateCondition($query, $type, $date, $endDate = null)
+    {
+        if ($type === 'verified') {
+            $query->where('verified_at', '>=', $date);
+            if ($endDate) $query->where('verified_at', '<=', $endDate);
+        } elseif ($type === 'email_verified') {
+            $query->where('email_verified_at', '>=', $date);
+            if ($endDate) $query->where('email_verified_at', '<=', $endDate);
+        } elseif ($type === 'phone_verified') {
+            $query->whereHas('profile', function ($q) use ($date, $endDate) {
+                $q->where('updated_at', '>=', $date);
+                if ($endDate) $q->where('updated_at', '<=', $endDate);
+            });
+        } elseif ($type === 'performed_job') {
+            $query->whereHas('myJobs', function ($q) use ($date, $endDate) {
+                $q->where('created_at', '>=', $date);
+                if ($endDate) $q->where('created_at', '<=', $endDate);
+            });
+        } else {
+            $query->where('created_at', '>=', $date);
+            if ($endDate) $query->where('created_at', '<=', $endDate);
+        }
+    }
 
-    //     if ($request->days) {
-    //         $date = now()->subDays($request->days);
-    //         if ($request->type === 'verified') {
-    //             $query->where('verified_at', '>=', $date);
-    //         } elseif ($request->type === 'email_verified') {
-    //             $query->where('email_verified_at', '>=', $date);
-    //         } else {
-    //             $query->where('created_at', '>=', $date);
-    //         }
-    //     }
+    private function applyCustomDateRange($query, $type, $startDate, $endDate)
+    {
+        $start = Carbon::parse($startDate)->startOfDay();
+        $end = Carbon::parse($endDate)->endOfDay();
 
-    //     if ($request->country) {
-    //         $query->where('country', $request->country);
-    //     }
-
-
-    //     // Send email using chunk
-    //     if ($request->send_email) {
-    //         // Create campaign record
-    //         $campaign = MassEmailCampaign::create([
-    //             'subject' => $request->subject,
-    //             'message' => $request->message,
-    //             'audience_type' => $request->type ?? 'registered',
-    //             'days_filter' => $request->days,
-    //             'country_filter' => $request->country,
-    //             'total_recipients' => 0,
-    //             'sent_by' => auth()->id(),
-    //         ]);
-    //         $totalRecipients = 0;
-
-    //         (clone $query)
-    //             ->whereNotNull('email')
-    //             ->select('id', 'email')
-    //             ->chunk(50, function ($users) use ($request, $campaign, &$totalRecipients) {
-    //                 $totalRecipients += $users->count();
-
-    //                 // Create log entries
-    //                 $logData = $users->map(fn($user) => [
-    //                     'campaign_id' => $campaign->id,
-    //                     'user_id' => $user->id,
-    //                     'email' => $user->email,
-    //                     'status' => 'pending',
-    //                     'created_at' => now(),
-    //                     'updated_at' => now(),
-    //                 ])->toArray();
-
-    //                 MassEmailLog::insert($logData);
-
-    //                 $userIds = $users->pluck('id')->toArray();
-    //                 dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
-    //             });
-
-    //         $campaign->update(['total_recipients' => $totalRecipients]);
-    //     }
-
-    //     // Send SMS in bulk
-    //     // if ($request->send_sms) {
-    //     //     (clone $query)
-    //     //         ->whereNotNull('phone')
-    //     //         ->select('phone')
-    //     //         ->chunk(100, function ($users) use ($request) {
-    //     //             $phones = $users->pluck('phone')->toArray();
-    //     //             $phones = formatAndArrange($phones);
-    //     //             Log::info($phones);
-    //     //             if (!empty($phones)) {
-    //     //                 $process = sendBulkSMS($phones, $request->sms_message);
-    //     //                 $code = is_array($process) ? $process['code'] : $process->code;
-
-    //     //                 if ($code !== 'ok') {
-    //     //                     return back()->with('error', 'SMS sending failed: ' . ($process['message'] ?? $process->message ?? 'Unknown error'));
-    //     //                 }
-    //     //             }
-    //     //         });
-    //     // }
-
-    //     // Send SMS using job
-    //     if ($request->send_sms) {
-    //         (clone $query)
-    //             ->whereNotNull('phone')
-    //             ->select('phone')
-    //             ->chunk(100, function ($users) use ($request) {
-    //                 $phones = $users->pluck('phone')->toArray();
-    //                 dispatch(new SendMassSms($phones, $request->sms_message));
-    //             });
-    //     }
-
-    //     return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
-    // }
+        $this->applyDateCondition($query, $type, $start, $end);
+    }
 
     // List all campaigns
     public function campaigns()
