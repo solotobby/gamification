@@ -1527,6 +1527,8 @@ class AdminController extends Controller
             });
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
+        } elseif ($request->type === 'performed_job') {
+            $query->whereHas('myJobs');
         }
 
         if ($request->days) {
@@ -1538,6 +1540,10 @@ class AdminController extends Controller
             } elseif ($request->type === 'phone_verified') {
                 $query->whereHas('profile', function ($q) use ($date) {
                     $q->where('updated_at', '>=', $date);
+                });
+            } elseif ($request->type === 'performed_job') {
+                $query->whereHas('myJobs', function ($q) use ($date) {
+                    $q->where('created_at', '>=', $date);
                 });
             } else {
                 $query->where('created_at', '>=', $date);
@@ -1583,6 +1589,8 @@ class AdminController extends Controller
             $query->whereHas('profile', function ($q) {
                 $q->where('phone_verified', true);
             });
+        } elseif ($request->type === 'performed_job') {
+            $query->whereHas('myJobs');
         } elseif ($request->type === 'test_user') {
             $query = User::where('email', 'morakinyovictor1@gmail.com');
         }
@@ -1596,6 +1604,10 @@ class AdminController extends Controller
             } elseif ($request->type === 'phone_verified') {
                 $query->whereHas('profile', function ($q) use ($date) {
                     $q->where('updated_at', '>=', $date);
+                });
+            } elseif ($request->type === 'performed_job') {
+                $query->whereHas('myJobs', function ($q) use ($date) {
+                    $q->where('created_at', '>=', $date);
                 });
             } else {
                 $query->where('created_at', '>=', $date);
