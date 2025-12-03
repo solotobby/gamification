@@ -72,10 +72,10 @@
                             <th>Audience</th>
                             <th>Channel</th>
                             <th>Total</th>
-                            {{-- <th>Delivered</th> --}}
-                            {{-- <th>Opened</th> --}}
-                            {{-- <th>Bounced</th> --}}
-                            {{-- <th>Failed</th> --}}
+                            <th>Delivered</th>
+                            <th>Opened</th>
+                            <th>Bounced</th>
+                            <th>Failed</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
@@ -96,18 +96,18 @@
                                 @else {{ number_format($campaign->sms_recipients) }}
                                     @endif
                                 </td>
-                                {{-- <td>
+                                <td>
                                     <span class="text-success">{{ number_format($campaign->delivered) }}</span>
                                     <small class="text-muted">({{ $campaign->total_recipients > 0 ?
                                         round(($campaign->delivered/$campaign->total_recipients)*100, 1) : 0 }}%)</small>
                                 </td>
                                 <td>
                                     <span class="text-primary">{{ number_format($campaign->opened) }}</span>
-                                    <small class="text-muted">({{ $campaign->delivered > 0 ?
-                                        round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small>
+                                    {{-- <small class="text-muted">({{ $campaign->delivered > 0 ?
+                                        round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small> --}}
                                 </td>
                                 <td><span class="text-warning">{{ number_format($campaign->bounced) }}</span></td>
-                                <td><span class="text-danger">{{ number_format($campaign->failed) }}</span></td> --}}
+                                <td><span class="text-danger">{{ number_format($campaign->failed) }}</span></td>
                                 <td>{{ $campaign->created_at->format('M d, Y H:i') }}</td>
                                 <td>
                                     <a href="{{ route('mass.mail.campaign.details', $campaign->id) }}"
@@ -124,7 +124,7 @@
                     </tbody>
                 </table>
 
-                <div class="mt-3">
+                <div class="mt-5">
                     {{ $campaigns->links() }}
                 </div>
             </div>
