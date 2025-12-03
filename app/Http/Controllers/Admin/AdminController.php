@@ -1862,16 +1862,17 @@ class AdminController extends Controller
             ->latest()
             ->paginate(50);
 
+
         // Separate stats for email and SMS
-        $emailStats = MassEmailLog::where('campaign_id', $id)
-            ->where('channel', 'email')
-            ->selectRaw("
-            COUNT(*) as total_sent,
-            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
-            SUM(CASE WHEN status = 'opened' THEN 1 ELSE 0 END) as opened,
-            SUM(CASE WHEN status IN ('failed', 'bounced') THEN 1 ELSE 0 END) as failed_bounced
-        ")
-            ->first();
+        // $emailStats = MassEmailLog::where('campaign_id', $id)
+        //     ->where('channel', 'email')
+        //     ->selectRaw("
+        //     COUNT(*) as total_sent,
+        //     SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) as delivered,
+        //     SUM(CASE WHEN status = 'opened' THEN 1 ELSE 0 END) as opened,
+        //     SUM(CASE WHEN status IN ('failed', 'bounced') THEN 1 ELSE 0 END) as failed_bounced
+        // ")
+        //     ->first();
 
         $smsStats = MassEmailLog::where('campaign_id', $id)
             ->where('channel', 'sms')
@@ -1885,10 +1886,11 @@ class AdminController extends Controller
         return view('admin.mass_mail_campaign_details', [
             'campaign' => $campaign,
             'logs' => $logs,
-            'totalSent' => $emailStats->total_sent ?? 0,
-            'delivered' => $emailStats->delivered ?? 0,
-            'opened' => $emailStats->opened ?? 0,
-            'failedBounced' => $emailStats->failed_bounced ?? 0,
+            'totalSent' => $campaign->total_recipients ?? 0,
+            'delivered' => $campaign->delivered ?? 0,
+            'opened' => $campaign->opened ?? 0,
+            'clicked' => $campaign->clicks ?? 0,
+            'failedBounced' => $campaign->failed_bounced ?? 0,
             'smsTotalSent' => $smsStats->total_sent ?? 0,
             'smsDelivered' => $smsStats->delivered ?? 0,
             'smsFailed' => $smsStats->failed ?? 0,

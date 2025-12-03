@@ -63,6 +63,22 @@
                 <div class="block block-rounded">
                     <div class="block-content block-content-full">
                         <div class="text-center">
+                            <div class="fs-2 fw-bold text-primary">{{ number_format($clicked) }}</div>
+                            {{-- <div class="fs-2 fw-bold text-primary">{{ number_format($campaign->opened) }}</div> --}}
+                            <div class="text-muted">
+                                Clicked
+                                <small>({{ $delivered > 0 ? round(($clicked / $delivered) * 100, 1) : 0 }}%)</small>
+                                {{-- <small>({{ $campaign->delivered > 0 ?
+                                    round(($campaign->opened/$campaign->delivered)*100, 1) : 0 }}%)</small> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="block block-rounded">
+                    <div class="block-content block-content-full">
+                        <div class="text-center">
                             <div class="fs-2 fw-bold text-danger">{{ number_format($failedBounced) }}</div>
                             {{-- <div class="fs-2 fw-bold text-danger">{{ number_format($campaign->bounced +
                                 $campaign->failed) }}</div> --}}

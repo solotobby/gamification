@@ -412,9 +412,9 @@ class WebhookController extends Controller
                 break;
 
             case 'email_link_click':
-                $log->update([
-                    'clicked_at' => $details['time'] ?? now(),
-                ]);
+                // $log->update([
+                //     'clicked_at' => $details['time'] ?? now(),
+                // ]);
                 $campaign->increment('clicks');
 
                 break;

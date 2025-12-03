@@ -2,6 +2,7 @@
 @section('style')
     <script src="https://cdn.tiny.cloud/1/d8iwvjd0vuxf9luaztf5x2ejuhnudtkzhxtnbh3gjjrgw4yx/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
 @section('content')
@@ -10,12 +11,6 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div>
                     <h1 class="fs-3 fw-semibold my-2 my-sm-3">Mass Communication</h1>
-                    {{-- <nav class="flex-shrink-0 my-2 my-sm-0" aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">Mass</li>
-                            <li class="breadcrumb-item active" aria-current="page">Communication</li>
-                        </ol>
-                    </nav> --}}
                 </div>
 
                 <a href="{{ route('mass.mail.campaigns') }}" class="btn btn-primary my-2 my-sm-0">
@@ -44,7 +39,7 @@
 
                     <!-- Audience Filters -->
                     <div class="row mb-4">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Audience Type</label>
                             <select class="form-control filter-input" name="type" required>
                                 <option value="registered">All Registered Users</option>
@@ -55,10 +50,17 @@
                                 <option value="test_user">Test User</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Date Range</label>
+                            <select class="form-control filter-input" name="date_range_type" id="dateRangeType">
+                                <option value="all">All Time</option>
+                                <option value="preset">Preset Range</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" id="presetRangeDiv" style="display:none;">
+                            <label>Preset Period</label>
                             <select class="form-control filter-input" name="days">
-                                <option value="">All Time</option>
                                 <option value="7">Last 7 Days</option>
                                 <option value="14">Last 14 Days</option>
                                 <option value="30">Last 30 Days</option>
@@ -66,10 +68,10 @@
                                 <option value="90">Last 3 months</option>
                                 <option value="180">Last 6 months</option>
                                 <option value="270">Last 9 months</option>
-                                <option value="365">Last 1 years</option>
+                                <option value="365">Last 1 year</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Country</label>
                             <select class="form-control filter-input" name="country">
                                 <option value="">All Countries</option>
@@ -77,6 +79,18 @@
                                     <option value="{{ $country }}">{{ $country }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Custom Date Range Row -->
+                    <div class="row mb-4" id="customRangeDiv" style="display:none;">
+                        <div class="col-md-6">
+                            <label>Start Date</label>
+                            <input type="date" class="form-control filter-input" name="start_date" id="startDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label>End Date</label>
+                            <input type="date" class="form-control filter-input" name="end_date" id="endDate">
                         </div>
                     </div>
 
@@ -143,6 +157,21 @@
 
     <script>
         $(document).ready(function () {
+            // Toggle date range options
+            $('#dateRangeType').on('change', function() {
+                const type = $(this).val();
+                $('#presetRangeDiv').toggle(type === 'preset');
+                $('#customRangeDiv').toggle(type === 'custom');
+
+                if (type === 'all') {
+                    $('select[name="days"]').val('');
+                    $('#startDate').val('');
+                    $('#endDate').val('');
+                }
+
+                updatePreview();
+            });
+
             // Update preview when filters change
             $('.filter-input').on('change', updatePreview);
 
@@ -153,21 +182,31 @@
             });
 
             function updatePreview() {
+                const dateRangeType = $('#dateRangeType').val();
+                let ajaxData = {
+                    _token: '{{ csrf_token() }}',
+                    type: $('select[name="type"]').val(),
+                    country: $('select[name="country"]').val(),
+                    date_range_type: dateRangeType
+                };
+
+                if (dateRangeType === 'preset') {
+                    ajaxData.days = $('select[name="days"]').val();
+                } else if (dateRangeType === 'custom') {
+                    ajaxData.start_date = $('#startDate').val();
+                    ajaxData.end_date = $('#endDate').val();
+                }
+
                 $.ajax({
                     url: '{{ route("preview.audience") }}',
                     method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        type: $('select[name="type"]').val(),
-                        days: $('select[name="days"]').val(),
-                        country: $('select[name="country"]').val()
-                    },
+                    data: ajaxData,
                     success: function (data) {
                         $('#previewContent').html(`
-                        <strong>${data.total}</strong> total users<br>
-                        <strong>${data.with_email}</strong> with email<br>
-                        <strong>${data.with_phone}</strong> with phone
-                    `);
+                            <strong>${data.total}</strong> total users<br>
+                            <strong>${data.with_email}</strong> with email<br>
+                            <strong>${data.with_phone}</strong> with phone
+                        `);
                         $('#previewSection').show();
                     }
                 });
