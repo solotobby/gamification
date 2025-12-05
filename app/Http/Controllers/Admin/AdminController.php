@@ -333,7 +333,7 @@ class AdminController extends Controller
             return back()->with('success', 'Dispute resolved Successfully');
 
 
-            return back()->with('success', 'Dispute resolved Successfully');
+            // return back()->with('success', 'Dispute resolved Successfully');
         }
     }
 
