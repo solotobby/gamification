@@ -44,6 +44,8 @@ class Kernel extends ConsoleKernel
 
         // $schedule->command('users:delete-unverified')->dailyAt('02:00');
 
+        // $schedule->command('disputes:resolve-completed')->hourly();
+
         $schedule->command('command:task')->daily();
 
         $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('08:30');
