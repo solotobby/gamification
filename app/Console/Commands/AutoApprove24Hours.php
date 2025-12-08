@@ -18,32 +18,40 @@ class AutoApprove24Hours extends Command
 
     public function handle()
     {
-        Log::info(message: 'Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
+        Log::info('Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
 
-        $startTime = Carbon::now()->subDays(1)->startOfHour();
-        $endTime = Carbon::now()->subDays(1)->endOfHour();
+        $cutoffTime = Carbon::now()->subHours(24);
 
         $lists = CampaignWorker::where('status', 'Pending')
             ->whereNull('reason')
             ->where('campaign_id', '!=', 8099)
-            ->whereHas('campaign.user', function($query) {
+            ->whereHas('campaign.user', function ($query) {
                 $query->where('is_business', false);
             })
-            ->whereBetween('created_at', [$startTime, $endTime])
+            ->where('created_at', '<=', $cutoffTime)
             ->get();
 
+        $this->info('Found ' . $lists->count() . ' campaign workers to auto-approve.');
+        Log::info('Found ' . $lists->count() . ' campaign workers to auto-approve.');
+
         foreach ($lists as $list) {
-            $this->approveCampaignWorker($list);
+            try {
+                $this->approveCampaignWorker($list);
+                $this->info('Approved: Campaign Worker ID ' . $list->id);
+            } catch (\Exception $e) {
+                Log::error('Failed to approve campaign worker ID ' . $list->id . ': ' . $e->getMessage());
+                $this->error('Failed: Campaign Worker ID ' . $list->id);
+            }
         }
 
-        $this->info('Auto-approved ' . $lists->count() . ' campaign workers (24 hours).');
-        Log::info('Auto-approved ' . $lists->count() . ' campaign workers (24 hours).');
+        $this->info('Auto-approved ' . $lists->count() . ' campaign workers (24+ hours old).');
+        Log::info('Auto-approved ' . $lists->count() . ' campaign workers (24+ hours old).');
     }
 
     private function approveCampaignWorker($ca)
     {
         $ca->status = 'Approved';
-        $ca->reason = 'Auto-approval';
+        $ca->reason = 'Auto-approval after 24 hours';
         $ca->save();
 
         $camp = Campaign::where('id', $ca->campaign_id)->first();
@@ -73,11 +81,11 @@ class AutoApprove24Hours extends Command
             $wallet->save();
         }
 
-        $ref = time();
+        $ref = time() . '_' . $ca->id; // More unique reference
 
         PaymentTransaction::create([
             'user_id' => $ca->user_id,
-            'campaign_id' => '1',
+            'campaign_id' => $ca->campaign_id,
             'reference' => $ref,
             'amount' => $amountCredited,
             'balance' => walletBalance($ca->user_id),
@@ -85,93 +93,9 @@ class AutoApprove24Hours extends Command
             'currency' => $currency,
             'channel' => $channel,
             'type' => 'campaign_payment',
-            'description' => 'Campaign Payment for ' . $ca->campaign->post_title,
+            'description' => 'Auto-approved payment for ' . $ca->campaign->post_title,
             'tx_type' => 'Credit',
             'user_type' => 'regular'
         ]);
     }
-
-    //    $schedule->call(function () {
-    //         // $yesterday = Carbon::yesterday();
-    //         // Get the start and end time for 24 hours ago
-    //         $startTime = Carbon::now()->subDays(1)->startOfHour();
-    //         $endTime = Carbon::now()->subDays(1)->endOfHour();
-    //         // $lists =  CampaignWorker::where('status', 'Pending')->where('reason', null)
-    //         //     ->whereBetween('created_at', [$startTime, $endTime])
-    //         //     //->whereDate('created_at', $yesterday)
-    //         //     ->get();
-
-    //         $lists = CampaignWorker::where('status', 'Pending')
-    //             ->whereNull('reason')
-    //             ->where('campaign_id', '!=', 8099)
-    //             ->whereBetween('created_at', [$startTime, $endTime])
-    //             ->get();
-
-    //         foreach ($lists as $list) {
-
-    //             $ca = CampaignWorker::where('id', $list->id)->first();
-    //             $ca->status = 'Approved';
-    //             $ca->reason = 'Auto-approval';
-    //             $ca->save();
-
-    //             $camp = Campaign::where('id', $ca->campaign_id)->first();
-    //             checkCampaignCompletedStatus($camp->id);
-
-    //             // $camp->pending_count = $campaignStatus['Pending'] ?? 0;
-    //             // $camp->completed_count = $campaignStatus['Approved'] ?? 0;
-    //             // $camp->save();
-    //             // $camp->completed_count += 1;
-    //             // $camp->pending_count -= 1;
-    //             // $camp->save();
-
-    //             $user = User::where('id', $ca->user_id)->first();
-    //             $baseCurrency = baseCurrency($user);
-    //             $amountCredited = $ca->amount;
-    //             if ($baseCurrency == 'NGN') {
-    //                 $currency = 'NGN';
-    //                 $channel = 'paystack';
-    //                 $wallet = Wallet::where('user_id', $ca->user_id)->first();
-    //                 // $wallet->balance += (int)$amountCredited;
-    //                 $wallet->balance += $amountCredited;
-    //                 $wallet->save();
-    //             } elseif ($camp->currency == 'USD') {
-    //                 $currency = 'USD';
-    //                 $channel = 'paypal';
-    //                 $wallet = Wallet::where('user_id', $ca->user_id)->first();
-    //                 $wallet->usd_balance += $amountCredited;
-    //                 $wallet->save();
-    //             } else {
-    //                 $currency = baseCurrency($user);
-    //                 $channel = 'flutterwave';
-    //                 $wallet = Wallet::where('user_id', $ca->user_id)->first();
-    //                 $wallet->base_currency_balance += $amountCredited;
-    //                 $wallet->save();
-    //             }
-
-    //             $ref = time();
-
-    //             // setIsComplete($ca->campaign_id);
-
-    //             PaymentTransaction::create([
-    //                 'user_id' => $ca->user_id,
-    //                 'campaign_id' => '1',
-    //                 'reference' => $ref,
-    //                 'amount' => $amountCredited,
-    //                 'balance' => walletBalance($ca->user_id),
-    //                 'status' => 'successful',
-    //                 'currency' => $currency,
-    //                 'channel' => $channel,
-    //                 'type' => 'campaign_payment',
-    //                 'description' => 'Campaign Payment for ' . $ca->campaign->post_title,
-    //                 'tx_type' => 'Credit',
-    //                 'user_type' => 'regular'
-    //             ]);
-    //         }
-
-    //         //$user = User::where('id', 4)->first(); //$user['name'] = 'Oluwatobi';
-    //         //$subject = 'Batched Job Approval - Notification';
-    //         // $content = 'Job Automatic Approval of '.$lists->count();
-    //         //Mail::to('solotobby@gmail.com')->send(new GeneralMail($user, $content, $subject, ''));
-
-    //     })->hourly();
 }

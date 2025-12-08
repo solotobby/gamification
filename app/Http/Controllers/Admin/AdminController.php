@@ -968,7 +968,7 @@ class AdminController extends Controller
             'currency' => 'NGN',
             'channel' => 'paystack',
             'type' => 'upgrade_payment',
-            'description' => 'Manual Ugrade Payment'
+            'description' => 'Manual Upgrade Payment'
         ]);
 
         $referee = Referral::where('user_id',  $getUser->id)->first();
