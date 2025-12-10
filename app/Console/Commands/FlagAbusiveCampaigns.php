@@ -18,6 +18,7 @@ class FlagAbusiveCampaigns extends Command
     {
         $liveCampaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
+            ->where('flagging_resolved', false)
             ->get();
 
         $flaggedCount = 0;
@@ -50,7 +51,7 @@ class FlagAbusiveCampaigns extends Command
                 $this->notifyCampaignOwner($campaign, $denialPercentage, $deniedWorkers, $totalWorkers);
 
                 $flaggedCount++;
-                
+
                 $this->warn("Flagged Campaign ID {$campaign->id}: {$denialPercentage}% denial rate");
             }
         }
@@ -66,13 +67,13 @@ class FlagAbusiveCampaigns extends Command
     private function notifyCampaignOwner($campaign, $denialPercentage, $deniedWorkers, $totalWorkers)
     {
         $user = User::find($campaign->user_id);
-        
+
         if ($user) {
             $subject = 'Campaign Flagged - High Denial Rate';
-            $content = "Your campaign '{$campaign->post_title}' has been flagged due to excessive worker denials. 
-                        You denied {$deniedWorkers} out of {$totalWorkers} workers (" . round($denialPercentage, 2) . "%). 
+            $content = "Your campaign '{$campaign->post_title}' has been flagged due to excessive worker denials.
+                        You denied {$deniedWorkers} out of {$totalWorkers} workers (" . round($denialPercentage, 2) . "%).
                         This campaign cannot be reactivated. Please contact support if you believe this is an error.";
-            
+
             try {
                 Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             } catch (\Exception $e) {
@@ -84,11 +85,11 @@ class FlagAbusiveCampaigns extends Command
     private function notifyAdmin($count)
     {
         $adminUser = User::where('id', 1)->first();
-        
+
         if ($adminUser) {
             $subject = 'Campaigns Flagged - Automated Report';
             $content = "{$count} campaigns were flagged for excessive worker denials (70%+ denial rate).";
-            
+
             try {
                  if (config('app.env') == 'Production') {
 
