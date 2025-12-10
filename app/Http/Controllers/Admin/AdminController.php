@@ -1984,6 +1984,7 @@ class AdminController extends Controller
 
         $campaign->status = $request->new_status;
         $campaign->flagged_at = null;
+        $campaign->flagging_resolved = true;
         $campaign->flagged_reason = null;
         $campaign->save();
 

@@ -11,9 +11,9 @@
                     {!! $message !!}
                 </div>
                 <br>
-                {{-- <img src="https://res.cloudinary.com/movic/image/upload/v1764664018/Freebyz_earn_xmpeep.jpg"
+                <img src="https://res.cloudinary.com/movic/image/upload/v1764664018/Freebyz_earn_xmpeep.jpg"
                      alt="Freebyz"
-                     style="max-width: 500px; width: 100%; height: auto;"> --}}
+                     style="max-width: 500px; width: 100%; height: auto;">
             </td>
         </tr>
     </tbody>
