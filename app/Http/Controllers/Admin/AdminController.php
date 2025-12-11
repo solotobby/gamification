@@ -344,16 +344,122 @@ class AdminController extends Controller
         $campaign->save();
     }
 
-    public function userList()
+    // public function userList()
+    // {
+
+    //     $users = User::where(
+    //         'role',
+    //         'regular'
+    //     )->latest()
+    //         ->paginate(100);
+
+    //     return view('admin.users.list', ['users' => $users]);
+    // }
+
+    public function userList(Request $request)
     {
+        $query = User::where('role', 'regular');
 
-        $users = User::where(
-            'role',
-            'regular'
-        )->latest()
-            ->paginate(100);
+        // Date filtering
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
 
-        return view('admin.users.list', ['users' => $users]);
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $users = $query->latest()->paginate(100);
+
+        // Get count for phone numbers button (efficient query)
+        $phoneCount = User::where('role', 'regular')
+            ->whereNotNull('phone')
+            ->where('phone', '!=', '');
+
+        if ($request->filled('start_date')) {
+            $phoneCount->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $phoneCount->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        return view('admin.users.list', [
+            'users' => $users,
+            'phoneCount' => $phoneCount->count()
+        ]);
+    }
+
+    // Phone numbers page with pagination
+    public function getPhoneNumbers(Request $request)
+    {
+        $query = User::where('role', 'regular')
+            ->whereNotNull('phone')
+            ->where('phone', '!=', '');
+
+        // Apply same date filters
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // Paginate 100 at a time
+        $users = $query->paginate(100);
+
+        $phoneNumbers = $users->pluck('phone')->filter()->toArray();
+        $formattedPhones = formatAndArrangeNew($phoneNumbers);
+
+        // Join with commas
+        $phoneString = implode(', ', $formattedPhones);
+
+        return view('admin.users.phone-numbers', [
+            'phones' => $phoneString,
+            'count' => count($formattedPhones),
+            'totalCount' => $users->total(),
+            'users' => $users,
+            'startDate' => $request->start_date,
+            'endDate' => $request->end_date
+        ]);
+    }
+
+    // Download ALL phone numbers as file
+    public function downloadPhoneNumbers(Request $request)
+    {
+        $query = User::where('role', 'regular')
+            ->whereNotNull('phone')
+            ->where('phone', '!=', '');
+
+        // Apply same date filters
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $filename = 'phone-numbers-' . now()->format('Y-m-d-His') . '.txt';
+
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+
+            // Process in chunks to avoid memory issues
+            $query->chunk(1000, function ($users) use ($handle) {
+                $phones = $users->pluck('phone')->filter()->toArray();
+                $formattedPhones = formatAndArrangeNew($phones);
+
+                foreach ($formattedPhones as $phone) {
+                    fwrite($handle, $phone . ', ');
+                }
+            });
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/plain',
+        ]);
     }
 
     public function userEmailVerified()

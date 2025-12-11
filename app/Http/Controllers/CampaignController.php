@@ -1187,6 +1187,7 @@ class CampaignController extends Controller
             $workSubmitted->reason = $request->reason;
             $workSubmitted->save();
 
+            // will return this if doesn't work
             $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
 
             // $campaign = Campaign::where('id', $deny->campaign_id)->first();

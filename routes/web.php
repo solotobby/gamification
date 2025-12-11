@@ -449,6 +449,9 @@ Route::get('users/search', [\App\Http\Controllers\Admin\AdminController::class, 
 Route::get('user/currency/search', [\App\Http\Controllers\Admin\AdminController::class, 'userCurrencySearch'])->name('user.currency.search');
 Route::get('users', [\App\Http\Controllers\Admin\AdminController::class, 'userList'])->name('user.list');
 Route::get('users/email-verified', [\App\Http\Controllers\Admin\AdminController::class, 'userEmailVerified'])->name('user.email.verified');
+Route::get('users/phone-numbers', [\App\Http\Controllers\Admin\AdminController::class, 'getPhoneNumbers'])->name('users.phone-numbers');
+Route::get('users/phone-numbers/download', [\App\Http\Controllers\Admin\AdminController::class, 'downloadPhoneNumbers'])->name('users.phone-numbers.download');
+
 
 Route::get('campaign/creator/list', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCreatorList'])->name('campaign.creator.list');
 Route::get('verified/users', [\App\Http\Controllers\Admin\AdminController::class, 'verifiedUserList'])->name('verified.user.list');
