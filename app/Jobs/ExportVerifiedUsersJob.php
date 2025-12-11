@@ -83,7 +83,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
 
             fputcsv($file, ["Users with income from: $dateRangeLabel of Amount: $amountRange"]);
             fputcsv($file, []);
-            fputcsv($file, ['', '#', 'UserId', 'Name', 'Email', 'Income', 'Currency']);
+            fputcsv($file, ['', '#', 'UserId', 'Name', 'Email', 'Phone', 'Income', 'Currency']);
 
             $i = 1;
             foreach ($users as $user) {
@@ -93,6 +93,7 @@ class ExportVerifiedUsersJob implements ShouldQueue
                     $user->id,
                     $user->name,
                     $user->email,
+                    $user->phone,
                     $user->income,
                     $user->wallet->base_currency ?? 'NGN',
                 ]);
