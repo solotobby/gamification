@@ -363,7 +363,8 @@ class GeneralController extends Controller
     public function make_money()
     {
         dailyVisit('LandingPage');
-        return view('make_money');
+        // return view('make_money');
+        return redirect('https://freebyz.com/affiliate-program');
     }
 
     public function trackRecord()

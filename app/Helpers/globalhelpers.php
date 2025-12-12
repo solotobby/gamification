@@ -34,7 +34,7 @@ use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
 if (!function_exists('isBlacklisted')) {
@@ -2888,6 +2888,88 @@ if (!function_exists('sendZeptoMail')) {
         function  ageranges()
         {
             return ['15-20', '21-25', '26-30', '31-40', '40-50'];
+        }
+    }
+}
+
+
+
+if (!function_exists('uploadImageToCloudinary')) {
+    function uploadImageToCloudinary($file, string $folder = 'uploads'): ?string
+    {
+        try {
+            $uploadedFile = Cloudinary::upload(
+                $file->getRealPath(),
+                [
+                    'folder' => $folder,
+                    'resource_type' => 'image',
+                    'transformation' => [
+                        'quality' => 'auto:good',
+                        'fetch_format' => 'auto',
+                    ],
+                ]
+            );
+
+            return $uploadedFile->getSecurePath();
+        } catch (\Exception $e) {
+            Log::error('Cloudinary image upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('uploadBase64ImageToCloudinary')) {
+    function uploadBase64ImageToCloudinary(string $base64, string $folder = 'uploads'): ?string
+    {
+        try {
+            if (!str_starts_with($base64, 'data:image')) {
+                $base64 = 'data:image/jpeg;base64,' . $base64;
+            }
+
+            $uploadedFile = Cloudinary::upload(
+                $base64,
+                [
+                    'folder' => $folder,
+                    'resource_type' => 'image',
+                    'transformation' => [
+                        'quality' => 'auto:good',
+                        'fetch_format' => 'auto',
+                    ],
+                ]
+            );
+
+            return $uploadedFile->getSecurePath();
+        } catch (\Exception $e) {
+            Log::error('Cloudinary base64 upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('uploadFileToCloudinary')) {
+    function uploadFileToCloudinary($file, string $folder = 'files'): ?string
+    {
+        try {
+            $uploadedFile = Cloudinary::uploadFile(
+                $file->getRealPath(),
+                [
+                    'folder' => $folder,
+                    'resource_type' => 'raw',
+                ]
+            );
+
+            Log::info('Cloudinary upload response', ['response' => $uploadedFile]);
+
+            $publicId = $uploadedFile->getPublicId();
+
+            // Correct URL structure for raw files
+            $cloudName = config('cloudinary.cloud_name');
+            $correctUrl = "https://res.cloudinary.com/{$cloudName}/raw/upload/{$publicId}";
+
+            return $correctUrl;
+        } catch (\Exception $e) {
+            Log::error('Cloudinary file upload failed: ' . $e->getMessage());
+            return null;
         }
     }
 }
