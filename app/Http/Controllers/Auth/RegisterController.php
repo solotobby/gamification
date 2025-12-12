@@ -390,13 +390,26 @@ class RegisterController extends Controller
 
                 activityLog($user, 'login', $user->name . ' Logged In', 'regular');
 
-                $job_id = $request->query('redirect');
-                if ($job_id && auth()->check()) {
-                    return redirect('campaign/' . $job_id);
-                    // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                // $job_id = $request->query('redirect');
+                // if ($job_id && auth()->check()) {
+                //     return redirect('campaign/' . $job_id);
+                //     // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                // }
+
+                // return redirect('home');
+                $careerHubRedirect = $request->query('career_hub_redirect');
+                if ($careerHubRedirect) {
+                    return redirect()->to($careerHubRedirect);
                 }
 
+                $job_id = $request->query('redirect');
+                if ($job_id && auth()->check()) {
+                    return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                }
+
+                // Default fallback
                 return redirect('home');
+
 
             case 'staff':
                 return "Staff Account";

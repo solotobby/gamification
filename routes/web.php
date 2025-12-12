@@ -70,6 +70,7 @@ Route::post('zeptomail/webhook', [\App\Http\Controllers\WebhookController::class
 // Route::get('winner/list', [\App\Http\Controllers\GeneralController::class, 'winnerlist'])->name('winner.list');
 Route::get('register/{referral_code}', [\App\Http\Controllers\Auth\RegisterController::class, 'referral_register']);
 Route::get('affiliate', [\App\Http\Controllers\GeneralController::class, 'make_money']);
+Route::get('/affiliate-program', [\App\Http\Controllers\GeneralController::class, 'make_money']);
 Route::get('terms', [\App\Http\Controllers\GeneralController::class, 'terms'])->name('terms');
 Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'])->name('privacy');
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
@@ -84,7 +85,26 @@ Route::get('agent/wellahealth/payment', [\App\Http\Controllers\GeneralController
 
 
 
+Route::prefix('career-hub')->name('career-hub.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\CareerHubController::class, 'index'])->name('index');
+    Route::get('/{job:slug}', [\App\Http\Controllers\CareerHubController::class, 'show'])->name('show');
 
+    Route::middleware(['auth', 'email'])->group(function () {
+        Route::post('/{job}/apply', [\App\Http\Controllers\CareerHubController::class, 'apply'])->name('apply');
+    });
+});
+
+Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'index'])->name('index');
+    Route::get('/create', [\App\Http\Controllers\Admin\CareerHubController::class, 'create'])->name('create');
+    Route::post('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'store'])->name('store');
+    Route::get('/{job}/edit', [\App\Http\Controllers\Admin\CareerHubController::class, 'edit'])->name('edit');
+    Route::put('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'update'])->name('update');
+    Route::delete('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'destroy'])->name('destroy');
+
+    Route::get('/{job}/applications', [\App\Http\Controllers\Admin\CareerHubController::class, 'applications'])->name('applications');
+    Route::patch('/applications/{application}/status', [\App\Http\Controllers\Admin\CareerHubController::class, 'updateApplicationStatus'])->name('applications.status');
+});
 
 Route::get('promo', [\App\Http\Controllers\GeneralController::class, 'promo']);
 
@@ -185,6 +205,7 @@ Route::get('decline/get/sub/categories/info', [\App\Http\Controllers\Admin\Admin
 Route::get('extend/payment', [\App\Http\Controllers\CampaignController::class, 'campaign_extension_payment']);
 
 Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class, 'viewCampaign'])->middleware(['auth', 'check.skills'])->name('campaign.view');
+
 
 
 // Public campaign route (no authentication required)
