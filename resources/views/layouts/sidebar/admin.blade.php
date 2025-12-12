@@ -145,6 +145,25 @@
         </ul>
       </li>
 
+        <li class="nav-main-item">
+        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+          <i class="nav-main-link-icon fa fa-briefcase"></i>
+          <span class="nav-main-link-name">Career Hub</span>
+        </a>
+        <ul class="nav-main-submenu">
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.career-hub.index') }}">
+              <span class="nav-main-link-name">List</span>
+            </a>
+          </li>
+          <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.career-hub.create') }}">
+              <span class="nav-main-link-name">Create</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('preferences') }}">
           <i class="nav-main-link-icon fa fa-star-of-life"></i>
