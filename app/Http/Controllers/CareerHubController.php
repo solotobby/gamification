@@ -53,6 +53,7 @@ class CareerHubController extends Controller
 
         $relatedJobs = JobListing::active()
             ->where('id', '!=', $job->id)
+            ->where('tier', '=', 'free')
             ->where(function ($q) use ($job) {
                 $q->where('type', $job->type)
                     ->orWhere('location', 'like', "%{$job->location}%");
