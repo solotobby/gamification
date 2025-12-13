@@ -13,18 +13,18 @@
             <div class="bg-body-extra-light shadow-lg">
               <div class="js-slider slick-dotted-inner" data-dots="true" data-arrows="false" data-infinite="false">
                 <div class="p-5">
-                 
+
                   <h3 class="mb-2 text-center">
                    What would you like to do on Freebyz?
                   </h3>
 
                   <h4 class="fw-normal text-muted text-center">
-                   Hire skilled and unskilled workers 
+                   Hire skilled and unskilled workers
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('pathway/hire')}}" data-toggle="click-ripple">
                         Hire Worker
                       </a>
-                      <br> 
+                      <br>
                     </center>
 
                   </h4>
@@ -33,9 +33,9 @@
                     Set up your profile to get hired for remote and full-time jobs
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('pathway/setup')}}" data-toggle="click-ripple">
-                        Setup Profile 
+                        Setup Profile
                       </a>
-                      <br> 
+                      <br>
                     </center>
 
                   </h4>
@@ -46,7 +46,7 @@
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('pathway/home')}}" data-toggle="click-ripple">
                         Start Earning
                       </a>
-                      <br> 
+                      <br>
                     </center>
 
                   </h4>

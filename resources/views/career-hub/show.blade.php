@@ -134,68 +134,84 @@
 
                 {{-- Sidebar --}}
                 <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-                        @auth
-                            @if($job->hasApplied(auth()->user()))
-                                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                                    <p class="text-green-800 font-medium">✓ You've already applied</p>
-                                </div>
+                    <div class="space-y-6 sticky top-4">
+                        {{-- Apply Card --}}
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            @auth
+                                @if($job->hasApplied(auth()->user()))
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                                        <p class="text-green-800 font-medium">✓ You've already applied</p>
+                                    </div>
+                                @else
+                                    <button onclick="document.getElementById('applicationModal').classList.remove('hidden')"
+                                        class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
+                                        Apply Now
+                                    </button>
+                                @endif
                             @else
-                                <button onclick="document.getElementById('applicationModal').classList.remove('hidden')"
-                                    class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
-                                    Apply Now
-                                </button>
-                            @endif
-                        @else
-                            <a href="{{ route('login', ['career_hub_redirect' => route('career-hub.show', $job->slug)]) }}"
-                                class="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
-                                Login to Apply
+                                <a href="{{ route('login', ['career_hub_redirect' => route('career-hub.show', $job->slug)]) }}"
+                                    class="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
+                                    Login to Apply
+                                </a>
+                            @endauth
+
+                            {{-- Job Summary --}}
+                            <div class="space-y-4 text-sm">
+                                <div class="pb-4 border-b">
+                                    <p class="text-gray-500 mb-1">Job Type</p>
+                                    <p class="font-semibold text-gray-900">{{ ucfirst($job->type) }}</p>
+                                </div>
+                                <div class="pb-4 border-b">
+                                    <p class="text-gray-500 mb-1">Location</p>
+                                    <p class="font-semibold text-gray-900">{{ $job->location }}</p>
+                                </div>
+                                @if($job->salary_range)
+                                    <div class="pb-4 border-b">
+                                        <p class="text-gray-500 mb-1">Salary Range</p>
+                                        <p class="font-semibold text-gray-900">{{ $job->salary_range }}</p>
+                                    </div>
+                                @endif
+                                @if($job->expires_at)
+                                    <div class="pb-4 border-b">
+                                        <p class="text-gray-500 mb-1">Application Deadline</p>
+                                        <p class="font-semibold text-gray-900">{{ $job->expires_at->format('M d, Y') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Micro-Jobs CTA --}}
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-sm p-6 text-white">
+                            <div class="flex items-center mb-3">
+                                <span class="text-3xl mr-3">⚡</span>
+                                <h3 class="text-lg font-bold">Looking for Quick Gigs?</h3>
+                            </div>
+                            <p class="text-blue-100 text-sm mb-4">
+                                Browse through Freebyz micro-jobs and start earning today!
+                            </p>
+                            <a href="/user/home"
+                                class="block w-full bg-white text-blue-600 text-center px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
+                                Explore Micro-Jobs →
                             </a>
-
-
-                        @endauth
-
-                        {{-- Job Summary --}}
-                        <div class="space-y-4 text-sm">
-                            <div class="pb-4 border-b">
-                                <p class="text-gray-500 mb-1">Job Type</p>
-                                <p class="font-semibold text-gray-900">{{ ucfirst($job->type) }}</p>
-                            </div>
-                            <div class="pb-4 border-b">
-                                <p class="text-gray-500 mb-1">Location</p>
-                                <p class="font-semibold text-gray-900">{{ $job->location }}</p>
-                            </div>
-                            @if($job->salary_range)
-                                <div class="pb-4 border-b">
-                                    <p class="text-gray-500 mb-1">Salary Range</p>
-                                    <p class="font-semibold text-gray-900">{{ $job->salary_range }}</p>
-                                </div>
-                            @endif
-                            @if($job->expires_at)
-                                <div class="pb-4 border-b">
-                                    <p class="text-gray-500 mb-1">Application Deadline</p>
-                                    <p class="font-semibold text-gray-900">{{ $job->expires_at->format('M d, Y') }}</p>
-                                </div>
-                            @endif
                         </div>
+
+                        {{-- Related Jobs --}}
+                        @if($relatedJobs->count())
+                            <div class="bg-white rounded-lg shadow-sm p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Similar Opportunities</h3>
+                                <div class="space-y-4">
+                                    @foreach($relatedJobs as $related)
+                                        <a href="{{ route('career-hub.show', $related->slug) }}"
+                                            class="block hover:bg-gray-50 p-3 rounded transition">
+                                            <p class="font-semibold text-gray-900 mb-1">{{ $related->title }}</p>
+                                            <p class="text-sm text-gray-600">{{ $related->company_name }}</p>
+                                            <p class="text-xs text-gray-500 mt-1">{{ $related->location }}</p>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
-
-                    {{-- Related Jobs --}}
-                    @if($relatedJobs->count())
-                        <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Similar Opportunities</h3>
-                            <div class="space-y-4">
-                                @foreach($relatedJobs as $related)
-                                    <a href="{{ route('career-hub.show', $related->slug) }}"
-                                        class="block hover:bg-gray-50 p-3 rounded transition">
-                                        <p class="font-semibold text-gray-900 mb-1">{{ $related->title }}</p>
-                                        <p class="text-sm text-gray-600">{{ $related->company_name }}</p>
-                                        <p class="text-xs text-gray-500 mt-1">{{ $related->location }}</p>
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
