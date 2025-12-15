@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CareerHubController extends Controller
 {
+
+    public function jobs(Request $request){
+        return redirect(route('career-hub.index'));
+    }
     public function index(Request $request)
     {
         $jobs = JobListing::active()
