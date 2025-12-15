@@ -94,6 +94,8 @@ Route::prefix('career-hub')->name('career-hub.')->group(function () {
     });
 });
 
+Route::get('jobs', [\App\Http\Controllers\CareerHubController::class, 'index'])->name('jobs');
+
 Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'index'])->name('index');
     Route::get('/create', [\App\Http\Controllers\Admin\CareerHubController::class, 'create'])->name('create');
