@@ -53,7 +53,7 @@
                   <h4 class="fw-normal text-muted text-center">
                     Get Full Time Remote Jobs
                     <center>
-                      <a class="btn btn-hero btn-primary mt-3"  href="{{url('career-hub/')}}" data-toggle="click-ripple">
+                      <a class="btn btn-hero btn-primary mt-3"  href="{{url('jobs/')}}" data-toggle="click-ripple">
                         Apply now
                       </a>
                       <br>
