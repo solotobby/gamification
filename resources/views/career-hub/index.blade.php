@@ -118,14 +118,8 @@
                     {{-- Company Logo & Premium Badge --}}
                     <div class="flex items-start justify-between mb-4">
                         @if($job->company_logo)
-                            @php
-                                $logo = Str::startsWith($job->company_logo, ['http://', 'https://'])
-                                    ? $job->company_logo
-                                    : Storage::url($job->company_logo);
-                            @endphp
-
                             <img
-                                src="{{ $logo }}"
+                                src="{{ displayImage($job->company_logo) }}"
                                 alt="{{ $job->company_name }}"
                                 class="w-12 h-12 rounded object-cover"
                             >

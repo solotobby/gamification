@@ -41,7 +41,7 @@
                 {{ session('error') }}
             </div>
             @endif
-            
+
         {{-- <div class="alert alert-info">
           Hi, Login point is not longer active.
         </div> --}}
@@ -65,10 +65,10 @@
                 <tr>
                     <td>
                        {{$banner->banner_id}}
-                    </td>  
+                    </td>
                     <td>
                       <a href="{{ url('user/'.$banner->user->id.'/info') }}" target="_blank"> {{ $banner->user->name}} </a>
-                  </td>  
+                  </td>
                     <td>
                         @if($banner->currency == 'NGN')
                             &#8358;{{ number_format($banner->amount,2) }}
@@ -79,7 +79,7 @@
                     <td>
                       {{$banner->click_count == null ? '0' : $banner->click_count}}/{{$banner->clicks}}
                     </td>
-                    
+
                     <td>
                       {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
                       @if($banner->live_state == null)
@@ -95,9 +95,9 @@
                     <td>
                         {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
                     </td>
-                   
+
                     <td>
-                     
+
 
                       <button type="button" class="btn btn-alt-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-default-popout-{{ $banner->id }}">View</button>
                     </td>
@@ -120,9 +120,9 @@
                                   <h3 class="block-title">{{ $banner->banner_id }}</h3>
                                 </div>
                                 <div class="block-content">
-                                  
-                                  <img src="{{ url($banner->banner_url)  }}" width="100%" height="300" class="img-responsive mb-4">
-                                  
+
+                                  <img src="{{ displayImage($banner->banner_url)  }}" width="100%" height="300" class="img-responsive mb-4">
+
                                   <ul class="list-group push">
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                       @if($banner->currency == 'NGN')
@@ -130,7 +130,7 @@
                                       @else
                                          Amount - {{ number_format($banner->amount,2) }}
                                       @endif
-                                       
+
                                      </li>
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -149,7 +149,7 @@
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
                                        {{-- {{ $banner->live_state == null ? 'Under Review' : $banner->live_state .' on '. \Carbon\Carbon::parse($banner->banner_end_date)->format('d F, Y') }} --}}
-                                     
+
                                       @if($banner->live_state == null)
                                        Status - Under Review
                                       @elseif($banner->live_state == 'Started')
@@ -164,7 +164,7 @@
 
                                      <li class="list-group-item d-flex justify-content-between align-items-center">
                                      Date Created -   {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
-                                     </li>                                    
+                                     </li>
                                   </ul>
 
                                    @if($banner->status == true)
@@ -172,20 +172,20 @@
                                     @else
                                         <a href="{{ url('admin/banner/activate/'.$banner->id) }}" class="btn btn-secondary btn-sm">Take Live</a>
                                         @if($banner->live_state == 'Rejected')
-                                         
+
                                         @else
                                           <a href="{{ url('admin/banner/reject/'.$banner->id) }}" class="btn btn-danger btn-sm">Reject Banner Ad</a>
                                         @endif
-                                
-                                    @endif 
+
+                                    @endif
 
                                 </div>
                               </div>
                               <!-- END With Badges -->
                             </div>
-                          
+
                       </div>
-                      
+
                       <div class="modal-footer">
                       <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                       {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
@@ -194,7 +194,7 @@
                   </div>
               </div>
                 @endforeach
-              
+
             </tbody>
           </table>
           {{-- <a href="{{ route('redeem.point') }}" class="btn btn-secondary mb-3 disabled">Redeem Points</a> --}}

@@ -7,7 +7,7 @@
 
 <div class="row g-0 flex-md-grow-1">
   <div class="col-md-12 col-lg-12 col-xl-12 bg-body-dark">
-  
+
     <div class="content">
       @if ($errors->any())
               <div class="alert alert-danger mt-2">
@@ -41,7 +41,7 @@
                   <div class="fs-sm text-muted">{{$feedback->user->email}} . </div>
                   <div class="fs-sm text-muted">
                     {{ $feedback->category }}
-                   
+
                   </div>
                   </div>
                   <div class="col-sm-5 d-sm-flex align-items-sm-center">
@@ -62,7 +62,7 @@
           <div class="row g-sm">
               <div class="col-6 col-sm-4 col-md-5 col-lg-4 col-xl-3">
               <div class="options-container fx-item-zoom-in">
-                  <img class="img-fluid options-item" src="{{asset($feedback->proof_url)}}" alt="">
+                  <img class="img-fluid options-item" src="{{displayImage($feedback->proof_url)}}" alt="">
                   <div class="options-overlay bg-black-75">
                   {{-- <div class="options-overlay-content">
                       <a class="btn btn-sm btn-primary" href="javascript:void(0)">
@@ -75,15 +75,15 @@
                   <i class="fa fa-paperclip"></i> Ticket #{{$feedback->id}}
               </p>
               </div>
-              
+
           </div>
         </div>
 
       </div>
 
       @if($feedback->replies()->count() > 0)
-            
-            
+
+
             <!-- Discussion -->
           <div class="block block-rounded">
           <div class="block-header block-header-default">
@@ -116,7 +116,7 @@
                       </a>
                     </p>
                     {{-- <p class="fs-sm fw-medium">
-                      289 Posts<br>Level 3              
+                      289 Posts<br>Level 3
                       </p> --}}
                   </td>
                   <td>
@@ -133,7 +133,7 @@
           </div>
           </div>
           <!-- END Discussion -->
-      
+
       @else
           <div class="alert alert-info">
               No Replies at the moment
@@ -152,7 +152,7 @@
               <label>Meesage</label>
               <textarea class="form-control" name="message" id="js-ckeditor5-classic"></textarea>
           </div>
-          
+
           <input type="hidden" name='user_id' value="{{ auth()->user()->id }}">
           <input type="hidden" name='feedback_id' value="{{ $feedback->id }}">
           <input type="hidden" name='0' value="false">
@@ -166,7 +166,7 @@
                 </a>
               </div>
           </div>
-         
+
       </form>
     </div>
   </div>
@@ -176,9 +176,9 @@
 
 
   </div>
-  
 
-  
+
+
 
 </div>
 
@@ -229,8 +229,8 @@
                <code> {!! $reply->message !!} </code>
             </p>
             @endforeach
-            
-            
+
+
         </div>
         </div>
         <!-- END Label on top Layout -->
@@ -270,16 +270,16 @@
                         <i class="fa fa-paper-plane opacity-50 me-1"></i> Send
                     </button>
                 </div>
-          
-            
-             
+
+
+
           </div>
         </form>
           </div>
         </div>
         <!-- END Horizontal Layout -->
 
-       
+
       </div>
     </div>
     <!-- END Layouts -->
@@ -292,5 +292,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Page JS Helpers (CKEditor 5 plugins) -->
 <script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script>
- 
+
 @endsection

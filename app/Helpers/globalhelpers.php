@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Storage;
 
 
 if (!function_exists('isBlacklisted')) {
@@ -2972,4 +2973,26 @@ if (!function_exists('uploadFileToCloudinary')) {
             return null;
         }
     }
+
 }
+
+
+if (!function_exists('displayImage')) {
+    function displayImage(string $path): string
+    {
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::url($path);
+        }
+
+        if (file_exists(public_path($path))) {
+            return asset($path);
+        }
+
+        return '';
+    }
+}
+

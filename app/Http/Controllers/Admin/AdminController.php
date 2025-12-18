@@ -187,8 +187,8 @@ class AdminController extends Controller
             $score->save();
 
             $phone = '234' . substr($score->user->phone, 1);
-            $message = "Hello " . $score->user->name . " you have a " . $request->name . " reward of " . $formattedReward . " from Freebyz.com. Please login to cliam it. Thanks";
-            // PaystackHelpers::sendNotificaion($phone, $message);
+            $message = "Hello " . $score->user->name . " you have a " . $request->name . " reward of " . $formattedReward . " from Freebyz.com. Please login to claim it. Thanks";
+            // PaystackHelpers::sendNotification($phone, $message);
         }
         return back()->with('status', 'Reward Assigned Successfully');
     }
@@ -293,7 +293,7 @@ class AdminController extends Controller
 
             $this->removePendingCountAfterDenial($workDone->campaign_id);
 
-            $campaingOwner = User::where('id', $campaign->user_id)->first();
+            $campaignOwner = User::where('id', $campaign->user_id)->first();
 
             if ($campaign->currency == 'NGN') {
                 $currency = 'NGN';
@@ -302,11 +302,11 @@ class AdminController extends Controller
                 $currency = 'USD';
                 $channel = 'paypal';
             } else {
-                $currency = baseCurrency($campaingOwner);
+                $currency = baseCurrency($campaignOwner);
                 $channel = 'flutterwave';
             }
 
-            creditWallet($campaingOwner, $currency, $workDone->amount);
+            creditWallet($campaignOwner, $currency, $workDone->amount);
 
             $ref = time();
 

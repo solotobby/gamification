@@ -20,11 +20,7 @@ class BannerController extends Controller
         // $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function index()
     {
         $banners = Banner::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
@@ -86,22 +82,25 @@ class BannerController extends Controller
 
         if ($request->hasFile('banner_url')) {
 
+            $bannerUrl = 'no image';
             //s3 bucket processing
-            // $fileBanner = $request->file('banner_url');
+            $fileBanner = $request->file('banner_url');
             // $Bannername = time();// . $fileBanner->getClientOriginalName();
             // $filePathBanner = 'ad/' . $Bannername.'.'.$fileBanner->extension();
 
             // Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
             // $bannerUrl = Storage::disk('s3')->url($filePathBanner);
+            $bannerUrl = uploadImageToCloudinary($fileBanner);
 
-            $imageName = time() . '.' . $request->banner_url->extension();
-            $request->banner_url->move(public_path('images'), $imageName);
+            // $imageName = time() . '.' . $request->banner_url->extension();
+            // $request->banner_url->move(public_path('images'), $imageName);
 
             // $fileBanner = $request->file('banner_url');
             // //process local storage
             // $imgName = time();
             // $Bannername =  $imgName.'.'.$request->banner_url->extension();//time();// . $fileBanner->getClientOriginalName();
             // $request->banner_url->move(public_path('banners'), $Bannername); //store in local storage
+
 
 
             $banner['user_id'] = auth()->user()->id;
@@ -114,7 +113,8 @@ class BannerController extends Controller
             $banner['country'] = 'all'; //$request->country;
             $banner['status'] = false;
             $banner['amount'] = $request->budget; //$finalTotal;
-            $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //$bannerUrl;
+            // $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //$bannerUrl;
+            $banner['banner_url'] =  $bannerUrl;
             $banner['impression'] = 0;
             $banner['impression_count'] = 0;
             $banner['clicks'] = $request->budget / 40.5;

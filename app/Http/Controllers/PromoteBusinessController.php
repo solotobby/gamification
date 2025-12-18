@@ -16,20 +16,21 @@ class PromoteBusinessController extends Controller
 
     public function __construct()
     {
-         $this->middleware(['auth', 'email']);
+        $this->middleware(['auth', 'email']);
         // $this->middleware('auth');
     }
 
 
-    public function create(){
-       // ProfessionalCategory::orderBy('name', 'DESC')->get();;
-       $business = Business::with('products')->where('user_id', auth()->user()->id)->first();
-       $categories = BusinessCategory::all();
+    public function create()
+    {
+        // ProfessionalCategory::orderBy('name', 'DESC')->get();;
+        $business = Business::with('products')->where('user_id', auth()->user()->id)->first();
+        $categories = BusinessCategory::all();
         return view('user.business.create', ['business' => $business, 'categories' => $categories]);
-
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'business_name' => 'required|string|unique:businesses',
             'business_phone' => 'required|string|unique:businesses',
@@ -46,7 +47,7 @@ class PromoteBusinessController extends Controller
 
         $business = Business::create($request->all());
 
-        if($business){
+        if ($business) {
             $subject = 'Freebyz Business Promotion - Business Created Successfully';
             $content = 'Your business will soon be activated. Once activated, you can add products and share your links freely on your social media.';
 
@@ -54,53 +55,51 @@ class PromoteBusinessController extends Controller
 
             return back()->with('success', 'Business Created Successfully');
         }
-
-
     }
 
-    public function createProduct(Request $request){
-        $this->validate($request, [
-            'img' => 'image|mimes:png,jpeg,gif,jpg',
-            'name' => 'required|string',
-            'price' => 'required|string',
+    public function createProduct(Request $request)
+    {
+        $validated = $request->validate([
+            'business_id' => 'required|exists:businesses,id',
+            'img' => 'nullable|image|mimes:png,jpeg,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
             'description' => 'required|string',
         ]);
 
+        $imageUrl = null;
 
+        if ($request->hasFile('img')) {
+            $imageUrl = uploadImageToCloudinary($request->file('img'));
+        }
 
-            if($request->hasFile('img')){
-                $fileBanner = $request->file('img');
-                $Bannername = time() . $fileBanner->getClientOriginalName();
-                $filePathBanner = 'products/' . $Bannername;
+        $product = BusinessProduct::create([
+            'business_id' => $validated['business_id'],
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'description' => $validated['description'],
+            'pid' => random_int(1000, 999999),
+            'unique' => Str::random(7),
+            'img' => $imageUrl,
+        ]);
 
-                Storage::disk('s3')->put($filePathBanner, file_get_contents($fileBanner), 'public');
-
-                BusinessProduct::create([
-                    'business_id' => $request->business_id,
-                    'name' => $request->name,
-                    'price' => $request->price,
-                    'description' => $request->description,
-                    'pid' => rand(999,1000000),
-                    'unique' => Str::random(7),
-                    'img' =>  Storage::disk('s3')->url($filePathBanner)
-                ]);//create($request->all());
-
-                return back()->with('success', 'Product added Successfully');
-            }
-
+        return back()->with('success', 'Product added Successfully');
     }
 
-    public function editProduct($id){
-        $product= BusinessProduct::where('unique', $id)->first();
+    public function editProduct($id)
+    {
+        $product = BusinessProduct::where('unique', $id)->first();
         return view('user.business.edit_product', ['product' => $product]);
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         BusinessProduct::where('unique', $id)->delete();
         return back()->with('status', 'Product deleted Successfully');
     }
 
-    public function processProductEdit(Request $request){
+    public function processProductEdit(Request $request)
+    {
         $findProduct = BusinessProduct::where('unique', $request->product_id)->first();
         $findProduct->name = $request->name;
         $findProduct->price = $request->price;
@@ -110,5 +109,4 @@ class PromoteBusinessController extends Controller
         return redirect('user/business')->with('status', 'Product updated Successfully');
         //return back()->with('success', 'Product updated Successfully');
     }
-
 }

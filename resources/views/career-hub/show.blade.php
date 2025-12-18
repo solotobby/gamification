@@ -16,13 +16,8 @@
                         <div class="flex items-start justify-between mb-6">
                             <div class="flex items-start space-x-4">
                                 @if($job->company_logo)
-                                    @php
-                                        $logo = Str::startsWith($job->company_logo, ['http://', 'https://'])
-                                            ? $job->company_logo
-                                            : Storage::url($job->company_logo);
-                                    @endphp
-
-                                    <img src="{{ $logo }}" alt="{{ $job->company_name }}"
+                            
+                                    <img src="{{ displayImage($job->company_logo) }}" alt="{{ $job->company_name }}"
                                         class="w-12 h-12 rounded object-cover">
                                 @else
                                     <div class="w-16 h-16 bg-blue-100 rounded flex items-center justify-center">

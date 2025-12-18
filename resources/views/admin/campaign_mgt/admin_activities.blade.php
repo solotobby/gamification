@@ -30,9 +30,9 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'pending')->count() }} 
-          | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }} 
-          | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }} 
+        <h3 class="block-title">{{ $lists->post_title }} campaign: Pending - {{ $lists->where('status', 'pending')->count() }}
+          | Approved - {{ @$lists->completed()->where('status', 'Approved')->count() }}
+          | Denied - {{ @$lists->completed()->where('status', 'Denied')->count() }}
           @if($lists->currency == 'NGN')
           | Amount Spent -   &#8358;{{ number_format(@$lists->completed()->where('status', 'Approved')->count() * $lists->campaign_amount) }}/&#8358;{{ number_format($lists->campaign_amount * $lists->number_of_staff) }}
           @else
@@ -59,7 +59,7 @@
 
         <div class="table-responsive">
           <form action="{{ url('mass/approval') }}" method="POST">
-            @csrf 
+            @csrf
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
               <tr>
@@ -71,7 +71,7 @@
               </tr>
             </thead>
             <tbody>
-                
+
             @if(auth()->user()->hasRole('admin'))
 
                   @foreach ($lists->completed()->orderBy('created_at', 'DESC')->where('status', 'Pending')->take($count)->get() as $list)
@@ -92,7 +92,7 @@
                         </td>
                         <td>{{ $list->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
-                        
+
                     </tr>
                   @endforeach
 
@@ -116,7 +116,7 @@
                           <td>{{ $list->status }}</td>
                           <td>
                               @if($list->status == 'Pending')
-                              
+
                                   @if($lists->completed()->where('status', 'Approved')->count() >= @$list->campaign->number_of_staff)
                                       <button type="button" class="btn btn-alt-warning btn-sm disabled">Worker Completed</button>
                                   @else
@@ -144,7 +144,7 @@
                                     @if($list->proof_url != null)
                                       <hr>
                                       <h5>Proof of work Image</h5>
-                                      <img src="{{ $list->proof_url }}" class="img-thumbnail rounded float-left " alt="Proof">
+                                      <img src="{{ displayImage($list->proof_url) }}" class="img-thumbnail rounded float-left " alt="Proof">
                                       @else
                                       <div class="alert alert-warning text-small">
                                         No Image attached
@@ -165,7 +165,7 @@
                                     </form>
                                     <br>
                                 </div>
-                                
+
                                 <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                                 {{-- <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button> --}}
@@ -173,13 +173,13 @@
                             </div>
                           </div>
                       </div>
-                    
+
 
                   @endforeach
 
             @endif
             </tbody>
-            
+
           </table>
             @if(auth()->user()->hasRole('admin'))
                 <button class="btn btn-primary mb-2" type="submit">Approve All</button>
