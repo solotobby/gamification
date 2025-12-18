@@ -53,7 +53,7 @@
     <form action="{{  route('campaign.decision') }}" method="POST">
         @csrf
       <div class="block block-rounded">
-       
+
 
         <!-- Files section -->
         <div class="block-content">
@@ -61,25 +61,25 @@
           <div class="row items-push">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
-             
+
               <div class="mb-4">
                 <label class="form-label" for="post-files">Campaign Description </label>
                 <p>{!! $campaign['campaign']['description'] !!}</p>
-               
+
               </div>
               <div class="mb-4">
                 <label class="form-label" for="post-files">Proof of completion of campaign
                 </label>
                 <p>{!! $campaign['campaign']['proof'] !!}</p>
-                    
+
               </div>
               <hr>
               <div class="mb-4">
                 <label class="form-label" for="post-files">Proof Submitted by Worker
                 </label>
-                <p>  {!! $campaign['comment'] !!}</p> 
+                <p>  {!! $campaign['comment'] !!}</p>
               </div>
-            
+
 
               @if($campaign['proof_url'] == 'no image')
               <div class="alert alert-warning text-small">
@@ -88,11 +88,11 @@
                 @else
                   <hr>
                   <h5>Proof of work Image</h5>
-              
-                  <img src="{{ asset($campaign['proof_url']) }}" class="img-thumbnail rounded float-left " alt="Proof">
-                
+
+                  <img src="{{ displayImage($campaign['proof_url']) }}" class="img-thumbnail rounded float-left " alt="Proof">
+
               @endif
-             
+
               <div class="mb-4 mt-4">
                 <label class="form-label" for="post-files">Give reason for Approval or Denial</small></label>
                     <textarea class="form-control" name="reason" id="js-ckeditor5-classic" required> {{ old('reason') }}</textarea>
@@ -106,13 +106,13 @@
               <a href="{{ url('campaign/activities/'.$campaign['campaign']['job_id']) }}" class="btn btn-secondary btn-sm mb-2"><i class="fa fa-backspace"></i> Back To List</a>
             </div>
             <div class="col-lg-2"></div>
-           
+
           </div>
-          
+
         </div>
-        
+
         <!-- END Files section -->
-      
+
       </div>
     </form>
     <!-- END Post Job Form -->

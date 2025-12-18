@@ -131,10 +131,11 @@ class FeedbackController extends Controller
         // If image is uploaded
         if ($request->hasFile('proof')) {
             $image = $request->file('proof');
-            $imageName = time() . '.' . $image->extension();
-            $image->move(public_path('images'), $imageName);
+            // $imageName = time() . '.' . $image->extension();
+            // $image->move(public_path('images'), $imageName);
 
-            $imageUrl = 'images/' . $imageName;
+            // $imageUrl = 'images/' . $imageName;
+            $imageUrl = uploadImageToCloudinary($image);
         }
 
         // Save feedback

@@ -8,7 +8,7 @@
     display: inline-block;
     color: :black;
   }
-  
+
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 140px;
@@ -25,7 +25,7 @@
     opacity: 0;
     transition: opacity 0.3s;
   }
-  
+
   .tooltip .tooltiptext::after {
     content: "";
     position: absolute;
@@ -36,7 +36,7 @@
     border-style: solid;
     border-color: #555 transparent transparent transparent;
   }
-  
+
   .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
@@ -116,14 +116,14 @@
 @section('content')
  <!-- Hero Section -->
  <div class="bg-body-extra-light text-center">
-  
+
     <div class="content content-boxed content-full py-5 py-md-7">
       <div class="row justify-content-center">
         <div class="col-md-10 col-xl-10">
           <h1 class="h2 mb-2">
             Complete simple jobs today and get <span class="text-primary">paid</span>.
           </h1>
-       
+
           <p>Earn 500 NGN each time you refer a friend. <br>
             <small style="color: chocolate">Note: Your friend must be a verified user</small></p>
           </p>
@@ -147,9 +147,9 @@
           Account Number: {{ auth()->user()->virtualAccount->account_number }}
         </div>
       @endif
-      
+
       <div class="d-flex justify-content-center align-items-center">
-        
+
         <div class="px-2 px-sm-5">
 
           @if(auth()->user()->wallet->base_currency == "Naira")
@@ -202,7 +202,7 @@
           {!! @$announcement->content !!}
         </div>
       @endif
-      
+
       {{-- <marquee>
         <ul class="list-inline">
           @foreach ($activity_log as $activity)
@@ -212,9 +212,9 @@
       </marquee> --}}
     </div>
   </div>
- 
+
   <!-- END Hero Section -->
-  
+
         <!-- Page Content -->
         <div class="content content-boxed content-full">
             <h2 class="content-heading">
@@ -223,7 +223,7 @@
               <iframe width="100%" height="250" src="https://www.youtube.com/embed/hvy02mfgg2I?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               {{-- @if($ads)
                 <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
-                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                    <img src="{{ displayImage($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
                 </a>
               @endif --}}
 
@@ -262,20 +262,20 @@
                         </a>
                       </div>
                       @endif
-                     
+
 
                       @foreach ($available_jobs as $job)
                         <div class="row mt-2">
-                            <a href="{{ url('campaign/'.$job['job_id']) }}"> 
+                            <a href="{{ url('campaign/'.$job['job_id']) }}">
                                 <div class="card p-3 mb-2">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex flex-row align-items-center">
                                             <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
                                             <div class="ms-2 c-details" style="color:#191918">
                                               @if($job['currency'] == 'NGN')
-                                                <h6 class="mb-0">&#8358;{{ number_format($job['campaign_amount'],2)}}</h6>   
+                                                <h6 class="mb-0">&#8358;{{ number_format($job['campaign_amount'],2)}}</h6>
                                               @else
-                                                <h6 class="mb-0">${{ $job['campaign_amount']}}</h6> 
+                                                <h6 class="mb-0">${{ $job['campaign_amount']}}</h6>
                                               @endif
                                                 <span>{{  @$job['type'] }}</span>
                                             </div>
@@ -288,11 +288,11 @@
                                                 <div class="progress-bar" role="progressbar" style="width: {{$job['progress']}}%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="mt-3" style="color:#191918"> <span class="text1">{{  $job['completed'] }} completed <span class="text2">out of {{ $job['number_of_staff'] }} workers</span></span> </div>
-                                            
+
                                             {{-- @if($job['is_completed'] == true)
                                             <div class="mt-3" style="color:#191918"> <span class="text1">Completed <li class="fa fa-check"></li></span> </div>
                                             @else
-                                            
+
                                             @endif --}}
                                         </div>
                                     </div>
@@ -301,23 +301,23 @@
                         </div>
                       @endforeach
                       {{-- {!! $available_jobs->links('pagination::bootstrap-4') !!} --}}
-                       
+
                     </div>
                     {{-- <div class="tab-pane" id="btabswo-static-profile" role="tabpanel" aria-labelledby="btabswo-static-profile-tab">
                       <h4 class="fw-normal">Profile Content</h4>
                       <p>...</p>
                     </div> --}}
                   </div>
-              
+
                 </div>
         </div>
 
 
-           
+
             <!-- END Jobs -->
           </div>
           <!-- END Page Content -->
-  
+
           <!-- Call to Action -->
           <div class="bg-body-dark">
             <div class="content content-full text-center">
@@ -326,7 +326,7 @@
                   Get Access to More Jobs
                 </h3>
                 <h4 class="fw-normal text-muted text-center">
-               Only verified users have unlimited access to jobs! 
+               Only verified users have unlimited access to jobs!
                 </h4>
                 @if(auth()->user()->is_verified == '0')
                 <a class="btn btn-hero btn-primary" href="{{route('upgrade')}}" data-toggle="click-ripple">
@@ -355,11 +355,11 @@
       @include('layouts.resources.account_details')
 
     @elseif(auth()->user()->is_verified == 0)
-    
+
       @include('layouts.resources.unverified')
 
     @endif
-    
+
 @endsection
 @section('script')
  <!-- jQuery (required for Slick Slider plugin) -->
@@ -371,7 +371,7 @@
  <!-- Page JS Code -->
  <script src="{{asset('src/assets/js/pages/be_comp_onboarding.min.js')}}"></script>
 
- 
+
 
  <script>
 
@@ -380,11 +380,11 @@
     copyText.select();
     copyText.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(copyText.value);
-    
+
     var tooltip = document.getElementById("myTooltip");
     tooltip.innerHTML = "Copied: " + copyText.value;
   }
-  
+
   function outFunc() {
     var tooltip = document.getElementById("myTooltip");
     tooltip.innerHTML = "Copy to clipboard";

@@ -20,11 +20,7 @@ class BannerController extends Controller
         // $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function index()
     {
         $banners = Banner::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();

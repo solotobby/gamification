@@ -1027,18 +1027,19 @@ class CampaignController extends Controller
 
         $data['campaign'] = $campaign;
 
-        $imageName = '';
+        $proofUrl = 'no image';
         if ($request->hasFile('proof')) {
-            $proofUrl = '';
-            $imageName = time() . '.' . $request->proof->extension();
-            $request->proof->move(public_path('images'), $imageName);
+            $proofUrl = uploadImageToCloudinary($request->proof);
+            // $imageName = time() . '.' . $request->proof->extension();
+            // $request->proof->move(public_path('images'), $imageName);
         }
 
         $campaignWorker['user_id'] = auth()->user()->id;
         $campaignWorker['campaign_id'] = $request->campaign_id;
         $campaignWorker['comment'] = $request->comment;
         $campaignWorker['amount'] = $request->amount;
-        $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName;
+        // $campaignWorker['proof_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName;
+        $campaignWorker['proof_url'] = $proofUrl;
         $campaignWorker['currency'] = baseCurrency();
 
         $campaignWork = CampaignWorker::create($campaignWorker);

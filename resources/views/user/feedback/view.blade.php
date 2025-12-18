@@ -73,7 +73,7 @@
             @foreach ($feedbacks as $feedback)
             <a class="list-group-item list-group-item-action" href="{{url('feedback/view/'.$feedback->id)}}">
               {{-- Number of unread messages --}}
-                <span class="badge rounded-pill bg-dark m-1 float-end">{{ $feedback->replies()->where('user_id', '!=', auth()->user()->id)->where('status', true)->count() }}</span> 
+                <span class="badge rounded-pill bg-dark m-1 float-end">{{ $feedback->replies()->where('user_id', '!=', auth()->user()->id)->where('status', true)->count() }}</span>
                 <p class="fs-6 fw-bold mb-0">
                     Ticket #{{$feedback->id}}
                 </p>
@@ -81,12 +81,12 @@
                     {!! \Illuminate\Support\Str::words($feedback->message, 10) !!}
                 </p>
                 <p class="fs-sm text-muted mb-0">
-                    <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->updated_at)->diffForHumans()}} 
+                    <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->updated_at)->diffForHumans()}}
                 </p>
               </a>
             @endforeach
-            
-           
+
+
           </div>
           <!-- END Messages -->
         </div>
@@ -95,7 +95,7 @@
     </div>
 
     <div class="col-md-8 col-lg-7 col-xl-9 bg-body-dark">
-        
+
       <!-- Main Content -->
       <div class="content">
         @if ($errors->any())
@@ -114,7 +114,7 @@
                 </div>
         @endif
         <div class="block block-rounded">
-        
+
 
             <div class="block-content block-content-sm block-content-full bg-body-light">
             <div class="d-flex py-3">
@@ -145,7 +145,7 @@
                 <div class="row g-sm">
                     <div class="col-6 col-sm-4 col-md-5 col-lg-4 col-xl-3">
                     <div class="options-container fx-item-zoom-in">
-                        <img class="img-fluid options-item" src="{{$replies->proof_url}}" alt="">
+                        <img class="img-fluid options-item" src="{{displayImage($replies->proof_url)}}" alt="">
                         <div class="options-overlay bg-black-75">
                         {{-- <div class="options-overlay-content">
                             <a class="btn btn-sm btn-primary" href="javascript:void(0)">
@@ -158,13 +158,13 @@
                         <i class="fa fa-paperclip"></i> Ticket #{{$replies->id}}
                     </p>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
         @if($replies->replies()->count() > 0)
-            
-            
+
+
                  <!-- Discussion -->
           <div class="block block-rounded">
             <div class="block-header block-header-default">
@@ -197,7 +197,7 @@
                         </a>
                       </p>
                       {{-- <p class="fs-sm fw-medium">
-                        289 Posts<br>Level 3              
+                        289 Posts<br>Level 3
                        </p> --}}
                     </td>
                     <td>
@@ -214,13 +214,13 @@
             </div>
           </div>
           <!-- END Discussion -->
-            
+
         @else
             <div class="alert alert-info">
                 No Replies at the moment
             </div>
         @endif
-       
+
 
         <!-- Reply -->
         <div class="block block-rounded">
@@ -231,7 +231,7 @@
                     <label>Meesage</label>
                     <textarea class="form-control" name="message" id="js-ckeditor5-classic"></textarea>
                 </div>
-                
+
                 <input type="hidden" name='user_id' value="{{ auth()->user()->id }}">
                 <input type="hidden" name='feedback_id' value="{{ $replies->id }}">
                 <input type="hidden" name='0' value="false">
@@ -242,7 +242,7 @@
                         </button>
                     </div>
                 </div>
-               
+
             </form>
           </div>
         </div>
@@ -259,5 +259,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Page JS Helpers (CKEditor 5 plugins) -->
 <script>Dashmix.helpersOnLoad(['js-ckeditor5']);</script>
- 
+
 @endsection
