@@ -104,13 +104,8 @@
                                     <td>{{ $app->created_at->format('d/m/Y @ h:i a') }}</td>
                                     <td>
                                         @if($app->resume_path)
-                                            @php
-                                                $resumeUrl = Str::startsWith($app->resume_path, ['http://', 'https://'])
-                                                    ? $app->resume_path
-                                                    : Storage::url($app->resume_path);
-                                            @endphp
 
-                                            <a href="{{ $resumeUrl }}" target="_blank" class="btn btn-sm btn-alt-info">
+                                            <a href="{{ displayImage($app->resume_path) }}" target="_blank" class="btn btn-sm btn-alt-info">
                                                 <i class="fa fa-file-pdf me-1"></i> Resume
                                             </a>
                                         @endif

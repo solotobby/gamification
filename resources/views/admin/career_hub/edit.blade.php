@@ -194,14 +194,9 @@
                     <div class="col-md-6 mb-4">
                         <label class="form-label">Company Logo</label>
                        @if($job->company_logo)
-                        @php
-                            $logo = Str::startsWith($job->company_logo, ['http://', 'https://'])
-                                ? $job->company_logo
-                                : Storage::url($job->company_logo);
-                        @endphp
 
                         <div class="mb-2">
-                            <img src="{{ $logo }}" alt="Current Logo" style="max-height: 50px;">
+                            <img src="{{ displayImage($job->company_logo) }}" alt="Current Logo" style="max-height: 50px;">
                         </div>
                     @endif
 
