@@ -355,13 +355,22 @@ class CampaignController extends Controller
     public function postCampaign(Request $request)
     {
         // Validation rules based on account type and upload option
+        // $rules = [
+        //     'description' => 'required|string',
+        //     'post_title' => 'required|string',
+        //     'post_link' => 'required|string',
+        //     'number_of_staff' => 'required|numeric|min:10',
+        //     'campaign_amount' => 'required|numeric',
+        // ];
+
         $rules = [
-            'description' => 'required|string',
-            'post_title' => 'required|string',
-            'post_link' => 'required|string',
-            'number_of_staff' => 'required|numeric',
-            'campaign_amount' => 'required|numeric',
+            'description'        => ['required', 'string'],
+            'post_title'         => ['required', 'string'],
+            'post_link'          => ['required', 'url'],
+            'number_of_staff'    => ['required', 'integer', 'min:10'],
+            'campaign_amount'    => ['required', 'numeric', 'min:0'],
         ];
+
 
         // Add proof validation
         if ($request->allow_upload == true) {
@@ -734,12 +743,12 @@ class CampaignController extends Controller
         $rating = Rating::where('user_id', $userId)
             ->where('campaign_id', $campaign->id)
             ->first();
-            $isRated = isset($rating);
+        $isRated = isset($rating);
 
-            $deniedCount = 0;
-            $canResubmit = false;
-            $hasPending = false;
-            $completed = $campaignWorker;
+        $deniedCount = 0;
+        $canResubmit = false;
+        $hasPending = false;
+        $completed = $campaignWorker;
 
 
         if ($checkIsVerified === 'Verified') {
