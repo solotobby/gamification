@@ -20,7 +20,7 @@
                             </p>
 
                             <p class="text-muted mb-4">
-                                📩 If you don't see the email in your inbox,
+                                📩 If mail not found in your inbox,
                                 <br>please check your <strong>Spam</strong> or
                                 <strong>Junk</strong> folder.
                             </p>

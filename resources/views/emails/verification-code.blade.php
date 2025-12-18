@@ -40,6 +40,12 @@
                         ⚠️ If you didn't request this code, please ignore this email.
                     </p>
 
+                    <p style="margin-top: 20px; margin-bottom: 20px;">
+                        Get Real Time Updates on Fresh Jobs and Tasks on our channel
+                        <a href="https://whatsapp.com/channel/0029Vb7Zfnb65yDGlRg8ho1M" target="_blank"
+                            style="color: #25D366; font-weight: 600;">Join WhatsApp Channel</a>
+                    </p>
+
                     <p style="margin-top: 45px; margin-bottom: 15px;">
                         ---- <br>
                         Regards, <br>

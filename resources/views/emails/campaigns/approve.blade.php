@@ -14,7 +14,7 @@
                 <p style="margin-bottom: 10px;">Hi <strong>{{ $name }},</strong></p>
                 <p style="margin-bottom: 10px;">
                     Thank you for completing the task on <b>{{ $campaign }}</b>. This is to let you know your submission has been <b>{{ $status }} </b> at <b>&#8358;{{ $amount }}</b>
-                    <br> 
+                    <br>
                     Reason for {{ $status }} : {{ $reason }}
                 </p>
                 <p style="margin-bottom: 10px;">
@@ -23,6 +23,12 @@
                         Take More Jobs
                     </a>
                 </p>
+                 <p style="margin-top: 20px; margin-bottom: 20px;">
+                        Get Real Time Updates on Fresh Jobs and Tasks on our channel
+                        <a href="https://whatsapp.com/channel/0029Vb7Zfnb65yDGlRg8ho1M" target="_blank"
+                            style="color: #25D366; font-weight: 600;">Join WhatsApp Channel</a>
+                    </p>
+                    
                 {{-- <p style="margin-bottom: 10px;">Its clean, minimal and pre-designed email template that is suitable for multiple purposes email template.</p>
                 <p style="margin-bottom: 15px;">Hope you'll enjoy the experience, we're here if you have any questions, drop us a line at info@yourwebsite.com anytime. </p> --}}
                 <p style="margin-top: 45px; margin-bottom: 15px;">---- <br> Regards, <br><i>Freebyz Team.</i></p>
