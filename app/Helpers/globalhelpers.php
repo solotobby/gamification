@@ -2978,7 +2978,7 @@ if (!function_exists('uploadFileToCloudinary')) {
 
 
 if (!function_exists('displayImage')) {
-    function displayImage(string $path): string
+    function displayImage($path): string
     {
         if (Str::startsWith($path, ['http://', 'https://'])) {
             return $path;
