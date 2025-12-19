@@ -24,7 +24,6 @@ class AutoApprove24Hours extends Command
 
         $lists = CampaignWorker::where('status', 'Pending')
             ->whereNull('reason')
-            ->where('campaign_id', '!=', 8099)
             ->whereHas('campaign.user', function ($query) {
                 $query->where('is_business', false);
             })

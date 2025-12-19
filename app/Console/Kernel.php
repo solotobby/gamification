@@ -32,13 +32,15 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('command:task')->daily();
 
-        $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('08:30');
+          $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
+
+        $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
 
         $schedule->command('campaigns:auto-approve-24hours')->hourly();
 
         // $schedule->command('campaigns:auto-approve-business')->hourly();
 
-        $schedule->command('campaigns:auto-approve-7days')->dailyAt('04:00');
+        $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4,'04:00');
 
         // $schedule->command('business:rotate-promotion')->dailyAt('03:00');
 
@@ -54,7 +56,6 @@ class Kernel extends ConsoleKernel
 
             $lists = CampaignWorker::where('status', 'Pending')
                 ->whereNull('reason')
-                ->where('campaign_id', '!=', 8099)
                 ->whereHas('campaign.user', function ($query) {
                     $query->where('is_business', false);
                 })
