@@ -57,15 +57,18 @@ class SendJobsBroadcast extends Command
             ->distinct()
             ->pluck('user_id');
 
-        $activeUsers = User::whereIn('id', $activeUserIds)->get();
-
         $subject = 'User, We found Jobs that matches your Skills/Interests';
 
-        foreach ($activeUsers as $user) {
-            SendJobBroadcastEmailJob::dispatch($user, $subject, $jobList);
-        }
+        // Process users in chunks of 50
+        User::whereIn('id', $activeUserIds)
+            ->chunk(50, function ($users) use ($subject, $jobList) {
+                foreach ($users as $user) {
+                    SendJobBroadcastEmailJob::dispatch($user, $subject, $jobList);
+                }
+            });
 
-        $this->info('Job broadcast queued for ' . $activeUsers->count() . ' active users.');
-        Log::info('Job broadcast queued for ' . $activeUsers->count() . ' users');
+        $totalUsers = count($activeUserIds);
+        $this->info('Job broadcast queued for ' . $totalUsers . ' active users in chunks of 50.');
+        Log::info('Job broadcast queued for ' . $totalUsers . ' users in chunks of 50');
     }
 }

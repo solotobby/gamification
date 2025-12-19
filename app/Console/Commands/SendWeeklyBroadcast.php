@@ -56,8 +56,6 @@ class SendWeeklyBroadcast extends Command
             ->distinct()
             ->pluck('user_id');
 
-        $activeUsers = User::whereIn('id', $activeUserIds)->get();
-
         // Commented out - users registered last week
         // $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
         // $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
@@ -65,11 +63,17 @@ class SendWeeklyBroadcast extends Command
 
         $subject = 'Fresh Campaign Just For You!';
 
-        foreach ($activeUsers as $user) {
-            SendBroadcastEmailJob::dispatch($user, $subject, $filteredArray);
-        }
+        // Process users in chunks of 50
+        User::whereIn('id', $activeUserIds)
+            ->chunk(50, function ($users) use ($subject, $filteredArray) {
+                foreach ($users as $user) {
+                    SendBroadcastEmailJob::dispatch($user, $subject, $filteredArray);
+                }
+            });
 
-        $this->info('Weekly broadcast queued for ' . $activeUsers->count() . ' active users.');
+        $totalUsers = count($activeUserIds);
+        $this->info('Weekly broadcast queued for ' . $totalUsers . ' active users in chunks of 50.');
+        Log::info('Weekly broadcast queued for ' . $totalUsers . ' users in chunks of 50');
     }
 }
 
