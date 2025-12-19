@@ -21,7 +21,8 @@
 
                     <p style="margin-bottom:20px;">
                         Exciting job opportunities are now available on
-                        <a href="{{ route('jobs') }}" style="color:#6576ff;font-weight:600;">Freebyz</a>.
+                        <a href="{{ route('career-hub.index') }}" style="color:#6576ff;font-weight:600;">Freebyz Career
+                            Hub</a>.
                         Find your next career move today! 💼
                     </p>
 
@@ -34,26 +35,40 @@
                                     margin-bottom:15px;
                                 ">
                             <!-- Job Header -->
-                            <div style="display:flex;align-items:center;margin-bottom:12px;">
-                                @if($job['company_logo'])
-                                    <img src="{{ $job['company_logo'] }}" alt="{{ $job['company_name'] }}"
-                                        style="width:40px;height:40px;border-radius:6px;margin-right:12px;object-fit:cover;">
-                                @endif
-                                <div>
-                                    <h4 style="margin:0 0 4px 0;color:#000;font-size:16px;">
-                                        {{ $job['title'] }}
-                                    </h4>
-                                    <p style="margin:0;color:#666;font-size:13px;">
-                                        {{ $job['company_name'] }}
-                                    </p>
-                                </div>
-                            </div>
+                            <table style="width:100%;margin-bottom:12px;">
+                                <tr>
+                                    <td style="width:40px;vertical-align:top;padding-right:12px;">
+                                        @if($job['company_logo'])
+                                            <img src="{{ $job['company_logo'] }}" alt="{{ $job['company_name'] }}"
+                                                style="width:40px;height:40px;border-radius:6px;display:block;object-fit:cover;">
+                                        @else
+                                            <table style="width:40px;height:40px;background:#e3f2fd;border-radius:6px;">
+                                                <tr>
+                                                    <td style="text-align:center;vertical-align:middle;">
+                                                        <span style="color:#6576ff;font-weight:bold;font-size:16px;">
+                                                            {{ $job['company_initial'] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        @endif
+                                    </td>
+                                    <td style="vertical-align:top;">
+                                        <h4 style="margin:0 0 4px 0;color:#000;font-size:16px;">
+                                            {{ $job['title'] }}
+                                        </h4>
+                                        <p style="margin:0;color:#666;font-size:13px;">
+                                            {{ $job['company_name'] }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
 
                             <!-- Job Details -->
                             <div style="margin-bottom:12px;">
                                 <p style="margin:0 0 5px 0;color:#555;font-size:14px;">
                                     <span style="color:#6576ff;">📍</span> <strong>Location:</strong>
-                                    {{ $job['location'] }}
+                                    {{ strtoupper($job['location']) }}
                                     @if($job['remote_allowed'])
                                         <span style="
                                                         background:#e8f5e9;
@@ -81,31 +96,17 @@
                                 </p>
                             </div>
 
-                            <!-- Tier Badge -->
-                            {{-- @if($job['tier'] === 'premium')
-                                <span style="
-                                                display:inline-block;
-                                                background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                                color:#fff;
-                                                padding:4px 10px;
-                                                border-radius:4px;
-                                                font-size:11px;
-                                                font-weight:600;
-                                                margin-bottom:12px;
-                                            ">⭐ PREMIUM</span>
-                            @endif --}}
-
                             <!-- CTA Button -->
                             <a href="{{ route('career-hub.show', $job['slug']) }}" target="_blank" style="
-                                           display:inline-block;
-                                           padding:10px 18px;
-                                           background-color:#6576ff;
-                                           color:#ffffff;
-                                           text-decoration:none;
-                                           border-radius:5px;
-                                           font-weight:600;
-                                           font-size:14px;
-                                       ">
+                                        display:inline-block;
+                                        padding:10px 18px;
+                                        background-color:#6576ff;
+                                        color:#ffffff;
+                                        text-decoration:none;
+                                        border-radius:5px;
+                                        font-weight:600;
+                                        font-size:14px;
+                                    ">
                                 View Job Details
                             </a>
                         </div>
@@ -123,14 +124,14 @@
                             <strong>Want to see more opportunities?</strong>
                         </p>
                         <a href="{{ route('career-hub.index') }}" target="_blank" style="
-                                   display:inline-block;
-                                   padding:12px 24px;
-                                   background-color:#6576ff;
-                                   color:#ffffff;
-                                   text-decoration:none;
-                                   border-radius:5px;
-                                   font-weight:600;
-                               ">
+                                display:inline-block;
+                                padding:12px 24px;
+                                background-color:#6576ff;
+                                color:#ffffff;
+                                text-decoration:none;
+                                border-radius:5px;
+                                font-weight:600;
+                            ">
                             Browse All Jobs
                         </a>
                     </div>
@@ -148,7 +149,7 @@
                     <p style="margin-top:45px;margin-bottom:15px;">
                         ---- <br>
                         Best regards, <br>
-                        <i>{{ config('app.name') }} Team</i>
+                        <i>{{ config('app.name') }} Career Hub Team</i>
                     </p>
                 </td>
             </tr>
