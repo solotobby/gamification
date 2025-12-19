@@ -505,6 +505,7 @@ Route::get('admin/upgrade/{id}/naira', [\App\Http\Controllers\Admin\AdminControl
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
 Route::get('campaigns/completed', [\App\Http\Controllers\Admin\AdminController::class, 'campaignCompleted'])->name('campaign.completed');
+Route::get('campaigns/paused', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPaused'])->name('campaign.paused');
 Route::get('campaigns/denied', [\App\Http\Controllers\Admin\AdminController::class, 'deniedCampaigns']);
 Route::get('campaigns/flagged', [\App\Http\Controllers\Admin\AdminController::class, 'flaggedCampaigns']);
 Route::post('campaigns/{id}/unflag', [\App\Http\Controllers\Admin\AdminController::class, 'unflagCampaigns']);
@@ -512,6 +513,8 @@ Route::get('campaign/info/{id}', [\App\Http\Controllers\Admin\AdminController::c
 Route::get('campaign/delete/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDelete']);
  Route::get('campaigns/denial-stats', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDenialStats'])
         ->name('admin.campaigns.denial-stats');
+
+Route::get('campaign/unpause/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'unpauseCampaign'])->name('campaign.unpause');
 
 // Route::get('campaign/status/{status}/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus']);
 Route::post('campaign/status', [\App\Http\Controllers\Admin\AdminController::class, 'campaignStatus'])->name('campaign.status');

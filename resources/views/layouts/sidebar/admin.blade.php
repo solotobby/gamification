@@ -99,6 +99,9 @@
             <a class="nav-main-link" href="{{ url('campaigns/pending') }}">
               <span class="nav-main-link-name">Pending</span>
             </a>
+            <a class="nav-main-link" href="{{ url('campaigns/paused') }}">
+              <span class="nav-main-link-name">Paused</span>
+            </a>
             <a class="nav-main-link" href="{{ url('campaigns/denied') }}">
               <span class="nav-main-link-name">Denied</span>
             </a>

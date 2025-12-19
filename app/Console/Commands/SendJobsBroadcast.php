@@ -23,7 +23,9 @@ class SendJobsBroadcast extends Command
         $jobs = JobListing::active()
             ->with('postedBy:id,name')
             ->where('tier', 'free')
-            ->orderBy('created_at', 'DESC')
+            ->where('is_active', true)
+            // ->orderBy('created_at', 'DESC')
+            ->inRandomOrder()
             ->take(10)
             ->get();
 
