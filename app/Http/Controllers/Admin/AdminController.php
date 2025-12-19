@@ -2530,6 +2530,37 @@ class AdminController extends Controller
         return view('admin.campaign_completed', ['campaigns' => $campaigns]);
     }
 
+    public function campaignPaused()
+    {
+        $campaigns = Campaign::where('status', 'Paused')
+            ->with(['user', 'campaignType', 'campaignCategory'])
+            ->withCount([
+                'attempts as pending_count' => function ($q) {
+                    $q->where('status', 'Pending');
+                },
+                'attempts as completed_count' => function ($q) {
+                    $q->where('status', 'Approved');
+                }
+            ])
+            ->orderBy('created_at', 'DESC')
+            ->paginate(20);
+
+        return view('admin.campaign_paused', ['campaigns' => $campaigns]);
+    }
+
+    public function unpauseCampaign($id)
+    {
+        $campaign = Campaign::findOrFail($id);
+
+        if ($campaign->status !== 'Paused') {
+            return redirect()->back()->with('error', 'Campaign is not paused');
+        }
+
+        $campaign->update(['status' => 'Live']);
+
+        return redirect()->back()->with('success', 'Campaign has been unpaused and is now Live');
+    }
+    
     public function userlocation()
     {
         $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);

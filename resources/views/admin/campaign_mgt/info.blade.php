@@ -151,23 +151,23 @@
                 <!-- END Files section -->
                 <input type="hidden" name="id" value="{{ $campaign->id }}">
                 <!-- Submit Form -->
-                <div class="block-content block-content-full pt-0">
-                    <div class="row mb-4">
+                {{-- <div class="block-content block-content-full pt-0">
+                    <div class="row mb-4"> --}}
 
                         {{-- offset-lg-5 --}}
-                        <div class="col-lg-3"></div>
-                        <div class="col-lg-9">
+                        {{-- <div class="col-lg-3"></div> --}}
+                        {{-- <div class="col-lg-9">
                             @if($campaign->allow_upload == true)
 
-                                <div class="alert alert-success">
-                                    <strong>Image Upload is allowed as evidence</strong>
+                            <div class="alert alert-success">
+                                <strong>Image Upload is allowed as evidence</strong>
 
-                                </div>
+                            </div>
                             @else
-                                <div class="alert alert-danger">
-                                    <strong>Image Upload is NOT allowed as evidence</strong>
+                            <div class="alert alert-danger">
+                                <strong>Image Upload is NOT allowed as evidence</strong>
 
-                                </div>
+                            </div>
 
                             @endif
 
@@ -177,86 +177,122 @@
                             <button type="submit" class="btn btn-alt-danger" name="status" value="Decline"><i
                                     class="fa fa-times opacity-50 me-1"></i> Decline Campaign Abruptly</button>
 
-                        </div>
+                        </div> --}}
                         {{-- <div class="col-lg-3"></div>
                         <div class="col-lg-9 mt-3">
                             <a href="{{ url('campaign/delete/'.$campaign->id) }}" class="btn btn-danger">Delete Campaign
                                 Completely</a>
                         </div> --}}
+                        {{--
+                    </div>
+                </div> --}}
+                <!-- END Submit Form -->
+
+                <!-- Replace the Submit Form section in your info.blade.php -->
+                <div class="block-content block-content-full pt-0">
+                    <div class="row mb-4">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-9">
+                            @if($campaign->allow_upload == true)
+                                <div class="alert alert-success">
+                                    <strong>Image Upload is allowed as evidence</strong>
+                                </div>
+                            @else
+                                <div class="alert alert-danger">
+                                    <strong>Image Upload is NOT allowed as evidence</strong>
+                                </div>
+                            @endif
+
+                            @if($campaign->status == 'Paused')
+                                <!-- Show unpause button for paused campaigns -->
+                                <a href="{{ url('campaign/unpause/' . $campaign->id) }}" class="btn btn-alt-success"
+                                    onclick="return confirm('Unpause this campaign and make it Live?')">
+                                    <i class="fa fa-play opacity-50 me-1"></i> Unpause Campaign
+                                </a>
+                            @else
+                                <!-- Show normal buttons for non-paused campaigns -->
+                                <button type="submit" class="btn btn-alt-primary" name="status" value="Live">
+                                    <i class="fa fa-save opacity-50 me-1"></i> Update & Approve Campaign
+                                </button>
+
+                                <button type="submit" class="btn btn-alt-danger" name="status" value="Decline">
+                                    <i class="fa fa-times opacity-50 me-1"></i> Decline Campaign Abruptly
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                <!-- END Submit Form -->
             </div>
         </form>
         <!-- END Post Job Form -->
     </div>
     {{-- @if($campaign->status == 'Live' || $campaign->status == 'Flagged') --}}
 
-        <div class="content content-boxed">
-            <div class="block block-rounded">
-                <div class="block-content block-content-full">
-                    <h2 class="content-heading">Campaign Activities - {{ $activities->count() }}
-                    </h2>
-                    <table class="table table-hover">
-                        <thead>
+    <div class="content content-boxed">
+        <div class="block block-rounded">
+            <div class="block-content block-content-full">
+                <h2 class="content-heading">Campaign Activities - {{ $activities->count() }}
+                </h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+
+                            @if($campaign->allow_upload)
+                                <th>Evidence</th>
+                            @endif
+
+                            <th>When</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($activities as $list)
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
+                                <td>{{ $list->user->name }}</td>
+                                <td>{{ $list->user->email }}</td>
+                                <td>{{ $list->user->phone }}</td>
+                                <td>{{ $list->status }}</td>
 
                                 @if($campaign->allow_upload)
-                                    <th>Evidence</th>
+                                    <td>
+                                        @if($list->proof_url)
+                                            <button class="btn btn-sm btn-alt-info" data-bs-toggle="modal"
+                                                data-bs-target="#evidenceModal" data-image="{{ displayImage($list->proof_url) }}">
+                                                <i class="fa fa-eye me-1"></i> View
+                                            </button>
+                                        @else
+                                            <span class="text-muted">None</span>
+                                        @endif
+                                    </td>
                                 @endif
 
-                                <th>When</th>
+                                <td>{{ $list->created_at->diffForHumans() }}</td>
                             </tr>
-                        </thead>
+                        @endforeach
+                    </tbody>
+                </table>
 
-                        <tbody>
-                            @foreach ($activities as $list)
-                                <tr>
-                                    <td>{{ $list->user->name }}</td>
-                                    <td>{{ $list->user->email }}</td>
-                                    <td>{{ $list->user->phone }}</td>
-                                    <td>{{ $list->status }}</td>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="evidenceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Uploaded Evidence</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-                                    @if($campaign->allow_upload)
-                                        <td>
-                                            @if($list->proof_url)
-                                                <button class="btn btn-sm btn-alt-info" data-bs-toggle="modal"
-                                                    data-bs-target="#evidenceModal" data-image="{{ displayImage($list->proof_url) }}">
-                                                    <i class="fa fa-eye me-1"></i> View
-                                                </button>
-                                            @else
-                                                <span class="text-muted">None</span>
-                                            @endif
-                                        </td>
-                                    @endif
-
-                                    <td>{{ $list->created_at->diffForHumans() }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
+                <div class="modal-body text-center">
+                    <img id="evidenceImage" src="" class="img-fluid rounded">
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="evidenceModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Uploaded Evidence</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body text-center">
-                        <img id="evidenceImage" src="" class="img-fluid rounded">
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 
     {{-- @endif --}}
 
