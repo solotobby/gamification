@@ -2,24 +2,25 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendBroadcastEmailJob;
 use App\Mail\JobBroadcast;
 use App\Models\Campaign;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendWeeklyBroadcast extends Command
 {
     protected $signature = 'campaigns:send-weekly-broadcast';
-    protected $description = 'Send weekly campaign broadcast to users registered last week';
+    protected $description = 'Send weekly campaign broadcast to active users in the last month';
 
     public function handle()
     {
+        Log::info('Send weekly campaign broadcast to active users started');
 
-        Log::info('Send weekly campaign broadcast to users registered last week started');
-        
         $campaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
             ->orderBy('created_at', 'DESC')
@@ -46,17 +47,35 @@ class SendWeeklyBroadcast extends Command
             return $item['is_completed'] !== true;
         });
 
-        $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
-        $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
-        $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        // Get active users in the last month
+        $startDate = Carbon::now()->subMonth();
+        $endDate = Carbon::now();
 
-        foreach ($usersLastWeek as $user) {
-            $subject = 'Fresh Campaign';
-            Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
-        }
+        $activeUserIds = DB::table('activity_logs')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->distinct()
+            ->pluck('user_id');
 
-        $this->info('Weekly broadcast sent to ' . $usersLastWeek->count() . ' users.');
+        // Commented out - users registered last week
+        // $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
+        // $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
+        // $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+
+        $subject = 'Fresh Campaign Just For You!';
+
+        // Process users in chunks of 50
+        User::whereIn('id', $activeUserIds)
+            ->chunk(50, function ($users) use ($subject, $filteredArray) {
+                foreach ($users as $user) {
+                    SendBroadcastEmailJob::dispatch($user, $subject, $filteredArray);
+                }
+            });
+
+        $totalUsers = count($activeUserIds);
+        $this->info('Weekly broadcast queued for ' . $totalUsers . ' active users in chunks of 50.');
+        Log::info('Weekly broadcast queued for ' . $totalUsers . ' users in chunks of 50');
     }
+}
 
     //    $schedule->call(function () {
     //         $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->take(20)->get();
@@ -105,4 +124,3 @@ class SendWeeklyBroadcast extends Command
     //             Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
     //         }
     //     })->daily(); //d
-}

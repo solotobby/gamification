@@ -1,3 +1,4 @@
+{{--
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,25 +83,107 @@
             <h1>Latest Campaign on Freebyz</h1>
         </div>
         @foreach($campaigns as $job)
-            <div class="job-details">
-                <h2>{{ $job['post_title'] }}</h2>
-                <p>Amount: {{ $job['currency'] }} {{ $job['campaign_amount'] }}</p>
-                <p>Category: {{ $job['type'] }}</p>
-                <div class="cta-button">
-                    <a href=" https://freebyz.com/campaign/{{ $job['job_id'] }}" target="_blank">View Campaign</a>
-                </div>
+        <div class="job-details">
+            <h2>{{ $job['post_title'] }}</h2>
+            <p>Amount: {{ $job['currency'] }} {{ $job['campaign_amount'] }}</p>
+            <p>Category: {{ $job['type'] }}</p>
+            <div class="cta-button">
+                <a href=" https://freebyz.com/campaign/{{ $job['job_id'] }}" target="_blank">View Campaign</a>
             </div>
+        </div>
         @endforeach
 
         <p style="margin-top: 20px; margin-bottom: 20px;">
-                        Get Real Time Updates on Fresh Jobs and Tasks on our channel
-                        <a href="https://whatsapp.com/channel/0029Vb7Zfnb65yDGlRg8ho1M" target="_blank"
-                            style="color: #25D366; font-weight: 600;">Join WhatsApp Channel</a>
-                    </p>
+            Get Real Time Updates on Fresh Jobs and Tasks on our channel
+            <a href="https://whatsapp.com/channel/0029Vb7Zfnb65yDGlRg8ho1M" target="_blank"
+                style="color: #25D366; font-weight: 600;">Join WhatsApp Channel</a>
+        </p>
         <div class="footer">
             <p>Freebyz Team</p>
         </div>
     </div>
 </body>
 
-</html>
+</html> --}}
+
+@extends('email_template.master')
+
+@section('content')
+    <table style="width:100%;max-width:620px;margin:0 auto;background-color:#ffffff;">
+        <tbody>
+            <!-- Header -->
+            <tr>
+                <td style="padding:30px 30px 15px 30px;">
+                    <h2 style="font-size:18px;color:#6576ff;font-weight:600;margin:0;">
+                        Latest Campaigns on Freebyz
+                    </h2>
+                </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+                <td style="padding:30px;">
+                    <p style="margin-bottom:10px;">
+                        Hi <strong>{{ $userName ?? 'there' }},</strong>
+                    </p>
+
+                    <p style="margin-bottom:20px;">
+                        Fresh earning opportunities are live on
+                        <a href="{{ url('/jobs') }}" style="color:#6576ff;font-weight:600;">Freebyz</a>.
+                        Explore the campaigns below and start earning today 💳
+                    </p>
+
+                    @foreach($campaigns as $job)
+                                        <div style="
+                                                background:#f8f9fa;
+                                                border:1px solid #e5e9f2;
+                                                border-radius:8px;
+                                                padding:20px;
+                                                margin-bottom:15px;
+                                            ">
+                                            <h4 style="margin:0 0 8px 0;color:#000;">
+                                                {{ $job['post_title'] }}
+                                            </h4>
+
+                                            <p style="margin:0 0 5px 0;color:#555;">
+                                                <strong>Amount:</strong> {{ $job['currency'] }} {{ number_format($job['campaign_amount']) }}
+                                            </p>
+
+                                            <p style="margin:0 0 12px 0;color:#555;">
+                                                <strong>Category:</strong> {{ ucfirst($job['type']) }}
+                                            </p>
+
+                                            <a href="{{ route('campaign.public.view', $job['job_id']) }}" target="_blank" style="
+                                display:inline-block;
+                                padding:10px 18px;
+                                background-color:#6576ff;
+                                color:#ffffff;
+                                text-decoration:none;
+                                border-radius:5px;
+                                font-weight:600;
+                           ">
+                                                View Campaign
+                                            </a>
+
+                                        </div>
+                    @endforeach
+
+                    <p style="margin-top:25px;">
+                        Get real-time updates on fresh jobs and tasks:
+                        <br>
+                        <a href="https://whatsapp.com/channel/0029Vb7Zfnb65yDGlRg8ho1M" target="_blank"
+                            style="color:#25D366;font-weight:600;">
+                            Join WhatsApp Channel
+                        </a>
+                    </p>
+
+                    <p style="margin-top:45px;margin-bottom:15px;">
+                        ---- <br>
+                        Regards, <br>
+                        <i>{{ config('app.name') }} Team</i>
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+@endsection
