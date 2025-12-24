@@ -3,26 +3,29 @@
 namespace App\Console\Commands;
 
 use App\Jobs\SendBroadcastEmailJob;
-use App\Mail\JobBroadcast;
 use App\Models\Campaign;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class SendWeeklyBroadcast extends Command
 {
-    protected $signature = 'campaigns:send-weekly-broadcast';
-    protected $description = 'Send weekly campaign broadcast to active users in the last month';
+    protected $signature = 'campaigns:send-weekly-broadcast {startDays=0 : Days ago for start date} {endDays=30 : Days ago for end date}';
+    protected $description = 'Send weekly campaign broadcast to active users within specified date range';
 
     public function handle()
     {
-        Log::info('Send weekly campaign broadcast to active users started');
+        $startDays = (int) $this->argument('startDays');
+        $endDays = (int) $this->argument('endDays');
 
+        Log::info("Send campaign broadcast started (startDays: {$startDays}, endDays: {$endDays})");
+
+        // Get campaigns prioritized first, then ordered by created_at
         $campaigns = Campaign::where('status', 'Live')
             ->where('is_completed', false)
+            ->orderByRaw("CASE WHEN approved = 'Priotized' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'DESC')
             ->take(20)
             ->get();
@@ -40,6 +43,7 @@ class SendWeeklyBroadcast extends Command
                 'category' => $value->campaignCategory->name,
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'currency' => $value->currency,
+                'is_prioritized' => $value->approved === 'Priotized',
             ];
         }
 
@@ -47,19 +51,22 @@ class SendWeeklyBroadcast extends Command
             return $item['is_completed'] !== true;
         });
 
-        // Get active users in the last month
-        $startDate = Carbon::now()->subMonth();
-        $endDate = Carbon::now();
+
+        $startDate = $startDays === 0 ? Carbon::now() : Carbon::now()->subDays($startDays);
+        $endDate = Carbon::now()->subDays($endDays);
+
+        $this->info("Fetching users active between {$startDate->toDateString()} and {$endDate->toDateString()}");
 
         $activeUserIds = DB::table('activity_logs')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$endDate, $startDate])
             ->distinct()
             ->pluck('user_id');
 
-        // Commented out - users registered last week
-        // $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
-        // $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
-        // $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        if ($activeUserIds->isEmpty()) {
+            $this->info('No active users found in the specified date range.');
+            Log::info('No active users found in the specified date range.');
+            return;
+        }
 
         $subject = 'Fresh Campaign Just For You!';
 
@@ -72,8 +79,8 @@ class SendWeeklyBroadcast extends Command
             });
 
         $totalUsers = count($activeUserIds);
-        $this->info('Weekly broadcast queued for ' . $totalUsers . ' active users in chunks of 50.');
-        Log::info('Weekly broadcast queued for ' . $totalUsers . ' users in chunks of 50');
+        $this->info("Campaign broadcast queued for {$totalUsers} active users in chunks of 50.");
+        Log::info("Campaign broadcast queued for {$totalUsers} users (startDays: {$startDays}, endDays: {$endDays})");
     }
 }
 
