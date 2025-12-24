@@ -12,25 +12,28 @@ use Illuminate\Support\Facades\Log;
 
 class SendJobsBroadcast extends Command
 {
-    protected $signature = 'jobs:send-broadcast';
-    protected $description = 'Send job listings broadcast to active users in the last month';
+    protected $signature = 'jobs:send-broadcast {startDays=0 : Days ago for start date} {endDays=30 : Days ago for end date}';
+    protected $description = 'Send job listings broadcast to active users within specified date range';
 
     public function handle()
     {
-        Log::info('Send job listings broadcast to active users started');
+        $startDays = (int) $this->argument('startDays');
+        $endDays = (int) $this->argument('endDays');
+
+        Log::info("Send job listings broadcast started (startDays: {$startDays}, endDays: {$endDays})");
 
         // Get active job listings
         $jobs = JobListing::active()
             ->with('postedBy:id,name')
             ->where('tier', 'free')
             ->where('is_active', true)
-            // ->orderBy('created_at', 'DESC')
             ->inRandomOrder()
             ->take(10)
             ->get();
 
         if ($jobs->isEmpty()) {
             $this->info('No active jobs found.');
+            Log::info('No active jobs found.');
             return;
         }
 
@@ -51,14 +54,22 @@ class SendJobsBroadcast extends Command
             ];
         })->toArray();
 
-        // Get active users in the last month
-        $startDate = Carbon::now()->subMonth();
-        $endDate = Carbon::now();
+        // Calculate date range based on arguments
+        $startDate = $startDays === 0 ? Carbon::now() : Carbon::now()->subDays($startDays);
+        $endDate = Carbon::now()->subDays($endDays);
+
+        $this->info("Fetching users active between {$endDate->toDateString()} and {$startDate->toDateString()}");
 
         $activeUserIds = DB::table('activity_logs')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$endDate, $startDate])
             ->distinct()
             ->pluck('user_id');
+
+        if ($activeUserIds->isEmpty()) {
+            $this->info('No active users found in the specified date range.');
+            Log::info('No active users found in the specified date range.');
+            return;
+        }
 
         $subject = 'User, We found Jobs that matches your Skills/Interests';
 
@@ -71,7 +82,7 @@ class SendJobsBroadcast extends Command
             });
 
         $totalUsers = count($activeUserIds);
-        $this->info('Job broadcast queued for ' . $totalUsers . ' active users in chunks of 50.');
-        Log::info('Job broadcast queued for ' . $totalUsers . ' users in chunks of 50');
+        $this->info("Job broadcast queued for {$totalUsers} active users in chunks of 50.");
+        Log::info("Job broadcast queued for {$totalUsers} users (startDays: {$startDays}, endDays: {$endDays})");
     }
 }
