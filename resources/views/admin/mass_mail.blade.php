@@ -34,7 +34,8 @@
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
 
-                <form action="{{ route('send.mass.communication') }}" method="POST" id="massCommForm">
+                <form action="{{ route('send.mass.communication') }}" method="POST" id="massCommForm"
+                    enctype="multipart/form-data">
                     @csrf
 
                     <!-- Audience Filters -->
@@ -47,6 +48,7 @@
                                 <option value="email_verified">Email Verified Users</option>
                                 <option value="phone_verified">Phone Verified Users</option>
                                 <option value="performed_job">Perform A Job</option>
+                                <option value="active_users">Active Users</option>
                                 <option value="test_user">Test User</option>
                             </select>
                         </div>
@@ -118,19 +120,25 @@
                         </div>
                     </div>
 
-
                     <!-- Email Fields -->
                     <div id="emailFields">
                         <div class="mb-4">
                             <label>Email Subject</label>
                             <input type="text" class="form-control" name="subject" value="{{ old('subject') }}">
                         </div>
+
+                        <!-- NEW: Image Upload Field -->
+                        <div class="mb-4">
+                            <label>Attach Image (Optional)</label>
+                            <input type="file" class="form-control" name="campaign_image" accept="image/*">
+                            <small class="text-muted">Max 2MB. Supported: jpg, png, gif</small>
+                        </div>
+
                         <div class="mb-4">
                             <label>Email Message</label>
                             <textarea id="js-ckeditor5-classic" name="message">{{ old('message') }}</textarea>
                         </div>
                     </div>
-
                     <!-- SMS Fields -->
                     <div id="smsFields" style="display:none;">
                         <div class="mb-4">
@@ -158,7 +166,7 @@
     <script>
         $(document).ready(function () {
             // Toggle date range options
-            $('#dateRangeType').on('change', function() {
+            $('#dateRangeType').on('change', function () {
                 const type = $(this).val();
                 $('#presetRangeDiv').toggle(type === 'preset');
                 $('#customRangeDiv').toggle(type === 'custom');
@@ -203,10 +211,10 @@
                     data: ajaxData,
                     success: function (data) {
                         $('#previewContent').html(`
-                            <strong>${data.total}</strong> total users<br>
-                            <strong>${data.with_email}</strong> with email<br>
-                            <strong>${data.with_phone}</strong> with phone
-                        `);
+                                    <strong>${data.total}</strong> total users<br>
+                                    <strong>${data.with_email}</strong> with email<br>
+                                    <strong>${data.with_phone}</strong> with phone
+                                `);
                         $('#previewSection').show();
                     }
                 });

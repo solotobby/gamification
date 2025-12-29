@@ -24,13 +24,15 @@ class SendMassEmail implements ShouldQueue
     protected $message;
     protected $subject;
     protected $campaignId;
+    protected $imagePath;
 
-    public function __construct(array $userIds, string $message, string $subject, int $campaignId)
+    public function __construct(array $userIds, string $message, string $subject, int $campaignId, ?string $imagePath = null)
     {
         $this->userIds = $userIds;
         $this->message = $message;
         $this->subject = $subject;
         $this->campaignId = $campaignId;
+        $this->imagePath = $imagePath;
     }
 
     public function handle(): void
@@ -56,15 +58,19 @@ class SendMassEmail implements ShouldQueue
             $log = $logs[$user->id];
 
             try {
+                // Extract first name
+                $firstName = explode(' ', trim($user->name))[0];
+
                 $htmlBody = view('emails.mass_mail.content_new', [
-                    'name' => $user->name,
+                    'name' => $firstName,
                     'message' => nl2br($this->message),
+                    'imagePath' => $this->imagePath,
                 ])->render();
 
                 $response = sendZeptoMail(
                     $user->email,
                     $user->name,
-                    $this->subject,
+                    'Dear '.$firstName.', '.$this->subject,
                     $htmlBody
                 );
 
@@ -73,13 +79,11 @@ class SendMassEmail implements ShouldQueue
                 $log->update([
                     'status' => $status,
                     'message_id' => $response['message_id'] ?? null,
-                    'sent_at'   => $status === 'sent' ? now() : null,
+                    'sent_at' => $status === 'sent' ? now() : null,
                     'error_message' => $response['error'] ?? null,
                 ]);
 
-                $status === 'sent'
-                    ? $deliveredCount++
-                    : $failedCount++;
+                $status === 'sent' ? $deliveredCount++ : $failedCount++;
             } catch (\Throwable $e) {
                 Log::error('Mass email failed', [
                     'campaign_id' => $this->campaignId,
@@ -102,82 +106,4 @@ class SendMassEmail implements ShouldQueue
         MassEmailCampaign::where('id', $this->campaignId)
             ->increment('failed', $failedCount);
     }
-
-
-    // public function handle(): void
-    // {
-    //     $pendingLogs = MassEmailLog::where('campaign_id', $this->campaignId)
-    //         ->whereIn('user_id', $this->userIds)
-    //         ->where('status', 'pending')
-    //         ->pluck('user_id')
-    //         ->toArray();
-
-    //     if (empty($pendingLogs)) {
-    //         return; // All emails already sent
-    //     }
-
-    //     $users = User::whereIn('id', $pendingLogs)
-    //         ->select('id', 'email', 'name')
-    //         ->get();
-
-    //     foreach ($users as $user) {
-    //         try {
-    //             $log = MassEmailLog::where('campaign_id', $this->campaignId)
-    //                 ->where('user_id', $user->id)
-    //                 ->first();
-
-    //             if ($log->status !== 'pending') {
-    //                 continue;
-    //             }
-
-    //             $formattedMessage = nl2br($this->message);
-
-    //             $htmlBody = view('emails.mass_mail.content_new', [
-    //                 'name' => $user->name,
-    //                 'message' => $formattedMessage,
-    //             ])->render();
-
-    //             $response = sendZeptoMail(
-    //                 $user->email,
-    //                 $user->name,
-    //                 $this->subject,
-    //                 $htmlBody
-    //             );
-
-    //             if ($response['status'] === 'accepted') {
-    //                 $messageId = $response['message_id'];
-    //                 $status = 'sent';
-
-    //             } else {
-    //                 $messageId = null;
-    //                 $status = 'failed';
-    //             }
-
-    //             MassEmailLog::where('campaign_id', $this->campaignId)
-    //                 ->where('user_id', $user->id)
-    //                 ->update([
-    //                     'status' => $status,
-    //                     'message_id' => $messageId,
-    //                     'sent_at' => $status === 'sent' ? now() : null,
-    //                     'error_message' => $response['error'] ?? null,
-    //                 ]);
-
-    //                 $status === 'sent' ? MassEmailCampaign::where('id', $this->campaignId)->increment('delivered') : MassEmailCampaign::where('id', $this->campaignId)->increment('failed') ;
-
-    //         } catch (\Throwable $e) {
-    //             Log::error('Mass email failed', [
-    //                 'user_id' => $user->id,
-    //                 'campaign_id' => $this->campaignId,
-    //                 'error' => $e->getMessage(),
-    //             ]);
-
-    //             MassEmailLog::where('campaign_id', $this->campaignId)
-    //                 ->where('user_id', $user->id)
-    //                 ->update([
-    //                     'status' => 'failed',
-    //                     'error_message' => $e->getMessage(),
-    //                 ]);
-    //         }
-    //     }
-    // }
 }
