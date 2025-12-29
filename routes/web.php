@@ -222,7 +222,7 @@ Route::get('campaign/activities/{id}/response', [\App\Http\Controllers\CampaignC
 Route::get('admin/campaign/activities/{id}', [\App\Http\Controllers\CampaignController::class, 'adminActivities']);
 Route::get('campaign/activities/pause/{id}', [\App\Http\Controllers\CampaignController::class, 'pauseCampaign']);
 Route::post('campaign/decision', [\App\Http\Controllers\CampaignController::class, 'campaignDecision'])->name('campaign.decision');
-Route::get('campaign/{id}/extraworker', [\App\Http\Controllers\CampaignController::class, 'edit']);
+Route::get('campaign/{id}/extra-worker', [\App\Http\Controllers\CampaignController::class, 'edit'])->name('campaign.add.worker');
 
 Route::get('complete/welcome', [\App\Http\Controllers\ProfileController::class, 'welcomeUser']);
 
@@ -280,8 +280,7 @@ Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, '
 Route::get('disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'disputedJobs']);
 Route::post('process/disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'processDisputedJobs'])->name('dispute.job');
 
-Route::post('addmore/workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');
-
+Route::post('campaign/add-more-workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');Route::post('campaign/preview-add-worker', [\App\Http\Controllers\CampaignController::class, 'previewAddWorker'])->name('preview.add.worker');
 
 Route::get('campaign/approve/{id}', [\App\Http\Controllers\CampaignController::class, 'approveCampaign']);
 Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::class, 'denyCampaign']);

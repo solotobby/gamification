@@ -70,12 +70,22 @@ class CampaignController extends Controller
     }
 
 
+    // public function edit($id)
+    // {
+    //     $campaign = Campaign::where('job_id', $id)->first();
+    //     return view('user.campaign.edit', ['campaign' => $campaign]);
+    // }
+
     public function edit($id)
     {
-        $campaign = Campaign::where('job_id', $id)->first();
-        return view('user.campaign.edit', ['campaign' => $campaign]);
-    }
+        $campaign = Campaign::where('job_id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
+        $countries = User::distinct()->pluck('country')->filter();
+
+        return view('user.campaign.add_worker', compact('campaign', 'countries'));
+    }
 
     public function update(Request $request, Campaign $campaign)
     {
@@ -1302,7 +1312,152 @@ class CampaignController extends Controller
         }
     }
 
+    public function previewAddWorker(Request $request)
+    {
+        $campaign = Campaign::where('job_id', $request->campaign_id)->firstOrFail();
+        $newWorkers = (int) $request->new_workers;
+
+        if ($newWorkers < 5) {
+            return response()->json(['error' => 'Invalid worker count, you cannot add less than 5 new workers'], 400);
+        }
+
+        $baseCurrency = auth()->user()->wallet->base_currency;
+        $campaignAmount = currencyConverter($campaign->currency, $baseCurrency, $campaign->campaign_amount);
+
+        // Calculate costs following postCampaign logic
+        $baseAmount = $newWorkers * $campaignAmount;
+
+        $isBusiness = auth()->user()->is_business;
+        $percentRate = $isBusiness ? 100 : 60;
+        $platformFee = ($percentRate / 100) * $baseAmount;
+
+        $uploadFee = 0;
+        if ($campaign->allow_upload) {
+            $uploadFee = $newWorkers * currencyParameter($baseCurrency)->allow_upload;
+        }
+
+        $totalCost = $baseAmount + $platformFee + $uploadFee;
+        $walletBalance = walletBalance(auth()->id());
+
+        return response()->json([
+            'new_workers' => $newWorkers,
+            'campaign_amount' => $campaignAmount,
+            'base_amount' => $baseAmount,
+            'platform_fee' => $platformFee,
+            'upload_fee' => $uploadFee,
+            'total_cost' => $totalCost,
+            'wallet_balance' => $walletBalance,
+            'has_sufficient_balance' => $totalCost <= $walletBalance,
+            'currency' => $baseCurrency
+        ]);
+    }
+
+    // Process add workers
     public function addMoreWorkers(Request $request)
+    {
+        $request->validate([
+            'new_number' => 'required|integer|min:5',
+            'id' => 'required|string'
+        ]);
+
+        $campaign = Campaign::where('job_id', $request->id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $baseCurrency = auth()->user()->wallet->base_currency;
+        $campaignAmount = currencyConverter($campaign->currency, $baseCurrency, $campaign->campaign_amount);
+        $newWorkers = $request->new_number;
+
+        // Calculate following postCampaign logic
+        $baseAmount = $newWorkers * $campaignAmount;
+
+        $isBusiness = auth()->user()->is_business;
+        $percentRate = $isBusiness ? 100 : 60;
+        $platformFee = ($percentRate / 100) * $baseAmount;
+
+        $uploadFee = 0;
+        if ($campaign->allow_upload) {
+            $uploadFee = $newWorkers * currencyParameter($baseCurrency)->allow_upload;
+        }
+
+        $totalCost = $baseAmount + $platformFee + $uploadFee;
+        $platformRevenue = $platformFee + $uploadFee;
+
+        // Check wallet balance
+        $walletValidity = checkWalletBalance(auth()->user(), $baseCurrency, $totalCost);
+
+        if (!$walletValidity) {
+            return back()->with('error', 'Insufficient funds in your wallet');
+        }
+
+        // Debit user wallet
+        $debitWallet = debitWallet(auth()->user(), $baseCurrency, $totalCost);
+
+        if (!$debitWallet) {
+            return back()->with('error', 'Failed to process payment');
+        }
+
+        // Update campaign
+        $campaign->number_of_staff += $newWorkers;
+        $campaign->total_amount += $totalCost;
+        $campaign->is_completed = false;
+        $campaign->save();
+
+        // Determine channel
+        $channel = match ($baseCurrency) {
+            'NGN' => 'paystack',
+            'USD' => 'paypal',
+            default => 'flutterwave'
+        };
+
+        $ref = time();
+
+        // User transaction
+        PaymentTransaction::create([
+            'user_id' => auth()->id(),
+            'campaign_id' => $campaign->id,
+            'reference' => $ref,
+            'amount' => $totalCost,
+            'balance' => walletBalance(auth()->id()),
+            'status' => 'successful',
+            'currency' => $baseCurrency,
+            'channel' => $channel,
+            'type' => 'added_more_worker',
+            'description' => "Added {$newWorkers} worker(s) for {$campaign->post_title} campaign",
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+
+        // Credit admin
+        $adminUser = User::find(1);
+        $creditAdmin = creditWallet($adminUser, $baseCurrency, $platformRevenue);
+
+        if ($creditAdmin) {
+            PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => $campaign->id,
+                'reference' => $ref,
+                'amount' => $platformRevenue,
+                'balance' => walletBalance(1),
+                'status' => 'successful',
+                'currency' => $baseCurrency,
+                'channel' => $channel,
+                'type' => 'campaign_revenue_add',
+                'description' => "Revenue for {$newWorkers} worker(s) added on {$campaign->post_title}",
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+        }
+
+        // Send email
+        $content = "You have successfully added {$newWorkers} worker(s) to your campaign.";
+        $subject = "Workers Added Successfully";
+        Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+
+        return redirect()->route('my.campaigns')->with('success', "{$newWorkers} worker(s) added successfully");
+    }
+
+    public function addMoreWorkersOld(Request $request)
     {
 
         $request->validate([
