@@ -1577,44 +1577,19 @@ class AdminController extends Controller
     //         $query->whereHas('myJobs');
     //     }
 
-    //     if ($request->days) {
-    //         $date = now()->subDays($request->days);
-    //         if ($request->type === 'verified') {
-    //             $query->where('verified_at', '>=', $date);
-    //         } elseif ($request->type === 'email_verified') {
-    //             $query->where('email_verified_at', '>=', $date);
-    //         } elseif ($request->type === 'phone_verified') {
-    //             $query->whereHas('profile', function ($q) use ($date) {
-    //                 $q->where('updated_at', '>=', $date);
-    //             });
-    //         } elseif ($request->type === 'performed_job') {
-    //             $query->whereHas('myJobs', function ($q) use ($date) {
-    //                 $q->where('created_at', '>=', $date);
-    //             });
-    //         } else {
-    //             $query->where('created_at', '>=', $date);
-    //         }
-    //     }
+    //     // Handle date filtering
+    //     $this->applyDateFilter($query, $request);
 
     //     if ($request->country) {
     //         $query->where('country', $request->country);
     //     }
 
-    //     $cacheKey = 'audience_preview_' . md5(json_encode($request->only(['type', 'days', 'country'])));
+    //     $result = $query->selectRaw('
+    //     COUNT(*) as total,
+    //     SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
+    //     SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
+    // ')->first();
 
-    //     if (!app()->environment(['local_test'])) {
-    //         $result = $query->selectRaw('
-    //         COUNT(*) as total,
-    //         SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-    //         SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-    //         ')->first();
-    //     } else {
-    //         $result = $query->selectRaw('
-    //         COUNT(*) as total,
-    //         SUM(CASE WHEN email IS NOT NULL THEN 1 ELSE 0 END) as with_email,
-    //         SUM(CASE WHEN phone IS NOT NULL THEN 1 ELSE 0 END) as with_phone
-    //         ')->first();
-    //     }
     //     return response()->json([
     //         'total' => $result->total,
     //         'with_email' => $result->with_email,
@@ -1641,24 +1616,8 @@ class AdminController extends Controller
     //         $query = User::where('email', 'morakinyovictor1@gmail.com');
     //     }
 
-    //     if ($request->days) {
-    //         $date = now()->subDays($request->days);
-    //         if ($request->type === 'verified') {
-    //             $query->where('verified_at', '>=', $date);
-    //         } elseif ($request->type === 'email_verified') {
-    //             $query->where('email_verified_at', '>=', $date);
-    //         } elseif ($request->type === 'phone_verified') {
-    //             $query->whereHas('profile', function ($q) use ($date) {
-    //                 $q->where('updated_at', '>=', $date);
-    //             });
-    //         } elseif ($request->type === 'performed_job') {
-    //             $query->whereHas('myJobs', function ($q) use ($date) {
-    //                 $q->where('created_at', '>=', $date);
-    //             });
-    //         } else {
-    //             $query->where('created_at', '>=', $date);
-    //         }
-    //     }
+    //     // Handle date filtering
+    //     $this->applyDateFilter($query, $request);
 
     //     if ($request->country) {
     //         $query->where('country', $request->country);
@@ -1676,6 +1635,8 @@ class AdminController extends Controller
     //         'audience_type' => $request->type ?? 'registered',
     //         'days_filter' => $request->days,
     //         'country_filter' => $request->country,
+    //         'start_date' => $request->start_date,
+    //         'end_date' => $request->end_date,
     //         'total_recipients' => 0,
     //         'sms_recipients' => 0,
     //         'sent_by' => auth()->id(),
@@ -1717,20 +1678,6 @@ class AdminController extends Controller
     //             ->chunk(100, function ($users) use ($request, $campaign, &$totalSmsRecipients) {
     //                 $totalSmsRecipients += $users->count();
 
-    //                 // Create log entries for SMS
-    //                 // $logData = $users->map(fn($user) => [
-    //                 //     'campaign_id' => $campaign->id,
-    //                 //     'user_id' => $user->id,
-    //                 //     'phone' => $user->phone,
-    //                 //     'channel' => 'sms',
-    //                 //     'status' => 'pending',
-    //                 //     'created_at' => now(),
-    //                 //     'updated_at' => now(),
-    //                 // ])->toArray();
-
-    //                 // MassEmailLog::insert($logData);
-
-    //                 // Prepare data for job
     //                 $userIds = $users->pluck('id')->toArray();
     //                 $phones = $users->pluck('phone')->toArray();
 
@@ -1745,6 +1692,7 @@ class AdminController extends Controller
 
     //     return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
     // }
+
 
     public function previewAudience(Request $request)
     {
@@ -1761,16 +1709,16 @@ class AdminController extends Controller
         if ($request->type === 'verified') {
             $query->where('is_verified', 1)->whereNotNull('verified_at');
         } elseif ($request->type === 'phone_verified') {
-            $query->whereHas('profile', function ($q) {
-                $q->where('phone_verified', true);
-            });
+            $query->whereHas('profile', fn($q) => $q->where('phone_verified', true));
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
         } elseif ($request->type === 'performed_job') {
             $query->whereHas('myJobs');
+        } elseif ($request->type === 'active_users') {
+            $activeUserIds = $this->getActiveUserIds($request);
+            $query->whereIn('id', $activeUserIds);
         }
 
-        // Handle date filtering
         $this->applyDateFilter($query, $request);
 
         if ($request->country) {
@@ -1792,6 +1740,11 @@ class AdminController extends Controller
 
     public function sendMassCommunication(Request $request)
     {
+        // Validate image
+        $request->validate([
+            'campaign_image' => 'nullable|image|max:2048'
+        ]);
+
         $query = User::where('role', 'regular');
 
         // Apply audience filters
@@ -1800,31 +1753,37 @@ class AdminController extends Controller
         } elseif ($request->type === 'email_verified') {
             $query->whereNotNull('email_verified_at');
         } elseif ($request->type === 'phone_verified') {
-            $query->whereHas('profile', function ($q) {
-                $q->where('phone_verified', true);
-            });
+            $query->whereHas('profile', fn($q) => $q->where('phone_verified', true));
         } elseif ($request->type === 'performed_job') {
             $query->whereHas('myJobs');
+        } elseif ($request->type === 'active_users') {
+            $activeUserIds = $this->getActiveUserIds($request);
+            $query->whereIn('id', $activeUserIds);
         } elseif ($request->type === 'test_user') {
             $query = User::where('email', 'morakinyovictor1@gmail.com');
         }
 
-        // Handle date filtering
         $this->applyDateFilter($query, $request);
 
         if ($request->country) {
             $query->where('country', $request->country);
         }
 
-        // Get channel from radio button
+        // Handle image upload
+        $imagePath = null;
+        if ($request->hasFile('campaign_image')) {
+            $imagePath = UploadImageToCloudinary($request->campaign_image);
+            // $imagePath = $request->file('campaign_image')->store('campaign_images', 'public');
+        }
+
         $channel = $request->input('send_channel', 'email');
 
-        // Create unified campaign
         $campaign = MassEmailCampaign::create([
             'channel' => $channel,
             'subject' => $request->subject ?? 'SMS Campaign',
             'message' => $request->message,
             'sms_message' => $request->sms_message,
+            'image_path' => $imagePath,
             'audience_type' => $request->type ?? 'registered',
             'days_filter' => $request->days,
             'country_filter' => $request->country,
@@ -1838,12 +1797,11 @@ class AdminController extends Controller
         $totalEmailRecipients = 0;
         $totalSmsRecipients = 0;
 
-        // Send Email
         if ($channel === 'email') {
             (clone $query)
                 ->whereNotNull('email')
                 ->select('id', 'email')
-                ->chunk(50, function ($users) use ($request, $campaign, &$totalEmailRecipients) {
+                ->chunk(50, function ($users) use ($request, $campaign, &$totalEmailRecipients, $imagePath) {
                     $totalEmailRecipients += $users->count();
 
                     $logData = $users->map(fn($user) => [
@@ -1859,21 +1817,24 @@ class AdminController extends Controller
                     MassEmailLog::insert($logData);
 
                     $userIds = $users->pluck('id')->toArray();
-                    dispatch(new SendMassEmail($userIds, $request->message, $request->subject, $campaign->id));
+                    dispatch(new SendMassEmail(
+                        $userIds,
+                        $request->message,
+                        $request->subject,
+                        $campaign->id,
+                        $imagePath
+                    ));
                 });
         }
 
-        // Send SMS
         if ($channel === 'sms') {
             (clone $query)
                 ->whereNotNull('phone')
                 ->select('id', 'phone')
                 ->chunk(100, function ($users) use ($request, $campaign, &$totalSmsRecipients) {
                     $totalSmsRecipients += $users->count();
-
                     $userIds = $users->pluck('id')->toArray();
                     $phones = $users->pluck('phone')->toArray();
-
                     dispatch(new SendMassSms($userIds, $phones, $request->sms_message, $campaign->id));
                 });
         }
@@ -1884,6 +1845,24 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('mass.mail.campaigns')->with('success', 'Communication sent successfully');
+    }
+
+    private function getActiveUserIds($request)
+    {
+        $query = DB::table('activity_logs')->distinct();
+
+        $dateRangeType = $request->date_range_type ?? 'all';
+
+        if ($dateRangeType === 'preset' && $request->days) {
+            $date = now()->subDays($request->days);
+            $query->where('created_at', '>=', $date);
+        } elseif ($dateRangeType === 'custom' && $request->start_date && $request->end_date) {
+            $start = Carbon::parse($request->start_date)->startOfDay();
+            $end = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        return $query->pluck('user_id');
     }
 
     private function applyDateFilter($query, $request)
@@ -1897,6 +1876,7 @@ class AdminController extends Controller
             $this->applyCustomDateRange($query, $request->type, $request->start_date, $request->end_date);
         }
     }
+
 
     private function applyDateCondition($query, $type, $date, $endDate = null)
     {
@@ -2560,7 +2540,7 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Campaign has been unpaused and is now Live');
     }
-    
+
     public function userlocation()
     {
         $userTracker = UserLocation::orderBy('created_at', 'DESC')->paginate(100);
