@@ -314,7 +314,7 @@
                 <a href="https://dashboard.freebyz.com/campaign/public/EbmFbEm" target="_blank">
         @endif
 
-        <div class="block block-rounded block-fx-pop mb-2">
+        {{-- <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
                 <div class="d-md-flex justify-content-md-between align-items-md-center">
                     <div class="col-12">
@@ -327,7 +327,24 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
+      {{-- </a> --}}
+
+      <a href="https://payhankey.com/register" target="_blank">
+            <div class="block block-rounded block-fx-pop mb-2">
+                <div class="block-content block-content-full border-start border-3 border-dark">
+                    <div class="d-md-flex justify-content-md-between align-items-md-center">
+                        <div class="col-12">
+                            <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
+                            <h3 class="h4 fw-bold mb-1" style="color: #191918">Monetize your Posts on Payhankey</h3>
+                            <p class="fs-sm text-muted">
+                                <i class="fa fa-heart me-1"></i> Your posts can earn you money. You don't need Followers or Watch hours to earn
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </a>
 
         <a href="{{ url('skills') }}" target="_blank">
@@ -373,7 +390,7 @@
                     <div class="d-md-flex justify-content-md-between align-items-md-center">
                         <div class="col-12">
                             <div class="icon" style="color:#191918"> <i class="fa fa-briefcase"></i> </div>
-                            <h3 class="h4 fw-bold mb-1" style="color: #191918">'Raise Money for Urgent Needs</h3>
+                            <h3 class="h4 fw-bold mb-1" style="color: #191918">Raise Money for Urgent Needs</h3>
                             <p class="fs-sm text-muted">
                                 <i class="fa fa-heart me-1"></i> Create a Crowdfunding link to share with your Friends
 
