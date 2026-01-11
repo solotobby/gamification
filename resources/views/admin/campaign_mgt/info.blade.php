@@ -129,6 +129,19 @@
                                     required>{{ $campaign->proof }}</textarea>
                             </div>
 
+                            <!-- Add this in your campaign decision view after the campaign description -->
+                            @if($campaign->expected_result_image)
+                            <div class="mb-4">
+                                <label class="form-label">Expected Result Example</label>
+                                <div class="alert alert-info">
+                                    <i class="fa fa-info-circle me-1"></i> The campaign creator provided this image as an example of what they expect:
+                                </div>
+                                <img src="{{ displayImage($campaign->expected_result_image)}}"
+                                    class="img-thumbnail rounded"
+                                    alt="Expected Result"
+                                    style="max-width: 100%; height: auto;">
+                            </div>
+                            @endif
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Enter Reason for decline or approval</label>

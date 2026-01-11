@@ -364,23 +364,14 @@ class CampaignController extends Controller
 
     public function postCampaign(Request $request)
     {
-        // Validation rules based on account type and upload option
-        // $rules = [
-        //     'description' => 'required|string',
-        //     'post_title' => 'required|string',
-        //     'post_link' => 'required|string',
-        //     'number_of_staff' => 'required|numeric|min:10',
-        //     'campaign_amount' => 'required|numeric',
-        // ];
-
         $rules = [
             'description'        => ['required', 'string'],
             'post_title'         => ['required', 'string'],
             'post_link'          => ['required', 'url'],
             'number_of_staff'    => ['required', 'integer', 'min:10'],
             'campaign_amount'    => ['required', 'numeric', 'min:0'],
+            'expected_result_image' => ['nullable', 'image', 'mimes:png,jpeg,jpg,gif', 'max:2048'],
         ];
-
 
         // Add proof validation
         if ($request->allow_upload == true) {
@@ -415,7 +406,7 @@ class CampaignController extends Controller
         if ($request->allow_upload == true) {
             $iniAmount = $request->number_of_staff * currencyParameter(baseCurrency())->allow_upload;
             $allowUpload = true;
-        } elseif ($request->allow_upload == '') {
+        } else {
             $iniAmount = 0;
             $allowUpload = false;
         }
@@ -428,7 +419,6 @@ class CampaignController extends Controller
         }
         $total = $est_amount + $percent;
 
-        [$est_amount, $percent, $total];
         $job_id = Str::random(9);
 
         // Set approval time based on account type
@@ -436,10 +426,52 @@ class CampaignController extends Controller
             ? $request->approval_time
             : 24;
 
+        // Handle Expected Result Image Upload
+        $expectedResultImageUrl = null;
+        if ($request->hasFile('expected_result_image')) {
+            $file = $request->file('expected_result_image');
+
+            if ($file->isValid()) {
+                try {
+                    \Log::info('Uploading expected result image', [
+                        'name' => $file->getClientOriginalName(),
+                        'size' => $file->getSize(),
+                        'mime' => $file->getMimeType()
+                    ]);
+
+                    $expectedResultImageUrl = uploadImageToCloudinary($file, 'freebyz/expected-results');
+
+                    if (!$expectedResultImageUrl) {
+                        return back()
+                            ->withInput()
+                            ->with('error', 'Failed to upload expected result image. Please try again.');
+                    }
+
+                    \Log::info('Expected result image uploaded successfully', [
+                        'url' => $expectedResultImageUrl
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::error('Expected result image upload failed', [
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+
+                    return back()
+                        ->withInput()
+                        ->with('error', 'Error uploading image: ' . $e->getMessage());
+                }
+            } else {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Invalid image file. Please try again.');
+            }
+        }
+
         $walletValidity = checkWalletBalance(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
 
         if ($walletValidity) {
             $debitWallet = debitWallet(auth()->user(), baseCurrency(), $total + $iniAmount + $prAmount);
+
             if ($debitWallet) {
                 $processedCampaign = $this->processCampaign(
                     $total + $iniAmount + $prAmount,
@@ -448,92 +480,183 @@ class CampaignController extends Controller
                     $percent,
                     $allowUpload,
                     $priotize,
-                    $approvalTime
+                    $approvalTime,
+                    $expectedResultImageUrl
                 );
-                Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
-                if (config('app.env') == 'Production') {
 
-                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new AdminCampaignPosted($processedCampaign));
+                Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
+
+                if (config('app.env') == 'production') {
+                    Mail::to('hello@freebyztechnologies.com')
+                        ->cc('blessing@freebyztechnologies.com')
+                        ->send(new AdminCampaignPosted($processedCampaign));
                 }
+
                 return back()->with('success', 'Campaign Posted Successfully. A member of our team will activate your campaign in less than 24 hours.');
             }
         } else {
-            return back()->with('error', 'You do not have sufficient funds in your wallet');
+            return back()
+                ->withInput()
+                ->with('error', 'You do not have sufficient funds in your wallet');
         }
     }
 
-    public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime)
-    {
-        $currency = '';
-        $channel = '';
+    public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime, $expectedResultImageUrl = null)
+{
+    $currency = '';
+    $channel = '';
 
-        $baseCurrency = auth()->user()->wallet->base_currency;
-        if ($baseCurrency == "NGN") {
-            $currency = 'NGN';
-            $channel = 'paystack';
-        } elseif ($baseCurrency == "USD") {
-            $currency = 'USD';
-            $channel = 'paypal';
-        } else {
-            $currency = $baseCurrency;
-            $channel = 'flutterwave';
-        }
+    $baseCurrency = auth()->user()->wallet->base_currency;
+    if ($baseCurrency == "NGN") {
+        $currency = 'NGN';
+        $channel = 'paystack';
+    } elseif ($baseCurrency == "USD") {
+        $currency = 'USD';
+        $channel = 'paypal';
+    } else {
+        $currency = $baseCurrency;
+        $channel = 'flutterwave';
+    }
 
-        $request->request->add([
-            'user_id' => auth()->user()->id,
-            'total_amount' => $total,
-            'job_id' => $job_id,
-            'currency' => $currency,
-            'impressions' => 0,
-            'pending_count' => 0,
-            'completed_count' => 0,
-            'allow_upload' => $allowUpload,
-            'approved' => $priotize,
-            'approval_time' => $approvalTime
-        ]);
+    // Build the campaign data array
+    $campaignData = [
+        'user_id' => auth()->user()->id,
+        'post_title' => $request->post_title,
+        'post_link' => $request->post_link,
+        'campaign_type' => $request->campaign_type,
+        'campaign_subcategory' => $request->campaign_subcategory,
+        'number_of_staff' => $request->number_of_staff,
+        'campaign_amount' => $request->campaign_amount,
+        'description' => $request->description,
+        'proof' => $request->proof,
+        'total_amount' => $total,
+        'job_id' => $job_id,
+        'currency' => $currency,
+        'impressions' => 0,
+        'pending_count' => 0,
+        'completed_count' => 0,
+        'allow_upload' => $allowUpload,
+        'approved' => $priotize,
+        'approval_time' => $approvalTime,
+        'expected_result_image' => $expectedResultImageUrl, // This is the Cloudinary URL
+    ];
 
-        $campaign = Campaign::create($request->all());
+    // Create campaign with explicit data array instead of using $request->all()
+    $campaign = Campaign::create($campaignData);
 
-        $ref = time();
+    $ref = time();
+    PaymentTransaction::create([
+        'user_id' => auth()->user()->id,
+        'campaign_id' => $campaign->id,
+        'reference' => $ref,
+        'amount' => $total,
+        'balance' => walletBalance(auth()->user()->id),
+        'status' => 'successful',
+        'currency' => $currency,
+        'channel' => $channel,
+        'type' => 'campaign_posted',
+        'description' => $campaign->post_title . ' Campaign',
+        'tx_type' => 'Debit',
+        'user_type' => 'regular'
+    ]);
+
+    //CREDIT ADMIN
+    $adminUser = User::where('id', 1)->first();
+    $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
+
+    if ($creditAdminWallet) {
+        //Admin Transaction Table
         PaymentTransaction::create([
-            'user_id' => auth()->user()->id,
-            'campaign_id' => $campaign->id,
+            'user_id' => 1,
+            'campaign_id' => '1',
             'reference' => $ref,
-            'amount' => $total,
-            'balance' => walletBalance(auth()->user()->id),
+            'amount' => $percent,
+            'balance' => walletBalance('1'),
             'status' => 'successful',
             'currency' => $currency,
             'channel' => $channel,
-            'type' => 'campaign_posted',
-            'description' => $campaign->post_title . ' Campaign',
-            'tx_type' => 'Debit',
-            'user_type' => 'regular'
+            'type' => 'campaign_revenue',
+            'description' => 'Campaign revenue from ' . auth()->user()->name,
+            'tx_type' => 'Credit',
+            'user_type' => 'admin'
         ]);
-
-        //CREDIT ADMIN
-        $adminUser = User::where('id', 1)->first();
-        $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
-
-        if ($creditAdminWallet) {
-            //Admin Transaction Table
-            PaymentTransaction::create([
-                'user_id' => 1,
-                'campaign_id' => '1',
-                'reference' => $ref,
-                'amount' => $percent,
-                'balance' => walletBalance('1'),
-                'status' => 'successful',
-                'currency' => $currency,
-                'channel' => $channel,
-                'type' => 'campaign_revenue',
-                'description' => 'Campaign revenue from ' . auth()->user()->name,
-                'tx_type' => 'Credit',
-                'user_type' => 'admin'
-            ]);
-        }
-
-        return $campaign;
     }
+
+    return $campaign;
+}
+
+    // public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime)
+    // {
+    //     $currency = '';
+    //     $channel = '';
+
+    //     $baseCurrency = auth()->user()->wallet->base_currency;
+    //     if ($baseCurrency == "NGN") {
+    //         $currency = 'NGN';
+    //         $channel = 'paystack';
+    //     } elseif ($baseCurrency == "USD") {
+    //         $currency = 'USD';
+    //         $channel = 'paypal';
+    //     } else {
+    //         $currency = $baseCurrency;
+    //         $channel = 'flutterwave';
+    //     }
+
+    //     $request->request->add([
+    //         'user_id' => auth()->user()->id,
+    //         'total_amount' => $total,
+    //         'job_id' => $job_id,
+    //         'currency' => $currency,
+    //         'impressions' => 0,
+    //         'pending_count' => 0,
+    //         'completed_count' => 0,
+    //         'allow_upload' => $allowUpload,
+    //         'approved' => $priotize,
+    //         'approval_time' => $approvalTime
+    //     ]);
+
+    //     $campaign = Campaign::create($request->all());
+
+    //     $ref = time();
+    //     PaymentTransaction::create([
+    //         'user_id' => auth()->user()->id,
+    //         'campaign_id' => $campaign->id,
+    //         'reference' => $ref,
+    //         'amount' => $total,
+    //         'balance' => walletBalance(auth()->user()->id),
+    //         'status' => 'successful',
+    //         'currency' => $currency,
+    //         'channel' => $channel,
+    //         'type' => 'campaign_posted',
+    //         'description' => $campaign->post_title . ' Campaign',
+    //         'tx_type' => 'Debit',
+    //         'user_type' => 'regular'
+    //     ]);
+
+    //     //CREDIT ADMIN
+    //     $adminUser = User::where('id', 1)->first();
+    //     $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
+
+    //     if ($creditAdminWallet) {
+    //         //Admin Transaction Table
+    //         PaymentTransaction::create([
+    //             'user_id' => 1,
+    //             'campaign_id' => '1',
+    //             'reference' => $ref,
+    //             'amount' => $percent,
+    //             'balance' => walletBalance('1'),
+    //             'status' => 'successful',
+    //             'currency' => $currency,
+    //             'channel' => $channel,
+    //             'type' => 'campaign_revenue',
+    //             'description' => 'Campaign revenue from ' . auth()->user()->name,
+    //             'tx_type' => 'Credit',
+    //             'user_type' => 'admin'
+    //         ]);
+    //     }
+
+    //     return $campaign;
+    // }
     private function checkUserVerified($baseCurrency)
     {
 

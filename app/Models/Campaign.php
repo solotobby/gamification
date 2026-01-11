@@ -36,8 +36,8 @@ class Campaign extends Model
         'approval_time',
         'flagged_at',
         'flagged_reason',
-        'flagging_resolved'
-
+        'flagging_resolved',
+        'expected_result_image',
     ];
 
 
