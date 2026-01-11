@@ -1125,6 +1125,137 @@ class CampaignController extends Controller
         return back()->with('success', 'Campaign status updated!');
     }
 
+    // public function campaignDecision(Request $request)
+    // {
+    //     $request->validate([
+    //         'reason' => 'required|string',
+    //     ]);
+
+    //     $workSubmitted = CampaignWorker::where('id', $request->id)->first();
+
+    //     if ($workSubmitted->reason != null) {
+    //         return back()->with('error', 'Campaign has been attended to');
+    //     }
+
+    //     $campaign = Campaign::where('id', $workSubmitted->campaign_id)->first();
+
+    //     if ($request->action == 'approve') {
+
+    //         $completed_campaign = $campaign->completed()->where('status', 'Approved')->count();
+    //         if ($completed_campaign >= $campaign->number_of_staff) {
+    //             return back()->with('error', 'Campaign has reached its maximum capacity');
+    //         }
+
+    //         $user = User::where('id', $workSubmitted->user_id)->first();
+
+    //         $workSubmitted->status = 'Approved';
+    //         $workSubmitted->reason = $request->reason;
+    //         $workSubmitted->save();
+
+    //         //    setIsComplete($workSubmitted->campaign_id);
+
+    //         if (baseCurrency($user) == 'NGN') {
+    //             $currency = 'NGN';
+    //             $channel = 'paystack';
+    //             creditWallet($user, 'NGN', $workSubmitted->amount);
+    //         } elseif (baseCurrency($user) == 'USD') {
+    //             $currency = 'USD';
+    //             $channel = 'paypal';
+    //             creditWallet($user, 'USD', $workSubmitted->amount);
+    //         } else {
+
+    //             $currency = baseCurrency($user);
+    //             $channel = 'flutterwave';
+    //             creditWallet($user, baseCurrency($user), $workSubmitted->amount);
+    //         }
+
+
+    //         $ref = time();
+
+    //         PaymentTransaction::create([
+    //             'user_id' =>  $workSubmitted->user_id,
+    //             'campaign_id' =>  $workSubmitted->campaign->id,
+    //             'reference' => $ref,
+    //             'amount' =>  $workSubmitted->amount,
+    //             'balance' => walletBalance($workSubmitted->user_id),
+    //             'status' => 'successful',
+    //             'currency' => $currency,
+    //             'channel' => $channel,
+    //             'type' => 'campaign_payment',
+    //             'description' => 'Campaign Payment for ' . $workSubmitted->campaign->post_title,
+    //             'tx_type' => 'Credit',
+    //             'user_type' => 'regular'
+    //         ]);
+
+    //         activityLog($user, 'campaign_payment', $user->name . ' earned a campaign payment of NGN' . number_format($workSubmitted->amount), 'regular');
+
+    //         $subject = 'Job Approved';
+    //         $status = 'Approved';
+
+    //         Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+
+
+    //         return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
+    //     } else {
+
+    //         //check if the
+    //         // $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
+    //         // if($chckCount >= 3){
+    //         //     return back()->with('error', 'You cannot deny more than 3 jobs in a day');
+    //         // }
+    //         $workSubmitted->status = 'Denied';
+    //         $workSubmitted->reason = $request->reason;
+    //         $workSubmitted->save();
+
+    //         // will return this if doesn't work
+    //         // $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
+
+    //         // $campaign = Campaign::where('id', $deny->campaign_id)->first();
+    //         // $campaingOwner = User::where('id', $campaign->user_id)->first();
+
+    //         if ($campaign->currency == 'NGN') {
+    //             $currency = 'Naira';
+    //             $channel = 'paystack';
+    //         } elseif ($campaign->currency == 'USD') {
+    //             $currency = 'Dollar';
+    //             $channel = 'paypal';
+    //         } elseif ($campaign->currency == null) {
+    //             $currency = 'Naira';
+    //             $channel = 'paystack';
+    //         }
+
+    //         // creditWallet($campaingOwner, $currency, $workSubmitted->amount);
+
+    //         // $ref = time();
+
+    //         // PaymentTransaction::create([
+    //         //     'user_id' => $workSubmitted->campaign->user_id,
+    //         //     'campaign_id' => $workSubmitted->campaign->id,
+    //         //     'reference' => $ref,
+    //         //     'amount' => $workSubmitted->amount,
+    //         //     'status' => 'successful',
+    //         //     'currency' => $currency,
+    //         //     'channel' => $channel,
+    //         //     'type' => 'campaign_payment_refund',
+    //         //     'description' => 'Campaign Payment Refund for '.$workSubmitted->campaign->post_title,
+    //         //     'tx_type' => 'Credit',
+    //         //     'user_type' => 'regular'
+    //         // ]);
+
+
+
+    //         $subject = 'Job Denied';
+    //         $status = 'Denied';
+
+    //         Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
+
+
+
+    //         return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign has been denied');
+    //     }
+    // }
+
+
     public function campaignDecision(Request $request)
     {
         $request->validate([
@@ -1152,8 +1283,6 @@ class CampaignController extends Controller
             $workSubmitted->reason = $request->reason;
             $workSubmitted->save();
 
-            //    setIsComplete($workSubmitted->campaign_id);
-
             if (baseCurrency($user) == 'NGN') {
                 $currency = 'NGN';
                 $channel = 'paystack';
@@ -1163,12 +1292,10 @@ class CampaignController extends Controller
                 $channel = 'paypal';
                 creditWallet($user, 'USD', $workSubmitted->amount);
             } else {
-
                 $currency = baseCurrency($user);
                 $channel = 'flutterwave';
                 creditWallet($user, baseCurrency($user), $workSubmitted->amount);
             }
-
 
             $ref = time();
 
@@ -1194,24 +1321,17 @@ class CampaignController extends Controller
 
             Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
 
-
             return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign Approve Successfully');
         } else {
-
-            //check if the
-            // $chckCount = PaymentTransaction::where('user_id', $workSubmitted->campaign->user_id)->where('type', 'campaign_payment_refund')->whereDate('created_at', Carbon::today())->count();
-            // if($chckCount >= 3){
-            //     return back()->with('error', 'You cannot deny more than 3 jobs in a day');
-            // }
+            // DENIAL LOGIC - Set denied_at timestamp
             $workSubmitted->status = 'Denied';
             $workSubmitted->reason = $request->reason;
+            $workSubmitted->denied_at = Carbon::now();
+            $workSubmitted->slot_released = false;
             $workSubmitted->save();
 
-            // will return this if doesn't work
-            $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
-
-            // $campaign = Campaign::where('id', $deny->campaign_id)->first();
-            // $campaingOwner = User::where('id', $campaign->user_id)->first();
+            // DO NOT reduce pending_count yet - slot is reserved for 12 hours
+            // $this->removePendingCountAfterDenial($workSubmitted->campaign_id);
 
             if ($campaign->currency == 'NGN') {
                 $currency = 'Naira';
@@ -1224,38 +1344,15 @@ class CampaignController extends Controller
                 $channel = 'paystack';
             }
 
-            // creditWallet($campaingOwner, $currency, $workSubmitted->amount);
-
-            // $ref = time();
-
-            // PaymentTransaction::create([
-            //     'user_id' => $workSubmitted->campaign->user_id,
-            //     'campaign_id' => $workSubmitted->campaign->id,
-            //     'reference' => $ref,
-            //     'amount' => $workSubmitted->amount,
-            //     'status' => 'successful',
-            //     'currency' => $currency,
-            //     'channel' => $channel,
-            //     'type' => 'campaign_payment_refund',
-            //     'description' => 'Campaign Payment Refund for '.$workSubmitted->campaign->post_title,
-            //     'tx_type' => 'Credit',
-            //     'user_type' => 'regular'
-            // ]);
-
-
-
-            $subject = 'Job Denied';
+            $subject = 'Job Denied - You have 12 hours to dispute';
             $status = 'Denied';
 
             Mail::to($workSubmitted->user->email)->send(new ApproveCampaign($workSubmitted, $subject, $status));
 
-
-
-            return redirect('campaign/activities/' . $request->campaign_job_id)->with('success', 'Campaign has been denied');
+            return redirect('campaign/activities/' . $request->campaign_job_id)
+                ->with('success', 'Campaign has been denied. Worker has 12 hours to dispute.');
         }
     }
-
-
     public function removePendingCountAfterDenial($id)
     {
         $campaign = Campaign::where('id', $id)->first();
@@ -1292,6 +1389,27 @@ class CampaignController extends Controller
     public function processDisputedJobs(Request $request)
     {
         $workDone = CampaignWorker::where('id', $request->id)->first();
+
+        if (!$workDone) {
+            return back()->with('error', 'Work submission not found');
+        }
+
+        // Check if dispute window has expired
+        if ($workDone->isDisputeWindowExpired()) {
+            return back()->with('error', 'Dispute window has expired. You had 12 hours to dispute this denial.');
+        }
+
+        // Check if already disputed
+        if ($workDone->is_dispute) {
+            return back()->with('error', 'This job has already been disputed');
+        }
+
+        // Check if slot was already released
+        if ($workDone->slot_released) {
+            return back()->with('error', 'This slot has already been released');
+        }
+
+        // Mark as disputed
         $workDone->is_dispute = true;
         $workDone->save();
 
@@ -1302,15 +1420,39 @@ class CampaignController extends Controller
             'reason' => $request->reason
         ]);
 
-
-        if ($disputedJob) {
+        if (config('app.env') == 'Production' && $disputedJob) {
             $subject = 'New Dispute Raised';
-            $content = 'A despute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
+            $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
             $url = 'admin/campaign/disputes/' . $workDone->id;
-            Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
-            return back()->with('success', 'Dispute Submitted Successfully');
+            Mail::to('freebyzcom@gmail.com')->bcc('favour@freebyztechnologies.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+
+            return back()->with('success', 'Dispute submitted successfully. Your slot is now reserved pending resolution.');
         }
+        return back()->with('error', 'Failed to submit dispute. Please try again.');
     }
+
+    // public function processDisputedJobs(Request $request)
+    // {
+    //     $workDone = CampaignWorker::where('id', $request->id)->first();
+    //     $workDone->is_dispute = true;
+    //     $workDone->save();
+
+    //     $disputedJob = DisputedJobs::create([
+    //         'campaign_worker_id' => $workDone->id,
+    //         'campaign_id' => $workDone->campaign_id,
+    //         'user_id' => auth()->user()->id,
+    //         'reason' => $request->reason
+    //     ]);
+
+
+    //     if ($disputedJob) {
+    //         $subject = 'New Dispute Raised';
+    //         $content = 'A despute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
+    //         $url = 'admin/campaign/disputes/' . $workDone->id;
+    //         // Mail::to('freebyzcom@gmail.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+    //         return back()->with('success', 'Dispute Submitted Successfully');
+    //     }
+    // }
 
     public function previewAddWorker(Request $request)
     {

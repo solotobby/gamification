@@ -1,4 +1,3 @@
-
 @extends('layouts.main.master')
 
 @section('title', 'Winner List')
@@ -18,11 +17,8 @@
       </div>
     </div>
   </div>
-  <!-- END Hero -->
 
-  <!-- Page Content -->
   <div class="content">
-    <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
         <h3 class="block-title">Completed Campaign</h3>
@@ -53,6 +49,7 @@
                 <th>Status</th>
                 <th>Reason</th>
                 <th>Dispute</th>
+                <th>Time Remaining</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -64,48 +61,56 @@
                     </td>
                     <td>
                       {{ @$list->currency }} {{ @$list->amount }}
-                      {{-- @if(@$list->currency == 'NGN')
-                        &#8358;{{ @$list->amount }}
-                        @else
-                        ${{ @$list->amount }}
-                      @endif --}}
                     </td>
-                      <td>
-                       
-
-                         @if(@$list->status == 'Denied')
-                            {{ @$list->status }} 
-                            
-                         @else
-                         {{ @$list->status }}
-                         @endif
-
-
-                      </td>
-                      <td>
-                        <code>{!! @$list->reason !!}</code>
-                     </td>
-                     <td>
+                    <td>
                       @if(@$list->status == 'Denied')
-                      @if($list->updated_at >= '2024-01-16 14:07:14')
-                        @if($list->is_dispute_resolved == false)
-                            <a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-secondary btn-sm">Dispute</a>
-                          @else
-                            <a class="btn btn-secondary btn-sm disabled">Dispute Resolved</a>
+                        <span class="badge bg-danger">{{ @$list->status }}</span>
+                        @if($list->slot_released)
+                          <br><small class="text-muted">Slot Released</small>
                         @endif
                       @else
-                        <a class="btn btn-secondary btn-sm disabled">No Dispute</a>
+                        <span class="badge bg-success">{{ @$list->status }}</span>
                       @endif
+                    </td>
+                    <td>
+                      <code>{!! @$list->reason !!}</code>
+                    </td>
+                    <td>
+                      @if(@$list->status == 'Denied')
+                        @if($list->is_dispute)
+                          <span class="badge bg-warning">Dispute Pending</span>
+                        @elseif($list->slot_released)
+                          <span class="badge bg-secondary">Slot Released</span>
+                        @elseif($list->canDispute())
+                          <a href="{{ url('campaign/my/submitted/'.$list->id) }}" class="btn btn-warning btn-sm">
+                            <i class="fa fa-exclamation-triangle"></i> Dispute Now
+                          </a>
+                        @else
+                          <span class="badge bg-secondary">Dispute Window Closed</span>
+                        @endif
                       @else
-                        <a class="btn btn-secondary btn-sm disabled">Pending</a>
+                        <span class="badge bg-secondary">N/A</span>
                       @endif
-                     </td>
-                     <td>
-                      {{ @$list->created_at }}
-                   </td>
+                    </td>
+                    <td>
+                      @if(@$list->status == 'Denied' && !$list->slot_released && !$list->is_dispute)
+                        @php
+                          $remaining = $list->remainingDisputeTime();
+                        @endphp
+                        @if($remaining > 0)
+                          <span class="badge bg-info">{{ $remaining }}h remaining</span>
+                        @else
+                          <span class="badge bg-danger">Expired</span>
+                        @endif
+                      @else
+                        <span class="text-muted">-</span>
+                      @endif
+                    </td>
+                    <td>
+                      {{ @$list->created_at->format('M d, Y H:i') }}
+                    </td>
                   </tr>
                 @endforeach
-              
             </tbody>
           </table>
           <div class="d-flex">
@@ -114,13 +119,10 @@
         </div>
       </div>
     </div>
-    <!-- END Full Table -->
-
   </div>
 
 @endsection
 
 @section('script')
-
 <script src="{{asset('src/assets/js/pages/be_ui_progress.min.js')}}"></script>
 @endsection
