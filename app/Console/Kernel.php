@@ -23,16 +23,21 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-          // $schedule->command('inspire')->hourly();
+        // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
         // $schedule->command('users:delete-unverified')->dailyAt('02:00');
+
+        $schedule->command('campaign:release-expired-slots')
+            ->hourly()
+            ->withoutOverlapping()
+            ->runInBackground();
 
         $schedule->command('disputes:resolve-completed')->hourly();
 
         $schedule->command('command:task')->daily();
 
-          $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
+        $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
 
         $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
 
@@ -40,7 +45,7 @@ class Kernel extends ConsoleKernel
 
         // $schedule->command('campaigns:auto-approve-business')->hourly();
 
-        $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4,'04:00');
+        $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
 
         // $schedule->command('business:rotate-promotion')->dailyAt('03:00');
 

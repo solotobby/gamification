@@ -9,6 +9,22 @@
             selector: '#mytextarea'
         });
     </script>
+    <style>
+        .preview-container {
+            margin-top: 10px;
+            max-width: 300px;
+        }
+        .preview-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .remove-preview {
+            margin-top: 5px;
+            cursor: pointer;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -49,7 +65,7 @@
             </div>
         @endif
 
-        <form id="campaignForm" method="POST" action="{{ route('post.campaign') }}">
+        <form id="campaignForm" method="POST" action="{{ route('post.campaign') }}" enctype="multipart/form-data">
             @csrf
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
@@ -92,13 +108,11 @@
                                         min="15" value="15" required>
                                 </div>
                                 <div class="col-6">
-
                                     @if(auth()->user()->wallet->base_currency == "NGN")
                                         <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                                     @else
                                         <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                                     @endif
-
 
                                     <input type="text" class="form-control" id="amount_per_campaign" name="campaign_amount"
                                         value="" readonly>
@@ -109,10 +123,8 @@
                                 <h4>Estimated Cost: &#8358;<span id="demo"></span></h4>
                             @elseif(auth()->user()->wallet->base_currency == 'GHS')
                                 <h4>Estimated Cost: &#8373;<span id="demo"></span></h4>
-
                             @elseif(auth()->user()->wallet->base_currency == 'KES')
                                 <h4>Estimated Cost: KES <span id="demo"></span></h4>
-
                             @elseif(auth()->user()->wallet->base_currency == 'TZS')
                                 <h4>Estimated Cost: TZS <span id="demo"></span></h4>
                             @elseif(auth()->user()->wallet->base_currency == 'RWF')
@@ -126,7 +138,6 @@
                             @else
                                 <h4>Estimated Cost: $<span id="demo"></span></h4>
                             @endif
-
                         </div>
                     </div>
                 </div>
@@ -165,28 +176,51 @@
                                 <textarea class="form-control" name="description" id="js-ckeditor5-classic"
                                     required> {{ old('description') }}</textarea>
                             </div>
-                            <div class="mb-2">
+
+                            <div class="mb-4">
                                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request
-                                        for social
-                                        media handle, email or other means of identifying the worker)</small></label>
+                                        for social media handle, email or other means of identifying the worker)</small></label>
                                 <textarea id="mytextareao" class="form-control" name="proof"
                                     required>{{ old('proof') }}</textarea>
                             </div>
+
+                            <!-- Expected Result Image Upload -->
+                            <div class="mb-4">
+                                <label class="form-label" for="expected-result-image">
+                                    Expected Result Image <span class="badge bg-info">Optional</span>
+                                </label>
+                                <input type="file"
+                                       class="form-control"
+                                       id="expected-result-image"
+                                       name="expected_result_image"
+                                       accept="image/png,image/jpeg,image/jpg,image/gif"
+                                       onchange="previewImage(event)">
+                                <small class="text-muted">
+                                    <i class="fa fa-info-circle me-1"></i>
+                                    Upload an example image showing what the expected result should look like. This helps workers understand exactly what you want. (Max 2MB, PNG, JPEG, JPG, GIF)
+                                </small>
+
+                                <!-- Image Preview -->
+                                <div id="imagePreview" class="preview-container" style="display: none;">
+                                    <img id="preview" src="" alt="Preview">
+                                    <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()">
+                                        <i class="fa fa-times"></i> Remove Image
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="mb-2">
                                 <input type="checkbox" name="allow_upload" value="1" class="">
-
                                 <span><small> Allow image to be uploaded with proof at a cost of <b> {{ baseCurrency() }}
                                             {{  currencyParameter(baseCurrency())->allow_upload }} </b> per worker
                                     </small></span>
-
                             </div>
+
                             <div class="mb-2">
                                 <input type="checkbox" name="priotize" value="1" class="">
-
                                 <span><small> Make your Campaign appear at the top for <b> {{ baseCurrency() }}
                                             {{  currencyParameter(baseCurrency())->priotize }} </b> (Optional)
                                     </small></span>
-
                             </div>
 
                             @if(auth()->user()->is_business)
@@ -227,7 +261,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- END Submit Form -->
             </div>
         </form>
@@ -259,7 +292,6 @@
                 </div>
             </div>
         </div>
-
         <!-- END Post Job Form -->
     </div>
     <!-- END Page Content -->
@@ -268,13 +300,39 @@
 
 @section('script')
 
-
     <script>
+        // Image Preview Function
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (2MB = 2097152 bytes)
+                if (file.size > 2097152) {
+                    alert('File size exceeds 2MB. Please choose a smaller file.');
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove Preview Function
+        function removePreview() {
+            document.getElementById('expected-result-image').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('preview').src = '';
+        }
+
+        // Form Submit Handler
         document.getElementById('agreeSubmitBtn').addEventListener('click', function () {
             document.getElementById('campaignForm').submit();
         });
     </script>
-
 
     <!-- Page JS Plugins -->
     <script src="{{ asset('src/assets/js/plugins/ckeditor5-classic/build/ckeditor.js')}}"></script>

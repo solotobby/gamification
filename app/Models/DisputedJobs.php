@@ -9,6 +9,11 @@ class DisputedJobs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['campaign_worker_id', 'campaign_id', 'user_id', 'reason', 'is_resolved'];
-    
+    protected $fillable = [
+        'campaign_worker_id',
+        'campaign_id',
+        'user_id',
+        'reason',
+        'is_resolved'
+    ];
 }
