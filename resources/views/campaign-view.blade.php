@@ -385,7 +385,7 @@
                 </div>
 
                 <!-- Share Card -->
-                <div class="card campaign-card mt-4">
+                {{-- <div class="card campaign-card mt-4">
                     <div class="card-header">
                         <i class="fas fa-share-alt me-2"></i>Share This Campaign
                     </div>
@@ -394,23 +394,11 @@
                             <button class="btn btn-secondary" onclick="copyShareLink()">
                                 <i class="fas fa-link me-2"></i>Copy Link
                             </button>
-                            {{-- <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url()->current()) }}"
+                            <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #25D366; color: white;">
                                 <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
                             </a>
                             <a href="https://x.com/intent/post?text=Check out this amazing campaign on Freebyz!&url={{ urlencode(url()->current()) }}"
-                                target="_blank" class="btn" style="background: #1DA1F2; color: white;">
-                                <i class="fab fa-x me-2"></i>Share on X
-                            </a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
-                                target="_blank" class="btn" style="background: #1877F2; color: white;">
-                                <i class="fab fa-facebook-f me-2"></i>Share on Facebook
-                            </a> --}}
-                            <a href="https://wa.me/?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url()->current()) }}"
-                                target="_blank" class="btn" style="background: #25D366; color: white;">
-                                <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
-                            </a>
-                            <a href="https://x.com/intent/post?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #1DA1F2; color: white;">
                                 <i class="fab fa-x me-2"></i>Share on X
                             </a>
@@ -423,7 +411,63 @@
                         <input type="hidden" id="shareLink" value="{{ url()->current() }}">
                         <small class="text-success d-block mt-2" id="copyMessage" style="display:none;"></small>
                     </div>
-                </div>
+                </div> --}}
+
+                <div class="card campaign-card mt-4">
+  <div class="card-header">
+    <i class="fas fa-share-alt me-2"></i>Share This Campaign
+  </div>
+
+  @php
+    $campaignUrl = url()->current();
+    $shareText = "Complete this {$campaign->post_title} task on Freebyz to earn {$campaignUrl}";
+  @endphp
+
+  <div class="card-body">
+    <div class="d-grid gap-2">
+
+      <!-- Copy link -->
+      <button type="button" class="btn btn-secondary" onclick="copyShareLink()">
+        <i class="fas fa-link me-2"></i>Copy Link
+      </button>
+
+      <!-- WhatsApp -->
+      <a
+        href="https://wa.me/?text={{ rawurlencode($shareText) }}"
+        target="_blank"
+        class="btn"
+        style="background:#25D366;color:#fff;"
+      >
+        <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
+      </a>
+
+      <!-- X -->
+      <a
+        href="https://x.com/intent/tweet?text={{ rawurlencode($shareText) }}"
+        target="_blank"
+        class="btn"
+        style="background:#1DA1F2;color:#fff;"
+      >
+        <i class="fab fa-x me-2"></i>Share on X
+      </a>
+
+      <!-- Facebook -->
+      <a
+        href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($campaignUrl) }}"
+        target="_blank"
+        class="btn"
+        style="background:#1877F2;color:#fff;"
+      >
+        <i class="fab fa-facebook-f me-2"></i>Share on Facebook
+      </a>
+
+    </div>
+
+    <input type="hidden" id="shareLink" value="{{ $campaignUrl }}">
+    <small class="text-success d-block mt-2" id="copyMessage" style="display:none;"></small>
+  </div>
+</div>
+
             </div>
         </div>
     </div>
