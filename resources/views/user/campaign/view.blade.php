@@ -199,7 +199,7 @@
             </ul>
 
             <!-- Share Campaign Section -->
-            <div class="mt-4 pt-3 border-top">
+            {{-- <div class="mt-4 pt-3 border-top">
               <div class="fw-semibold mb-2">
                 <i class="fa fa-share-alt text-primary"></i> Share Campaign
               </div>
@@ -219,7 +219,70 @@
               </div>
               <input type="hidden" id="shareLink" value="{{ url('campaign/public/'.$campaign['job_id']) }}">
               <small class="text-muted d-block mt-2" id="copyMessage" style="display:none;"></small>
-            </div>
+            </div> --}}
+
+            <div class="mt-4 pt-3 border-top">
+                <div class="fw-semibold mb-2">
+                    <i class="fa fa-share-alt text-primary"></i> Share Campaign
+                </div>
+
+                @php
+                    $campaignUrl = url('campaign/public/' . $campaign->job_id);
+                    $shareText = "Complete this {$campaign->post_title} task on Freebyz to earn {$campaignUrl}";
+                @endphp
+
+                <div class="share-btn-group flex-wrap">
+                    <!-- Copy Link -->
+                    <button
+                    type="button"
+                    class="share-btn copy-link-btn"
+                    onclick="copyShareLink()"
+                    title="Copy Link"
+                    >
+                    <i class="fa fa-link"></i> Copy Link
+                    </button>
+
+                    <!-- WhatsApp -->
+                    <a
+                    href="https://wa.me/?text={{ rawurlencode($shareText) }}"
+                    target="_blank"
+                    class="share-btn"
+                    style="background:#25D366;color:#fff;"
+                    >
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+
+                    <!-- X -->
+                    <a
+                    href="https://x.com/intent/tweet?text={{ rawurlencode($shareText) }}"
+                    target="_blank"
+                    class="share-btn"
+                    style="background:#1DA1F2;color:#fff;"
+                    >
+                    <i class="fab fa-x"></i> X
+                    </a>
+
+                    <!-- Facebook -->
+                    <a
+                    href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($campaignUrl) }}"
+                    target="_blank"
+                    class="share-btn"
+                    style="background:#1877F2;color:#fff;"
+                    >
+                    <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                </div>
+
+                <!-- Hidden input for copy -->
+                <input type="hidden" id="shareLink" value="{{ $campaignUrl }}">
+
+                <small
+                    class="text-muted d-block mt-2"
+                    id="copyMessage"
+                    style="display:none;"
+                ></small>
+                </div>
+
           </div>
         </div>
 
