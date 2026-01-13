@@ -284,7 +284,7 @@
                             {!! $campaign->description !!}
                         </div>
 
-                        
+
 
                     </div>
                 </div>
@@ -296,15 +296,15 @@
                     <div class="card-body">
                         {!! $campaign->proof !!}
 
-                        
+
                     </div>
 
-                    
+
 
                 </div>
 
                 <a href="{{ route('login') }}?redirect={{ $campaign->job_id }}" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Perform Task 
+                        <i class="fas fa-sign-in-alt me-2"></i>Perform Task
                     </a>
 
                 <!-- Features Section -->
@@ -394,7 +394,7 @@
                             <button class="btn btn-secondary" onclick="copyShareLink()">
                                 <i class="fas fa-link me-2"></i>Copy Link
                             </button>
-                            <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url()->current()) }}"
+                            {{-- <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #25D366; color: white;">
                                 <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
                             </a>
@@ -405,7 +405,20 @@
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                                 target="_blank" class="btn" style="background: #1877F2; color: white;">
                                 <i class="fab fa-facebook-f me-2"></i>Share on Facebook
+                            </a> --}}
+                            <a href="https://wa.me/?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url()->current()) }}"
+                                target="_blank" class="btn" style="background: #25D366; color: white;">
+                                <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
                             </a>
+                            <a href="https://x.com/intent/post?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url()->current()) }}"
+                                target="_blank" class="btn" style="background: #1DA1F2; color: white;">
+                                <i class="fab fa-x me-2"></i>Share on X
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
+                                target="_blank" class="btn" style="background: #1877F2; color: white;">
+                                <i class="fab fa-facebook-f me-2"></i>Share on Facebook
+                            </a>
+
                         </div>
                         <input type="hidden" id="shareLink" value="{{ url()->current() }}">
                         <small class="text-success d-block mt-2" id="copyMessage" style="display:none;"></small>

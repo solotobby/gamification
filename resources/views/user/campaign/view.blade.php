@@ -207,10 +207,10 @@
                 <button class="share-btn copy-link-btn" onclick="copyShareLink()" title="Copy Link">
                   <i class="fa fa-link"></i> Copy Link
                 </button>
-                <a href="https://wa.me/?text=Check out this amazing campaign on Freebyz! {{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #25D366; color: white;">
+                <a href="https://wa.me/?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #25D366; color: white;">
                   <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <a href="https://x.com/intent/post?text=Check out this campaign on Freebyz!&url={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1DA1F2; color: white;">
+                <a href="https://x.com/intent/post?text=Complete this {{ $campaign['post_title'] }} task on Freebyz to earn {{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1DA1F2; color: white;">
                   <i class="fab fa-x"></i> X
                 </a>
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('campaign/public/'.$campaign['job_id'])) }}" target="_blank" class="share-btn" style="background: #1877F2; color: white;">
