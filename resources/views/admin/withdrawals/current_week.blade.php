@@ -134,9 +134,13 @@
                           <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                           @if($with->status != '1')
-                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal-pin-{{ $with->id }}"
+                                        data-bs-dismiss="modal">Process via API</button>
+                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Manual Update</a>
                           @else
-                          <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
+                          <a href="#" class="btn btn-sm btn-success disabled">Approved</a>
                           @endif
                           </div>
                       </div>
@@ -178,12 +182,51 @@
                         <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                          @if($with->status != '1')
-                                  <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal-pin-{{ $with->id }}"
+                                        data-bs-dismiss="modal">Process via API</button>
+                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Manual Update</a>
                             @else
-                                <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
+                                <a href="#" class="btn btn-sm btn-success disabled">Approved</a>
                             @endif
                         </div>
                     </div>
+                    </div>
+                </div>
+
+                <!-- PIN Verification Modal -->
+                <div class="modal fade" id="modal-pin-{{ $with->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Enter PIN to Process Payment</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="POST" action="{{ url('update/withdrawal/'.$with->id.'/verify-pin') }}">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Security PIN</label>
+                                        <input type="password" name="pin" class="form-control"
+                                               placeholder="Enter 6-digit PIN" maxlength="6" required
+                                               pattern="\d{6}" inputmode="numeric">
+                                        <small class="form-text text-muted">Enter your 6-digit security PIN to process this payment via API</small>
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                        You are about to process a payment of <strong>{{ $with->base_currency }} {{ number_format($with->amount) }}</strong>
+                                        to <strong>{{ $with->user->name }}</strong>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-lock"></i> Verify & Process
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 @empty

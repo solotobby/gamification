@@ -1,17 +1,15 @@
 @extends('layouts.main.master')
-@section('style')
-@endsection
 
 @section('content')
 
  <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3"> Queued Withdrawal Request</h1>
+        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">This Week Queued Withdrawal Request</h1>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item active" aria-current="page">Queued Withdrawal Request</li>
+            <li class="breadcrumb-item active" aria-current="page">This Week Queued Withdrawal Request</li>
           </ol>
         </nav>
       </div>
@@ -24,7 +22,7 @@
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
-        <h3 class="block-title">Queued Withdrawal Request - &#8358;{{ number_format($withdrawals->where('status', false)->sum('amount')) }}</h3>
+        <h3 class="block-title">This Week Queued Withdrawal Request - &#8358;{{ number_format($withdrawals->where('status', false)->sum('amount')) }}</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option">
             <i class="si si-settings"></i>
@@ -68,7 +66,6 @@
           <table class="table table-bordered table-striped table-vcenter">
             <thead>
                 <tr>
-                    <th>USD</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -82,8 +79,15 @@
             <tbody>
                 @forelse ($withdrawals as $with)
                     <tr>
-                        <td>{{ $with->user->is_usd == true ? 'USD' : 'Naira' }} - {{ $with->paypal_email }}</td>
-                        <td class="fw-semibold"> <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}"> {{$with->user->name }}</a></td>
+                        <td class="fw-semibold">
+                          @if($with->is_usd == true)
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}">{{$with->user->name}}</a>
+                          @elseif($with->base_currency == null)
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-{{ $with->id }}">{{$with->user->name}}</a>
+                          @else
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modal-default-popout-upgrade-other-{{ $with->id }}">{{$with->user->name}}</a>
+                          @endif
+                        </td>
                         <td>{{ $with->user->email }}</td>
                         <td>{{ $with->user->phone }}</td>
                         <td>
@@ -95,7 +99,7 @@
                         <td>{{ \Carbon\Carbon::parse($with->next_payment_date)->diffForHumans() }}</td>
                     </tr>
 
-                    <!-- Bank Account Modal -->
+                    <!-- Modal for NGN -->
                     <div class="modal fade" id="modal-default-popout-upgrade-{{ $with->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-popout" role="document">
                       <div class="modal-content">
@@ -105,7 +109,6 @@
                           </div>
 
                           <div class="modal-body pb-1">
-                              <hr>
                               <div class="block-content">
                                 <ul class="list-group push">
                                   <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
@@ -131,60 +134,65 @@
                           <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
                           @if($with->status != '1')
-                                <button type="button" class="btn btn-sm btn-primary"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modal-pin-{{ $with->id }}"
-                                        data-bs-dismiss="modal">Process via API</button>
-                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Manual Update</a>
+                                <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
                           @else
-                          <a href="#" class="btn btn-sm btn-success disabled">Approved</a>
+                          <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
                           @endif
                           </div>
                       </div>
                       </div>
                   </div>
 
-                  <!-- PIN Verification Modal -->
-                  <div class="modal fade" id="modal-pin-{{ $with->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title">Enter PIN to Process Payment</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <form method="POST" action="{{ url('update/withdrawal/'.$with->id.'/verify-pin') }}">
-                                  @csrf
-                                  <div class="modal-body">
-                                      <div class="mb-3">
-                                          <label class="form-label">Security PIN</label>
-                                          <input type="password" name="pin" class="form-control"
-                                                 placeholder="Enter 6-digit PIN" maxlength="6" required
-                                                 pattern="\d{6}" inputmode="numeric">
-                                          <small class="form-text text-muted">Enter your 6-digit security PIN to process this payment via API</small>
-                                      </div>
-                                      <div class="alert alert-warning">
-                                          <i class="fa fa-exclamation-triangle"></i>
-                                          You are about to process a payment of <strong>{{ $with->base_currency }} {{ number_format($with->amount) }}</strong>
-                                          to <strong>{{ $with->user->name }}</strong>
-                                      </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                      <button type="submit" class="btn btn-sm btn-primary">
-                                          <i class="fa fa-lock"></i> Verify & Process
-                                      </button>
-                                  </div>
-                              </form>
-                          </div>
-                      </div>
-                  </div>
+                  <!-- Modal for Other Currencies -->
+                  <div class="modal fade" id="modal-default-popout-upgrade-other-{{ $with->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-popout" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-popout" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">Payment Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body pb-1">
+                            <div class="block-content">
+                              <ul class="list-group push">
+                              <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                 Bank Name
+                                   <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->bank_name }}  </span>
+                              </li>
+                             <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                  Account Name
+                                   <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->name }} </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                  Account Number
+                                   <span class="badge rounded-pill bg-info">{{ @$with->user->accountDetails->account_number }} </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+                                  Amount
+                                   <span class="badge rounded-pill bg-info">&#8358;{{ number_format($with->amount) }} </span>
+                                 </li>
+                              </ul>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                         @if($with->status != '1')
+                                  <a href="{{ url('update/withdrawal/manual/'.$with->id) }}" class="btn btn-sm btn-secondary">Update Approval</a>
+                            @else
+                                <a href="#" class="btn btn-sm btn-success diasbled">Approved</a>
+                            @endif
+                        </div>
+                    </div>
+                    </div>
+                </div>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center">
+                        <td colspan="8" class="text-center">
                             @if(request('search'))
                                 No results found for "{{ request('search') }}"
                             @else
-                                No queued withdrawals found
+                                No withdrawals found for this week
                             @endif
                         </td>
                     </tr>
