@@ -2388,6 +2388,18 @@ if (!function_exists('recipientCode')) {
     }
 }
 
+function verifyRecipientCode($recipientCode)
+{
+    $res = Http::withHeaders([
+        'Authorization' => 'Bearer ' . config('paystack.secretKey'),
+    ])->get("https://api.paystack.co/transferrecipient/{$recipientCode}");
+
+    return $res->successful()
+        ? json_decode($res->getBody()->getContents(), true)
+        : null;
+}
+
+
 if (!function_exists('transferFund')) {
     function transferFund($amount, $recipient, $reason)
     {
@@ -2395,7 +2407,7 @@ if (!function_exists('transferFund')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/transfer', [
             "source" => "balance",
             "amount" => $amount,
@@ -2403,6 +2415,7 @@ if (!function_exists('transferFund')) {
             "reason" => $reason
         ]);
 
+        Log::info($res);
         return json_decode($res->getBody()->getContents(), true);
     }
 }
@@ -2973,7 +2986,6 @@ if (!function_exists('uploadFileToCloudinary')) {
             return null;
         }
     }
-
 }
 
 
@@ -2995,4 +3007,3 @@ if (!function_exists('displayImage')) {
         return '';
     }
 }
-

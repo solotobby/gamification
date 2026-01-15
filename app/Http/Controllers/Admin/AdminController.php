@@ -965,6 +965,139 @@ class AdminController extends Controller
     }
 
 
+    public function verifyPinAndProcess(Request $request, $id)
+    {
+        $request->validate([
+            'pin' => 'required|digits:6'
+        ]);
+
+        if ($request->pin !== config('services.env.withdrawal_payment')) {
+
+            return back()->with('error', 'Invalid PIN. Payment not processed.');
+        }
+
+        return $this->updateWithdrawalRequest($id);
+    }
+
+    public function updateWithdrawalRequest($id)
+    {
+        $withdrawal = Withrawal::find($id);
+
+        if (!$withdrawal) {
+            return back()->with('error', 'Withdrawal not found');
+        }
+
+        if ($withdrawal->status != 0) {
+            return back()->with('error', 'Payment has already been processed');
+        }
+
+        $user = $withdrawal->user;
+
+        $bankInformation = BankInformation::where('user_id', $user->id)->first();
+
+        if (!$bankInformation) {
+            return back()->with('error', 'Bank information not found');
+        }
+
+        // Verify existing recipient code (if any)
+        $recipientValid = false;
+
+        if (!empty($bankInformation->recipient_code)) {
+            $verify = verifyRecipientCode($bankInformation->recipient_code);
+            $recipientValid = $verify && $verify['status'] === true;
+        }
+
+        // Create / Recreate recipient if invalid or missing
+        if (!$recipientValid) {
+
+            $recipientResponse = recipientCode(
+                $bankInformation->name,
+                $bankInformation->account_number,
+                $bankInformation->bank_code
+            );
+
+            if (
+                !$recipientResponse ||
+                $recipientResponse['status'] !== true ||
+                !isset($recipientResponse['data']['recipient_code'])
+            ) {
+
+                Log::error('Paystack recipient creation failed', [
+                    'user_id' => $user->id,
+                    'response' => $recipientResponse
+                ]);
+
+                return back()->with('error', 'Unable to validate bank recipient');
+            }
+
+            $bankInformation->recipient_code = $recipientResponse['data']['recipient_code'];
+            $bankInformation->save();
+        }
+
+        // Transfer funds
+
+        $amount = $withdrawal->amount * 100;
+
+        $transfer = transferFund(
+            $amount,
+            $bankInformation->recipient_code,
+            'Freebyz Withdrawal'
+        );
+
+        if (
+            isset($transfer['data']['status']) &&
+            in_array($transfer['data']['status'], ['success', 'pending'])
+        ) {
+
+            $withdrawal->status = true;
+            $withdrawal->save();
+
+            activityLog(
+                $user,
+                'withdrawal_sent',
+                'NGN' . number_format($amount) . ' cash withdrawal by ' . $user->name,
+                'regular'
+            );
+
+            Mail::to($user->email)->send(
+                new GeneralMail(
+                    $user,
+                    'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
+                    'Withdrawal Request Granted',
+                    ''
+                )
+            );
+
+            return back()->with('success', 'Withdrawal processed successfully');
+        }
+
+        // Log Paystack transfer error
+        Log::error('Paystack transfer failed', [
+            'withdrawal_id' => $withdrawal->id,
+            'response' => $transfer
+        ]);
+
+        return back()->with('error', 'Withdrawal transfer failed');
+    }
+
+
+    public function updateWithdrawalRequestManual($id)
+    {
+        $withdrawals = Withrawal::where('id', $id)->first();
+        $withdrawals->status = true;
+        $withdrawals->save();
+        $user = User::where('id', $withdrawals->user->id)->first();
+        //set activity log
+        $am = number_format($withdrawals->amount);
+        $name = $user->name;
+        activityLog($user, 'withdrawal_sent', 'NGN' . $am . ' cash withdrawal by ' . $name, 'regular');
+        $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
+        $subject = 'Withdrawal Request Granted';
+        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        return back()->with('success', 'Withdrawals Updated');
+    }
+
+
     public function withdrawalRequest(Request $request)
     {
         $query = Withrawal::where('status', '1')->orderBy('created_at', 'DESC');
@@ -2254,7 +2387,7 @@ class AdminController extends Controller
         return view('admin.market_place.view', ['marketPlaceLists' => $list]);
     }
 
-    public function updateWithdrawalRequest($id)
+    public function updateWithdrawalRequestOld($id)
     {
         $withdrawals = Withrawal::where('id', $id)->first();
 
@@ -2304,7 +2437,7 @@ class AdminController extends Controller
         }
     }
 
-    public function updateWithdrawalRequestManual($id)
+    public function updateWithdrawalRequestManualOld($id)
     {
         $withdrawals = Withrawal::where('id', $id)->first();
         $withdrawals->status = true;
