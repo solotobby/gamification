@@ -47,10 +47,10 @@ class ReleaseExpiredDeniedSlots extends Command
                 $deniedWork->slot_released = true;
                 $deniedWork->save();
 
-                // Decrease the pending count for the campaign
+                // Increase the pending count for the campaign
                 $campaign = Campaign::find($deniedWork->campaign_id);
                 if ($campaign && $campaign->pending_count > 0) {
-                    $campaign->pending_count -= 1;
+                    $campaign->pending_count += 1;
                     $campaign->save();
 
                     $this->info("Released slot for Campaign ID: {$campaign->id}, Worker ID: {$deniedWork->id}");

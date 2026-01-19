@@ -502,88 +502,88 @@ class CampaignController extends Controller
     }
 
     public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime, $expectedResultImageUrl = null)
-{
-    $currency = '';
-    $channel = '';
+    {
+        $currency = '';
+        $channel = '';
 
-    $baseCurrency = auth()->user()->wallet->base_currency;
-    if ($baseCurrency == "NGN") {
-        $currency = 'NGN';
-        $channel = 'paystack';
-    } elseif ($baseCurrency == "USD") {
-        $currency = 'USD';
-        $channel = 'paypal';
-    } else {
-        $currency = $baseCurrency;
-        $channel = 'flutterwave';
-    }
+        $baseCurrency = auth()->user()->wallet->base_currency;
+        if ($baseCurrency == "NGN") {
+            $currency = 'NGN';
+            $channel = 'paystack';
+        } elseif ($baseCurrency == "USD") {
+            $currency = 'USD';
+            $channel = 'paypal';
+        } else {
+            $currency = $baseCurrency;
+            $channel = 'flutterwave';
+        }
 
-    // Build the campaign data array
-    $campaignData = [
-        'user_id' => auth()->user()->id,
-        'post_title' => $request->post_title,
-        'post_link' => $request->post_link,
-        'campaign_type' => $request->campaign_type,
-        'campaign_subcategory' => $request->campaign_subcategory,
-        'number_of_staff' => $request->number_of_staff,
-        'campaign_amount' => $request->campaign_amount,
-        'description' => $request->description,
-        'proof' => $request->proof,
-        'total_amount' => $total,
-        'job_id' => $job_id,
-        'currency' => $currency,
-        'impressions' => 0,
-        'pending_count' => 0,
-        'completed_count' => 0,
-        'allow_upload' => $allowUpload,
-        'approved' => $priotize,
-        'approval_time' => $approvalTime,
-        'expected_result_image' => $expectedResultImageUrl, // This is the Cloudinary URL
-    ];
+        // Build the campaign data array
+        $campaignData = [
+            'user_id' => auth()->user()->id,
+            'post_title' => $request->post_title,
+            'post_link' => $request->post_link,
+            'campaign_type' => $request->campaign_type,
+            'campaign_subcategory' => $request->campaign_subcategory,
+            'number_of_staff' => $request->number_of_staff,
+            'campaign_amount' => $request->campaign_amount,
+            'description' => $request->description,
+            'proof' => $request->proof,
+            'total_amount' => $total,
+            'job_id' => $job_id,
+            'currency' => $currency,
+            'impressions' => 0,
+            'pending_count' => 0,
+            'completed_count' => 0,
+            'allow_upload' => $allowUpload,
+            'approved' => $priotize,
+            'approval_time' => $approvalTime,
+            'expected_result_image' => $expectedResultImageUrl, // This is the Cloudinary URL
+        ];
 
-    // Create campaign with explicit data array instead of using $request->all()
-    $campaign = Campaign::create($campaignData);
+        // Create campaign with explicit data array instead of using $request->all()
+        $campaign = Campaign::create($campaignData);
 
-    $ref = time();
-    PaymentTransaction::create([
-        'user_id' => auth()->user()->id,
-        'campaign_id' => $campaign->id,
-        'reference' => $ref,
-        'amount' => $total,
-        'balance' => walletBalance(auth()->user()->id),
-        'status' => 'successful',
-        'currency' => $currency,
-        'channel' => $channel,
-        'type' => 'campaign_posted',
-        'description' => $campaign->post_title . ' Campaign',
-        'tx_type' => 'Debit',
-        'user_type' => 'regular'
-    ]);
-
-    //CREDIT ADMIN
-    $adminUser = User::where('id', 1)->first();
-    $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
-
-    if ($creditAdminWallet) {
-        //Admin Transaction Table
+        $ref = time();
         PaymentTransaction::create([
-            'user_id' => 1,
-            'campaign_id' => '1',
+            'user_id' => auth()->user()->id,
+            'campaign_id' => $campaign->id,
             'reference' => $ref,
-            'amount' => $percent,
-            'balance' => walletBalance('1'),
+            'amount' => $total,
+            'balance' => walletBalance(auth()->user()->id),
             'status' => 'successful',
             'currency' => $currency,
             'channel' => $channel,
-            'type' => 'campaign_revenue',
-            'description' => 'Campaign revenue from ' . auth()->user()->name,
-            'tx_type' => 'Credit',
-            'user_type' => 'admin'
+            'type' => 'campaign_posted',
+            'description' => $campaign->post_title . ' Campaign',
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
         ]);
-    }
 
-    return $campaign;
-}
+        //CREDIT ADMIN
+        $adminUser = User::where('id', 1)->first();
+        $creditAdminWallet = creditWallet($adminUser, $baseCurrency, $percent);
+
+        if ($creditAdminWallet) {
+            //Admin Transaction Table
+            PaymentTransaction::create([
+                'user_id' => 1,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => $percent,
+                'balance' => walletBalance('1'),
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => $channel,
+                'type' => 'campaign_revenue',
+                'description' => 'Campaign revenue from ' . auth()->user()->name,
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+        }
+
+        return $campaign;
+    }
 
     // public function processCampaign($total, $request, $job_id, $percent, $allowUpload, $priotize, $approvalTime)
     // {
@@ -1511,48 +1511,94 @@ class CampaignController extends Controller
 
     public function processDisputedJobs(Request $request)
     {
-        $workDone = CampaignWorker::where('id', $request->id)->first();
+        $workDone = CampaignWorker::find($request->id);
 
-        if (!$workDone) {
+        if (! $workDone) {
             return back()->with('error', 'Work submission not found');
         }
 
-        // Check if dispute window has expired
-        if ($workDone->isDisputeWindowExpired()) {
-            return back()->with('error', 'Dispute window has expired. You had 12 hours to dispute this denial.');
-        }
-
-        // Check if already disputed
-        if ($workDone->is_dispute) {
-            return back()->with('error', 'This job has already been disputed');
-        }
-
-        // Check if slot was already released
-        if ($workDone->slot_released) {
-            return back()->with('error', 'This slot has already been released');
+        // Centralized dispute eligibility check
+        if (! $workDone->canCreateDispute()) {
+            return back()->with(
+                'error',
+                'This job can no longer be disputed. The dispute window has expired.'
+            );
         }
 
         // Mark as disputed
-        $workDone->is_dispute = true;
-        $workDone->save();
+        $workDone->update([
+            'is_dispute' => true,
+        ]);
 
         $disputedJob = DisputedJobs::create([
             'campaign_worker_id' => $workDone->id,
-            'campaign_id' => $workDone->campaign_id,
-            'user_id' => auth()->user()->id,
-            'reason' => $request->reason
+            'campaign_id'        => $workDone->campaign_id,
+            'user_id'            => auth()->id(),
+            'reason'             => $request->reason,
         ]);
 
-        if (config('app.env') == 'Production' && $disputedJob) {
+        // Send mail only in production
+        if (config('app.env') === 'production') {
             $subject = 'New Dispute Raised';
-            $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
+            $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a job. Please attend to it.';
             $url = 'admin/campaign/disputes/' . $workDone->id;
-            Mail::to('freebyzcom@gmail.com')->bcc('favour@freebyztechnologies.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
 
-            return back()->with('success', 'Dispute submitted successfully. Your slot is now reserved pending resolution.');
+            Mail::to('freebyzcom@gmail.com')
+                ->bcc('favour@freebyztechnologies.com')
+                ->send(new GeneralMail(auth()->user(), $content, $subject, $url));
         }
-        return back()->with('error', 'Failed to submit dispute. Please try again.');
+
+        return back()->with(
+            'success',
+            'Dispute submitted successfully. Your slot is now reserved pending resolution.'
+        );
     }
+
+
+    // public function processDisputedJobsLatestDepreciate(Request $request)
+    // {
+    //     $workDone = CampaignWorker::where('id', $request->id)->first();
+
+    //     if (!$workDone) {
+    //         return back()->with('error', 'Work submission not found');
+    //     }
+
+    //     // Check if dispute window has expired
+    //     if ($workDone->isDisputeWindowExpired()) {
+    //         return back()->with('error', 'Dispute window has expired');
+    //     }
+
+    //     // Check if already disputed
+    //     if ($workDone->is_dispute) {
+    //         return back()->with('error', 'This job has already been disputed');
+    //     }
+
+    //     // Check if slot was already released
+    //     if ($workDone->slot_released) {
+    //         return back()->with('error', 'This slot has already been released');
+    //     }
+
+    //     // Mark as disputed
+    //     $workDone->is_dispute = true;
+    //     $workDone->save();
+
+    //     $disputedJob = DisputedJobs::create([
+    //         'campaign_worker_id' => $workDone->id,
+    //         'campaign_id' => $workDone->campaign_id,
+    //         'user_id' => auth()->user()->id,
+    //         'reason' => $request->reason
+    //     ]);
+
+    //     if (config('app.env') == 'Production' && $disputedJob) {
+    //         $subject = 'New Dispute Raised';
+    //         $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a Job. Please follow the link below to attend to it.';
+    //         $url = 'admin/campaign/disputes/' . $workDone->id;
+    //         Mail::to('freebyzcom@gmail.com')->bcc('favour@freebyztechnologies.com')->send(new GeneralMail(auth()->user(), $content, $subject, $url));
+
+    //         return back()->with('success', 'Dispute submitted successfully. Your slot is now reserved pending resolution.');
+    //     }
+    //     return back()->with('error', 'Failed to submit dispute. Please try again.');
+    // }
 
     // public function processDisputedJobs(Request $request)
     // {
