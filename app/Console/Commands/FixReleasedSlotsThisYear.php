@@ -15,52 +15,52 @@ class FixReleasedSlotsThisYear extends Command
 
     protected $description = 'Restore wrongly reduced campaign slots for released denied jobs (current year only)';
 
-    public function handle()
-    {
-        $this->info('Starting slot correction for this year...');
+    // public function handle()
+    // {
+    //     $this->info('Starting slot correction for this year...');
 
-        $yearStart = Carbon::now()->startOfYear();
+    //     $yearStart = Carbon::now()->startOfYear();
 
-        // Get released denied jobs THIS YEAR and group by campaign
-        $releasedByCampaign = CampaignWorker::where('status', 'Denied')
-            ->where('slot_released', true)
-            ->where('updated_at', '>=', $yearStart)
-            ->get()
-            ->groupBy('campaign_id');
+    //     // Get released denied jobs THIS YEAR and group by campaign
+    //     $releasedByCampaign = CampaignWorker::where('status', 'Denied')
+    //         ->where('slot_released', true)
+    //         ->where('updated_at', '>=', $yearStart)
+    //         ->get()
+    //         ->groupBy('campaign_id');
 
-        if ($releasedByCampaign->isEmpty()) {
-            $this->info('No released slots found for correction.');
-            return Command::SUCCESS;
-        }
+    //     if ($releasedByCampaign->isEmpty()) {
+    //         $this->info('No released slots found for correction.');
+    //         return Command::SUCCESS;
+    //     }
 
-        DB::transaction(function () use ($releasedByCampaign) {
-            foreach ($releasedByCampaign as $campaignId => $workers) {
-                $slotCount = $workers->count();
+    //     DB::transaction(function () use ($releasedByCampaign) {
+    //         foreach ($releasedByCampaign as $campaignId => $workers) {
+    //             $slotCount = $workers->count();
 
-                $campaign = Campaign::find($campaignId);
+    //             $campaign = Campaign::find($campaignId);
 
-                if (! $campaign) {
-                    continue;
-                }
+    //             if (! $campaign) {
+    //                 continue;
+    //             }
 
-                // Restore the wrongly reduced slots
-                $restoredSlots = $slotCount * 2;
+    //             // Restore the wrongly reduced slots
+    //             $restoredSlots = $slotCount * 2;
 
-                $campaign->pending_count += $restoredSlots;
-                $campaign->save();
+    //             $campaign->pending_count += $restoredSlots;
+    //             $campaign->save();
 
-                $this->info("Campaign ID {$campaignId}: restored {$restoredSlots} slots");
+    //             $this->info("Campaign ID {$campaignId}: restored {$restoredSlots} slots");
 
-                Log::info('Campaign slots restored (manual correction)', [
-                    'campaign_id' => $campaignId,
-                    'released_slots' => $slotCount,
-                    'slots_restored' => $restoredSlots,
-                ]);
-            }
-        });
+    //             Log::info('Campaign slots restored (manual correction)', [
+    //                 'campaign_id' => $campaignId,
+    //                 'released_slots' => $slotCount,
+    //                 'slots_restored' => $restoredSlots,
+    //             ]);
+    //         }
+    //     });
 
-        $this->info('Slot correction completed successfully.');
+    //     $this->info('Slot correction completed successfully.');
 
-        return Command::SUCCESS;
-    }
+    //     return Command::SUCCESS;
+    // }
 }
