@@ -206,6 +206,16 @@ class AdminController extends Controller
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
+    public function campaignDisputesForFlagged($id)
+    {
+        $disputes = CampaignWorker::where('is_dispute', true)
+            ->where(
+                'campaign_id',
+                $id
+            )->orderBy('created_at', 'DESC')->paginate(100);
+        return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
+    }
+
     public function campaignDisputesView($id)
     {
         $workdisputed = CampaignWorker::where('id', $id)->first();
@@ -1055,7 +1065,7 @@ class AdminController extends Controller
             activityLog(
                 $user,
                 'withdrawal_sent',
-                'NGN' . number_format($amount) . ' cash withdrawal by ' . $user->name,
+                'NGN' . number_format($withdrawal->amount) . ' cash withdrawal by ' . $user->name,
                 'regular'
             );
 
@@ -1451,10 +1461,17 @@ class AdminController extends Controller
 
 
 
+    // public function campaignInfo($id)
+    // {
+    //     $campaign = Campaign::where('id', $id)->first();
+    //     $activities = $campaign->attempts;
+    //     return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
+    // }
+
     public function campaignInfo($id)
     {
         $campaign = Campaign::where('id', $id)->first();
-        $activities = $campaign->attempts;
+        $activities = $campaign->attempts()->paginate(20);
         return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
     }
 

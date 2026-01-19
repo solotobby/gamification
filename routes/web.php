@@ -583,6 +583,7 @@ Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::cla
 //Campaign metrics
 Route::get('admin/campaign/metrics', [\App\Http\Controllers\Admin\AdminController::class, 'campaignMetrics']);
 Route::get('admin/campaign/disputes', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputes']);
+Route::get('admin/campaign/{id}/disputes', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputesForFlagged']);
 Route::get('admin/campaign/disputes/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputesView']);
 Route::post('admin/campaign/disputes/decision', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDisputesDecision'])->name('dispute.decision');
 

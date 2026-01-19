@@ -72,12 +72,16 @@
                                     <small>{{ $campaign->flagged_reason }}</small>
                                 </td>
                                 <td>
-                                    <a href="{{ url('campaign/info/'.$campaign->id) }}" 
+                                    <a href="{{ url('campaign/info/'.$campaign->id) }}"
                                        class="btn btn-sm btn-info" target="_blank">
                                         View
                                     </a>
-                                    <button class="btn btn-sm btn-warning" 
-                                            data-bs-toggle="modal" 
+                                     <a href="{{ url('admin/campaign/'.$campaign->id.'/disputes') }}"
+                                       class="btn btn-sm btn-danger" target="_blank">
+                                        Disputes
+                                    </a>
+                                    <button class="btn btn-sm btn-warning"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#unflag-{{ $campaign->id }}">
                                         Unflag
                                     </button>
@@ -98,7 +102,7 @@
                                                 <p>Are you sure you want to unflag this campaign?</p>
                                                 <p><strong>Campaign:</strong> {{ $campaign->post_title }}</p>
                                                 <p><strong>Denial Rate:</strong> {{ $denialRate }}%</p>
-                                                
+
                                                 <div class="mb-3">
                                                     <label class="form-label">New Status</label>
                                                     <select class="form-select" name="new_status" required>

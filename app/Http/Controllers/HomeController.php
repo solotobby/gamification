@@ -326,9 +326,18 @@ class HomeController extends Controller
 
     public function adminHome(Request $request)
     {
-        $period = $request->get('period', 7);
-        $startDate = Carbon::now()->subDays($period)->startOfDay();
-        $endDate = Carbon::now()->endOfDay();
+        $period = $request->get('period', 'today');
+        // $startDate = Carbon::now()->subDays($period)->startOfDay();
+        // $endDate = Carbon::now()->endOfDay();
+
+        // $data = ['period' => $period];
+        if ($period === 'today') {
+            $startDate = Carbon::today()->startOfDay();
+            $endDate = Carbon::now();
+        } else {
+            $startDate = Carbon::now()->subDays($period)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+        }
 
         $data = ['period' => $period];
 
@@ -367,22 +376,52 @@ class HomeController extends Controller
         return view('admin.index_new', $data);
     }
 
+    // public function analytics(Request $request)
+    // {
+    //     $period = $request->get('period', 'today'); // Changed from 7 to 'today'
+
+    //     // Handle "today" filter for cache key
+    //     if ($period === 'today') {
+    //         $cacheKeyPeriod = 'today';
+    //     } else {
+    //         $cacheKeyPeriod = $period;
+    //     }
+    //     $chartData = [
+    //         'visitor' => Cache::remember('chart_daily_activities_' . $period, 1800, fn() => dailyActivities()),
+    //         'daily' => Cache::remember('chart_daily_stats_' . $period, 1800, fn() => dailyStats()),
+    //         'monthly' => Cache::remember('chart_monthly_visits_' . $period, 1800, fn() => monthlyVisits()),
+    //         'revenue' => Cache::remember('chart_revenue_channel_' . $period, 1800, fn() => revenueChannel()),
+    //         'country' => Cache::remember('chart_country_dist_' . $period, 1800, fn() => countryDistribution()),
+    //         'age' => Cache::remember('chart_age_dist_' . $period, 1800, fn() => ageDistribution()),
+    //         'currency' => Cache::remember('chart_currency_dist_' . $period, 1800, fn() => currencyDistribution()),
+    //         'monthlyRevenue' => Cache::remember('chart_monthly_revenue_' . $period, 1800, fn() => monthlyRevenue()),
+    //         'weeklyRegistrationChannel' => Cache::remember('chart_weekly_reg_' . $period, 1800, fn() => weeklyRegistrationChannel()),
+    //         'weeklyVerificationChannel' => Cache::remember('chart_weekly_verif_' . $period, 1800, fn() => weeklyVerificationChannel())
+    //     ];
+
+    //     return view('admin.analytics', [
+    //         'period' => $period
+    //     ])->with(array_map('json_encode', $chartData));
+    // }
+
+
     public function analytics(Request $request)
     {
-        $period = $request->get('period', 7);
+        $period = $request->get('period', 'today');
 
-        // Prepare chart data with caching for expensive operations
+        $cacheDuration = $period === 'today' ? 300 : 1800;
+
         $chartData = [
-            'visitor' => Cache::remember('chart_daily_activities_' . $period, 300, fn() => dailyActivities()),
-            'daily' => Cache::remember('chart_daily_stats_' . $period, 300, fn() => dailyStats()),
-            'monthly' => Cache::remember('chart_monthly_visits_' . $period, 300, fn() => monthlyVisits()),
-            'revenue' => Cache::remember('chart_revenue_channel_' . $period, 300, fn() => revenueChannel()),
-            'country' => Cache::remember('chart_country_dist_' . $period, 1800, fn() => countryDistribution()),
-            'age' => Cache::remember('chart_age_dist_' . $period, 1800, fn() => ageDistribution()),
-            'currency' => Cache::remember('chart_currency_dist_' . $period, 1800, fn() => currencyDistribution()),
-            'monthlyRevenue' => Cache::remember('chart_monthly_revenue_' . $period, 300, fn() => monthlyRevenue()),
-            'weeklyRegistrationChannel' => Cache::remember('chart_weekly_reg_' . $period, 300, fn() => weeklyRegistrationChannel()),
-            'weeklyVerificationChannel' => Cache::remember('chart_weekly_verif_' . $period, 300, fn() => weeklyVerificationChannel())
+            'visitor' => Cache::remember('chart_daily_activities_' . $period, $cacheDuration, fn() => dailyActivities()),
+            'daily' => Cache::remember('chart_daily_stats_' . $period, $cacheDuration, fn() => dailyStats()),
+            'monthly' => Cache::remember('chart_monthly_visits_' . $period, $cacheDuration, fn() => monthlyVisits()),
+            'revenue' => Cache::remember('chart_revenue_channel_' . $period, $cacheDuration, fn() => revenueChannel()),
+            'country' => Cache::remember('chart_country_dist_' . $period, $cacheDuration, fn() => countryDistribution()),
+            'age' => Cache::remember('chart_age_dist_' . $period, $cacheDuration, fn() => ageDistribution()),
+            'currency' => Cache::remember('chart_currency_dist_' . $period, $cacheDuration, fn() => currencyDistribution()),
+            'monthlyRevenue' => Cache::remember('chart_monthly_revenue_' . $period, $cacheDuration, fn() => monthlyRevenue()),
+            'weeklyRegistrationChannel' => Cache::remember('chart_weekly_reg_' . $period, $cacheDuration, fn() => weeklyRegistrationChannel()),
+            'weeklyVerificationChannel' => Cache::remember('chart_weekly_verif_' . $period, $cacheDuration, fn() => weeklyVerificationChannel())
         ];
 
         return view('admin.analytics', [
@@ -392,15 +431,29 @@ class HomeController extends Controller
 
     public function adminApiDefault(Request $request)
     {
-        $period = (int) $request->period ?? 7;
-        $startDate = Carbon::today()->subDays($period);
-        $endDate = Carbon::today();
+        $period = $request->period ?? 7;
+        // $startDate = Carbon::today()->subDays($period);
+        // $endDate = Carbon::today();
+
+        // $userRole = auth()->user()->role;
+        // $cacheKey = "admin_dashboard_stats_{$period}_{$userRole}";
+
+        if ($period === 'today') {
+            $startDate = Carbon::today()->startOfDay();
+            $endDate = Carbon::now();
+        } else {
+            $period = (int) $period;
+            $startDate = Carbon::today()->subDays($period);
+            $endDate = Carbon::today();
+        }
 
         $userRole = auth()->user()->role;
         $cacheKey = "admin_dashboard_stats_{$period}_{$userRole}";
 
-        // Cache for 30 minutes (1800 seconds)
-        return Cache::remember($cacheKey, 1800, function () use ($startDate, $endDate, $userRole) {
+        // Cache for 5 minutes for "today" to keep data fresh
+        $cacheDuration = $period === 'today' ? 300 : 1800;
+
+        return Cache::remember($cacheKey, $cacheDuration, function () use ($startDate, $endDate, $userRole) {
             // --- User stats ---
             $userStats = User::selectRaw("
             COUNT(*) as registered,

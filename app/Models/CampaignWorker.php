@@ -59,6 +59,15 @@ class CampaignWorker extends Model
         return Carbon::now()->diffInHours($this->denied_at) >= 12;
     }
 
+    public function canCreateDispute(): bool
+    {
+        return $this->status === 'Denied'
+            && ! $this->slot_released
+            && ! $this->is_dispute
+            && $this->denied_at
+            && now()->diffInHours($this->denied_at) < 12;
+    }
+
     /**
      * Check if worker can still dispute
      */

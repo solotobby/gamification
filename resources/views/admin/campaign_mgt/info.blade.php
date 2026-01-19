@@ -131,16 +131,15 @@
 
                             <!-- Add this in your campaign decision view after the campaign description -->
                             @if($campaign->expected_result_image)
-                            <div class="mb-4">
-                                <label class="form-label">Expected Result Example</label>
-                                <div class="alert alert-info">
-                                    <i class="fa fa-info-circle me-1"></i> The campaign creator provided this image as an example of what they expect:
+                                <div class="mb-4">
+                                    <label class="form-label">Expected Result Example</label>
+                                    <div class="alert alert-info">
+                                        <i class="fa fa-info-circle me-1"></i> The campaign creator provided this image as an
+                                        example of what they expect:
+                                    </div>
+                                    <img src="{{ displayImage($campaign->expected_result_image)}}" class="img-thumbnail rounded"
+                                        alt="Expected Result" style="max-width: 100%; height: auto;">
                                 </div>
-                                <img src="{{ displayImage($campaign->expected_result_image)}}"
-                                    class="img-thumbnail rounded"
-                                    alt="Expected Result"
-                                    style="max-width: 100%; height: auto;">
-                            </div>
                             @endif
                             <div class="mb-2">
                                 <div class="form-group">
@@ -251,8 +250,8 @@
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Phone</th>
                             <th>Status</th>
+                            <th>Denial Reason</th>
 
                             @if($campaign->allow_upload)
                                 <th>Evidence</th>
@@ -267,30 +266,52 @@
                             <tr>
                                 <td>{{ $list->user->name }}</td>
                                 <td>{{ $list->user->email }}</td>
-                                <td>{{ $list->user->phone }}</td>
                                 <td>{{ $list->status }}</td>
+                                <td>{{ strip_tags($list->reason) ?: '-' }}</td>
 
                                 @if($campaign->allow_upload)
                                     <td>
                                         @if($list->proof_url)
-                                            <button class="btn btn-sm btn-alt-info" data-bs-toggle="modal"
+                                            <!-- View Evidence -->
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt-info" data-bs-toggle="modal"
                                                 data-bs-target="#evidenceModal" data-image="{{ displayImage($list->proof_url) }}">
-                                                <i class="fa fa-eye me-1"></i> View
-                                            </button>
-                                        @else
+                                                <i class="fa fa-eye"></i> View
+                                            </a>
+                                        @endif
+
+                                        {{-- Dispute icon --}}
+                                        @if($list->is_dispute)
+                                            <a href="{{ url('admin/campaign/disputes/' . $list->id) }}"
+                                                class="btn btn-sm btn-alt-danger ms-1" title="View Dispute">
+                                                <i class="fa fa-exclamation-circle"></i>Dispute
+                                            </a>
+                                        @endif
+
+                                        @if(!$list->proof_url && !$list->is_dispute)
                                             <span class="text-muted">None</span>
                                         @endif
                                     </td>
                                 @endif
+
 
                                 <td>{{ $list->created_at->diffForHumans() }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <!-- Add this right after the closing </table> tag and before </div> -->
+                </table>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $activities->links() }}
+                </div>
 
             </div>
         </div>
+    </div>
+    </div>
+    </div>
     </div>
     <div class="modal fade" id="evidenceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
