@@ -25,7 +25,7 @@
                         <br> Total Transaction - <a class="fw-medium" href="javascript:void(0)">
                             &#8358;{{number_format($transactions[0]->total_successful_transactions, 2)}}</a>
                         {{-- <br> Jobs Available - <a class="fw-medium" href="javascript:void(0)">{{ $av_count }}</a> --}}
-                        <br> Period Payment (Last {{ $period }} days) - <a class="fw-medium" href="javascript:void(0)">
+                        <br> Period Payment ({{ $period === 'today' ? 'Today' : 'Last ' . $period . ' days' }}) - <a class="fw-medium" href="javascript:void(0)">
                             &#8358;{{number_format($periodPayment, 2)}}</a>
 
                         <br> Active Virtual Account -<a class="fw-medium" href="javascript:void(0)"> {{ totalVirtualAccount() }}
@@ -47,9 +47,17 @@
                 <div class="dropdown d-inline-block">
                     <button type="button" class="btn btn-sm btn-alt-primary px-3" id="dropdown-analytics-overview"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span id="selected-option">Last {{ $period }} days</span> <i class="fa fa-fw fa-angle-down"></i>
+                        <span id="selected-option">
+                            @if($period === 'today')
+                                Today
+                            @else
+                                Last {{ $period }} days
+                            @endif
+                        </span>
+                        <i class="fa fa-fw fa-angle-down"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
+                        <a class="dropdown-item period-filter" data-period="today">Today</a>
                         <a class="dropdown-item period-filter" data-period="7">Last 7 days</a>
                         <a class="dropdown-item period-filter" data-period="14">Last 14 days</a>
                         <a class="dropdown-item period-filter" data-period="30">Last 30 days</a>
@@ -245,7 +253,7 @@
             }
 
             // Load stats on page load
-            var currentPeriod = {{ $period }};
+            var currentPeriod = '{{ $period }}';
             loadDashboardStats(currentPeriod);
         });
     </script>

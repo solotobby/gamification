@@ -1055,7 +1055,7 @@ class AdminController extends Controller
             activityLog(
                 $user,
                 'withdrawal_sent',
-                'NGN' . number_format($amount) . ' cash withdrawal by ' . $user->name,
+                'NGN' . number_format($withdrawal->amount) . ' cash withdrawal by ' . $user->name,
                 'regular'
             );
 

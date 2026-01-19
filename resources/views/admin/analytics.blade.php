@@ -100,9 +100,17 @@
                 <div class="dropdown d-inline-block">
                     <button type="button" class="btn btn-sm btn-alt-primary px-3" id="dropdown-analytics-overview"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span id="selected-option">Last {{ $period }} days</span> <i class="fa fa-fw fa-angle-down"></i>
+                        <span id="selected-option">
+                            @if($period === 'today')
+                                Today
+                            @else
+                                Last {{ $period }} days
+                            @endif
+                        </span>
+                        <i class="fa fa-fw fa-angle-down"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
+                        <a class="dropdown-item period-filter" data-period="today">Today</a>
                         <a class="dropdown-item period-filter" data-period="7">Last 7 days</a>
                         <a class="dropdown-item period-filter" data-period="14">Last 14 days</a>
                         <a class="dropdown-item period-filter" data-period="30">Last 30 days</a>
