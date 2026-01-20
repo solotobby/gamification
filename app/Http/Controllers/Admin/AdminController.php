@@ -202,7 +202,7 @@ class AdminController extends Controller
 
     public function campaignDisputes()
     {
-        $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(100);
+        $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
@@ -212,7 +212,7 @@ class AdminController extends Controller
             ->where(
                 'campaign_id',
                 $id
-            )->orderBy('created_at', 'DESC')->paginate(100);
+            )->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
@@ -1471,7 +1471,7 @@ class AdminController extends Controller
     public function campaignInfo($id)
     {
         $campaign = Campaign::where('id', $id)->first();
-        $activities = $campaign->attempts()->paginate(20);
+        $activities = $campaign->attempts()->paginate(50);
         return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
     }
 

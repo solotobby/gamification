@@ -248,6 +248,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th>S/N</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Status</th>
@@ -264,6 +265,7 @@
                     <tbody>
                         @foreach ($activities as $list)
                             <tr>
+                                <td>{{ $activities->firstItem() + $loop->index }}</td>
                                 <td>{{ $list->user->name }}</td>
                                 <td>{{ $list->user->email }}</td>
                                 <td>{{ $list->status }}</td>
