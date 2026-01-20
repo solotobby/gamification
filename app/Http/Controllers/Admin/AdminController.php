@@ -228,12 +228,13 @@ class AdminController extends Controller
     {
 
         $workDone = CampaignWorker::where('id', $request->id)->first();
-        if ($workDone->is_dispute_resolve == true) {
+        if ($workDone->is_dispute_resolved == true) {
             return back()->with('error', 'Dispute has been attended to');
         }
         $workDone->status = $request->status;
         $workDone->is_dispute_resolved = true;
         $workDone->is_dispute = false;
+        $workDone->slot_released = true;
         $workDone->save();
 
         $campaign = Campaign::where('id', $workDone->campaign_id)->first();
@@ -253,7 +254,7 @@ class AdminController extends Controller
 
             //update completed action
             $campaign->completed_count += 1;
-            $campaign->pending_count -= 1;
+            // $campaign->pending_count -= 1;
             $campaign->save();
 
             setIsComplete($workDone->campaign_id);
@@ -301,39 +302,44 @@ class AdminController extends Controller
             $workDone->status = 'Denied';
             $workDone->save();
 
-            $this->removePendingCountAfterDenial($workDone->campaign_id);
+            if($workDone->denied_at){
 
-            $campaignOwner = User::where('id', $campaign->user_id)->first();
+                 $campaign->pending_count += 1;
+                // $this->removePendingCountAfterDenial($workDone->campaign_id);
 
-            if ($campaign->currency == 'NGN') {
-                $currency = 'NGN';
-                $channel = 'paystack';
-            } elseif ($campaign->currency == 'USD') {
-                $currency = 'USD';
-                $channel = 'paypal';
-            } else {
-                $currency = baseCurrency($campaignOwner);
-                $channel = 'flutterwave';
             }
 
-            creditWallet($campaignOwner, $currency, $workDone->amount);
+            // $campaignOwner = User::where('id', $campaign->user_id)->first();
 
-            $ref = time();
+            // if ($campaign->currency == 'NGN') {
+            //     $currency = 'NGN';
+            //     $channel = 'paystack';
+            // } elseif ($campaign->currency == 'USD') {
+            //     $currency = 'USD';
+            //     $channel = 'paypal';
+            // } else {
+            //     $currency = baseCurrency($campaignOwner);
+            //     $channel = 'flutterwave';
+            // }
 
-            PaymentTransaction::create([
-                'user_id' => $workDone->campaign->user_id,
-                'campaign_id' => $workDone->campaign->id,
-                'reference' => $ref,
-                'amount' => $workDone->amount,
-                'balance' => walletBalance($workDone->campaign->user_id),
-                'status' => 'successful',
-                'currency' => $currency,
-                'channel' => $channel,
-                'type' => 'campaign_payment_refund',
-                'description' => 'Campaign Dispute Resolution for ' . $workDone->campaign->post_title,
-                'tx_type' => 'Credit',
-                'user_type' => 'regular'
-            ]);
+            // creditWallet($campaignOwner, $currency, $workDone->amount);
+
+            // $ref = time();
+
+            // PaymentTransaction::create([
+            //     'user_id' => $workDone->campaign->user_id,
+            //     'campaign_id' => $workDone->campaign->id,
+            //     'reference' => $ref,
+            //     'amount' => $workDone->amount,
+            //     'balance' => walletBalance($workDone->campaign->user_id),
+            //     'status' => 'successful',
+            //     'currency' => $currency,
+            //     'channel' => $channel,
+            //     'type' => 'campaign_payment_refund',
+            //     'description' => 'Campaign Dispute Resolution for ' . $workDone->campaign->post_title,
+            //     'tx_type' => 'Credit',
+            //     'user_type' => 'regular'
+            // ]);
 
             $subject = 'Disputed Job ' . $request->status;
             $status = $request->status;
