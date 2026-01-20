@@ -78,7 +78,7 @@
                                         <label class="form-label" for="post-salary-min">Cost per Campaign</label>
                                     @endif
                                     <br>
-                                    {{$campaign->campaign->total_amount}}
+                                    {{$campaign->campaign->campaign_amount}}
                                 </div>
                             </div>
                             <hr>
