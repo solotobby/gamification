@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -433,7 +434,7 @@ class CampaignController extends Controller
 
             if ($file->isValid()) {
                 try {
-                    \Log::info('Uploading expected result image', [
+                    Log::info('Uploading expected result image', [
                         'name' => $file->getClientOriginalName(),
                         'size' => $file->getSize(),
                         'mime' => $file->getMimeType()
@@ -447,11 +448,11 @@ class CampaignController extends Controller
                             ->with('error', 'Failed to upload expected result image. Please try again.');
                     }
 
-                    \Log::info('Expected result image uploaded successfully', [
+                    Log::info('Expected result image uploaded successfully', [
                         'url' => $expectedResultImageUrl
                     ]);
                 } catch (\Exception $e) {
-                    \Log::error('Expected result image upload failed', [
+                    Log::error('Expected result image upload failed', [
                         'error' => $e->getMessage(),
                         'trace' => $e->getTraceAsString()
                     ]);
@@ -486,7 +487,7 @@ class CampaignController extends Controller
 
                 Mail::to(auth()->user()->email)->send(new CreateCampaign($processedCampaign));
 
-                if (config('app.env') == 'production') {
+                if (config('app.env') === 'Production') {
                     Mail::to('hello@freebyztechnologies.com')
                         ->cc('blessing@freebyztechnologies.com')
                         ->send(new AdminCampaignPosted($processedCampaign));
@@ -1538,7 +1539,7 @@ class CampaignController extends Controller
         ]);
 
         // Send mail only in production
-        if (config('app.env') === 'production') {
+        if (config('app.env') === 'Production') {
             $subject = 'New Dispute Raised';
             $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a job. Please attend to it.';
             $url = 'admin/campaign/disputes/' . $workDone->id;

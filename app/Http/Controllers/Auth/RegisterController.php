@@ -383,7 +383,7 @@ class RegisterController extends Controller
 
                 Auth::login($user);
 
-                if (config('app.env') === 'production') {
+                if (config('app.env') === 'Production') {
                     setProfile($user);
                     userLocation('Login');
                 }
