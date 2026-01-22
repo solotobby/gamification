@@ -11,13 +11,22 @@ class Feedback extends Model
 
     protected $table = "feedback";
 
-    protected $fillable = ['user_id', 'category', 'message', 'status', 'proof_url', 'respondent_id'];
+    protected $fillable = [
+        'user_id',
+        'category',
+        'message',
+        'status',
+        'proof_url',
+        'respondent_id'
+    ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function replies(){
+    public function replies()
+    {
         return $this->hasMany(FeedbackReplies::class, 'feedback_id');
     }
 }

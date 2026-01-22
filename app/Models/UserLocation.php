@@ -11,7 +11,19 @@ class UserLocation extends Model
 
     protected $table = "locations";
 
-    protected $fillable = ['user_id', 'activity', 'ip', 'countryName', 'countryCode', 'regionName', 'regionCode', 'cityName', 'zipCode', 'areaCode', 'timezone'];
+    protected $fillable = [
+        'user_id',
+        'activity',
+        'ip',
+        'countryName',
+        'countryCode',
+        'regionName',
+        'regionCode',
+        'cityName',
+        'zipCode',
+        'areaCode',
+        'timezone'
+    ];
 
     public function user()
     {

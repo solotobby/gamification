@@ -11,5 +11,12 @@ class Answer extends Model
 
     protected $table = "answers";
 
-    protected $fillable = ['game_id', 'question_id', 'user_id', 'selected_option', 'correct_option', 'is_correct'];
+    protected $fillable = [
+        'game_id',
+        'question_id',
+        'user_id',
+        'selected_option',
+        'correct_option',
+        'is_correct'
+    ];
 }

@@ -9,9 +9,18 @@ class ProfessionalJob extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'professional_category_id', 'professional_sub_category_id', 'title', 'slug', 'description', 'views'];
+    protected $fillable = [
+        'user_id',
+        'professional_category_id',
+        'professional_sub_category_id',
+        'title',
+        'slug',
+        'description',
+        'views'
+    ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(ProfessionalCategory::class, 'professional_category_id');
     }
 }

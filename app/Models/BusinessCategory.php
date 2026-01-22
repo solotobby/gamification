@@ -9,5 +9,8 @@ class BusinessCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'is_active'];
+    protected $fillable = [
+        'name',
+        'is_active'
+    ];
 }

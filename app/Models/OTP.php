@@ -11,6 +11,11 @@ class OTP extends Model
 
     protected $table = 'otp';
 
-    protected $fillable = ['user_id', 'pinId', 'phone_number', 'otp', 'is_verified'];
-
+    protected $fillable = [
+        'user_id',
+        'pinId',
+        'phone_number',
+        'otp',
+        'is_verified'
+    ];
 }

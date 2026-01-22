@@ -10,6 +10,12 @@ class Accounts extends Model
     use HasFactory;
 
     protected $table = "accounts";
-    protected $fillable = ['user_id', 'name', 'amount', 'type', 'description', 'date'];
-    
+    protected $fillable = [
+        'user_id',
+        'name',
+        'amount',
+        'type',
+        'description',
+        'date'
+    ];
 }

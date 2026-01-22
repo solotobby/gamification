@@ -9,7 +9,15 @@ class PartnershipSubscriber extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['partnership_subscription_id', 'subscriptionCode', 'firstName',
-     'lastName', 'email', 'phone', 'status', 'amount', 'product'];
-
+    protected $fillable = [
+        'partnership_subscription_id',
+        'subscriptionCode',
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+        'status',
+        'amount',
+        'product'
+    ];
 }
