@@ -27,7 +27,7 @@ class AddCurrencyParams extends Migration
     public function down()
     {
         Schema::table('wallets', function (Blueprint $table) {
-            //
+            $table->dropColumn(['base_currency_balance', 'base_currency_set']);
         });
     }
 }
