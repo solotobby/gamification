@@ -16,15 +16,51 @@ class FeedbackRepliesController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
-        $feedbacks = Feedback::where('status', '1')->orderBy('created_at', 'DESC')->paginate(25);
-        return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
-    }
+    // public function index(){
+    //     $feedbacks = Feedback::where('status', '1')->orderBy('created_at', 'DESC')->paginate(25);
+    //     return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
+    // }
 
-    public function unread(){
-        $feedbacks = Feedback::where('status', '0')->orderBy('created_at', 'DESC')->paginate(25);
-        return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
-    }
+    // public function unread(){
+    //     $feedbacks = Feedback::where('status', '0')->orderBy('created_at', 'DESC')->paginate(25);
+    //     return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
+    // }
+
+    public function index(Request $request){
+    $feedbacks = Feedback::where('status', '1')
+        ->when($request->search, function($query) use ($request) {
+            $query->where(function($q) use ($request) {
+                $q->where('category', 'like', "%{$request->search}%")
+                  ->orWhere('message', 'like', "%{$request->search}%")
+                  ->orWhereHas('user', function($userQuery) use ($request) {
+                      $userQuery->where('name', 'like', "%{$request->search}%");
+                  });
+            });
+        })
+        ->orderBy('created_at', 'DESC')
+        ->paginate(25)
+        ->appends(['search' => $request->search]);
+
+    return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
+}
+
+public function unread(Request $request){
+    $feedbacks = Feedback::where('status', '0')
+        ->when($request->search, function($query) use ($request) {
+            $query->where(function($q) use ($request) {
+                $q->where('category', 'like', "%{$request->search}%")
+                  ->orWhere('message', 'like', "%{$request->search}%")
+                  ->orWhereHas('user', function($userQuery) use ($request) {
+                      $userQuery->where('name', 'like', "%{$request->search}%");
+                  });
+            });
+        })
+        ->orderBy('created_at', 'DESC')
+        ->paginate(25)
+        ->appends(['search' => $request->search]);
+
+    return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
+}
 
     public function view($id){
         // $feedbacks = Feedback::where('status', false)->orderBy('created_at', 'DESC')->take(10)->get();

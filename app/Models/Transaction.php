@@ -11,5 +11,15 @@ class Transaction extends Model
 
     protected $table = 'transactions';
 
-    protected $fillable = ['user_id', 'game_id', 'reward_type', 'reference', 'transfer_code', 'amount', 'status', 'recipient', 'currency'];
+    protected $fillable = [
+        'user_id',
+        'game_id',
+        'reward_type',
+        'reference',
+        'transfer_code',
+        'amount',
+        'status',
+        'recipient',
+        'currency'
+    ];
 }

@@ -9,9 +9,20 @@ class BloqAccount extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'customer_id','customer_name', 'account_id', 'balance', 'account_number', 'bank_name', 'currency', 'provider'];
+    protected $fillable = [
+        'user_id',
+        'customer_id',
+        'customer_name',
+        'account_id',
+        'balance',
+        'account_number',
+        'bank_name',
+        'currency',
+        'provider'
+    ];
 
-    public function bloqAccount(){
+    public function bloqAccount()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 }

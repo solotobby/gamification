@@ -11,7 +11,13 @@ class UserScore extends Model
 
     protected $table = "user_scores";
 
-    protected $fillable = ['game_id', 'user_id', 'score', 'reward_type', 'is_redeem'];
+    protected $fillable = [
+        'game_id',
+        'user_id',
+        'score',
+        'reward_type',
+        'is_redeem'
+    ];
 
     public function game()
     {
@@ -22,5 +28,4 @@ class UserScore extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }

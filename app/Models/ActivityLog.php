@@ -11,10 +11,15 @@ class ActivityLog extends Model
 
     protected $table = "activity_logs";
 
-    protected $fillable = ['user_id', 'activity_type', 'description', 'user_type'];
+    protected $fillable = [
+        'user_id',
+        'activity_type',
+        'description',
+        'user_type'
+    ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-
 }

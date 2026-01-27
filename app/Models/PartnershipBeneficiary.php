@@ -9,6 +9,13 @@ class PartnershipBeneficiary extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['partnership_subscriptions_id', 'firstName', 'lastName', 'email', 'phone', 'dateOfBirth', 'gender'];
-    
+    protected $fillable = [
+        'partnership_subscriptions_id',
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+        'dateOfBirth',
+        'gender'
+    ];
 }

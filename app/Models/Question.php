@@ -11,7 +11,13 @@ class Question extends Model
 
     protected $table = "questions";
 
-    protected $fillable = ['content', 'asset_url', 'option_A','option_B', 'option_C', 'option_D', 'correct_answer'];
-
-
+    protected $fillable = [
+        'content',
+        'asset_url',
+        'option_A',
+        'option_B',
+        'option_C',
+        'option_D',
+        'correct_answer'
+    ];
 }

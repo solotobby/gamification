@@ -9,6 +9,15 @@ class Currency extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'country', 'is_active', 'min_upgrade_amount', 'upgrade_fee', 'allow_upload', 'priotize', 'referral_commission', 'base_rate'];
-
+    protected $fillable = [
+        'code',
+        'country',
+        'is_active',
+        'min_upgrade_amount',
+        'upgrade_fee',
+        'allow_upload',
+        'priotize',
+        'referral_commission',
+        'base_rate'
+    ];
 }

@@ -23,7 +23,7 @@
 
   <!-- Page Content -->
   <div class="content">
-    
+
     <!-- Full Table -->
     <div class="block block-rounded">
       <div class="block-header block-header-default">
@@ -34,6 +34,25 @@
           </button>
         </div>
       </div>
+
+      <div class="block block-rounded mb-3">
+    <div class="block-content">
+        <form method="GET" action="">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search"
+                       placeholder="Search by name, category, or message..."
+                       value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i> Search
+                </button>
+                @if(request('search'))
+                    <a href="{{ url()->current() }}" class="btn btn-secondary">Clear</a>
+                @endif
+            </div>
+        </form>
+    </div>
+</div>
+
       <div class="block-content">
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
@@ -56,13 +75,13 @@
                         <td>{{ $feedback->user->name }}</td>
                         <td>{{ $feedback->category }}</td>
                         <td>{{ $feedback->status == false ? 'Unread' : 'Read' }}/{{ $feedback->replies()->count() > 0 ? 'Replied' : 'Not Replied' }} </td>
-                        
+
                         <td><a href="{{ url('admin/feedback/'.$feedback->id) }}" class="btn btn-primary btn-sm">View</a></td>
                         <td>{{ $feedback->created_at }}</td>
                         {{-- <td>{{ \Carbon\Carbon::parse($feedback->created_at)->format('d/m/Y @ h:i:sa') }}</td> --}}
                     </tr>
                 @endforeach
-              
+
             </tbody>
           </table>
           <div class="d-flex">

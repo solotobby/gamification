@@ -1134,7 +1134,7 @@ class CampaignController extends Controller
             ->first();
 
         if ($check) {
-            if (in_array($request->campaign_id, [56])) {
+            if (in_array($request->campaign_id, ['8401', '8099'])) {
                 // Check if has pending submission
                 $hasPending = CampaignWorker::where('user_id', auth()->user()->id)
                     ->where('campaign_id', $request->campaign_id)
