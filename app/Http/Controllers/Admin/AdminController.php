@@ -302,9 +302,9 @@ class AdminController extends Controller
             $workDone->status = 'Denied';
             $workDone->save();
 
-            if($workDone->denied_at){
+            if ($workDone->denied_at) {
 
-                 $campaign->pending_count += 1;
+                $campaign->pending_count += 1;
                 // $this->removePendingCountAfterDenial($workDone->campaign_id);
 
             }
@@ -1441,13 +1441,33 @@ class AdminController extends Controller
         return $getUser;
     }
 
-    public function campaignList()
+    // public function campaignList()
+    // {
+    //     $campaigns = Campaign::where('status', 'Live')->orderBy('id', 'DESC')->paginate(200);
+
+    //     // \DB::select('SELECT * FROM campaigns WHERE status = ? ORDER BY created_at DESC', ['Live']);
+
+    //     ///paginate(30);
+    //     return view('admin.campaign_list', ['campaigns' => $campaigns]);
+    // }
+
+
+    public function campaignList(Request $request)
     {
-        $campaigns = Campaign::where('status', 'Live')->orderBy('id', 'DESC')->paginate(200);
+        $campaigns = Campaign::where('status', 'Live')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('post_title', 'like', "%{$request->search}%")
+                        ->orWhere('job_id', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(100)
+            ->appends(['search' => $request->search]);
 
-        // \DB::select('SELECT * FROM campaigns WHERE status = ? ORDER BY created_at DESC', ['Live']);
-
-        ///paginate(30);
         return view('admin.campaign_list', ['campaigns' => $campaigns]);
     }
 
@@ -1496,12 +1516,31 @@ class AdminController extends Controller
         return view('admin.approved_list', ['campaigns' => $list]);
     }
 
-    public function deniedCampaigns()
+    // public function deniedCampaigns()
+    // {
+    //     $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->paginate(10);
+    //     return view('admin.denied_list', ['campaigns' => $list]);
+    // }
+
+
+    public function deniedCampaigns(Request $request)
     {
-        $list = Campaign::where('status', 'Decline')->orderBy('created_at', 'DESC')->paginate(10);
+        $list = Campaign::where('status', 'Decline')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('post_title', 'like', "%{$request->search}%")
+                        ->orWhere('job_id', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10)
+            ->appends(['search' => $request->search]);
+
         return view('admin.denied_list', ['campaigns' => $list]);
     }
-
     public function jobReversal($id)
     {
         $list = CampaignWorker::where('id', $id)->first();
@@ -2192,23 +2231,53 @@ class AdminController extends Controller
         // }
     }
 
-    public function campaignPending()
+    // public function campaignPending()
+    // {
+    //     $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
+    //     return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
+    // }
+
+    public function campaignPending(Request $request)
     {
-        $pendingCampaign = Campaign::orderBy('created_at', 'DESC')->where('status', 'Offline')->orderBy('created_at', 'DESC')->get();
+        $pendingCampaign = Campaign::where('status', 'Offline')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('post_title', 'like', "%{$request->search}%")
+                        ->orWhere('job_id', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50)
+            ->appends(['search' => $request->search]);
+
         return view('admin.pending_campaigns', ['campaigns' => $pendingCampaign]);
     }
 
     // Add these methods to your Admin Controller
 
-    public function flaggedCampaigns()
+    public function flaggedCampaigns(Request $request)
     {
         $campaigns = Campaign::where('status', 'Flagged')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('post_title', 'like', "%{$request->search}%")
+                        ->orWhere('job_id', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
             ->with(['user', 'attempts'])
             ->orderBy('flagged_at', 'DESC')
-            ->paginate(20);
+            ->paginate(50)
+            ->appends(['search' => $request->search]);
 
         return view('admin.flagged_campaigns', compact('campaigns'));
     }
+
 
     public function unflagCampaigns(Request $request, $id)
     {
@@ -2666,9 +2735,18 @@ class AdminController extends Controller
         return view('admin.campaign_completed', ['campaigns' => $campaigns]);
     }
 
-    public function campaignPaused()
+    public function campaignPaused(Request $request)
     {
         $campaigns = Campaign::where('status', 'Paused')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('post_title', 'like', "%{$request->search}%")
+                        ->orWhere('job_id', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
             ->with(['user', 'campaignType', 'campaignCategory'])
             ->withCount([
                 'attempts as pending_count' => function ($q) {
@@ -2679,7 +2757,8 @@ class AdminController extends Controller
                 }
             ])
             ->orderBy('created_at', 'DESC')
-            ->paginate(20);
+            ->paginate(20)
+            ->appends(['search' => $request->search]);
 
         return view('admin.campaign_paused', ['campaigns' => $campaigns]);
     }

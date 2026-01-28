@@ -41,6 +41,24 @@
             </div>
         @endif
 
+        <div class="block block-rounded mb-3">
+    <div class="block-content">
+        <form method="GET" action="">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search"
+                       placeholder="Search by job ID, campaign name, or creator..."
+                       value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i> Search
+                </button>
+                @if(request('search'))
+                    <a href="{{ url()->current() }}" class="btn btn-secondary">Clear</a>
+                @endif
+            </div>
+        </form>
+    </div>
+</div>
+
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-vcenter">
           {{-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> --}}
@@ -71,20 +89,20 @@
                         {{-- completed()->where('status', 'Approved')->count() --}}
                         <td>
                           @if($camp->currency == 'NGN')
-                          &#8358;{{ number_format($camp->campaign_amount) }} 
+                          &#8358;{{ number_format($camp->campaign_amount) }}
                           @elseif($camp->currency == 'USD')
-                          ${{ $camp->campaign_amount }} 
+                          ${{ $camp->campaign_amount }}
                           @else
-                           {{ $camp->currency }} {{ $camp->campaign_amount }} 
+                           {{ $camp->currency }} {{ $camp->campaign_amount }}
                           @endif
                         </td>
                         <td>
                           @if($camp->currency == 'NGN')
-                            &#8358;{{ number_format($camp->total_amount) }} 
+                            &#8358;{{ number_format($camp->total_amount) }}
                           @elseif($camp->currency == 'USD')
-                            ${{ $camp->campaign_amount }} 
+                            ${{ $camp->campaign_amount }}
                           @else
-                            {{ $camp->currency }} {{ $camp->total_amount }} 
+                            {{ $camp->currency }} {{ $camp->total_amount }}
                           @endif
                         </td>
                         <td>{{ number_format($camp->impressions) }}</td>
@@ -97,7 +115,7 @@
                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                     </tr>
                 @endforeach
-              
+
             </tbody>
           </table>
           <div class="d-flex">
