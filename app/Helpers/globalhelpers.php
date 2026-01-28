@@ -1825,10 +1825,13 @@ if (!function_exists('filterCampaign')) {
         }
 
         // Optimize sorting and paginate
-        $campaigns = $query->orderByRaw("CASE WHEN approved = 'Priotized' THEN 1 ELSE 2 END")
+        // $campaigns = $query->orderByRaw("CASE WHEN approved = 'Priotized' THEN 1 ELSE 2 END")
+        //     ->orderBy('created_at', 'DESC')
+        //     ->paginate(15);
+
+        $campaigns = $query->orderByRaw("CASE WHEN job_id = 'Lgh1yOgwO' THEN 0 WHEN approved IN ('Priotized', 'Priotize') THEN 1 ELSE 2 END")
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
-
 
         // Add extra fields (handled by Accessors in the Model)
         $campaigns->getCollection()->transform(function ($campaign) use ($user) {
