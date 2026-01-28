@@ -70,7 +70,7 @@ class SendMassEmail implements ShouldQueue
                 $response = sendZeptoMail(
                     $user->email,
                     $user->name,
-                    'Dear '.$firstName.', '.$this->subject,
+                    $this->subject,
                     $htmlBody
                 );
 
