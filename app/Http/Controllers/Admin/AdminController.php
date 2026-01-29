@@ -1497,7 +1497,7 @@ class AdminController extends Controller
     public function campaignInfo($id)
     {
         $campaign = Campaign::where('id', $id)->first();
-        $activities = $campaign->attempts()->paginate(50);
+        $activities = $campaign->attempts()->latest()->paginate(50);
         return view('admin.campaign_mgt.info', ['campaign' => $campaign, 'activities' => $activities]);
     }
 
