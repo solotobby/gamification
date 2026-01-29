@@ -75,7 +75,7 @@ class HomeController extends Controller
         }
     }
 
-    public function userHome()
+    public function userHomeOld()
     {
 
         dailyVisit('Dashboard');
@@ -125,6 +125,68 @@ class HomeController extends Controller
         ]);
     }
 
+    public function userHome()
+    {
+        $user = auth()->user();
+
+        /**
+         * Track dashboard visit
+         */
+        dailyVisit('Dashboard');
+
+        /**
+         * Production-only profile sync
+         */
+        if (app()->environment('Production')) {
+            setProfile($user);
+        }
+
+        /**
+         * Force survey completion
+         */
+        if (empty($user->age_range) || empty($user->gender)) {
+            return redirect()->route('survey');
+        }
+
+        /**
+         * Data queries (optimized)
+         */
+        $badgeCount = badgeCount();
+
+        $completedCampaigns = CampaignWorker::where('user_id', $user->id)
+            ->where('status', 'Approved')
+            ->count();
+
+        $announcement = Cache::remember(
+            'active_announcement',
+            now()->addHour(),
+            fn() => Announcement::where('status', true)->first()
+        );
+
+        $promotion = Cache::remember(
+            'active_business_promotion',
+            now()->addHours(6),
+            fn() => Business::where('is_live', true)->first()
+        );
+
+        $ads = adBanner();
+        $categories = $this->listCategories();
+
+        /**
+         * Render dashboard
+         */
+        return view('user.home', [
+            'user'         => $user,
+            'badgeCount'   => $badgeCount,
+            'completed'    => $completedCampaigns,
+            'balance'      => null,
+            'announcement' => $announcement,
+            'ads'          => $ads,
+            'categories'   => $categories,
+            'promotion'    => $promotion,
+        ]);
+    }
+
     public function newHome()
     {
 
@@ -144,9 +206,23 @@ class HomeController extends Controller
         // return $this->listCategories();
     }
 
-    public function listCategories()
+    public function listCategoriesOld()
     {
         return Category::query()->orderBy('name', 'ASC')->get();
+    }
+
+    public function listCategories()
+    {
+        return Cache::remember(
+            'categories_list',
+            now()->addHours(6),
+            function () {
+                return Category::query()
+                    ->select('id', 'name')
+                    ->orderBy('name', 'ASC')
+                    ->get();
+            }
+        );
     }
 
     public function filterCampaignByCategories($category_id)

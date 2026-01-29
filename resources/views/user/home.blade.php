@@ -1,28 +1,38 @@
 @extends('layouts.main.master')
+
 @section('style')
 @endsection
 
 @section('content')
+    @php
+        $user = auth()->user();
+        $wallet = $user->wallet;
+        $profile = $user->profile;
+        $isNGN = $wallet->base_currency == 'NGN';
+        $isVerified = $isNGN ? $user->is_verified : $user->USD_verified;
+        $virtualAccount = $user->virtualAccount ?? null;
+
+        $currency = baseCurrency();
+        $balance = match($currency) {
+            'NGN' => $wallet->balance,
+            'USD' => $wallet->usd_balance,
+            default => $wallet->base_currency_balance
+        };
+    @endphp
+
     <!-- Hero -->
     <div class="bg-image"
         style="background-image: url('https://i.natgeofe.com/n/9e7c6381-8205-4a0c-a3a6-e744bf86a751/climbing-8000-meters-first-winter-ascents-everest.jpg');">
-
         <div class="bg-primary-dark-op">
             <div class="content content-full">
                 <div class="row my-3">
                     <div class="col-md-5 d-md-flex align-items-md-center">
                         <div class="py-4 py-md-0 text-center text-md-start">
-                            <h1 class="fs-2 text-white mb-2">{{ auth()->user()->name }}
-                                @if (auth()->user()->wallet->base_currency == 'NGN')
-                                    @if (auth()->user()->is_verified)
-                                        <i class="fa fa-check opacity-75 me-1"></i>
-                                    @endif
-                                @else
-                                    @if (auth()->user()->USD_verified)
-                                        <i class="fa fa-check-double opacity-75 me-1"></i>
-                                    @endif
+                            <h1 class="fs-2 text-white mb-2">
+                                {{ $user->name }}
+                                @if ($isVerified)
+                                    <i class="fa fa-{{ $isNGN ? 'check' : 'check-double' }} opacity-75 me-1"></i>
                                 @endif
-
                             </h1>
                             <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Jobs and Get Paid!</h2>
                         </div>
@@ -31,25 +41,15 @@
                         <div class="row w-100 text-center">
                             <div class="col-4 col-xl-4">
                                 <p class="fs-3 fw-semibold text-white mb-0">
-
-                                    @if (baseCurrency() == 'NGN')
-                                        {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance, 2) }}
-                                    @elseif(baseCurrency() == 'USD')
-                                        {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance, 2) }}
-                                    @else
-                                        {{ baseCurrency() }}
-                                        {{ number_format(auth()->user()->wallet->base_currency_balance, 2) }}
-                                    @endif
-
+                                    {{ $currency }} {{ number_format($balance, 2) }}
                                 </p>
                                 <p class="fs-sm fw-semibold text-white-75 mb-0">
-
                                     <i class="fa fa-money-bill opacity-75 me-1"></i> Balance
                                 </p>
                             </div>
                             <div class="col-4 col-xl-4">
                                 <p class="fs-3 fw-semibold text-white mb-0">
-                                    {{ auth()->user()->referees()->count() }}
+                                    {{ $user->referees()->count() }}
                                 </p>
                                 <p class="fs-sm fw-semibold text-white-75 mb-0">
                                     <i class="fa fa-users opacity-75 me-1"></i> Referrals
@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-4 col-xl-4">
                                 <p class="fs-3 fw-semibold text-white mb-0">
-                                    {{ auth()->user()->myAttemptedJobs()->where('status', 'Approved')->count() }}
+                                    {{ $user->myAttemptedJobs()->where('status', 'Approved')->count() }}
                                 </p>
                                 <p class="fs-sm fw-semibold text-white-75 mb-0">
                                     <i class="fa fa-briefcase opacity-75 me-1"></i> Jobs Done
@@ -74,23 +74,12 @@
     <!-- Page Content -->
     <div class="content content-full">
         <div class="row">
-
             <div class="col-12">
-                @if (auth()->user()->wallet->base_currency == 'NGN')
-                    @if (auth()->user()->is_verified)
-                        <div class="alert alert-warning">
-                            Your Naira account has been <strong>Verified.</strong>
-                        </div>
-                    @endif
-                @else
-                    @if (auth()->user()->USD_verified)
-                        <div class="alert alert-warning">
-                            Your Dollar account has been <strong>Verified.</strong>
-                        </div>
-                    @endif
+                @if ($isVerified)
+                    <div class="alert alert-warning">
+                        Your {{ $isNGN ? 'Naira' : 'Dollar' }} account has been <strong>Verified.</strong>
+                    </div>
                 @endif
-
-
             </div>
 
             <div class="col-12">
@@ -100,11 +89,9 @@
                     </div>
                 @endif
             </div>
-
         </div>
 
         <div class="row">
-
             @if (session('success'))
                 <div class="alert alert-success" role="alert">
                     {{ session('success') }}
@@ -119,42 +106,36 @@
 
             <div class="col-md-6">
                 <h5 class="fw-light mb-2">Referral Link</h5>
-                <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9"
-                    data-task-completed="false" data-task-starred="false">
+                <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn">
                     <table class="table table-borderless table-vcenter mb-0">
                         <div class="input-group">
-                            <input type="text" value="{{ url('register/' . auth()->user()->referral_code) }}"
+                            <input type="text" value="{{ url('register/' . $user->referral_code) }}"
                                 class="form-control form-control-alt" id="myInput" readonly>
-                            <button type="button" class="btn btn-alt-secondary" onclick="myFunction()"
-                                onmouseout="outFunc()">
+                            <button type="button" class="btn btn-alt-secondary" onclick="copyToClipboard('myInput')">
                                 <i class="fa fa-copy"></i>
                             </button>
                         </div>
                     </table>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <h5 class="fw-light mb-2">Your Funding Account(to fund your wallet)</h5>
-                <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn" data-task-id="9"
-                    data-task-completed="false" data-task-starred="false">
+                <h5 class="fw-light mb-2">Your Funding Account (to fund your wallet)</h5>
+                <div class="js-task block block-rounded block-fx-pop block-fx-pop mb-2 animated fadeIn">
                     <table class="table table-borderless table-vcenter mb-0">
                         <div class="input-group">
-                            {{-- <span class="form-control form-control-alt">Coming Soon!</span>  --}}
-                            @if (auth()->user()->wallet->base_currency == 'NGN')
-
-                                @if (@auth()->user()->virtualAccount)
-                                    @if (@auth()->user()->virtualAccount->bank_name == 'Wema Bank')
+                            @if ($isNGN)
+                                @if ($virtualAccount)
+                                    @if ($virtualAccount->bank_name == 'Wema Bank')
                                         <span class="form-control form-control-alt">
                                             <a href="{{ route('create.updated.virtual.account') }}"
                                                 class="btn btn-success btn-sm">Activate New Freebyz Personal Account</a>
                                         </span>
                                     @else
-                                        <span
-                                            class="form-control form-control-alt">{{ auth()->user()->virtualAccount->bank_name }}</span>
-                                        <input type="text" value="{{ auth()->user()->virtualAccount->account_number }}"
+                                        <span class="form-control form-control-alt">{{ $virtualAccount->bank_name }}</span>
+                                        <input type="text" value="{{ $virtualAccount->account_number }}"
                                             class="form-control form-control-alt" id="myInput-2" readonly>
-                                        <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()"
-                                            onmouseout="outFunc()">
+                                        <button type="button" class="btn btn-alt-secondary" onclick="copyToClipboard('myInput-2')">
                                             <i class="fa fa-copy"></i>
                                         </button>
                                     @endif
@@ -163,53 +144,43 @@
                         <button type="button" class="btn btn-alt-secondary" onclick="myFunction2()" onmouseout="outFunc()">
                           <i class="fa fa-copy"></i>
                         </button> --}}
-
                                     <span class="form-control form-control-alt">
                                         {{-- <a href="{{ route('generate.virtual.account') }}" class="btn btn-success btn-sm">Fund your Wallet</a> --}}
-                                        <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm">Click Here to
-                                            Fund Wallet</a>
+                                        <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm">Click Here to Fund Wallet</a>
                                     </span>
                                 @endif
                             @else
                                 <span class="form-control form-control-alt">
-                                    <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm"> Click Here to Fund
-                                        Wallet</a>
+                                    <a href="{{ url('wallet/fund') }}" class="btn btn-success btn-sm">Click Here to Fund Wallet</a>
                                 </span>
                                 {{-- <span class="form-control form-control-alt">https://flutterwave.com/pay/topuponfreebyz</span>    --}}
                             @endif
                         </div>
-
                     </table>
                 </div>
             </div>
         </div>
 
-
         {{-- <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-        <h4 class="fw-light mb-0">Ad</h4><br>
-        @if ($ads)
+            <h4 class="fw-light mb-0">Ad</h4><br>
+            @if ($ads)
                 <a href="{{ url('ad/'.$ads->banner_id.'/view')}}" target="_blank">
-                  <img src="{{ asset($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
-                    <img src="{{ url($ads->banner_url)  }}" width="100%" height="300" class="img-responsive">
+                    <img src="{{ asset($ads->banner_url) }}" width="100%" height="300" class="img-responsive">
                 </a>
-        @else
-
+            @else
                 <a href="{{ url('banner/create')}}" target="_blank">
-                  <img src="https://freebyz.s3.us-east-1.amazonaws.com/ad/1701380428.jpg" width="100%" height="300" class="img-responsive">
+                    <img src="https://freebyz.s3.us-east-1.amazonaws.com/ad/1701380428.jpg" width="100%" height="300" class="img-responsive">
                 </a>
-
                 <iframe width="1060" height="315" src="https://www.youtube.com/embed/XAjXvFri0Z4?si=XCPZbkHroL7qfh2j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        @endif
-    </div> --}}
+            @endif
+        </div> --}}
 
-
-        <!-- VPS -->
+        <!-- Available Jobs -->
         <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
-
             <h4 class="fw-light mb-0">Available Jobs</h4>
 
             {{-- @csrf
-              @if (auth()->user()->wallet->base_currency == 'Naira')
+              @if ($wallet->base_currency == 'Naira')
               <input type="hidden" name="currency" value="Dollar">
               <button type="submit" class="btn btn-primary btn-sm btn-primary rounded-pill px-3">
                 <i class="fa fa-fw fa-share opacity-50 me-1"></i> Switch to Dollar
@@ -221,7 +192,6 @@
               </button>
               @endif
           </form>  --}}
-
         </div>
 
         <form action="#" method="POST">
@@ -245,8 +215,6 @@
                 </div>
             </div>
         </form>
-
-
 
         {{-- <div class="block block-rounded block-fx-pop mb-2">
         <div class="block-content block-content-full border-start border-3 border-dark">
@@ -286,7 +254,7 @@
         </div>
       </div>  --}}
 
-        {{-- @if (auth()->user()->wallet->base_currency == 'NGN')
+        {{-- @if ($isNGN)
           @if ($promotion)
               <a href="{{ url('m/'.$promotion->business_link) }}" target="_blank">
                 <div class="block block-rounded block-fx-pop mb-2">
@@ -308,7 +276,7 @@
           @endif
       @endif --}}
 
-        @if (auth()->user())
+        @if ($user)
             <a href="https://dashboard.freebyz.com/campaign/EbmFbEm">
             @else
                 <a href="https://dashboard.freebyz.com/campaign/public/EbmFbEm" target="_blank">
@@ -328,9 +296,9 @@
                 </div>
             </div>
         </div> --}}
-      {{-- </a> --}}
+        </a>
 
-      <a href="https://payhankey.com/register" target="_blank">
+        <a href="https://payhankey.com/register" target="_blank">
             <div class="block block-rounded block-fx-pop mb-2">
                 <div class="block-content block-content-full border-start border-3 border-dark">
                     <div class="d-md-flex justify-content-md-between align-items-md-center">
@@ -339,7 +307,6 @@
                             <h3 class="h4 fw-bold mb-1" style="color: #191918">Monetize your Posts on Payhankey</h3>
                             <p class="fs-sm text-muted">
                                 <i class="fa fa-heart me-1"></i> Your posts can earn you money. You don't need Followers or Watch hours to earn
-
                             </p>
                         </div>
                     </div>
@@ -363,10 +330,6 @@
             </div>
         </a>
 
-
-
-
-
         {{-- <a href="{{ route('agent.wellahealth') }}">
           <div class="block block-rounded block-fx-pop mb-2">
             <div class="block-content block-content-full border-start border-3 border-dark">
@@ -384,6 +347,7 @@
             </div>
           </div>
         </a>  --}}
+
         <a href="https://famlic.com" target="_blank">
             <div class="block block-rounded block-fx-pop mb-2">
                 <div class="block-content block-content-full border-start border-3 border-dark">
@@ -393,7 +357,6 @@
                             <h3 class="h4 fw-bold mb-1" style="color: #191918">Raise Money for Urgent Needs</h3>
                             <p class="fs-sm text-muted">
                                 <i class="fa fa-heart me-1"></i> Create a Crowdfunding link to share with your Friends
-
                             </p>
                         </div>
                     </div>
@@ -417,56 +380,38 @@
           </div>
         </a>  --}}
 
-
-        <div class="" id="display-jobs">
-        </div>
-
-        <div id="pagination-controls"></div>
-
-        {{-- <div id="pagination-controls" class="d-flex justify-content-center mt-3"></div> --}}
-
+        <div class="" id="display-jobs"></div>
+        <div id="pagination-controls" class="d-flex justify-content-center mt-3"></div>
     </div>
-
-
 
     @include('layouts.resources.pathway')
 
-    <!-- END Call to Action -->
-    @if (auth()->user()->profile->is_welcome == false)
+    <!-- Conditional Modals -->
+    @if ($profile->is_welcome == false)
         {{-- Show welcome pop up --}}
         @include('layouts.resources.welcome')
-    @elseif(auth()->user()->wallet->base_currency == 'USD' && auth()->user()->wallet->base_currency_set == false)
+    @elseif($wallet->base_currency == 'USD' && $wallet->base_currency_set == false)
         @include('layouts.resources.validate_currency')
-    @elseif(auth()->user()->profile->pathway == null)
+    @elseif($profile->pathway == null)
         @include('layouts.resources.choice')
-        {{-- @elseif(!auth()->user()->accountDetails)
-        @if (auth()->user()->wallet->base_currency == 'NGN')
+        {{-- @elseif(!$user->accountDetails)
+        @if ($isNGN)
             @include('layouts.resources.account_details')
         @endif --}}
 
-        {{-- @elseif(!auth()->user()->profile->phone_verified)
-
-        @if (auth()->user()->wallet->base_currency == 'NGN')
+        {{-- @elseif(!$profile->phone_verified)
+        @if ($isNGN)
             @include('layouts.resources.account_details')
         @endif  --}}
 
-
-
-        {{-- @elseif(auth()->user()->wallet->base_currency == 'NGN' && @auth()->user()->virtualAccount->bank_name == 'Wema Bank')
-
-
+        {{-- @elseif($isNGN && @$virtualAccount->bank_name == 'Wema Bank')
      @include('layouts.resources.virtualaccount') --}}
 
         {{-- @include('layouts.resources.unverified') --}}
 
         {{-- @else
-
       @include('layouts.resources.xmas') --}}
     @endif
-
-
-
-
 @endsection
 
 @section('script')
@@ -480,30 +425,18 @@
     <script src="{{ asset('src/assets/js/pages/be_comp_onboarding.min.js') }}"></script>
 
     <script>
-        function myFunction() {
-            var copyText = document.getElementById("myInput");
-
+        // Unified copy to clipboard function
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
             copyText.select();
             copyText.setSelectionRange(0, 99999);
-
-            console.log(navigator.clipboard.writeText(copyText.value));
-
-            // var tooltip = document.getElementById("myTooltip");
-            // tooltip.innerHTML = "Copied: " + copyText.value;
-        }
-
-        function myFunction2() {
-            var copyText = document.getElementById("myInput-2");
-
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-
-            console.log(navigator.clipboard.writeText(copyText.value));
+            navigator.clipboard.writeText(copyText.value);
         }
 
         $(document).ready(function() {
             const baseApiUrl = '{{ url('available/jobs') }}';
             const baseUrl = '{{ url('campaign') }}';
+            const itemsPerPage = 30;
             let currentPage = 1;
 
             function loadJobs(apiUrl) {
@@ -522,7 +455,7 @@
                         console.error('Error:', error);
                         $("#display-jobs").html(
                             `<div class="alert alert-warning mt-2">Failed to load jobs. Please refresh your browser.</div>`
-                            );
+                        );
                     });
             }
 
@@ -530,45 +463,44 @@
                 const container = $("#display-jobs");
                 container.empty();
 
-
                 if (jobs.length === 0) {
-                    $("#display-jobs").html(
-                        `<div class="alert alert-info mt-2">No jobs found for this category</div>`);
-                    // container.html(`<p class="text-muted">No jobs found.</p>`);
+                    container.html(`<div class="alert alert-info mt-2">No jobs found for this category</div>`);
                     return;
                 }
 
-
-                // Filter out completed jobs from the data
+                // Filter out completed jobs
                 const filteredJobs = jobs.filter(job => !job.is_completed);
-
-                console.log(filteredJobs);
 
                 filteredJobs.forEach(job => {
                     const url = `${baseUrl}/${job.job_id}`;
                     const jobHtml = `
-                <a href="${url}">
-                    <div class="block block-rounded block-fx-pop mb-2">
-                        <div class="block-content block-content-full border-start border-3 border-primary">
-                            <div class="d-md-flex justify-content-md-between align-items-md-center">
-                                <div class="col-12">
-                                    <h3 class="h4 fw-bold mb-1" style="color: black">${job.post_title}</h3>
-                                    <p class="fs-sm text-muted">${job.local_currency} ${job.local_converted_amount}</p>
-                                    <div class="mb-0">
-                                        <div class="progress mb-1" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${job.progress}%;" aria-valuenow="${job.percentage_progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <a href="${url}">
+                            <div class="block block-rounded block-fx-pop mb-2">
+                                <div class="block-content block-content-full border-start border-3 border-primary">
+                                    <div class="d-md-flex justify-content-md-between align-items-md-center">
+                                        <div class="col-12">
+                                            <h3 class="h4 fw-bold mb-1" style="color: black">${job.post_title}</h3>
+                                            <p class="fs-sm text-muted">${job.local_currency} ${job.local_converted_amount}</p>
+                                            <div class="mb-0">
+                                                <div class="progress mb-1" style="height: 6px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                                         role="progressbar"
+                                                         style="width: ${job.progress}%;"
+                                                         aria-valuenow="${job.percentage_progress}"
+                                                         aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <p class="fs-sm fw-semibold mb-3" style="color: black">
+                                                    <span class="fw-bold">${job.completed} completed</span>
+                                                    <span class="fw-bold text-muted">out of ${job.number_of_staff} workers</span>
+                                                </p>
+                                            </div>
+                                            <p class="fs-sm text-muted mb-0">${job.type} &bull; Originally posted in ${job.currency}</p>
                                         </div>
-                                        <p class="fs-sm fw-semibold mb-3" style="color: black">
-                                            <span class="fw-bold">${job.completed} completed</span>
-                                            <span class="fw-bold text-muted">out of ${job.number_of_staff} workers</span>
-                                        </p>
                                     </div>
-                                    <p class="fs-sm text-muted mb-0">${job.type} &bull; Originally posted in ${job.currency}</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </a>`;
+                        </a>`;
                     container.append(jobHtml);
                 });
             }
@@ -579,16 +511,15 @@
 
                 if (data.total === 0) return;
 
-                if (data.current_page > 1) {
-                    controls.append(
-                        `<button class="btn btn-primary me-2 btn-sm" id="prev-page">Previous Page</button>`);
-                    $("#prev-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page - 1}`));
-                }
+                const paginationHtml = `
+                    ${data.current_page > 1 ? `<button class="btn btn-primary me-2 btn-sm" id="prev-page">Previous</button>` : ''}
+                    <span class="align-self-center mx-3">Page ${data.current_page} of ${data.last_page}</span>
+                    ${data.current_page < data.last_page ? `<button class="btn btn-primary btn-sm" id="next-page">Next</button>` : ''}
+                `;
+                controls.html(paginationHtml);
 
-                if (data.current_page < data.last_page) {
-                    controls.append(`<button class="btn btn-primary btn-sm" id="next-page">Next Page</button>`);
-                    $("#next-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page + 1}`));
-                }
+                $("#prev-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page - 1}`));
+                $("#next-page").click(() => loadJobs(`${baseApiUrl}/0?page=${data.current_page + 1}`));
             }
 
             // Initial load
@@ -597,11 +528,12 @@
             // Category filter
             $('#jobs-categories').on('change', function() {
                 const selectedValue = $(this).val();
-                currentPage = 1; // Reset to first page
+                currentPage = 1;
                 loadJobs(`${baseApiUrl}/${selectedValue}?page=${currentPage}`);
             });
         });
 
+        {{-- Legacy commented code for reference --}}
         //   $(document).ready(function () {
         //     const baseApiUrl = '{{ url('available/jobs') }}';
         //     const baseUrl = '{{ url('campaign') }}';
@@ -623,28 +555,28 @@
         //                 $.each(data.data, function (key, value) {
         //                     const url = `${baseUrl}/${value.id}`;
         //                     const jobHtml = `
-    //                         <a href="${url}">
-    //                             <div class="block block-rounded block-fx-pop mb-2">
-    //                                 <div class="block-content block-content-full border-start border-3 border-primary">
-    //                                     <div class="d-md-flex justify-content-md-between align-items-md-center">
-    //                                         <div class="col-12">
-    //                                             <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
-    //                                             <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
-    //                                             <div class="mb-0">
-    //                                                 <div class="progress mb-1" style="height: 6px;">
-    //                                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-    //                                                 </div>
-    //                                                 <p class="fs-sm fw-semibold mb-3" style="color: black">
-    //                                                     <span class="fw-bold">${value.completed} completed</span>
-    //                                                     <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
-    //                                                 </p>
-    //                                             </div>
-    //                                             <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
-    //                                         </div>
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-    //                         </a>`;
+        //                         <a href="${url}">
+        //                             <div class="block block-rounded block-fx-pop mb-2">
+        //                                 <div class="block-content block-content-full border-start border-3 border-primary">
+        //                                     <div class="d-md-flex justify-content-md-between align-items-md-center">
+        //                                         <div class="col-12">
+        //                                             <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+        //                                             <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
+        //                                             <div class="mb-0">
+        //                                                 <div class="progress mb-1" style="height: 6px;">
+        //                                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+        //                                                 </div>
+        //                                                 <p class="fs-sm fw-semibold mb-3" style="color: black">
+        //                                                     <span class="fw-bold">${value.completed} completed</span>
+        //                                                     <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+        //                                                 </p>
+        //                                             </div>
+        //                                             <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
+        //                                         </div>
+        //                                     </div>
+        //                                 </div>
+        //                             </div>
+        //                         </a>`;
         //                     $("#display-jobs").append(jobHtml);
         //                 });
 
@@ -708,28 +640,28 @@
         //                       $.each(data, function(key, value) {
         //                           const url = `${baseUrl}/${value.job_id}`;
         //                           const jobHtml = `
-    //                               <a href="${url}">
-    //                                   <div class="block block-rounded block-fx-pop mb-2">
-    //                                       <div class="block-content block-content-full border-start border-3 border-primary">
-    //                                           <div class="d-md-flex justify-content-md-between align-items-md-center">
-    //                                               <div class="col-12">
-    //                                                   <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
-    //                                                   <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
-    //                                                   <div class="mb-0">
-    //                                                       <div class="progress mb-1" style="height: 6px;">
-    //                                                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-    //                                                       </div>
-    //                                                       <p class="fs-sm fw-semibold mb-3" style="color: black">
-    //                                                           <span class="fw-bold">${value.completed} completed</span>
-    //                                                           <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
-    //                                                       </p>
-    //                                                   </div>
-    //                                                   <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
-    //                                               </div>
-    //                                           </div>
-    //                                       </div>
-    //                                   </div>
-    //                               </a>`;
+        //                               <a href="${url}">
+        //                                   <div class="block block-rounded block-fx-pop mb-2">
+        //                                       <div class="block-content block-content-full border-start border-3 border-primary">
+        //                                           <div class="d-md-flex justify-content-md-between align-items-md-center">
+        //                                               <div class="col-12">
+        //                                                   <h3 class="h4 fw-bold mb-1" style="color: black">${value.post_title}</h3>
+        //                                                   <p class="fs-sm text-muted">${value.local_converted_currency_code} ${value.local_converted_amount}</p>
+        //                                                   <div class="mb-0">
+        //                                                       <div class="progress mb-1" style="height: 6px;">
+        //                                                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: ${value.progress}%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+        //                                                       </div>
+        //                                                       <p class="fs-sm fw-semibold mb-3" style="color: black">
+        //                                                           <span class="fw-bold">${value.completed} completed</span>
+        //                                                           <span class="fw-bold text-muted">out of ${value.number_of_staff} workers</span>
+        //                                                       </p>
+        //                                                   </div>
+        //                                                   <p class="fs-sm text-muted mb-0">${value.type} &bull; Originally posted in ${value.currency}</p>
+        //                                               </div>
+        //                                           </div>
+        //                                       </div>
+        //                                   </div>
+        //                               </a>`;
         //                           $("#display-jobs").append(jobHtml);
         //                       });
 

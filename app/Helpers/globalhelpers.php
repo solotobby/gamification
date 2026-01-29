@@ -1763,22 +1763,12 @@ if (!function_exists('currencyList')) {
     }
 }
 
-if (!function_exists('filterCampaign')) {
-    function filterCampaign($categoryID)
+if (!function_exists('filterCampaignOld')) {
+    function filterCampaignOld($categoryID)
     {
 
         $user = Auth::user();
-        // $jobfilter = '';
         $campaigns = '';
-
-        // $query = Campaign::query()
-        //     ->where('status', 'Live')
-        //     ->where('is_completed', false)
-        //     ->whereNotIn('id', function ($query) use ($user) {
-        //         $query->select('campaign_id')
-        //             ->from('campaign_workers')
-        //             ->where('user_id', $user->id);
-        //     });
 
         $query = Campaign::query()
             ->where('status', 'Live')
@@ -1957,6 +1947,102 @@ if (!function_exists('filterCampaign')) {
 
     }
 }
+
+if (!function_exists('filterCampaign')) {
+    function filterCampaign(int $categoryID = 0)
+    {
+        $user = Auth::user();
+        $baseCurrency = $user->wallet->base_currency;
+
+        $query = Campaign::query()
+            ->select('campaigns.*')
+            ->with(['campaignType'])
+            ->where('status', 'Live')
+            ->where('is_completed', false)
+            ->where(function ($q) use ($user) {
+
+                // Exclude campaigns already worked on
+                $q->whereNotExists(function ($sub) use ($user) {
+                    $sub->selectRaw(1)
+                        ->from('campaign_workers')
+                        ->whereColumn('campaign_id', 'campaigns.id')
+                        ->where('user_id', $user->id);
+                })
+
+                // Allow special campaigns with strict rules
+                ->orWhere(function ($special) use ($user) {
+                    $special->whereIn('id', [8099, 8401])
+                        ->whereNotExists(function ($sub) use ($user) {
+                            $sub->selectRaw(1)
+                                ->from('campaign_workers')
+                                ->whereColumn('campaign_id', 'campaigns.id')
+                                ->where('user_id', $user->id)
+                                ->whereIn('status', ['Approved', 'Pending']);
+                        })
+                        ->whereRaw("
+                            (
+                                SELECT COUNT(*)
+                                FROM campaign_workers
+                                WHERE campaign_id = campaigns.id
+                                AND user_id = ?
+                                AND status = 'Denied'
+                            ) < 3
+                        ", [$user->id]);
+                });
+            });
+
+        // Optional category filter
+        if ($categoryID !== 0) {
+            $query->where('campaign_type', $categoryID);
+        }
+
+        $campaigns = $query
+            ->orderByRaw("
+                CASE
+                    WHEN job_id = 'Lgh1yOgwO' THEN 0
+                    WHEN approved IN ('Priotized','Priotize') THEN 1
+                    ELSE 2
+                END
+            ")
+            ->orderByDesc('created_at')
+            ->paginate(30);
+
+        // Transform response (single pass, no extra queries)
+        $campaigns->getCollection()->transform(function ($campaign) use ($baseCurrency) {
+
+            $completed = $campaign->pending_count + $campaign->completed_count;
+
+            return [
+                'id'                         => $campaign->id,
+                'job_id'                     => $campaign->job_id,
+                'post_title'                 => $campaign->post_title,
+                'number_of_staff'            => $campaign->number_of_staff,
+                'type'                       => $campaign->campaignType->name,
+                'completed'                  => $completed,
+                'is_completed'               => $completed >= $campaign->number_of_staff,
+                'progress'                   => $campaign->number_of_staff > 0
+                                                ? round(($completed / $campaign->number_of_staff) * 100, 2)
+                                                : 0,
+                'campaign_amount'            => $campaign->campaign_amount,
+                'currency'                   => $campaign->currency,
+                'local_currency'             => $baseCurrency, // Added this field for frontend
+                'local_converted_amount'     => currencyConverter(
+                                                    $campaign->currency,
+                                                    $baseCurrency,
+                                                    $campaign->campaign_amount
+                                                ),
+                'local_converted_currency'   => $baseCurrency,
+                'percentage_progress'        => $campaign->number_of_staff > 0
+                                                ? round(($completed / $campaign->number_of_staff) * 100, 2)
+                                                : 0, // Added for frontend consistency
+                'created_at'                 => $campaign->created_at,
+            ];
+        });
+
+        return response()->json($campaigns);
+    }
+}
+
 
 if (!function_exists('currencyParameter')) {
     function currencyParameter($currency)
