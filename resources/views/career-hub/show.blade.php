@@ -16,7 +16,7 @@
                         <div class="flex items-start justify-between mb-6">
                             <div class="flex items-start space-x-4">
                                 @if($job->company_logo)
-                            
+
                                     <img src="{{ displayImage($job->company_logo) }}" alt="{{ $job->company_name }}"
                                         class="w-12 h-12 rounded object-cover">
                                 @else
@@ -187,6 +187,20 @@
                             <a href="/user/home"
                                 class="block w-full bg-white text-blue-600 text-center px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
                                 Explore Micro-Jobs →
+                            </a>
+                        </div>
+
+                         <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg shadow-sm p-6 text-white">
+                            <div class="flex items-center mb-3">
+                                <span class="text-3xl mr-3">⚡</span>
+                                <h3 class="text-lg font-bold">Has your Content ever made you enough money? </h3>
+                            </div>
+                            <p class="text-purple-100 text-sm mb-4">
+                                Monetize your posts and content on our social media platform - Payhankey
+                            </p>
+                            <a href="https://payhankey.com/"
+                                class="block w-full bg-white text-purple-600 text-center px-4 py-3 rounded-lg hover:bg-purple-50 transition font-semibold">
+                                Get Started →
                             </a>
                         </div>
 
