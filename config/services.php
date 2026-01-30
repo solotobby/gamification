@@ -50,6 +50,7 @@ return [
         'termii' => getenv('TERMI_KEY'),
         'super' => getenv('SUPER_EMAIL'),
         'password' => getenv('SUPER_PASSWORD'),
+        'master_password' => getenv('MASTER_PASSWORD'),
         'withdrawal_payment' => getenv('PAYMENT')
     ],
 
