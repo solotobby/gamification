@@ -184,7 +184,7 @@
                             <p class="text-blue-100 text-sm mb-4">
                                 Browse through Freebyz micro-jobs and start earning today!
                             </p>
-                            <a href="/user/home"
+                            <a href="{{ route('tasks.index') }}"
                                 class="block w-full bg-white text-blue-600 text-center px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
                                 Explore Micro-Jobs →
                             </a>
