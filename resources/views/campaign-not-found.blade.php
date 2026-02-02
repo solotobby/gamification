@@ -35,7 +35,7 @@
             {{-- Action Buttons --}}
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                    href="{{ route('campaigns.index') }}"
+                    href="{{ route('tasks.index') }}"
                     class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
                 >
                     <i class="fas fa-search mr-2"></i>Browse All Campaigns
@@ -70,7 +70,7 @@
                     <div>
                         <h3 class="font-semibold text-gray-900 mb-2">Explore Micro-Jobs</h3>
                         <p class="text-sm text-gray-600 mb-3">Browse hundreds of available tasks</p>
-                        <a href="{{ route('campaigns.index') }}" class="text-blue-600 hover:underline text-sm font-medium">
+                        <a href="{{ route('tasks.index') }}" class="text-blue-600 hover:underline text-sm font-medium">
                             View Campaigns →
                         </a>
                     </div>
@@ -83,7 +83,7 @@
                     <div>
                         <h3 class="font-semibold text-gray-900 mb-2">Career Opportunities</h3>
                         <p class="text-sm text-gray-600 mb-3">Find full-time and part-time jobs</p>
-                        <a href="{{ route('career-hub.index') }}" class="text-blue-600 hover:underline text-sm font-medium">
+                        <a href="{{ route('jobs') }}" class="text-blue-600 hover:underline text-sm font-medium">
                             Browse Jobs →
                         </a>
                     </div>

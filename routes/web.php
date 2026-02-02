@@ -100,7 +100,7 @@ Route::get('jobs', [\App\Http\Controllers\CareerHubController::class, 'index'])-
 
 // Public campaign route (no authentication required)
 Route::get('/campaign/public/{job_id}', [\App\Http\Controllers\GeneralController::class, 'viewPublicCampaign'])->name('campaign.public.view');
-Route::get('/campaigns/public', [PublicCampaignController::class, 'index'])->name('campaigns.index');
+// Route::get('/campaigns/public', [PublicCampaignController::class, 'index'])->name('campaigns.index');
 Route::get('/tasks', [PublicCampaignController::class, 'index'])->name('tasks.index');
 Route::get('/campaigns/public/{job_id}', [PublicCampaignController::class, 'show'])->name('campaigns.show');
 Route::get('/tasks/{job_id}', [PublicCampaignController::class, 'show2'])->name('tasks.show');

@@ -124,7 +124,7 @@
         @else
             <div class="bg-white rounded-lg shadow-sm p-12 text-center">
                 <p class="text-gray-600 text-lg mb-4">No campaigns found matching your criteria.</p>
-                <a href="{{ route('campaigns.index') }}" class="text-blue-600 hover:underline">
+                <a href="{{ route('tasks.index') }}" class="text-blue-600 hover:underline">
                     Clear all filters
                 </a>
             </div>

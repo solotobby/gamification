@@ -45,7 +45,7 @@
             {{-- Action Buttons --}}
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <a
-                    href="{{ route('campaigns.index') }}"
+                    href="{{ route('tasks.index') }}"
                     class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
                 >
                     <i class="fas fa-search mr-2"></i>Browse More Campaigns
@@ -84,7 +84,7 @@
                         <h3 class="font-semibold text-gray-900 mb-2">Similar Campaigns</h3>
                         <p class="text-sm text-gray-600 mb-3">Find tasks like this one still accepting workers</p>
                         <a
-                            href="{{ route('campaigns.index', ['type' => $campaign['campaign_type']]) }}"
+                            href="{{ route('tasks.index', ['type' => $campaign['campaign_type']]) }}"
                             class="text-blue-600 hover:underline text-sm font-medium"
                         >
                             Browse Similar →
@@ -99,7 +99,7 @@
                     <div>
                         <h3 class="font-semibold text-gray-900 mb-2">Career Opportunities</h3>
                         <p class="text-sm text-gray-600 mb-3">Looking for long-term opportunities?</p>
-                        <a href="{{ route('career-hub.index') }}" class="text-blue-600 hover:underline text-sm font-medium">
+                        <a href="{{ route('jobs') }}" class="text-blue-600 hover:underline text-sm font-medium">
                             Explore Jobs →
                         </a>
                     </div>

@@ -21,7 +21,7 @@
 
                     <p style="margin-bottom:20px;">
                         Exciting job opportunities are now available on
-                        <a href="{{ route('career-hub.index') }}" style="color:#6576ff;font-weight:600;">Freebyz Career
+                        <a href="{{ route('jobs') }}" style="color:#6576ff;font-weight:600;">Freebyz Career
                             Hub</a>.
                         Find your next career move today! 💼
                     </p>
@@ -123,7 +123,7 @@
                         <p style="margin:0 0 12px 0;color:#333;">
                             <strong>Want to see more opportunities?</strong>
                         </p>
-                        <a href="{{ route('career-hub.index') }}" target="_blank" style="
+                        <a href="{{ route('jobs') }}" target="_blank" style="
                                 display:inline-block;
                                 padding:12px 24px;
                                 background-color:#6576ff;

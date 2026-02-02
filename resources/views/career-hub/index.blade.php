@@ -34,7 +34,7 @@
     <div class="container mx-auto px-4 pb-12">
         {{-- Filters --}}
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <form method="GET" action="{{ route('career-hub.index') }}" class="space-y-4">
+            <form method="GET" action="{{ route('jobs') }}" class="space-y-4">
                 {{-- Search --}}
                 <div>
                     <input
@@ -187,7 +187,7 @@
         @else
             <div class="bg-white rounded-lg shadow-sm p-12 text-center">
                 <p class="text-gray-600 text-lg mb-4">No opportunities found matching your criteria.</p>
-                <a href="{{ route('career-hub.index') }}" class="text-blue-600 hover:underline">
+                <a href="{{ route('jobs') }}" class="text-blue-600 hover:underline">
                     Clear all filters
                 </a>
             </div>

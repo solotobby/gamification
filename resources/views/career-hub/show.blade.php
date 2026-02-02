@@ -4,7 +4,7 @@
     <div class="min-h-screen bg-gray-50 py-8">
         <div class="container mx-auto px-4">
             {{-- Back Button --}}
-            <a href="{{ route('career-hub.index') }}" class="inline-flex items-center text-blue-600 hover:underline mb-6">
+            <a href="{{ route('jobs') }}" class="inline-flex items-center text-blue-600 hover:underline mb-6">
                 ← Back to opportunities
             </a>
 
