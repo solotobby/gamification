@@ -227,7 +227,7 @@
                 </div>
 
                 @php
-                    $campaignUrl = url('campaign/public/' . $campaign->job_id);
+                    $campaignUrl = url('tasks/' . $campaign->job_id);
                     $shareText = "Complete this {$campaign->post_title} task on Freebyz to earn {$campaignUrl}";
                 @endphp
 

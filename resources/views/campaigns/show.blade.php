@@ -1,6 +1,6 @@
 @extends('layouts.task')
 
-@section('title',  'Freebyz - '.$campaign['post_title'])
+@section('title', 'Freebyz - '.$campaign['post_title'])
 
 @section('meta')
     <meta name="description"
