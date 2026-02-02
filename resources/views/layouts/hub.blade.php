@@ -74,7 +74,7 @@
                         class="text-gray-700 hover:text-blue-600 transition font-medium">
                         Affiliate Program
                     </a>
-                    <a href="{{ route('career-hub.index') }}"
+                    <a href="{{ route('jobs') }}"
                         class="text-gray-700 hover:text-blue-600 transition font-medium">
                         Career Hub
                     </a>
@@ -149,7 +149,7 @@
                     class="block py-3 text-gray-700 hover:text-blue-600 font-medium">
                     Affiliate Program
                 </a>
-                <a href="{{ route('career-hub.index') }}"
+                <a href="{{ route('jobs') }}"
                     class="block py-3 text-gray-700 hover:text-blue-600 font-medium">
                     Career Hub
                 </a>
