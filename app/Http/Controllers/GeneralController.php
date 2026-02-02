@@ -119,6 +119,7 @@ class GeneralController extends Controller
         // if ($job_id == null) {
         //     abort(404);
         // }
+        return redirect()->route('tasks.show', ['job_id' => $job_id]);
 
         try {
             // Get campaign details without authentication
