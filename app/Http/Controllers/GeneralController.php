@@ -133,7 +133,7 @@ class GeneralController extends Controller
                 return view('campaign-completed', ['campaign' => $getCampaign]);
             }
 
-            return view('campaign-view', ['campaign' => $getCampaign]);
+            return view('campaign-view-old', ['campaign' => $getCampaign]);
         } catch (\Exception $e) {
             return view('campaign-not-found');
         }

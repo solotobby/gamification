@@ -105,4 +105,33 @@ class Campaign extends Model
     {
         return $this->hasOne(Rating::class, 'campaign_id');
     }
+
+    // Check if campaign is active and accepting workers
+    public function isActive(): bool
+    {
+        return  !$this->is_completed
+            && $this->status === 'Live'
+            && $this->completed_count < $this->number_of_staff;
+    }
+
+    // Get remaining spots
+    public function getRemainingSpots(): int
+    {
+        return max(0, $this->number_of_staff - $this->completed_count);
+    }
+
+     // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_completed', false)
+            ->where('status', 'Live');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->active()
+            ->where(function($q) {
+                $q->whereColumn('completed_count', '<', 'number_of_staff');
+            });
+    }
 }

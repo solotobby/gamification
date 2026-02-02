@@ -1060,6 +1060,8 @@ class AdminController extends Controller
             'Freebyz Withdrawal'
         );
 
+
+        
         if (
             isset($transfer['data']['status']) &&
             in_array($transfer['data']['status'], ['success', 'pending'])

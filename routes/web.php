@@ -24,6 +24,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SafeLockController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicCampaignController;
+
 
 Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage']);
 //business Page
@@ -95,6 +97,20 @@ Route::prefix('career-hub')->name('career-hub.')->group(function () {
 });
 
 Route::get('jobs', [\App\Http\Controllers\CareerHubController::class, 'index'])->name('jobs');
+
+// Public campaign route (no authentication required)
+Route::get('/campaign/public/{job_id}', [\App\Http\Controllers\GeneralController::class, 'viewPublicCampaign'])->name('campaign.public.view');
+Route::get('/campaigns/public', [PublicCampaignController::class, 'index'])->name('campaigns.index');
+Route::get('/tasks', [PublicCampaignController::class, 'index'])->name('tasks.index');
+Route::get('/campaigns/public/{job_id}', [PublicCampaignController::class, 'show'])->name('campaigns.show');
+Route::get('/tasks/{job_id}', [PublicCampaignController::class, 'show2'])->name('tasks.show');
+Route::get('/tasks/public/{job_id}', [PublicCampaignController::class, 'show'])->name('tasks.shows');
+
+// Backwards compatibility - redirect old route to new one
+// Route::get('/view-campaign/{job_id}', function($job_id) {
+//     return redirect()->route('campaigns.show', $job_id);
+// });
+
 
 Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'index'])->name('index');
@@ -210,8 +226,8 @@ Route::get('campaign/{job_id}', [\App\Http\Controllers\CampaignController::class
 
 
 
-// Public campaign route (no authentication required)
-Route::get('/campaign/public/{job_id}', [\App\Http\Controllers\GeneralController::class, 'viewPublicCampaign'])->name('campaign.public.view');
+
+
 
 Route::post('post/campaign/work', [\App\Http\Controllers\CampaignController::class, 'submitWork'])->name('post.campaign.work');
 Route::get('my/jobs', [\App\Http\Controllers\JobsController::class, 'myJobs'])->name('my.jobs');
@@ -392,16 +408,6 @@ Route::get('available/jobs/{category_id}', [\App\Http\Controllers\HomeController
 
 Route::post('post', [\App\Http\Controllers\GistGrooveController::class, 'savePost'])->name('save.post');
 Route::get('success/{slug}', [\App\Http\Controllers\GistGrooveController::class, 'savePostSuccess']);
-
-
-
-
-
-
-
-
-
-
 
 
 

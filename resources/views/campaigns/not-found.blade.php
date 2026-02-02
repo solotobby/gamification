@@ -1,4 +1,5 @@
 @extends('layouts.hub')
+@section('title', 'Micro-Tasks')
 
 @section('content')
 <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">

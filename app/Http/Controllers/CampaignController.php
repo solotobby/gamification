@@ -938,8 +938,6 @@ class CampaignController extends Controller
     }
 
 
-
-
     public function viewPublicCampaign($job_id)
     {
         if ($job_id == null) {
