@@ -8,7 +8,7 @@
 
                     {{-- Greeting --}}
                     <p style="margin-bottom: 20px; font-weight: 500;">
-                        Dear {{ $name }},
+                        Hi {{ $name }},
                     </p>
 
                     {{-- Message --}}
