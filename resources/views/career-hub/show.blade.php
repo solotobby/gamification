@@ -133,16 +133,11 @@
                         {{-- Apply Card --}}
                         <div class="bg-white rounded-lg shadow-sm p-6">
                             @auth
-                                @if($job->hasApplied(auth()->user()))
-                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                                        <p class="text-green-800 font-medium">✓ You've already applied</p>
-                                    </div>
-                                @else
-                                    <button onclick="document.getElementById('applicationModal').classList.remove('hidden')"
-                                        class="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
-                                        Apply Now
-                                    </button>
-                                @endif
+                                <a href="{{ filled($job->company_website) ? $job->company_website : 'https://www.freebyz.com' }}"
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
+                                    Apply Now
+                                </a>
                             @else
                                 <a href="{{ route('login', ['career_hub_redirect' => route('career-hub.show', $job->slug)]) }}"
                                     class="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg mb-4">
@@ -156,24 +151,30 @@
                                     <p class="text-gray-500 mb-1">Job Type</p>
                                     <p class="font-semibold text-gray-900">{{ ucfirst($job->type) }}</p>
                                 </div>
+
                                 <div class="pb-4 border-b">
                                     <p class="text-gray-500 mb-1">Location</p>
                                     <p class="font-semibold text-gray-900">{{ $job->location }}</p>
                                 </div>
-                                @if($job->salary_range)
+
+                                @if ($job->salary_range)
                                     <div class="pb-4 border-b">
                                         <p class="text-gray-500 mb-1">Salary Range</p>
                                         <p class="font-semibold text-gray-900">{{ $job->salary_range }}</p>
                                     </div>
                                 @endif
-                                @if($job->expires_at)
+
+                                @if ($job->expires_at)
                                     <div class="pb-4 border-b">
                                         <p class="text-gray-500 mb-1">Application Deadline</p>
-                                        <p class="font-semibold text-gray-900">{{ $job->expires_at->format('M d, Y') }}</p>
+                                        <p class="font-semibold text-gray-900">
+                                            {{ $job->expires_at->format('M d, Y') }}
+                                        </p>
                                     </div>
                                 @endif
                             </div>
                         </div>
+
 
                         {{-- Micro-Jobs CTA --}}
                         <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-sm p-6 text-white">
@@ -190,7 +191,7 @@
                             </a>
                         </div>
 
-                         <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg shadow-sm p-6 text-white">
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg shadow-sm p-6 text-white">
                             <div class="flex items-center mb-3">
                                 <span class="text-3xl mr-3">⚡</span>
                                 <h3 class="text-lg font-bold">Has your Content ever made you enough money? </h3>
