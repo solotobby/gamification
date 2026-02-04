@@ -251,6 +251,7 @@
                             <th>S/N</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Phone</th>
                             <th>Status</th>
                             <th>Denial Reason</th>
 
@@ -268,6 +269,7 @@
                                 <td>{{ $activities->firstItem() + $loop->index }}</td>
                                 <td>{{ $list->user->name }}</td>
                                 <td>{{ $list->user->email }}</td>
+                                <td>{{ $list->user->phone }}</td>
                                 <td>{{ $list->status }}</td>
                                 <td>{{ strip_tags($list->reason) ?: '-' }}</td>
 
