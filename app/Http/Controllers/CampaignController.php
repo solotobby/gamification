@@ -1222,7 +1222,7 @@ class CampaignController extends Controller
         $campaignStat = checkCampaignCompletedStatus($cam->id);
 
 
-        $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(10);
+        $responses = CampaignWorker::where('campaign_id', $cam->id)->orderBy('created_at', 'DESC')->paginate(20);
 
         return view('user.campaign.activities', ['lists' => $cam, 'responses' => $responses, 'amount' => $convertedAmount, 'campaignStat' => $campaignStat]);
     }
