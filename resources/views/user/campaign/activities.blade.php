@@ -124,7 +124,9 @@
                         <thead>
                             <tr>
                                 <th>Worker Name</th>
-                                <th>Worker Phone</th>
+                                @if(auth()->user()->is_business)
+                                    <th>Worker Phone</th>
+                                @endif
                                 <th>Campaign Name</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -139,9 +141,9 @@
                                     <td>
                                         {{ @$list->user->name }}
                                     </td>
-                                      <td>
-                                        {{ @$list->user->phone }}
-                                    </td>
+                                    @if(auth()->user()->is_business)
+                                        <td>{{ optional($list->user)->phone }}</td>
+                                    @endif
                                     <td>
                                         {{ @$list->campaign->post_title }}
                                     </td>
