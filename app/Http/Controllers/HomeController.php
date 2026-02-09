@@ -172,9 +172,7 @@ class HomeController extends Controller
         $ads = adBanner();
         $categories = $this->listCategories();
 
-        /**
-         * Render dashboard
-         */
+       
         return view('user.home', [
             'user'         => $user,
             'badgeCount'   => $badgeCount,
@@ -197,7 +195,7 @@ class HomeController extends Controller
             ->whereDoesntHave('attempts', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->orderByRaw("CASE WHEN approved = 'Priotize' THEN 1 ELSE 2 END")
+            ->orderByRaw("CASE WHEN approved = 'Priotize' || 'Priotized' THEN 1 ELSE 2 END")
             // ->orderByDesc('created_at') // Then order by newest creation date
             ->paginate(10);
 

@@ -1780,7 +1780,7 @@ if (!function_exists('filterCampaignOld')) {
                         ->where('user_id', $user->id);
                 })
                     ->orWhere(function ($q) use ($user) {
-                        $q->whereIn('id', [8099, 8401])
+                        $q->whereIn('id', [8188, 8401])
                             // Exclude campaigns with any approved submissions
                             ->whereNotExists(function ($query) use ($user) {
                                 $query->select(DB::raw(1))
