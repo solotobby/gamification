@@ -474,11 +474,17 @@
                                           <div class="col-md-12 mb-3">
                                               <textarea class="form-control" name="comment" id="js-ckeditor5-classic" ></textarea>
                                           </div>
-                                          @if($campaign->allow_upload == true)
-                                          <div class="col-md-12 mb-3">
-                                            <label class="form-label" for="formFileMultiple" class="form-label">Upload Proof (png,jpeg,gif,jpg) - Optional</label>
-                                            <input class="form-control" type="file" name="proof" id="example-file-input-multiple">
-                                          </div>
+                                         @if($campaign->allow_upload)
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label" for="formFileMultiple">Upload Proof (png, jpeg, gif, jpg)</label>
+                                                <input
+                                                    class="form-control"
+                                                    type="file"
+                                                    name="proof"
+                                                    id="example-file-input-multiple"
+                                                    {{ $campaign->allow_upload ? 'required' : '' }}
+                                                >
+                                            </div>
                                           @endif
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                           <input type="hidden" name="amount" value="{{$campaign['local_converted_amount']}}">

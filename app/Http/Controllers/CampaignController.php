@@ -892,7 +892,7 @@ class CampaignController extends Controller
             }
 
 
-            if (($campaign->id == 8099 ||  $campaign->id == 8401 ) && $campaignWorker) {
+            if (($campaign->id === 8401 || $campaign->id === 8188 ) && $campaignWorker) {
                 // Get counts in a single query
                 $statusCounts = CampaignWorker::where('user_id', $userId)
                     ->where('campaign_id', $campaign->id)

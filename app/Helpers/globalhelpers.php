@@ -1971,7 +1971,7 @@ if (!function_exists('filterCampaign')) {
 
                 // Allow special campaigns with strict rules
                 ->orWhere(function ($special) use ($user) {
-                    $special->whereIn('id', [8099, 8401])
+                    $special->whereIn('id', [8188, 8401])
                         ->whereNotExists(function ($sub) use ($user) {
                             $sub->selectRaw(1)
                                 ->from('campaign_workers')
