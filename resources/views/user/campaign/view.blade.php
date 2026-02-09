@@ -482,8 +482,9 @@
                                                     type="file"
                                                     name="proof"
                                                     id="example-file-input-multiple"
-                                                    {{ $campaign->allow_upload ? 'required' : '' }}
+                                                    required
                                                 >
+
                                             </div>
                                           @endif
                                           <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
