@@ -34,7 +34,7 @@
                                     <i class="fa fa-{{ $isNGN ? 'check' : 'check-double' }} opacity-75 me-1"></i>
                                 @endif
                             </h1>
-                            <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Jobs and Get Paid!</h2>
+                            <h2 class="fs-lg fw-normal text-white-75 mb-0">Complete Simple Tasks and Get Paid!</h2>
                         </div>
                     </div>
                     <div class="col-md-7 d-md-flex align-items-md-center">

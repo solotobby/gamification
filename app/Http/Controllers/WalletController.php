@@ -212,8 +212,8 @@ class WalletController extends Controller
                         "name" => auth()->user()->name,
                         "email" => auth()->user()->email
                     ],
-                    // "notification_url" => config('app.env') === 'Production') ? route('koraPay.webhook') : "https://webhook.site/d9458b90-f6bb-4775-9f58-eb8bebdca5b7",
-                    "notification_url" =>  route('koraPay.webhook'),
+                    "notification_url" => config('app.env') === 'Production' ? route('koraPay.webhook') : "https://webhook.site/c156a0f5-58c9-4256-b59a-0042a6628a7f",
+                    // "notification_url" =>  route('koraPay.webhook'),
                     // "metadata"=>[
                     //     "key0"=> "test0",
                     //     "key1"=> "test1",
