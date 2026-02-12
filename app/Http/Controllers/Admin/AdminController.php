@@ -1061,7 +1061,7 @@ class AdminController extends Controller
         );
 
 
-        
+
         if (
             isset($transfer['data']['status']) &&
             in_array($transfer['data']['status'], ['success', 'pending'])
