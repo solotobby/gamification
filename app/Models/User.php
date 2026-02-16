@@ -40,7 +40,8 @@ class User extends Authenticatable
         'is_wallet_transfered',
         'email_verified_at',
         'email_verification_attempted_at',
-        'username'
+        'username',
+        'email_preference'
     ];
 
     /**
