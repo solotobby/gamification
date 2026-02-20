@@ -76,7 +76,7 @@
                         <tbody>
                             <?php $i = 1; ?>
                             @foreach ($campaigns as $camp)
-                                @if($camp->completed()->where('status', 'Approved')->count() >= $camp->number_of_staff)
+                                {{-- @if($camp) --}}
                                     <tr>
                                         <th scope="row">{{ $i++ }}.</th>
                                         <td class="fw-semibold"><a href="#" data-bs-toggle="modal"
@@ -100,7 +100,7 @@
                                         </td>
                                         <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
                                     </tr>
-                                @endif
+                                {{-- @endif --}}
 
                                 <div class="modal fade" id="modal-default-popout-{{ $camp->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="modal-default-popout" aria-hidden="true">
