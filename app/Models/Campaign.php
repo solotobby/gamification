@@ -45,11 +45,10 @@ class Campaign extends Model
         'flagged_at' => 'datetime',
     ];
 
-    // Accessor for percentage progress
     public function getPercentageProgressAttribute()
     {
         if ($this->number_of_staff > 0) {
-            return round(($this->completed / $this->number_of_staff) * 100, 2); // Rounded to 2 decimals
+            return round(($this->completed / $this->number_of_staff) * 100, 2);
         }
         return 0;
     }

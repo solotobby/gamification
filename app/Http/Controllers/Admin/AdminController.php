@@ -2375,7 +2375,13 @@ class AdminController extends Controller
             $userWallet->save();
 
             $est_amount = $camp->number_of_staff * $camp->campaign_amount;
-            $percent = (60 / 100) * $est_amount;
+
+            if ($camp->user->is_business) {
+                $percent = (100 / 100) * $est_amount;
+            } else {
+                $percent = (60 / 100) * $est_amount;
+            }
+            // $percent = (60 / 100) * $est_amount;
             $adminCom = $est_amount - $percent;
 
             $adminWallet = Wallet::where('user_id', '1')->first();
@@ -2733,7 +2739,7 @@ class AdminController extends Controller
 
     public function campaignCompleted()
     {
-        $campaigns = Campaign::where('status', 'Live')->orderBy('created_at', 'DESC')->get();
+        $campaigns = Campaign::where('status', 'Live')->where('is_completed', 1)->orderBy('created_at', 'DESC')->get();
         return view('admin.campaign_completed', ['campaigns' => $campaigns]);
     }
 
