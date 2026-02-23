@@ -7,9 +7,9 @@
                 <td style="padding: 30px 30px 20px;">
 
                     {{-- Greeting --}}
-                    {{-- <p style="margin-bottom: 20px; font-weight: 500;">
+                    <p style="margin-bottom: 20px; font-weight: 500;">
                         Dear {{ $name }},
-                    </p> --}}
+                    </p>
 
                     {{-- Message --}}
                     <div style="margin-bottom: 10px; white-space: pre-line;">

@@ -48,6 +48,7 @@ class SendMassEmail implements ShouldQueue
         }
 
         $users = User::whereIn('id', $logs->keys())
+            ->where('email_preference', true)
             ->select('id', 'email', 'name')
             ->get();
 
@@ -70,7 +71,7 @@ class SendMassEmail implements ShouldQueue
                 $response = sendZeptoMail(
                     $user->email,
                     $user->name,
-                    "Hi {$firstName}, {$this->subject}",
+                    $this->subject,
                     $htmlBody
                 );
 
