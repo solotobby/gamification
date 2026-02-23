@@ -63,6 +63,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'is_business' => 'boolean',
         'is_blacklisted' => 'boolean',
+        'email_preference' => 'boolean',
         'is_wallet_transfered' => 'boolean',
 
     ];
