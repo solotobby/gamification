@@ -254,7 +254,9 @@ class AdminController extends Controller
 
             //update completed action
             $campaign->completed_count += 1;
-            // $campaign->pending_count -= 1;
+            if ($workDone->denied_at) {
+                 $campaign->pending_count -= 1;
+            }
             $campaign->save();
 
             setIsComplete($workDone->campaign_id);
@@ -304,7 +306,8 @@ class AdminController extends Controller
 
             if ($workDone->denied_at) {
 
-                $campaign->pending_count += 1;
+                $campaign->pending_count -= 1;
+                $campaign->save();
                 // $this->removePendingCountAfterDenial($workDone->campaign_id);
 
             }
