@@ -59,15 +59,17 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+               <div class="table-responsive">
+          <table class="table table-bordered table-striped table-vcenter">
                         <thead>
 
                             <tr>
                                 <th>#</th>
-                                <th>Creator</th>
+                                <th>Campaign</th>
+                                <th>Campaign ID</th>
                                 <th>Name</th>
                                 <th>Number of Staff</th>
+                                <th>Original Currency</th>
                                 <th>Unit Price</th>
                                 <th>Total</th>
                                 <th>When Created</th>
@@ -85,8 +87,10 @@
                                     <td class="fw-semibold"><a href="#" data-bs-toggle="modal"
                                             data-bs-target="#modal-default-popout-{{ $camp->id }}"> {{$camp->post_title }}</a>
                                     </td>
+                                    <td>{{ $camp->id }}</td>
                                     <td>{{ $camp->user->name }}</td>
                                     <td>{{ $camp->number_of_staff }}</td>
+                                    <td>{{ $camp->currency }}</td>
                                     <td>&#8358;{{ number_format($camp->campaign_amount) }}</td>
                                     <td>&#8358;{{ number_format($camp->total_amount) }}</td>
                                     <td>{{ \Carbon\Carbon::parse($camp->created_at)->format('d/m/Y @ h:i:s a') }}</td>
