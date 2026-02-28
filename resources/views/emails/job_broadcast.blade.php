@@ -115,7 +115,7 @@
             <tr>
                 <td style="padding:30px 30px 15px 30px;">
                     <h2 style="font-size:18px;color:#6576ff;font-weight:600;margin:0;">
-                        Latest Campaigns on Freebyz
+                        Latest Tasks on Freebyz
                     </h2>
                 </td>
             </tr>
@@ -130,7 +130,7 @@
                     <p style="margin-bottom:20px;">
                         Fresh earning opportunities are live on
                         <a href="{{ url('/jobs') }}" style="color:#6576ff;font-weight:600;">Freebyz</a>.
-                        Explore the campaigns below and start earning today 💳
+                        Explore the tasks below and start earning today 💳
                     </p>
 
                     @foreach($campaigns as $job)
@@ -162,7 +162,7 @@
                                 border-radius:5px;
                                 font-weight:600;
                            ">
-                                                View Campaign
+                                                View Task
                                             </a>
 
                                         </div>

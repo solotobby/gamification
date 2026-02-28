@@ -68,7 +68,7 @@ class SendWeeklyBroadcast extends Command
             return;
         }
 
-        $subject = 'Fresh Campaign Just For You!';
+        $subject = 'Fresh Tasks Just For You!';
 
         // Process users in chunks of 50
         User::whereIn('id', $activeUserIds)

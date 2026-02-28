@@ -133,7 +133,7 @@
             <div class="col-lg-8">
                 <div class="card campaign-card">
                     <div class="card-header">
-                        <i class="fas fa-file-alt me-2"></i>Campaign Description
+                        <i class="fas fa-file-alt me-2"></i>Task Description
                     </div>
                     <div class="card-body">
                         <div class="campaign-description">
@@ -144,7 +144,7 @@
 
                 <div class="card campaign-card">
                     <div class="card-header">
-                        <i class="fas fa-tasks me-2"></i>Campaign Instructions
+                        <i class="fas fa-tasks me-2"></i>Task Instructions
                     </div>
                     <div class="card-body">
                         {!! $campaign['proof'] !!}
@@ -197,13 +197,13 @@
             <div class="col-lg-4">
                 <div class="card campaign-card">
                     <div class="card-header">
-                        <i class="fas fa-info-circle me-2"></i>Campaign Summary
+                        <i class="fas fa-info-circle me-2"></i>Task Summary
                     </div>
                     <div class="card-body p-0">
                         <div class="campaign-info-item">
                             <i class="fas fa-briefcase"></i>
                             <div>
-                                <strong>Campaign Type</strong><br>
+                                <strong>Task Type</strong><br>
                                 <span class="text-muted">{{ $campaign['campaignType']['name'] }}</span>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                 <!-- Share Card -->
                 <div class="card campaign-card mt-4">
                     <div class="card-header">
-                        <i class="fas fa-share-alt me-2"></i>Share This Campaign
+                        <i class="fas fa-share-alt me-2"></i>Share This Task
                     </div>
 
                     @php

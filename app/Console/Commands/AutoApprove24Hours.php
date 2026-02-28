@@ -80,7 +80,7 @@ class AutoApprove24Hours extends Command
             $wallet->save();
         }
 
-        $ref = time() . '_' . $ca->id; // More unique reference
+        $ref = time() . '_' . $ca->id; 
 
         PaymentTransaction::create([
             'user_id' => $ca->user_id,
