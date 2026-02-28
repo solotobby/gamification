@@ -59,8 +59,8 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+               <div class="table-responsive">
+          <table class="table table-bordered table-striped table-vcenter">
                         <thead>
 
                             <tr>
