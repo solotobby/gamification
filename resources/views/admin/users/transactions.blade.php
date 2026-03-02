@@ -1,18 +1,20 @@
 @extends('layouts.main.master')
 @section('style')
-<style>
-    #loader {
-        display: none;
-        text-align: center;
-        padding: 20px;
-    }
-    .transaction-row.credit {
-        color: forestgreen;
-    }
-    .transaction-row.debit {
-        color: chocolate;
-    }
-</style>
+    <style>
+        #loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .transaction-row.credit {
+            color: forestgreen;
+        }
+
+        .transaction-row.debit {
+            color: chocolate;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -47,7 +49,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <input type="text" id="searchInput" class="form-control"
-                               placeholder="Search by reference, type, description...">
+                            placeholder="Search by reference, type, description...">
                     </div>
                     <div class="col-md-6 text-end">
                         <span class="badge bg-info">Total: <span id="totalCount">0</span> transactions</span>
@@ -59,6 +61,7 @@
                         <thead>
                             <tr>
                                 <th>Reference</th>
+                                <th>Campaign ID</th>
                                 <th>Type</th>
                                 <th>Amount</th>
                                 <th>Action</th>
@@ -102,11 +105,11 @@
         let filteredTransactions = [];
         const userId = {{ $user->id }};
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             loadTransactions();
 
             // Infinite scroll
-            $(window).scroll(function() {
+            $(window).scroll(function () {
                 if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
                     if (!loading && hasMore) {
                         loadTransactions();
@@ -115,17 +118,17 @@
             });
 
             // Search functionality
-            $('#searchInput').on('keyup', function() {
+            $('#searchInput').on('keyup', function () {
                 const searchTerm = $(this).val().toLowerCase();
 
                 if (searchTerm === '') {
                     filteredTransactions = [...allTransactions];
                 } else {
-                    filteredTransactions = allTransactions.filter(function(transaction) {
+                    filteredTransactions = allTransactions.filter(function (transaction) {
                         return transaction.reference.toLowerCase().includes(searchTerm) ||
-                               transaction.type.toLowerCase().includes(searchTerm) ||
-                               transaction.description.toLowerCase().includes(searchTerm) ||
-                               transaction.amount.toString().includes(searchTerm);
+                            transaction.type.toLowerCase().includes(searchTerm) ||
+                            transaction.description.toLowerCase().includes(searchTerm) ||
+                            transaction.amount.toString().includes(searchTerm);
                     });
                 }
 
@@ -145,7 +148,7 @@
                 data: {
                     page: page
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.data.length > 0) {
                         allTransactions = allTransactions.concat(response.data);
                         filteredTransactions = [...allTransactions];
@@ -169,7 +172,7 @@
                     loading = false;
                     $('#loader').hide();
                 },
-                error: function() {
+                error: function () {
                     loading = false;
                     $('#loader').hide();
                     alert('Error loading transactions');
@@ -182,27 +185,27 @@
                 $('#transactionTable').empty();
             }
 
-            $.each(transactions, function(index, transaction) {
+            $.each(transactions, function (index, transaction) {
                 const rowClass = transaction.tx_type === 'Credit' ? 'credit' : 'debit';
 
                 const actionHtml = (transaction.type === 'wallet_topup' || transaction.type === 'transfer_topup')
                     ? `<button class="btn btn-sm btn-primary verify-btn" data-id="${transaction.id}">Verify</button>
-                       <span class="verify-status"></span>`
+                               <span class="verify-status"></span>`
                     : '-';
 
                 const row = `
-                    <tr class="transaction-row ${rowClass}">
-                        <td>${transaction.reference}</td>
-                        <td>${transaction.type}</td>
-                        <td>${transaction.amount}</td>
-                        <td>${actionHtml}</td>
-                        <td>${transaction.balance}</td>
-                        <td>${transaction.currency}</td>
-                        <td>${transaction.status}</td>
-                        <td>${transaction.description}</td>
-                        <td>${formatDate(transaction.created_at)}</td>
-                    </tr>
-                `;
+                            <tr class="transaction-row ${rowClass}">
+                                <td>${transaction.reference}</td>
+                                <td>${transaction.campaign_id === 1 ? null : transaction.campaign_id}</td>                        <td>${transaction.type}</td>
+                                <td>${transaction.amount}</td>
+                                <td>${actionHtml}</td>
+                                <td>${transaction.balance}</td>
+                                <td>${transaction.currency}</td>
+                                <td>${transaction.status}</td>
+                                <td>${transaction.description}</td>
+                                <td>${formatDate(transaction.created_at)}</td>
+                            </tr>
+                        `;
 
                 $('#transactionTable').append(row);
             });
@@ -212,7 +215,7 @@
         }
 
         function attachVerifyHandlers() {
-            $('.verify-btn').off('click').on('click', function() {
+            $('.verify-btn').off('click').on('click', function () {
                 const btn = $(this);
                 const id = btn.data('id');
                 const statusSpan = btn.siblings('.verify-status');
@@ -225,7 +228,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.verified) {
                             statusSpan.html('<span class="badge bg-success">Verified</span>');
                             btn.remove();
@@ -234,7 +237,7 @@
                             btn.prop('disabled', false).text('Verify');
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         const errorMessage = xhr.responseJSON?.message || 'Verification failed';
                         alert('Error: ' + errorMessage);
                         btn.prop('disabled', false).text('Verify');
