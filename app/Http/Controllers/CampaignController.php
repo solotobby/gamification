@@ -382,11 +382,11 @@ class CampaignController extends Controller
         }
 
         // Add validation based on account type
-        if (auth()->user()->is_business) {
+        // if (auth()->user()->is_business) {
             $rules['approval_time'] = 'required|numeric|in:24,36,48,56,72';
-        } else {
+        // } else {
             $rules['validate'] = 'required';
-        }
+        // }
 
         $request->validate($rules);
 
