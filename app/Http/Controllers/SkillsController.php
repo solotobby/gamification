@@ -13,6 +13,7 @@ use App\Models\SkillCategory;
 use App\Models\SkillProficiencyLevel;
 use App\Models\Tool;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SkillsController extends Controller
@@ -73,7 +74,7 @@ class SkillsController extends Controller
 
         $query = SkillAsset::where('id', $id)->first();
         $portfolio = Portfolio::where('user_id', $query->user_id)->get();
-        $checkifExist = \DB::table('skill_user')->where('skill_asset_id',$query->id)->where('user_id', auth()->user()->id)->first();
+        $checkifExist = DB::table('skill_user')->where('skill_asset_id',$query->id)->where('user_id', auth()->user()->id)->first();
         return view('user.skills.view_skill', ['skill' => $query, 'portfolio' => $portfolio, 'checkExist' => $checkifExist]);
     }
 

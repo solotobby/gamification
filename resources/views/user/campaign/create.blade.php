@@ -14,12 +14,14 @@
             margin-top: 10px;
             max-width: 300px;
         }
+
         .preview-container img {
             max-width: 100%;
             height: auto;
             border-radius: 4px;
             border: 1px solid #ddd;
         }
+
         .remove-preview {
             margin-top: 5px;
             cursor: pointer;
@@ -179,7 +181,8 @@
 
                             <div class="mb-4">
                                 <label class="form-label" for="post-files">Expected Campaign Proof <small>(You can request
-                                        for social media handle, email or other means of identifying the worker)</small></label>
+                                        for social media handle, email or other means of identifying the
+                                        worker)</small></label>
                                 <textarea id="mytextareao" class="form-control" name="proof"
                                     required>{{ old('proof') }}</textarea>
                             </div>
@@ -189,21 +192,20 @@
                                 <label class="form-label" for="expected-result-image">
                                     Expected Result Image <span class="badge bg-info">Optional</span>
                                 </label>
-                                <input type="file"
-                                       class="form-control"
-                                       id="expected-result-image"
-                                       name="expected_result_image"
-                                       accept="image/png,image/jpeg,image/jpg,image/gif"
-                                       onchange="previewImage(event)">
+                                <input type="file" class="form-control" id="expected-result-image"
+                                    name="expected_result_image" accept="image/png,image/jpeg,image/jpg,image/gif"
+                                    onchange="previewImage(event)">
                                 <small class="text-muted">
                                     <i class="fa fa-info-circle me-1"></i>
-                                    Upload an example image showing what the expected result should look like. This helps workers understand exactly what you want. (Max 2MB, PNG, JPEG, JPG, GIF)
+                                    Upload an example image showing what the expected result should look like. This helps
+                                    workers understand exactly what you want. (Max 2MB, PNG, JPEG, JPG, GIF)
                                 </small>
 
                                 <!-- Image Preview -->
                                 <div id="imagePreview" class="preview-container" style="display: none;">
                                     <img id="preview" src="" alt="Preview">
-                                    <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()">
+                                    <button type="button" class="btn btn-sm btn-danger remove-preview"
+                                        onclick="removePreview()">
                                         <i class="fa fa-times"></i> Remove Image
                                     </button>
                                 </div>
@@ -223,26 +225,35 @@
                                     </small></span>
                             </div>
 
-                            @if(auth()->user()->is_business)
-                                <div class="mb-4">
-                                    <label class="form-label" for="approval-time">Auto-Approval Time</label>
-                                    <select class="form-select" id="approval-time" name="approval_time" required>
-                                        <option value="24" selected>24 Hours</option>
-                                        <option value="36">36 Hours</option>
-                                        <option value="48">48 Hours</option>
-                                        <option value="56">56 Hours</option>
-                                        <option value="72">72 Hours</option>
-                                    </select>
-                                    <small><i>Select when your campaign submissions should be automatically approved if you
-                                            don't review them.</i></small>
-                                </div>
-                            @else
-                                <div class="mb-2">
-                                    <input type="checkbox" name="validate" required class="">
-                                    <span><small> I agree that this campaign will be automatically approved after 24 hours If I
-                                            fail to approve it. </small></span>
-                                </div>
-                            @endif
+                            {{-- @if(auth()->user()->is_business) --}}
+                            <div class="mb-4">
+                                <label class="form-label" for="approval-time">Auto-Approval Time</label>
+                                <select class="form-select" id="approval-time" name="approval_time" required>
+                                    <option value="24" selected>24 Hours</option>
+                                    <option value="36">36 Hours</option>
+                                    <option value="48">48 Hours</option>
+                                    <option value="56">56 Hours</option>
+                                    <option value="72">72 Hours</option>
+                                </select>
+                                <small><i>Select when your campaign submissions should be automatically approved if you
+                                        don't review them.</i></small>
+                            </div>
+                            {{-- @else --}}
+                            {{-- <div class="mb-2">
+                                <input type="checkbox" name="validate" required class="">
+                                <span><small> I agree that this campaign will be automatically approved after 24 hours If I
+                                        fail to approve it. </small></span>
+                            </div> --}}
+                            <div class="mb-2">
+                                <input type="checkbox" name="validate" required class="">
+                                <span>
+                                    <small>
+                                        I agree that jobs performed on this campaign should be automatically approved after
+                                        the selected time if I fail to approve or deny them.
+                                    </small>
+                                </span>
+                            </div>
+                            {{-- @endif --}}
 
                         </div>
                     </div>
@@ -277,8 +288,8 @@
                     </div>
 
                     <div class="modal-body">
-                       To ensure fairness, kindly avoid denying task submissions without genuine reasons.
-                       Repeated denials will lead to your campaigns being suspended without refund.
+                        To ensure fairness, kindly avoid denying task submissions without genuine reasons.
+                        Repeated denials will lead to your campaigns being suspended without refund.
                     </div>
 
                     <div class="modal-footer">
@@ -313,7 +324,7 @@
                 }
 
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById('preview').src = e.target.result;
                     document.getElementById('imagePreview').style.display = 'block';
                 };

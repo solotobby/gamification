@@ -11,13 +11,22 @@ class FeedbackReplies extends Model
 
     protected $table = "feedback_replies";
 
-    protected $fillable = ['feedback_id', 'user_id', 'message', 'status'];
+    protected $fillable = [
+        'feedback_id',
+        'user_id',
+        'message',
+        'status',
+         'is_image',
+        'image_url',
+    ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function feedback(){
+    public function feedback()
+    {
         return $this->belongsTo(Feedback::class);
     }
 }

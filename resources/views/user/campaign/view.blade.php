@@ -325,7 +325,7 @@
       <div class="col-md-8 order-md-0">
         <div class="alert alert-info">
           <li class="fa fa-info"></li> Please note that this job must be approved before payment.
-          We'll automatically approve it if it is not approved by poster after 24hours.
+          We'll automatically approve it if it is not approved by poster after {{ $campaign['approval_time'] }}hours.
         </div>
         @if (session('success'))
           <div class="alert alert-success" role="alert">
@@ -367,7 +367,45 @@
             <br>
           </div>
         <!-- END Job Description -->
+  <!-- Add this in your campaign decision view after the campaign description -->
+                            @if($campaign->expected_result_image)
+                                <div class="mb-4">
+                                    <label class="form-label">Expected Result Example</label>
+                                    <div class="alert alert-info">
+                                        <i class="fa fa-info-circle me-1"></i> The poster provided this image as an
+                                        example of what they expect:
+                                    </div>
+                                    <div style="position: relative; display: inline-block;">
+    <img src="{{ displayImage($campaign->expected_result_image) }}"
+         class="img-thumbnail rounded"
+         alt="Expected Result"
+         style="max-width: 100%; height: auto;">
 
+    <div style="
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.25);
+        border-radius:inherit;
+    "></div>
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%) rotate(-45deg);
+        font-size:40px;
+        color:rgba(255,255,255,0.5);
+        font-weight:bold;
+        pointer-events:none;
+    ">
+        WWW.FREEBYZ.COM
+    </div>
+</div>
+                                </div>
+                            @endif
         <!-- Similar Jobs -->
             <div class="block block-rounded">
               <div class="block-header block-header-default">
