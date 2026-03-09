@@ -41,7 +41,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
 
-        $schedule->command('campaigns:auto-approve-24hours')->hourly();
+        $schedule->command('campaigns:auto-approve')->hourly();
 
         // $schedule->command('campaigns:auto-approve-business')->hourly();
 
