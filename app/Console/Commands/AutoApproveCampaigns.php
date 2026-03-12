@@ -28,7 +28,8 @@ class AutoApproveCampaigns extends Command
             ->whereNull('campaign_workers.reason')
             ->where('users.is_business', false)
             ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
-            ->select('campaign_workers.*');
+            ->select('campaign_workers.*', 'campaign_workers.id as chunk_id')
+            ->orderBy('campaign_workers.id');
 
         $count = $query->count();
 
@@ -52,7 +53,9 @@ class AutoApproveCampaigns extends Command
 
                         checkCampaignCompletedStatus($campaign->id);
 
-                        $wallet = Wallet::where('user_id', $worker->user_id)->lockForUpdate()->first();
+                        $wallet = Wallet::where('user_id', $worker->user_id)
+                            ->lockForUpdate()
+                            ->first();
 
                         $baseCurrency = baseCurrency($user);
                         $amount = $worker->amount;
@@ -61,21 +64,16 @@ class AutoApproveCampaigns extends Command
 
                             $currency = 'NGN';
                             $channel = 'paystack';
-
                             $wallet->balance += $amount;
-
                         } elseif ($campaign->currency == 'USD') {
 
                             $currency = 'USD';
                             $channel = 'paypal';
-
                             $wallet->usd_balance += $amount;
-
                         } else {
 
                             $currency = $baseCurrency;
                             $channel = 'flutterwave';
-
                             $wallet->base_currency_balance += $amount;
                         }
 
@@ -97,26 +95,23 @@ class AutoApproveCampaigns extends Command
                             'tx_type' => 'Credit',
                             'user_type' => 'regular'
                         ]);
-
                     });
 
                     $this->info("Approved Campaign Worker ID {$worker->id}");
-
                 } catch (\Exception $e) {
 
                     Log::error("Auto approval failed for worker {$worker->id}: " . $e->getMessage());
-
                     $this->error("Failed Campaign Worker ID {$worker->id}");
                 }
-
             }
-
-        });
+        }, 'chunk_id');
 
         Log::info('Auto campaign approval completed');
         $this->info('Auto campaign approval completed');
     }
 }
+
+
 // class AutoApprove24Hours extends Command
 // {
 //     protected $signature = 'campaigns:auto-approve-24hours';
