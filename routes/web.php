@@ -657,3 +657,5 @@ Route::post('professional/subcategory/store', [\App\Http\Controllers\Admin\Profe
 Route::post('professional/skillset/store', [\App\Http\Controllers\Admin\ProfessionalController::class, 'storeProfessionalSkillset'])->name('professional.store.skillset');
 
 Route::get('remove/duplicate/account', [\App\Http\Controllers\Admin\FraudController::class, 'removeDuplicateAccount']);
+Route::post('/admin/fraud/blacklist/{user}', [\App\Http\Controllers\Admin\FraudController::class, 'blacklist'])->name('admin.fraud.blacklist');
+Route::post('/admin/fraud/unblacklist/{user}', [\App\Http\Controllers\Admin\FraudController::class, 'unblacklist'])->name('admin.fraud.unblacklist');
