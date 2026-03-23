@@ -32,7 +32,8 @@ Route::get('/', [\App\Http\Controllers\GeneralController::class, 'landingPage'])
 Route::get('m/{id}', [\App\Http\Controllers\GeneralController::class, 'businessPage']);
 
 Route::middleware('auth.apikey')->group(function () {
-    Route::get('api/list', [\App\Http\Controllers\GeneralController::class, 'apiList']);
+    Route::get('api/list', [\App\Http\Controllers\GeneralController::class, 'apiListNew']);
+    Route::get('api/list/paginated', [\App\Http\Controllers\GeneralController::class, 'apiListPaginated']);
     Route::get('api/list/number', [\App\Http\Controllers\GeneralController::class, 'apiListNumber']);
 });
 
