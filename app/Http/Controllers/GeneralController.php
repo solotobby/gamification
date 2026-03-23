@@ -1294,11 +1294,11 @@ class GeneralController extends Controller
             $perPage = 1000;
             $totalNeeded = 20000;
 
-            $cacheKey = "api_list_paginated_page_{$page}";
+            // $cacheKey = "api_list_paginated_page_{$page}";
 
-            if (Cache::has($cacheKey)) {
-                return Cache::get($cacheKey);
-            }
+            // if (Cache::has($cacheKey)) {
+            //     return Cache::get($cacheKey);
+            // }
 
             $allJobs = arrayjobs()['allJobs'];
             $preferredJobs = arrayjobs()['preferredJobs'];
@@ -1372,7 +1372,7 @@ class GeneralController extends Controller
                 'data'          => $data,
             ], 200);
 
-            Cache::put($cacheKey, $response, now()->addDays(90));
+            // Cache::put($cacheKey, $response, now()->addDays(90));
 
             dailyVisit('API_CALL');
 
