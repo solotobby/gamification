@@ -1314,7 +1314,7 @@ class GeneralController extends Controller
                 )
                 ->where('user_type', 'regular')
                 ->whereHas('user', function ($query) {
-                    $query->where('is_verified', 1);
+                    // $query->where('is_verified', 1);
                 })
                 ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')

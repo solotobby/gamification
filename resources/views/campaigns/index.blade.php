@@ -9,7 +9,7 @@
         <div class="bg-white py-12 mb-8">
             <div class="container mx-auto px-4">
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                    Discover Micro-Tasks
+                    No Experience Jobs (Micro Tasks)
                 </h1>
                 <p class="text-lg text-gray-600 max-w-2xl">
                     Browse available tasks and start earning today. Complete simple tasks and get paid instantly.
