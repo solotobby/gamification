@@ -1206,7 +1206,7 @@ class GeneralController extends Controller
     {
 
         try {
-
+            set_time_limit(120);
             $allJobs = arrayjobs()['allJobs'];
             $preferredJobs = arrayjobs()['preferredJobs'];
             $otherJobs = arrayjobs()['otherJobs'];
@@ -1290,6 +1290,7 @@ class GeneralController extends Controller
     public function apiListPaginated(Request $request)
     {
         try {
+            set_time_limit(120);
             $page = $request->input('page', 1);
             $perPage = 500;
             $totalNeeded = 20000;
