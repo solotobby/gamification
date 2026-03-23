@@ -1360,7 +1360,7 @@ class GeneralController extends Controller
 
             // Track returned user IDs
             $newIds = $paginated->pluck('user_id')->toArray();
-            Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(90));
+            Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
 
             $data = $paginated->map(fn($item) => collect($item)->except('user_id'))->values();
 
@@ -1390,6 +1390,7 @@ class GeneralController extends Controller
     public function apiListNew()
     {
         try {
+            set_time_limit(120);
             $cacheKey = 'api_list_all_users';
 
             if (Cache::has($cacheKey)) {
@@ -1456,7 +1457,7 @@ class GeneralController extends Controller
 
             // Track returned user IDs
             $newIds = $highestPayout->pluck('user_id')->toArray();
-            Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(90));
+            Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
 
             $data = $highestPayout->map(fn($item) => collect($item)->except('user_id'))->values();
 
