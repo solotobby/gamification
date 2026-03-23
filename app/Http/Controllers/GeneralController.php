@@ -1282,7 +1282,7 @@ class GeneralController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch users, kindly contact support.',
-                 'error' => $e->getMessage(), // Remove in production
+                'error' => $e->getMessage(), // Remove in production
             ], 500);
         }
     }
@@ -1313,9 +1313,6 @@ class GeneralController extends Controller
                     DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
-                ->whereHas('user', function ($query) {
-                    // $query->where('is_verified', 1);
-                })
                 ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
