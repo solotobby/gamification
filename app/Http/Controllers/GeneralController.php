@@ -1291,6 +1291,7 @@ class GeneralController extends Controller
     {
         try {
             set_time_limit(120);
+
             $page = $request->input('page', 1);
             $perPage = 20000;
             $totalNeeded =20000;
@@ -1316,7 +1317,7 @@ class GeneralController extends Controller
                 ->where('user_type', 'regular')
                 // ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')
-                ->having('total_payout', '>', 5000)
+                ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
                 ->take($totalNeeded)
@@ -1350,7 +1351,7 @@ class GeneralController extends Controller
                         'phone'                => $item->user->phone,
                         'gender'               => $item->user->gender ?? 'Male',
                         'age_range'            => $ageRange,
-                        'total_payout'         => $item->total_payout,
+                        'total_payout'         => (int)$item->total_payout,
                         'highest_earning_task' => $highestEarningTask,
                         'most_active_tasks'    => $mostActiveTasks,
                     ];
