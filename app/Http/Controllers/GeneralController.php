@@ -1287,27 +1287,126 @@ class GeneralController extends Controller
         }
     }
 
+    // public function apiListPaginated(Request $request)
+    // {
+    //     try {
+    //         set_time_limit(120);
+
+    //         $page = $request->input('page', 1);
+    //         $perPage = 20000;
+    //         $totalNeeded =20000;
+
+    //         $cacheKey = "api_list_paginated_page";
+
+    //         if (Cache::has($cacheKey)) {
+    //             return Cache::get($cacheKey);
+    //         }
+
+    //         $allJobs = arrayjobs()['allJobs'];
+    //         $preferredJobs = arrayjobs()['preferredJobs'];
+    //         $otherJobs = arrayjobs()['otherJobs'];
+    //         $ageRanges = ageranges();
+
+    //         $returnedUserIds = Cache::get('api_list_paginated_page', []);
+
+    //         $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
+    //             ->select(
+    //                 'user_id',
+    //                 DB::raw('LEAST(GREATEST(SUM(amount) * 100, 50000), 2000000) as total_payout')
+    //             )
+    //             ->where('user_type', 'regular')
+    //             // ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
+    //             ->groupBy('user_id')
+    //             ->having('total_payout', '>', 50000)
+    //             ->having('total_payout', '<', 2000000)
+    //             ->orderByDesc('total_payout')
+    //             ->take($totalNeeded)
+    //             ->get()
+    //             ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
+    //                 mt_srand(crc32($item->user_id));
+
+    //                 $isPreferred = mt_rand(1, 100) <= 90;
+    //                 $highestEarningTask = $isPreferred
+    //                     ? $preferredJobs[array_rand($preferredJobs)]
+    //                     : $otherJobs[array_rand($otherJobs)];
+
+    //                 $remainingJobs = collect($allJobs)
+    //                     ->reject(fn($j) => $j === $highestEarningTask)
+    //                     ->shuffle()
+    //                     ->take(2)
+    //                     ->values()
+    //                     ->toArray();
+
+    //                 $mostActiveTasks = array_merge([$highestEarningTask], $remainingJobs);
+
+    //                 $assign21to25 = mt_rand(1, 100) <= 80;
+    //                 $ageRange = $assign21to25
+    //                     ? '21-25'
+    //                     : collect($ageRanges)->reject(fn($a) => $a === '21-25')->shuffle()->first();
+
+    //                 return [
+    //                     'user_id'              => $item->user_id,
+    //                     'name'                 => $item->user->name,
+    //                     'email'                => $item->user->email,
+    //                     'phone'                => $item->user->phone,
+    //                     'gender'               => $item->user->gender ?? 'Male',
+    //                     'age_range'            => $ageRange,
+    //                     'total_payout'         => (int)$item->total_payout,
+    //                     'highest_earning_task' => $highestEarningTask,
+    //                     'most_active_tasks'    => $mostActiveTasks,
+    //                 ];
+    //             });
+
+    //         $paginated = $highestPayout->forPage($page, $perPage);
+
+    //         // Track returned user IDs
+    //         $newIds = $paginated->pluck('user_id')->toArray();
+
+    //         Cache::put('api_list_paginated_page', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
+    //         $data = $paginated->map(fn($item) => collect($item)->except('user_id'))->values();
+
+    //         $response = response()->json([
+    //             'message'       => 'Users fetched successfully.',
+    //             // 'page'          => (int) $page,
+    //             // 'per_page'      => $perPage,
+    //             'total_fetched' => $highestPayout->count(),
+    //             'count'         => $data->count(),
+    //             'data'          => $data,
+    //         ], 200);
+
+    //         Cache::put($cacheKey, $response, now()->addDays(30));
+
+    //         dailyVisit('API_CALL');
+
+    //         return $response;
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status'  => 'error',
+    //             'message' => 'Failed to fetch users, kindly contact support.',
+    //             'error'   => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
+
+
     public function apiListPaginated(Request $request)
     {
         try {
             set_time_limit(120);
 
-            $page = $request->input('page', 1);
-            $perPage = 20000;
-            $totalNeeded =20000;
+            $cacheKey = "api_list_paginated";
 
-            // $cacheKey = "api_list_paginated_page_{$page}";
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
 
-            // if (Cache::has($cacheKey)) {
-            //     return Cache::get($cacheKey);
-            // }
+            $totalNeeded = 20000;
 
             $allJobs = arrayjobs()['allJobs'];
             $preferredJobs = arrayjobs()['preferredJobs'];
             $otherJobs = arrayjobs()['otherJobs'];
             $ageRanges = ageranges();
-
-            // $returnedUserIds = Cache::get('api_returned_user_ids', []);
 
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
@@ -1315,7 +1414,6 @@ class GeneralController extends Controller
                     DB::raw('LEAST(GREATEST(SUM(amount) * 100, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
-                // ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
@@ -1323,6 +1421,7 @@ class GeneralController extends Controller
                 ->take($totalNeeded)
                 ->get()
                 ->map(function ($item) use ($preferredJobs, $otherJobs, $allJobs, $ageRanges) {
+
                     mt_srand(crc32($item->user_id));
 
                     $isPreferred = mt_rand(1, 100) <= 90;
@@ -1345,7 +1444,6 @@ class GeneralController extends Controller
                         : collect($ageRanges)->reject(fn($a) => $a === '21-25')->shuffle()->first();
 
                     return [
-                        'user_id'              => $item->user_id,
                         'name'                 => $item->user->name,
                         'email'                => $item->user->email,
                         'phone'                => $item->user->phone,
@@ -1357,24 +1455,13 @@ class GeneralController extends Controller
                     ];
                 });
 
-            $paginated = $highestPayout->forPage($page, $perPage);
-
-            // Track returned user IDs
-            // $newIds = $paginated->pluck('user_id')->toArray();
-            // Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
-
-            $data = $paginated->map(fn($item) => collect($item)->except('user_id'))->values();
-
             $response = response()->json([
                 'message'       => 'Users fetched successfully.',
-                'page'          => (int) $page,
-                'per_page'      => $perPage,
                 'total_fetched' => $highestPayout->count(),
-                'count'         => $data->count(),
-                'data'          => $data,
+                'data'          => $highestPayout,
             ], 200);
 
-            // Cache::put($cacheKey, $response, now()->addMinutes(10));
+            Cache::put($cacheKey, $response, now()->addDays(30));
 
             dailyVisit('API_CALL');
 
@@ -1387,7 +1474,6 @@ class GeneralController extends Controller
             ], 500);
         }
     }
-
     public function apiListNew()
     {
         try {
