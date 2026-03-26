@@ -1312,12 +1312,12 @@ class GeneralController extends Controller
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
-                    DB::raw('LEAST(GREATEST(SUM(amount) * 10, 5000), 2000000) as total_payout')
+                    DB::raw('LEAST(GREATEST(SUM(amount) * 100, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
                 // ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')
-                ->having('total_payout', '>', 5000)
+                ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
                 ->orderByDesc('total_payout')
                 ->take($totalNeeded)
