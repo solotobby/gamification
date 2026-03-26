@@ -1293,20 +1293,20 @@ class GeneralController extends Controller
             set_time_limit(120);
             $page = $request->input('page', 1);
             $perPage = 1000;
-            $totalNeeded =10000;
+            $totalNeeded =20000;
 
-            // $cacheKey = "api_list_paginated_page_{$page}";
+            $cacheKey = "api_list_paginated_page_{$page}";
 
-            // if (Cache::has($cacheKey)) {
-            //     return Cache::get($cacheKey);
-            // }
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
 
             $allJobs = arrayjobs()['allJobs'];
             $preferredJobs = arrayjobs()['preferredJobs'];
             $otherJobs = arrayjobs()['otherJobs'];
             $ageRanges = ageranges();
 
-            // $returnedUserIds = Cache::get('api_returned_user_ids', []);
+            $returnedUserIds = Cache::get('api_returned_user_ids', []);
 
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
@@ -1314,7 +1314,7 @@ class GeneralController extends Controller
                     DB::raw('LEAST(GREATEST(SUM(amount) * 100, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
-                // ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
+                ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
                 ->groupBy('user_id')
                 ->having('total_payout', '>', 50000)
                 ->having('total_payout', '<', 2000000)
@@ -1359,8 +1359,8 @@ class GeneralController extends Controller
             $paginated = $highestPayout->forPage($page, $perPage);
 
             // Track returned user IDs
-            // $newIds = $paginated->pluck('user_id')->toArray();
-            // Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
+            $newIds = $paginated->pluck('user_id')->toArray();
+            Cache::put('api_returned_user_ids', array_unique(array_merge($returnedUserIds, $newIds)), now()->addDays(30));
 
             $data = $paginated->map(fn($item) => collect($item)->except('user_id'))->values();
 
@@ -1373,7 +1373,7 @@ class GeneralController extends Controller
                 'data'          => $data,
             ], 200);
 
-            // Cache::put($cacheKey, $response, now()->addDays(90));
+            Cache::put($cacheKey, $response, now()->addDays(2));
 
             dailyVisit('API_CALL');
 
