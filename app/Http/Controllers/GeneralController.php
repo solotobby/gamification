@@ -1292,7 +1292,7 @@ class GeneralController extends Controller
         try {
             set_time_limit(120);
             $page = $request->input('page', 1);
-            $perPage = 500;
+            $perPage = 50;
             $totalNeeded =20000;
 
             $cacheKey = "api_list_paginated_page_{$page}";
