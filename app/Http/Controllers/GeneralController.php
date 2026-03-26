@@ -1292,7 +1292,7 @@ class GeneralController extends Controller
         try {
             set_time_limit(120);
             $page = $request->input('page', 1);
-            $perPage = 1000;
+            $perPage = 500;
             $totalNeeded =20000;
 
             $cacheKey = "api_list_paginated_page_{$page}";
@@ -1311,7 +1311,7 @@ class GeneralController extends Controller
             $highestPayout = PaymentTransaction::with(['user:id,name,email,phone,gender,is_verified'])
                 ->select(
                     'user_id',
-                    DB::raw('LEAST(GREATEST(SUM(amount) * 100, 50000), 2000000) as total_payout')
+                    DB::raw('LEAST(GREATEST(SUM(amount) * 10, 50000), 2000000) as total_payout')
                 )
                 ->where('user_type', 'regular')
                 ->when(!empty($returnedUserIds), fn($q) => $q->whereNotIn('user_id', $returnedUserIds))
@@ -1373,7 +1373,7 @@ class GeneralController extends Controller
                 'data'          => $data,
             ], 200);
 
-            Cache::put($cacheKey, $response, now()->addDays(2));
+            Cache::put($cacheKey, $response, now()->addMinutes(10));
 
             dailyVisit('API_CALL');
 
@@ -1467,7 +1467,7 @@ class GeneralController extends Controller
                 'data'    => $data,
             ], 200);
 
-            Cache::put($cacheKey, $response, now()->addDays(90));
+            Cache::put($cacheKey, $response, now()->addMinutes(10));
 
             dailyVisit('API_CALL');
 
