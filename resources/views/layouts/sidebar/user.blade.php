@@ -5,27 +5,27 @@
         <a class="nav-main-link" href="{{ url('home') }}">
           <i class="nav-main-link-icon fa fa-home"></i>
           <span class="nav-main-link-name">Dashboard</span>
-          <?php 
+          <?php
           $badge = badge();
           ?>
           <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: {{$badge['color']}}"></i> </span>
         </a>
       </li>
 
-    
+
       @if(auth()->user()->wallet->base_currency == 'NGN')
         {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ route('spin') }}">
             <i class="nav-main-link-icon fa fa-spinner"></i>
             <span class="nav-main-link-name">Spin & Win</span>
-          
+
           </a>
         </li> --}}
-      
+
         {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('fastest/finger') }}">
             <i class="nav-main-link-icon fa fa-fingerprint"></i>
-            <span class="nav-main-link-name">Fastest Finger</span>   
+            <span class="nav-main-link-name">Fastest Finger</span>
             <span class="nav-main-link-badge badge rounded-pill bg-default">New</span>
           </a>
         </li>  --}}
@@ -33,20 +33,20 @@
         {{-- <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('user/business') }}">
             <i class="nav-main-link-icon fa fa-briefcase"></i>
-            <span class="nav-main-link-name">Promote Business</span>   
+            <span class="nav-main-link-name">Promote Business</span>
             <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> </span>
           </a>
         </li>   --}}
 
-         
+
       @endif
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ url('skills') }}">
           <i class="nav-main-link-icon fa fa-search"></i>
-          <span class="nav-main-link-name">Hire Skilled Worker</span>   
+          <span class="nav-main-link-name">Hire Skilled Worker</span>
           {{-- <span class="nav-main-link-badge badge rounded-pill "> <i class="fa fa-star fa-lg" aria-hidden="true" style="color: goldenrod"></i> </span> --}}
         </a>
-      </li> 
+      </li>
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -64,10 +64,10 @@
               <span class="nav-main-link-name">My Skill</span>
             </a>
           </li>
-          
+
         </ul>
       </li>
-    
+
 
     {{-- <li class="nav-main-item">
       <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -98,13 +98,13 @@
           <a class="nav-main-link" href="{{url('top/earners')}}">
             <span class="nav-main-link-name">Top Earners</span>
           </a>
-          
-         
+
+
         </li>
       </ul>
     </li>  --}}
 
-     
+
 
       {{-- <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -119,10 +119,10 @@
             <a class="nav-main-link" href="{{url('list/survey')}}">
               <span class="nav-main-link-name">List</span>
             </a>
-           
+
           </li>
         </ul>
-      </li> 
+      </li>
  --}}
 
       {{-- <li class="nav-main-item">
@@ -138,8 +138,8 @@
         <li class="nav-main-item">
           <a class="nav-main-link" href="{{ url('safelock') }}">
             <i class="nav-main-link-icon fa fa-snowflake"></i>
-            <span class="nav-main-link-name">Safelock Funds</span>   
-          
+            <span class="nav-main-link-name">Safelock Funds</span>
+
           </a>
         </li>
         <li class="nav-main-item">
@@ -155,37 +155,37 @@
               <a class="nav-main-link" href="{{url('banner')}}">
                 <span class="nav-main-link-name">List</span>
               </a>
-            
+
             </li>
           </ul>
-        </li> 
+        </li>
 
       @endif
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-list"></i>
-          <span class="nav-main-link-name" style="color:gr">Jobs</span>
+          <span class="nav-main-link-name" style="color:gr">Tasks</span>
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('home') }}">
-              <span class="nav-main-link-name">Available Jobs</span>
+              <span class="nav-main-link-name">Available Tasks</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{route('my.jobs')}}">
-              <span class="nav-main-link-name">My Jobs</span>
+              <span class="nav-main-link-name">My Tasks</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('completed/jobs') }}">
-              <span class="nav-main-link-name">Completed Job</span>
+              <span class="nav-main-link-name">Completed Tasks</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('disputed/jobs') }}">
-              <span class="nav-main-link-name">Disputed Jobs</span>
+              <span class="nav-main-link-name">Disputed Tasks</span>
             </a>
           </li>
         </ul>
@@ -218,7 +218,7 @@
           </li>
         </ul>
       </li>
-      
+
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -226,31 +226,31 @@
           <span class="nav-main-link-name">Wallet</span>
 
           @if( baseCurrency() == 'NGN')
-          <span class="nav-main-link-badge badge rounded-pill bg-default">  
-            {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }} 
+          <span class="nav-main-link-badge badge rounded-pill bg-default">
+            {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->balance,2) }}
           </span>
-         
+
          @elseif( baseCurrency() == 'USD')
-         <span class="nav-main-link-badge badge rounded-pill bg-default">  
+         <span class="nav-main-link-badge badge rounded-pill bg-default">
           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->usd_balance,2) }}
          </span>
-         
+
          @else
-         <span class="nav-main-link-badge badge rounded-pill bg-default"> 
+         <span class="nav-main-link-badge badge rounded-pill bg-default">
           {{ baseCurrency() }} {{ number_format(auth()->user()->wallet->base_currency_balance,2) }}
          </span>
-         
-         
-         @endif
-     
 
-          
+
+         @endif
+
+
+
           {{-- @if(auth()->user()->wallet->base_currency == "Naira")
           <span class="nav-main-link-badge badge rounded-pill bg-default">&#8358;{{ @number_format(auth()->user()->wallet->balance) }}</span>
           @else
           <span class="nav-main-link-badge badge rounded-pill bg-default">${{ number_format(auth()->user()->wallet->usd_balance,3) }}</span>
           @endif --}}
-           
+
         </a>
         <ul class="nav-main-submenu">
           <li class="nav-main-item">
@@ -296,7 +296,7 @@
         </ul>
       </li> --}}
 
-     
+
 
       <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -354,8 +354,8 @@
           <span class="nav-main-link-name">Buy DataBundle</span>
         </a>
       </li> --}}
-     
-      
+
+
       <li class="nav-main-item">
         <a class="nav-main-link" href="{{ route('transactions') }}">
           <i class="nav-main-link-icon fa fa-table"></i>
@@ -364,7 +364,7 @@
       </li>
 
 
-      
+
        <li class="nav-main-item">
         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
           <i class="nav-main-link-icon fa fa-ring"></i>
@@ -381,7 +381,7 @@
               <span class="nav-main-link-name">How to Complete Tasks</span>
             </a>
           </li>
-          
+
         </ul>
       </li>
 

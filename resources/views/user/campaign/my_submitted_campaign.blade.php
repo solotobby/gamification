@@ -7,7 +7,7 @@
         <div class="bg-black-75">
             <div class="content content-boxed text-center py-5">
                 <h1 class="h2 text-white mb-2">
-                    View Job
+                    View Task
                 </h1>
             </div>
         </div>
@@ -18,7 +18,7 @@
     <div class="content content-boxed">
         <!-- Job -->
         <h2 class="content-heading">
-            <i class="fa fa-check text-success me-1"></i> You completed this Campaign
+            <i class="fa fa-check text-success me-1"></i> You completed this Task
         </h2>
         <div class="block block-rounded">
             <div class="block-content block-content-full">
@@ -90,7 +90,7 @@
 
                 @if(!empty($work->proof_url) && $work->proof_url !== 'no image')
                     <hr>
-                    <h5>Proof of your work Image</h5>
+                    <h5>Proof of your Task (Image)</h5>
                     <img src="{{ displayImage($work->proof_url) }}" class="img-thumbnail rounded float-left" alt="Proof">
                 @else
                     <div class="alert alert-warning text-small">
@@ -111,7 +111,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <h4>Dispute Job Denial</h4>
+                    <h4>Dispute Task Denial</h4>
 
                     @if($work->is_dispute == false)
 
@@ -123,7 +123,7 @@
                             <form action="{{ url('process/disputed/jobs') }}" method="POST">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="form-label" for="post-files">Give reason why you feel this job shouldn't be
+                                    <label class="form-label" for="post-files">Give reason why you feel this task shouldn't be
                                         denied</small></label>
                                     <textarea class="form-control" name="reason" id="js-ckeditor5-classic"
                                         required> {{ old('reason') }}</textarea>

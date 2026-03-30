@@ -60,7 +60,7 @@
                                     {{ $user->myAttemptedJobs()->where('status', 'Approved')->count() }}
                                 </p>
                                 <p class="fs-sm fw-semibold text-white-75 mb-0">
-                                    <i class="fa fa-briefcase opacity-75 me-1"></i> Jobs Done
+                                    <i class="fa fa-briefcase opacity-75 me-1"></i>     Tasks Done
                                 </p>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
 
         <!-- Available Jobs -->
         <div class="d-flex justify-content-between align-items-center mt-0 mb-3">
-            <h4 class="fw-light mb-0">Available Jobs</h4>
+            <h4 class="fw-light mb-0">Available Tasks</h4>
 
             {{-- @csrf
               @if ($wallet->base_currency == 'Naira')
@@ -443,7 +443,7 @@
                 fetch(apiUrl)
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Failed to fetch jobs: ' + response.statusText);
+                            throw new Error('Failed to fetch tasks: ' + response.statusText);
                         }
                         return response.json();
                     })
@@ -454,7 +454,7 @@
                     .catch(error => {
                         console.error('Error:', error);
                         $("#display-jobs").html(
-                            `<div class="alert alert-warning mt-2">Failed to load jobs. Please refresh your browser.</div>`
+                            `<div class="alert alert-warning mt-2">Failed to load tasks. Please refresh your browser.</div>`
                         );
                     });
             }
@@ -464,7 +464,7 @@
                 container.empty();
 
                 if (jobs.length === 0) {
-                    container.html(`<div class="alert alert-info mt-2">No jobs found for this category</div>`);
+                    container.html(`<div class="alert alert-info mt-2">No tasks found for this category</div>`);
                     return;
                 }
 

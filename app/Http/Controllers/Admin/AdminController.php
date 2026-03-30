@@ -1598,7 +1598,7 @@ class AdminController extends Controller
         $user = User::where('id', $campaignAmount->user_id)->first();
         $subject = 'Job Reversal';
 
-        $content = 'Your request to for job reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
+        $content = 'Your request to for task reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Reversal Successful');

@@ -7,11 +7,11 @@
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Campaigns</h1>
+                <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Tasks</h1>
                 <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">Campaign</li>
-                        <li class="breadcrumb-item active" aria-current="page">Completed Campaigns</li>
+                        <li class="breadcrumb-item">Tasks</li>
+                        <li class="breadcrumb-item active" aria-current="page">Completed Tasks</li>
                     </ol>
                 </nav>
             </div>
@@ -21,7 +21,7 @@
     <div class="content">
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Completed Campaign</h3>
+                <h3 class="block-title">Completed Tasks</h3>
                 <div class="block-options">
                     <button type="button" class="btn-block-option">
                         <i class="si si-settings"></i>

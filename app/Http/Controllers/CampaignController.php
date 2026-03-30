@@ -383,9 +383,9 @@ class CampaignController extends Controller
 
         // Add validation based on account type
         // if (auth()->user()->is_business) {
-            $rules['approval_time'] = 'required|numeric|in:24,36,48,56,72';
+        $rules['approval_time'] = 'required|numeric|in:24,36,48,56,72';
         // } else {
-            $rules['validate'] = 'required';
+        $rules['validate'] = 'required';
         // }
 
         $request->validate($rules);
@@ -858,9 +858,16 @@ class CampaignController extends Controller
         if (!$job_id) {
             abort(400);
         }
+        $user = auth()->user();
 
-        if (!auth()->user()->accountDetails) {
-            return redirect('profile')->with('info', 'You are about to take on a high-paying job. Please scroll down to Bank Account Details to update your information.');
+        if (
+            in_array($user->wallet->base_currency, ['NGN', 'Naira']) &&
+            !$user->accountDetails
+        ) {
+            return redirect('profile')->with(
+                'info',
+                'You are about to take on a high-paying task. Please scroll down to Bank Account Details to update your information.'
+            );
         }
         $userId = auth()->id();
         $userBaseCurrency = baseCurrency();
@@ -892,7 +899,7 @@ class CampaignController extends Controller
             }
 
 
-            if (($campaign->id === 8401 || $campaign->id === 8188 ) && $campaignWorker) {
+            if (($campaign->id === 8401 || $campaign->id === 8188) && $campaignWorker) {
                 // Get counts in a single query
                 $statusCounts = CampaignWorker::where('user_id', $userId)
                     ->where('campaign_id', $campaign->id)
@@ -1140,7 +1147,7 @@ class CampaignController extends Controller
                     ->exists();
 
                 if ($hasPending) {
-                    return back()->with('error', 'You have a pending submission for this campaign. Please wait for review.');
+                    return back()->with('error', 'You have a pending submission for this task. Please wait for review.');
                 }
 
                 // Count denied attempts
@@ -1153,14 +1160,14 @@ class CampaignController extends Controller
                 if ($check->status === 'Denied' && $deniedCount < 3) {
                     // Allow resubmission - continue with the code below
                 } elseif ($check->status === 'Approved') {
-                    return back()->with('error', 'You have already completed this campaign successfully.');
+                    return back()->with('error', 'You have already completed this task successfully.');
                 } elseif ($deniedCount >= 3) {
-                    return back()->with('error', 'You have exceeded the maximum number of attempts (3) for this campaign.');
+                    return back()->with('error', 'You have exceeded the maximum number of attempts (3) for this task.');
                 } else {
-                    return back()->with('error', 'You have already submitted this campaign.');
+                    return back()->with('error', 'You have already submitted this task.');
                 }
             } else {
-                return back()->with('error', 'You have completed this campaign before');
+                return back()->with('error', 'You have completed this task before');
             }
         }
 
@@ -1188,11 +1195,11 @@ class CampaignController extends Controller
         $campaignStatus = checkCampaignCompletedStatus($campaign->id);
 
         $user = User::where('id', $campaign->user->id)->first();
-        $subject = 'Job Submission';
+        $subject = 'Task Submission';
         $content = auth()->user()->name . ' submitted a response to your campaign - ' . $campaign->post_title . '. Please login to review.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, route('tasks.index')));
 
-        return back()->with('success', 'Job Submitted Successfully');
+        return back()->with('success', 'Task Submitted Successfully');
     }
 
     public function mySubmittedCampaign($id)
@@ -1539,7 +1546,7 @@ class CampaignController extends Controller
         // Send mail only in production
         if (config('app.env') === 'Production') {
             $subject = 'New Dispute Raised';
-            $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a job. Please attend to it.';
+            $content = 'A dispute has been raised by ' . auth()->user()->name . ' on a task. Please attend to it.';
             $url = 'admin/campaign/disputes/' . $workDone->id;
 
             Mail::to('freebyzcom@gmail.com')
@@ -1998,7 +2005,7 @@ class CampaignController extends Controller
                 }
             } else {
 
-                return back()->with('error', 'You do not have suficient funds in your wallet');
+                return back()->with('error', 'You do not have sufficient funds in your wallet');
             }
         } else {
 
@@ -2074,7 +2081,7 @@ class CampaignController extends Controller
                 Mail::to(auth()->user()->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Worker Updated Successfully');
             } else {
-                return back()->with('error', 'You do not have suficient funds in your wallet');
+                return back()->with('error', 'You do not have sufficient funds in your wallet');
             }
         }
     }

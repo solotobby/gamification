@@ -147,7 +147,7 @@
                 <div class="fs-2 fw-semibold text-white">
                   {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}<span class="text-white-50"></span>
                 </div>
-                <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Job</div>
+                <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Per Task</div>
               </div>
             </a>
           </div>
@@ -164,7 +164,7 @@
         <!-- Job Summary -->
         <div class="block block-rounded">
           <div class="block-header block-header-default">
-            <h3 class="block-title">Campaign Summary</h3>
+            <h3 class="block-title">Task Summary</h3>
           </div>
           <div class="block-content">
             <ul class="fa-ul list-icons">
@@ -172,21 +172,21 @@
                 <span class="fa-li text-primary">
                   <i class="fa fa-briefcase"></i>
                 </span>
-                <div class="fw-semibold">Campaign Type</div>
+                <div class="fw-semibold">Task Type</div>
                 <div class="text-muted">{{$campaign['campaignType']['name']}}</div>
               </li>
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-briefcase"></i>
                 </span>
-                <div class="fw-semibold">Campaign Category</div>
+                <div class="fw-semibold">Task Category</div>
                 <div class="text-muted">{{$campaign['campaignCategory']['name']}}</div>
               </li>
               <li>
                 <span class="fa-li text-primary">
                   <i class="fa fa-money-check-alt"></i>
                 </span>
-                <div class="fw-semibold">Amount per Campaign</div>
+                <div class="fw-semibold">Amount per Task</div>
                 <div class="text-muted"> {{$campaign['local_converted_currency']}} {{$campaign['local_converted_amount']}}</div>
               </li>
               <li>
@@ -223,7 +223,7 @@
 
             <div class="mt-4 pt-3 border-top">
                 <div class="fw-semibold mb-2">
-                    <i class="fa fa-share-alt text-primary"></i> Share Campaign
+                    <i class="fa fa-share-alt text-primary"></i> Share Task
                 </div>
 
                 @php
@@ -296,7 +296,7 @@
 
               <div class="modal-body pb-1">
                 Current Number of Workers - {{ $campaign['number_of_staff'] }} <br>
-                Current Value per Job  - {{ $campaign['local_converted_amount'] }} <br>
+                Current Value per Task  - {{ $campaign['local_converted_amount'] }} <br>
                 <hr>
                 <form action="{{ route('addmore.workers') }}" method="POST">
                   @csrf
@@ -324,7 +324,7 @@
       </div>
       <div class="col-md-8 order-md-0">
         <div class="alert alert-info">
-          <li class="fa fa-info"></li> Please note that this job must be approved before payment.
+          <li class="fa fa-info"></li> Please note that this task must be approved before payment.
           We'll automatically approve it if it is not approved by poster after {{ $campaign['approval_time'] }}hours.
         </div>
         @if (session('success'))
@@ -344,7 +344,7 @@
         <!-- Job Description -->
         <div class="block block-rounded">
           <div class="block-header block-header-default">
-            <h3 class="block-title">Campaign Description</h3>
+            <h3 class="block-title">Task Description</h3>
           </div>
             <div class="block-content">
 
@@ -359,7 +359,7 @@
 
         <div class="block block-rounded">
             <div class="block-header block-header-default">
-              <h3 class="block-title">Campaign Instruction</h3>
+              <h3 class="block-title">Task Instruction</h3>
             </div>
             <div class="block-content">
              {!! $campaign->proof !!}
@@ -416,7 +416,7 @@
                             <div class="row">
                             <div class="col-md-12">
                                 <div class="alert alert-info">
-                                    You cannot do this campaign because you created it.
+                                    You cannot do this task because you created it.
                                 </div>
                             </div>
                         </div>
@@ -434,7 +434,7 @@
                                 <div class="col-md-12">
 
                                     <h4 class="fw-normal text-muted text-center">
-                                        Opps!! You have completed this campaign
+                                        Opps!! You have completed this Task
                                     </h4>
                                     @if(@!$is_rated)
                                     <!-- Onboarding Modal -->
@@ -539,7 +539,7 @@
                         <div class="col-md-12">
                             <div class="alert alert-warning">
                                 <i class="fa fa-exclamation-triangle me-2"></i>
-                                <strong>Business Account Restriction:</strong> Business accounts cannot perform tasks or jobs.
+                                <strong>Business Account Restriction:</strong> Business accounts cannot perform tasks.
                                 Please contact support if you need to change your account type.
                             </div>
                         </div>
