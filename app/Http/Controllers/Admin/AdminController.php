@@ -255,7 +255,7 @@ class AdminController extends Controller
             //update completed action
             $campaign->completed_count += 1;
             if ($workDone->denied_at) {
-                 $campaign->pending_count -= 1;
+                $campaign->pending_count -= 1;
             }
             $campaign->save();
 
@@ -1066,8 +1066,14 @@ class AdminController extends Controller
 
 
         if (
+            // isset($transfer['data']['status']) &&
+            // in_array($transfer['data']['status'], ['success', 'pending'])
+
+            isset($transfer['status']) &&
+            $transfer['status'] === true &&
             isset($transfer['data']['status']) &&
             in_array($transfer['data']['status'], ['success', 'pending'])
+
         ) {
 
             $withdrawal->status = true;
