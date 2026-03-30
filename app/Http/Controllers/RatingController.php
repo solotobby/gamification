@@ -38,6 +38,6 @@ class RatingController extends Controller
             'type' => 'job'
         ]);
 
-        return back()->with('success', 'Thank you for taking the time to rate this job, we really appreciate it');
+        return back()->with('success', 'Thank you for taking the time to rate this task, we really appreciate it');
     }
 }

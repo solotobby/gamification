@@ -20,7 +20,7 @@ class BannerController extends Controller
         // $this->middleware('auth');
     }
 
-  
+
     public function index()
     {
         $banners = Banner::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
@@ -146,7 +146,7 @@ class BannerController extends Controller
                 // }
             }
 
-            $content = 'Your ad banner placement is successfully created. It is currenctly under review, you will get a notification when it goes live!';
+            $content = 'Your ad banner placement is successfully created. It is currently under review, you will get a notification when it goes live!';
             $subject = 'Ad Banner Placement - Under Review';
 
             //Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));

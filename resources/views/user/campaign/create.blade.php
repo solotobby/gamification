@@ -227,7 +227,11 @@
 
                             {{-- @if(auth()->user()->is_business) --}}
                             <div class="mb-4">
-                                <label class="form-label" for="approval-time">Auto-Approval Time</label>
+                                <br>
+                            
+                                <label class="form-label" for="approval-time">Auto-Approval Time</label><br>
+                                <small><i>Select when your campaign submissions should be automatically approved if you
+                                        don't review them.</i></small>
                                 <select class="form-select" id="approval-time" name="approval_time" required>
                                     <option value="24" selected>24 Hours</option>
                                     <option value="36">36 Hours</option>
@@ -235,8 +239,7 @@
                                     <option value="56">56 Hours</option>
                                     <option value="72">72 Hours</option>
                                 </select>
-                                <small><i>Select when your campaign submissions should be automatically approved if you
-                                        don't review them.</i></small>
+
                             </div>
                             {{-- @else --}}
                             {{-- <div class="mb-2">

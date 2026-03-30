@@ -41,7 +41,7 @@
                   </h4>
 
                   <h4 class="fw-normal text-muted text-center">
-                    Start making money from Micro Jobs
+                    Start making money from completing simple tasks
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" href="{{url('pathway/home')}}" data-toggle="click-ripple">
                         Start Earning

@@ -40,7 +40,7 @@
                   </h4>
 
                   <h4 class="fw-normal text-muted text-center">
-                    Start making money from Micro Jobs
+                    Start making money by completing simple tasks
                     <center>
                       <a class="btn btn-hero btn-primary mt-3" data-bs-dismiss="modal" aria-label="Close" data-toggle="click-ripple">
                         Start Earning
