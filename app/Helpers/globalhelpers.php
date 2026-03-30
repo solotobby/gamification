@@ -1969,17 +1969,17 @@ if (!function_exists('filterCampaign')) {
                         ->where('user_id', $user->id);
                 })
 
-                // Allow special campaigns with strict rules
-                ->orWhere(function ($special) use ($user) {
-                    $special->whereIn('id', [8188, 8401])
-                        ->whereNotExists(function ($sub) use ($user) {
-                            $sub->selectRaw(1)
-                                ->from('campaign_workers')
-                                ->whereColumn('campaign_id', 'campaigns.id')
-                                ->where('user_id', $user->id)
-                                ->whereIn('status', ['Approved', 'Pending']);
-                        })
-                        ->whereRaw("
+                    // Allow special campaigns with strict rules
+                    ->orWhere(function ($special) use ($user) {
+                        $special->whereIn('id', [8188, 8401])
+                            ->whereNotExists(function ($sub) use ($user) {
+                                $sub->selectRaw(1)
+                                    ->from('campaign_workers')
+                                    ->whereColumn('campaign_id', 'campaigns.id')
+                                    ->where('user_id', $user->id)
+                                    ->whereIn('status', ['Approved', 'Pending']);
+                            })
+                            ->whereRaw("
                             (
                                 SELECT COUNT(*)
                                 FROM campaign_workers
@@ -1988,7 +1988,7 @@ if (!function_exists('filterCampaign')) {
                                 AND status = 'Denied'
                             ) < 3
                         ", [$user->id]);
-                });
+                    });
             });
 
         // Optional category filter
@@ -2021,20 +2021,20 @@ if (!function_exists('filterCampaign')) {
                 'completed'                  => $completed,
                 'is_completed'               => $completed >= $campaign->number_of_staff,
                 'progress'                   => $campaign->number_of_staff > 0
-                                                ? round(($completed / $campaign->number_of_staff) * 100, 2)
-                                                : 0,
+                    ? round(($completed / $campaign->number_of_staff) * 100, 2)
+                    : 0,
                 'campaign_amount'            => $campaign->campaign_amount,
                 'currency'                   => $campaign->currency,
                 'local_currency'             => $baseCurrency, // Added this field for frontend
                 'local_converted_amount'     => currencyConverter(
-                                                    $campaign->currency,
-                                                    $baseCurrency,
-                                                    $campaign->campaign_amount
-                                                ),
+                    $campaign->currency,
+                    $baseCurrency,
+                    $campaign->campaign_amount
+                ),
                 'local_converted_currency'   => $baseCurrency,
                 'percentage_progress'        => $campaign->number_of_staff > 0
-                                                ? round(($completed / $campaign->number_of_staff) * 100, 2)
-                                                : 0, // Added for frontend consistency
+                    ? round(($completed / $campaign->number_of_staff) * 100, 2)
+                    : 0, // Added for frontend consistency
                 'created_at'                 => $campaign->created_at,
             ];
         });
@@ -2504,8 +2504,9 @@ if (!function_exists('transferFund')) {
             "reason" => $reason
         ]);
 
-        Log::info($res);
-        return json_decode($res->getBody()->getContents(), true);
+        Log::info($res->json());
+        // return json_decode($res->getBody()->getContents(), true);
+        return $res->json();
     }
 }
 
