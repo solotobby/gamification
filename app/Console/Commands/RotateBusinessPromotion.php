@@ -30,7 +30,7 @@ class RotateBusinessPromotion extends Command
             $subject = 'Freebyz Business Promotion - Business Selected';
             $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
             $this->info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
             Log::info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);

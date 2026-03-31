@@ -899,9 +899,9 @@ class GeneralController extends Controller
 
         // return $filteredArray;
 
-        $user = User::where('id', 1)->first();
-        $subject = 'Fresh Campaign';
-        Mail::to('solotobby@gmail.com')->send(new JobBroadcast($user, $subject, $filteredArray));
+        // $user = User::where('id', 1)->first();
+        // $subject = 'Fresh Campaign';
+        // Mail::to('solotobby@gmail.com')->send(new JobBroadcast($user, $subject, $filteredArray));
 
         return 'okay';
 

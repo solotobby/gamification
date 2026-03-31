@@ -55,9 +55,9 @@ class StaffController extends Controller
         $staff->staff_id = 'FBY0'.$staff->id;
         $staff->save();
 
-        $subject = 'Welcome Home!';
-        $content = 'We are glad to have you in the family, this means so much to us and we look forward to working with you and building the best technologies out of Africa.';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // $subject = 'Welcome Home!';
+        // $content = 'We are glad to have you in the family, this means so much to us and we look forward to working with you and building the best technologies out of Africa.';
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return  back()->with('success', 'Staff Created Successfully');
     }
