@@ -9,6 +9,8 @@
     <meta name="description" content="Freebyz.com">
     <meta name="author" content="freebyz">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="google-site-verification" content="XxhPT_QNOsBsjCWWuH_y3AnW0usKGIDJOLwNqRfk61Y" />
+ 
 
     <!-- Open Graph Meta -->
     <meta property="og:title" content="Freebyz">
@@ -35,7 +37,7 @@
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
     <!-- END Stylesheets -->
-    
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7484162262282358"
                           crossorigin="anonymous"></script>
 
@@ -99,7 +101,7 @@
 </script>
   <!--End of Tawk.to Script-->
 
-  
+
 
   </head>
   <body>
@@ -160,7 +162,7 @@
         'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
     -->
     <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-fixed main-content-narrow">
-      
+
 
       <!-- Sidebar -->
       <!--
@@ -184,9 +186,9 @@
                     <span class="opacity-75">b</span>
               </span>
               <span class="smini-hidden">
-               
+
                     Free<span class="opacity-75">byz</span>
-                
+
               </span>
             </a>
             <!-- END Logo -->
@@ -223,9 +225,9 @@
         <!-- Sidebar Scrolling -->
         <div class="js-sidebar-scroll">
           <!-- Side Navigation -->
-           
+
                 @include('layouts.sidebar.default')
-          
+
           <!-- END Side Navigation -->
         </div>
         <!-- END Sidebar Scrolling -->
@@ -238,7 +240,7 @@
 
         @include('layouts.menu.general')
         <!-- END Header Content -->
-        
+
         <!-- END Header Loader -->
       </header>
       <!-- END Header -->
