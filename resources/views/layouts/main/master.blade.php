@@ -7,6 +7,7 @@
     <title>Freebyz.com</title>
 
     <meta name="description" content="Freebyz.com">
+    <meta name="google-site-verification" content="XxhPT_QNOsBsjCWWuH_y3AnW0usKGIDJOLwNqRfk61Y" />
     <meta name="author" content="freebyz">
     <meta name="robots" content="noindex, nofollow">
 
