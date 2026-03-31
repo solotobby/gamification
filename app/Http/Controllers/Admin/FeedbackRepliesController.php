@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Mail;
 
 class FeedbackRepliesController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -26,43 +27,46 @@ class FeedbackRepliesController extends Controller
     //     return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
     // }
 
-    public function index(Request $request){
-    $feedbacks = Feedback::where('status', '1')
-        ->when($request->search, function($query) use ($request) {
-            $query->where(function($q) use ($request) {
-                $q->where('category', 'like', "%{$request->search}%")
-                  ->orWhere('message', 'like', "%{$request->search}%")
-                  ->orWhereHas('user', function($userQuery) use ($request) {
-                      $userQuery->where('name', 'like', "%{$request->search}%");
-                  });
-            });
-        })
-        ->orderBy('created_at', 'DESC')
-        ->paginate(25)
-        ->appends(['search' => $request->search]);
+    public function index(Request $request)
+    {
+        $feedbacks = Feedback::where('status', '1')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('category', 'like', "%{$request->search}%")
+                        ->orWhere('message', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(25)
+            ->appends(['search' => $request->search]);
 
-    return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
-}
+        return view('admin.feedback.index', ['feedbacks' => $feedbacks]);
+    }
 
-public function unread(Request $request){
-    $feedbacks = Feedback::where('status', '0')
-        ->when($request->search, function($query) use ($request) {
-            $query->where(function($q) use ($request) {
-                $q->where('category', 'like', "%{$request->search}%")
-                  ->orWhere('message', 'like', "%{$request->search}%")
-                  ->orWhereHas('user', function($userQuery) use ($request) {
-                      $userQuery->where('name', 'like', "%{$request->search}%");
-                  });
-            });
-        })
-        ->orderBy('created_at', 'DESC')
-        ->paginate(25)
-        ->appends(['search' => $request->search]);
+    public function unread(Request $request)
+    {
+        $feedbacks = Feedback::where('status', '0')
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('category', 'like', "%{$request->search}%")
+                        ->orWhere('message', 'like', "%{$request->search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', "%{$request->search}%");
+                        });
+                });
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(25)
+            ->appends(['search' => $request->search]);
 
-    return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
-}
+        return view('admin.feedback.unread', ['feedbacks' => $feedbacks]);
+    }
 
-    public function view($id){
+    public function view($id)
+    {
         // $feedbacks = Feedback::where('status', false)->orderBy('created_at', 'DESC')->take(10)->get();
 
         $feedback = Feedback::where('id', $id)->firstOrFail();
@@ -74,7 +78,8 @@ public function unread(Request $request){
         return view('admin.feedback.view', ['feedback' => $feedback]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'message' => 'required',
         ]);
@@ -88,8 +93,8 @@ public function unread(Request $request){
         $user = User::where('id', $senderID)->first();
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
-        $url = 'feedback/view/'.$request->feedback_id;
-        //  Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
+        $url = route('feedback');
+        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
         return back()->with('success', 'Reply sent');
     }
 }
