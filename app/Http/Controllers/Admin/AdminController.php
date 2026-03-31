@@ -293,9 +293,9 @@ class AdminController extends Controller
                 'user_type' => 'regular'
             ]);
 
-            $subject = 'Job ' . $request->status;
-            $status = $request->status;
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            // $subject = 'Job ' . $request->status;
+            // $status = $request->status;
+            // Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
 
 
             return back()->with('success', 'Dispute resolved Successfully');
@@ -344,10 +344,10 @@ class AdminController extends Controller
             //     'user_type' => 'regular'
             // ]);
 
-            $subject = 'Disputed Job ' . $request->status;
-            $status = $request->status;
+            // $subject = 'Disputed Job ' . $request->status;
+            // $status = $request->status;
 
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            // Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
 
             return back()->with('success', 'Dispute resolved Successfully');
 
@@ -1086,14 +1086,14 @@ class AdminController extends Controller
                 'regular'
             );
 
-            Mail::to($user->email)->send(
-                new GeneralMail(
-                    $user,
-                    'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
-                    'Withdrawal Request Granted',
-                    ''
-                )
-            );
+            // Mail::to($user->email)->send(
+            //     new GeneralMail(
+            //         $user,
+            //         'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
+            //         'Withdrawal Request Granted',
+            //         ''
+            //     )
+            // );
 
             return back()->with('success', 'Withdrawal processed successfully');
         }
@@ -1118,9 +1118,9 @@ class AdminController extends Controller
         $am = number_format($withdrawals->amount);
         $name = $user->name;
         activityLog($user, 'withdrawal_sent', 'NGN' . $am . ' cash withdrawal by ' . $name, 'regular');
-        $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
-        $subject = 'Withdrawal Request Granted';
-        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
+        // $subject = 'Withdrawal Request Granted';
+        // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawals Updated');
     }
 
@@ -1317,7 +1317,7 @@ class AdminController extends Controller
         $name = $getUser->name;
 
         activityLog($getUser, 'account_verification', $name . ' account verification', 'regular');
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
         return $getUser;
     }
@@ -1431,7 +1431,7 @@ class AdminController extends Controller
 
         activityLog($getUser, 'dollar_account_verification', $name . ' account verification', 'regular');
 
-        Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+        // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
 
         // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
@@ -1605,7 +1605,7 @@ class AdminController extends Controller
         $subject = 'Job Reversal';
 
         $content = 'Your request to for task reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
         return back()->with('success', 'Reversal Successful');
     }
@@ -2326,7 +2326,7 @@ class AdminController extends Controller
                     New status: {$request->new_status}.
                     Reason: {$request->unflag_reason}";
 
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
         }
 
         // $this->flaggedCampaigns();
@@ -2411,11 +2411,11 @@ class AdminController extends Controller
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
-            $user = User::where('id', $camp->user_id)->first();
-            $content = 'Reason: ' . $request->reason . '.';
-            $subject = 'Campaign Declined';
+            // $user = User::where('id', $camp->user_id)->first();
+            // $content = 'Reason: ' . $request->reason . '.';
+            // $subject = 'Campaign Declined';
 
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return redirect('campaigns/pending')->with('error', 'Campaign is Declined');
         } else {
 
@@ -2425,10 +2425,10 @@ class AdminController extends Controller
             $camp->description = $request->description;
             $camp->proof = $request->proof;
             $camp->save();
-            $user = User::where('id', $camp->user_id)->first();
-            $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
-            $subject = 'Campaign Live!!!';
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // $user = User::where('id', $camp->user_id)->first();
+            // $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
+            // $subject = 'Campaign Live!!!';
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return redirect('campaigns/pending')->with('success', 'Campaign is Live!!!');
         }
 
@@ -2513,9 +2513,9 @@ class AdminController extends Controller
                     $name = $user->name;
                     activityLog($user, 'withdrawal_sent', ' ' . $withdrawals->base_currency . '' . $am = number_format($withdrawals->amount * 100) . ' cash withdrawal by ' . $name, 'regular');
 
-                    $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-                    $subject = 'Withdrawal Request Granted';
-                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+                    // $subject = 'Withdrawal Request Granted';
+                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawal Error');
@@ -2533,9 +2533,9 @@ class AdminController extends Controller
                     $name = $user->name;
                     activityLog($user, 'withdrawal_sent', 'NGN' . $am . ' cash withdrawal by ' . $name, 'regular');
                     //send mail
-                    $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
-                    $subject = 'Withdrawal Request Granted';
-                    Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                    // $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
+                    // $subject = 'Withdrawal Request Granted';
+                    // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
                 } else {
                     return back()->with('error', 'Withdrawals Error');
@@ -2558,9 +2558,9 @@ class AdminController extends Controller
         $name = $user->name;
         activityLog($user, 'withdrawal_sent', 'NGN' . $am . ' cash withdrawal by ' . $name, 'regular');
 
-        $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
-        $subject = 'Withdrawal Request Granted';
-        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        // $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+        // $subject = 'Withdrawal Request Granted';
+        // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawals Updated');
     }
 
@@ -2640,10 +2640,10 @@ class AdminController extends Controller
                 ]);
 
                 // PaystackHelpers::paymentTrasanction($request->user_id, '1', time(), $request->amount, 'successful', 'wallet_topup', 'Manual Wallet Topup', 'Credit', 'regular');
-                $content = 'Your wallet has been succesfully credited with NGN' . $request->amount . '. Thank you for choosing Freebyz.com';
-                $subject = 'Wallet Topup';
-                $user = User::where('id', $request->user_id)->first();
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                // $content = 'Your wallet has been succesfully credited with NGN' . $request->amount . '. Thank you for choosing Freebyz.com';
+                // $subject = 'Wallet Topup';
+                // $user = User::where('id', $request->user_id)->first();
+                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Funded');
             } else {
                 $currency = '';
@@ -2683,9 +2683,9 @@ class AdminController extends Controller
                     'user_type' => 'regular'
                 ]);
                 $content = $request->reason;
-                $subject = 'Wallet Debit';
-                $user = User::where('id', $request->user_id)->first();
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                // $subject = 'Wallet Debit';
+                // $user = User::where('id', $request->user_id)->first();
+                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                 return back()->with('success', 'Wallet Successfully Debitted');
             }
         } else {
@@ -2839,11 +2839,11 @@ class AdminController extends Controller
                 ]
             );
 
-            $user = User::where('id', $request->user_id)->first();
-            $subject = 'Account Details Updated';
-            $content = 'Congratulations, your account details has been updated on Freebyz.';
+            // $user = User::where('id', $request->user_id)->first();
+            // $subject = 'Account Details Updated';
+            // $content = 'Congratulations, your account details has been updated on Freebyz.';
 
-            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return back()->with('success', 'Account Details Upated');
         }
         return back()->with('error', 'Account Updating Failed');

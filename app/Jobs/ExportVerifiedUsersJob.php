@@ -44,9 +44,9 @@ class ExportVerifiedUsersJob implements ShouldQueue
 
             if ($users->isEmpty()) {
                 $exportJob->update(['status' => 'failed', 'error_message' => 'No data found']);
-                Mail::raw('No verified users found.', function ($message) {
-                    $message->to($this->email)->subject('Export - No Data');
-                });
+                // Mail::raw('No verified users found.', function ($message) {
+                //     $message->to($this->email)->subject('Export - No Data');
+                // });
                 return;
             }
 
@@ -102,9 +102,9 @@ class ExportVerifiedUsersJob implements ShouldQueue
 
             $downloadUrl = rtrim(config('services.env.url'), '/') . '/storage/exports/' . $fileName;
 
-            Mail::raw("Your verified users CSV export is ready.\n\nDownload here: {$downloadUrl}", function ($message) {
-                $message->to($this->email)->subject('Freebyz Verified Users Export');
-            });
+            // Mail::raw("Your verified users CSV export is ready.\n\nDownload here: {$downloadUrl}", function ($message) {
+            //     $message->to($this->email)->subject('Freebyz Verified Users Export');
+            // });
 
             $exportJob->update([
                 'status' => 'completed',
@@ -117,9 +117,9 @@ class ExportVerifiedUsersJob implements ShouldQueue
                 'error_message' => $e->getMessage()
             ]);
 
-            Mail::raw("Export failed: " . $e->getMessage(), function ($message) {
-                $message->to($this->email)->subject('Export Failed');
-            });
+            // Mail::raw("Export failed: " . $e->getMessage(), function ($message) {
+            //     $message->to($this->email)->subject('Export Failed');
+            // });
         }
     }
 

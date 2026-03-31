@@ -8,6 +8,7 @@ use App\Models\Feedback;
 use App\Models\FeedbackReplies;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class FeedbackRepliesController extends Controller
@@ -94,7 +95,18 @@ class FeedbackRepliesController extends Controller
         $subject = 'Admin Feedback Reply';
         $content = $request->message;
         $url = route('feedback');
-        Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
+        // try {
+        //     Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
+        // } catch (\Exception $e) {
+
+        //     Log::error('Mail sending failed', [
+        //         'user_id' => $user->id ?? null,
+        //         'email' => $user->email ?? null,
+        //         'error' => $e->getMessage()
+        //     ]);
+
+        //     // return back()->with('error', 'Failed to send reply. Please try again.');
+        // }
         return back()->with('success', 'Reply sent');
     }
 }

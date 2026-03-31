@@ -28,7 +28,7 @@ class EmailVerificationController extends Controller
         ]);
 
         try {
-            Mail::to($user->email)->send(new VerificationCodeMail($code, $user->name));
+            // Mail::to($user->email)->send(new VerificationCodeMail($code, $user->name));
 
             if (is_null($user->email_verification_attempted_at)) {
                 $user->email_verification_attempted_at = now()->addDays(60);
@@ -111,7 +111,7 @@ class EmailVerificationController extends Controller
         ]);
 
         try {
-            Mail::to($request->new_email)->send(new VerificationCodeMail($code, auth()->user()->name));
+            // Mail::to($request->new_email)->send(new VerificationCodeMail($code, auth()->user()->name));
 
             return response()->json([
                 'success' => true,
