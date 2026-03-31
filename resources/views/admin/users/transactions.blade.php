@@ -6,22 +6,23 @@
             text-align: center;
             padding: 20px;
         }
-/*
-        .transaction-row.credit {
-            color: forestgreen;
-        }
 
-        .transaction-row.debit {
-            color: chocolate;
-        } */
+        /*
+            .transaction-row.credit {
+                color: forestgreen;
+            }
+
+            .transaction-row.debit {
+                color: chocolate;
+            } */
 
         .transaction-row.credit td {
-    color: forestgreen !important;
-}
+            color: forestgreen !important;
+        }
 
-.transaction-row.debit td {
-    color: chocolate !important;
-}
+        .transaction-row.debit td {
+            color: chocolate !important;
+        }
     </style>
 @endsection
 
@@ -210,26 +211,26 @@
                 ];
                 // const rowClass = transaction.tx_type === 'Credit' ? 'credit' : 'debit';
                 const type = (transaction.type || '').trim().toLowerCase();
-const rowClass = debitTypes.includes(type) ? 'debit' : 'credit';
+                const rowClass = debitTypes.includes(type) ? 'debit' : 'credit';
 
                 const actionHtml = (transaction.type === 'wallet_topup' || transaction.type === 'transfer_topup')
                     ? `<button class="btn btn-sm btn-primary verify-btn" data-id="${transaction.id}">Verify</button>
-                                       <span class="verify-status"></span>`
+                                           <span class="verify-status"></span>`
                     : '-';
 
                 const row = `
-                                    <tr class="transaction-row ${rowClass}">
-                                        <td>${transaction.reference}</td>
-                                        <td>${transaction.campaign_id === 1 ? null : transaction.campaign_id}</td>                        <td>${transaction.type}</td>
-                                        <td>${transaction.amount}</td>
-                                        <td>${actionHtml}</td>
-                                        <td>${transaction.balance}</td>
-                                        <td>${transaction.currency}</td>
-                                        <td>${transaction.status}</td>
-                                        <td>${transaction.description}</td>
-                                        <td>${formatDate(transaction.created_at)}</td>
-                                    </tr>
-                                `;
+                                        <tr class="transaction-row ${rowClass}">
+                                            <td>${transaction.reference}</td>
+                                            <td>${transaction.campaign_id === 1 ? null : transaction.campaign_id}</td>                        <td>${transaction.type}</td>
+                                            <td>${transaction.amount}</td>
+                                            <td>${actionHtml}</td>
+                                            <td>${transaction.balance}</td>
+                                            <td>${transaction.currency}</td>
+                                            <td>${transaction.status}</td>
+                                            <td>${transaction.description}</td>
+                                            <td>${formatDate(transaction.created_at)}</td>
+                                        </tr>
+                                    `;
 
                 $('#transactionTable').append(row);
             });
