@@ -1086,14 +1086,14 @@ class AdminController extends Controller
                 'regular'
             );
 
-            // Mail::to($user->email)->send(
-            //     new GeneralMail(
-            //         $user,
-            //         'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
-            //         'Withdrawal Request Granted',
-            //         ''
-            //     )
-            // );
+            Mail::to($user->email)->send(
+                new GeneralMail(
+                    $user,
+                    'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
+                    'Withdrawal Request Granted',
+                    ''
+                )
+            );
 
             return back()->with('success', 'Withdrawal processed successfully');
         }
@@ -1118,9 +1118,9 @@ class AdminController extends Controller
         $am = number_format($withdrawals->amount);
         $name = $user->name;
         activityLog($user, 'withdrawal_sent', 'NGN' . $am . ' cash withdrawal by ' . $name, 'regular');
-        // $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
-        // $subject = 'Withdrawal Request Granted';
-        // Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
+        $subject = 'Withdrawal Request Granted';
+        Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
         return back()->with('success', 'Withdrawals Updated');
     }
 
