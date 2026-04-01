@@ -162,11 +162,11 @@ class RegisterController extends Controller
         //     generateVirtualAccountOnboarding($user, $phone);
         // }
 
-        // $subject = 'Welcome to Freebyz';
-        // Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
+        $subject = 'Welcome to Freebyz';
+        Mail::to($request->email)->send(new Welcome($user,  $subject, ''));
 
         try {
-            // Mail::to($user->email)->send(new WelcomeMail($user->name));
+            Mail::to($user->email)->send(new WelcomeMail($user->name));
         } catch (Exception $e) {
             // Optionally log the error
             Log::error('Failed to send welcome email: ' . $e->getMessage());
