@@ -159,7 +159,7 @@ class Kernel extends ConsoleKernel
                         $subject = 'Campaign Flagged - High Denial Rate';
                         $content = "Your campaign '{$campaign->post_title}' has been flagged due to excessive worker denials.";
                         try {
-                            // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                            Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
                         } catch (\Exception $e) {
                             Log::error("Failed to send email to user {$user->id}: " . $e->getMessage());
                         }
@@ -174,8 +174,8 @@ class Kernel extends ConsoleKernel
                 if ($adminUser && config('app.env') == 'Production') {
                     $subject = 'Campaigns Flagged - Automated Report';
                     $content = "{$flaggedCount} campaigns were flagged for excessive worker denials.";
-                    // Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')
-                        // ->send(new GeneralMail($adminUser, $content, $subject, ''));
+                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')
+                        ->send(new GeneralMail($adminUser, $content, $subject, ''));
                 }
             }
 
@@ -225,7 +225,7 @@ class Kernel extends ConsoleKernel
                 $subject = 'Freebyz Business Promotion - Business Selected';
                 $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
-                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
                 Log::info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
             } else {
@@ -269,7 +269,7 @@ class Kernel extends ConsoleKernel
 
             foreach ($usersLastWeek as $user) {
                 $subject = 'Fresh Campaign';
-                // Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
+                Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
             }
 
             Log::info('Weekly broadcast sent to ' . $usersLastWeek->count() . ' users.');

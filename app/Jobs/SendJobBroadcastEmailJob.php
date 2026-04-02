@@ -27,8 +27,8 @@ class SendJobBroadcastEmailJob implements ShouldQueue
 
     public function handle()
     {
-        // Mail::to($this->user->email)->send(
-        //     new JobListingBroadcast($this->user, $this->subject, $this->jobs)
-        // );
+        Mail::to($this->user->email)->send(
+            new JobListingBroadcast($this->user, $this->subject, $this->jobs)
+        );
     }
 }

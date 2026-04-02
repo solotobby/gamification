@@ -75,7 +75,7 @@ class FlagAbusiveCampaigns extends Command
                         This campaign cannot be reactivated. Please contact support if you believe this is an error.";
 
             try {
-                // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             } catch (\Exception $e) {
                 $this->error("Failed to send email to user {$user->id}: " . $e->getMessage());
             }
@@ -93,7 +93,7 @@ class FlagAbusiveCampaigns extends Command
             try {
                  if (config('app.env') == 'Production') {
 
-                    // Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
+                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
                  }
             } catch (\Exception $e) {
                 $this->error("Failed to send admin notification: " . $e->getMessage());
