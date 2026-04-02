@@ -149,7 +149,7 @@ class BannerController extends Controller
             $content = 'Your ad banner placement is successfully created. It is currently under review, you will get a notification when it goes live!';
             $subject = 'Ad Banner Placement - Under Review';
 
-            //Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
+            Mail::to(auth()->user()->email)->send(new GeneralMail(auth()->user(), $content, $subject, ''));
             return back()->with('success', 'Banner Ad Created Successfully');
         } else {
             return back()->with('error', 'Please upload a banner');
