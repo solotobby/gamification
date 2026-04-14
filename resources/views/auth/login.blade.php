@@ -9,6 +9,7 @@
     <meta name="description" content="Freebyz - Login">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="google-site-verification" content="XxhPT_QNOsBsjCWWuH_y3AnW0usKGIDJOLwNqRfk61Y" />
 
     <!-- Open Graph Meta -->
     <meta property="og:title" content="Freebyz - Login">
