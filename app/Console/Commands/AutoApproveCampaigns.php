@@ -21,15 +21,25 @@ class AutoApproveCampaigns extends Command
     {
         Log::info('Auto campaign approval started');
 
+        // $query = CampaignWorker::query()
+        //     ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
+        //     ->join('users', 'campaigns.user_id', '=', 'users.id')
+        //     ->where('campaign_workers.status', 'Pending')
+        //     ->whereNull('campaign_workers.reason')
+        //     ->where('users.is_business', false)
+        //     ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
+        //     ->select('campaign_workers.*', 'campaign_workers.id as chunk_id')
+        //     ->orderBy('campaign_workers.id');
+
         $query = CampaignWorker::query()
-            ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
-            ->join('users', 'campaigns.user_id', '=', 'users.id')
-            ->where('campaign_workers.status', 'Pending')
-            ->whereNull('campaign_workers.reason')
-            ->where('users.is_business', false)
-            ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
-            ->select('campaign_workers.*', 'campaign_workers.id as chunk_id')
-            ->orderBy('campaign_workers.id');
+    ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
+    ->join('users', 'campaigns.user_id', '=', 'users.id')
+    ->where('campaign_workers.status', 'Pending')
+    ->whereNull('campaign_workers.reason')
+    ->where('users.is_business', false)
+    ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
+    ->select('campaign_workers.*')
+    ->orderBy('campaign_workers.id');
 
         $count = $query->count();
 
@@ -104,7 +114,7 @@ class AutoApproveCampaigns extends Command
                     $this->error("Failed Campaign Worker ID {$worker->id}");
                 }
             }
-        }, 'chunk_id');
+        }, 'campaign_workers.id');
 
         Log::info('Auto campaign approval completed');
         $this->info('Auto campaign approval completed');
