@@ -21,32 +21,24 @@ class AutoApproveCampaigns extends Command
     {
         Log::info('Auto campaign approval started');
 
-        // $query = CampaignWorker::query()
-        //     ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
-        //     ->join('users', 'campaigns.user_id', '=', 'users.id')
-        //     ->where('campaign_workers.status', 'Pending')
-        //     ->whereNull('campaign_workers.reason')
-        //     ->where('users.is_business', false)
-        //     ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
-        //     ->select('campaign_workers.*', 'campaign_workers.id as chunk_id')
-        //     ->orderBy('campaign_workers.id');
-
         $query = CampaignWorker::query()
-    ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
-    ->join('users', 'campaigns.user_id', '=', 'users.id')
-    ->where('campaign_workers.status', 'Pending')
-    ->whereNull('campaign_workers.reason')
-    ->where('users.is_business', false)
-    ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
-    ->select('campaign_workers.*')
-    ->orderBy('campaign_workers.id');
+            ->with(['campaign', 'user']) // prevent N+1
+            ->where('status', 'Pending')
+            ->whereNull('reason')
+            ->whereHas('campaign.user', function ($q) {
+                $q->where('is_business', false);
+            })
+            ->whereHas('campaign', function ($q) {
+                $q->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL approval_time HOUR) <= NOW()');
+            })
+            ->orderBy('id');
 
         $count = $query->count();
 
         $this->info("Found {$count} campaign workers to auto approve");
         Log::info("Found {$count} campaign workers to auto approve");
 
-        $query->chunkById(50, function ($workers) {
+        $query->chunkById(100, function ($workers) {
 
             foreach ($workers as $worker) {
 
@@ -54,9 +46,17 @@ class AutoApproveCampaigns extends Command
 
                     DB::transaction(function () use ($worker) {
 
-                        $worker->status = 'Approved';
-                        $worker->reason = 'Auto approval after approval window';
-                        $worker->save();
+                        // Refresh row for consistency
+                        $worker->refresh();
+
+                        if ($worker->status !== 'Pending') {
+                            return; // already processed by another process
+                        }
+
+                        $worker->update([
+                            'status' => 'Approved',
+                            'reason' => 'Auto approval after approval window'
+                        ]);
 
                         $campaign = $worker->campaign;
                         $user = $worker->user;
@@ -67,21 +67,22 @@ class AutoApproveCampaigns extends Command
                             ->lockForUpdate()
                             ->first();
 
+                        if (!$wallet) {
+                            throw new \Exception("Wallet not found for user {$worker->user_id}");
+                        }
+
                         $baseCurrency = baseCurrency($user);
                         $amount = $worker->amount;
 
-                        if ($baseCurrency == 'NGN') {
-
+                        if ($baseCurrency === 'NGN') {
                             $currency = 'NGN';
                             $channel = 'paystack';
                             $wallet->balance += $amount;
-                        } elseif ($campaign->currency == 'USD') {
-
+                        } elseif ($campaign->currency === 'USD') {
                             $currency = 'USD';
                             $channel = 'paypal';
                             $wallet->usd_balance += $amount;
                         } else {
-
                             $currency = $baseCurrency;
                             $channel = 'flutterwave';
                             $wallet->base_currency_balance += $amount;
@@ -108,18 +109,127 @@ class AutoApproveCampaigns extends Command
                     });
 
                     $this->info("Approved Campaign Worker ID {$worker->id}");
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
 
                     Log::error("Auto approval failed for worker {$worker->id}: " . $e->getMessage());
                     $this->error("Failed Campaign Worker ID {$worker->id}");
                 }
             }
-        }, 'campaign_workers.id');
+        });
 
         Log::info('Auto campaign approval completed');
         $this->info('Auto campaign approval completed');
     }
 }
+
+// class AutoApproveCampaigns extends Command
+// {
+//     protected $signature = 'campaigns:auto-approve';
+//     protected $description = 'Auto approve campaign workers when campaign approval window expires';
+
+//     public function handle()
+//     {
+//         Log::info('Auto campaign approval started');
+
+//         // $query = CampaignWorker::query()
+//         //     ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
+//         //     ->join('users', 'campaigns.user_id', '=', 'users.id')
+//         //     ->where('campaign_workers.status', 'Pending')
+//         //     ->whereNull('campaign_workers.reason')
+//         //     ->where('users.is_business', false)
+//         //     ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
+//         //     ->select('campaign_workers.*', 'campaign_workers.id as chunk_id')
+//         //     ->orderBy('campaign_workers.id');
+
+//         $query = CampaignWorker::query()
+//     ->join('campaigns', 'campaign_workers.campaign_id', '=', 'campaigns.id')
+//     ->join('users', 'campaigns.user_id', '=', 'users.id')
+//     ->where('campaign_workers.status', 'Pending')
+//     ->whereNull('campaign_workers.reason')
+//     ->where('users.is_business', false)
+//     ->whereRaw('DATE_ADD(campaign_workers.created_at, INTERVAL campaigns.approval_time HOUR) <= NOW()')
+//     ->select('campaign_workers.*')
+//     ->orderBy('campaign_workers.id');
+
+//         $count = $query->count();
+
+//         $this->info("Found {$count} campaign workers to auto approve");
+//         Log::info("Found {$count} campaign workers to auto approve");
+
+//         $query->chunkById(50, function ($workers) {
+
+//             foreach ($workers as $worker) {
+
+//                 try {
+
+//                     DB::transaction(function () use ($worker) {
+
+//                         $worker->status = 'Approved';
+//                         $worker->reason = 'Auto approval after approval window';
+//                         $worker->save();
+
+//                         $campaign = $worker->campaign;
+//                         $user = $worker->user;
+
+//                         checkCampaignCompletedStatus($campaign->id);
+
+//                         $wallet = Wallet::where('user_id', $worker->user_id)
+//                             ->lockForUpdate()
+//                             ->first();
+
+//                         $baseCurrency = baseCurrency($user);
+//                         $amount = $worker->amount;
+
+//                         if ($baseCurrency == 'NGN') {
+
+//                             $currency = 'NGN';
+//                             $channel = 'paystack';
+//                             $wallet->balance += $amount;
+//                         } elseif ($campaign->currency == 'USD') {
+
+//                             $currency = 'USD';
+//                             $channel = 'paypal';
+//                             $wallet->usd_balance += $amount;
+//                         } else {
+
+//                             $currency = $baseCurrency;
+//                             $channel = 'flutterwave';
+//                             $wallet->base_currency_balance += $amount;
+//                         }
+
+//                         $wallet->save();
+
+//                         $reference = 'AUTO_' . now()->timestamp . '_' . $worker->id;
+
+//                         PaymentTransaction::create([
+//                             'user_id' => $worker->user_id,
+//                             'campaign_id' => $worker->campaign_id,
+//                             'reference' => $reference,
+//                             'amount' => $amount,
+//                             'balance' => walletBalance($worker->user_id),
+//                             'status' => 'successful',
+//                             'currency' => $currency,
+//                             'channel' => $channel,
+//                             'type' => 'campaign_payment',
+//                             'description' => 'Auto-approved payment for ' . $campaign->post_title,
+//                             'tx_type' => 'Credit',
+//                             'user_type' => 'regular'
+//                         ]);
+//                     });
+
+//                     $this->info("Approved Campaign Worker ID {$worker->id}");
+//                 } catch (\Exception $e) {
+
+//                     Log::error("Auto approval failed for worker {$worker->id}: " . $e->getMessage());
+//                     $this->error("Failed Campaign Worker ID {$worker->id}");
+//                 }
+//             }
+//         }, 'campaign_workers.id');
+
+//         Log::info('Auto campaign approval completed');
+//         $this->info('Auto campaign approval completed');
+//     }
+// }
 
 
 // class AutoApprove24Hours extends Command
