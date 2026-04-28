@@ -652,14 +652,14 @@ class WalletController extends Controller
         if ($user->is_business) {
             return back()->with('error', 'Business accounts cannot make withdrawals. Please contact support.');
         }
-        $withdrawalExists = PaymentTransaction::where('user_id', $user->id)
-            ->where('type', 'added_more_worker')
-            ->where('created_at', '>=', now()->subDays(3))
-            ->exists();
+        // $withdrawalExists = PaymentTransaction::where('user_id', $user->id)
+        //     ->where('type', 'added_more_worker')
+        //     ->where('created_at', '>=', now()->subDays(3))
+        //     ->exists();
 
-        if ($withdrawalExists) {
-            return back()->with('error', 'This transaction is not allowed, contact customer care');
-        }
+        // if ($withdrawalExists) {
+        //     return back()->with('error', 'This transaction is not allowed, contact customer care');
+        // }
 
         if ($baseCurrency == 'NGN') {
 
@@ -679,7 +679,7 @@ class WalletController extends Controller
                 ->get(['id', 'amount', 'type']);
 
             if (count($check) > 1) {
-                return back()->with('error', 'This transaction is not allowed count, contact customer care');
+                return back()->with('error', 'This transaction is not allowed, contact customer care');
             }
 
             if ($check->sum('amount') >= '50000') {
