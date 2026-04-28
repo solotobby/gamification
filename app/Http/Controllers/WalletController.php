@@ -644,7 +644,7 @@ class WalletController extends Controller
         }
     }
 
-    public function storeWithdraw(Request $request)
+    public function storeWithdrawOld(Request $request)
     {
         $baseCurrency = auth()->user()->wallet->base_currency;
         $user = auth()->user();
@@ -757,6 +757,179 @@ class WalletController extends Controller
             return back()->with('success', 'Withdrawal Successfully queued');
         }
     }
+
+
+    public function storeWithdraw(Request $request)
+    {
+        $user = auth()->user();
+        $baseCurrency = $user->wallet->base_currency;
+
+        if ($user->is_business) {
+            return back()->with('error', 'Business accounts cannot make withdrawals.');
+        }
+
+        $request->validate([
+            'balance' => 'required|numeric|min:2500',
+        ]);
+
+        $amount = (float) $request->balance;
+
+        try {
+
+            DB::beginTransaction();
+
+            // 🔒 LOCK WALLET
+            $wallet = Wallet::where('user_id', $user->id)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$wallet) {
+                DB::rollBack();
+                return back()->with('error', 'Wallet not found');
+            }
+
+            // ✅ SAFE BALANCE CHECK
+            if ($baseCurrency === 'NGN') {
+                if ($wallet->balance < $amount) {
+                    DB::rollBack();
+                    return back()->with('error', 'Insufficient balance');
+                }
+                $wallet->balance -= $amount;
+            } elseif ($baseCurrency === 'USD') {
+                if ($wallet->usd_balance < $amount) {
+                    DB::rollBack();
+                    return back()->with('error', 'Insufficient balance');
+                }
+                $wallet->usd_balance -= $amount;
+            } else {
+                if ($wallet->base_currency_balance < $amount) {
+                    DB::rollBack();
+                    return back()->with('error', 'Insufficient balance');
+                }
+                $wallet->base_currency_balance -= $amount;
+            }
+
+            $wallet->save();
+
+            // ✅ PROCESS WITHDRAWAL LOGIC INSIDE SAME TX
+            $withdrawal = $this->processWithdrawalsOptimized($user, $amount, $baseCurrency, $request);
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Withdrawal error: ' . $e->getMessage());
+            return back()->with('error', 'Withdrawal failed, try again');
+        }
+
+        return back()->with('success', 'Withdrawal successfully queued');
+    }
+
+    private function processWithdrawalsOptimized($user, $amount, $currency, $request)
+    {
+        $percent = 7.5 / 100 * $amount;
+        $netAmount = $amount - $percent;
+        $referralAmount = 2 / 100 * $amount;
+
+        $ref = 'WD_' . now()->timestamp . '_' . $user->id;
+
+        $nextFriday = now()->isFriday()
+            ? now()->endOfDay()
+            : now()->next('Friday');
+
+        // ✅ CREATE WITHDRAWAL
+        $withdrawal = Withrawal::create([
+            'user_id' => $user->id,
+            'amount' => $netAmount,
+            'next_payment_date' => $nextFriday,
+            'paypal_email' => $currency === 'USD' ? $request->paypal_email : null,
+            'base_currency' => $currency,
+            'content' => null
+        ]);
+
+        // ✅ USER TRANSACTION
+        PaymentTransaction::create([
+            'user_id' => $user->id,
+            'campaign_id' => '1',
+            'reference' => $ref,
+            'amount' => $netAmount,
+            'balance' => walletBalance($user->id),
+            'status' => 'pending',
+            'currency' => $currency,
+            'channel' => $currency === 'NGN' ? 'paystack' : 'flutterwave',
+            'type' => 'cash_withdrawal',
+            'description' => 'Withdrawal request',
+            'tx_type' => 'Debit',
+            'user_type' => 'regular'
+        ]);
+
+        // ✅ REFERRAL + ADMIN (LOCKED SAFE)
+        $referee = DB::table('referral')->where('user_id', $user->id)->first();
+
+        if ($referee) {
+
+            $referreUser = User::with('wallet')->find($referee->referee_id);
+
+            DB::transaction(function () use ($referreUser, $currency, $referralAmount, $ref) {
+
+                $wallet = Wallet::where('user_id', $referreUser->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                $converted = currencyConverter($currency, $wallet->base_currency, $referralAmount);
+
+                $wallet->base_currency_balance += $converted;
+                $wallet->save();
+
+                PaymentTransaction::create([
+                    'user_id' => $referreUser->id,
+                    'campaign_id' => '1',
+                    'reference' => $ref,
+                    'amount' => (int) $converted,
+                    'balance' => walletBalance($referreUser->id),
+                    'status' => 'successful',
+                    'currency' => $wallet->base_currency,
+                    'channel' => 'referral',
+                    'type' => 'referral_withdrawal_commission',
+                    'description' => 'Referral commission',
+                    'tx_type' => 'Credit',
+                    'user_type' => 'regular'
+                ]);
+            });
+        }
+
+        // ✅ ADMIN COMMISSION (LOCKED)
+        DB::transaction(function () use ($currency, $percent, $ref, $referralAmount) {
+
+            $admin = User::with('wallet')->find(1);
+
+            $wallet = Wallet::where('user_id', $admin->id)
+                ->lockForUpdate()
+                ->first();
+
+            $amount = currencyConverter($currency, $wallet->base_currency, ($percent - $referralAmount));
+
+            $wallet->base_currency_balance += $amount;
+            $wallet->save();
+
+            PaymentTransaction::create([
+                'user_id' => $admin->id,
+                'campaign_id' => '1',
+                'reference' => $ref,
+                'amount' => (int) $amount,
+                'balance' => walletBalance($admin->id),
+                'status' => 'successful',
+                'currency' => $wallet->base_currency,
+                'channel' => 'commission',
+                'type' => 'withdrawal_commission',
+                'description' => 'Withdrawal commission',
+                'tx_type' => 'Credit',
+                'user_type' => 'admin'
+            ]);
+        });
+
+        return $withdrawal;
+    }
+
 
     public function processWithdrawals($request, $currency, $channel, $payload)
     {
