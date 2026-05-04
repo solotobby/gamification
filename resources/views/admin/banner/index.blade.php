@@ -93,7 +93,7 @@
                     @endif
                     </td>
                     <td>
-                        {{ \Carbon\Carbon::parse($banner->date)->format('d F, Y') }}
+                        {{ \Carbon\Carbon::parse($banner->created_at)->format('d F, Y') }}
                     </td>
 
                     <td>
