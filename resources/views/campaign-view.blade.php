@@ -236,7 +236,7 @@
                             <h3 class="text-lg font-bold">Looking for Full-Time Jobs?</h3>
                         </div>
                         <p class="text-blue-100 text-sm mb-4">
-                            Explore professional opportunities in our Career Hub!
+                            Explore professional opportunities from our numerous Job Vacancies!
                         </p>
                         <a
                             href="{{ route('jobs') }}"

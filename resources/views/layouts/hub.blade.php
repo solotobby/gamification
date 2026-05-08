@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Freebyz') }} - @yield('title', 'Career Hub')</title>
+    <title>{{ config('app.name', 'Freebyz') }} - @yield('title', 'Job Vacancies')</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
