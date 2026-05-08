@@ -7,7 +7,7 @@
             <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Post New Job</h1>
             <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.career-hub.index') }}">Career Hub</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.career-hub.index') }}">Job Vacancies</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Post Job</li>
                 </ol>
             </nav>

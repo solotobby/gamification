@@ -149,7 +149,7 @@
                     <p style="margin-top:45px;margin-bottom:15px;">
                         ---- <br>
                         Best regards, <br>
-                        <i>{{ config('app.name') }} Career Hub Team</i>
+                        <i>{{ config('app.name') }} Job Vacancies Team</i>
                     </p>
                 </td>
             </tr>
