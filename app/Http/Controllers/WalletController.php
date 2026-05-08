@@ -817,7 +817,7 @@ class WalletController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Withdrawal error: ' . $e->getMessage());
+            \Log::error('Withdrawal error: ' . $e->getMessage());
             return back()->with('error', 'Withdrawal failed, try again');
         }
 
@@ -853,7 +853,7 @@ class WalletController extends Controller
             'reference' => $ref,
             'amount' => $netAmount,
             'balance' => walletBalance($user->id),
-            'status' => 'pending',
+            'status' => 'successful',
             'currency' => $currency,
             'channel' => $currency === 'NGN' ? 'paystack' : 'flutterwave',
             'type' => 'cash_withdrawal',
