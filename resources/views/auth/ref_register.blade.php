@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
@@ -33,8 +34,9 @@
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/xwork.min.css"> -->
     <!-- END Stylesheets -->
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- Page Container -->
     <!--
       Available classes for #page-container:
@@ -93,96 +95,105 @@
     -->
     <div id="page-container">
 
-      <!-- Main Container -->
-      <main id="main-container">
-        <!-- Page Content -->
-        <div class="bg-image" style="background-image: url('{{ asset('src/assets/media/photos/photo22@2x.jpg')}}');">
-          <div class="row g-0 bg-primary-op">
-            <!-- Main Section -->
-            <div class="hero-static col-md-6 d-flex align-items-center bg-body-extra-light">
-              <div class="p-3 w-100">
-                <!-- Header -->
-                <div class="mb-3 text-center">
-                  <a class="link-fx fw-bold fs-1" href="https://freebyz.com">
-                    <span class="text-dark">Free</span><span class="text-primary">byz</span>
-                  </a>
-                  <p class="text-uppercase fw-bold fs-sm text-muted">Sign Up</p>
-                </div>
-                <!-- END Header -->
-
-                <!-- Sign In Form -->
-                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
-                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
-                <div class="row g-0 justify-content-center">
-                  <div class="col-sm-8 col-xl-6">
-                    @if ($errors->any())
-                      <div class="alert alert-danger">
-                          <ul>
-                              @foreach ($errors->all() as $error)
-                                  <li>{{ $error }}</li>
-                              @endforeach
-                          </ul>
-                      </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    <form class="js-validation-signin" method="POST" action="{{ url('register/user') }}">
-                            @csrf
-                      <div class="py-3">
-                        @include('layouts.resources.reg')
-                        <div class="col-md-12 mb-3">
-
-                            <label>Referral Code</label>
-                            <input id="text" type="text" class="form-control intput-lg @error('name') is-invalid @enderror" name="referral_code" value="{{ $name->referral_code }}" required readonly>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                              <input type="checkbox" class="form-check-input" id="signup-terms" name="signup-terms" required>
-                              <label class="form-check-label" for="signup-terms">I agree to Terms &amp; Conditions</label>
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Page Content -->
+            <div class="bg-image"
+                style="background-image: url('{{ asset('src/assets/media/photos/photo22@2x.jpg')}}');">
+                <div class="row g-0 bg-primary-op">
+                    <!-- Main Section -->
+                    <div class="hero-static col-md-6 d-flex align-items-center bg-body-extra-light">
+                        <div class="p-3 w-100">
+                            <!-- Header -->
+                            <div class="mb-3 text-center">
+                                <a class="link-fx fw-bold fs-1" href="https://freebyz.com">
+                                    <span class="text-dark">Free</span><span class="text-primary">byz</span>
+                                </a>
+                                <p class="text-uppercase fw-bold fs-sm text-muted">Sign Up</p>
                             </div>
+                            <!-- END Header -->
+
+                            <!-- Sign In Form -->
+                            <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
+                            <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                            <div class="row g-0 justify-content-center">
+                                <div class="col-sm-8 col-xl-6">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    @if (session('error'))
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+
+                                    <form class="js-validation-signin" method="POST"
+                                        action="{{ url('register/user') }}">
+                                        @csrf
+                                        <div class="py-3">
+                                            @include('layouts.resources.reg')
+                                            <div class="col-md-12 mb-3">
+
+                                                <label>Referral Code</label>
+                                                <input id="text" type="text"
+                                                    class="form-control intput-lg @error('name') is-invalid @enderror"
+                                                    name="referral_code" value="{{ $name->referral_code }}" required
+                                                    readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="signup-terms"
+                                                        name="signup-terms" required>
+                                                    <label class="form-check-label" for="signup-terms">I agree to Terms
+                                                        &amp; Conditions</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary">
+                                                    <i class="fa  fa-plus opacity-50 me-1"></i> Sign Up
+                                                </button>
+                                                <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
+
+                                                    <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"
+                                                        href="{{ url('login') }}">
+                                                        <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Sign In
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- END Sign In Form -->
                         </div>
-                        <div class="mb-4">
-                            <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary">
-                              <i class="fa  fa-plus opacity-50 me-1"></i> Sign Up
-                            </button>
-                            <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
-                              
-                              <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1" href="{{ url('login') }}">
-                                <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Sign In
-                              </a>
+                    </div>
+                    <!-- END Main Section -->
+
+                    <!-- Meta Info Section -->
+                    <div
+                        class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
+                        <div class="p-3">
+                            <p class="display-4 fw-bold text-white mb-3">
+                                Welcome to the future of possibilities
+                            </p>
+                            <p class="fs-lg fw-semibold text-white-75 mb-0">
+                                Copyright &copy; <span data-toggle="year-copy"></span>
                             </p>
                         </div>
-                      </div>
-                    </form>
-                  </div>
+                    </div>
+                    <!-- END Meta Info Section -->
                 </div>
-                <!-- END Sign In Form -->
-              </div>
             </div>
-            <!-- END Main Section -->
-
-            <!-- Meta Info Section -->
-            <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
-              <div class="p-3">
-                <p class="display-4 fw-bold text-white mb-3">
-                  Welcome to the future of possibilities
-                </p>
-                <p class="fs-lg fw-semibold text-white-75 mb-0">
-                  Copyright &copy; <span data-toggle="year-copy"></span>
-                </p>
-              </div>
-            </div>
-            <!-- END Meta Info Section -->
-          </div>
-        </div>
-        <!-- END Page Content -->
-      </main>
-      <!-- END Main Container -->
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->
     </div>
     <!-- END Page Container -->
 
@@ -202,5 +213,48 @@
 
     <!-- Page JS Code -->
     <script src="{{ asset('src/assets/js/pages/op_auth_signin.min.js')}}"></script>
-  </body>
+
+    <div id="appPopupOverlay"
+        style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
+        <div
+            style="background:#1558D6;border-radius:24px;width:100%;max-width:360px;padding:32px 24px 28px;position:relative;color:#fff;text-align:center;font-family:'Inter',sans-serif;">
+
+            <span style="position:absolute;top:14px;left:16px;font-size:18px;opacity:.85;">✦ ✦</span>
+            <button onclick="document.getElementById('appPopupOverlay').style.display='none'"
+                style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:16px;cursor:pointer;line-height:1;">✕</button>
+
+            <div
+                style="width:88px;height:88px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+                <i class="fa fa-gift" style="font-size:40px;color:#1558D6;"></i>
+            </div>
+
+            <p style="font-size:40px;font-weight:700;margin:0 0 4px;">&#8358;50,000</p>
+            <p style="font-size:17px;font-weight:600;margin:0 0 8px;">Cash Gift Awaits You!</p>
+            <p style="font-size:13px;color:rgba(255,255,255,.82);margin:0 0 18px;line-height:1.5;">
+                Download the <strong>Freebyz Remote Jobs App</strong> and claim your rewards once you hit any of these
+                streaks this month.
+            </p>
+
+            <ul style="list-style:none;padding:0;margin:0 0 22px;text-align:left;">
+                <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                        class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Complete Tasks worth
+                    &#8358;100,000</li>
+                <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                        class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Post Campaigns worth
+                    &#8358;300,000</li>
+                <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                        class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Get 50 Verified Referrals
+                </li>
+                <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                        class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Hire 150 Workers</li>
+            </ul>
+
+            <a href="https://play.google.com/store/apps/details?id=com.mobile.freebyz" target="_blank"
+                style="display:block;width:100%;padding:15px;background:#fff;color:#1558D6;font-weight:700;font-size:15px;border-radius:14px;text-decoration:none;box-sizing:border-box;">
+                <i class="fa fa-android" style="margin-right:6px;"></i> Get Started — Download App
+            </a>
+        </div>
+    </div>
+</body>
+
 </html>
