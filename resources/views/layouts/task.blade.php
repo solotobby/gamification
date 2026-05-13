@@ -64,81 +64,83 @@
             border-color: var(--primary-blue-dark);
         }
 
-    /* ===== Footer ===== */
-.site-footer {
-    background-color: #2563eb; /* blue-600 */
-    color: #ffffff;
-}
+        /* ===== Footer ===== */
+        .site-footer {
+            background-color: #2563eb;
+            /* blue-600 */
+            color: #ffffff;
+        }
 
-.site-footer .container {
-    padding-top: 64px;
-    padding-bottom: 48px;
-}
+        .site-footer .container {
+            padding-top: 64px;
+            padding-bottom: 48px;
+        }
 
-/* Column spacing (Tailwind gap-12 equivalent) */
-.site-footer .row > div {
-    padding-left: 24px;
-    padding-right: 24px;
-}
+        /* Column spacing (Tailwind gap-12 equivalent) */
+        .site-footer .row>div {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
 
-/* Logo alignment */
-.site-footer img {
-    margin-top: 4px;
-}
+        /* Logo alignment */
+        .site-footer img {
+            margin-top: 4px;
+        }
 
-/* Section titles */
-.footer-title {
-    font-weight: 700;
-    font-size: 17px;
-    margin-bottom: 16px;
-}
+        /* Section titles */
+        .footer-title {
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 16px;
+        }
 
-/* Links */
-.footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        /* Links */
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-.footer-links li {
-    margin-bottom: 12px;
-}
+        .footer-links li {
+            margin-bottom: 12px;
+        }
 
-.footer-links a {
-    color: #bfdbfe; /* blue-100 */
-    font-size: 14px;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
+        .footer-links a {
+            color: #bfdbfe;
+            /* blue-100 */
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
 
-.footer-links a:hover {
-    color: #ffffff;
-}
+        .footer-links a:hover {
+            color: #ffffff;
+        }
 
-/* Bottom bar */
-.footer-bottom {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.35);
-}
+        /* Bottom bar */
+        .footer-bottom {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.35);
+        }
 
-.footer-copy {
-    color: #bfdbfe;
-    font-size: 14px;
-    line-height: 1.6;
-}
+        .footer-copy {
+            color: #bfdbfe;
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-/* Social icons */
-.footer-social a {
-    color: #bfdbfe;
-    margin-left: 28px;
-    font-size: 20px;
-    transition: color 0.2s ease;
-}
+        /* Social icons */
+        .footer-social a {
+            color: #bfdbfe;
+            margin-left: 28px;
+            font-size: 20px;
+            transition: color 0.2s ease;
+        }
 
-.footer-social a:hover {
-    color: #ffffff;
-}
+        .footer-social a:hover {
+            color: #ffffff;
+        }
 
 
         /* Mobile Menu */
@@ -263,6 +265,49 @@
     <!-- Main Content -->
     <main>
         @yield('content')
+        <div id="appPopupOverlay"
+            style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
+            <div
+                style="background:#1558D6;border-radius:24px;width:100%;max-width:360px;padding:32px 24px 28px;position:relative;color:#fff;text-align:center;font-family:'Inter',sans-serif;">
+
+                <span style="position:absolute;top:14px;left:16px;font-size:18px;opacity:.85;">✦ ✦</span>
+                <button onclick="document.getElementById('appPopupOverlay').style.display='none'"
+                    style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:16px;cursor:pointer;line-height:1;">✕</button>
+
+                <div
+                    style="width:88px;height:88px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+                    <i class="fa fa-gift" style="font-size:40px;color:#1558D6;"></i>
+                </div>
+
+                <p style="font-size:40px;font-weight:700;margin:0 0 4px;">&#8358;50,000</p>
+                <p style="font-size:17px;font-weight:600;margin:0 0 8px;">Cash Gift Awaits You!</p>
+                <p style="font-size:13px;color:rgba(255,255,255,.82);margin:0 0 18px;line-height:1.5;">
+                    Download the <strong>Freebyz Remote Jobs App</strong> and claim your rewards once you hit any of
+                    these
+                    streaks this month.
+                </p>
+
+                <ul style="list-style:none;padding:0;margin:0 0 22px;text-align:left;">
+                    <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                            class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Complete Tasks worth
+                        &#8358;100,000</li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                            class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Post Campaigns worth
+                        &#8358;300,000</li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                            class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Get 50 Verified
+                        Referrals
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13.5px;"><i
+                            class="fa fa-check-circle" style="color:#6EDBA8;font-size:17px;"></i> Hire 150 Workers</li>
+                </ul>
+
+                <a href="https://play.google.com/store/apps/details?id=com.mobile.freebyz" target="_blank"
+                    style="display:block;width:100%;padding:15px;background:#fff;color:#1558D6;font-weight:700;font-size:15px;border-radius:14px;text-decoration:none;box-sizing:border-box;">
+                    <i class="fa fa-android" style="margin-right:6px;"></i> Get Started — Download App
+                </a>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
