@@ -42,7 +42,9 @@ class User extends Authenticatable
         'email_verified_at',
         'email_verification_attempted_at',
         'username',
-        'email_preference'
+        'email_preference',
+        'auth_device',
+        'streak_redeemed'
     ];
 
     /**
@@ -66,6 +68,7 @@ class User extends Authenticatable
         'is_blacklisted' => 'boolean',
         'email_preference' => 'boolean',
         'is_wallet_transfered' => 'boolean',
+        'streak_redeemed' => 'boolean',
 
     ];
 

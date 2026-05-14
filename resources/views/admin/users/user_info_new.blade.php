@@ -84,6 +84,8 @@
                                     &#8226; Referral Code: {{@$info->referral_code}}<br>
                                     &#8226; Celebrity Status: {{ @$info->is_blacklisted == true ? 'Yes' : 'No' }}<br>
                                     &#8226; Country: {{ $info->country }}<br>
+                                    &#8226; Device: {{ $info->auth_device }}<br>
+                                    &#8226; Redeem Streak?: {{ $info->streak_redeemed == true ? 'Yes' : 'No' }}<br>
                                     &#8226; Is Blocked: {{ @$info->profile->is_celebrity == true ? 'Yes' : 'No' }}<br>
                                     &#8226; Account Type:
                                     {{ @$info->is_business ? 'Business Account' : 'Regular Account' }}<br>
