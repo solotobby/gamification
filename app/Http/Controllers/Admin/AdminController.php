@@ -18,6 +18,7 @@ use App\Mail\UpgradeUser;
 use App\Models\BankInformation;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
+use App\Models\ManualVerification;
 use App\Models\DataBundle;
 use App\Models\DisputedJobs;
 use App\Models\Games;
@@ -2592,6 +2593,95 @@ class AdminController extends Controller
         $created = DataBundle::create($request->all());
         $created->save();
         return back()->with('success', 'Databundle Created Successfully');
+    }
+
+
+    // List all manual funding requests
+    public function manualFundingIndex(Request $request)
+    {
+        $query = ManualVerification::with('user')->where('status', 'pending')->orderBy('created_at', 'DESC');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            })->orWhere('reference', 'like', "%$search%")
+                ->orWhere('amount', 'like', "%$search%");
+        }
+
+        $fundings = $query->paginate(50);
+        return view('admin.manual-fundings', compact('fundings'));
+    }
+
+    // Approve or Deny
+    public function manualFundingAction(Request $request, $id)
+    {
+        $request->validate([
+            'action' => 'required|in:approved,rejected',
+            'amount' => 'required|numeric|min:1',
+            'admin_note' => 'nullable|string',
+        ]);
+
+        $funding = ManualVerification::with('user')->findOrFail($id);
+
+        if ($funding->status !== 'pending') {
+            return back()->with('error', 'This request has already been processed.');
+        }
+
+        $funding->amount    = $request->amount; // allow admin to edit amount
+        $funding->admin_note = $request->admin_note;
+        $funding->status    = $request->action;
+        $funding->save();
+
+        if ($request->action === 'approved') {
+            // Reuse your existing adminWalletTopUp logic inline
+            $wallet = Wallet::where('user_id', $funding->user_id)->first();
+
+            if ($funding->currency === 'NGN') {
+                $wallet->balance += $funding->amount;
+                $channel = 'manual';
+            } elseif ($funding->currency === 'USD') {
+                $wallet->usd_balance += $funding->amount;
+                $channel = 'manual';
+            } else {
+                $wallet->base_currency_balance += $funding->amount;
+                $channel = 'manual';
+            }
+            $wallet->save();
+
+            PaymentTransaction::create([
+                'user_id'     => $funding->user_id,
+                'campaign_id' => '1',
+                'reference'   => $funding->reference ?? time(),
+                'amount'      => $funding->amount,
+                'balance'     => walletBalance($funding->user_id),
+                'status'      => 'successful',
+                'currency'    => $funding->currency,
+                'channel'     => $channel,
+                'type'        => 'wallet_topup',
+                'description' => 'Manual Bank Transfer - Admin Approved',
+                'tx_type'     => 'Credit',
+                'user_type'   => 'regular',
+            ]);
+
+            $content = 'Your manual funding of ' . $funding->currency . number_format($funding->amount) . ' has been approved and your wallet credited.';
+            $subject = 'Wallet Funded Successfully';
+            Mail::to($funding->user->email)->send(new GeneralMail($funding->user, $content, $subject, ''));
+
+            return back()->with('success', 'Funding approved and wallet credited.');
+        }
+
+        // Rejected path
+        $content = 'Your manual funding request of ' .
+            $funding->currency . number_format($funding->amount) .
+            ' was rejected. Reason: ' .
+            ($request->admin_note ?? 'N/A') .
+            '. If you believe this was an error or you are experiencing any issue, kindly contact the admin by creating a ticket through the Talk to Us chat.';
+        $subject = 'Manual Funding Request Rejected';
+        Mail::to($funding->user->email)->send(new GeneralMail($funding->user, $content, $subject, ''));
+
+        return back()->with('success', 'Funding request rejected and user notified.');
     }
 
     public function adminWalletTopUp(Request $request)
