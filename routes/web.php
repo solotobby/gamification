@@ -560,6 +560,10 @@ Route::get('admin/feedback/unread', [\App\Http\Controllers\Admin\FeedbackReplies
 Route::get('admin/feedback/{id}', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'view']);
 Route::post('store/admin/feedback/', [\App\Http\Controllers\Admin\FeedbackRepliesController::class, 'store'])->name('store.admin.feedbackreplies');
 
+//Manual funding actions
+Route::get('admin/manual-fundings', [\App\Http\Controllers\Admin\AdminController::class, 'manualFundingIndex'])->name('admin.manual.fundings');
+Route::post('admin/manual-fundings/{id}/action', [\App\Http\Controllers\Admin\AdminController::class, 'manualFundingAction'])->name('admin.manual.fundings.action');
+
 Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
 Route::post('admin/celebrity', [\App\Http\Controllers\Admin\AdminController::class, 'adminCelebrity'])->name('admin.celebrity');
 
