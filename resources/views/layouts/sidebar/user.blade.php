@@ -175,7 +175,7 @@
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{route('my.jobs')}}">
-              <span class="nav-main-link-name">My Tasks</span>
+              <span class="nav-main-link-name">Pending Tasks</span>
             </a>
           </li>
           <li class="nav-main-item">

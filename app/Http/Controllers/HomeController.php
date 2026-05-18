@@ -439,10 +439,14 @@ class HomeController extends Controller
             $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
             $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
 
-            $data = User::selectRaw("
-                    COUNT(CASE WHEN auth_device = 'app' THEN 1 END) as appUser,
-                    COUNT(CASE WHEN streak_redeemed = 1 THEN 1 END) as streak
-                ")->first()->toArray();
+            // $data = User::selectRaw("
+            //         COUNT(CASE WHEN auth_device = 'app' THEN 1 END) as appUser,
+            //         COUNT(CASE WHEN streak_redeemed = 1 THEN 1 END) as streak
+            //     ")->first()->toArray();
+
+            $data['appUser'] = User::whereIn('auth_device', ['app', 'mobile'])->count();
+
+$data['streak'] = User::where('streak_redeemed', 1)->count();
 
             $data['transactions'] = DB::select('
                 SELECT SUM(amount) AS total_successful_transactions
