@@ -160,6 +160,41 @@
             </div>
         </div>
     </div>
+
+   
+
+    <div class="{{ $colClass }}">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+            <div class="block-content block-content-full flex-grow-1">
+                <div class="item rounded-3 bg-body mx-auto my-3">
+                    <i class="fa fa-mobile-alt fa-lg text-primary"></i>
+                </div>
+
+                <div class="fs-1 fw-bold">
+                    {{ number_format($data['appUser'] ?? 0) }}
+                </div>
+
+                <div class="text-muted mb-3">App Users</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="{{ $colClass }}">
+        <div class="block block-rounded text-center d-flex flex-column h-100 mb-0">
+            <div class="block-content block-content-full flex-grow-1">
+                <div class="item rounded-3 bg-body mx-auto my-3">
+                    <i class="fa fa-fire fa-lg text-danger"></i>
+                </div>
+
+                <div class="fs-1 fw-bold">
+                    {{ number_format($data['streak'] ?? 0) }}
+                </div>
+
+                <div class="text-muted mb-3">Streak Redeemed</div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
