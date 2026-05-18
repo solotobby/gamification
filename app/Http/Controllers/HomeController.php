@@ -401,10 +401,7 @@ class HomeController extends Controller
     public function adminHome(Request $request)
     {
         $period = $request->get('period', 'today');
-        // $startDate = Carbon::now()->subDays($period)->startOfDay();
-        // $endDate = Carbon::now()->endOfDay();
 
-        // $data = ['period' => $period];
         if ($period === 'today') {
             $startDate = Carbon::today()->startOfDay();
             $endDate = Carbon::now();
@@ -413,48 +410,46 @@ class HomeController extends Controller
             $endDate = Carbon::now()->endOfDay();
         }
 
-        $data = ['period' => $period];
+        $data = [
+            'period' => $period,
+            'appUser' => User::where('auth_device', 'app')->count(),
+            'webUser' => User::where('auth_device', 'web')->count(),
+            'streak' => User::where('streak_redeemed', true)->count(),
+        ];
 
         // Only show financial data to super_admin
         if (auth()->user()->role === 'super_admin') {
+
             $data['wallet'] = DB::select('
-                SELECT
-                    SUM(balance) AS total_balance,
-                    SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
-                    SUM(usd_balance) AS total_usd_balance
-                FROM wallets
-            ');
+            SELECT
+                SUM(balance) AS total_balance,
+                SUM(CASE WHEN balance > 2500 THEN balance ELSE 0 END) AS balance_gt_200,
+                SUM(usd_balance) AS total_usd_balance
+            FROM wallets
+        ');
 
             $withdrawalMetrics = DB::table('withrawals')
                 ->selectRaw('
-                    SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
-                    SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
-                    SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
-                ', [$startDate, $endDate])
+                SUM(CASE WHEN status = 0 AND created_at BETWEEN ? AND ? THEN amount ELSE 0 END) AS period_payment,
+                SUM(CASE WHEN is_usd = 0 THEN amount ELSE 0 END) AS total_payout,
+                SUM(CASE WHEN status = 0 THEN amount ELSE 0 END) AS total_pending_payout
+            ', [$startDate, $endDate])
                 ->first();
 
             $data['withdrawalMetrics'] = $withdrawalMetrics;
             $data['periodPayment'] = $withdrawalMetrics->period_payment ?? 0;
             $data['totalPayout'] = $withdrawalMetrics->total_payout ?? 0;
             $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
-            $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
-
-            // $data = User::selectRaw("
-            //         COUNT(CASE WHEN auth_device = 'app' THEN 1 END) as appUser,
-            //         COUNT(CASE WHEN streak_redeemed = 1 THEN 1 END) as streak
-            //     ")->first()->toArray();
-
-            $data['appUser'] = User::whereIn('auth_device', ['app', 'mobile'])->count();
-
-$data['streak'] = User::where('streak_redeemed', 1)->count();
 
             $data['transactions'] = DB::select('
-                SELECT SUM(amount) AS total_successful_transactions
-                FROM payment_transactions
-                WHERE status = ?
-                AND created_at BETWEEN ? AND ?
-            ', ['successful', $startDate, $endDate]);
+            SELECT SUM(amount) AS total_successful_transactions
+            FROM payment_transactions
+            WHERE status = ?
+            AND created_at BETWEEN ? AND ?
+        ', ['successful', $startDate, $endDate]);
         }
+
+        
 
         return view('admin.index_new', $data);
     }
@@ -569,6 +564,7 @@ $data['streak'] = User::where('streak_redeemed', 1)->count();
                 'verifiedUser' => (int) $userStats->verified,
                 'activeUsers' => $activeUsersCount,
                 'registeredUsers' => $registeredUsersCount,
+                'appUser' => 1
             ];
 
             // --- Add financial data only for super_admin ---
