@@ -172,7 +172,7 @@ class HomeController extends Controller
         $ads = adBanner();
         $categories = $this->listCategories();
 
-       
+
         return view('user.home', [
             'user'         => $user,
             'badgeCount'   => $badgeCount,
@@ -438,6 +438,11 @@ class HomeController extends Controller
             $data['totalPayout'] = $withdrawalMetrics->total_payout ?? 0;
             $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
             $data['totalPendingPayout'] = $withdrawalMetrics->total_pending_payout ?? 0;
+
+            $data = User::selectRaw("
+                    COUNT(CASE WHEN auth_device = 'app' THEN 1 END) as appUser,
+                    COUNT(CASE WHEN streak_redeemed = 1 THEN 1 END) as streak
+                ")->first()->toArray();
 
             $data['transactions'] = DB::select('
                 SELECT SUM(amount) AS total_successful_transactions
