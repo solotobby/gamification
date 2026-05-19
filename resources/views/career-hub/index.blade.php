@@ -55,6 +55,8 @@
                         <option value="contract" {{ request('type') == 'contract' ? 'selected' : '' }}>Contract</option>
                         <option value="internship" {{ request('type') == 'internship' ? 'selected' : '' }}>Internship</option>
                         <option value="gig" {{ request('type') == 'gig' ? 'selected' : '' }}>Gig</option>
+                        <option value="nysc" {{ request('type') == 'nysc' ? 'selected' : '' }}>NYSC PPA</option>
+
                     </select>
 
                     <select name="tier" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
