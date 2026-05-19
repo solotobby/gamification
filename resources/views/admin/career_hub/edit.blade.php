@@ -58,6 +58,8 @@
                             <option value="contract" {{ old('type', $job->type) == 'contract' ? 'selected' : '' }}>Contract</option>
                             <option value="internship" {{ old('type', $job->type) == 'internship' ? 'selected' : '' }}>Internship</option>
                             <option value="gig" {{ old('type', $job->type) == 'gig' ? 'selected' : '' }}>Gig</option>
+                            <option value="nysc" {{ old('type', $job->type) == 'nysc' ? 'selected' : '' }}>NYSC PPA</option>
+
                         </select>
                         @error('type')
                             <div class="invalid-feedback">{{ $message }}</div>
