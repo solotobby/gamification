@@ -93,7 +93,7 @@ class FlagAbusiveCampaigns extends Command
             try {
                  if (config('app.env') == 'Production') {
 
-                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
+                    Mail::to('hello@freebyztechnologies.com')->cc('favour@freebyztechnologies.com')->send(new GeneralMail($adminUser, $content, $subject, ''));
                  }
             } catch (\Exception $e) {
                 $this->error("Failed to send admin notification: " . $e->getMessage());
