@@ -51,7 +51,9 @@
                         <tbody>
                             @forelse($fundings as $funding)
                                 <tr>
-                                    <td>{{ $funding->user->name }}<br><small>{{ $funding->user->email }}</small></td>
+                                    {{-- <td>{{ $funding->user->name }}<br><small>{{ $funding->user->email }}</small></td> --}}
+                                    <td class="fw-semibold"><a href="{{ url('user/' . $funding->user->id . '/info') }}" target="_blank">
+                                            {{ $funding->user->name}}</a></td>
                                     <td>{{ $funding->payment_method }}</td>
                                     <td>{{ $funding->reference }}</td>
                                     <td>{{ number_format($funding->amount) }}</td>

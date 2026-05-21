@@ -174,7 +174,7 @@ class Kernel extends ConsoleKernel
                 if ($adminUser && config('app.env') == 'Production') {
                     $subject = 'Campaigns Flagged - Automated Report';
                     $content = "{$flaggedCount} campaigns were flagged for excessive worker denials.";
-                    Mail::to('hello@freebyztechnologies.com')->cc('blessing@freebyztechnologies.com')
+                    Mail::to('hello@freebyztechnologies.com')->cc('favour@freebyztechnologies.com')
                         ->send(new GeneralMail($adminUser, $content, $subject, ''));
                 }
             }
