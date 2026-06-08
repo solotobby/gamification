@@ -112,7 +112,7 @@
                               {!! \Illuminate\Support\Str::words($feedback->message, 30) !!}
                           </p>
                           <p class="fs-sm text-muted mb-0">
-                              <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->updated_at)->diffForHumans()}}
+                              <strong>{{$feedback->category}}</strong>, {{\Carbon\Carbon::parse($feedback->created_at)->diffForHumans()}}
                           </p>
                       </a>
                   @endforeach
