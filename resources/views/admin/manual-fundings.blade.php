@@ -46,6 +46,7 @@
                                 <th>Proof</th>
                                 <th>Date</th>
                                 <th>Action</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,19 +75,22 @@
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($funding->created_at)->format('d/m/Y h:i a') }}</td>
                                     <td>
-                                        @if($funding->status === 'pending')
+                                        {{-- @if($funding->status === 'pending') --}}
                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#modal-funding-{{ $funding->id }}">
                                                 Review
                                             </button>
-                                        @else
+                                        {{-- @else
                                             <span class="text-muted">{{ $funding->admin_note ?? '—' }}</span>
-                                        @endif
+                                        @endif --}}
+                                    </td>
+                                    <td>
+                                            <span class="text-muted">{{ $funding->admin_note ?? '—' }}</span>
                                     </td>
                                 </tr>
 
                                 {{-- Review Modal --}}
-                                @if($funding->status === 'pending')
+                                {{-- @if($funding->status === 'pending') --}}
                                     <div class="modal fade" id="modal-funding-{{ $funding->id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-popout">
                                             <div class="modal-content">
@@ -99,6 +103,10 @@
                                                     @csrf
                                                     <div class="modal-body">
                                                         <ul class="list-group mb-3">
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Status <span
+                                                                    class="badge bg-info">{{ $funding->status }}</span>
+                                                            </li>
                                                             <li class="list-group-item d-flex justify-content-between">
                                                                 Payment Method <span
                                                                     class="badge bg-info">{{ $funding->payment_method }}</span>
@@ -130,6 +138,7 @@
                                                                 placeholder="Optional note to user..."></textarea>
                                                         </div>
                                                     </div>
+                                                     @if($funding->status === 'pending')
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-sm btn-secondary"
                                                             data-bs-dismiss="modal">Cancel</button>
@@ -138,11 +147,12 @@
                                                         <button type="submit" name="action" value="approved"
                                                             class="btn btn-sm btn-success">Approve & Fund</button>
                                                     </div>
+                                                    @endif
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                {{-- @endif --}}
 
                             @empty
                                 <tr>
