@@ -6,11 +6,11 @@
 
     <title>Freebyz.com</title>
 
-    <meta name="description" content="Freebyz.com">
+    {{-- <meta name="description" content="Freebyz.com">
     <meta name="author" content="freebyz">
     <meta name="robots" content="noindex, nofollow">
     <meta name="google-site-verification" content="XxhPT_QNOsBsjCWWuH_y3AnW0usKGIDJOLwNqRfk61Y" />
- 
+
 
     <!-- Open Graph Meta -->
     <meta property="og:title" content="Freebyz">
@@ -18,7 +18,7 @@
     <meta property="og:description" content="Freebyz">
     <meta property="og:type" content="website">
     <meta property="og:url" content="freebyz.com">
-    <meta property="og:image" content="">
+    <meta property="og:image" content=""> --}}
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
