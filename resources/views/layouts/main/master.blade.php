@@ -17,8 +17,8 @@
     <meta property="og:description" content="Freebyz">
     <meta property="og:type" content="website">
     <meta property="og:url" content="freebyz.com">
-    <meta property="og:image" content="">
-    <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
+    <meta property="og:image" content=""> --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
     <!-- Icons -->

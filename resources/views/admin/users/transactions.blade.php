@@ -250,7 +250,9 @@
                 $.ajax({
                     url: '{{ url("admin/user/transactions/verify") }}/' + id,
                     method: 'POST',
-                   
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     success: function (response) {
                         if (response.verified) {
                             statusSpan.html('<span class="badge bg-success">Verified</span>');
