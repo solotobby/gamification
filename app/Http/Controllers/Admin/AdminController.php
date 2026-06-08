@@ -2599,7 +2599,9 @@ class AdminController extends Controller
     // List all manual funding requests
     public function manualFundingIndex(Request $request)
     {
-        $query = ManualVerification::with('user')->where('status', 'pending')->orderBy('created_at', 'DESC');
+        $query = ManualVerification::with('user')
+        // ->where('status', 'pending')
+        ->orderBy('created_at', 'DESC');
 
         if ($request->filled('search')) {
             $search = $request->search;
