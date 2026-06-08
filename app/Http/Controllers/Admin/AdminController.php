@@ -952,7 +952,13 @@ class AdminController extends Controller
         try {
             $transaction = PaymentTransaction::findOrFail($id);
 
-            $result = $transaction->channel === 'kora'
+            // $result = $transaction->channel === ('kora' || 'korapay')
+            //     ? verifyKorayPay($transaction->reference)
+            //     : verifyTransaction($transaction->reference);
+
+            $isKorapay = in_array($transaction->channel, ['kora', 'korapay']);
+
+            $result = $isKorapay
                 ? verifyKorayPay($transaction->reference)
                 : verifyTransaction($transaction->reference);
 
@@ -2600,8 +2606,8 @@ class AdminController extends Controller
     public function manualFundingIndex(Request $request)
     {
         $query = ManualVerification::with('user')
-        // ->where('status', 'pending')
-        ->orderBy('created_at', 'DESC');
+            // ->where('status', 'pending')
+            ->orderBy('created_at', 'DESC');
 
         if ($request->filled('search')) {
             $search = $request->search;
