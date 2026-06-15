@@ -48,6 +48,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
 
+        $schedule->command('users:testing-supervisor')->everyMinute();
         // $schedule->command('business:rotate-promotion')->dailyAt('03:00');
 
         // $schedule->command('questions:cleanup-invalid')->dailyAt('03:00');
@@ -55,10 +56,13 @@ class Kernel extends ConsoleKernel
         // $schedule->command('campaigns:flag-abusive')->twiceDaily(8, 20);
 
         //test
-        $schedule->call(function () {
-            Log::info('Test scheduled task executed.');
-            Mail::to('morakinyovictor1@gmail.com')->send(new GeneralMail(User::find(1), 'This is a test email from the scheduled task.', 'Test Email', ''));
-        })->everyMinute();
+        // $schedule->call(function () {
+        //     Log::info('Test scheduled task executed.');
+        //     Mail::to('morakinyovictor1@gmail.com')->send(new GeneralMail(User::find(1), 'This is a test email from the scheduled task.', 'Test Email', ''));
+        // })->everyMinute();
+
+
+
         // Auto-approve campaign workers after 24 hours (non-business)
         // $schedule->call(function () {
         //     Log::info('Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
