@@ -51,6 +51,7 @@ class ReleaseExpiredDeniedSlots extends Command
                 $campaign = Campaign::find($deniedWork->campaign_id);
                 if ($campaign && $campaign->pending_count > 0) {
                     $campaign->pending_count += 1;
+                    $campaign->is_complete = false;
                     $campaign->save();
 
                     $this->info("Released slot for Campaign ID: {$campaign->id}, Worker ID: {$deniedWork->id}");
