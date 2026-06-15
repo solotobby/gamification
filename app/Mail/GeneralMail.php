@@ -40,7 +40,8 @@ class GeneralMail extends Mailable
         return $this->markdown('emails.general')->subject($this->subject)->with([
             'name' => $this->user->name,
             'content' => $this->content,
-            'url' => isset($this->url) && $this->url ? $this->url : 'home'
+            // 'url' => isset($this->url) && $this->url ? $this->url : 'home'
+            'url' => 'https://dashboard.freebyz.com'
         ]);
     }
 }
