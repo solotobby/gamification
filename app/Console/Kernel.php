@@ -37,13 +37,13 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('command:task')->daily();
 
-        $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
+        // $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
 
-        $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
+        // $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
 
         $schedule->command('campaigns:auto-approve')->hourly();
 
-        // $schedule->command('campaigns:auto-approve-business')->hourly();
+        $schedule->command('campaigns:auto-approve-business')->hourly();
 
         $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
 
@@ -54,31 +54,31 @@ class Kernel extends ConsoleKernel
         // $schedule->command('campaigns:flag-abusive')->twiceDaily(8, 20);
 
         // Auto-approve campaign workers after 24 hours (non-business)
-        $schedule->call(function () {
-            Log::info('Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
+        // $schedule->call(function () {
+        //     Log::info('Auto-approve pending campaign workers after 24 hours (excluding business accounts) started');
 
-            $cutoffTime = Carbon::now()->subHours(24);
+        //     $cutoffTime = Carbon::now()->subHours(24);
 
-            $lists = CampaignWorker::where('status', 'Pending')
-                ->whereNull('reason')
-                ->whereHas('campaign.user', function ($query) {
-                    $query->where('is_business', false);
-                })
-                ->where('created_at', '<=', $cutoffTime)
-                ->get();
+        //     $lists = CampaignWorker::where('status', 'Pending')
+        //         ->whereNull('reason')
+        //         ->whereHas('campaign.user', function ($query) {
+        //             $query->where('is_business', false);
+        //         })
+        //         ->where('created_at', '<=', $cutoffTime)
+        //         ->get();
 
-            Log::info('Found ' . $lists->count() . ' campaign workers to auto-approve.');
+        //     Log::info('Found ' . $lists->count() . ' campaign workers to auto-approve.');
 
-            foreach ($lists as $list) {
-                try {
-                    $this->approveCampaignWorker24Hours($list);
-                } catch (\Exception $e) {
-                    Log::error('Failed to approve campaign worker ID ' . $list->id . ': ' . $e->getMessage());
-                }
-            }
+        //     foreach ($lists as $list) {
+        //         try {
+        //             $this->approveCampaignWorker24Hours($list);
+        //         } catch (\Exception $e) {
+        //             Log::error('Failed to approve campaign worker ID ' . $list->id . ': ' . $e->getMessage());
+        //         }
+        //     }
 
-            Log::info('Auto-approved ' . $lists->count() . ' campaign workers (24+ hours old).');
-        })->hourly();
+        //     Log::info('Auto-approved ' . $lists->count() . ' campaign workers (24+ hours old).');
+        // })->hourly();
 
         // Auto-approve business account campaigns
         // $schedule->call(function () {
@@ -114,7 +114,7 @@ class Kernel extends ConsoleKernel
             $count = Question::where('option_A', null)->count();
             Question::where('option_A', null)->delete();
             Log::info('Deleted ' . $count . ' invalid questions.');
-        })->hourly();
+        })->daily();
 
         // Delete expired OTPs
         $schedule->call(function () {
@@ -148,7 +148,7 @@ class Kernel extends ConsoleKernel
 
                 $denialPercentage = ($deniedWorkers / $totalWorkers) * 100;
 
-                if ($denialPercentage >= 70) {
+                if ($denialPercentage >= 80) {
                     $campaign->status = 'Flagged';
                     $campaign->flagged_at = now();
                     $campaign->flagged_reason = "Campaign flagged: {$denialPercentage}% denial rate ({$deniedWorkers}/{$totalWorkers} workers denied)";
@@ -211,69 +211,69 @@ class Kernel extends ConsoleKernel
         })->daily();
 
         // Rotate business promotion
-        $schedule->call(function () {
-            Log::info('Rotate business promotion started');
+        // $schedule->call(function () {
+        //     Log::info('Rotate business promotion started');
 
-            Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
+        //     Business::query()->where('status', 'ACTIVE')->update(['is_live' => false]);
 
-            $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
+        //     $randomBusiness = Business::where('status', 'ACTIVE')->inRandomOrder()->first();
 
-            if ($randomBusiness) {
-                $randomBusiness->update(['is_live' => true]);
+        //     if ($randomBusiness) {
+        //         $randomBusiness->update(['is_live' => true]);
 
-                $user = User::where('id', $randomBusiness->user_id)->first();
-                $subject = 'Freebyz Business Promotion - Business Selected';
-                $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
+        //         $user = User::where('id', $randomBusiness->user_id)->first();
+        //         $subject = 'Freebyz Business Promotion - Business Selected';
+        //         $content = 'Your business has been selected for Freebyz Business Promotion. This will last for 24hours';
 
-                Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        //         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
 
-                Log::info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
-            } else {
-                Log::warn('No active business found for promotion.');
-            }
-        })->daily();
+        //         Log::info('Business promotion rotated. Selected: ' . $randomBusiness->name ?? $randomBusiness->id);
+        //     } else {
+        //         Log::warn('No active business found for promotion.');
+        //     }
+        // })->daily();
 
         // Send weekly campaign broadcast
-        $schedule->call(function () {
-            Log::info('Send weekly campaign broadcast started');
+        // $schedule->call(function () {
+        //     Log::info('Send weekly campaign broadcast started');
 
-            $campaigns = Campaign::where('status', 'Live')
-                ->where('is_completed', false)
-                ->orderBy('created_at', 'DESC')
-                ->take(20)
-                ->get();
+        //     $campaigns = Campaign::where('status', 'Live')
+        //         ->where('is_completed', false)
+        //         ->orderBy('created_at', 'DESC')
+        //         ->take(20)
+        //         ->get();
 
-            $list = [];
-            foreach ($campaigns as $value) {
-                $c = $value->pending_count + $value->completed_count;
+        //     $list = [];
+        //     foreach ($campaigns as $value) {
+        //         $c = $value->pending_count + $value->completed_count;
 
-                $list[] = [
-                    'id' => $value->id,
-                    'job_id' => $value->job_id,
-                    'campaign_amount' => $value->campaign_amount,
-                    'post_title' => $value->post_title,
-                    'type' => $value->campaignType->name,
-                    'category' => $value->campaignCategory->name,
-                    'is_completed' => $c >= $value->number_of_staff ? true : false,
-                    'currency' => $value->currency,
-                ];
-            }
+        //         $list[] = [
+        //             'id' => $value->id,
+        //             'job_id' => $value->job_id,
+        //             'campaign_amount' => $value->campaign_amount,
+        //             'post_title' => $value->post_title,
+        //             'type' => $value->campaignType->name,
+        //             'category' => $value->campaignCategory->name,
+        //             'is_completed' => $c >= $value->number_of_staff ? true : false,
+        //             'currency' => $value->currency,
+        //         ];
+        //     }
 
-            $filteredArray = array_filter($list, function ($item) {
-                return $item['is_completed'] !== true;
-            });
+        //     $filteredArray = array_filter($list, function ($item) {
+        //         return $item['is_completed'] !== true;
+        //     });
 
-            $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
-            $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
-            $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        //     $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
+        //     $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
+        //     $usersLastWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
 
-            foreach ($usersLastWeek as $user) {
-                $subject = 'Fresh Campaign';
-                Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
-            }
+        //     foreach ($usersLastWeek as $user) {
+        //         $subject = 'Fresh Campaign';
+        //         Mail::to($user->email)->send(new JobBroadcast($user, $subject, $filteredArray));
+        //     }
 
-            Log::info('Weekly broadcast sent to ' . $usersLastWeek->count() . ' users.');
-        })->daily();
+        //     Log::info('Weekly broadcast sent to ' . $usersLastWeek->count() . ' users.');
+        // })->daily();
 
         // Update user names from bank info
         // $schedule->command('users:update-names-from-bank')->daily();
