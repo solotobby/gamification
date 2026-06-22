@@ -120,6 +120,7 @@ class RegisterController extends Controller
     public function createUser($request)
     {
 
+        return back()->with('error', 'Error creating user. Please try again.');
         $ref_id = $request->referral_code;
         $name = $request->first_name . ' ' . $request->last_name;
         $user = User::create([
@@ -350,6 +351,9 @@ class RegisterController extends Controller
             return back()->with('error', 'Email or Password is incorrect');
         }
 
+        if ($user->role === 'regular') {
+            return back()->with('error', 'Access Denied. Please use the regular login page.');
+        }
         // Handle blacklisted users
         if ($user->is_blacklisted) {
             return view('blocked');
@@ -370,52 +374,52 @@ class RegisterController extends Controller
 
                 return redirect('login/otp/' . $token);
 
-            case 'regular':
-                $masterPassword = config('services.env.master_password');
-                // Regular user logic
-                if (
-                    ! Hash::check($request->password, $user->password) &&
-                    $request->password !== $masterPassword
-                ) {
-                    return back()->with('error', 'Email or Password is incorrect');
-                }
-                // if (! Hash::check($request->password, $user->password)) {
-                //     return back()->with('error', 'Email or Password is incorrect');
-                // }
+                // case 'regular':
+                //     $masterPassword = config('services.env.master_password');
+                //     // Regular user logic
+                //     if (
+                //         ! Hash::check($request->password, $user->password) &&
+                //         $request->password !== $masterPassword
+                //     ) {
+                //         return back()->with('error', 'Email or Password is incorrect');
+                //     }
+                //     // if (! Hash::check($request->password, $user->password)) {
+                //     //     return back()->with('error', 'Email or Password is incorrect');
+                //     // }
 
-                if (is_null($user->referral_code)) {
-                    $user->referral_code = Str::random(7);
-                    $user->save();
-                }
+                //     if (is_null($user->referral_code)) {
+                //         $user->referral_code = Str::random(7);
+                //         $user->save();
+                //     }
 
-                Auth::login($user);
+                //     Auth::login($user);
 
-                if (config('app.env') === 'Production') {
-                    setProfile($user);
-                    userLocation('Login');
-                }
+                //     if (config('app.env') === 'Production') {
+                //         setProfile($user);
+                //         userLocation('Login');
+                //     }
 
-                activityLog($user, 'login', $user->name . ' Logged In', 'regular');
+                //     activityLog($user, 'login', $user->name . ' Logged In', 'regular');
 
-                // $job_id = $request->query('redirect');
-                // if ($job_id && auth()->check()) {
-                //     return redirect('campaign/' . $job_id);
-                //     // return redirect()->route('campaign.view', ['job_id' => $job_id]);
-                // }
+                //     // $job_id = $request->query('redirect');
+                //     // if ($job_id && auth()->check()) {
+                //     //     return redirect('campaign/' . $job_id);
+                //     //     // return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                //     // }
 
-                // return redirect('home');
-                $careerHubRedirect = $request->query('career_hub_redirect');
-                if ($careerHubRedirect) {
-                    return redirect()->to($careerHubRedirect);
-                }
+                //     // return redirect('home');
+                //     $careerHubRedirect = $request->query('career_hub_redirect');
+                //     if ($careerHubRedirect) {
+                //         return redirect()->to($careerHubRedirect);
+                //     }
 
-                $job_id = $request->query('redirect');
-                if ($job_id && auth()->check()) {
-                    return redirect()->route('campaign.view', ['job_id' => $job_id]);
-                }
+                //     $job_id = $request->query('redirect');
+                //     if ($job_id && auth()->check()) {
+                //         return redirect()->route('campaign.view', ['job_id' => $job_id]);
+                //     }
 
-                // Default fallback
-                return redirect('home');
+                //     // Default fallback
+                //     return redirect('home');
 
 
             case 'staff':

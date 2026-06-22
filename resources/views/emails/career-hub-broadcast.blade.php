@@ -97,7 +97,7 @@
                             </div>
 
                             <!-- CTA Button -->
-                            <a href="{{ route('career-hub.show', $job['slug']) }}" target="_blank" style="
+                            <a href="https://dashboard.freebyz.com/tasks/{{ $job['slug'] }}" target="_blank" style="
                                         display:inline-block;
                                         padding:10px 18px;
                                         background-color:#6576ff;

@@ -129,7 +129,7 @@
 
                     <p style="margin-bottom:20px;">
                         Fresh earning opportunities are live on
-                        <a href="{{ url('/jobs') }}" style="color:#6576ff;font-weight:600;">Freebyz</a>.
+                        <a href="https://dashboard.freebyz.com/jobs" style="color:#6576ff;font-weight:600;">Freebyz</a>.
                         Explore the tasks below and start earning today 💳
                     </p>
 
