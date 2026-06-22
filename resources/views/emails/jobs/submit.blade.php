@@ -20,7 +20,7 @@
                     </p>
                     <p style="margin-bottom: 10px;">
                         Click the button below to access more jobs... <br>
-                        <a href="{{ route('tasks.index') }}" target="_blank"
+                        <a href="https://dashboard.freebyz.com/" target="_blank"
                             style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">Access
                             More Tasks</a>
                     </p>

@@ -76,7 +76,7 @@
 
                     <p style="margin-bottom: 10px;">
                         Ready for more opportunities? Click the button below to access more jobs... <br><br>
-                        <a href="{{ url('home') }}" target="_blank"
+                        <a href="https://dashboard.freebyz.com/jobs" target="_blank"
                            style="background-color:#6576ff;
                                   border-radius:4px;
                                   color:#ffffff;

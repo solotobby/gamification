@@ -30,7 +30,7 @@
                 </p>
                 <p style="margin-bottom: 10px;">
                     Click the button below to create more Campaigns... <br><br>
-                    <a href="{{ url('campaign/create') }}" target="_blank" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">
+                    <a href="https://dashboard.freebyz.com/campaign/create" target="_blank" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">
                         Create More Campaign
                     </a>
                 </p>

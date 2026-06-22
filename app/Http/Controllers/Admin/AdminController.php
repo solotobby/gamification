@@ -249,7 +249,7 @@ class AdminController extends Controller
             $approvedJob = $campaign->completed()->where('status', 'Approved')->count();
 
             if ($approvedJob >= $campaign->number_of_staff) {
-                return back()->with('error', 'Job has reached its maximum number of staff');
+                return back()->with('error', 'Task has reached its maximum number of staff');
             }
 
 
