@@ -18,6 +18,13 @@ class Currency extends Model
         'allow_upload',
         'priotize',
         'referral_commission',
-        'base_rate'
+        'base_rate',
+        'min_withdrawal_amount',
+        'withdrawal_percent',
+        'freebyz_withdrawal_percent',
+        'referral_withdrawal_percent',
+        'banner_clicks_amount',
+        'hire_worker_points_amount',
+        'job_points_amount',
     ];
 }
