@@ -581,11 +581,24 @@ Route::post('accounts', [\App\Http\Controllers\Admin\AccountController::class, '
 
 Route::resource('preferences', PreferenceController::class);
 
-Route::resource('conversions', ConversionRateController::class);
-Route::get('currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'index']);
-Route::post('update/currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'updateCurrency']);
-Route::get('base/rates', [\App\Http\Controllers\Admin\CurrencyController::class, 'baseRates']);
+// Route::resource('conversions', ConversionRateController::class);
+// Route::get('currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'index']);
+// Route::post('update/currency', [\App\Http\Controllers\Admin\CurrencyController::class, 'updateCurrency']);
+// Route::get('base/rates', [\App\Http\Controllers\Admin\CurrencyController::class, 'baseRates']);
 
+// ── Currencies ──────────────────────────────
+Route::get   ('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'index'])        ->name('admin.currencies.index');
+Route::post  ('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'store'])        ->name('admin.currencies.store');
+Route::put   ('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'update'])       ->name('admin.currencies.update');
+Route::patch ('currencies/{currency}/toggle', [\App\Http\Controllers\Admin\CurrencyController::class, 'toggleStatus'])->name('admin.currencies.toggle');
+Route::delete('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'destroy'])      ->name('admin.currencies.destroy');
+
+// ── Conversion Rates ────────────────────────
+Route::get   ('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'index'])      ->name('admin.conversion-rates.index');
+Route::post  ('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'store'])      ->name('admin.conversion-rates.store');
+Route::put   ('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'update'])     ->name('admin.conversion-rates.update');
+Route::delete('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'destroy'])    ->name('admin.conversion-rates.destroy');
+Route::post  ('conversion-rates/generate-all',     [\App\Http\Controllers\Admin\ConversionRateController::class, 'generateAll'])->name('admin.conversion-rates.generate-all');
 Route::get('change/completed/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'changeCompleted']);
 Route::get('priotize/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'priotize']);
 Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::class, 'index']);

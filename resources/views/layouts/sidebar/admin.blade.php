@@ -181,14 +181,14 @@
         </a>
       </li>
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ url('currency') }}">
+        <a class="nav-main-link" href="{{ url('currencies') }}">
           <i class="nav-main-link-icon fa fa-money-bill-wave"></i>
           <span class="nav-main-link-name">Currency</span>
         </a>
       </li>
 
       <li class="nav-main-item">
-        <a class="nav-main-link" href="{{ url('conversions') }}">
+        <a class="nav-main-link" href="{{ url('conversion-rates') }}">
           <i class="nav-main-link-icon fa fa-money-bill-wave"></i>
           <span class="nav-main-link-name">Rate</span>
         </a>
