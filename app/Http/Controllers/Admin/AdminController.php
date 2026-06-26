@@ -51,6 +51,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportVerifiedUsersJob;
 use App\Jobs\SendMassSms;
+use App\Mail\ResolveDispute;
 
 class AdminController extends Controller
 {
@@ -294,9 +295,9 @@ class AdminController extends Controller
                 'user_type' => 'regular'
             ]);
 
-            $subject = 'Job ' . $request->status;
+            $subject = 'Disputed Task - ' . $request->status;
             $status = $request->status;
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            Mail::to($workDone->user->email)->send(new ResolveDispute($workDone, $subject, $status, $request->reason));
 
 
             return back()->with('success', 'Dispute resolved Successfully');
@@ -345,10 +346,10 @@ class AdminController extends Controller
             //     'user_type' => 'regular'
             // ]);
 
-            $subject = 'Disputed Job ' . $request->status;
+            $subject = 'Disputed Task - ' . $request->status;
             $status = $request->status;
 
-            Mail::to($workDone->user->email)->send(new ApproveCampaign($workDone, $subject, $status));
+            Mail::to($workDone->user->email)->send(new ResolveDispute($workDone, $subject, $status, $request->reason));
 
             return back()->with('success', 'Dispute resolved Successfully');
 

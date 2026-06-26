@@ -36,11 +36,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('disputes:resolve-completed')->hourly();
 
-        // $schedule->command('command:task')->daily();
-
-        // $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
-
-        // $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
+        $schedule->command('campaigns:update-completed')->twiceDaily(9, 21);
 
         $schedule->command('campaigns:auto-approve')->everyThirtyMinutes();
 
@@ -48,13 +44,18 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
 
-        // $schedule->command('users:testing-supervisor')->everyMinute();
-        // $schedule->command('business:rotate-promotion')->dailyAt('03:00');
-
         $schedule->command('questions:cleanup-invalid')->dailyAt('03:00');
 
         $schedule->command('campaigns:flag-abusive')->twiceDaily(8, 20);
 
+        // $schedule->command('command:task')->daily();
+
+        // $schedule->command('jobs:send-broadcast')->dailyAt('9:00');
+
+        // $schedule->command('campaigns:send-weekly-broadcast')->dailyAt('10:30');
+
+        // $schedule->command('users:testing-supervisor')->everyMinute();
+        // $schedule->command('business:rotate-promotion')->dailyAt('03:00');
         //test
         // $schedule->call(function () {
         //     Log::info('Test scheduled task executed.');
