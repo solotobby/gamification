@@ -37,7 +37,7 @@ class ResolveDispute extends Mailable
     public function build()
     {
 
-        return $this->markdown('emails.campaigns.resolve_dispute')->subject($this->subject)->with([
+        return $this->markdown('emails.campaigns.dispute_decision')->subject($this->subject)->with([
             'name' => $this->approve->user->name,
             'subject' => $this->subject,
             'amount' => $this->approve->amount,
