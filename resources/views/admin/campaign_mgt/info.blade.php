@@ -95,7 +95,7 @@
                     <div class="row items-push">
                         <div class="col-lg-3">
                             <p class="text-muted">
-                                Give detailed decription of the campaign
+                                Give detailed description of the campaign
                             </p>
                         </div>
                         <div class="col-lg-9">
