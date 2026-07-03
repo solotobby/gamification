@@ -170,7 +170,7 @@
                             <div class="col-md-3">
                                 <label class="form-label">Job Listing Amount</label>
                                 <input type="number" step="0.000001" class="form-control" name="job_listing_amount"
-                                    value="{{ $currency->job_listing_amount }}">
+                                    value="{{ old('job_listing_amount', 0) }}" min="0">
                             </div>
 
                             <div class="col-12 mt-2">
