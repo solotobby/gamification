@@ -115,14 +115,14 @@
                     @if($job->user_posted)
                         {{-- @if(!$job->is_active) --}}
                             <form method="POST" action="{{ route('admin.career-hub.approve', $job) }}">
-                                @csrf
+                                {{-- @csrf --}}
                                 <button type="submit" class="btn btn-success w-100">
                                     <i class="fa fa-check me-1"></i> Approve & Publish
                                 </button>
                             </form>
                         {{-- @else --}}
                             <form method="POST" action="{{ route('admin.career-hub.decline', $job) }}">
-                                @csrf
+                                {{-- @csrf --}}
                                 <button type="submit" class="btn btn-warning w-100">
                                     <i class="fa fa-times me-1"></i> Deactivate
                                 </button>
