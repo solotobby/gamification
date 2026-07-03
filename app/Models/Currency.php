@@ -26,5 +26,6 @@ class Currency extends Model
         'banner_clicks_amount',
         'hire_worker_points_amount',
         'job_points_amount',
+        'job_listing_amount'
     ];
 }
