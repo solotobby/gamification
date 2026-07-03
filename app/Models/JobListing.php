@@ -29,7 +29,9 @@ class JobListing extends Model
         'company_website',
         'expires_at',
         'is_active',
-        'posted_by'
+        'posted_by',
+        'application_link',
+        'user_posted',
     ];
 
     protected $casts = [

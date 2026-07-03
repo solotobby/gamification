@@ -79,7 +79,7 @@ Route::get('privacy', [\App\Http\Controllers\GeneralController::class, 'privacy'
 Route::get('track-record', [\App\Http\Controllers\GeneralController::class, 'trackRecord'])->name('track.record');
 Route::get('faq', [\App\Http\Controllers\GeneralController::class, 'faq'])->name('faq');
 Route::get('about', [\App\Http\Controllers\GeneralController::class, 'about'])->name('about');
-Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']);//->name('faq');
+Route::get('download', [\App\Http\Controllers\GeneralController::class, 'download']); //->name('faq');
 Route::post('download', [\App\Http\Controllers\GeneralController::class, 'download_url'])->name('download');
 
 Route::get('wellahealth', [\App\Http\Controllers\GeneralController::class, 'wellaheathLanding']);
@@ -121,6 +121,11 @@ Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.
     Route::put('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'update'])->name('update');
     Route::delete('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'destroy'])->name('destroy');
 
+    // Route::get('/vacancy',          [\App\Http\Controllers\Admin\CareerHubController::class, 'showPending'])->name('admin.career-hub.show');
+    Route::get('/vacancy/{job}',          [\App\Http\Controllers\Admin\CareerHubController::class, 'show'])->name('show');
+    Route::post('/vacancy/{job}/approve', [\App\Http\Controllers\Admin\CareerHubController::class, 'approve'])->name('approve');
+    Route::post('/vacancy/{job}/decline', [\App\Http\Controllers\Admin\CareerHubController::class, 'decline'])->name('decline');
+
     Route::get('/{job}/applications', [\App\Http\Controllers\Admin\CareerHubController::class, 'applications'])->name('applications');
     Route::patch('/applications/{application}/status', [\App\Http\Controllers\Admin\CareerHubController::class, 'updateApplicationStatus'])->name('applications.status');
 });
@@ -133,9 +138,9 @@ Route::get('solution', [\App\Http\Controllers\GeneralController::class, 'solutio
 Route::get('marketplace/payment/callback', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketPlacePaymentCallBack']);
 Route::get('marketplace/payment/completion', [\App\Http\Controllers\GeneralMarketplaceController::class, 'marketplaceCompletePayment']);
 
-Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']);//->name('marketplace');
-Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']);//->name('marketplace');
-Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']);//->name('marketplace');
+Route::get('marketplace/{referral_code}/{product_id}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'index']); //->name('marketplace');
+Route::get('marketplace/payment/{referral_code}/{product_id}/{ref}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'processPayment']); //->name('marketplace');
+Route::post('marketplace/proccess/payment', [\App\Http\Controllers\GeneralMarketplaceController::class, 'enter_info']); //->name('marketplace');
 Route::get('resource/{url}', [\App\Http\Controllers\GeneralMarketplaceController::class, 'resourceDownload']);
 
 Route::post('register/user', [\App\Http\Controllers\Auth\RegisterController::class, 'registerUser'])->name('register.user');
@@ -279,7 +284,7 @@ Route::post('agent/create/wellahealth', [\App\Http\Controllers\WellaHealthContro
 Route::get('survey', [\App\Http\Controllers\SurveyController::class, 'survey'])->name('survey');
 Route::post('survey', [\App\Http\Controllers\SurveyController::class, 'storeSurvey'])->name('store.survey');
 Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'index']);
-Route::post('validate/bank/account', [\App\Http\Controllers\HomeController::class, 'validateBankAccount']) ->name('validate.bank');;
+Route::post('validate/bank/account', [\App\Http\Controllers\HomeController::class, 'validateBankAccount'])->name('validate.bank');;
 
 //virtual account routes
 Route::get('assign/virtual/account', [\App\Http\Controllers\VirtualAccountController::class, 'index'])->name('assign.virtual.account');
@@ -297,7 +302,8 @@ Route::get('completed/jobs', [\App\Http\Controllers\CampaignController::class, '
 Route::get('disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'disputedJobs']);
 Route::post('process/disputed/jobs', [\App\Http\Controllers\CampaignController::class, 'processDisputedJobs'])->name('dispute.job');
 
-Route::post('campaign/add-more-workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');Route::post('campaign/preview-add-worker', [\App\Http\Controllers\CampaignController::class, 'previewAddWorker'])->name('preview.add.worker');
+Route::post('campaign/add-more-workers', [\App\Http\Controllers\CampaignController::class, 'addMoreWorkers'])->name('addmore.workers');
+Route::post('campaign/preview-add-worker', [\App\Http\Controllers\CampaignController::class, 'previewAddWorker'])->name('preview.add.worker');
 
 Route::get('campaign/approve/{id}', [\App\Http\Controllers\CampaignController::class, 'approveCampaign']);
 Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::class, 'denyCampaign']);
@@ -305,7 +311,7 @@ Route::get('campaign/deny/{id}', [\App\Http\Controllers\CampaignController::clas
 Route::get('wallet/fund', [\App\Http\Controllers\WalletController::class, 'fund'])->name('fund');
 Route::get('wallet/withdraw', [\App\Http\Controllers\WalletController::class, 'withdraw'])->name('withdraw');
 Route::post('store/fund', [\App\Http\Controllers\WalletController::class, 'storeFund'])->name('store.funds');
-Route::get('cancel/transaction/{ref}', [\App\Http\Controllers\WalletController::class, 'cancelUrl']);//->name('store.funds');
+Route::get('cancel/transaction/{ref}', [\App\Http\Controllers\WalletController::class, 'cancelUrl']); //->name('store.funds');
 
 Route::get('wallet/fund/redirect', [\App\Http\Controllers\WalletController::class, 'koraPayRedirect']);
 
@@ -388,13 +394,13 @@ Route::get('top/earners', [\App\Http\Controllers\AchieverController::class, 'top
 
 Route::get('test/campaign', [\App\Http\Controllers\HomeController::class, 'testCampaignList']);
 ///skills
-Route::get('skills',[\App\Http\Controllers\SkillsController::class, 'index']);
-Route::get('view/skill/{id}',[\App\Http\Controllers\SkillsController::class, 'viewSkill']);
-Route::get('create/skill',[\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
-Route::post('store/skill',[\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
-Route::get('my/skill',[\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
+Route::get('skills', [\App\Http\Controllers\SkillsController::class, 'index']);
+Route::get('view/skill/{id}', [\App\Http\Controllers\SkillsController::class, 'viewSkill']);
+Route::get('create/skill', [\App\Http\Controllers\SkillsController::class, 'create'])->name('create.skill');
+Route::post('store/skill', [\App\Http\Controllers\SkillsController::class, 'storeSkill'])->name('setup.skill');
+Route::get('my/skill', [\App\Http\Controllers\SkillsController::class, 'mySkill'])->name('my.skill');
 
-Route::get('view/point/{id}',[\App\Http\Controllers\SkillsController::class, 'viewPoint'])->name('view.point');
+Route::get('view/point/{id}', [\App\Http\Controllers\SkillsController::class, 'viewPoint'])->name('view.point');
 
 Route::post('create/portfolio', [\App\Http\Controllers\SkillsController::class, 'addPortfolio'])->name('add.portfolio');
 
@@ -506,8 +512,8 @@ Route::get('admin/withdrawal/request/queued/current', [\App\Http\Controllers\Adm
 Route::post('update/withdrawal/{id}/verify-pin', [\App\Http\Controllers\Admin\AdminController::class, 'verifyPinAndProcess']);
 Route::get('update/withdrawal/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequest']);
 Route::get('update/withdrawal/manual/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'updateWithdrawalRequestManual']);
-Route::get('admin/upgrade/{id}/dollar', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserDollar']);//->name('admin.withdrawal');
-Route::get('admin/upgrade/{id}/naira', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserNaira']);//->name('admin.withdrawal');
+Route::get('admin/upgrade/{id}/dollar', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserDollar']); //->name('admin.withdrawal');
+Route::get('admin/upgrade/{id}/naira', [\App\Http\Controllers\Admin\AdminController::class, 'upgradeUserNaira']); //->name('admin.withdrawal');
 
 Route::get('campaigns', [\App\Http\Controllers\Admin\AdminController::class, 'campaignList'])->name('campaign.list');
 Route::get('campaigns/pending', [\App\Http\Controllers\Admin\AdminController::class, 'campaignPending'])->name('campaign.pending');
@@ -518,8 +524,8 @@ Route::get('campaigns/flagged', [\App\Http\Controllers\Admin\AdminController::cl
 Route::post('campaigns/{id}/unflag', [\App\Http\Controllers\Admin\AdminController::class, 'unflagCampaigns']);
 Route::get('campaign/info/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignInfo']);
 Route::get('campaign/delete/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDelete']);
- Route::get('campaigns/denial-stats', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDenialStats'])
-        ->name('admin.campaigns.denial-stats');
+Route::get('campaigns/denial-stats', [\App\Http\Controllers\Admin\AdminController::class, 'campaignDenialStats'])
+    ->name('admin.campaigns.denial-stats');
 
 Route::get('campaign/unpause/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'unpauseCampaign'])->name('campaign.unpause');
 
@@ -587,18 +593,18 @@ Route::resource('preferences', PreferenceController::class);
 // Route::get('base/rates', [\App\Http\Controllers\Admin\CurrencyController::class, 'baseRates']);
 
 // ── Currencies ──────────────────────────────
-Route::get   ('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'index'])        ->name('admin.currencies.index');
-Route::post  ('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'store'])        ->name('admin.currencies.store');
-Route::put   ('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'update'])       ->name('admin.currencies.update');
-Route::patch ('currencies/{currency}/toggle', [\App\Http\Controllers\Admin\CurrencyController::class, 'toggleStatus'])->name('admin.currencies.toggle');
-Route::delete('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'destroy'])      ->name('admin.currencies.destroy');
+Route::get('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'index'])->name('admin.currencies.index');
+Route::post('currencies',                [\App\Http\Controllers\Admin\CurrencyController::class, 'store'])->name('admin.currencies.store');
+Route::put('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'update'])->name('admin.currencies.update');
+Route::patch('currencies/{currency}/toggle', [\App\Http\Controllers\Admin\CurrencyController::class, 'toggleStatus'])->name('admin.currencies.toggle');
+Route::delete('currencies/{currency}',     [\App\Http\Controllers\Admin\CurrencyController::class, 'destroy'])->name('admin.currencies.destroy');
 
 // ── Conversion Rates ────────────────────────
-Route::get   ('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'index'])      ->name('admin.conversion-rates.index');
-Route::post  ('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'store'])      ->name('admin.conversion-rates.store');
-Route::put   ('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'update'])     ->name('admin.conversion-rates.update');
-Route::delete('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'destroy'])    ->name('admin.conversion-rates.destroy');
-Route::post  ('conversion-rates/generate-all',     [\App\Http\Controllers\Admin\ConversionRateController::class, 'generateAll'])->name('admin.conversion-rates.generate-all');
+Route::get('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'index'])->name('admin.conversion-rates.index');
+Route::post('conversion-rates',                  [\App\Http\Controllers\Admin\ConversionRateController::class, 'store'])->name('admin.conversion-rates.store');
+Route::put('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'update'])->name('admin.conversion-rates.update');
+Route::delete('conversion-rates/{conversionRate}', [\App\Http\Controllers\Admin\ConversionRateController::class, 'destroy'])->name('admin.conversion-rates.destroy');
+Route::post('conversion-rates/generate-all',     [\App\Http\Controllers\Admin\ConversionRateController::class, 'generateAll'])->name('admin.conversion-rates.generate-all');
 Route::get('change/completed/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'changeCompleted']);
 Route::get('priotize/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'priotize']);
 Route::get('audit/trail', [\App\Http\Controllers\Admin\AuditTrailController::class, 'index']);

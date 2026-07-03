@@ -132,6 +132,18 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label">Application Link</label>
+                        <input type="url" class="form-control @error('application_link') is-invalid @enderror"
+                            name="application_link"
+                            value="{{ old('application_link', $job->application_link ?? '') }}"
+                            placeholder="https://your-application-form.com">
+                        <small class="text-muted">Where applicants will be directed to apply</small>
+                        @error('application_link')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>
