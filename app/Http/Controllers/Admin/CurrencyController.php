@@ -43,6 +43,7 @@ class CurrencyController extends Controller
             'banner_clicks_amount'       => 'nullable|numeric|min:0',
             'hire_worker_points_amount'  => 'nullable|numeric|min:0',
             'job_points_amount'          => 'nullable|numeric|min:0',
+            'job_listing_amount'         => 'nullable|numeric|min:0',
             'is_active'                  => 'boolean',
         ]);
 
@@ -51,7 +52,7 @@ class CurrencyController extends Controller
                 'code', 'country', 'base_rate', 'upgrade_fee', 'min_upgrade_amount',
                 'referral_commission', 'allow_upload', 'priotize', 'min_withdrawal_amount',
                 'withdrawal_percent', 'freebyz_withdrawal_percent', 'referral_withdrawal_percent',
-                'banner_clicks_amount', 'hire_worker_points_amount', 'job_points_amount',
+                'banner_clicks_amount', 'hire_worker_points_amount', 'job_points_amount', 'job_listing_amount',
             ]),
             ['is_active' => $request->boolean('is_active', true)]
         ));
@@ -81,6 +82,7 @@ class CurrencyController extends Controller
             'banner_clicks_amount'       => 'nullable|numeric|min:0',
             'hire_worker_points_amount'  => 'nullable|numeric|min:0',
             'job_points_amount'          => 'nullable|numeric|min:0',
+            'job_listing_amount'         => 'nullable|numeric|min:0',
             'is_active'                  => 'boolean',
         ]);
 
@@ -89,7 +91,7 @@ class CurrencyController extends Controller
                 'code', 'country', 'base_rate', 'upgrade_fee', 'min_upgrade_amount',
                 'referral_commission', 'allow_upload', 'priotize', 'min_withdrawal_amount',
                 'withdrawal_percent', 'freebyz_withdrawal_percent', 'referral_withdrawal_percent',
-                'banner_clicks_amount', 'hire_worker_points_amount', 'job_points_amount',
+                'banner_clicks_amount', 'hire_worker_points_amount', 'job_points_amount', 'job_listing_amount',
             ]),
             ['is_active' => $request->boolean('is_active')]
         ));
