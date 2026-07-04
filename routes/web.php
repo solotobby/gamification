@@ -114,19 +114,17 @@ Route::get('/tasks/{job_id}', [PublicCampaignController::class, 'show'])->name('
 
 
 Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'index'])->name('index');
-    Route::get('/create', [\App\Http\Controllers\Admin\CareerHubController::class, 'create'])->name('create');
-    Route::post('/', [\App\Http\Controllers\Admin\CareerHubController::class, 'store'])->name('store');
-    Route::get('/{job}/edit', [\App\Http\Controllers\Admin\CareerHubController::class, 'edit'])->name('edit');
-    Route::put('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'update'])->name('update');
-    Route::delete('/{job}', [\App\Http\Controllers\Admin\CareerHubController::class, 'destroy'])->name('destroy');
-
-    // Route::get('/vacancy',          [\App\Http\Controllers\Admin\CareerHubController::class, 'showPending'])->name('admin.career-hub.show');
-    Route::get('/vacancy/{job}',          [\App\Http\Controllers\Admin\CareerHubController::class, 'show'])->name('show');
-    Route::post('/vacancy/{job}/approve', [\App\Http\Controllers\Admin\CareerHubController::class, 'approve'])->name('approve');
-    Route::post('/vacancy/{job}/decline', [\App\Http\Controllers\Admin\CareerHubController::class, 'decline'])->name('decline');
-
-    Route::get('/{job}/applications', [\App\Http\Controllers\Admin\CareerHubController::class, 'applications'])->name('applications');
+    Route::get('/',                    [\App\Http\Controllers\Admin\CareerHubController::class, 'index'])->name('index');
+    Route::get('/create',              [\App\Http\Controllers\Admin\CareerHubController::class, 'create'])->name('create');
+    Route::post('/',                   [\App\Http\Controllers\Admin\CareerHubController::class, 'store'])->name('store');
+    Route::get('/pending',             [\App\Http\Controllers\Admin\CareerHubController::class, 'showPending'])->name('pending');
+    Route::get('/{job}',               [\App\Http\Controllers\Admin\CareerHubController::class, 'show'])->name('show');
+    Route::get('/{job}/edit',          [\App\Http\Controllers\Admin\CareerHubController::class, 'edit'])->name('edit');
+    Route::put('/{job}',               [\App\Http\Controllers\Admin\CareerHubController::class, 'update'])->name('update');
+    Route::delete('/{job}',            [\App\Http\Controllers\Admin\CareerHubController::class, 'destroy'])->name('destroy');
+    Route::post('/approve/{job}',      [\App\Http\Controllers\Admin\CareerHubController::class, 'approve'])->name('approve');
+    Route::post('/decline/{job}',      [\App\Http\Controllers\Admin\CareerHubController::class, 'decline'])->name('decline');
+    Route::get('/{job}/applications',  [\App\Http\Controllers\Admin\CareerHubController::class, 'applications'])->name('applications');
     Route::patch('/applications/{application}/status', [\App\Http\Controllers\Admin\CareerHubController::class, 'updateApplicationStatus'])->name('applications.status');
 });
 

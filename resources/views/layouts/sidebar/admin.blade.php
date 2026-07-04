@@ -159,6 +159,11 @@
               <span class="nav-main-link-name">List</span>
             </a>
           </li>
+           <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.career-hub.pending') }}">
+              <span class="nav-main-link-name">Pending Approvals</span>
+            </a>
+          </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('admin.career-hub.create') }}">
               <span class="nav-main-link-name">Create</span>
