@@ -8,6 +8,7 @@ return [
      * Default Firebase project
      * ------------------------------------------------------------------------
      */
+
     'default' => env('FIREBASE_PROJECT', 'app'),
 
     /*
@@ -15,8 +16,10 @@ return [
      * Firebase project configurations
      * ------------------------------------------------------------------------
      */
+
     'projects' => [
         'app' => [
+
             /*
              * ------------------------------------------------------------------------
              * Credentials / Service Account
@@ -46,8 +49,8 @@ return [
              * first time you try to access a component of the Firebase Admin SDK.
              *
              */
-            // 'credentials' => [
-            // 'file' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+
+            // 'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
 
             'credentials' => [
                 'type'                        => env('FIREBASE_TYPE'),
@@ -62,14 +65,6 @@ return [
                 'client_x509_cert_url'        => env('FIREBASE_CLIENT_X509_CERT_URL'),
             ],
             /*
-                 * If you want to prevent the auto discovery of credentials, set the
-                 * following parameter to false. If you disable it, you must
-                 * provide a credentials file.
-                 */
-            // 'auto_discovery' => true,
-            // ],
-
-            /*
              * ------------------------------------------------------------------------
              * Firebase Auth Component
              * ------------------------------------------------------------------------
@@ -81,11 +76,32 @@ return [
 
             /*
              * ------------------------------------------------------------------------
+             * Firestore Component
+             * ------------------------------------------------------------------------
+             */
+
+            'firestore' => [
+
+                /*
+                 * If you want to access a Firestore database other than the default database,
+                 * enter its name here.
+                 *
+                 * By default, the Firestore client will connect to the `(default)` database.
+                 *
+                 * https://firebase.google.com/docs/firestore/manage-databases
+                 */
+
+                // 'database' => env('FIREBASE_FIRESTORE_DATABASE'),
+            ],
+
+            /*
+             * ------------------------------------------------------------------------
              * Firebase Realtime Database
              * ------------------------------------------------------------------------
              */
 
             'database' => [
+
                 /*
                  * In most of the cases the project ID defined in the credentials file
                  * determines the URL of your project's Realtime Database. If the
@@ -97,6 +113,7 @@ return [
                  * Please make sure that you use a full URL like, for example,
                  * https://my-project-id.firebaseio.com
                  */
+
                 'url' => env('FIREBASE_DATABASE_URL'),
 
                 /*
@@ -106,12 +123,15 @@ return [
                  *
                  * https://firebase.google.com/docs/database/admin/start#authenticate-with-limited-privileges
                  */
+
                 // 'auth_variable_override' => [
                 //     'uid' => 'my-service-worker'
                 // ],
+
             ],
 
             'dynamic_links' => [
+
                 /*
                  * Dynamic links can be built with any URL prefix registered on
                  *
@@ -123,6 +143,7 @@ return [
                  * The value must be a valid domain, for example,
                  * https://example.page.link
                  */
+
                 'default_domain' => env('FIREBASE_DYNAMIC_LINKS_DEFAULT_DOMAIN'),
             ],
 
@@ -133,6 +154,7 @@ return [
              */
 
             'storage' => [
+
                 /*
                  * Your project's default storage bucket usually uses the project ID
                  * as its name. If you have multiple storage buckets and want to
@@ -141,6 +163,7 @@ return [
                  */
 
                 'default_bucket' => env('FIREBASE_STORAGE_DEFAULT_BUCKET'),
+
             ],
 
             /*
@@ -165,7 +188,7 @@ return [
              * Log channels are defined in config/logging.php
              *
              * Successful HTTP messages are logged with the log level 'info'.
-             * Failed HTTP messages are logged with the the log level 'notice'.
+             * Failed HTTP messages are logged with the log level 'notice'.
              *
              * Note: Using the same channel for simple and debug logs will result in
              * two entries per request and response.
@@ -183,11 +206,14 @@ return [
              *
              * Behavior of the HTTP Client performing the API requests
              */
+
             'http_client_options' => [
+
                 /*
                  * Use a proxy that all API requests should be passed through.
                  * (default: none)
                  */
+
                 'proxy' => env('FIREBASE_HTTP_CLIENT_PROXY'),
 
                 /*
@@ -197,7 +223,10 @@ return [
                  * The default time out can be reviewed at
                  * https://github.com/kreait/firebase-php/blob/6.x/src/Firebase/Http/HttpClientOptions.php
                  */
+
                 'timeout' => env('FIREBASE_HTTP_CLIENT_TIMEOUT'),
+
+                'guzzle_middlewares' => [],
             ],
         ],
     ],
