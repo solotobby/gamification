@@ -359,6 +359,60 @@ if (!function_exists('verifyKorayPay')) {
     }
 }
 
+if (!function_exists('getInterswitchAccessToken')) {
+    function getInterswitchAccessToken(): ?string
+    {
+        return Cache::remember('interswitch_access_token', 39000, function () {
+            $clientId = config('services.interswitch.client_id');
+            $clientSecret = config('services.interswitch.client_secret');
+
+            $credentials = base64_encode("{$clientId}:{$clientSecret}");
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . $credentials,
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+            ])
+                ->asForm()
+                ->post('https://passport.interswitchng.com/passport/oauth/token', [
+                    'grant_type' => 'client_credentials',
+                ]);
+
+            Log::info('Interswitch Auth Response: ' . $response->body());
+
+            return $response->successful()
+                ? $response->json('access_token')
+                : null;
+        });
+    }
+}
+
+if (!function_exists('interswitchOauthHeaders')) {
+    function interswitchOauthHeaders(): array
+    {
+        return [
+            'Authorization' => 'Bearer ' . getInterswitchAccessToken(),
+            'Content-Type'  => 'application/json',
+            'Accept'        => 'application/json',
+        ];
+    }
+}
+
+if (!function_exists('verifyInterswitch')) {
+    function verifyInterswitch(string $reference): ?array
+    {
+        $url = "https://api.interswitchng.com/collections/api/v1/merchant/transactions/query?transactionReference={$reference}";
+
+        $response = Http::withHeaders(interswitchOauthHeaders())
+            ->get($url);
+
+        Log::info('Interswitch Verify Payment Response: ' . $response->body());
+
+        return $response->successful()
+            ? $response->json()
+            : null;
+    }
+}
+
 if (!function_exists('flutterwaveVirtualAccount')) {
     function flutterwaveVirtualAccount($payload)
     {

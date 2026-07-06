@@ -54,6 +54,11 @@ return [
         'withdrawal_payment' => getenv('PAYMENT')
     ],
 
+    'interswitch' => [
+        'client_id' => env('INTERSWITCH_CLIENT_ID'),
+        'client_secret' => env('INTERSWITCH_CLIENT_SECRET'),
+    ],
+
     'zeptomail' => [
         'webhook_auth_key' => env('ZEPTO_WEBHOOK_AUTH_KEY'),
         'token' => env('ZEPTO_TOKEN'),
