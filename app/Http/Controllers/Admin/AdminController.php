@@ -974,11 +974,11 @@ class AdminController extends Controller
                     && (($result['data']['status'] ?? null) === 'success');
             }
 
-            $isVerified = $result['status'] === true || ($result['data']['status'] ?? null) === 'success';
+            // $isVerified = $result['status'] === true || ($result['data']['status'] ?? null) === 'success';
 
-            if ($isVerified) {
-                // $transaction->update(['is_verified' => true]);
-            }
+            // if ($isVerified) {
+            //     // $transaction->update(['is_verified' => true]);
+            // }
 
             return response()->json([
                 'success' => true,
