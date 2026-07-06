@@ -398,9 +398,13 @@ if (!function_exists('interswitchOauthHeaders')) {
 }
 
 if (!function_exists('verifyInterswitch')) {
-    function verifyInterswitch(string $reference): ?array
+    function verifyInterswitch(string $reference, float $amount): ?array
     {
-        $url = "https://api.interswitchng.com/collections/api/v1/merchant/transactions/query?transactionReference={$reference}";
+
+        $merchantCode = config('services.interswitch.merchant_code');
+
+
+        $url = "https://api.interswitchng.com/collections/api/v1/merchant/transactions/query?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
 
         $response = Http::withHeaders(interswitchOauthHeaders())
             ->get($url);
