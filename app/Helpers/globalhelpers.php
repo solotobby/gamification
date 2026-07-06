@@ -404,7 +404,7 @@ if (!function_exists('verifyInterswitch')) {
         $merchantCode = config('services.interswitch.merchant_code');
 
 
-        $url = "https://api.interswitchng.com/collections/api/v1/merchant/transactions/query?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
+        $url = "https://api.interswitchng.com/collections/api/v1/gettransaction?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
 
         $response = Http::withHeaders(interswitchOauthHeaders())
             ->get($url);
