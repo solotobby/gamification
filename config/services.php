@@ -57,6 +57,7 @@ return [
     'interswitch' => [
         'client_id' => env('INTERSWITCH_CLIENT_ID'),
         'client_secret' => env('INTERSWITCH_CLIENT_SECRET'),
+        'merchant_code' => env('INTERSWITCH_MERCHANT_CODE'),
     ],
 
     'zeptomail' => [

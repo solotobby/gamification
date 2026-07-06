@@ -962,7 +962,7 @@ class AdminController extends Controller
                 $isVerified = ($result['status'] ?? false) === true
                     || (($result['data']['status'] ?? null) === 'success');
             } elseif (in_array($channel, ['interswitch', 'isw'])) {
-                $result = verifyInterswitch($transaction->reference);
+                $result = verifyInterswitch($transaction->reference, $transaction->amount * 100);
 
                 $isVerified = ($result['responseCode'] ?? null) === '00'
                     || (($result['responseBody']['responseCode'] ?? null) === '00')
@@ -995,7 +995,7 @@ class AdminController extends Controller
         }
     }
 
-    
+
 
     public function adminUserCampaigns($id)
     {
