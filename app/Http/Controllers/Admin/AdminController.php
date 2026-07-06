@@ -962,11 +962,10 @@ class AdminController extends Controller
                 $isVerified = ($result['status'] ?? false) === true
                     || (($result['data']['status'] ?? null) === 'success');
             } elseif (in_array($channel, ['interswitch', 'isw'])) {
-                $result = verifyInterswitch($transaction->reference, $transaction->amount * 100);
 
-                $isVerified = ($result['responseCode'] ?? null) === '00'
-                    || (($result['responseBody']['responseCode'] ?? null) === '00')
-                    || (($result['transactionResponseCode'] ?? null) === '00');
+            $result = verifyInterswitch($transaction->reference, $transaction->amount * 100);
+
+                $isVerified = ($result['ResponseCode'] ?? null) === '00';
             } else {
                 $result = verifyTransaction($transaction->reference);
 
