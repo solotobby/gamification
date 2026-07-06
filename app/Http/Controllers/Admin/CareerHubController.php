@@ -169,6 +169,13 @@ class CareerHubController extends Controller
 
         $user = User::find($job->posted_by);
 
+        Mail::to($user->email)->send(new GeneralMail(
+            $user,
+            'Your job listing <strong>' . $job->title . '</strong> has been approved and is now live on the platform.',
+            'Job Listing Approved 🎉',
+            ''
+        ));
+
         app(NotificationHelpers::class)->createNotification(
             $user,
             'Job Listing Approved',
@@ -176,12 +183,7 @@ class CareerHubController extends Controller
             'job_listing'
         );
 
-        Mail::to($user->email)->send(new GeneralMail(
-            $user,
-            'Your job listing <strong>' . $job->title . '</strong> has been approved and is now live on the platform.',
-            'Job Listing Approved 🎉',
-            ''
-        ));
+
 
         return back()->with('success', 'Job approved and user notified.');
     }
@@ -219,6 +221,14 @@ class CareerHubController extends Controller
 
         $refundNote = $job->tier === 'premium' ? ' A refund has been credited to your wallet.' : '';
 
+         Mail::to($user->email)->send(new GeneralMail(
+            $user,
+            'Your job listing <strong>' . $job->title . '</strong> has been declined.<br><br>'
+                . '<strong>Reason:</strong> ' . $reason . $refundNote,
+            'Job Listing Declined',
+            ''
+        ));
+        
         app(NotificationHelpers::class)->createNotification(
             $user,
             'Job Listing Declined',
@@ -226,13 +236,7 @@ class CareerHubController extends Controller
             'job_listing'
         );
 
-        Mail::to($user->email)->send(new GeneralMail(
-            $user,
-            'Your job listing <strong>' . $job->title . '</strong> has been declined.<br><br>'
-                . '<strong>Reason:</strong> ' . $reason . $refundNote,
-            'Job Listing Declined',
-            ''
-        ));
+
 
         return back()->with('success', 'Job declined' . ($job->tier === 'premium' ? ' and user refunded.' : '.'));
     }

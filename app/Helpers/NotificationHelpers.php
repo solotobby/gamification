@@ -19,7 +19,7 @@ class NotificationHelpers
         $this->messaging = $messaging;
     }
 
-    public function createNotification($user, $title, $body, $type)
+    public function createNotification($user, $title, $body, $type, array $data = [])
     {
         try {
             // $this->notifRepo->createForUser($user->id, $title, $body, $type);
@@ -29,14 +29,15 @@ class NotificationHelpers
                 'title'   => $title,
                 'body'    => $body,
                 'type'    => $type ?? 'general',
-                'data'    => $data ?? [],
+                'data'    => $data,
             ]);
 
             // $tokens = User::where('id', $user->id)->whereNotNull('fcm_token')->pluck('fcm_token');
             $tokens = User::where('id', $user->id)->whereNotNull('fcm_token')->value('fcm_token');
 
             if ($tokens) {
-                $this->send($tokens, $title, $body);
+                $this->send($tokens, $title, $body, $data);
+                // return true;
             }
 
             return true;
@@ -53,7 +54,7 @@ class NotificationHelpers
     {
         try {
             $message = CloudMessage::new()
-                ->toToken($fcmToken)
+                ->withTarget('token', $fcmToken)
                 ->withNotification(Notification::create($title, $body))
                 ->withData($data);
 
@@ -67,7 +68,7 @@ class NotificationHelpers
                 'error'   => $e->getMessage(),
             ]);
 
-            return false;
+            return true;
         }
     }
 
