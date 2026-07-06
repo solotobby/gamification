@@ -953,15 +953,26 @@ class AdminController extends Controller
         try {
             $transaction = PaymentTransaction::findOrFail($id);
 
-            // $result = $transaction->channel === ('kora' || 'korapay')
-            //     ? verifyKorayPay($transaction->reference)
-            //     : verifyTransaction($transaction->reference);
+            $channel = strtolower($transaction->channel);
 
-            $isKorapay = in_array($transaction->channel, ['kora', 'korapay']);
 
-            $result = $isKorapay
-                ? verifyKorayPay($transaction->reference)
-                : verifyTransaction($transaction->reference);
+            if (in_array($channel, ['kora', 'korapay'])) {
+                $result = verifyKorayPay($transaction->reference);
+
+                $isVerified = ($result['status'] ?? false) === true
+                    || (($result['data']['status'] ?? null) === 'success');
+            } elseif (in_array($channel, ['interswitch', 'isw'])) {
+                $result = verifyInterswitch($transaction->reference);
+
+                $isVerified = ($result['responseCode'] ?? null) === '00'
+                    || (($result['responseBody']['responseCode'] ?? null) === '00')
+                    || (($result['transactionResponseCode'] ?? null) === '00');
+            } else {
+                $result = verifyTransaction($transaction->reference);
+
+                $isVerified = ($result['status'] ?? false) === true
+                    && (($result['data']['status'] ?? null) === 'success');
+            }
 
             $isVerified = $result['status'] === true || ($result['data']['status'] ?? null) === 'success';
 
@@ -983,6 +994,8 @@ class AdminController extends Controller
             ], 500);
         }
     }
+
+    
 
     public function adminUserCampaigns($id)
     {
