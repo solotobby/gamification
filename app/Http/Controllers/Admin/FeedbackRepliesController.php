@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\NotificationHelpers;
 
 class FeedbackRepliesController extends Controller
 {
@@ -97,6 +98,12 @@ class FeedbackRepliesController extends Controller
         $url = route('feedback');
         try {
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, $url));
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Admin Feedback Reply',
+                $request->message,
+                'feedback'
+            );
         } catch (\Exception $e) {
 
             Log::error('Mail sending failed', [

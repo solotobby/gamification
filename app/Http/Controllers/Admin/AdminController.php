@@ -52,6 +52,7 @@ use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportVerifiedUsersJob;
 use App\Jobs\SendMassSms;
 use App\Mail\ResolveDispute;
+use App\Helpers\NotificationHelpers;
 
 class AdminController extends Controller
 {
@@ -299,6 +300,12 @@ class AdminController extends Controller
             $status = $request->status;
             Mail::to($workDone->user->email)->send(new ResolveDispute($workDone, $subject, $status, $request->reason));
 
+            app(NotificationHelpers::class)->createNotification(
+                $workDone->user,
+                'Disputed Task - ' . $request->status,
+                'Your Disputed Task  "' . $workDone->campaign->post_title . '" has been ' . strtolower($request->status) . '.',
+                'task'
+            );
 
             return back()->with('success', 'Dispute resolved Successfully');
         } else {
@@ -351,6 +358,12 @@ class AdminController extends Controller
 
             Mail::to($workDone->user->email)->send(new ResolveDispute($workDone, $subject, $status, $request->reason));
 
+            app(NotificationHelpers::class)->createNotification(
+                $workDone->user,
+                'Disputed Task - ' . $request->status,
+                'Your Disputed Task  "' . $workDone->campaign->post_title . '" has been ' . strtolower($request->status) . '.',
+                'task'
+            );
             return back()->with('success', 'Dispute resolved Successfully');
 
 
@@ -963,7 +976,7 @@ class AdminController extends Controller
                     || (($result['data']['status'] ?? null) === 'success');
             } elseif (in_array($channel, ['interswitch', 'isw'])) {
 
-            $result = verifyInterswitch($transaction->reference, $transaction->amount * 100);
+                $result = verifyInterswitch($transaction->reference, $transaction->amount * 100);
 
                 $isVerified = ($result['ResponseCode'] ?? null) === '00';
             } else {
@@ -1115,6 +1128,13 @@ class AdminController extends Controller
                 )
             );
 
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Withdrawal Request Granted',
+                'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
+                'withdrawal'
+            );
+
             return back()->with('success', 'Withdrawal processed successfully');
         }
 
@@ -1141,6 +1161,12 @@ class AdminController extends Controller
         $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
         $subject = 'Withdrawal Request Granted';
         Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
+        app(NotificationHelpers::class)->createNotification(
+            $user,
+            'Withdrawal Request Granted',
+            'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com',
+            'withdrawal'
+        );
         return back()->with('success', 'Withdrawals Updated');
     }
 
@@ -1339,6 +1365,13 @@ class AdminController extends Controller
         activityLog($getUser, 'account_verification', $name . ' account verification', 'regular');
         Mail::to($getUser->email)->send(new UpgradeUser($getUser));
 
+        app(NotificationHelpers::class)->createNotification(
+            $getUser,
+            'Account Verified',
+            $name . ' your account has been verified.',
+            'upgrade'
+        );
+
         return $getUser;
     }
 
@@ -1452,6 +1485,13 @@ class AdminController extends Controller
         activityLog($getUser, 'dollar_account_verification', $name . ' account verification', 'regular');
 
         Mail::to($getUser->email)->send(new UpgradeUser($getUser));
+
+        app(NotificationHelpers::class)->createNotification(
+            $getUser,
+            'Account Verified',
+            $name . ' your account has been verified.',
+            'upgrade'
+        );
 
 
         // Mail::to($getUser->email)->send(new UpgradeUser($getUser));
@@ -1626,6 +1666,7 @@ class AdminController extends Controller
 
         $content = 'Your request to for task reversal is successful. A total of NGN' . $campaignAmount->campaign_amount . ' has been credited to your wallet from ' . $campaignAmount->post_title . ' job';
         Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
 
         return back()->with('success', 'Reversal Successful');
     }
@@ -2347,6 +2388,13 @@ class AdminController extends Controller
                     Reason: {$request->unflag_reason}";
 
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Campaign Unflagged',
+                "Your campaign '{$campaign->post_title}' has been reviewed and unflagged.",
+                'campaign'
+            );
         }
 
         // $this->flaggedCampaigns();
@@ -2436,6 +2484,12 @@ class AdminController extends Controller
             $subject = 'Campaign Declined';
 
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Campaign Declined',
+                "Your campaign '{$camp->post_title}' has been reviewed and declined.",
+                'campaign'
+            );
             return redirect('campaigns/pending')->with('error', 'Campaign is Declined');
         } else {
 
@@ -2445,10 +2499,18 @@ class AdminController extends Controller
             $camp->description = $request->description;
             $camp->proof = $request->proof;
             $camp->save();
+
             $user = User::where('id', $camp->user_id)->first();
             $content = 'Your campaign has been approved and it is now Live. Thank you for choosing Freebyz.com';
             $subject = 'Campaign Live!!!';
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Campaign Live',
+                "Your campaign '{$camp->post_title}' has been reviewed and approved.",
+                'campaign'
+            );
             return redirect('campaigns/pending')->with('success', 'Campaign is Live!!!');
         }
 
@@ -2533,7 +2595,7 @@ class AdminController extends Controller
                     $name = $user->name;
                     activityLog($user, 'withdrawal_sent', ' ' . $withdrawals->base_currency . '' . $am = number_format($withdrawals->amount * 100) . ' cash withdrawal by ' . $name, 'regular');
 
-                    $content = 'Your withdrawal request has been granted and your acount credited successfully. Thank you for choosing Freebyz.com';
+                    $content = 'Your withdrawal request has been granted and your account credited successfully. Thank you for choosing Freebyz.com';
                     $subject = 'Withdrawal Request Granted';
                     Mail::to($withdrawals->user->email)->send(new GeneralMail($user, $content, $subject, ''));
                     return back()->with('success', 'Withdrawals Updated');
@@ -2690,6 +2752,13 @@ class AdminController extends Controller
             $subject = 'Wallet Funded Successfully';
             Mail::to($funding->user->email)->send(new GeneralMail($funding->user, $content, $subject, ''));
 
+            app(NotificationHelpers::class)->createNotification(
+                $funding->user,
+                'Wallet Funded',
+                'Your manual funding of ' . $funding->currency . number_format($funding->amount) . ' has been approved and your wallet credited.',
+                'wallet'
+            );
+
             return back()->with('success', 'Funding approved and wallet credited.');
         }
 
@@ -2702,6 +2771,12 @@ class AdminController extends Controller
         $subject = 'Manual Funding Request Rejected';
         Mail::to($funding->user->email)->send(new GeneralMail($funding->user, $content, $subject, ''));
 
+        app(NotificationHelpers::class)->createNotification(
+            $funding->user,
+            'Manual Funding Request Rejected',
+            'Your manual funding of ' . $funding->currency . number_format($funding->amount) . ' has been rejected.',
+            'wallet'
+        );
         return back()->with('success', 'Funding request rejected and user notified.');
     }
 
@@ -2755,6 +2830,12 @@ class AdminController extends Controller
                 $subject = 'Wallet Topup';
                 $user = User::where('id', $request->user_id)->first();
                 Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                app(NotificationHelpers::class)->createNotification(
+                    $user,
+                    'Wallet Topup',
+                    'Your wallet has been succesfully credited with NGN' . $request->amount . '. Thank you for choosing Freebyz.com',
+                    'wallet'
+                );
                 return back()->with('success', 'Wallet Successfully Funded');
             } else {
                 $currency = '';
@@ -2797,6 +2878,12 @@ class AdminController extends Controller
                 $subject = 'Wallet Debit';
                 $user = User::where('id', $request->user_id)->first();
                 Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+                app(NotificationHelpers::class)->createNotification(
+                    $user,
+                    'Wallet Debit',
+                    'Your wallet has been debited with ' . $currency . number_format($request->amount) . '. Reason: ' . $request->reason,
+                    'wallet'
+                );
                 return back()->with('success', 'Wallet Successfully Debitted');
             }
         } else {
@@ -2841,6 +2928,12 @@ class AdminController extends Controller
             $content = $request->reason;
             $subject = 'Wallet Debit';
             $user = User::where('id', $request->user_id)->first();
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Wallet Debit',
+                'Your wallet has been debited with ' . $currency . number_format($request->amount) . '. Reason: ' . $request->reason,
+                'wallet'
+            );
             // Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
             return back()->with('success', 'Wallet Successfully Debitted');
         }
@@ -2955,6 +3048,12 @@ class AdminController extends Controller
             $content = 'Congratulations, your account details has been updated on Freebyz.';
 
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
+            app(NotificationHelpers::class)->createNotification(
+                $user,
+                'Account Details Updated',
+                'Congratulations, your account details has been updated on Freebyz.',
+                'account'
+            );
             return back()->with('success', 'Account Details Upated');
         }
         return back()->with('error', 'Account Updating Failed');
