@@ -50,7 +50,8 @@
         "files": [
             "app/Helpers/globalhelpers.php",
             "app/Helpers/wellahealthApiIntegration.php",
-            "app/Helpers/flutterwave.php"
+            "app/Helpers/flutterwave.php",
+            "app/Helpers/NotificationHelpers.php"
         ]
     },
     "autoload-dev": {
