@@ -46,13 +46,43 @@ class CareerHubController extends Controller
     {
         $job->update(['is_active' => false, 'paused_at' => now()]);
 
+        $user = User::find($job->posted_by);
+
+        Mail::to($user->email)->send(new GeneralMail(
+            $user,
+            'Your job Vacancy listing <strong>' . $job->title . '</strong> has been Paused.',
+            'Job Vacancy Listing Paused 🕒',
+            ''
+        ));
+
+        app(NotificationHelpers::class)->createNotification(
+            $user,
+            'Job Vacancy Listing Paused',
+            'Your job Vacancy listing "' . $job->title . '" has been paused.',
+            'job_listing'
+        );
+
         return back()->with('success', 'Job paused.');
     }
 
     public function resume(JobListing $job)
     {
         $job->update(['is_active' => true, 'paused_at' => null]);
+        $user = User::find($job->posted_by);
 
+        Mail::to($user->email)->send(new GeneralMail(
+            $user,
+            'Your job Vacancy listing <strong>' . $job->title . '</strong> has been Resumed.',
+            'Job Vacancy Listing Resumed 🕒',
+            ''
+        ));
+
+        app(NotificationHelpers::class)->createNotification(
+            $user,
+            'Job Vacancy Listing Resumed',
+            'Your job Vacancy listing "' . $job->title . '" has been resumed.',
+            'job_listing'
+        );
         return back()->with('success', 'Job resumed.');
     }
 

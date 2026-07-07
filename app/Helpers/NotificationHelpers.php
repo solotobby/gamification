@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\AppNotification;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -37,6 +38,7 @@ class NotificationHelpers
 
             if ($tokens) {
                 // $this->send($tokens, $title, $body, $data);
+                $this->sendNotification($user, $title, $body, $type, $data);
                 return true;
             }
 
@@ -50,6 +52,29 @@ class NotificationHelpers
         }
     }
 
+    public function sendNotification($user, $title, $body, $type, array $data = [])
+    {
+        try {
+            $res = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->post(config('services.env.api_url').'/api/notifications', [
+                'user_id' => $user->id,
+                'title' => $title,
+                'body' => $body,
+                'type' => $type,
+                "api_token" => config('services.env.token'),
+            ]);
+
+            return true;
+        } catch (Throwable $e) {
+            Log::error('Failed to send notification', [
+                'user_id' => $user->id,
+                'error'   => $e->getMessage(),
+            ]);
+            return false;
+        }
+    }
     // public function send(string $fcmToken, string $title, string $body, array $data = []): bool
     // {
     //     try {

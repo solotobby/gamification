@@ -51,7 +51,10 @@ return [
         'super' => getenv('SUPER_EMAIL'),
         'password' => getenv('SUPER_PASSWORD'),
         'master_password' => getenv('MASTER_PASSWORD'),
-        'withdrawal_payment' => getenv('PAYMENT')
+        'withdrawal_payment' => getenv('PAYMENT'),
+        'token' => env('PUBLIC_API_TOKEN'),
+        'api_url' => env('PUBLIC_API_URL'),
+
     ],
 
     'interswitch' => [
