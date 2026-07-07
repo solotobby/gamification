@@ -30,11 +30,10 @@ class CareerHubController extends Controller
 
     public function index()
     {
-        $jobs = JobListing::withTrashed()
-            ->withCount('applications')
-            ->where('is_active', true)  // approved/active only
-            ->orWhere(function ($q) {
-                $q->withoutTrashed()->where('is_active', false)->where('user_posted', false);
+        $jobs = JobListing::withCount('applications')
+            ->where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
             })
             ->latest()
             ->paginate(20);
@@ -42,16 +41,56 @@ class CareerHubController extends Controller
         return view('admin.career_hub.index', compact('jobs'));
     }
 
+    public function pause(JobListing $job)
+    {
+        $job->update(['is_active' => false, 'paused_at' => now()]);
+
+        return back()->with('success', 'Job paused.');
+    }
+
+    public function resume(JobListing $job)
+    {
+        $job->update(['is_active' => true, 'paused_at' => null]);
+
+        return back()->with('success', 'Job resumed.');
+    }
+
     public function showPending()
     {
         $jobs = JobListing::withCount('applications')
             ->where('user_posted', true)
             ->where('is_active', false)
+            ->whereNull('decision_reason')
             ->whereNull('deleted_at')
             ->latest()
             ->paginate(20);
 
         return view('admin.career_hub.pending', compact('jobs'));
+    }
+
+    public function showDeclined()
+    {
+        $jobs = JobListing::withCount('applications')
+            ->where('is_active', false)
+            ->whereNotNull('decision_reason')
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.career_hub.declined', compact('jobs'));
+    }
+
+    public function showExpired()
+    {
+        $jobs = JobListing::withCount('applications')
+            ->where('is_active', true)
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<', now())
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.career_hub.expired', compact('jobs'));
     }
 
     public function create()
@@ -68,7 +107,7 @@ class CareerHubController extends Controller
             'responsibilities' => 'nullable|string',
             'benefits' => 'nullable|string',
             'type' => 'required|in:fulltime,parttime,contract,internship,gig,nysc',
-            'tier' => 'required|in:free,premium',
+            'tier' => 'required|in:free,premium,sponsored',
             'location' => 'required|string|max:255',
             'remote_allowed' => 'boolean',
             'salary_min' => 'nullable|numeric|min:0',
@@ -112,7 +151,7 @@ class CareerHubController extends Controller
             'responsibilities' => 'nullable|string',
             'benefits' => 'nullable|string',
             'type' => 'required|in:fulltime,parttime,contract,internship,gig,nysc',
-            'tier' => 'required|in:free,premium',
+            'tier' => 'required|in:free,premium,sponsored',
             'location' => 'required|string|max:255',
             'remote_allowed' => 'boolean',
             'salary_min' => 'nullable|numeric|min:0',
@@ -165,13 +204,15 @@ class CareerHubController extends Controller
 
     public function approve(JobListing $job)
     {
-        $job->update(['is_active' => true]);
+        // $job->update(['is_active' => true]);
+            $job->update(['is_active' => true, 'decision_reason' => null, 'paused_at' => null]);
+
 
         $user = User::find($job->posted_by);
 
         Mail::to($user->email)->send(new GeneralMail(
             $user,
-            'Your job listing <strong>' . $job->title . '</strong> has been approved and is now live on the platform.',
+            'Your job Vacancy listing <strong>' . $job->title . '</strong> has been approved and is now live on the platform.',
             'Job Listing Approved 🎉',
             ''
         ));
@@ -179,7 +220,7 @@ class CareerHubController extends Controller
         app(NotificationHelpers::class)->createNotification(
             $user,
             'Job Listing Approved',
-            'Your job listing "' . $job->title . '" has been approved and is now live!',
+            'Your job Vacancy listing "' . $job->title . '" has been approved and is now live!',
             'job_listing'
         );
 
@@ -192,14 +233,23 @@ class CareerHubController extends Controller
     {
         $request->validate(['reason' => 'nullable|string|max:500']);
 
-        $job->update(['is_active' => false]);
-
-        $user   = User::find($job->posted_by);
         $reason = $request->reason ?? 'No reason provided.';
+        $alreadyProcessed = !is_null($job->decision_reason); // guards against double refund
+        $isPaidTier = in_array($job->tier, ['premium', 'sponsored']);
 
-        if ($job->tier === 'premium') {
+        $job->update([
+            'is_active'       => false,
+            'decision_reason' => $reason,
+            'paused_at'       => null,
+        ]);
+
+        $user = User::find($job->posted_by);
+        $refundNote = '';
+
+        if ($isPaidTier && !$alreadyProcessed) {
             $currency = baseCurrency($user);
-            $amount   = $currency->job_listing_amount ?? 5000;
+            dd($currency);
+            $amount   = $currency->job_listing_amount;
 
             creditWallet($user, $currency, $amount);
 
@@ -213,33 +263,84 @@ class CareerHubController extends Controller
                 'currency'    => $currency,
                 'channel'     => 'wallet',
                 'type'        => 'career_hub_job_refund',
-                'description' => 'Refund for declined premium job: ' . $job->title,
+                'description' => 'Refund for declined ' . ucfirst($job->tier) . ' job: ' . $job->title,
                 'tx_type'     => 'Credit',
                 'user_type'   => 'regular',
             ]);
+
+            $refundNote = 'A refund has been credited to your wallet.';
         }
 
-        $refundNote = $job->tier === 'premium' ? ' A refund has been credited to your wallet.' : '';
-
-         Mail::to($user->email)->send(new GeneralMail(
+        Mail::to($user->email)->send(new GeneralMail(
             $user,
-            'Your job listing <strong>' . $job->title . '</strong> has been declined.<br><br>'
+            'Your job Vacancy listing <strong>' . $job->title . '</strong> has been declined.<br><br>'
                 . '<strong>Reason:</strong> ' . $reason . $refundNote,
             'Job Listing Declined',
             ''
         ));
-        
+
         app(NotificationHelpers::class)->createNotification(
             $user,
             'Job Listing Declined',
-            'Your job listing "' . $job->title . '" was declined. Reason: ' . $reason . $refundNote,
+            'Your job Vacancy listing "' . $job->title . '" was declined. Reason: ' . $reason . $refundNote,
             'job_listing'
         );
 
-
-
-        return back()->with('success', 'Job declined' . ($job->tier === 'premium' ? ' and user refunded.' : '.'));
+        return back()->with('success', 'Job declined' . ($refundNote ? ' and user refunded.' : '.'));
     }
+
+    // public function decline(JobListing $job, Request $request)
+    // {
+    //     $request->validate(['reason' => 'nullable|string|max:500']);
+
+    //     $job->update(['is_active' => false]);
+
+    //     $user   = User::find($job->posted_by);
+    //     $reason = $request->reason ?? 'No reason provided.';
+
+    //     if ($job->tier === 'premium') {
+    //         $currency = baseCurrency($user);
+    //         $amount   = $currency->job_listing_amount ?? 5000;
+
+    //         creditWallet($user, $currency, $amount);
+
+    //         PaymentTransaction::create([
+    //             'user_id'     => $job->posted_by,
+    //             'campaign_id' => 1,
+    //             'reference'   => time(),
+    //             'amount'      => $amount,
+    //             'balance'     => walletBalance($job->posted_by),
+    //             'status'      => 'successful',
+    //             'currency'    => $currency,
+    //             'channel'     => 'wallet',
+    //             'type'        => 'career_hub_job_refund',
+    //             'description' => 'Refund for declined premium job: ' . $job->title,
+    //             'tx_type'     => 'Credit',
+    //             'user_type'   => 'regular',
+    //         ]);
+    //     }
+
+    //     $refundNote = $job->tier === 'premium' ? 'A refund has been credited to your wallet.' : '';
+
+    //     Mail::to($user->email)->send(new GeneralMail(
+    //         $user,
+    //         'Your job listing <strong>' . $job->title . '</strong> has been declined.<br><br>'
+    //             . '<strong>Reason:</strong> ' . $reason . $refundNote,
+    //         'Job Listing Declined',
+    //         ''
+    //     ));
+
+    //     app(NotificationHelpers::class)->createNotification(
+    //         $user,
+    //         'Job Listing Declined',
+    //         'Your job listing "' . $job->title . '" was declined. Reason: ' . $reason . $refundNote,
+    //         'job_listing'
+    //     );
+
+
+
+    //     return back()->with('success', 'Job declined' . ($job->tier === 'premium' ? ' and user refunded.' : '.'));
+    // }
     public function applications(JobListing $job)
     {
         $applications = $job->applications()

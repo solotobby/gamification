@@ -12,12 +12,12 @@ use Throwable;
 
 class NotificationHelpers
 {
-    protected Messaging $messaging;
+    // protected Messaging $messaging;
 
-    public function __construct(Messaging $messaging)
-    {
-        $this->messaging = $messaging;
-    }
+    // public function __construct(Messaging $messaging)
+    // {
+    //     $this->messaging = $messaging;
+    // }
 
     public function createNotification($user, $title, $body, $type, array $data = [])
     {
@@ -36,8 +36,8 @@ class NotificationHelpers
             $tokens = User::where('id', $user->id)->whereNotNull('fcm_token')->value('fcm_token');
 
             if ($tokens) {
-                $this->send($tokens, $title, $body, $data);
-                // return true;
+                // $this->send($tokens, $title, $body, $data);
+                return true;
             }
 
             return true;
@@ -50,46 +50,46 @@ class NotificationHelpers
         }
     }
 
-    public function send(string $fcmToken, string $title, string $body, array $data = []): bool
-    {
-        try {
-            $message = CloudMessage::new()
-                ->withTarget('token', $fcmToken)
-                ->withNotification(Notification::create($title, $body))
-                ->withData($data);
+    // public function send(string $fcmToken, string $title, string $body, array $data = []): bool
+    // {
+    //     try {
+    //         $message = CloudMessage::new()
+    //             ->withTarget('token', $fcmToken)
+    //             ->withNotification(Notification::create($title, $body))
+    //             ->withData($data);
 
-            $this->messaging->send($message);
+    //         $this->messaging->send($message);
 
-            return true;
-        } catch (Throwable $e) {
-            Log::error('FCM send failed', [
-                'token'   => $fcmToken,
-                'title'   => $title,
-                'error'   => $e->getMessage(),
-            ]);
+    //         return true;
+    //     } catch (Throwable $e) {
+    //         Log::error('FCM send failed', [
+    //             'token'   => $fcmToken,
+    //             'title'   => $title,
+    //             'error'   => $e->getMessage(),
+    //         ]);
 
-            return true;
-        }
-    }
+    //         return true;
+    //     }
+    // }
 
-    public function sendToMultiple(array $tokens, string $title, string $body, array $data = []): bool
-    {
-        try {
-            $message = CloudMessage::new()
-                ->withNotification(Notification::create($title, $body))
-                ->withData($data);
+    // public function sendToMultiple(array $tokens, string $title, string $body, array $data = []): bool
+    // {
+    //     try {
+    //         $message = CloudMessage::new()
+    //             ->withNotification(Notification::create($title, $body))
+    //             ->withData($data);
 
-            $this->messaging->sendMulticast($message, $tokens);
+    //         $this->messaging->sendMulticast($message, $tokens);
 
-            return true;
-        } catch (Throwable $e) {
-            Log::error('FCM multicast failed', [
-                'tokens'  => $tokens,
-                'title'   => $title,
-                'error'   => $e->getMessage(),
-            ]);
+    //         return true;
+    //     } catch (Throwable $e) {
+    //         Log::error('FCM multicast failed', [
+    //             'tokens'  => $tokens,
+    //             'title'   => $title,
+    //             'error'   => $e->getMessage(),
+    //         ]);
 
-            return false;
-        }
-    }
+    //         return false;
+    //     }
+    // }
 }

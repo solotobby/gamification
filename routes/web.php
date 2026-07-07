@@ -118,8 +118,12 @@ Route::middleware(['auth'])->prefix('admin/career-hub')->name('admin.career-hub.
     Route::get('/create',              [\App\Http\Controllers\Admin\CareerHubController::class, 'create'])->name('create');
     Route::post('/',                   [\App\Http\Controllers\Admin\CareerHubController::class, 'store'])->name('store');
     Route::get('/pending',             [\App\Http\Controllers\Admin\CareerHubController::class, 'showPending'])->name('pending');
-    Route::get('/{job}',               [\App\Http\Controllers\Admin\CareerHubController::class, 'show'])->name('show');
+    Route::get('/declined',            [\App\Http\Controllers\Admin\CareerHubController::class, 'showDeclined'])->name('declined');
+    Route::get('/expired',             [\App\Http\Controllers\Admin\CareerHubController::class, 'showExpired'])->name('expired');
+    Route::post('/{job}/pause',        [\App\Http\Controllers\Admin\CareerHubController::class, 'pause'])->name('pause');
+    Route::post('/{job}/resume',       [\App\Http\Controllers\Admin\CareerHubController::class, 'resume'])->name('resume');
     Route::get('/{job}/edit',          [\App\Http\Controllers\Admin\CareerHubController::class, 'edit'])->name('edit');
+    Route::get('/{job}',               [\App\Http\Controllers\Admin\CareerHubController::class, 'show'])->name('show');
     Route::put('/{job}',               [\App\Http\Controllers\Admin\CareerHubController::class, 'update'])->name('update');
     Route::delete('/{job}',            [\App\Http\Controllers\Admin\CareerHubController::class, 'destroy'])->name('destroy');
     Route::post('/approve/{job}',      [\App\Http\Controllers\Admin\CareerHubController::class, 'approve'])->name('approve');

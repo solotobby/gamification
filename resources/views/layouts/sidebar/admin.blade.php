@@ -161,12 +161,22 @@
           </li>
            <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('admin.career-hub.pending') }}">
-              <span class="nav-main-link-name">Pending Approvals</span>
+              <span class="nav-main-link-name">Pending Approvals Vacancies</span>
+            </a>
+          </li>
+           <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.career-hub.declined') }}">
+              <span class="nav-main-link-name">Declined Vacancies</span>
+            </a>
+          </li>
+           <li class="nav-main-item">
+            <a class="nav-main-link" href="{{ route('admin.career-hub.expired') }}">
+              <span class="nav-main-link-name">Expired Vacancies</span>
             </a>
           </li>
           <li class="nav-main-item">
             <a class="nav-main-link" href="{{ route('admin.career-hub.create') }}">
-              <span class="nav-main-link-name">Create</span>
+              <span class="nav-main-link-name">Create Vacancy</span>
             </a>
           </li>
         </ul>

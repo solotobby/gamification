@@ -29,15 +29,20 @@ class JobListing extends Model
         'company_website',
         'expires_at',
         'is_active',
+        'paused_at',
+        'views_count',
+        'applications_count',
         'posted_by',
         'application_link',
         'user_posted',
+        'decision_reason'
     ];
 
     protected $casts = [
         'remote_allowed' => 'boolean',
         'is_active' => 'boolean',
         'expires_at' => 'datetime',
+        'paused_at' =>  'datetime',
         'salary_min' => 'decimal:2',
         'salary_max' => 'decimal:2'
     ];
@@ -66,6 +71,7 @@ class JobListing extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
+            ->whereNull('paused_at')
             ->where(function ($q) {
                 $q->whereNull('expires_at')
                     ->orWhere('expires_at', '>', now());
