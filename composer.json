@@ -15,7 +15,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "2.7",
         "joelbutcher/facebook-graph-sdk": "^6.0",
-        "kreait/laravel-firebase": "^5.10",
+        "kreait/laravel-firebase": "^4.2",
         "kris/laravel-form-builder": "^1.53",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",

@@ -31,7 +31,7 @@
             <div class="block block-rounded">
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Job Details</h3>
-                    <div class="block-options d-flex gap-2">
+                    {{-- <div class="block-options d-flex gap-2">
                         @if($job->user_posted)
                             <span class="badge bg-info">User Submitted</span>
                         @endif
@@ -39,6 +39,26 @@
                             <span class="badge bg-danger">Deleted</span>
                         @elseif($job->user_posted && !$job->is_active)
                             <span class="badge bg-warning">Pending Approval</span>
+                        @elseif($job->is_active)
+                            <span class="badge bg-success">Active</span>
+                        @else
+                            <span class="badge bg-secondary">Inactive</span>
+                        @endif
+                    </div> --}}
+                    <div class="block-options d-flex gap-2">
+                        @if($job->user_posted)
+                            <span class="badge bg-info">User Submitted</span>
+                        @endif
+                        @if($job->trashed())
+                            <span class="badge bg-danger">Deleted</span>
+                        @elseif($job->paused_at)
+                            <span class="badge bg-dark">Paused</span>
+                        @elseif($job->user_posted && !$job->is_active && is_null($job->decision_reason))
+                            <span class="badge bg-warning">Pending Approval</span>
+                        @elseif(!$job->is_active && $job->decision_reason)
+                            <span class="badge bg-danger">Declined</span>
+                        @elseif($job->is_active && $job->expires_at && $job->expires_at < now())
+                            <span class="badge bg-warning">Expired</span>
                         @elseif($job->is_active)
                             <span class="badge bg-success">Active</span>
                         @else
@@ -52,8 +72,15 @@
                         <tr><th>Company</th><td>{{ $job->company_name }}</td></tr>
                         <tr><th>Type</th><td><span class="badge bg-primary">{{ ucfirst($job->type) }}</span></td></tr>
                         <tr><th>Tier</th><td>
-                            @if($job->tier === 'premium')
+                            {{-- @if($job->tier === 'premium')
                                 <span class="badge bg-warning">⭐ Premium</span>
+                            @else
+                                <span class="badge bg-secondary">Free</span>
+                            @endif --}}
+                            @if($job->tier === 'premium')
+                                <span class="badge bg-warning">Premium</span>
+                            @elseif($job->tier === 'sponsored')
+                                <span class="badge bg-info">⭐ Sponsored</span>
                             @else
                                 <span class="badge bg-secondary">Free</span>
                             @endif
@@ -117,17 +144,43 @@
                 <div class="block-header block-header-default"><h3 class="block-title">Actions</h3></div>
                 <div class="block-content py-3 d-flex flex-column gap-2">
 
-                    @if($job->user_posted && !$job->is_active && !$job->trashed())
+                    @if($job->user_posted && !$job->is_active && is_null($job->decision_reason) && !$job->trashed())
+                        <button type="button" class="btn btn-success w-100" onclick="document.getElementById('approve-modal').style.display='flex'">
+                            <i class="fa fa-check me-1"></i> Approve & Publish
+                        </button>
+                        <button type="button" class="btn btn-danger w-100" onclick="document.getElementById('decline-modal').style.display='flex'">
+                            <i class="fa fa-times me-1"></i> Decline{{ $job->tier !== 'free' ? ' & Refund' : '' }}
+                        </button>
+
+                    @elseif($job->is_active && !$job->trashed())
+                        <form method="POST" action="{{ route('admin.career-hub.pause', $job) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i class="fa fa-pause me-1"></i> Pause Listing
+                            </button>
+                        </form>
+
+                    @elseif($job->paused_at && !$job->trashed())
+                        <form method="POST" action="{{ route('admin.career-hub.resume', $job) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fa fa-play me-1"></i> Resume Listing
+                            </button>
+                        </form>
+
+                    @elseif(!$job->is_active && !$job->user_posted && !is_null($job->decision_reason) === false && !$job->trashed())
+                        <button type="button" class="btn btn-success w-100" onclick="document.getElementById('approve-modal').style.display='flex'">
+                            <i class="fa fa-play me-1"></i> Activate
+                        </button>
+                    @endif
+
+                    {{-- @if($job->user_posted && !$job->is_active && !$job->trashed())
                         <button type="button" class="btn btn-success w-100"
                                 onclick="document.getElementById('approve-modal').style.display='flex'">
                             <i class="fa fa-check me-1"></i> Approve & Publish
                         </button>
 
-                        {{-- <div class="mb-1">
-                            <label class="fw-semibold" style="font-size:.83rem">
-                                Decline Reason <span class="text-muted fw-normal">(optional)</span>
-                            </label>
-                        </div> --}}
+
                         <button type="button" class="btn btn-danger w-100"
                                 onclick="document.getElementById('decline-modal').style.display='flex'">
                             <i class="fa fa-times me-1"></i> Decline{{ $job->tier === 'premium' ? ' & Refund' : '' }}
@@ -144,9 +197,9 @@
                                 onclick="document.getElementById('approve-modal').style.display='flex'">
                             <i class="fa fa-play me-1"></i> Activate
                         </button>
-                    @endif
+                    @endif --}}
 
-                    @if(!$job->trashed())
+                    {{-- @if(!$job->trashed())
                         <a href="{{ route('admin.career-hub.edit', $job) }}" class="btn btn-alt-info w-100">
                             <i class="fa fa-pencil-alt me-1"></i> Edit Job
                         </a>
@@ -160,7 +213,7 @@
                                 <i class="fa fa-trash me-1"></i> Delete Job
                             </button>
                         </form>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>
@@ -196,7 +249,7 @@
         <p class="text-muted" style="font-size:.875rem">
             Are you sure you want to {{ $job->is_active ? 'deactivate' : 'decline' }}
             <strong>{{ $job->title }}</strong>?
-            @if($job->tier === 'premium' && !$job->is_active)
+           @if(in_array($job->tier, ['premium', 'sponsored']) && !$job->is_active)
                 The user will be refunded automatically.
             @endif
             The user will be notified by email and push notification.

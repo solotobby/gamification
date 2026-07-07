@@ -111,8 +111,15 @@
                                         <span class="badge bg-primary">{{ ucfirst($job->type) }}</span>
                                     </td>
                                     <td>
+                                        {{-- @if($job->tier === 'premium')
+                                            <span class="badge bg-warning">Premium</span>
+                                        @else
+                                            <span class="badge bg-secondary">Free</span>
+                                        @endif --}}
                                         @if($job->tier === 'premium')
                                             <span class="badge bg-warning">Premium</span>
+                                        @elseif($job->tier === 'sponsored')
+                                            <span class="badge bg-info">⭐ Sponsored</span>
                                         @else
                                             <span class="badge bg-secondary">Free</span>
                                         @endif

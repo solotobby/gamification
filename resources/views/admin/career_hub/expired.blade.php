@@ -4,11 +4,11 @@
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-            <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Pending Job Approvals</h1>
+            <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">Expired Job Approvals</h1>
             <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.career-hub.index') }}">Job Vacancies</a></li>
-                    <li class="breadcrumb-item active">Pending</li>
+                    <li class="breadcrumb-item active">Expired</li>
                 </ol>
             </nav>
         </div>
@@ -25,7 +25,7 @@
 
     <div class="block block-rounded">
         <div class="block-header block-header-default">
-            <h3 class="block-title">Pending Jobs — {{ $jobs->total() }}</h3>
+            <h3 class="block-title">Expired Jobs — {{ $jobs->total() }}</h3>
         </div>
         <div class="block-content">
             <div class="table-responsive">
