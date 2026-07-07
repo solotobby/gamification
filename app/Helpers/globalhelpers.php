@@ -2928,6 +2928,14 @@ if (!function_exists('getBaseRate')) {
     }
 }
 
+if (!function_exists('getCurrency')) {
+    function  getCurrency($currencyCode)
+    {
+        return Currency::where('code', $currencyCode)->first();
+    }
+}
+
+
 if (!function_exists('currencyConverter')) {
     function  currencyConverter($from, $to, $amount)
     {

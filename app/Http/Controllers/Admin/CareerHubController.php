@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\GeneralMail;
 use App\Models\{JobListing, JobApplication, PaymentTransaction, User};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -205,7 +206,7 @@ class CareerHubController extends Controller
     public function approve(JobListing $job)
     {
         // $job->update(['is_active' => true]);
-            $job->update(['is_active' => true, 'decision_reason' => null, 'paused_at' => null]);
+        $job->update(['is_active' => true, 'decision_reason' => null, 'paused_at' => null]);
 
 
         $user = User::find($job->posted_by);
@@ -247,11 +248,18 @@ class CareerHubController extends Controller
         $refundNote = '';
 
         if ($isPaidTier && !$alreadyProcessed) {
-            $currency = baseCurrency($user);
-            dd($currency);
+            $base = baseCurrency($user);
+            $currency = getCurrency($base);
+
+            // Log::info('Refunding user for declined job listing', [
+            //     'user_id' => $user->id,
+            //     'job_id'  => $job->id,
+            //     'tier'    => $job->tier,
+            //     'currency' => $currency,
+            // ]);
             $amount   = $currency->job_listing_amount;
 
-            creditWallet($user, $currency, $amount);
+            creditWallet($user, $base, $amount);
 
             PaymentTransaction::create([
                 'user_id'     => $job->posted_by,
@@ -260,7 +268,7 @@ class CareerHubController extends Controller
                 'amount'      => $amount,
                 'balance'     => walletBalance($job->posted_by),
                 'status'      => 'successful',
-                'currency'    => $currency,
+                'currency'    => $base,
                 'channel'     => 'wallet',
                 'type'        => 'career_hub_job_refund',
                 'description' => 'Refund for declined ' . ucfirst($job->tier) . ' job: ' . $job->title,
