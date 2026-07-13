@@ -183,9 +183,9 @@
                         <div class="col-lg-9">
                             @if(@$campaign->is_dispute == true)
                                 @if(!$campaign->is_dispute_resolved == true)
-                                    @if($campaign->campaign->is_completed == true)
+                                    @if($campaign->campaign->status === 'Completed')
                                         <div class="alert alert-success" role="alert">
-                                            This campaign has recieved complete Approved responses.
+                                            This campaign has received complete Approved responses.
                                         </div>
                                     @else
                                         <div class="mb-4">
