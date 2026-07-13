@@ -18,7 +18,8 @@ class ResolveCompletedCampaignDisputes extends Command
         $disputes = CampaignWorker::where('is_dispute', true)
             ->where('is_dispute_resolved', false)
             ->whereHas('campaign', function($query) {
-                $query->where('is_completed', true);
+                $query->where('is_completed', true)
+                ->where('status', 'Completed');
             })
             ->get();
 
