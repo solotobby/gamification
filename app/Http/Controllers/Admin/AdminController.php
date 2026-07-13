@@ -205,7 +205,7 @@ class AdminController extends Controller
 
     public function campaignDisputes()
     {
-        $disputes = CampaignWorker::where('is_dispute', true)->orderBy('created_at', 'DESC')->paginate(50);
+        $disputes = CampaignWorker::where('is_dispute', true)->where('is_dispute_resolved', false)->orderBy('created_at', 'DESC')->paginate(50);
         return view('admin.campaign_mgt.disputes', ['disputes' => $disputes]);
     }
 
