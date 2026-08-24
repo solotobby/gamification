@@ -3,7 +3,6 @@
     <style>
         .fb-inbox {
             position: relative;
-            /* NEW — anchors any positioned children correctly */
             display: flex;
             height: calc(100vh - 140px);
             min-height: 560px;
@@ -226,6 +225,22 @@
             font-size: .82rem;
         }
 
+        .fb-list-loading {
+            text-align: center;
+            padding: .85rem;
+            font-size: .78rem;
+            color: #94A3B8;
+        }
+
+        .fb-awaiting-pill {
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .1rem .55rem;
+            border-radius: 20px;
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
         /* ── Thread pane ── */
         .fb-thread-pane {
             flex: 1;
@@ -417,7 +432,6 @@
             display: block;
         }
 
-
         .fb-msg-meta {
             font-size: .68rem;
             margin-top: .3rem;
@@ -499,7 +513,6 @@
                 height: 100%;
             }
 
-            /* NEW — no position/inset/z-index at all */
             .fb-inbox.thread-open .fb-list-pane {
                 display: none;
             }
@@ -525,16 +538,6 @@
             font-weight: 700;
             padding: .5rem .3rem;
             margin: -.5rem -.3rem -.5rem -.3rem;
-            /* keeps layout tight while growing the tap target */
-        }
-
-        .fb-awaiting-pill {
-            font-size: .65rem;
-            font-weight: 700;
-            padding: .1rem .55rem;
-            border-radius: 20px;
-            background: #FEF3C7;
-            color: #92400E;
         }
     </style>
 @endsection
@@ -603,6 +606,13 @@
             let listPollTimer = null;
             let threadPollTimer = null;
             let searchDebounce = null;
+            let isSending = false;
+
+            // Pagination state
+            let currentPage = 1;
+            let lastPage = 1;
+            let isLoadingMore = false;
+            let allRows = [];
 
             const LIST_URL = '{{ route("admin.feedback.api.list") }}';
             const THREAD_URL_BASE = '{{ url("admin/feedback/api") }}'; // + /{id}/thread
@@ -615,14 +625,34 @@
                 return (name || 'U').trim().split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
             }
 
-            async function loadList() {
-                const params = new URLSearchParams({ tab: currentTab, search: currentSearch });
+            function escapeHtml(str) {
+                return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+
+            async function loadList(reset = true) {
+                if (reset) {
+                    currentPage = 1;
+                    allRows = [];
+                }
+
+                const params = new URLSearchParams({ tab: currentTab, search: currentSearch, page: currentPage });
                 try {
                     const res = await fetch(`${LIST_URL}?${params}`);
                     const data = await res.json();
                     if (!data.status) return;
-                    renderList(data.data);
+
+                    allRows = reset ? data.data : allRows.concat(data.data);
+                    lastPage = data.pagination.last_page;
+                    renderList(allRows);
                 } catch (e) { /* silent */ }
+            }
+
+            async function loadMore() {
+                if (isLoadingMore || currentPage >= lastPage) return;
+                isLoadingMore = true;
+                currentPage++;
+                await loadList(false);
+                isLoadingMore = false;
             }
 
             function renderList(rows) {
@@ -630,32 +660,35 @@
                     listScroll.innerHTML = `<div class="fb-list-empty">No tickets found.</div>`;
                     return;
                 }
+
                 listScroll.innerHTML = rows.map(r => `
-                                                        <div class="fb-row ${r.id == activeTicketId ? 'active' : ''}" data-id="${r.id}">
-                                                            <div class="fb-row-avatar">${initials(r.user_name)}</div>
-                                                            <div class="fb-row-body">
-                                                                <div class="fb-row-top">
-                                                                    <span class="fb-row-name">${escapeHtml(r.user_name)}</span>
-                                                                    <span class="fb-row-time">${escapeHtml(r.last_activity)}</span>
-                                                                </div>
-                                                                <div class="fb-row-msg">${escapeHtml(r.message)}</div>
-                                                              <div class="fb-row-bottom">
-                                    <span class="fb-cat-pill cat-${escapeHtml(r.category)}">${escapeHtml((r.category || '').replace(/_/g, ' '))}</span>
-                                    ${r.awaiting_reply ? `<span class="fb-awaiting-pill">Awaiting reply</span>` : ''}
-                                    ${r.unread_count > 0 ? `<span class="fb-unread-badge">${r.unread_count}</span>` : ''}
-                                </div>
-                                                            </div>
-                                                        </div>
-                                                    `).join('');
+                    <div class="fb-row ${r.id == activeTicketId ? 'active' : ''}" data-id="${r.id}">
+                        <div class="fb-row-avatar">${initials(r.user_name)}</div>
+                        <div class="fb-row-body">
+                            <div class="fb-row-top">
+                                <span class="fb-row-name">${escapeHtml(r.user_name)}</span>
+                                <span class="fb-row-time">${escapeHtml(r.last_activity)}</span>
+                            </div>
+                            <div class="fb-row-msg">${escapeHtml(r.message)}</div>
+                            <div class="fb-row-bottom">
+                                <span class="fb-cat-pill cat-${escapeHtml(r.category)}">${escapeHtml((r.category || '').replace(/_/g, ' '))}</span>
+                                ${r.awaiting_reply ? `<span class="fb-awaiting-pill">Awaiting reply</span>` : ''}
+                                ${r.unread_count > 0 ? `<span class="fb-unread-badge">${r.unread_count}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('') + (currentPage < lastPage ? `<div class="fb-list-loading" id="fb-list-loading">Loading more…</div>` : '');
 
                 listScroll.querySelectorAll('.fb-row').forEach(row => {
                     row.addEventListener('click', () => openTicket(row.dataset.id));
                 });
             }
 
-            function escapeHtml(str) {
-                return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
+            // Infinite scroll trigger
+            listScroll.addEventListener('scroll', () => {
+                const nearBottom = listScroll.scrollTop + listScroll.clientHeight >= listScroll.scrollHeight - 120;
+                if (nearBottom) loadMore();
+            });
 
             // ── Thread rendering ──
             async function openTicket(id, pushHistory = true) {
@@ -678,13 +711,15 @@
                         return;
                     }
                     renderThread(data.data.ticket, data.data.replies);
-                    loadList();
+                    loadList(); // refresh unread badges now that this thread is read
                     restartThreadPolling(id);
                 } catch (e) {
                     threadPane.innerHTML = `<div class="fb-thread-empty"><p>Failed to load conversation.</p></div>`;
                 }
             }
 
+            // Single source of truth for closing the thread pane — handles both the
+            // visible back button AND the browser's native back gesture/button.
             window.__fbCloseThread = function (skipHistoryBack) {
                 inbox.classList.remove('thread-open');
                 stopThreadPolling();
@@ -693,10 +728,9 @@
                 }
             };
 
-            // Handle the native back button/gesture
-            window.addEventListener('popstate', (e) => {
+            window.addEventListener('popstate', () => {
                 if (inbox.classList.contains('thread-open')) {
-                    window.__fbCloseThread(true); // true = skip calling history.back() again, we're already responding to it
+                    window.__fbCloseThread(true); // true = we're already responding to a back nav, don't push another one
                 }
             });
 
@@ -704,40 +738,46 @@
                 const cat = (ticket.category || 'others').toLowerCase().replace(/ /g, '_');
 
                 threadPane.innerHTML = `
-                                                        <div class="fb-thread-header">
-                                                           <button class="fb-thread-back" onclick="window.__fbCloseThread()">
+                    <div class="fb-thread-header">
+                        <button class="fb-thread-back" onclick="window.__fbCloseThread()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
                             All tickets
                         </button>
-                                                            <div class="fb-thread-avatar">${initials(ticket.user.name)}</div>
-                                                            <div>
-                                                                <div class="fb-thread-name">
-                                                                    ${escapeHtml(ticket.user.name)}
-                                                                    ${ticket.user.is_verified ? '<svg class="fb-verified-tick" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.4 3.4-.5 1 3.3 3.2 1.6-1 3.3 1.9 2.9-2.6 2.2.3 3.4-3.4.3-1.9 2.9-3.3-1.3-3.3 1.3-1.9-2.9-3.4-.3.3-3.4-2.6-2.2 1.9-2.9-1-3.3 3.2-1.6 1-3.3 3.4.5z"/></svg>' : ''}
-                                                                </div>
-                                                                <div class="fb-thread-email">${escapeHtml(ticket.user.email)}</div>
-                                                            </div>
-                                                            <div class="fb-thread-meta">
-                                                                <span class="fb-cat-pill cat-${cat}">${escapeHtml((ticket.category || '').replace(/_/g, ' '))}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="fb-thread-body" id="fb-thread-body">
-                                                            <div class="fb-original-card">
-                                                                <div class="label">Original message · ${escapeHtml(ticket.created_at)}</div>
-                                                                <div class="msg">${ticket.message}</div>
-                                                                ${ticket.proof_url ? `<img src="${ticket.proof_url}" alt="Proof">` : ''}
-                                                            </div>
-                                                            <div id="fb-replies-list"></div>
-                                                        </div>
-                                                        <div class="fb-thread-footer">
-                                                            <div class="fb-input-row">
-                                                                <textarea class="fb-textarea" id="fb-reply-input" placeholder="Type a reply…" rows="1" onkeydown="window.__fbHandleKey(event)" oninput="window.__fbAutoResize(this)"></textarea>
-                                                                <button class="fb-send-btn" id="fb-send-btn" onclick="window.__fbSendReply(${ticket.id})">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    `;
+                        <div class="fb-thread-avatar">${initials(ticket.user.name)}</div>
+                        <div>
+                            <div class="fb-thread-name">
+                                ${escapeHtml(ticket.user.name)}
+                                ${ticket.user.is_verified ? '<svg class="fb-verified-tick" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.4 3.4-.5 1 3.3 3.2 1.6-1 3.3 1.9 2.9-2.6 2.2.3 3.4-3.4.3-1.9 2.9-3.3-1.3-3.3 1.3-1.9-2.9-3.4-.3.3-3.4-2.6-2.2 1.9-2.9-1-3.3 3.2-1.6 1-3.3 3.4.5z"/></svg>' : ''}
+                            </div>
+                            <div class="fb-thread-email">${escapeHtml(ticket.user.email)}</div>
+                        </div>
+                        <div class="fb-thread-meta">
+                            <span class="fb-cat-pill cat-${cat}">${escapeHtml((ticket.category || '').replace(/_/g, ' '))}</span>
+                        </div>
+                    </div>
+                    <div class="fb-thread-body" id="fb-thread-body">
+                        <div class="fb-original-card">
+                            <div class="label">Original message · ${escapeHtml(ticket.created_at)}</div>
+                            <div class="msg">${escapeHtml(ticket.message).replace(/\n/g, '<br>')}</div>
+                            ${ticket.proof_url ? `<img src="${ticket.proof_url}" alt="Proof">` : ''}
+                        </div>
+                        <div id="fb-replies-list"></div>
+                    </div>
+                    <div class="fb-thread-footer">
+                        <div class="fb-input-row">
+                            <textarea class="fb-textarea" id="fb-reply-input" placeholder="Type a reply…" rows="1" onkeydown="window.__fbHandleKey(event)" oninput="window.__fbAutoResize(this)"></textarea>
+                            <button class="fb-send-btn" id="fb-send-btn" onclick="window.__fbSendReply(${ticket.id})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Guard against mobile keyboards firing a synthetic Enter mid-composition,
+                // which otherwise splits a message into fragments (e.g. "hello" -> "he" / "llo").
+                const replyInput = document.getElementById('fb-reply-input');
+                replyInput.addEventListener('compositionstart', () => { window.__fbComposing = true; });
+                replyInput.addEventListener('compositionend', () => { window.__fbComposing = false; });
 
                 renderReplies(replies);
             }
@@ -765,8 +805,8 @@
                     if (label !== lastLabel) {
                         lastLabel = label;
                         html += `<div style="text-align:center;margin:.9rem 0;font-size:.72rem;color:#94A3B8">
-                                                            <span style="background:#FAFBFC;padding:.2rem .75rem;border:1px solid #E5E9F0;border-radius:20px">${label}</span>
-                                                        </div>`;
+                            <span style="background:#FAFBFC;padding:.2rem .75rem;border:1px solid #E5E9F0;border-radius:20px">${label}</span>
+                        </div>`;
                     }
 
                     let bubble = '';
@@ -778,16 +818,15 @@
                     }
                     const readLabel = r.is_mine ? ` · ${r.is_read ? 'Seen' : 'Sent'}` : '';
 
-                    // admin inbox JS — renderReplies()
                     html += `
-            <div class="fb-msg-wrap ${r.is_mine ? 'mine' : ''}">
-                <div class="fb-msg-avatar">${initials(r.sender_name)}</div>
-                <div class="fb-msg-content">
-                    <div class="fb-msg-bubble ${r.is_mine ? 'mine' : 'other'}">${bubble}</div>
-                    <div class="fb-msg-meta">${escapeHtml(r.created_at)}${readLabel}</div>
-                </div>
-            </div>
-        `;
+                        <div class="fb-msg-wrap ${r.is_mine ? 'mine' : ''}">
+                            <div class="fb-msg-avatar">${initials(r.sender_name)}</div>
+                            <div class="fb-msg-content">
+                                <div class="fb-msg-bubble ${r.is_mine ? 'mine' : 'other'}">${bubble}</div>
+                                <div class="fb-msg-meta">${escapeHtml(r.created_at)}${readLabel}</div>
+                            </div>
+                        </div>
+                    `;
                 });
 
                 list.innerHTML = html;
@@ -795,29 +834,33 @@
                 const body = document.getElementById('fb-thread-body');
                 if (body) setTimeout(() => body.scrollTop = body.scrollHeight, 30);
             }
+
             // ── Reply sending ──
             window.__fbAutoResize = function (el) {
                 el.style.height = 'auto';
                 el.style.height = Math.min(el.scrollHeight, 120) + 'px';
             };
-            let isSending = false; // NEW — add near the other top-level state (activeTicketId, etc.)
 
             window.__fbHandleKey = function (e) {
+                // isComposing / keyCode 229 = mobile keyboard autocomplete firing a
+                // synthetic Enter mid-word. Must ignore both or messages get split.
+                if (window.__fbComposing || e.isComposing || e.keyCode === 229) return;
+
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    if (!isSending) window.__fbSendReply(activeTicketId); // NEW guard
+                    if (!isSending) window.__fbSendReply(activeTicketId);
                 }
             };
 
             window.__fbSendReply = async function (ticketId) {
-                if (isSending) return; // NEW — first line, blocks re-entry
+                if (isSending) return;
 
                 const input = document.getElementById('fb-reply-input');
                 const btn = document.getElementById('fb-send-btn');
                 const msg = input.value.trim();
                 if (!msg) return;
 
-                isSending = true;   // NEW
+                isSending = true;
                 btn.disabled = true;
 
                 try {
@@ -835,13 +878,8 @@
                     }
                 } catch (e) { /* silent */ }
 
-                isSending = false;  // NEW
+                isSending = false;
                 btn.disabled = false;
-            };
-            // ── Mobile back button ──
-            window.__fbCloseThread = function () {
-                inbox.classList.remove('thread-open');
-                stopThreadPolling();
             };
 
             // ── Polling ──
@@ -862,7 +900,25 @@
             }
 
             function startListPolling() {
-                listPollTimer = setInterval(loadList, 60000);
+                listPollTimer = setInterval(async () => {
+                    // Refresh page 1 only, merged into whatever's already loaded —
+                    // keeps unread badges live without discarding scrolled-in pages.
+                    const params = new URLSearchParams({ tab: currentTab, search: currentSearch, page: 1 });
+                    try {
+                        const res = await fetch(`${LIST_URL}?${params}`);
+                        const data = await res.json();
+                        if (!data.status) return;
+
+                        const freshById = Object.fromEntries(data.data.map(r => [r.id, r]));
+                        allRows = allRows.map(r => freshById[r.id] || r);
+
+                        const existingIds = new Set(allRows.map(r => r.id));
+                        const newOnes = data.data.filter(r => !existingIds.has(r.id));
+                        if (newOnes.length) allRows = [...newOnes, ...allRows];
+
+                        renderList(allRows);
+                    } catch (e) { /* silent */ }
+                }, 60000);
             }
 
             // ── Tabs ──
@@ -871,7 +927,7 @@
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     currentTab = tab.dataset.tab;
-                    loadList();
+                    loadList(true);
                 });
             });
 
@@ -880,12 +936,12 @@
                 clearTimeout(searchDebounce);
                 searchDebounce = setTimeout(() => {
                     currentSearch = searchInput.value.trim();
-                    loadList();
+                    loadList(true);
                 }, 350);
             });
 
             // ── Init ──
-            loadList();
+            loadList(true);
             startListPolling();
 
             if (openIdInitial) {
