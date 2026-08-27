@@ -90,6 +90,16 @@
         </li> --}}
 
         <li class="nav-main-item">
+            <a class="nav-main-link {{ request()->routeIs('admin.blogs*') ? 'active' : '' }}"
+                href="{{ route('admin.blogs.index') }}">
+                <i class="nav-main-link-icon si si-book-open"></i>
+                <span class="nav-main-link-name">Blog</span>
+                {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Blog::where('status',
+                    'draft')->count() }}</span> --}}
+            </a>
+        </li>
+
+        <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('preferences') }}">
                 <i class="nav-main-link-icon fa fa-star-of-life"></i>
                 <span class="nav-main-link-name">Preferences</span>
@@ -221,7 +231,15 @@ $count = \App\Models\Banner::where('status', false)->count();
                 href="{{ route('admin.feedback') }}">
                 <i class="nav-main-link-icon si si-note"></i>
                 <span class="nav-main-link-name">Feedbacks</span>
-                <span class="nav-main-link-badge badge rounded-pill bg-default">{{ App\Models\Feedback::where('status', false)->count() }}</span>
+                {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{
+                    App\Models\Feedback::where('status', false)->count() }}</span> --}}
+                <span class="nav-main-link-badge badge rounded-pill bg-default">{{
+    App\Models\Feedback::whereRaw('(
+                            select fr.user_id from feedback_replies fr
+                            where fr.feedback_id = feedback.id
+                            order by fr.id desc
+                            limit 1
+                        ) = feedback.user_id')->count() }}</span>
             </a>
         </li>
 
@@ -229,7 +247,7 @@ $count = \App\Models\Banner::where('status', false)->count();
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                 aria-expanded="false" href="#">
                 <i class="nav-main-link-icon si si-note"></i>
-          <span class=" nav-main-link-name">Fraud Mgt</span>
+                <span class=" nav-main-link-name">Fraud Mgt</span>
 
             </a>
             <ul class="nav-main-submenu">

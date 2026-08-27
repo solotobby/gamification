@@ -26,17 +26,16 @@ use App\Models\VirtualAccount;
 use App\Models\Wallet;
 use App\Models\Withrawal;
 use Carbon\Carbon;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
-use Stevebauman\Location\Facades\Location;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
+use Stevebauman\Location\Facades\Location;
 
 if (!function_exists('isBlacklisted')) {
     function isBlacklisted($user)
@@ -50,15 +49,13 @@ if (!function_exists('isBlacklisted')) {
     }
 }
 
-
-
 if (!function_exists('setWalletBaseCurrency')) {
     function setWalletBaseCurrency()
     {
         $location = getLocation();
         $wall = Wallet::where('user_id', auth()->user()->id)->first();
         if ($wall->base_currency_set != 1) {
-            $wall->base_currency = $location == "Nigeria" ? 'NGN' : 'USD';
+            $wall->base_currency = $location == 'Nigeria' ? 'NGN' : 'USD';
             $wall->save();
         }
 
@@ -80,7 +77,6 @@ if (!function_exists('setWalletBaseCurrency')) {
 //     }
 // }
 
-
 if (!function_exists('setProfile')) {
     function setProfile($user)
     {
@@ -94,7 +90,7 @@ if (!function_exists('setProfile')) {
 
         $profile = Profile::where('user_id', $user->id)->first();
         if (!$profile) {
-            $profile =  Profile::create(['user_id' => $user->id, 'country' => $location->countryName, 'country_code' => $location->countryCode]);
+            $profile = Profile::create(['user_id' => $user->id, 'country' => $location->countryName, 'country_code' => $location->countryCode]);
         } else {
             $profile->country = $location->countryName;
             $profile->country_code = $location->countryCode;
@@ -104,11 +100,10 @@ if (!function_exists('setProfile')) {
     }
 }
 
-
 if (!function_exists('conversionRate')) {
     function conversionRate()
     {
-        return ConversionRate::where('status', true)->first()->rate; //Settings::where('status', true)->first()->name;
+        return ConversionRate::where('status', true)->first()->rate;  // Settings::where('status', true)->first()->name;
     }
 }
 
@@ -124,13 +119,13 @@ if (!function_exists('convertDollar')) {
 if (!function_exists('paypalPayment')) {
     function paypalPayment($amount, $url)
     {
-
         $res = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'))
+        ])
+            ->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'))
             ->post(env('PAYPAL_URL') . 'checkout/orders', [
-                "intent" => "CAPTURE",
-                "purchase_units" => [
+                'intent' => 'CAPTURE',
+                'purchase_units' => [
                     [
                         // "items"=> [
                         //     [
@@ -143,22 +138,22 @@ if (!function_exists('paypalPayment')) {
                         //         ]
                         //     ]
                         // ],
-                        "reference_id" => time(),
-                        "amount" => [
-                            "currency_code" => "USD",
-                            "value" => $amount,
-                            "breakdown" => [
-                                "item_total" => [
-                                    "currency_code" => "USD",
-                                    "value" => $amount
+                        'reference_id' => time(),
+                        'amount' => [
+                            'currency_code' => 'USD',
+                            'value' => $amount,
+                            'breakdown' => [
+                                'item_total' => [
+                                    'currency_code' => 'USD',
+                                    'value' => $amount
                                 ]
                             ]
                         ]
                     ]
                 ],
-                "application_context" => [
-                    "return_url" => url($url),
-                    "cancel_url" => url('/home')
+                'application_context' => [
+                    'return_url' => url($url),
+                    'cancel_url' => url('/home')
                 ]
             ]);
         return json_decode($res->getBody()->getContents(), true);
@@ -168,7 +163,6 @@ if (!function_exists('paypalPayment')) {
 if (!function_exists('capturePaypalPayment')) {
     function capturePaypalPayment($id)
     {
-
         $url = env('PAYPAL_URL') . 'checkout/orders/' . $id . '/capture';
 
         // Request payload
@@ -198,7 +192,7 @@ if (!function_exists('capturePaypalPayment')) {
             $error = curl_error($ch);
             // Handle the error
         } else {
-            return json_decode($response, true); //return response()->json([$response], 201);
+            return json_decode($response, true);  // return response()->json([$response], 201);
         }
         // Close cURL resource
         curl_close($ch);
@@ -208,7 +202,6 @@ if (!function_exists('capturePaypalPayment')) {
 if (!function_exists('systemNotification')) {
     function systemNotification($user, $category, $title, $message)
     {
-
         $notification = Notification::create([
             'user_id' => $user->id,
             'category' => $category,
@@ -220,21 +213,18 @@ if (!function_exists('systemNotification')) {
     }
 }
 
-
 if (!function_exists('checkWalletBalance')) {
     function checkWalletBalance($user, $type, $amount)
     {
-
         if ($type == 'NGN') {
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
             if ((int) $wallet->balance >= $amount) {
                 return true;
             } else {
                 return false;
             }
         } elseif ($type == 'USD') {
-
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
 
             if ((int) $wallet->usd_balance >= $amount) {
                 return true;
@@ -242,7 +232,7 @@ if (!function_exists('checkWalletBalance')) {
                 return false;
             }
         } else {
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
 
             if ((int) $wallet->base_currency_balance >= $amount) {
                 return true;
@@ -256,9 +246,7 @@ if (!function_exists('checkWalletBalance')) {
 if (!function_exists('creditWallet')) {
     function creditWallet($user, $type, $amount)
     {
-
         if ($type == 'NGN') {
-
             $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->balance += (int) $amount;
             // $wallet->balance += (int) $amount;
@@ -281,19 +269,18 @@ if (!function_exists('creditWallet')) {
 if (!function_exists('debitWallet')) {
     function debitWallet($user, $type, $amount)
     {
-
         if ($type == 'NGN') {
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->balance -= $amount;
             $wallet->save();
             return $wallet;
         } elseif ($type == 'USD') {
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->usd_balance -= $amount;
             $wallet->save();
             return $wallet;
         } else {
-            $wallet =  Wallet::where('user_id', $user->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
             $wallet->base_currency_balance -= $amount;
             $wallet->save();
             return $wallet;
@@ -307,7 +294,6 @@ if (!function_exists('dollar_naira')) {
         return ConversionRate::where('from', 'Dollar')->first()->amount;
     }
 }
-
 
 if (!function_exists('naira_dollar')) {
     function naira_dollar()
@@ -323,11 +309,10 @@ if (!function_exists('nairaConversion')) {
     }
 }
 
-
 if (!function_exists('short_name')) {
     function short_name($name)
     {
-        $name = explode(" ", $name);
+        $name = explode(' ', $name);
         return $name['0'];
     }
 }
@@ -335,7 +320,6 @@ if (!function_exists('short_name')) {
 if (!function_exists('initializeKorayPay')) {
     function initializeKorayPay($payloadNGN)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -370,7 +354,7 @@ if (!function_exists('getInterswitchAccessToken')) {
 
             $response = Http::withHeaders([
                 'Authorization' => 'Basic ' . $credentials,
-                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Content-Type' => 'application/x-www-form-urlencoded',
             ])
                 ->asForm()
                 ->post('https://passport.interswitchng.com/passport/oauth/token', [
@@ -391,8 +375,8 @@ if (!function_exists('interswitchOauthHeaders')) {
     {
         return [
             'Authorization' => 'Bearer ' . getInterswitchAccessToken(),
-            'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
         ];
     }
 }
@@ -400,9 +384,7 @@ if (!function_exists('interswitchOauthHeaders')) {
 if (!function_exists('verifyInterswitch')) {
     function verifyInterswitch(string $reference, float $amount): ?array
     {
-
         $merchantCode = config('services.interswitch.merchant_code');
-
 
         $url = "https://api.interswitchng.com/collections/api/v1/gettransaction?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
 
@@ -420,7 +402,6 @@ if (!function_exists('verifyInterswitch')) {
 if (!function_exists('flutterwaveVirtualAccount')) {
     function flutterwaveVirtualAccount($payload)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -434,7 +415,6 @@ if (!function_exists('flutterwaveVirtualAccount')) {
 if (!function_exists('flutterwavePaymentInitiation')) {
     function flutterwavePaymentInitiation($payload)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -448,7 +428,6 @@ if (!function_exists('flutterwavePaymentInitiation')) {
 if (!function_exists('flutterwaveVeryTransaction')) {
     function flutterwaveVeryTransaction($id)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -462,7 +441,6 @@ if (!function_exists('flutterwaveVeryTransaction')) {
 if (!function_exists('flutterwaveTransfer')) {
     function flutterwaveTransfer($payload)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -484,8 +462,7 @@ if (!function_exists('sendGridEmails')) {
     }
 }
 
-
-///campaign handler
+// /campaign handler
 
 if (!function_exists('setIsComplete')) {
     function setIsComplete($id)
@@ -515,8 +492,6 @@ if (!function_exists('setPendingCount')) {
         }
     }
 }
-
-
 
 if (!function_exists('listPreferences')) {
     function listPreferences()
@@ -558,16 +533,15 @@ if (!function_exists('sendSMS')) {
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post('https://api.ng.termii.com/api/sms/send', [
-            "to" => $phone,
-            "from" => "FREEBYZ",
-            "sms" => 'Congrats! Your wallet at Freebyz is verified. Login to start working& earning.Click https://vm.tiktok.com/ZMM8PGFEN/ to learn  more. Earn up to 50k & more today',
-            "type" => "plain",
-            "channel" => "generic",
-            "api_key" => env('TERMI_KEY')
+            'to' => $phone,
+            'from' => 'FREEBYZ',
+            'sms' => 'Congrats! Your wallet at Freebyz is verified. Login to start working& earning.Click https://vm.tiktok.com/ZMM8PGFEN/ to learn  more. Earn up to 50k & more today',
+            'type' => 'plain',
+            'channel' => 'generic',
+            'api_key' => env('TERMI_KEY')
         ]);
 
         return json_decode($res->getBody()->getContents(), true);
-
 
         // $payload = [
         //     "api_key" => env('TERMI_KEY'),
@@ -589,27 +563,24 @@ if (!function_exists('sendSMS')) {
         // ])->post('https://api.ng.termii.com/api/sms/otp/send', $payload);
 
         //  return json_decode($res->getBody()->getContents(), true);
-
-
     }
 }
 
 if (!function_exists('sendOTP')) {
     function sendOTP($phone)
     {
-
         $payload = [
-            "api_key" => env('TERMI_KEY'),
-            "message_type" => "NUMERIC",
-            "to" => $phone,
-            "from" => "FREEBYZ",
-            "channel" => "generic",
-            "pin_attempts" => 3,
-            "pin_time_to_live" =>  5,
-            "pin_length" => 6,
-            "pin_placeholder" => "< 1234 >",
-            "message_text" => "Your Freebyz OTP pin is < 1234 >",
-            "pin_type" => "NUMERIC"
+            'api_key' => env('TERMI_KEY'),
+            'message_type' => 'NUMERIC',
+            'to' => $phone,
+            'from' => 'FREEBYZ',
+            'channel' => 'generic',
+            'pin_attempts' => 3,
+            'pin_time_to_live' => 5,
+            'pin_length' => 6,
+            'pin_placeholder' => '< 1234 >',
+            'message_text' => 'Your Freebyz OTP pin is < 1234 >',
+            'pin_type' => 'NUMERIC'
         ];
 
         $res = Http::withHeaders([
@@ -624,11 +595,10 @@ if (!function_exists('sendOTP')) {
 if (!function_exists('OTPVerify')) {
     function OTPVerify($pin_id, $otp)
     {
-
         $payload = [
-            "api_key" => env('TERMI_KEY'),
-            "pin_id" => $pin_id,
-            "pin" => $otp
+            'api_key' => env('TERMI_KEY'),
+            'pin_id' => $pin_id,
+            'pin' => $otp
         ];
 
         $res = Http::withHeaders([
@@ -647,7 +617,7 @@ if (!function_exists('adBanner')) {
         if (!$banner) {
             return '';
         } else {
-            ///check if current date and time is equal of greater than banner_end_date, then deactivate the banner
+            // /check if current date and time is equal of greater than banner_end_date, then deactivate the banner
             // $currentTime = Carbon::now()->format('Y-m-d h:i:s');
             // if($currentTime > $banner->banner_end_date){
             //     $banner->live_state = 'Ended';
@@ -656,45 +626,41 @@ if (!function_exists('adBanner')) {
 
             $banner->impression += 1;
             $banner->save();
-            //enter the impression infor
+            // enter the impression infor
             BannerImpression::create(['user_id' => auth()->user()->id, 'banner_id' => $banner->id]);
             return $banner;
         }
     }
 }
 
-
 if (!function_exists('generateVirtualAccountOnboarding')) {
     function generateVirtualAccountOnboarding($user, $phone_number)
     {
         // $splitedName = explode(" ", $name);
 
-        //check if user exist, if yes, update informatioon
+        // check if user exist, if yes, update informatioon
         $fetchCustomer = fetchCustomer($user->email);
 
         if ($fetchCustomer['status'] == true) {
-
-            //update customer
+            // update customer
             $customerPayload = [
-                "first_name" => $user->name, //auth()->user()->name,
-                "last_name" => 'Freebyz',
-                "phone" => "+" . $phone_number
+                'first_name' => $user->name,  // auth()->user()->name,
+                'last_name' => 'Freebyz',
+                'phone' => '+' . $phone_number
             ];
 
             $updateCustomer = updateCustomer($user->email, $customerPayload);
 
             if ($updateCustomer['status'] == true) {
-
                 $data = [
-                    "customer" => $updateCustomer['data']['customer_code'],
-                    "preferred_bank" => env('PAYSTACK_BANK')
+                    'customer' => $updateCustomer['data']['customer_code'],
+                    'preferred_bank' => env('PAYSTACK_BANK')
                 ];
 
                 $response = virtualAccount($data);
 
                 $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
                 if ($VirtualAccount) {
-
                     $VirtualAccount->bank_name = $response['data']['bank']['name'];
                     $VirtualAccount->account_name = $response['data']['account_name'];
                     $VirtualAccount->account_number = $response['data']['account_number'];
@@ -702,8 +668,6 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                     $VirtualAccount->currency = 'NGN';
                     $VirtualAccount->save();
                 } else {
-
-
                     $VirtualAccount = VirtualAccount::create([
                         'user_id' => $user->id,
                         'channel' => 'paystack',
@@ -718,32 +682,29 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                 }
 
                 $data['res'] = $response;
-                $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                 return $data;
             }
         } else {
-
             $payload = [
-                "email" => $user->email,
-                "first_name" => $user->name,
-                "last_name" => 'Freebyz',
-                "phone" => "+" . $phone_number
+                'email' => $user->email,
+                'first_name' => $user->name,
+                'last_name' => 'Freebyz',
+                'phone' => '+' . $phone_number
             ];
             $res = createCustomer($payload);
 
             if ($res['status'] == true) {
-
                 $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
 
                 $data = [
-                    "customer" => $res['data']['customer_code'],
-                    "preferred_bank" => env('PAYSTACK_BANK') //"wema-bank"
+                    'customer' => $res['data']['customer_code'],
+                    'preferred_bank' => env('PAYSTACK_BANK')  // "wema-bank"
                 ];
 
                 $response = virtualAccount($data);
 
                 if ($VirtualAccount) {
-
                     $VirtualAccount->bank_name = $response['data']['bank']['name'];
                     $VirtualAccount->account_name = $response['data']['account_name'];
                     $VirtualAccount->account_number = $response['data']['account_number'];
@@ -751,8 +712,6 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                     $VirtualAccount->currency = 'NGN';
                     $VirtualAccount->save();
                 } else {
-
-
                     $VirtualAccount = VirtualAccount::create([
                         'user_id' => $user->id,
                         'channel' => 'paystack',
@@ -767,7 +726,7 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
                 }
 
                 $data['res'] = $response;
-                $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                 return $data;
             } else {
                 return back()->with('error', 'Error occured while processing');
@@ -776,36 +735,33 @@ if (!function_exists('generateVirtualAccountOnboarding')) {
     }
 }
 if (!function_exists('generateVirtualAccount')) {
-    function generateVirtualAccount($name,  $phone_number)
+    function generateVirtualAccount($name, $phone_number)
     {
-        $splitedName = explode(" ", $name);
+        $splitedName = explode(' ', $name);
 
-        //check if user exist, if yes, update informatioon
+        // check if user exist, if yes, update informatioon
         $fetchCustomer = fetchCustomer(auth()->user()->email);
 
         if ($fetchCustomer['status'] == true) {
-
-            //update customer
+            // update customer
             $customerPayload = [
-                "first_name" => $name, //auth()->user()->name,
-                "last_name" => 'Freebyz',
-                "phone" => "+" . $phone_number
+                'first_name' => $name,  // auth()->user()->name,
+                'last_name' => 'Freebyz',
+                'phone' => '+' . $phone_number
             ];
 
             $updateCustomer = updateCustomer(auth()->user()->email, $customerPayload);
 
             if ($updateCustomer['status'] == true) {
-
                 $data = [
-                    "customer" => $updateCustomer['data']['customer_code'],
-                    "preferred_bank" => env('PAYSTACK_BANK')
+                    'customer' => $updateCustomer['data']['customer_code'],
+                    'preferred_bank' => env('PAYSTACK_BANK')
                 ];
 
                 $response = virtualAccount($data);
 
                 $VirtualAccount = VirtualAccount::where('user_id', auth()->user()->id)->first();
                 if ($VirtualAccount) {
-
                     $VirtualAccount->bank_name = $response['data']['bank']['name'];
                     $VirtualAccount->account_name = $response['data']['account_name'];
                     $VirtualAccount->account_number = $response['data']['account_number'];
@@ -813,8 +769,6 @@ if (!function_exists('generateVirtualAccount')) {
                     $VirtualAccount->currency = 'NGN';
                     $VirtualAccount->save();
                 } else {
-
-
                     $VirtualAccount = VirtualAccount::create([
                         'user_id' => auth()->user()->id,
                         'channel' => 'paystack',
@@ -829,32 +783,29 @@ if (!function_exists('generateVirtualAccount')) {
                 }
 
                 $data['res'] = $response;
-                $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                 return $data;
             }
         } else {
-
             $payload = [
-                "email" => auth()->user()->email,
-                "first_name" => auth()->user()->name,
-                "last_name" => 'Freebyz',
-                "phone" => "+" . $phone_number
+                'email' => auth()->user()->email,
+                'first_name' => auth()->user()->name,
+                'last_name' => 'Freebyz',
+                'phone' => '+' . $phone_number
             ];
             $res = createCustomer($payload);
 
             if ($res['status'] == true) {
-
                 $VirtualAccount = VirtualAccount::where('user_id', auth()->user()->id)->first();
 
                 $data = [
-                    "customer" => $res['data']['customer_code'],
-                    "preferred_bank" => env('PAYSTACK_BANK') //"wema-bank"
+                    'customer' => $res['data']['customer_code'],
+                    'preferred_bank' => env('PAYSTACK_BANK')  // "wema-bank"
                 ];
 
                 $response = virtualAccount($data);
 
                 if ($VirtualAccount) {
-
                     $VirtualAccount->bank_name = $response['data']['bank']['name'];
                     $VirtualAccount->account_name = $response['data']['account_name'];
                     $VirtualAccount->account_number = $response['data']['account_number'];
@@ -862,7 +813,6 @@ if (!function_exists('generateVirtualAccount')) {
                     $VirtualAccount->currency = 'NGN';
                     $VirtualAccount->save();
                 } else {
-
                     $VirtualAccount = VirtualAccount::create([
                         'user_id' => auth()->user()->id,
                         'channel' => 'paystack',
@@ -877,7 +827,7 @@ if (!function_exists('generateVirtualAccount')) {
                 }
 
                 $data['res'] = $response;
-                $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                 return $data;
             } else {
                 return back()->with('error', 'Error occured while processing');
@@ -889,30 +839,25 @@ if (!function_exists('generateVirtualAccount')) {
 if (!function_exists('reGenerateUpdatedVirtualAccount')) {
     function reGenerateUpdatedVirtualAccount($email, $phone, $user)
     {
-
         try {
-
             // $data = \DB::transaction(function () use ($email, $phone, $user) {
             $payload = [
-                "email" => $email,
-                "first_name" => $user->name,
-                "last_name" => 'Freebyz',
-                "phone" => "+" . $phone
+                'email' => $email,
+                'first_name' => $user->name,
+                'last_name' => 'Freebyz',
+                'phone' => '+' . $phone
             ];
             $res = createCustomer($payload);
 
             if ($res['status'] == true) {
-
                 $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
 
                 $data = [
-                    "customer" => $res['data']['customer_code'],
-                    "preferred_bank" => env('PAYSTACK_BANK') //"wema-bank"
+                    'customer' => $res['data']['customer_code'],
+                    'preferred_bank' => env('PAYSTACK_BANK')  // "wema-bank"
                 ];
 
                 $response = virtualAccount($data);
-
-
 
                 if ($VirtualAccount) {
                     // customer_code
@@ -937,8 +882,6 @@ if (!function_exists('reGenerateUpdatedVirtualAccount')) {
             //     'status' => true,
             //     'data' => $VirtualAccount,
             // ], 200);
-
-
         } catch (\Exception $e) {
             // Handle errors and roll back the transaction
             return response()->json([
@@ -952,39 +895,34 @@ if (!function_exists('reGenerateUpdatedVirtualAccount')) {
 if (!function_exists('reGenerateVirtualAccount')) {
     function reGenerateVirtualAccount($user)
     {
-
-
         try {
-
             $data = DB::transaction(function () use ($user) {
                 // Fetch the object within the transaction
 
-                //check if user exist, if yes, update informatioon
+                // check if user exist, if yes, update informatioon
                 $fetchCustomer = fetchCustomer($user->email);
 
                 if ($fetchCustomer['status'] == true) {
                     $phone = '234' . substr($user->phone, 1);
-                    //update customer
+                    // update customer
                     $customerPayload = [
-                        "first_name" => $user->name, //auth()->user()->name,
-                        "last_name" => 'Freebyz',
-                        "phone" => "+" . $phone
+                        'first_name' => $user->name,  // auth()->user()->name,
+                        'last_name' => 'Freebyz',
+                        'phone' => '+' . $phone
                     ];
 
                     $updateCustomer = updateCustomer($user->email, $customerPayload);
 
                     if ($updateCustomer['status'] == true) {
-
                         $data = [
-                            "customer" => $updateCustomer['data']['customer_code'],
-                            "preferred_bank" => env('PAYSTACK_BANK')
+                            'customer' => $updateCustomer['data']['customer_code'],
+                            'preferred_bank' => env('PAYSTACK_BANK')
                         ];
 
                         $response = virtualAccount($data);
 
                         $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
                         if ($VirtualAccount) {
-
                             $VirtualAccount->bank_name = $response['data']['bank']['name'];
                             $VirtualAccount->account_name = $response['data']['account_name'];
                             $VirtualAccount->account_number = $response['data']['account_number'];
@@ -992,8 +930,6 @@ if (!function_exists('reGenerateVirtualAccount')) {
                             $VirtualAccount->currency = 'NGN';
                             $VirtualAccount->save();
                         } else {
-
-
                             $VirtualAccount = VirtualAccount::create([
                                 'user_id' => $user->id,
                                 'channel' => 'paystack',
@@ -1008,34 +944,30 @@ if (!function_exists('reGenerateVirtualAccount')) {
                         }
 
                         $data['res'] = $response;
-                        $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                        $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                         return $data;
                     }
                 } else {
                     $phone = '234' . substr($user->phone, 1);
                     $payload = [
-                        "email" => $user->email,
-                        "first_name" => $user->name,
-                        "last_name" => 'Freebyz',
-                        "phone" => "+" . $phone
+                        'email' => $user->email,
+                        'first_name' => $user->name,
+                        'last_name' => 'Freebyz',
+                        'phone' => '+' . $phone
                     ];
                     $res = createCustomer($payload);
 
                     if ($res['status'] == true) {
-
                         $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
 
                         $data = [
-                            "customer" => $res['data']['customer_code'],
-                            "preferred_bank" => env('PAYSTACK_BANK') //"wema-bank"
+                            'customer' => $res['data']['customer_code'],
+                            'preferred_bank' => env('PAYSTACK_BANK')  // "wema-bank"
                         ];
 
                         $response = virtualAccount($data);
 
-
-
                         if ($VirtualAccount) {
-
                             $VirtualAccount->bank_name = $response['data']['bank']['name'];
                             $VirtualAccount->account_name = $response['data']['account_name'];
                             $VirtualAccount->account_number = $response['data']['account_number'];
@@ -1043,8 +975,6 @@ if (!function_exists('reGenerateVirtualAccount')) {
                             $VirtualAccount->currency = 'NGN';
                             $VirtualAccount->save();
                         } else {
-
-
                             $VirtualAccount = VirtualAccount::create([
                                 'user_id' => $user->id,
                                 'channel' => 'paystack',
@@ -1058,10 +988,8 @@ if (!function_exists('reGenerateVirtualAccount')) {
                             ]);
                         }
 
-
-
                         $data['res'] = $response;
-                        $data['va'] = $VirtualAccount; //back()->with('success', 'Account Created Succesfully');
+                        $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
                         return $data;
                     } else {
                         throw new \Exception('An error occoured while processing');
@@ -1093,7 +1021,6 @@ if (!function_exists('totalVirtualAccount')) {
 if (!function_exists('transactionProcessor')) {
     function transactionProcessor($user, $reference, $amount, $status, $currency, $channel, $type, $description, $tx_type, $user_type)
     {
-
         return PaymentTransaction::create([
             'user_id' => $user->id,
             'campaign_id' => '1',
@@ -1103,10 +1030,10 @@ if (!function_exists('transactionProcessor')) {
             'status' => $status,
             'currency' => $currency,
             'channel' => $channel,
-            'type' => $type, //'cash_transfer_top',
-            'description' => $description, //'Cash transfer from '.$user->name,
-            'tx_type' => $tx_type, //'Credit',
-            'user_type' => $user_type //'regular'
+            'type' => $type,  // 'cash_transfer_top',
+            'description' => $description,  // 'Cash transfer from '.$user->name,
+            'tx_type' => $tx_type,  // 'Credit',
+            'user_type' => $user_type  // 'regular'
         ]);
     }
 }
@@ -1114,10 +1041,9 @@ if (!function_exists('transactionProcessor')) {
 if (!function_exists('currentLocation')) {
     function currentLocation()
     {
-
         if (config('services.env.env') == 'local') {
             // $ip =  '41.210.11.223';//'48.188.144.248';
-            $ip =  '41.203.78.171'; //'48.188.144.248';
+            $ip = '41.203.78.171';  // '48.188.144.248';
         } else {
             $ip = request()->ip();
         }
@@ -1130,7 +1056,6 @@ if (!function_exists('currentLocation')) {
 if (!function_exists('userForeignUpgrade')) {
     function userForeignUpgrade($user, $currency, $amount, $referral_amount = null)
     {
-
         $debitWallet = debitWallet($user, $currency, $amount);
         if ($debitWallet) {
             $getUser = User::where('id', $user->id)->first();
@@ -1138,7 +1063,7 @@ if (!function_exists('userForeignUpgrade')) {
             $getUser->verified_at = now();
             $getUser->save();
 
-            $usd_Verified =  Usdverified::create(['user_id' => $getUser->id]);
+            $usd_Verified = Usdverified::create(['user_id' => $getUser->id]);
 
             $ref = time();
 
@@ -1156,11 +1081,9 @@ if (!function_exists('userForeignUpgrade')) {
                 'description' => 'Ugrade Payment - ' . $currency
             ]);
 
-            $referee = Referral::where('user_id',  $getUser->id)->first();
+            $referee = Referral::where('user_id', $getUser->id)->first();
 
             if ($referee) {
-
-
                 $wallet = Wallet::where('user_id', $referee->referee_id)->first();
                 if ($wallet->base_currency == 'NGN') {
                     $baseCur = 'NGN';
@@ -1170,7 +1093,7 @@ if (!function_exists('userForeignUpgrade')) {
                     $baseCur = $wallet->base_currency;
                 }
 
-                //convert the referral commission to the referrer base currency and credit the wallet
+                // convert the referral commission to the referrer base currency and credit the wallet
                 $referral_converted_amount = currencyConverter($currency, $baseCur, $referral_amount);
 
                 $referralInfo = User::find($referee->referee_id);
@@ -1182,9 +1105,9 @@ if (!function_exists('userForeignUpgrade')) {
                 $usd_Verified->amount = $referral_converted_amount;
                 $usd_Verified->save();
 
-                ///Transactions
+                // /Transactions
                 $ref_tx = PaymentTransaction::create([
-                    'user_id' => $referee->referee_id, ///auth()->user()->id,
+                    'user_id' => $referee->referee_id,  // /auth()->user()->id,
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $referral_converted_amount,
@@ -1197,7 +1120,6 @@ if (!function_exists('userForeignUpgrade')) {
                     'description' => $baseCur . ' Referral Bonus from ' . $getUser->name
                 ]);
             } else {
-
                 $walletAdmin = Wallet::where('user_id', 1)->first();
 
                 if ($walletAdmin->base_currency == 'Naira') {
@@ -1214,7 +1136,7 @@ if (!function_exists('userForeignUpgrade')) {
                 creditWallet($walletAdmin, $baseCur, $referral_converted_amount);
 
                 $ref_tx = PaymentTransaction::create([
-                    'user_id' => 1, ///auth()->user()->id,
+                    'user_id' => 1,  // /auth()->user()->id,
                     'campaign_id' => '1',
                     'reference' => $ref,
                     'amount' => $referral_converted_amount,
@@ -1228,7 +1150,7 @@ if (!function_exists('userForeignUpgrade')) {
                 ]);
             }
 
-            systemNotification($getUser, 'success', 'User Verification',  $getUser->name . ' was verified');
+            systemNotification($getUser, 'success', 'User Verification', $getUser->name . ' was verified');
             $name = $getUser->name;
             activityLog($getUser, 'foreign_account_verification', $name . ' account verification', 'regular');
 
@@ -1239,18 +1161,15 @@ if (!function_exists('userForeignUpgrade')) {
     }
 }
 
-
 if (!function_exists('userDollaUpgrade')) {
     function userDollaUpgrade($user)
     {
-
-
         $getUser = User::where('id', $user->id)->first();
         $getUser->is_verified = 1;
         $getUser->verified_at = now();
         $getUser->save();
 
-        $usd_Verified =  Usdverified::create(['user_id' => $getUser->id]);
+        $usd_Verified = Usdverified::create(['user_id' => $getUser->id]);
 
         $ref = time();
 
@@ -1268,9 +1187,8 @@ if (!function_exists('userDollaUpgrade')) {
             'description' => 'Ugrade Payment - USD'
         ]);
 
-        $referee = Referral::where('user_id',  $getUser->id)->first();
+        $referee = Referral::where('user_id', $getUser->id)->first();
         if ($referee) {
-
             $wallet = Wallet::where('user_id', $referee->referee_id)->first();
             $wallet->usd_balance += 1.5;
             $wallet->save();
@@ -1280,9 +1198,9 @@ if (!function_exists('userDollaUpgrade')) {
             $usd_Verified->amount = 1.5;
             $usd_Verified->save();
 
-            ///Transactions
+            // /Transactions
             PaymentTransaction::create([
-                'user_id' => $referee->referee_id, ///auth()->user()->id,
+                'user_id' => $referee->referee_id,  // /auth()->user()->id,
                 'campaign_id' => '1',
                 'reference' => $ref,
                 'amount' => 1.5,
@@ -1295,7 +1213,7 @@ if (!function_exists('userDollaUpgrade')) {
                 'description' => 'USD Referral Bonus from ' . $getUser->name
             ]);
         }
-        systemNotification($getUser, 'success', 'User Verification',  $getUser->name . ' was verified');
+        systemNotification($getUser, 'success', 'User Verification', $getUser->name . ' was verified');
         $name = $getUser->name;
         activityLog($getUser, 'dollar_account_verification', $name . ' account verification', 'regular');
 
@@ -1306,7 +1224,6 @@ if (!function_exists('userDollaUpgrade')) {
 if (!function_exists('userNairaUpgrade')) {
     function userNairaUpgrade($user, $upgradeAmount, $referral_commission)
     {
-
         // @$referee_id = Referral::where('user_id', $user->id)->first()->referee_id;
         // @$profile_celebrity = Profile::where('user_id', $referee_id)->first()->is_celebrity;
         // $amount = 0;
@@ -1322,7 +1239,7 @@ if (!function_exists('userNairaUpgrade')) {
         $userInfo->verified_at = now();
         $userInfo->save();
 
-        $transaction =  PaymentTransaction::create([
+        $transaction = PaymentTransaction::create([
             'user_id' => $user->id,
             'campaign_id' => 1,
             'reference' => $ref,
@@ -1337,8 +1254,7 @@ if (!function_exists('userNairaUpgrade')) {
             'user_type' => 'regular'
         ]);
 
-
-        $referee = DB::table('referral')->where('user_id',  $user->id)->first();
+        $referee = DB::table('referral')->where('user_id', $user->id)->first();
 
         if ($referee) {
             $refereeInfo = Profile::where('user_id', $referee->referee_id)->first()->is_celebrity;
@@ -1348,11 +1264,11 @@ if (!function_exists('userNairaUpgrade')) {
                 $wallet->balance += $referral_commission;
                 $wallet->save();
 
-                $refereeUpdate = Referral::where('user_id',  $user->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                $refereeUpdate = Referral::where('user_id', $user->id)->first();  // \DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
                 $refereeUpdate->is_paid = true;
                 $refereeUpdate->save();
 
-                ///Transactions
+                // /Transactions
                 $description = 'Referer Bonus from ' . $user->name;
                 // paymentTrasanction($referee->referee_id, '1', time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'regular');
 
@@ -1375,7 +1291,7 @@ if (!function_exists('userNairaUpgrade')) {
                 $adminWallet->balance += $referral_commission;
                 $adminWallet->save();
 
-                //Admin Transaction Table
+                // Admin Transaction Table
                 $description = 'Referer Bonus from ' . $user->name;
                 // paymentTrasanction(1, 1, time(), 500, 'successful', 'referer_bonus', $description, 'Credit', 'admin');
 
@@ -1394,7 +1310,7 @@ if (!function_exists('userNairaUpgrade')) {
                     'user_type' => 'admin'
                 ]);
             } else {
-                $refereeUpdate = Referral::where('user_id', $user->id)->first(); //\DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
+                $refereeUpdate = Referral::where('user_id', $user->id)->first();  // \DB::table('referral')->where('user_id',  auth()->user()->id)->update(['is_paid', '1']);
                 $refereeUpdate->is_paid = true;
                 $refereeUpdate->save();
             }
@@ -1402,7 +1318,7 @@ if (!function_exists('userNairaUpgrade')) {
             $adminWallet = Wallet::where('user_id', '1')->first();
             $adminWallet->balance += $upgradeAmount;
             $adminWallet->save();
-            //Admin Transaction Tablw
+            // Admin Transaction Tablw
             PaymentTransaction::create([
                 'user_id' => 1,
                 'campaign_id' => '1',
@@ -1422,19 +1338,19 @@ if (!function_exists('userNairaUpgrade')) {
         $name = $user->name;
         activityLog($user, 'account_verification', $name . ' account verification', 'regular');
 
-
         return $transaction;
     }
 }
 
-
 if (!function_exists('topEarners')) {
     function topEarners()
     {
-        $highestPayoutUser = Withrawal::with(['user:id,name'])->select('user_id', DB::raw('SUM(amount) as total_payout'))
+        $highestPayoutUser = Withrawal::with(['user:id,name'])
+            ->select('user_id', DB::raw('SUM(amount) as total_payout'))
             ->groupBy('user_id')
             ->orderByDesc('total_payout')
-            ->take('10')->get();
+            ->take('10')
+            ->get();
 
         return $highestPayoutUser;
     }
@@ -1451,7 +1367,6 @@ if (!function_exists('dailyVisit')) {
         );
     }
 }
-
 
 if (!function_exists('dailyActivities')) {
     function dailyActivities()
@@ -1472,8 +1387,8 @@ if (!function_exists('dailyActivities')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->date,
-                    (int)$value->reg_count + (int)$value->google_reg_count,
-                    (int)$value->verified_count
+                    (int) $value->reg_count + (int) $value->google_reg_count,
+                    (int) $value->verified_count
                 ];
             }
 
@@ -1497,12 +1412,12 @@ if (!function_exists('dailyStats')) {
 
             $result = [['Year', 'Visits**', 'LandingPage', 'Dashboard', 'Total Visit']];
             foreach ($data as $value) {
-                $total = (int)$value->landing_page_count + (int)$value->dashboard_count;
+                $total = (int) $value->landing_page_count + (int) $value->dashboard_count;
                 $result[] = [
                     $value->date,
-                    (int)$value->visits,
-                    (int)$value->landing_page_count,
-                    (int)$value->dashboard_count,
+                    (int) $value->visits,
+                    (int) $value->landing_page_count,
+                    (int) $value->dashboard_count,
                     $total
                 ];
             }
@@ -1529,8 +1444,8 @@ if (!function_exists('monthlyVisits')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->month,
-                    (int)$value->user_per_month,
-                    (int)$value->verified_users
+                    (int) $value->user_per_month,
+                    (int) $value->verified_users
                 ];
             }
             return $result;
@@ -1551,7 +1466,7 @@ if (!function_exists('registrationChannel')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->source ?? 'Organic',
-                    (int)$value->total
+                    (int) $value->total
                 ];
             }
             return $result;
@@ -1573,7 +1488,7 @@ if (!function_exists('revenueChannel')) {
 
             $result = [['Revenue Channel', 'Total']];
             foreach ($data as $value) {
-                $result[] = [$value->type, (int)$value->amount];
+                $result[] = [$value->type, (int) $value->amount];
             }
             return $result;
         });
@@ -1604,14 +1519,14 @@ if (!function_exists('weeklyRegistrationChannel')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->day,
-                    (int)$value->youtube,
-                    (int)$value->facebook,
-                    (int)$value->instagram,
-                    (int)$value->whatsapp,
-                    (int)$value->tiktok,
-                    (int)$value->twitter,
-                    (int)$value->online_ads,
-                    (int)$value->referred
+                    (int) $value->youtube,
+                    (int) $value->facebook,
+                    (int) $value->instagram,
+                    (int) $value->whatsapp,
+                    (int) $value->tiktok,
+                    (int) $value->twitter,
+                    (int) $value->online_ads,
+                    (int) $value->referred
                 ];
             }
             return $result;
@@ -1644,14 +1559,14 @@ if (!function_exists('weeklyVerificationChannel')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->day,
-                    (int)$value->youtube,
-                    (int)$value->facebook,
-                    (int)$value->instagram,
-                    (int)$value->whatsapp,
-                    (int)$value->tiktok,
-                    (int)$value->twitter,
-                    (int)$value->online_ads,
-                    (int)$value->referred
+                    (int) $value->youtube,
+                    (int) $value->facebook,
+                    (int) $value->instagram,
+                    (int) $value->whatsapp,
+                    (int) $value->tiktok,
+                    (int) $value->twitter,
+                    (int) $value->online_ads,
+                    (int) $value->referred
                 ];
             }
             return $result;
@@ -1671,7 +1586,7 @@ if (!function_exists('monthlyRevenue')) {
                 DB::raw('SUM(CASE WHEN type = "withdrawal_commission" THEN amount ELSE 0 END) AS withdrawal_commission'),
                 DB::raw('SUM(CASE WHEN type = "campaign_revenue_add" THEN amount ELSE 0 END) AS campaign_revenue_add')
             )
-                ->whereNotIn('user_id', [84]) // Exclude admin accounts
+                ->whereNotIn('user_id', [84])  // Exclude admin accounts
                 ->whereBetween('created_at', [Carbon::now()->subMonths(3)->startOfMonth(), Carbon::now()])
                 ->groupBy('month')
                 ->orderByRaw('MIN(created_at) ASC')
@@ -1681,11 +1596,11 @@ if (!function_exists('monthlyRevenue')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->month,
-                    (int)$value->direct_referer_bonus,
-                    (int)$value->referer_bonus,
-                    (int)$value->campaign_revenue,
-                    (int)$value->campaign_revenue_add,
-                    (int)$value->withdrawal_commission
+                    (int) $value->direct_referer_bonus,
+                    (int) $value->referer_bonus,
+                    (int) $value->campaign_revenue,
+                    (int) $value->campaign_revenue_add,
+                    (int) $value->withdrawal_commission
                 ];
             }
             return $result;
@@ -1706,7 +1621,7 @@ if (!function_exists('countryDistribution')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->country ?? 'Unassigned',
-                    (int)$value->total
+                    (int) $value->total
                 ];
             }
             return $result;
@@ -1727,7 +1642,7 @@ if (!function_exists('ageDistribution')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->age_range ?? 'Unassigned',
-                    (int)$value->total
+                    (int) $value->total
                 ];
             }
             return $result;
@@ -1748,7 +1663,7 @@ if (!function_exists('currencyDistribution')) {
             foreach ($data as $value) {
                 $result[] = [
                     $value->base_currency ?? 'Unassigned',
-                    (int)$value->total
+                    (int) $value->total
                 ];
             }
             return $result;
@@ -1761,15 +1676,15 @@ if (!function_exists('numberFormat')) {
     {
         if ($number >= 1000000000) {
             $formatted = number_format(($number / 1000000000), 1);
-            return $formatted > (int)$formatted && $plus ? (int)$formatted . 'B+' : (int)$formatted . 'B';
+            return $formatted > (int) $formatted && $plus ? (int) $formatted . 'B+' : (int) $formatted . 'B';
         }
         if ($number >= 1000000) {
             $formatted = number_format(($number / 1000000), 1);
-            return $formatted > (int)$formatted && $plus ? (int)$formatted . 'M+' : (int)$formatted . 'M';
+            return $formatted > (int) $formatted && $plus ? (int) $formatted . 'M+' : (int) $formatted . 'M';
         }
         if ($number >= 1000) {
             $formatted = number_format(($number / 1000), 1);
-            return $formatted > (int)$formatted && $plus ? (int)$formatted . 'K+' : (int)$formatted . 'K';
+            return $formatted > (int) $formatted && $plus ? (int) $formatted . 'K+' : (int) $formatted . 'K';
         }
         return $number;
     }
@@ -1799,11 +1714,9 @@ if (!function_exists('activityLog')) {
     }
 }
 
-
 if (!function_exists('showActivityLog')) {
     function showActivityLog()
     {
-
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
         return ActivityLog::whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('user_type', 'regular')->get();
@@ -1824,7 +1737,6 @@ if (!function_exists('currencyList')) {
 if (!function_exists('filterCampaignOld')) {
     function filterCampaignOld($categoryID)
     {
-
         $user = Auth::user();
         $campaigns = '';
 
@@ -1832,16 +1744,20 @@ if (!function_exists('filterCampaignOld')) {
             ->where('status', 'Live')
             ->where('is_completed', false)
             ->where(function ($q) use ($user) {
-                $q->whereNotIn('id', function ($query) use ($user) {
-                    $query->select('campaign_id')
-                        ->from('campaign_workers')
-                        ->where('user_id', $user->id);
-                })
+                $q
+                    ->whereNotIn('id', function ($query) use ($user) {
+                        $query
+                            ->select('campaign_id')
+                            ->from('campaign_workers')
+                            ->where('user_id', $user->id);
+                    })
                     ->orWhere(function ($q) use ($user) {
-                        $q->whereIn('id', [8188, 8401])
+                        $q
+                            ->whereIn('id', [8188, 8401])
                             // Exclude campaigns with any approved submissions
                             ->whereNotExists(function ($query) use ($user) {
-                                $query->select(DB::raw(1))
+                                $query
+                                    ->select(DB::raw(1))
                                     ->from('campaign_workers')
                                     ->whereColumn('campaign_id', 'campaigns.id')
                                     ->where('user_id', $user->id)
@@ -1849,7 +1765,8 @@ if (!function_exists('filterCampaignOld')) {
                             })
                             // Allow campaigns with Denied < 3
                             ->whereExists(function ($query) use ($user) {
-                                $query->select(DB::raw(1))
+                                $query
+                                    ->select(DB::raw(1))
                                     ->from('campaign_workers')
                                     ->whereColumn('campaign_id', 'campaigns.id')
                                     ->where('user_id', $user->id)
@@ -1858,7 +1775,8 @@ if (!function_exists('filterCampaignOld')) {
                             })
                             // Ensure no pending submissions
                             ->whereNotExists(function ($query) use ($user) {
-                                $query->select(DB::raw(1))
+                                $query
+                                    ->select(DB::raw(1))
                                     ->from('campaign_workers')
                                     ->whereColumn('campaign_id', 'campaigns.id')
                                     ->where('user_id', $user->id)
@@ -1866,7 +1784,6 @@ if (!function_exists('filterCampaignOld')) {
                             });
                     });
             });
-
 
         if ($categoryID != 0) {
             $query->where('campaign_type', $categoryID);
@@ -1877,7 +1794,8 @@ if (!function_exists('filterCampaignOld')) {
         //     ->orderBy('created_at', 'DESC')
         //     ->paginate(15);
 
-        $campaigns = $query->orderByRaw("CASE WHEN job_id = 'Lgh1yOgwO' THEN 0 WHEN approved IN ('Priotized', 'Priotize') THEN 1 ELSE 2 END")
+        $campaigns = $query
+            ->orderByRaw("CASE WHEN job_id = 'Lgh1yOgwO' THEN 0 WHEN approved IN ('Priotized', 'Priotize') THEN 1 ELSE 2 END")
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
 
@@ -1891,9 +1809,9 @@ if (!function_exists('filterCampaignOld')) {
                 ? round(($c / $campaign->number_of_staff) * 100, 2)
                 : 0;
 
-            $from = $campaign->currency; //from
-            $to = $baseCurrency; //to user local currency
-            $campaign->local_converted_amount = currencyConverter($from, $to, $campaign->campaign_amount); //$convertedAmount,
+            $from = $campaign->currency;  // from
+            $to = $baseCurrency;  // to user local currency
+            $campaign->local_converted_amount = currencyConverter($from, $to, $campaign->campaign_amount);  // $convertedAmount,
             $campaign->local_converted_currency = $baseCurrency;
             $campaign->completed = $c;
             $campaign->is_completed = $c >= $campaign->number_of_staff ? true : false;
@@ -1909,9 +1827,6 @@ if (!function_exists('filterCampaignOld')) {
 
         return response()->json($campaigns);
         // return $filteredArray;
-
-
-
 
         // if($categoryID == 0){
         //     ///without filter
@@ -1989,8 +1904,6 @@ if (!function_exists('filterCampaignOld')) {
         //     ];
         // }
 
-
-
         // // Remove objects where 'is_completed' is true
         // $filteredArray = array_filter($list, function ($item) {
         //     return $item['is_completed'] !== true;
@@ -2002,7 +1915,6 @@ if (!function_exists('filterCampaignOld')) {
         // });
 
         //  return  $filteredArray;
-
     }
 }
 
@@ -2018,20 +1930,22 @@ if (!function_exists('filterCampaign')) {
             ->where('status', 'Live')
             ->where('is_completed', false)
             ->where(function ($q) use ($user) {
-
                 // Exclude campaigns already worked on
-                $q->whereNotExists(function ($sub) use ($user) {
-                    $sub->selectRaw(1)
-                        ->from('campaign_workers')
-                        ->whereColumn('campaign_id', 'campaigns.id')
-                        ->where('user_id', $user->id);
-                })
-
+                $q
+                    ->whereNotExists(function ($sub) use ($user) {
+                        $sub
+                            ->selectRaw(1)
+                            ->from('campaign_workers')
+                            ->whereColumn('campaign_id', 'campaigns.id')
+                            ->where('user_id', $user->id);
+                    })
                     // Allow special campaigns with strict rules
                     ->orWhere(function ($special) use ($user) {
-                        $special->whereIn('id', [8188, 8401])
+                        $special
+                            ->whereIn('id', [8188, 8401])
                             ->whereNotExists(function ($sub) use ($user) {
-                                $sub->selectRaw(1)
+                                $sub
+                                    ->selectRaw(1)
                                     ->from('campaign_workers')
                                     ->whereColumn('campaign_id', 'campaigns.id')
                                     ->where('user_id', $user->id)
@@ -2067,40 +1981,38 @@ if (!function_exists('filterCampaign')) {
 
         // Transform response (single pass, no extra queries)
         $campaigns->getCollection()->transform(function ($campaign) use ($baseCurrency) {
-
             $completed = $campaign->pending_count + $campaign->completed_count;
 
             return [
-                'id'                         => $campaign->id,
-                'job_id'                     => $campaign->job_id,
-                'post_title'                 => $campaign->post_title,
-                'number_of_staff'            => $campaign->number_of_staff,
-                'type'                       => $campaign->campaignType->name,
-                'completed'                  => $completed,
-                'is_completed'               => $completed >= $campaign->number_of_staff,
-                'progress'                   => $campaign->number_of_staff > 0
+                'id' => $campaign->id,
+                'job_id' => $campaign->job_id,
+                'post_title' => $campaign->post_title,
+                'number_of_staff' => $campaign->number_of_staff,
+                'type' => $campaign->campaignType->name,
+                'completed' => $completed,
+                'is_completed' => $completed >= $campaign->number_of_staff,
+                'progress' => $campaign->number_of_staff > 0
                     ? round(($completed / $campaign->number_of_staff) * 100, 2)
                     : 0,
-                'campaign_amount'            => $campaign->campaign_amount,
-                'currency'                   => $campaign->currency,
-                'local_currency'             => $baseCurrency, // Added this field for frontend
-                'local_converted_amount'     => currencyConverter(
+                'campaign_amount' => $campaign->campaign_amount,
+                'currency' => $campaign->currency,
+                'local_currency' => $baseCurrency,  // Added this field for frontend
+                'local_converted_amount' => currencyConverter(
                     $campaign->currency,
                     $baseCurrency,
                     $campaign->campaign_amount
                 ),
-                'local_converted_currency'   => $baseCurrency,
-                'percentage_progress'        => $campaign->number_of_staff > 0
+                'local_converted_currency' => $baseCurrency,
+                'percentage_progress' => $campaign->number_of_staff > 0
                     ? round(($completed / $campaign->number_of_staff) * 100, 2)
-                    : 0, // Added for frontend consistency
-                'created_at'                 => $campaign->created_at,
+                    : 0,  // Added for frontend consistency
+                'created_at' => $campaign->created_at,
             ];
         });
 
         return response()->json($campaigns);
     }
 }
-
 
 if (!function_exists('currencyParameter')) {
     function currencyParameter($currency)
@@ -2112,23 +2024,21 @@ if (!function_exists('currencyParameter')) {
 if (!function_exists('fetchUpgradeFee')) {
     function fetchUpgradeFee($currency)
     {
-        return  Currency::where('code', $currency)->where('is_active', true)->first()->upgrade_fee;
+        return Currency::where('code', $currency)->where('is_active', true)->first()->upgrade_fee;
     }
 }
 
 if (!function_exists('testCampaign')) {
     function testCampaign($categoryID)
     {
-
         $user = Auth::user();
         // $jobfilter = '';
         $campaigns = '';
 
         $baseCurrency = $user->wallet->base_currency;
 
-
         if ($categoryID == 0) {
-            ///without filter
+            // /without filter
 
             $campaigns = Campaign::where('status', 'Live')
                 ->where('is_completed', false)
@@ -2142,16 +2052,18 @@ if (!function_exists('testCampaign')) {
                     'completed as total_denied' => function ($query) {
                         $query->where('status', 'Denied');
                     }
-                ])->havingRaw("(total_approved + total_pending) < number_of_staff")
-
+                ])
+                ->havingRaw('(total_approved + total_pending) < number_of_staff')
                 ->whereNotIn('id', function ($query) use ($user) {
-
-                    $query->select('campaign_id')
+                    $query
+                        ->select('campaign_id')
                         ->from('campaign_workers')
                         ->where('user_id', $user->id);
-                })->orderBy('created_at', 'DESC')->paginate(10);
+                })
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10);
         } else {
-            //with filter
+            // with filter
             $campaigns = Campaign::where('status', 'Live')
                 ->where('is_completed', false)
                 ->where('campaign_type', $categoryID)
@@ -2165,21 +2077,19 @@ if (!function_exists('testCampaign')) {
                     'completed as total_denied' => function ($query) {
                         $query->where('status', 'Denied');
                     }
-                ])->havingRaw("(total_approved + total_pending) < number_of_staff")
-
+                ])
+                ->havingRaw('(total_approved + total_pending) < number_of_staff')
                 ->whereNotIn('id', function ($query) use ($user) {
-
-                    $query->select('campaign_id')
+                    $query
+                        ->select('campaign_id')
                         ->from('campaign_workers')
                         ->where('user_id', $user->id);
-                })->orderBy('created_at', 'DESC')->paginate(10);
+                })
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10);
         }
 
-
-
         // $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
-
-
 
         $list = [];
         foreach ($campaigns as $key => $value) {
@@ -2192,33 +2102,26 @@ if (!function_exists('testCampaign')) {
             $div = $c / $value->number_of_staff;
             $progress = $div * 100;
 
-
-
-            //jobCurrency
-            $from = $value->currency; //from
-            $to = $baseCurrency; //to user local currency
+            // jobCurrency
+            $from = $value->currency;  // from
+            $to = $baseCurrency;  // to user local currency
 
             $list[] = [
                 'id' => $value->id,
                 'job_id' => $value->job_id,
-
                 'post_title' => $value->post_title,
                 'number_of_staff' => $value->number_of_staff,
                 'type' => $value->campaignType->name,
                 'category' => $value->campaignCategory->name,
-
                 'completed' => $c,
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
-
                 'campaign_amount' => $value->campaign_amount,
                 'currency' => $value->currency,
                 'currency_code' => $value->currency == 'NGN' ? '&#8358;' : '$',
-
-                'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount), //$convertedAmount,
+                'local_converted_amount' => currencyConverter($from, $to, $value->campaign_amount),  // $convertedAmount,
                 'local_converted_currency' => $baseCurrency,
                 'local_converted_currency_code' => $baseCurrency,
-
                 'priotized' => $value->approved,
                 'from' => $from,
                 'to' => $to,
@@ -2226,16 +2129,13 @@ if (!function_exists('testCampaign')) {
                 'total_approved_count' => $value->total_approved,
                 'total_pending_count' => $value->total_pending,
                 'total_denied_count' => $value->total_denied,
-
                 // 'completed_status' => checkCampaignCompletedStatus($value->id)
                 // 'local_converted_amount' => $rates * $value->campaign_amount,
                 // 'created_at' => $value->created_at
             ];
         }
 
-
-
-        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+        // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         // Remove objects where 'is_completed' is true
 
@@ -2249,18 +2149,15 @@ if (!function_exists('testCampaign')) {
             return strcmp($b['priotized'], $a['priotized']);
         });
 
-        return  $list;
+        return $list;
 
-        //return $list;
-
-
+        // return $list;
     }
 }
 
 if (!function_exists('checkCampaignCompletedStatus')) {
     function checkCampaignCompletedStatus($campaignId)
     {
-
         $counts = array_merge([
             'Approved' => 0,
             'Pending' => 0,
@@ -2269,7 +2166,8 @@ if (!function_exists('checkCampaignCompletedStatus')) {
             ->where('campaign_id', $campaignId)
             ->select('status', DB::raw('COUNT(*) as count'))
             ->groupBy('status')
-            ->pluck('count', 'status')->toArray());
+            ->pluck('count', 'status')
+            ->toArray());
 
         $campaign = Campaign::where('id', $campaignId)->first();
         $campaign->pending_count = $counts['Pending'];
@@ -2287,18 +2185,16 @@ if (!function_exists('checkCampaignCompletedStatus')) {
         }
 
         // $data['campaign'] = $campaign;
-        $data['is_completed'] = $campaign->is_completed; //$totalCampaign;
+        $data['is_completed'] = $campaign->is_completed;  // $totalCampaign;
         $data['counts'] = $counts;
 
-        return $data; //$counts;
-
+        return $data;  // $counts;
     }
 }
 
 if (!function_exists('availableJobs')) {
     function availableJobs()
     {
-
         $user = Auth::user();
         $jobfilter = '';
         $campaigns = '';
@@ -2307,7 +2203,7 @@ if (!function_exists('availableJobs')) {
             $jobfilter = $user->wallet->base_currency == 'Naira' ? 'NGN' : 'USD';
         }
 
-        if ($user->USD_verified) { //if user is usd verified, they see all jobs
+        if ($user->USD_verified) {  // if user is usd verified, they see all jobs
             $campaigns = Campaign::where('status', 'Live')->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
         } else {
             $campaigns = Campaign::where('status', 'Live')->where('currency', $jobfilter)->where('is_completed', false)->orderBy('created_at', 'DESC')->get();
@@ -2315,7 +2211,7 @@ if (!function_exists('availableJobs')) {
 
         $list = [];
         foreach ($campaigns as $key => $value) {
-            $c = $value->pending_count + $value->completed_count; //
+            $c = $value->pending_count + $value->completed_count;  //
             $div = $c / $value->number_of_staff;
             $progress = $div * 100;
 
@@ -2327,8 +2223,8 @@ if (!function_exists('availableJobs')) {
                 'number_of_staff' => $value->number_of_staff,
                 'type' => $value->campaignType->name,
                 'category' => $value->campaignCategory->name,
-                //'attempts' => $attempts,
-                'completed' => $c, //$value->completed_count+$value->pending_count,
+                // 'attempts' => $attempts,
+                'completed' => $c,  // $value->completed_count+$value->pending_count,
                 'is_completed' => $c >= $value->number_of_staff ? true : false,
                 'progress' => $progress,
                 'currency' => $value->currency,
@@ -2337,7 +2233,7 @@ if (!function_exists('availableJobs')) {
             ];
         }
 
-        //$sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
+        // $sortedList = collect($list)->sortBy('is_completed')->values()->all();//collect($list)->sortByDesc('is_completed')->values()->all(); //collect($list)->sortBy('is_completed')->values()->all();
 
         // Remove objects where 'is_completed' is true
         $filteredArray = array_filter($list, function ($item) {
@@ -2349,15 +2245,13 @@ if (!function_exists('availableJobs')) {
             return strcmp($b['priotized'], $a['priotized']);
         });
 
-        return  $filteredArray;
+        return $filteredArray;
     }
 }
-
 
 if (!function_exists('badgeCount')) {
     function badgeCount()
     {
-
         $currentDate = Carbon::now()->subMonth();
         return Referral::where('referee_id', auth()->user()->id)
             ->whereMonth('updated_at', $currentDate->month)
@@ -2366,11 +2260,9 @@ if (!function_exists('badgeCount')) {
     }
 }
 
-
 if (!function_exists('badge')) {
     function badge()
     {
-
         $currentDate = Carbon::now()->subMonth();
         $count = Referral::where('referee_id', auth()->user()->id)->whereMonth('updated_at', $currentDate->month)->count();
 
@@ -2405,7 +2297,6 @@ if (!function_exists('badge')) {
     }
 }
 
-
 if (!function_exists('viewCampaign')) {
     function viewCampaign($campaign_id, $trackImpression = true)
     {
@@ -2430,14 +2321,15 @@ if (!function_exists('viewCampaign')) {
             // Only add user-specific data if authenticated
             if (auth()->check()) {
                 $data['current_user_id'] = auth()->user()->id;
-                $data['is_attempted'] = $campaign->completed()
+                $data['is_attempted'] = $campaign
+                    ->completed()
                     ->where('user_id', auth()->user()->id)
                     ->first() != null ? true : false;
                 $baseCurrency = baseCurrency();
             } else {
                 $data['current_user_id'] = null;
                 $data['is_attempted'] = false;
-                $baseCurrency = 'NGN'; // Default currency for guests
+                $baseCurrency = 'NGN';  // Default currency for guests
             }
 
             $data['attempts'] = $campaign->completed()->count();
@@ -2458,17 +2350,15 @@ if (!function_exists('viewCampaign')) {
 if (!function_exists('baseCurrency')) {
     function baseCurrency($user = null)
     {
-
         if ($user == null) {
             $user = Auth::user();
-            return Wallet::where('user_id', $user->id)->first()->base_currency; //$user->wallet->base_currency;
+            return Wallet::where('user_id', $user->id)->first()->base_currency;  // $user->wallet->base_currency;
         } else {
             $user = User::find($user->id);
-            return Wallet::where('user_id', $user->id)->first()->base_currency; //$user->wallet->base_currency;
+            return Wallet::where('user_id', $user->id)->first()->base_currency;  // $user->wallet->base_currency;
         }
     }
 }
-
 
 if (!function_exists('countryList')) {
     function countryList()
@@ -2502,7 +2392,6 @@ if (!function_exists('bankList')) {
 if (!function_exists('resolveBankName')) {
     function resolveBankName($account_number, $bank_code)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2513,22 +2402,19 @@ if (!function_exists('resolveBankName')) {
     }
 }
 
-
-
 if (!function_exists('recipientCode')) {
     function recipientCode($name, $account_number, $bank_code)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/transferrecipient', [
-            "type" => "nuban",
-            "name" => $name,
-            "account_number" => $account_number,
-            "bank_code" => $bank_code,
-            "currency" => "NGN"
+            'type' => 'nuban',
+            'name' => $name,
+            'account_number' => $account_number,
+            'bank_code' => $bank_code,
+            'currency' => 'NGN'
         ]);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2546,20 +2432,18 @@ function verifyRecipientCode($recipientCode)
         : null;
 }
 
-
 if (!function_exists('transferFund')) {
     function transferFund($amount, $recipient, $reason)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('paystack.secretKey')
         ])->post('https://api.paystack.co/transfer', [
-            "source" => "balance",
-            "amount" => $amount,
-            "recipient" => $recipient,
-            "reason" => $reason
+            'source' => 'balance',
+            'amount' => $amount,
+            'recipient' => $recipient,
+            'reason' => $reason
         ]);
 
         Log::info($res->json());
@@ -2569,17 +2453,16 @@ if (!function_exists('transferFund')) {
 }
 
 if (!function_exists('bulkFundTransfer')) {
-    function  bulkFundTransfer($transfers)
+    function bulkFundTransfer($transfers)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY')
         ])->post('https://api.paystack.co/transfer/bulk', [
-            "currency" => "NGN",
-            "source" => "balance",
-            "transfers" => $transfers
+            'currency' => 'NGN',
+            'source' => 'balance',
+            'transfers' => $transfers
         ]);
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2587,9 +2470,8 @@ if (!function_exists('bulkFundTransfer')) {
 }
 
 if (!function_exists('initiateTrasaction')) {
-    function  initiateTrasaction($ref, $amount, $redirect_url)
+    function initiateTrasaction($ref, $amount, $redirect_url)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2597,12 +2479,12 @@ if (!function_exists('initiateTrasaction')) {
         ])->post('https://api.paystack.co/transaction/initialize', [
             'email' => auth()->user()->email,
             'amount' => $amount * 100,
-            'channels' => ['card', 'bank', 'ussd', 'transfer'], //'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
+            'channels' => ['card', 'bank', 'ussd', 'transfer'],  // 'ussd', 'bank', 'transfer', 'opay', 'payattitude', 'pocket_app', 'visa_qr'
             'currency' => 'NGN',
             'reference' => $ref,
             'callback_url' => url($redirect_url),
-            "metadata" => [
-                "user_id" => auth()->user()->id,
+            'metadata' => [
+                'user_id' => auth()->user()->id,
             ]
         ]);
         return $res['data']['authorization_url'];
@@ -2610,9 +2492,8 @@ if (!function_exists('initiateTrasaction')) {
 }
 
 if (!function_exists('verifyTransaction')) {
-    function  verifyTransaction($ref)
+    function verifyTransaction($ref)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2623,7 +2504,7 @@ if (!function_exists('verifyTransaction')) {
     }
 }
 if (!function_exists('virtualAccount')) {
-    function  virtualAccount($data)
+    function virtualAccount($data)
     {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
@@ -2636,9 +2517,8 @@ if (!function_exists('virtualAccount')) {
 }
 
 if (!function_exists('createCustomer')) {
-    function  createCustomer($data)
+    function createCustomer($data)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2649,11 +2529,9 @@ if (!function_exists('createCustomer')) {
     }
 }
 
-
 if (!function_exists('fetchCustomer')) {
-    function  fetchCustomer($email)
+    function fetchCustomer($email)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2664,11 +2542,9 @@ if (!function_exists('fetchCustomer')) {
     }
 }
 
-
 if (!function_exists('updateCustomer')) {
-    function  updateCustomer($email, $payload)
+    function updateCustomer($email, $payload)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2679,12 +2555,11 @@ if (!function_exists('updateCustomer')) {
     }
 }
 
-//fluterwave apis
+// fluterwave apis
 
 if (!function_exists('listFlutterwaveTransaction')) {
-    function  listFlutterwaveTransaction()
+    function listFlutterwaveTransaction()
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2696,9 +2571,8 @@ if (!function_exists('listFlutterwaveTransaction')) {
 }
 
 if (!function_exists('initiateFlutterwavePayment')) {
-    function  initiateFlutterwavePayment($payload)
+    function initiateFlutterwavePayment($payload)
     {
-
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -2717,12 +2591,12 @@ if (!function_exists('sendBulkSMS')) {
             'Content-Type' => 'application/json',
         ])->post('https://v3.api.termii.com/api/sms/send/bulk', [
             // "to"=> $number,
-            "to" => $number,
-            "from" => "Freebyz",
-            "sms" => $message,
-            "type" => "plain",
-            "channel" => "generic",
-            "api_key" => config('services.env.termii')
+            'to' => $number,
+            'from' => 'Freebyz',
+            'sms' => $message,
+            'type' => 'plain',
+            'channel' => 'generic',
+            'api_key' => config('services.env.termii')
         ]);
         Log::info($res->json());
 
@@ -2775,7 +2649,7 @@ if (!function_exists('formatAndArrangeNew')) {
 }
 
 if (!function_exists('getLocation')) {
-    function  getLocation()
+    function getLocation()
     {
         if (config('services.env.env') == 'local') {
             // $ip = '48.188.144.248';
@@ -2789,7 +2663,7 @@ if (!function_exists('getLocation')) {
 }
 
 if (!function_exists('geo')) {
-    function  geo()
+    function geo()
     {
         if (config('services.env.env') == 'local') {
             // $ip = '48.188.144.248';
@@ -2801,11 +2675,9 @@ if (!function_exists('geo')) {
     }
 }
 
-
 if (!function_exists('userLocation')) {
-    function  userLocation($type)
+    function userLocation($type)
     {
-
         if (config('services.env.env') == 'local') {
             // $ip = '48.188.144.248';
             $ip = '41.203.78.171';
@@ -2853,7 +2725,7 @@ if (!function_exists('userLocation')) {
 }
 
 if (!function_exists('paymentTrasanction')) {
-    function  paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
+    function paymentTrasanction($userId, $campaign_id, $ref, $amount, $status, $type, $description, $tx_type, $user_type)
     {
         return PaymentTransaction::create([
             'user_id' => $userId,
@@ -2872,9 +2744,8 @@ if (!function_exists('paymentTrasanction')) {
     }
 }
 
-
 if (!function_exists('paymentUpdate')) {
-    function  paymentUpdate($ref, $status, $amount = null)
+    function paymentUpdate($ref, $status, $amount = null)
     {
         $fetchPaymentTransaction = PaymentTransaction::where('reference', $ref)->first();
         $fetchPaymentTransaction->status = $status;
@@ -2884,9 +2755,8 @@ if (!function_exists('paymentUpdate')) {
     }
 }
 
-
 if (!function_exists('amountCalculator')) {
-    function  amountCalculator($amount)
+    function amountCalculator($amount)
     {
         $percent = 5 / 100 * $amount;
         return $amount + $percent + 0.4;
@@ -2894,26 +2764,23 @@ if (!function_exists('amountCalculator')) {
 }
 
 if (!function_exists('baseRates')) {
-    function  baseRates()
+    function baseRates()
     {
-
         $currencies = Currency::query()->where('is_active', '1')->get(['id', 'code', 'base_rate']);
 
         // Initialize results array
         $pairsWithRates = [];
 
         foreach ($currencies as $base) {
-
             foreach ($currencies as $target) {
                 // if($base !== $target){
                 $rate = $target['base_rate'] / $base['base_rate'];
                 $pairsWithRates[] = [
                     'from' => $base['code'],
                     'to' => $target['code'],
-                    'rate' => sprintf("%.6g", $rate),
+                    'rate' => sprintf('%.6g', $rate),
                 ];
                 // }
-
             }
         }
 
@@ -2922,22 +2789,21 @@ if (!function_exists('baseRates')) {
 }
 
 if (!function_exists('getBaseRate')) {
-    function  getBaseRate($currencyCode)
+    function getBaseRate($currencyCode)
     {
         return Currency::where('code', $currencyCode)->first()->base_rate;
     }
 }
 
 if (!function_exists('getCurrency')) {
-    function  getCurrency($currencyCode)
+    function getCurrency($currencyCode)
     {
         return Currency::where('code', $currencyCode)->first();
     }
 }
 
-
 if (!function_exists('currencyConverter')) {
-    function  currencyConverter($from, $to, $amount)
+    function currencyConverter($from, $to, $amount)
     {
         $baseCurr = getBaseRate($from);
         $target = getBaseRate($to);
@@ -2953,9 +2819,8 @@ if (!function_exists('currencyConverter')) {
 }
 
 if (!function_exists('walletBalance')) {
-    function  walletBalance($userId)
+    function walletBalance($userId)
     {
-
         $wallet = Wallet::where('user_id', $userId)->first();
 
         if ($wallet->base_currency == 'NGN') {
@@ -2969,18 +2834,16 @@ if (!function_exists('walletBalance')) {
 }
 
 if (!function_exists('fraudDetection')) {
-    function  fraudDetection($userId)
+    function fraudDetection($userId)
     {
-
-        //check last 3 months transaction
-        return  $recentUsers = DB::select("
+        // check last 3 months transaction
+        return $recentUsers = DB::select('
             SELECT * FROM payment_transactions
-            WHERE user_id = " . $userId . ",
+            WHERE user_id = ' . $userId . ',
             WHERE created_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
-        ");
+        ');
     }
 }
-
 
 if (!function_exists('sendZeptoMail')) {
     function sendZeptoMail(string $toEmail, string $toName, string $subject, string $htmlBody)
@@ -3041,7 +2904,7 @@ if (!function_exists('sendZeptoMail')) {
     }
 
     if (!function_exists('arrayjobs')) {
-        function  arrayjobs()
+        function arrayjobs()
         {
             $preferredJobs = ['Godconnect', 'App Download', 'Freebyz'];
             $otherJobs = ['whatsapp', 'telegram', 'sentz app', 'facebook', 'instagram', 'tiktok', 'youtube', 'Lagos Business Women (NNEW)', 'spotify'];
@@ -3055,14 +2918,12 @@ if (!function_exists('sendZeptoMail')) {
     }
 
     if (!function_exists('ageranges')) {
-        function  ageranges()
+        function ageranges()
         {
             return ['15-20', '21-25', '26-30', '31-40', '40-50'];
         }
     }
 }
-
-
 
 if (!function_exists('uploadImageToCloudinary')) {
     function uploadImageToCloudinary($file, string $folder = 'uploads'): ?string
@@ -3116,6 +2977,197 @@ if (!function_exists('uploadBase64ImageToCloudinary')) {
     }
 }
 
+if (!function_exists('uploadImageToSpaces')) {
+    function uploadImageToSpaces($file, string $folder = 'Freebyz'): ?string
+    {
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+            $image = \Intervention\Image\ImageManager::withDriver(new \Intervention\Image\Drivers\Gd\Driver())
+                ->read($file)
+                ->scaleDown(width: 1200);
+
+            $encoded = $image->toWebp(quality: 80)->toString();
+
+            $filename = $folder . '/' . Str::uuid() . '.webp';
+
+            Storage::disk('spaces')->put($filename, $encoded, 'public');
+
+            return $cdnUrl . '/' . $filename;
+        } catch (\Throwable $e) {
+            Log::error('Spaces image upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('uploadBase64ImageToSpaces')) {
+    function uploadBase64ImageToSpaces(?string $base64, string $folder = 'Freebyz'): ?string
+    {
+        if (!$base64) {
+            return null;
+        }
+
+        $base64 = trim(str_replace(["\n", "\r"], '', $base64));
+
+        if (!preg_match('/^data:image\/(\w+);base64,(.+)$/', $base64, $matches)) {
+            return null;
+        }
+
+        $data = base64_decode($matches[2]);
+
+        if (!$data) {
+            return null;
+        }
+
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+            $image = \Intervention\Image\ImageManager::withDriver(new \Intervention\Image\Drivers\Gd\Driver())
+                ->read($data)
+                ->scaleDown(width: 1200);
+
+            $encoded = $image->toWebp(quality: 80)->toString();
+
+            $filename = $folder . '/' . Str::uuid() . '.webp';
+
+            Storage::disk('spaces')->put($filename, $encoded, 'public');
+
+            return $cdnUrl . '/' . $filename;
+        } catch (\Throwable $e) {
+            Log::error('Spaces base64 upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('displaySpacesImage')) {
+    function displaySpacesImage(?string $path): string
+    {
+        if (!$path) {
+            return '';
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+        return $cdnUrl . '/' . ltrim($path, '/');
+    }
+}
+
+if (!function_exists('deleteFromSpaces')) {
+    function deleteFromSpaces(string $url): bool
+    {
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+            $path = ltrim(str_replace($cdnUrl, '', $url), '/');
+
+            return Storage::disk('spaces')->delete($path);
+        } catch (\Throwable $e) {
+            Log::error('Spaces delete failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+}
+if (!function_exists('uploadImageToSpaces')) {
+    function uploadImageToSpaces($file, string $folder = 'Freebyz'): ?string
+    {
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+            $image = \Intervention\Image\ImageManager::withDriver(new \Intervention\Image\Drivers\Gd\Driver())
+                ->read($file)
+                ->scaleDown(width: 1200);
+
+            $encoded = $image->toWebp(quality: 80)->toString();
+
+            $filename = $folder . '/' . Str::uuid() . '.webp';
+
+            Storage::disk('spaces')->put($filename, $encoded, 'public');
+
+            return $cdnUrl . '/' . $filename;
+        } catch (\Throwable $e) {
+            Log::error('Spaces image upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('uploadBase64ImageToSpaces')) {
+    function uploadBase64ImageToSpaces(?string $base64, string $folder = 'Freebyz'): ?string
+    {
+        if (!$base64) {
+            return null;
+        }
+
+        $base64 = trim(str_replace(["\n", "\r"], '', $base64));
+
+        if (!preg_match('/^data:image\/(\w+);base64,(.+)$/', $base64, $matches)) {
+            return null;
+        }
+
+        $data = base64_decode($matches[2]);
+
+        if (!$data) {
+            return null;
+        }
+
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+            $image = \Intervention\Image\ImageManager::withDriver(new \Intervention\Image\Drivers\Gd\Driver())
+                ->read($data)
+                ->scaleDown(width: 1200);
+
+            $encoded = $image->toWebp(quality: 80)->toString();
+
+            $filename = $folder . '/' . Str::uuid() . '.webp';
+
+            Storage::disk('spaces')->put($filename, $encoded, 'public');
+
+            return $cdnUrl . '/' . $filename;
+        } catch (\Throwable $e) {
+            Log::error('Spaces base64 upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('displaySpacesImage')) {
+    function displaySpacesImage(?string $path): string
+    {
+        if (!$path) {
+            return '';
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+
+        return $cdnUrl . '/' . ltrim($path, '/');
+    }
+}
+
+if (!function_exists('deleteFromSpaces')) {
+    function deleteFromSpaces(string $url): bool
+    {
+        try {
+            $cdnUrl = rtrim(env('DO_SPACES_CDN_URL', env('DO_SPACES_ENDPOINT')), '/');
+            $path = ltrim(str_replace($cdnUrl, '', $url), '/');
+
+            return Storage::disk('spaces')->delete($path);
+        } catch (\Throwable $e) {
+            Log::error('Spaces delete failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+}
+
 if (!function_exists('uploadFileToCloudinary')) {
     function uploadFileToCloudinary($file, string $folder = 'files'): ?string
     {
@@ -3143,7 +3195,6 @@ if (!function_exists('uploadFileToCloudinary')) {
         }
     }
 }
-
 
 if (!function_exists('displayImage')) {
     function displayImage($path): string

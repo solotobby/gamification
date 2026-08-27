@@ -145,6 +145,12 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+        .fb-row-name:hover {
+            color: #1565D8;
+            text-decoration: underline;
         }
 
         .fb-row-time {
@@ -297,6 +303,12 @@
             display: flex;
             align-items: center;
             gap: .4rem;
+            text-decoration: none;
+        }
+
+        .fb-thread-name:hover {
+            color: #1565D8;
+            text-decoration: underline;
         }
 
         .fb-verified-tick {
@@ -618,6 +630,7 @@
             const THREAD_URL_BASE = '{{ url("admin/feedback/api") }}'; // + /{id}/thread
             const POLL_URL_BASE = '{{ url("admin/feedback/api") }}';   // + /{id}/poll
             const STORE_URL = '{{ route("store.admin.feedbackreplies") }}';
+            const USER_INFO_URL_BASE = '{{ url("user") }}'; // + /{id}/info
             const CSRF = '{{ csrf_token() }}';
 
             // ── List rendering ──
@@ -666,7 +679,7 @@
                         <div class="fb-row-avatar">${initials(r.user_name)}</div>
                         <div class="fb-row-body">
                             <div class="fb-row-top">
-                                <span class="fb-row-name">${escapeHtml(r.user_name)}</span>
+                                <a href="${USER_INFO_URL_BASE}/${r.user_id}/info" class="fb-row-name" onclick="event.stopPropagation()" target="_blank" rel="noopener">${escapeHtml(r.user_name)}</a>
                                 <span class="fb-row-time">${escapeHtml(r.last_activity)}</span>
                             </div>
                             <div class="fb-row-msg">${escapeHtml(r.message)}</div>
@@ -745,10 +758,10 @@
                         </button>
                         <div class="fb-thread-avatar">${initials(ticket.user.name)}</div>
                         <div>
-                            <div class="fb-thread-name">
+                            <a href="${USER_INFO_URL_BASE}/${ticket.user.id}/info" class="fb-thread-name" target="_blank" rel="noopener">
                                 ${escapeHtml(ticket.user.name)}
                                 ${ticket.user.is_verified ? '<svg class="fb-verified-tick" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.4 3.4-.5 1 3.3 3.2 1.6-1 3.3 1.9 2.9-2.6 2.2.3 3.4-3.4.3-1.9 2.9-3.3-1.3-3.3 1.3-1.9-2.9-3.4-.3.3-3.4-2.6-2.2 1.9-2.9-1-3.3 3.2-1.6 1-3.3 3.4.5z"/></svg>' : ''}
-                            </div>
+                            </a>
                             <div class="fb-thread-email">${escapeHtml(ticket.user.email)}</div>
                         </div>
                         <div class="fb-thread-meta">

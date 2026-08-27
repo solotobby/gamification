@@ -582,6 +582,18 @@ Route::post('admin/manual-fundings/{id}/action', [\App\Http\Controllers\Admin\Ad
 Route::post('admin/store/fund', [\App\Http\Controllers\Admin\AdminController::class, 'adminWalletTopUp'])->name('admin.wallet.topup');
 Route::post('admin/celebrity', [\App\Http\Controllers\Admin\AdminController::class, 'adminCelebrity'])->name('admin.celebrity');
 
+// admin web routes
+Route::middleware('auth')->prefix('admin/blogs')->name('admin.blogs.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\BlogController::class, 'index'])->name('index');
+    Route::get('/create', [\App\Http\Controllers\Admin\BlogController::class, 'create'])->name('create');
+    Route::post('/', [\App\Http\Controllers\Admin\BlogController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [\App\Http\Controllers\Admin\BlogController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [\App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
+    Route::delete('/{id}', [\App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
+    Route::post('/{id}/toggle-publish', [\App\Http\Controllers\Admin\BlogController::class, 'togglePublish'])->name('toggle-publish');
+    Route::get('/{id}/analytics', [\App\Http\Controllers\Admin\BlogController::class, 'analytics'])->name('analytics');
+});
+
 ///// External Fintech Api
 Route::get('flutterwave/trf/list', [\App\Http\Controllers\Admin\AdminController::class, 'listFlutterwaveTrf']);
 
@@ -636,9 +648,11 @@ Route::get('admin/dashboard/api/default', [\App\Http\Controllers\HomeController:
 Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
 
 //Banner Ad
-Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index']);
-Route::get('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner']);
-Route::get('admin/banner/reject/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'rejectBanner']);
+Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index'])->name('admin.banner.index');
+Route::post('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner'])->name('admin.banner.activate');
+Route::post('admin/banner/reject/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'rejectBanner'])->name('admin.banner.reject');
+Route::post('admin/banner/toggle/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'toggleBanner'])->name('admin.banner.toggle');
+
 
 // Route::resource('admin/safelock', AdminSafeLockController::class);
 Route::get('admin/safelock', [\App\Http\Controllers\Admin\SafeLockController::class, 'index']);
