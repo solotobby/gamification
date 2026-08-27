@@ -233,13 +233,13 @@ $count = \App\Models\Banner::where('status', false)->count();
                 <span class="nav-main-link-name">Feedbacks</span>
                 {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{
                     App\Models\Feedback::where('status', false)->count() }}</span> --}}
-                <span class="nav-main-link-badge badge rounded-pill bg-default">{{
+                {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{
     App\Models\Feedback::whereRaw('(
                             select fr.user_id from feedback_replies fr
                             where fr.feedback_id = feedback.id
                             order by fr.id desc
                             limit 1
-                        ) = feedback.user_id')->count() }}</span>
+                        ) = feedback.user_id')->count() }}</span> --}}
             </a>
         </li>
 
