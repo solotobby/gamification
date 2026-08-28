@@ -131,6 +131,15 @@
             </ul>
         </li>
 
+
+        <li class="nav-main-item">
+            <a class="nav-main-link {{ request()->routeIs('admin.career-profiles*') ? 'active' : '' }}"
+                href="{{ route('admin.career-profiles.index') }}">
+                <i class="nav-main-link-icon si si-user"></i>
+                <span class="nav-main-link-name">Career Profiles</span>
+            </a>
+        </li>
+
         <li class="nav-main-item">
             <a class="nav-main-link" href="{{ url('admin/banner/list') }}">
                 <i class="nav-main-link-icon fa fa-star-of-life"></i>
@@ -234,12 +243,12 @@ $count = \App\Models\Banner::where('status', false)->count();
                 {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{
                     App\Models\Feedback::where('status', false)->count() }}</span> --}}
                 {{-- <span class="nav-main-link-badge badge rounded-pill bg-default">{{
-    App\Models\Feedback::whereRaw('(
-                            select fr.user_id from feedback_replies fr
-                            where fr.feedback_id = feedback.id
-                            order by fr.id desc
-                            limit 1
-                        ) = feedback.user_id')->count() }}</span> --}}
+                    App\Models\Feedback::whereRaw('(
+                    select fr.user_id from feedback_replies fr
+                    where fr.feedback_id = feedback.id
+                    order by fr.id desc
+                    limit 1
+                    ) = feedback.user_id')->count() }}</span> --}}
             </a>
         </li>
 
