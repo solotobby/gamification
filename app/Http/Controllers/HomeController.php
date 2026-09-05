@@ -1049,10 +1049,11 @@ class HomeController extends Controller
 
     public function selectBankInformation()
     {
-        $bankList = bankList();
+        $currency = auth()->check() ? baseCurrency(auth()->user()) : 'NGN';
+        $bankList = bankList($currency);
         @$bankInfo = BankInformation::where('user_id', auth()->user()->id)->first();
         $otp = OTP::where('user_id', auth()->user()->id)->where('is_verified', false)->latest()->first();
-        return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'otp' => $otp]);
+        return view('user.bank_information', ['bankList' => $bankList, 'bankInfo' => $bankInfo, 'otp' => $otp, 'currency' => $currency]);
     }
 
     public function validateBankAccount(Request $request)
@@ -1062,7 +1063,7 @@ class HomeController extends Controller
             'bank_code'      => 'required|string',
         ]);
 
-        $currency = strtoupper($request->input('currency', 'NGN'));
+        $currency = strtoupper($request->input('currency', baseCurrency(auth()->user())));
         $method = strtolower($request->input('method', 'bank'));
 
         $accountInfo = resolveBankName($request->account_number, $request->bank_code, $currency, $method);
@@ -1088,53 +1089,53 @@ class HomeController extends Controller
     public function saveBankInformation(Request $request)
     {
         $request->validate([
-            'account_number' => 'required|digits:10|numeric',
+            'account_number' => 'required|string',
             'bank_code'      => 'required|string',
             'validated_name' => 'required|string',
             'bank_name'      => 'required|string',
+            'currency'       => 'nullable|string',
         ]);
 
-        // Check if same account exists for another user
-        // $duplicate = BankInformation::where('account_number', $request->account_number)
-        //     ->where('name', $request->validated_name)
-        //     ->where('user_id', '!=', auth()->id())
-        //     ->exists();
-
-        // if ($duplicate) {
-        //     auth()->user()->update(['is_blacklisted' => true]);
-        //     // return back()->with(key: 'error', 'Account already exists for another user. You have been flagged for review.');
-        // }
-
         try {
-            // Create recipient code
-            $recipientCode = recipientCode(
-                $request->validated_name,
-                $request->account_number,
-                $request->bank_code
-            );
+            $user = auth()->user();
+            $currency = $request->input('currency', baseCurrency($user));
+
+            // Create recipient code if NGN / Paystack configured
+            $recipientCode = null;
+            try {
+                if ($currency === 'NGN') {
+                    $recipientCode = recipientCode(
+                        $request->validated_name,
+                        $request->account_number,
+                        $request->bank_code
+                    );
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Recipient code generation skipped/failed: ' . $e->getMessage());
+            }
 
             // Create or update bank info
             $bankInfo = BankInformation::updateOrCreate(
-                ['user_id' => auth()->id()],
+                ['user_id' => $user->id],
                 [
                     'name'           => $request->validated_name,
                     'bank_name'      => $request->bank_name,
                     'account_number' => $request->account_number,
                     'bank_code'      => $request->bank_code,
                     'recipient_code' => $recipientCode['data']['recipient_code'] ?? null,
-                    'currency'       => 'NGN',
+                    'currency'       => $currency,
                     'status'         => true
                 ]
             );
 
             // Update user name if it does not match
-            if (strtolower(trim(auth()->user()->name)) !== strtolower(trim($request->validated_name))) {
-                auth()->user()->update(['name' => $request->validated_name]);
+            if (strtolower(trim($user->name)) !== strtolower(trim($request->validated_name))) {
+                $user->update(['name' => $request->validated_name]);
             }
 
             // Generate virtual account only if user phone is verified
-            if (auth()->user()->profile->phone_verified && $bankInfo) {
-                generateVirtualAccount($request->validated_name, auth()->user()->phone);
+            if ($user->profile && $user->profile->phone_verified && $bankInfo) {
+                generateVirtualAccount($request->validated_name, $user->phone);
             }
 
             return back()->with('success', 'Bank details saved successfully.');

@@ -332,13 +332,135 @@ if (!function_exists('initializeKorayPay')) {
 if (!function_exists('verifyKorayPay')) {
     function verifyKorayPay($referee)
     {
+        $secretKey = config('services.korapay.secret_key') ?: (config('services.env.kora_sec') ?: env('KORA_SEC', env('KORAPAY_SECRET_KEY')));
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . config('services.env.kora_sec')
+            'Authorization' => 'Bearer ' . $secretKey
         ])->get('https://api.korapay.com/merchant/api/v1/charges/' . $referee)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
+    }
+}
+
+if (!function_exists('getKorapayBanks')) {
+    function getKorapayBanks(string $countryCode, ?string $currency = null): array
+    {
+        return Cache::remember("korapay_banks_{$countryCode}_{$currency}", 86400, function () use ($countryCode, $currency) {
+            try {
+                $secretKey = config('services.korapay.secret_key') ?: (config('services.env.kora_sec') ?: env('KORA_SEC', env('KORAPAY_SECRET_KEY')));
+                $queryParams = ['countryCode' => strtoupper($countryCode)];
+                if ($currency) {
+                    $queryParams['currency'] = strtoupper($currency);
+                }
+
+                $res = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $secretKey,
+                    'Accept'        => 'application/json',
+                    'Content-Type'  => 'application/json',
+                ])->timeout(10)->get('https://api.korapay.com/merchant/api/v1/misc/banks', $queryParams);
+
+                if ($res->successful()) {
+                    $banks = $res->json('data') ?? [];
+                    if (is_array($banks)) {
+                        $mapped = array_map(fn($b) => [
+                            'name' => $b['name'] ?? '',
+                            'code' => (string) ($b['code'] ?? $b['id'] ?? ''),
+                            'id'   => $b['code'] ?? $b['id'] ?? '',
+                            'slug' => $b['slug'] ?? null,
+                        ], $banks);
+
+                        return collect($mapped)
+                            ->filter(fn($b) => !empty($b['code']) && !empty($b['name']))
+                            ->sortBy(fn($b) => strtoupper(trim($b['name'] ?? '')))
+                            ->values()
+                            ->all();
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Korapay getBanks for {$countryCode} failed: " . $e->getMessage());
+            }
+
+            return [];
+        });
+    }
+}
+
+if (!function_exists('getKorapayMobileMoneyOperators')) {
+    function getKorapayMobileMoneyOperators(string $countryCode): array
+    {
+        return Cache::remember("korapay_mmo_{$countryCode}", 86400, function () use ($countryCode) {
+            try {
+                $secretKey = config('services.korapay.secret_key') ?: (config('services.env.kora_sec') ?: env('KORA_SEC', env('KORAPAY_SECRET_KEY')));
+                $res = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $secretKey,
+                    'Accept'        => 'application/json',
+                    'Content-Type'  => 'application/json',
+                ])->timeout(10)->get('https://api.korapay.com/merchant/api/v1/misc/mobile-money', [
+                    'countryCode' => strtoupper($countryCode),
+                ]);
+
+                if ($res->successful()) {
+                    $operators = $res->json('data') ?? [];
+                    if (is_array($operators)) {
+                        $mapped = array_map(fn($op) => [
+                            'name' => $op['name'] ?? '',
+                            'code' => (string) ($op['code'] ?? $op['slug'] ?? ''),
+                            'id'   => $op['code'] ?? $op['slug'] ?? '',
+                            'slug' => $op['slug'] ?? '',
+                        ], $operators);
+
+                        return collect($mapped)
+                            ->filter(fn($op) => !empty($op['name']))
+                            ->sortBy(fn($op) => strtoupper(trim($op['name'] ?? '')))
+                            ->values()
+                            ->all();
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Korapay getMobileMoneyOperators for {$countryCode} failed: " . $e->getMessage());
+            }
+
+            return [];
+        });
+    }
+}
+
+if (!function_exists('resolveKorapayAccount')) {
+    function resolveKorapayAccount(string $accountNumber, string $bankCode, string $currency = 'NGN'): ?array
+    {
+        try {
+            $secretKey = config('services.korapay.secret_key') ?: (config('services.env.kora_sec') ?: env('KORA_SEC', env('KORAPAY_SECRET_KEY')));
+            $res = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $secretKey,
+                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/json',
+            ])->timeout(12)->post('https://api.korapay.com/merchant/api/v1/misc/banks/resolve', [
+                'bank'     => (string) $bankCode,
+                'account'  => (string) $accountNumber,
+                'currency' => strtoupper($currency),
+            ]);
+
+            Log::info('Korapay Resolve Account Response: ' . $res->body());
+
+            if ($res->successful()) {
+                $data = $res->json('data') ?? [];
+                $name = $data['account_name'] ?? null;
+                if (!empty($name)) {
+                    return [
+                        'status'         => true,
+                        'account_name'   => $name,
+                        'account_number' => $data['account_number'] ?? $accountNumber,
+                        'bank_code'      => $data['bank_code'] ?? $bankCode,
+                        'bank_name'      => $data['bank_name'] ?? null,
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Korapay resolveAccount error: ' . $e->getMessage());
+        }
+
+        return null;
     }
 }
 
@@ -2759,9 +2881,32 @@ if (!function_exists('bankList')) {
     function bankList($currency = 'NGN')
     {
         $currency = strtoupper($currency);
-        $countryMap = ['NGN' => 'NG', 'GHS' => 'GH', 'KES' => 'KE', 'ZAR' => 'ZA', 'UGX' => 'UG'];
+        $countryMap = [
+            'NGN' => 'NG',
+            'GHS' => 'GH',
+            'KES' => 'KE',
+            'ZAR' => 'ZA',
+            'UGX' => 'UG',
+            'TZS' => 'TZ',
+            'EGP' => 'EG',
+            'XAF' => 'CM',
+            'XOF' => 'CI',
+            'USD' => 'US',
+            'GBP' => 'GB',
+            'EUR' => 'EU',
+        ];
+
         if (isset($countryMap[$currency])) {
-            return getFlutterwaveBanks($countryMap[$currency]);
+            $countryCode = $countryMap[$currency];
+
+            // 1. Try Korapay first
+            $korapayBanks = getKorapayBanks($countryCode, $currency);
+            if (!empty($korapayBanks)) {
+                return $korapayBanks;
+            }
+
+            // 2. Fallback to Flutterwave
+            return getFlutterwaveBanks($countryCode);
         }
 
         return [];
@@ -2784,19 +2929,35 @@ if (!function_exists('resolveBankName')) {
             ];
         }
 
+        // 1. Try Korapay resolve first
+        $resolved = resolveKorapayAccount((string) $account_number, (string) $bank_code, $currency);
+        if ($resolved && !empty($resolved['account_name'])) {
+            return [
+                'status' => 'true',
+                'data' => [
+                    'account_name'   => $resolved['account_name'],
+                    'account_number' => $resolved['account_number'] ?? $account_number,
+                    'bank_code'      => $resolved['bank_code'] ?? $bank_code,
+                    'bank_name'      => $resolved['bank_name'] ?? null,
+                ],
+            ];
+        }
+
+        // 2. Fallback to Flutterwave resolve
         $resolved = resolveFlutterwaveAccount((string) $account_number, (string) $bank_code);
         if ($resolved && !empty($resolved['account_name'])) {
             return [
                 'status' => 'true',
                 'data' => [
-                    'account_name' => $resolved['account_name'],
+                    'account_name'   => $resolved['account_name'],
                     'account_number' => $account_number,
-                    'bank_code' => $bank_code,
+                    'bank_code'      => $bank_code,
+                    'bank_name'      => null,
                 ],
             ];
         }
 
-        return ['status' => 'false', 'message' => 'Flutterwave could not resolve bank account.'];
+        return ['status' => 'false', 'message' => 'Could not resolve bank account details. Please verify your account number and bank.'];
     }
 }
 

@@ -81,4 +81,9 @@ return [
         'from_name' => env('ZEPTO_FROM_NAME', 'Your App Name'),
     ],
 
+    'korapay' => [
+        'secret_key' => env('KORA_SEC', env('KORAPAY_SECRET_KEY', getenv('KORA_SEC'))),
+        'public_key' => env('KORA_PUB_KEY', env('KORAPAY_PUBLIC_KEY', getenv('KORA_PUB_KEY'))),
+    ],
+
 ];
