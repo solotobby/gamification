@@ -71,18 +71,26 @@
                                     <br>
                                     {{@$campaign->campaign->number_of_staff}}
                                 </div>
-                                 <div class="col-6">
-                                    @if(auth()->user()->wallet->base_currency === "Naira" || auth()->user()->wallet->base_currency === 'NGN')
-                                        <label class="form-label" for="post-salary-min">Cost per Campaign</label>
-                                    @else
-                                        <label class="form-label" for="post-salary-min">Cost per Campaign</label>
-                                    @endif
-                                    <br>
-                                    {{$campaign->campaign->campaign_amount}}
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold" for="post-salary-min">Disputed Worker Payout</label>
+                                    <div class="fs-5 fw-bold text-success">
+                                        {{ formatCurrency(@$campaign->amount ?: @$campaign->campaign->campaign_amount, @$campaign->campaign->currency) }}
+                                        <span class="badge-currency badge-currency-{{ strtolower(@$campaign->campaign->currency) }} ms-1">{{ @$campaign->campaign->currency }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
-                            <h4>Estimated Cost: {{ $campaign->currency }} {{ $campaign->campaign->total_amount }} </h4>
+                            <div class="d-flex justify-content-between align-items-center p-3 bg-body-light rounded-3">
+                                <div>
+                                    <span class="fs-xs text-muted text-uppercase fw-bold">Campaign Total Escrow</span>
+                                    <h4 class="mb-0 text-dark fw-bold">{{ formatCurrency(@$campaign->campaign->total_amount, @$campaign->campaign->currency) }}</h4>
+                                </div>
+                                <div>
+                                    <span class="badge rounded-pill {{ @$campaign->is_dispute_resolved ? 'bg-success' : 'bg-danger' }} px-3 py-2 fs-sm">
+                                        {{ @$campaign->is_dispute_resolved ? 'Resolved' : 'Dispute Open' }}
+                                    </span>
+                                </div>
+                            </div>
 
 
                         </div>

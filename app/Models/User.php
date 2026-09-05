@@ -85,7 +85,45 @@ class User extends Authenticatable
             return 'NGN';
         }
 
-        return $this->wallet->base_currency ?? 'NGN';
+        return $this->currency_code;
+    }
+
+    public function getCurrencyCodeAttribute(): string
+    {
+        $currency = $this->wallet->base_currency ?? $this->base_currency ?? 'NGN';
+        return match (strtolower($currency)) {
+            'naira', 'ngn' => 'NGN',
+            'dollar', 'usd' => 'USD',
+            default => strtoupper($currency),
+        };
+    }
+
+    public function getActiveBalanceAttribute(): float
+    {
+        if (!$this->wallet) {
+            return 0.00;
+        }
+        $currency = $this->currency_code;
+        if (in_array($currency, ['NGN', 'NAIRA'])) {
+            return (float) $this->wallet->balance;
+        } elseif (in_array($currency, ['USD', 'DOLLAR'])) {
+            return (float) $this->wallet->usd_balance;
+        } else {
+            return (float) $this->wallet->base_currency_balance;
+        }
+    }
+
+    public function getFormattedBalanceAttribute(): string
+    {
+        return formatCurrency($this->active_balance, $this->currency_code);
+    }
+
+    public function isVerifiedInCurrency(): bool
+    {
+        if ($this->currency_code === 'USD') {
+            return (bool) ($this->USD_verified !== null || $this->is_verified == '1');
+        }
+        return (bool) ($this->is_verified == '1' || $this->is_verified === true);
     }
 
     public function staff()

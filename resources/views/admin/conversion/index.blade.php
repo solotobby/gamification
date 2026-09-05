@@ -1,5 +1,9 @@
 @extends('layouts.main.master')
 
+@php
+  $errors = $errors ?? new \Illuminate\Support\ViewErrorBag;
+@endphp
+
 @section('style')
 <link rel="stylesheet" href="{{ asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
 @endsection

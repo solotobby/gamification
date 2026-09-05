@@ -1,0 +1,289 @@
+/**
+ * Modern Admin UI Stylesheet - Freebyz Admin Portal
+ * Sleek, clean, responsive multi-currency admin styling
+ */
+
+:root {
+  --admin-primary: #3b82f6;
+  --admin-primary-dark: #1d4ed8;
+  --admin-primary-light: #eff6ff;
+  --admin-success: #10b981;
+  --admin-success-light: #ecfdf5;
+  --admin-warning: #f59e0b;
+  --admin-warning-light: #fffbeb;
+  --admin-danger: #ef4444;
+  --admin-danger-light: #fef2f2;
+  --admin-indigo: #6366f1;
+  --admin-indigo-light: #eef2ff;
+  --admin-purple: #8b5cf6;
+  --admin-surface: #ffffff;
+  --admin-bg: #f8fafc;
+  --admin-border: #e2e8f0;
+  --admin-text-main: #1e293b;
+  --admin-text-muted: #64748b;
+  --admin-radius: 12px;
+  --admin-radius-sm: 8px;
+  --admin-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --admin-shadow-hover: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* Modern Card Styles */
+.block.block-rounded,
+.card-modern {
+  border-radius: var(--admin-radius) !important;
+  border: 1px solid var(--admin-border) !important;
+  box-shadow: var(--admin-shadow) !important;
+  transition: all 0.2s ease-in-out !important;
+  background-color: var(--admin-surface);
+}
+
+.card-modern:hover {
+  box-shadow: var(--admin-shadow-hover) !important;
+}
+
+.block-header {
+  border-bottom: 1px solid var(--admin-border);
+  padding: 1rem 1.5rem;
+}
+
+/* Sidebar Modernization */
+.nav-main-item {
+  margin-bottom: 2px;
+}
+
+.nav-main-link {
+  border-radius: var(--admin-radius-sm);
+  padding: 0.55rem 0.9rem !important;
+  font-weight: 500;
+  color: #475569 !important;
+  transition: all 0.15s ease;
+}
+
+.nav-main-link:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.nav-main-link.active {
+  background-color: #eff6ff !important;
+  color: var(--admin-primary) !important;
+  font-weight: 600;
+}
+
+.nav-main-link-icon {
+  margin-right: 0.65rem !important;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.nav-main-link:hover .nav-main-link-icon,
+.nav-main-link.active .nav-main-link-icon {
+  color: var(--admin-primary) !important;
+}
+
+.nav-main-submenu {
+  padding-left: 1.25rem !important;
+  margin-top: 2px;
+}
+
+.nav-main-submenu .nav-main-link {
+  padding: 0.4rem 0.75rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* Multi-Currency Badges */
+.badge-currency {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.35em 0.65em;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid transparent;
+}
+
+.badge-currency-ngn {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.badge-currency-usd {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.badge-currency-ghs {
+  background-color: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.badge-currency-kes {
+  background-color: #f5f3ff;
+  color: #5b21b6;
+  border-color: #ddd6fe;
+}
+
+.badge-currency-zar {
+  background-color: #fff1f2;
+  color: #9f1239;
+  border-color: #fecdd3;
+}
+
+.badge-currency-rwf,
+.badge-currency-xof {
+  background-color: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.badge-currency-default {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+/* Currency Balance Display */
+.currency-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.currency-symbol {
+  opacity: 0.8;
+  margin-right: 2px;
+}
+
+/* Stat Cards for Financials */
+.currency-stat-card {
+  border-radius: var(--admin-radius);
+  padding: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.currency-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-hover);
+}
+
+.currency-stat-card .stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.currency-stat-card .stat-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+}
+
+.currency-stat-card .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text-main);
+  line-height: 1.2;
+}
+
+.currency-stat-card .stat-footer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+/* Table Enhancements */
+.table-modern {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-modern th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.table-modern td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.table-modern tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Filter Bar */
+.filter-bar {
+  background-color: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--admin-shadow);
+}
+
+/* Currency Switcher Preview Box */
+.conversion-preview-box {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1px dashed #34d399;
+  border-radius: var(--admin-radius-sm);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.conversion-preview-box.calculating {
+  opacity: 0.6;
+}
+
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-filter {
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.pill-filter:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.pill-filter.active {
+  background-color: var(--admin-primary);
+  color: #ffffff;
+  border-color: var(--admin-primary);
+  font-weight: 600;
+}

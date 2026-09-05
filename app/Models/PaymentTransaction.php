@@ -53,9 +53,7 @@ class PaymentTransaction extends Model
             default => (float) $wallet->base_currency_balance,
         };
 
-        $newBalance = $walletBalance + (float) $this->amount;
-
-        $this->balance = $newBalance;
+        $this->balance = $walletBalance;
         $this->saveQuietly();
     }
 

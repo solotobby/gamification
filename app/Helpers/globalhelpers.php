@@ -248,8 +248,7 @@ if (!function_exists('creditWallet')) {
     {
         if ($type == 'NGN') {
             $wallet = Wallet::where('user_id', $user->id)->first();
-            $wallet->balance += (int) $amount;
-            // $wallet->balance += (int) $amount;
+            $wallet->balance += (float) $amount;
             $wallet->save();
             return $wallet;
         } elseif ($type == 'USD') {
@@ -349,6 +348,7 @@ if (!function_exists('getInterswitchAccessToken')) {
         return Cache::remember('interswitch_access_token', 39000, function () {
             $clientId = config('services.interswitch.client_id');
             $clientSecret = config('services.interswitch.client_secret');
+            $passportUrl = config('services.interswitch.passport_url', 'https://passport.interswitchng.com');
 
             $credentials = base64_encode("{$clientId}:{$clientSecret}");
 
@@ -357,7 +357,7 @@ if (!function_exists('getInterswitchAccessToken')) {
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ])
                 ->asForm()
-                ->post('https://passport.interswitchng.com/passport/oauth/token', [
+                ->post("{$passportUrl}/passport/oauth/token", [
                     'grant_type' => 'client_credentials',
                 ]);
 
@@ -384,9 +384,10 @@ if (!function_exists('interswitchOauthHeaders')) {
 if (!function_exists('verifyInterswitch')) {
     function verifyInterswitch(string $reference, float $amount): ?array
     {
+        $baseUrl = config('services.interswitch.base_url', 'https://api.interswitchng.com');
         $merchantCode = config('services.interswitch.merchant_code');
 
-        $url = "https://api.interswitchng.com/collections/api/v1/gettransaction?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
+        $url = "{$baseUrl}/collections/api/v1/gettransaction?merchantcode={$merchantCode}&transactionreference={$reference}&amount={$amount}";
 
         $response = Http::withHeaders(interswitchOauthHeaders())
             ->get($url);
@@ -399,13 +400,372 @@ if (!function_exists('verifyInterswitch')) {
     }
 }
 
+if (!function_exists('createInterswitchVirtualAccount')) {
+    function createInterswitchVirtualAccount(string $accountName, ?string $provider = null): ?array
+    {
+        try {
+            $baseUrl = config('services.interswitch.base_url', 'https://api.interswitchng.com');
+            $url = "{$baseUrl}/paymentgateway/api/v1/payable/virtualaccount";
+            $merchantCode = config('services.interswitch.merchant_code');
+            $payableCode = config('services.interswitch.payable_code');
+            $providerCode = $provider ?? config('services.interswitch.provider_code', 'WEMA');
+
+            $payload = [
+                'accountName' => 'Freebyz Technologies/' . $accountName,
+                'merchantCode' => (string) $merchantCode,
+            ];
+            if ($payableCode) {
+                $payload['payableCode'] = (string) $payableCode;
+            }
+            if ($providerCode) {
+                $payload['provider'] = $providerCode;
+            }
+
+            $res = Http::withHeaders(interswitchOauthHeaders())
+                ->timeout(20)
+                ->post($url, $payload);
+
+            Log::info('Interswitch Create Virtual Account Response: ' . $res->body());
+
+            return $res->successful() ? $res->json() : null;
+        } catch (\Throwable $e) {
+            Log::error('Interswitch Create Virtual Account Error: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('getPaystackBanks')) {
+    function getPaystackBanks(): array
+    {
+        return Cache::remember('paystack_banks_list', 86400, function () {
+            try {
+                $secretKey = config('paystack.secretKey') ?: env('PAYSTACK_SECRET_KEY');
+                $res = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $secretKey,
+                ])->timeout(10)->get('https://api.paystack.co/bank?country=nigeria');
+
+                if ($res->successful()) {
+                    $banks = $res->json('data');
+                    if (is_array($banks) && count($banks) > 0) {
+                        return array_map(fn($b) => [
+                            'name' => $b['name'] ?? '',
+                            'code' => $b['code'] ?? '',
+                            'id' => $b['id'] ?? '',
+                        ], $banks);
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Paystack getBanks failed: ' . $e->getMessage());
+            }
+
+            return [
+                ['name' => 'Access Bank', 'code' => '044'],
+                ['name' => 'Access Bank (Diamond)', 'code' => '063'],
+                ['name' => 'Citibank Nigeria', 'code' => '023'],
+                ['name' => 'Ecobank Nigeria', 'code' => '050'],
+                ['name' => 'Fidelity Bank', 'code' => '070'],
+                ['name' => 'First Bank of Nigeria', 'code' => '011'],
+                ['name' => 'First City Monument Bank (FCMB)', 'code' => '214'],
+                ['name' => 'Guaranty Trust Bank (GTBank)', 'code' => '058'],
+                ['name' => 'Heritage Bank', 'code' => '030'],
+                ['name' => 'Jaiz Bank', 'code' => '301'],
+                ['name' => 'Keystone Bank', 'code' => '082'],
+                ['name' => 'Kuda Bank', 'code' => '50211'],
+                ['name' => 'Lotus Bank', 'code' => '303'],
+                ['name' => 'Moniepoint Microfinance Bank', 'code' => '50515'],
+                ['name' => 'OPay Digital Services Limited (OPay)', 'code' => '999992'],
+                ['name' => 'Optimus Bank', 'code' => '107'],
+                ['name' => 'PalmPay', 'code' => '999991'],
+                ['name' => 'Parallex Bank', 'code' => '104'],
+                ['name' => 'Polaris Bank', 'code' => '076'],
+                ['name' => 'Premium Trust Bank', 'code' => '105'],
+                ['name' => 'Providus Bank', 'code' => '101'],
+                ['name' => 'Rubies MFB', 'code' => '125'],
+                ['name' => 'Stanbic IBTC Bank', 'code' => '221'],
+                ['name' => 'Standard Chartered Bank', 'code' => '068'],
+                ['name' => 'Sterling Bank', 'code' => '232'],
+                ['name' => 'Suntrust Bank', 'code' => '100'],
+                ['name' => 'TAJ Bank', 'code' => '302'],
+                ['name' => 'Titan Trust Bank', 'code' => '102'],
+                ['name' => 'Union Bank of Nigeria', 'code' => '032'],
+                ['name' => 'United Bank for Africa (UBA)', 'code' => '033'],
+                ['name' => 'Unity Bank', 'code' => '215'],
+                ['name' => 'VFD Microfinance Bank', 'code' => '566'],
+                ['name' => 'Wema Bank', 'code' => '035'],
+                ['name' => 'Zenith Bank', 'code' => '057'],
+            ];
+        });
+    }
+}
+
+if (!function_exists('resolvePaystackAccount')) {
+    function resolvePaystackAccount(string $accountNumber, string $bankCode): ?array
+    {
+        try {
+            $secretKey = config('paystack.secretKey') ?: env('PAYSTACK_SECRET_KEY');
+            $url = 'https://api.paystack.co/bank/resolve?account_number=' . $accountNumber . '&bank_code=' . $bankCode;
+
+            $res = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $secretKey,
+            ])->timeout(10)->get($url);
+
+            Log::info('Paystack Name Enquiry Response: ' . $res->body());
+
+            if ($res->successful()) {
+                $data = $res->json('data') ?? $res->json();
+                $name = $data['account_name'] ?? null;
+                if ($name) {
+                    return [
+                        'status' => true,
+                        'account_name' => $name,
+                        'account_number' => $accountNumber,
+                        'bank_code' => $bankCode,
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Paystack resolveAccount error: ' . $e->getMessage());
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('getInterswitchBanks')) {
+    function getInterswitchBanks(): array
+    {
+        return Cache::remember('interswitch_banks_list', 86400, function () {
+            try {
+                $baseUrl = config('services.interswitch.base_url', 'https://qa.interswitchng.com');
+                $url = "{$baseUrl}/generic-wallet/api/v1/admin/account/banks";
+
+                $res = Http::withHeaders(interswitchOauthHeaders())
+                    ->timeout(10)
+                    ->get($url);
+
+                if ($res->successful()) {
+                    $banks = $res->json('data') ?? $res->json();
+                    if (is_array($banks) && count($banks) > 0) {
+                        return array_map(fn($b) => [
+                            'name' => $b['name'] ?? $b['bankName'] ?? '',
+                            'code' => $b['code'] ?? $b['bankCode'] ?? '',
+                        ], $banks);
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Interswitch getBanks failed, using default NGN bank list: ' . $e->getMessage());
+            }
+
+            return [
+                ['name' => 'Access Bank', 'code' => '044'],
+                ['name' => 'Access Bank (Diamond)', 'code' => '063'],
+                ['name' => 'Citibank Nigeria', 'code' => '023'],
+                ['name' => 'Ecobank Nigeria', 'code' => '050'],
+                ['name' => 'Fidelity Bank', 'code' => '070'],
+                ['name' => 'First Bank of Nigeria', 'code' => '011'],
+                ['name' => 'First City Monument Bank (FCMB)', 'code' => '214'],
+                ['name' => 'Guaranty Trust Bank (GTBank)', 'code' => '058'],
+                ['name' => 'Heritage Bank', 'code' => '030'],
+                ['name' => 'Jaiz Bank', 'code' => '301'],
+                ['name' => 'Keystone Bank', 'code' => '082'],
+                ['name' => 'Kuda Bank', 'code' => '50211'],
+                ['name' => 'Lotus Bank', 'code' => '303'],
+                ['name' => 'Moniepoint Microfinance Bank', 'code' => '50515'],
+                ['name' => 'OPay Digital Services Limited (OPay)', 'code' => '999992'],
+                ['name' => 'Optimus Bank', 'code' => '107'],
+                ['name' => 'PalmPay', 'code' => '999991'],
+                ['name' => 'Parallex Bank', 'code' => '104'],
+                ['name' => 'Polaris Bank', 'code' => '076'],
+                ['name' => 'Premium Trust Bank', 'code' => '105'],
+                ['name' => 'Providus Bank', 'code' => '101'],
+                ['name' => 'Rubies MFB', 'code' => '125'],
+                ['name' => 'Stanbic IBTC Bank', 'code' => '221'],
+                ['name' => 'Standard Chartered Bank', 'code' => '068'],
+                ['name' => 'Sterling Bank', 'code' => '232'],
+                ['name' => 'Suntrust Bank', 'code' => '100'],
+                ['name' => 'TAJ Bank', 'code' => '302'],
+                ['name' => 'Titan Trust Bank', 'code' => '102'],
+                ['name' => 'Union Bank of Nigeria', 'code' => '032'],
+                ['name' => 'United Bank for Africa (UBA)', 'code' => '033'],
+                ['name' => 'Unity Bank', 'code' => '215'],
+                ['name' => 'VFD Microfinance Bank', 'code' => '566'],
+                ['name' => 'Wema Bank', 'code' => '035'],
+                ['name' => 'Zenith Bank', 'code' => '057'],
+            ];
+        });
+    }
+}
+
+if (!function_exists('resolveInterswitchAccount')) {
+    function resolveInterswitchAccount(string $accountNumber, string $bankCode): ?array
+    {
+        try {
+            $baseUrl = config('services.interswitch.base_url', 'https://qa.interswitchng.com');
+            $url = "{$baseUrl}/api/v1/inquiry/bank-code/{$bankCode}/account/{$accountNumber}";
+
+            $res = Http::withHeaders(interswitchOauthHeaders())
+                ->timeout(10)
+                ->get($url);
+
+            Log::info('Interswitch Name Enquiry Response: ' . $res->body());
+
+            if ($res->successful()) {
+                $data = $res->json();
+                $name = $data['name'] ?? $data['accountName'] ?? $data['data']['account_name'] ?? null;
+                if ($name) {
+                    return [
+                        'status' => true,
+                        'account_name' => $name,
+                        'account_number' => $accountNumber,
+                        'bank_code' => $bankCode,
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Interswitch resolveAccount error: ' . $e->getMessage());
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('createFlutterwaveVirtualAccount')) {
+    function createFlutterwaveVirtualAccount(array $data): ?array
+    {
+        try {
+            $secretKey = config('services.flutterwave.secret_key');
+            $url = 'https://api.flutterwave.com/v3/virtual-account-numbers';
+
+            $payload = array_filter([
+                'email' => $data['email'],
+                'currency' => $data['currency'] ?? 'GHS',
+                'amount' => $data['amount'] ?? 1,
+                'tx_ref' => $data['tx_ref'] ?? ('VA-' . time() . '-' . rand(100, 999)),
+                'is_permanent' => true,
+                'firstname' => $data['firstname'] ?? null,
+                'lastname' => $data['lastname'] ?? null,
+                'narration' => $data['narration'] ?? 'Freebyz Wallet Funding',
+            ]);
+
+            $res = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $secretKey,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->timeout(15)->post($url, $payload);
+
+            Log::info('Flutterwave Create Virtual Account Response: ' . $res->body());
+
+            return $res->successful() ? ($res->json('data') ?? $res->json()) : null;
+        } catch (\Throwable $e) {
+            Log::error('Flutterwave Create Virtual Account Error: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('getFlutterwaveBanks')) {
+    function getFlutterwaveBanks(string $countryCode): array
+    {
+        return Cache::remember("flutterwave_banks_{$countryCode}", 86400, function () use ($countryCode) {
+            try {
+                $secretKey = config('services.flutterwave.secret_key');
+                $res = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $secretKey,
+                    'Content-Type' => 'application/json',
+                ])->timeout(10)->get("https://api.flutterwave.com/v3/banks/{$countryCode}");
+
+                if ($res->successful()) {
+                    $banks = $res->json('data') ?? [];
+                    $mapped = array_map(fn($b) => [
+                        'name' => $b['name'] ?? '',
+                        'code' => (string) ($b['code'] ?? $b['id'] ?? ''),
+                        'id' => $b['id'] ?? '',
+                    ], $banks);
+
+                    return collect($mapped)
+                        ->sortBy(fn($b) => strtoupper(trim($b['name'] ?? '')))
+                        ->values()
+                        ->all();
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Flutterwave getBanks for {$countryCode} failed: " . $e->getMessage());
+            }
+
+            return [];
+        });
+    }
+}
+
+if (!function_exists('getFlutterwaveMobileMoneyNetworks')) {
+    function getFlutterwaveMobileMoneyNetworks(string $countryCode): array
+    {
+        $networks = [
+            'GH' => [
+                ['name' => 'MTN Mobile Money', 'code' => 'MTN'],
+                ['name' => 'Vodafone Cash', 'code' => 'VODAFONE'],
+                ['name' => 'AirtelTigo Money', 'code' => 'AIRTELTIGO'],
+            ],
+            'KE' => [
+                ['name' => 'M-Pesa', 'code' => 'MPESA'],
+                ['name' => 'Airtel Money', 'code' => 'AIRTEL'],
+            ],
+            'UG' => [
+                ['name' => 'MTN Mobile Money', 'code' => 'MTN'],
+                ['name' => 'Airtel Money', 'code' => 'AIRTEL'],
+            ],
+        ];
+
+        return $networks[strtoupper($countryCode)] ?? [];
+    }
+}
+
+if (!function_exists('resolveFlutterwaveAccount')) {
+    function resolveFlutterwaveAccount(string $accountNumber, string $bankCode): ?array
+    {
+        try {
+            $secretKey = config('services.flutterwave.secret_key');
+            $res = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $secretKey,
+                'Content-Type' => 'application/json',
+            ])->timeout(10)->post('https://api.flutterwave.com/v3/accounts/resolve', [
+                'account_number' => $accountNumber,
+                'account_bank' => $bankCode,
+            ]);
+
+            Log::info('Flutterwave Resolve Account Response: ' . $res->body());
+
+            if ($res->successful()) {
+                $data = $res->json('data') ?? $res->json();
+                $name = $data['account_name'] ?? null;
+                if ($name) {
+                    return [
+                        'status' => true,
+                        'account_name' => $name,
+                        'account_number' => $accountNumber,
+                        'bank_code' => $bankCode,
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Flutterwave resolveAccount error: ' . $e->getMessage());
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('flutterwaveVirtualAccount')) {
     function flutterwaveVirtualAccount($payload)
     {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
+            'Authorization' => 'Bearer ' . (config('services.flutterwave.secret_key')),
         ])->post('https://api.flutterwave.com/v3/virtual-account-numbers', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -418,7 +778,7 @@ if (!function_exists('flutterwavePaymentInitiation')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('services.flutterwave.secret_key')
         ])->post('https://api.flutterwave.com/v3/payments', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -431,7 +791,7 @@ if (!function_exists('flutterwaveVeryTransaction')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('services.flutterwave.secret_key')
         ])->get('https://api.flutterwave.com/v3/transactions/' . $id . '/verify')->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -444,7 +804,7 @@ if (!function_exists('flutterwaveTransfer')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('services.flutterwave.secret_key')
         ])->post('https://api.flutterwave.com/v3/transfers', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -896,118 +1256,124 @@ if (!function_exists('reGenerateVirtualAccount')) {
     function reGenerateVirtualAccount($user)
     {
         try {
-            $data = DB::transaction(function () use ($user) {
-                // Fetch the object within the transaction
+            $currency = baseCurrency($user);
 
-                // check if user exist, if yes, update informatioon
-                $fetchCustomer = fetchCustomer($user->email);
+            if ($currency === 'NGN') {
+                $result = createInterswitchVirtualAccount($user->name);
 
-                if ($fetchCustomer['status'] == true) {
-                    $phone = '234' . substr($user->phone, 1);
-                    // update customer
-                    $customerPayload = [
-                        'first_name' => $user->name,  // auth()->user()->name,
-                        'last_name' => 'Freebyz',
-                        'phone' => '+' . $phone
-                    ];
+                if ($result && !isset($result['error'])) {
+                    $bankName = $result['bankName'] ?? 'Wema Bank';
+                    $accountName = $result['accountName'] ?? $user->name;
+                    $accountNumber = $result['accountNumber'] ?? null;
+                    $customerId = $result['payableCode'] ?? null;
+                    $integration = $result['merchantCode'] ?? config('services.interswitch.merchant_code');
 
-                    $updateCustomer = updateCustomer($user->email, $customerPayload);
+                    if ($accountNumber) {
+                        $va = VirtualAccount::updateOrCreate(
+                            ['user_id' => $user->id],
+                            [
+                                'channel' => 'interswitch',
+                                'customer_id' => $customerId,
+                                'customer_intgration' => $integration,
+                                'bank_name' => $bankName,
+                                'account_name' => $accountName,
+                                'account_number' => $accountNumber,
+                                'currency' => 'NGN',
+                                'status' => true,
+                            ]
+                        );
 
-                    if ($updateCustomer['status'] == true) {
-                        $data = [
-                            'customer' => $updateCustomer['data']['customer_code'],
-                            'preferred_bank' => env('PAYSTACK_BANK')
-                        ];
-
-                        $response = virtualAccount($data);
-
-                        $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
-                        if ($VirtualAccount) {
-                            $VirtualAccount->bank_name = $response['data']['bank']['name'];
-                            $VirtualAccount->account_name = $response['data']['account_name'];
-                            $VirtualAccount->account_number = $response['data']['account_number'];
-                            $VirtualAccount->account_name = $response['data']['account_name'];
-                            $VirtualAccount->currency = 'NGN';
-                            $VirtualAccount->save();
-                        } else {
-                            $VirtualAccount = VirtualAccount::create([
-                                'user_id' => $user->id,
-                                'channel' => 'paystack',
-                                'customer_id' => $updateCustomer['data']['customer_code'],
-                                'customer_intgration' => $updateCustomer['data']['integration'],
-                                'bank_name' => $response['data']['bank']['name'],
-                                'account_name' => $response['data']['account_name'],
-                                'account_number' => $response['data']['account_number'],
-                                // 'account_name' => $response['data']['account_name'],
-                                'currency' => 'NGN'
-                            ]);
+                        try {
+                            app(NotificationHelpers::class)->createNotification(
+                                $user,
+                                'Virtual Account Created',
+                                "Your NGN virtual account {$accountNumber} ({$bankName}) is ready.",
+                                'wallet'
+                            );
+                        } catch (\Throwable $ne) {
+                            Log::warning('Notification dispatch failed: ' . $ne->getMessage());
                         }
 
-                        $data['res'] = $response;
-                        $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
-                        return $data;
-                    }
-                } else {
-                    $phone = '234' . substr($user->phone, 1);
-                    $payload = [
-                        'email' => $user->email,
-                        'first_name' => $user->name,
-                        'last_name' => 'Freebyz',
-                        'phone' => '+' . $phone
-                    ];
-                    $res = createCustomer($payload);
-
-                    if ($res['status'] == true) {
-                        $VirtualAccount = VirtualAccount::where('user_id', $user->id)->first();
-
-                        $data = [
-                            'customer' => $res['data']['customer_code'],
-                            'preferred_bank' => env('PAYSTACK_BANK')  // "wema-bank"
+                        return [
+                            'status' => true,
+                            'message' => "NGN Virtual account generated successfully ({$bankName} - {$accountNumber}).",
+                            'data' => $va,
                         ];
-
-                        $response = virtualAccount($data);
-
-                        if ($VirtualAccount) {
-                            $VirtualAccount->bank_name = $response['data']['bank']['name'];
-                            $VirtualAccount->account_name = $response['data']['account_name'];
-                            $VirtualAccount->account_number = $response['data']['account_number'];
-                            $VirtualAccount->account_name = $response['data']['account_name'];
-                            $VirtualAccount->currency = 'NGN';
-                            $VirtualAccount->save();
-                        } else {
-                            $VirtualAccount = VirtualAccount::create([
-                                'user_id' => $user->id,
-                                'channel' => 'paystack',
-                                'customer_id' => $res['data']['customer_code'],
-                                'customer_intgration' => $res['data']['integration'],
-                                'bank_name' => $response['data']['bank']['name'],
-                                'account_name' => $response['data']['account_name'],
-                                'account_number' => $response['data']['account_number'],
-                                // 'account_name' => $response['data']['account_name'],
-                                'currency' => 'NGN'
-                            ]);
-                        }
-
-                        $data['res'] = $response;
-                        $data['va'] = $VirtualAccount;  // back()->with('success', 'Account Created Succesfully');
-                        return $data;
-                    } else {
-                        throw new \Exception('An error occoured while processing');
                     }
                 }
-            }, 2);
 
-            // Return the object as JSON
-            return response()->json([
-                'status' => true,
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-            // Handle errors and roll back the transaction
-            return response()->json([
+                return [
+                    'status' => false,
+                    'message' => $result['description'] ?? 'Could not generate Interswitch NGN virtual account.',
+                ];
+            } elseif ($currency === 'GHS') {
+                $nameParts = explode(' ', trim($user->name));
+                $result = createFlutterwaveVirtualAccount([
+                    'email' => $user->email,
+                    'currency' => 'GHS',
+                    'tx_ref' => 'VA-' . $user->id . '-' . time(),
+                    'firstname' => $nameParts[0] ?? $user->name,
+                    'lastname' => $nameParts[1] ?? 'User',
+                    'narration' => 'Freebyz Wallet Funding',
+                ]);
+
+                if ($result) {
+                    $bankName = $result['bank_name'] ?? 'Flutterwave';
+                    $accountName = $result['account_name'] ?? $user->name;
+                    $accountNumber = $result['account_number'] ?? null;
+                    $customerId = $result['order_ref'] ?? $result['id'] ?? null;
+                    $integration = $result['flw_ref'] ?? null;
+
+                    if ($accountNumber) {
+                        $va = VirtualAccount::updateOrCreate(
+                            ['user_id' => $user->id],
+                            [
+                                'channel' => 'flutterwave',
+                                'customer_id' => $customerId,
+                                'customer_intgration' => $integration,
+                                'bank_name' => $bankName,
+                                'account_name' => $accountName,
+                                'account_number' => $accountNumber,
+                                'currency' => 'GHS',
+                                'status' => true,
+                            ]
+                        );
+
+                        try {
+                            app(NotificationHelpers::class)->createNotification(
+                                $user,
+                                'Virtual Account Created',
+                                "Your GHS virtual account {$accountNumber} ({$bankName}) is ready.",
+                                'wallet'
+                            );
+                        } catch (\Throwable $ne) {
+                            Log::warning('Notification dispatch failed: ' . $ne->getMessage());
+                        }
+
+                        return [
+                            'status' => true,
+                            'message' => "GHS Virtual account generated successfully ({$bankName} - {$accountNumber}).",
+                            'data' => $va,
+                        ];
+                    }
+                }
+
+                return [
+                    'status' => false,
+                    'message' => 'Could not generate Flutterwave GHS virtual account.',
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => "Static virtual accounts are not available for {$currency} accounts. Only NGN (Interswitch) and GHS (Flutterwave) are supported.",
+                ];
+            }
+        } catch (\Throwable $e) {
+            Log::error('reGenerateVirtualAccount error: ' . $e->getMessage());
+            return [
                 'status' => false,
-                'message' => $e->getMessage()
-            ], 403);
+                'message' => 'Error generating virtual account: ' . $e->getMessage(),
+            ];
         }
     }
 }
@@ -2350,13 +2716,28 @@ if (!function_exists('viewCampaign')) {
 if (!function_exists('baseCurrency')) {
     function baseCurrency($user = null)
     {
-        if ($user == null) {
+        if ($user === null) {
             $user = Auth::user();
-            return Wallet::where('user_id', $user->id)->first()->base_currency;  // $user->wallet->base_currency;
-        } else {
-            $user = User::find($user->id);
-            return Wallet::where('user_id', $user->id)->first()->base_currency;  // $user->wallet->base_currency;
+        } elseif (is_numeric($user)) {
+            $user = User::find($user);
         }
+
+        if (!$user) {
+            return 'NGN';
+        }
+
+        $currency = $user->wallet->base_currency ?? $user->base_currency ?? null;
+        if (!$currency && isset($user->id)) {
+            $currency = Wallet::where('user_id', $user->id)->value('base_currency');
+        }
+
+        $currency = $currency ?: 'NGN';
+
+        return match (strtolower($currency)) {
+            'naira', 'ngn' => 'NGN',
+            'dollar', 'usd' => 'USD',
+            default => strtoupper($currency),
+        };
     }
 }
 
@@ -2375,30 +2756,47 @@ if (!function_exists('countryList')) {
 }
 
 if (!function_exists('bankList')) {
-    function bankList()
+    function bankList($currency = 'NGN')
     {
-        // country=nigeria
-        $url = 'https://api.paystack.co/bank?country=nigeria';
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . config('paystack.secretKey')
-        ])->get($url)->throw();
+        $currency = strtoupper($currency);
+        $countryMap = ['NGN' => 'NG', 'GHS' => 'GH', 'KES' => 'KE', 'ZAR' => 'ZA', 'UGX' => 'UG'];
+        if (isset($countryMap[$currency])) {
+            return getFlutterwaveBanks($countryMap[$currency]);
+        }
 
-        return $bankList = json_decode($res->getBody()->getContents(), true)['data'];
+        return [];
     }
 }
 
 if (!function_exists('resolveBankName')) {
-    function resolveBankName($account_number, $bank_code)
+    function resolveBankName($account_number, $bank_code, $currency = 'NGN', $method = 'bank')
     {
-        $res = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . config('paystack.secretKey')
-        ])->get('https://api.paystack.co/bank/resolve?account_number=' . $account_number . '&bank_code=' . $bank_code);
-        // Log::info($res);
-        return json_decode($res->getBody()->getContents(), true);
+        $currency = strtoupper($currency);
+
+        if ($method === 'mobile_money') {
+            return [
+                'status' => 'true',
+                'data' => [
+                    'account_name' => null,
+                    'account_number' => $account_number,
+                    'bank_code' => $bank_code,
+                ],
+            ];
+        }
+
+        $resolved = resolveFlutterwaveAccount((string) $account_number, (string) $bank_code);
+        if ($resolved && !empty($resolved['account_name'])) {
+            return [
+                'status' => 'true',
+                'data' => [
+                    'account_name' => $resolved['account_name'],
+                    'account_number' => $account_number,
+                    'bank_code' => $bank_code,
+                ],
+            ];
+        }
+
+        return ['status' => 'false', 'message' => 'Flutterwave could not resolve bank account.'];
     }
 }
 
@@ -2563,7 +2961,7 @@ if (!function_exists('listFlutterwaveTransaction')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
+            'Authorization' => 'Bearer ' . config('services.flutterwave.secret_key')
         ])->get('https://api.flutterwave.com/v3/transactions')->throw();
 
         return json_decode($res->getBody()->getContents(), true);
@@ -2576,8 +2974,8 @@ if (!function_exists('initiateFlutterwavePayment')) {
         $res = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . env('FL_SECRET_KEY')
-        ])->post('hhttps://api.flutterwave.com/v3/payments', $payload)->throw();
+            'Authorization' => 'Bearer ' . config('services.flutterwave.secret_key')
+        ])->post('https://api.flutterwave.com/v3/payments', $payload)->throw();
 
         return json_decode($res->getBody()->getContents(), true);
     }
@@ -2822,14 +3220,98 @@ if (!function_exists('walletBalance')) {
     function walletBalance($userId)
     {
         $wallet = Wallet::where('user_id', $userId)->first();
-
-        if ($wallet->base_currency == 'NGN') {
-            return $wallet->balance;
-        } elseif ($wallet->base_currency == 'USD') {
-            return $wallet->usd_balance;
-        } else {
-            return $wallet->base_currency_balance;
+        if (!$wallet) {
+            return 0.00;
         }
+
+        $currency = strtoupper($wallet->base_currency ?? 'NGN');
+        if (in_array($currency, ['NGN', 'NAIRA'])) {
+            return (float) $wallet->balance;
+        } elseif (in_array($currency, ['USD', 'DOLLAR'])) {
+            return (float) $wallet->usd_balance;
+        } else {
+            return (float) $wallet->base_currency_balance;
+        }
+    }
+}
+
+if (!function_exists('formatCurrency')) {
+    function formatCurrency($amount, $currencyCode = 'NGN')
+    {
+        $code = strtoupper($currencyCode ?? 'NGN');
+        $amount = (float) $amount;
+        $formattedAmount = number_format($amount, 2);
+
+        return match ($code) {
+            'NGN', 'NAIRA' => '₦' . $formattedAmount,
+            'USD', 'DOLLAR' => '$' . $formattedAmount,
+            'GHS' => 'GH₵' . $formattedAmount,
+            'KES' => 'KSh ' . $formattedAmount,
+            'ZAR' => 'R ' . $formattedAmount,
+            'GBP' => '£' . $formattedAmount,
+            'EUR' => '€' . $formattedAmount,
+            'RWF' => 'FRw ' . $formattedAmount,
+            'UGX' => 'USh ' . $formattedAmount,
+            'TZS' => 'TSh ' . $formattedAmount,
+            'XOF', 'XAF' => $formattedAmount . ' FCFA',
+            default => $code . ' ' . $formattedAmount,
+        };
+    }
+}
+
+if (!function_exists('currencySymbol')) {
+    function currencySymbol($currencyCode = 'NGN')
+    {
+        $code = strtoupper($currencyCode ?? 'NGN');
+        return match ($code) {
+            'NGN', 'NAIRA' => '₦',
+            'USD', 'DOLLAR' => '$',
+            'GHS' => 'GH₵',
+            'KES' => 'KSh',
+            'ZAR' => 'R',
+            'GBP' => '£',
+            'EUR' => '€',
+            'RWF' => 'FRw',
+            'UGX' => 'USh',
+            'TZS' => 'TSh',
+            'XOF', 'XAF' => 'FCFA',
+            default => $code,
+        };
+    }
+}
+
+if (!function_exists('convertUserCurrency')) {
+    function convertUserCurrency($amount, $from, $to)
+    {
+        $from = strtoupper($from);
+        $to = strtoupper($to);
+        if ($from === $to) {
+            return ['amount' => (float) $amount, 'rate' => 1.0, 'source' => 'identity'];
+        }
+
+        $baseCurr = (float) getBaseRate($from);
+        $target = (float) getBaseRate($to);
+
+        if ($baseCurr > 0 && $target > 0) {
+            $rate = $target / $baseCurr;
+            $convertedAmount = (float) round($amount * $rate, 2);
+
+            return [
+                'amount' => $convertedAmount,
+                'rate'   => (float) round($rate, 6),
+                'source' => 'base_rate'
+            ];
+        }
+
+        // Fallback to currencyConverter
+        $converted = currencyConverter($from, $to, $amount);
+        $calculatedRate = $amount > 0 ? (float) round($converted / $amount, 6) : 1.0;
+
+        return [
+            'amount' => $converted,
+            'rate'   => $calculatedRate,
+            'source' => 'currency_converter'
+        ];
     }
 }
 

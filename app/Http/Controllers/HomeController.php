@@ -448,9 +448,40 @@ class HomeController extends Controller
             WHERE status = ?
             AND created_at BETWEEN ? AND ?
         ', ['successful', $startDate, $endDate]);
+
+            // Multi-currency wallet liabilities breakdown
+            $data['currencyWallets'] = DB::table('wallets')
+                ->selectRaw("
+                    COALESCE(NULLIF(base_currency, ''), 'NGN') as currency,
+                    COUNT(*) as count,
+                    SUM(CASE 
+                        WHEN LOWER(COALESCE(NULLIF(base_currency, ''), 'NGN')) IN ('naira', 'ngn') THEN balance
+                        WHEN LOWER(COALESCE(NULLIF(base_currency, ''), 'NGN')) IN ('dollar', 'usd') THEN usd_balance
+                        ELSE base_currency_balance
+                    END) as total_active_balance
+                ")
+                ->groupBy('currency')
+                ->orderBy('total_active_balance', 'DESC')
+                ->get();
+
+            // Multi-currency pending withdrawals
+            $data['pendingWithdrawalsByCurrency'] = DB::table('withrawals')
+                ->where('status', 0)
+                ->selectRaw("COALESCE(NULLIF(base_currency, ''), 'NGN') as currency, COUNT(*) as count, SUM(amount) as total_amount")
+                ->groupBy('currency')
+                ->orderBy('total_amount', 'DESC')
+                ->get();
+
+            // Multi-currency paid withdrawals (period and all time)
+            $data['paidWithdrawalsByCurrency'] = DB::table('withrawals')
+                ->where('status', 1)
+                ->selectRaw("COALESCE(NULLIF(base_currency, ''), 'NGN') as currency, COUNT(*) as count, SUM(amount) as total_amount")
+                ->groupBy('currency')
+                ->orderBy('total_amount', 'DESC')
+                ->get();
+
+            $data['activeCurrencies'] = \App\Models\Currency::where('is_active', true)->get();
         }
-
-
 
         return view('admin.index_new', $data);
     }
@@ -1027,20 +1058,19 @@ class HomeController extends Controller
     public function validateBankAccount(Request $request)
     {
         $request->validate([
-            'account_number' => 'required|digits:10|numeric',
+            'account_number' => 'required|string',
             'bank_code'      => 'required|string',
         ]);
 
-        // Log::info("Validating account: " . $request->account_number);
+        $currency = strtoupper($request->input('currency', 'NGN'));
+        $method = strtolower($request->input('method', 'bank'));
 
-        $accountInfo = resolveBankName($request->account_number, $request->bank_code);
+        $accountInfo = resolveBankName($request->account_number, $request->bank_code, $currency, $method);
 
-        // Log::info($accountInfo);
-
-        if (!isset($accountInfo['status']) || $accountInfo['status'] != true) {
+        if (!isset($accountInfo['status']) || $accountInfo['status'] != 'true' || empty($accountInfo['data']['account_name'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid account details'
+                'message' => $accountInfo['message'] ?? 'Could not resolve account details'
             ], 400);
         }
 
@@ -1050,8 +1080,8 @@ class HomeController extends Controller
             'success'      => true,
             'account_name' => $validatedName,
             'bank_name'    => $accountInfo['data']['bank_name'] ?? null,
-            'name_match'   => strtolower(trim($validatedName)) === strtolower(trim(auth()->user()->name)),
-            'current_name' => auth()->user()->name
+            'name_match'   => auth()->check() ? (strtolower(trim($validatedName)) === strtolower(trim(auth()->user()->name))) : true,
+            'current_name' => auth()->check() ? auth()->user()->name : null
         ]);
     }
 

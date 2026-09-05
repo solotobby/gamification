@@ -67,22 +67,29 @@
 
                             <div class="row mb-4">
                                 <div class="col-6">
-                                    <label class="form-label" for="post-salary-min">Number of Workers</label>
-                                    <br>
-                                    {{$campaign->number_of_staff}}
+                                    <label class="form-label fw-semibold" for="post-salary-min">Number of Workers</label>
+                                    <div class="fs-5 fw-bold text-dark">{{ number_format($campaign->number_of_staff) }} Workers</div>
                                 </div>
                                 <div class="col-6">
-                                    {{-- @if(auth()->user()->wallet->base_currency === "Naira" || auth()->user()->wallet->base_currency === 'NGN') --}}
-                                        <label class="form-label" for="post-salary-min">Cost per Campaign</label>
-                                    {{-- @else
-                                        <label class="form-label" for="post-salary-min">Cost per Campaign</label>
-                                    @endif --}}
-                                    <br>
-                                    {{ $campaign->currency }} {{$campaign->campaign_amount}}
+                                    <label class="form-label fw-semibold" for="post-salary-min">Cost per Worker Submission</label>
+                                    <div class="fs-5 fw-bold text-dark">
+                                        {{ formatCurrency($campaign->campaign_amount, $campaign->currency) }}
+                                        <span class="badge-currency badge-currency-{{ strtolower($campaign->currency) }} ms-1">{{ $campaign->currency }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
-                            <h4>Estimated Cost: {{ $campaign->currency }} {{ $campaign->total_amount }} </h4>
+                            <div class="d-flex justify-content-between align-items-center p-3 bg-body-light rounded-3">
+                                <div>
+                                    <span class="fs-xs text-muted text-uppercase fw-bold">Total Escrow Budget</span>
+                                    <h4 class="mb-0 text-success fw-bold">{{ formatCurrency($campaign->total_amount, $campaign->currency) }}</h4>
+                                </div>
+                                <div>
+                                    <span class="badge rounded-pill {{ $campaign->status === 'Live' ? 'bg-success' : ($campaign->status === 'Offline' ? 'bg-warning text-dark' : 'bg-secondary') }} px-3 py-2 fs-sm">
+                                        Status: {{ $campaign->status }}
+                                    </span>
+                                </div>
+                            </div>
 
                         </div>
                     </div>

@@ -60,7 +60,18 @@ return [
     'interswitch' => [
         'client_id' => env('INTERSWITCH_CLIENT_ID'),
         'client_secret' => env('INTERSWITCH_CLIENT_SECRET'),
+        'webhook_secret' => env('INTERSWITCH_WEBHOOK_SECRET'),
         'merchant_code' => env('INTERSWITCH_MERCHANT_CODE'),
+        'payable_code' => env('INTERSWITCH_PAYABLE_CODE'),
+        'provider_code' => env('INTERSWITCH_PROVIDER_CODE'),
+        'base_url' => env('INTERSWITCH_BASE_URL'),
+        'passport_url' => env('INTERSWITCH_PASSPORT_URL'),
+    ],
+
+    'flutterwave' => [
+        'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
+        'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
+        'webhook_hash' => env('FLUTTERWAVE_WEBHOOK_HASH'),
     ],
 
     'zeptomail' => [

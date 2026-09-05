@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AutoApprove7Days extends Command
@@ -24,27 +25,32 @@ class AutoApprove7Days extends Command
         $sevenDaysAgo = Carbon::now()->subDays(7);
         $sixMonthsAgo = Carbon::now()->subMonths(9);
 
+        // Fetch pending campaign workers within the allowed range
         $lists = CampaignWorker::where('status', 'Pending')
-            ->whereNull('reason')
             ->where('created_at', '<=', $sevenDaysAgo)
             ->where('created_at', '>=', $sixMonthsAgo)
+            ->whereNull('reason')
             ->get();
 
-        $approvedCount = 0;
-        $skippedCount = 0;
+        $count = $lists->count();
+        $this->info('Found ' . $count . ' campaign workers to approve.');
+        Log::info('Found ' . $count . ' campaign workers to approve.');
 
         foreach ($lists as $list) {
-            // Double check if campaign is not older than 6 months
-            if ($list->created_at->greaterThanOrEqualTo($sixMonthsAgo)) {
+            $isPaid = PaymentTransaction::where('user_id', $list->user_id)
+                ->where('campaign_id', $list->campaign_id)
+                ->where('type', 'campaign_payment')
+                ->first();
+
+            if (!$isPaid) {
                 $this->approveCampaignWorker($list);
-                $approvedCount++;
-            } else {
-                $skippedCount++;
             }
         }
 
-        $this->info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
-        Log::info('Auto-approved ' . $approvedCount . ' campaign workers (7 days).');
+        // Count skipped old jobs
+        $skippedCount = CampaignWorker::where('status', 'Pending')
+            ->where('created_at', '<', $sixMonthsAgo)
+            ->count();
 
         if ($skippedCount > 0) {
             $this->warn('Skipped ' . $skippedCount . ' campaign workers older than 6 months.');
@@ -54,56 +60,66 @@ class AutoApprove7Days extends Command
 
     private function approveCampaignWorker($ca)
     {
-        $ca->status = 'Approved';
-        $ca->reason = 'Auto-approval';
-        $ca->save();
+        DB::transaction(function () use ($ca) {
+            $ca = CampaignWorker::where('id', $ca->id)->lockForUpdate()->first();
+            if (!$ca || $ca->status !== 'Pending') {
+                return;
+            }
 
-        $camp = Campaign::where('id', $ca->campaign_id)->first();
-        checkCampaignCompletedStatus($camp->id);
+            $ca->status = 'Approved';
+            $ca->reason = 'Auto-approval';
+            $ca->save();
 
-        $user = User::where('id', $ca->user_id)->first();
-        $baseCurrency = baseCurrency($user);
-        $amountCredited = (float) $ca->amount;
+            $camp = Campaign::where('id', $ca->campaign_id)->first();
+            checkCampaignCompletedStatus($camp->id);
 
-        $wallet = Wallet::where('user_id', $ca->user_id)->first();
+            $user = User::where('id', $ca->user_id)->first();
+            $baseCurrency = baseCurrency($user);
+            $amountCredited = (float) $ca->amount;
 
-        // Ensure numeric fields
-        $wallet->balance = (float) ($wallet->balance ?? 0);
-        $wallet->usd_balance = (float) ($wallet->usd_balance ?? 0);
-        $wallet->base_currency_balance = (float) ($wallet->base_currency_balance ?? 0);
+            $wallet = Wallet::where('user_id', $ca->user_id)->lockForUpdate()->first();
+            if (!$wallet) {
+                return;
+            }
 
-        if ($baseCurrency == 'NGN') {
-            $currency = 'NGN';
-            $channel = 'paystack';
-            $wallet->balance += $amountCredited;
-        } elseif ($camp->currency == 'USD') {
-            $currency = 'USD';
-            $channel = 'paypal';
-            $wallet->usd_balance += $amountCredited;
-        } else {
-            $currency = $baseCurrency;
-            $channel = 'flutterwave';
-            $wallet->base_currency_balance += $amountCredited;
-        }
+            // Ensure numeric fields
+            $wallet->balance = (float) ($wallet->balance ?? 0);
+            $wallet->usd_balance = (float) ($wallet->usd_balance ?? 0);
+            $wallet->base_currency_balance = (float) ($wallet->base_currency_balance ?? 0);
 
-        $wallet->save();
+            if ($baseCurrency == 'NGN') {
+                $currency = 'NGN';
+                $channel = 'paystack';
+                $wallet->balance += $amountCredited;
+            } elseif ($camp->currency == 'USD') {
+                $currency = 'USD';
+                $channel = 'paypal';
+                $wallet->usd_balance += $amountCredited;
+            } else {
+                $currency = $baseCurrency;
+                $channel = 'flutterwave';
+                $wallet->base_currency_balance += $amountCredited;
+            }
 
-        $ref = time();
+            $wallet->save();
 
-        PaymentTransaction::create([
-            'user_id' => $ca->user_id,
-            'campaign_id' => '1',
-            'reference' => $ref,
-            'amount' => $amountCredited,
-            'balance' => walletBalance($ca->user_id),
-            'status' => 'successful',
-            'currency' => $currency,
-            'channel' => $channel,
-            'type' => 'campaign_payment',
-            'description' => 'Campaign Payment for ' . $ca->campaign->post_title,
-            'tx_type' => 'Credit',
-            'user_type' => 'regular'
-        ]);
+            $ref = 'AUTO7_' . time() . '_' . $ca->id;
+
+            PaymentTransaction::create([
+                'user_id' => $ca->user_id,
+                'campaign_id' => $ca->campaign_id,
+                'reference' => $ref,
+                'amount' => $amountCredited,
+                'balance' => walletBalance($ca->user_id),
+                'status' => 'successful',
+                'currency' => $currency,
+                'channel' => $channel,
+                'type' => 'campaign_payment',
+                'description' => 'Campaign Payment for ' . ($camp->post_title ?? 'Task'),
+                'tx_type' => 'Credit',
+                'user_type' => 'regular'
+            ]);
+        });
     }
 
 

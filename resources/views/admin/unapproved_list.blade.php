@@ -1,153 +1,190 @@
 @extends('layouts.main.master')
-@section('style')
-{{-- <link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')}}">
-<link rel="stylesheet" href="{{asset('src/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')}}"> --}}
 
-@endsection
+@section('title', 'Pending Task Proof Approvals')
 
 @section('content')
 
- <div class="bg-body-light">
+  <div class="bg-body-light">
     <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-3">UnApproved</h1>
+        <div>
+          <h1 class="flex-grow-1 fs-3 fw-semibold my-2 my-sm-1">Pending Task Approvals</h1>
+          <span class="text-muted fs-sm">Review and approve worker task submissions queued for reward disbursement</span>
+        </div>
         <nav class="flex-shrink-0 my-2 my-sm-0 ms-sm-3" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">UnApproved Jobs</li>
-            <li class="breadcrumb-item active" aria-current="page">List</li>
+            <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
+            <li class="breadcrumb-item">Tasks</li>
+            <li class="breadcrumb-item active" aria-current="page">Unapproved Proofs</li>
           </ol>
         </nav>
       </div>
     </div>
   </div>
 
-
-  <!-- Page Content -->
   <div class="content">
-    <!-- Full Table -->
-    <div class="block block-rounded">
-      <div class="block-header block-header-default">
-        <h3 class="block-title">UnApproved jobs - {{ count($campaigns) }}</h3>
-        <div class="block-options">
-          <button type="button" class="btn-block-option">
-            <i class="si si-settings"></i>
-          </button>
-        </div>
+
+    @if (session('success'))
+      <div class="alert alert-success d-flex align-items-center shadow-sm" role="alert">
+        <i class="fa fa-check-circle me-2 fs-5"></i>
+        <div>{{ session('success') }}</div>
       </div>
-      <div class="block-content">
-        
-        <div class="table-responsive">
-            @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+    @endif
 
+    @if (session('error'))
+      <div class="alert alert-danger d-flex align-items-center shadow-sm" role="alert">
+        <i class="fa fa-exclamation-circle me-2 fs-5"></i>
+        <div>{{ session('error') }}</div>
+      </div>
+    @endif
 
-            @if (session('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            <form action="{{ url('unapproved') }}" method="GET">
-              <div class="row mb-3">
-                <div class="col-md-6"> 
-                  <input type="date" class="form-control" name="start" value="{{ request('start') }}" required>
-                </div>
-              
-                <div class="col-md-6">
-                  <input type="date" class="form-control" name="end" value="{{ request('end') }}" required>
-                </div>
-
-                 <div class="col-md-4 mt-3">
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fa fa-search me-1"></i> Search
-                    </button>
-                    @if(request()->has(['start', 'end']))
-                      <a href="{{ url('unapproved') }}" class="btn btn-warning">
-                        <i class="fa fa-cogs me-1"></i> Reset
-                      </a>
-                    @endif
-                 </div>
-                 <div class="col-md-4">
-                    
-                 </div>
-              </div>
+    <!-- Filter Card -->
+    <div class="block block-rounded">
+      <div class="block-content py-3">
+        <form action="{{ url('unapproved') }}" method="GET">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+              <label class="form-label fs-xs fw-bold text-muted text-uppercase">Start Date</label>
+              <input type="date" class="form-control" name="start" value="{{ request('start') }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fs-xs fw-bold text-muted text-uppercase">End Date</label>
+              <input type="date" class="form-control" name="end" value="{{ request('end') }}">
+            </div>
+            <div class="col-md-4 pt-md-4">
+              <button type="submit" class="btn btn-primary me-2">
+                <i class="fa fa-filter me-1"></i> Filter Dates
+              </button>
+              @if(request()->has(['start', 'end']))
+                <a href="{{ url('unapproved') }}" class="btn btn-outline-secondary">
+                  <i class="fa fa-times me-1"></i> Reset
+                </a>
+              @endif
+            </div>
+          </div>
         </form>
-
-
-        <form action="{{ url('mass/approval') }}" method="POST">
-                @csrf
-          <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Camp. Name</th>
-                    <th>Worker Name</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>When Created</th>
-                    
-                    </tr>
-            </thead>
-            <tbody>
-              <?php $i = 1; ?>
-
-              {{-- @foreach ($campaigns as $list) 
-              <tr>
-                <td>{{ $i++ }}</td>
-                <td>{{ $list['post_title'] }}</td>
-                <td>{{ $list['campaign_amount'] }}</td>
-                <td>{{ $list['currency'] }}</td>
-                {{-- <td>{{ \Carbon\Carbon::parse($list['created_at'])->diffForHumans() }}</td> 
-                <td><a href="{{ url('admin/campaign/activities/'.$list['job_id'])  }}" class="btn btn-primary btn-sm">View</a></td>
-              </tr>
-              @endforeach --}}
-                
-                @foreach ($campaigns as $list)
-                    <tr>
-                        <th scope="row"><input type="checkbox" name="id[]" value="{{ $list->id }}"></th>
-                        <td>{{ $list->campaign->post_title }}</td>
-                        <td>{{ $list->user->name }}</td>
-                        {{-- <td>{{ @$list->campaign->user->name }}</td> --}}
-                        <td>&#8358;{{ number_format(@$list->amount) }}</td>
-                        <td>{{ $list->status }}</td>
-                        <td>{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</td>
-                    </tr>
-                @endforeach
-              
-            </tbody>
-          </table>
-          <button class="btn btn-primary mb-2" type="submit">Approve All</button>
-            </form>
-        </div>
-        <div class="d-flex">
-          {!! $campaigns->links('pagination::bootstrap-4') !!}
-        </div>
       </div>
     </div>
-    <!-- END Full Table -->
+
+    <!-- Submissions Table Card -->
+    <div class="block block-rounded">
+      <form action="{{ url('mass/approval') }}" method="POST" id="massApprovalForm">
+        @csrf
+        <div class="block-header block-header-default d-flex justify-content-between align-items-center">
+          <h3 class="block-title">
+            Pending Submissions <span class="badge bg-warning text-dark rounded-pill ms-2">{{ number_format($campaigns->total()) }}</span>
+          </h3>
+          <div class="block-options">
+            <button class="btn btn-sm btn-success" type="submit" onclick="return confirm('Approve all selected task proofs and disburse rewards?')">
+              <i class="fa fa-check-double me-1"></i> Approve Selected
+            </button>
+          </div>
+        </div>
+
+        <div class="block-content p-0">
+          <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th style="width: 40px;" class="text-center">
+                    <input type="checkbox" class="form-check-input" id="checkAll">
+                  </th>
+                  <th>Currency</th>
+                  <th>Campaign</th>
+                  <th>Worker</th>
+                  <th class="text-end">Reward Amount</th>
+                  <th>Status</th>
+                  <th>Submitted</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @forelse ($campaigns as $list)
+                  @php
+                    $wCurr = @$list->currency ?: (@$list->campaign->currency ?: 'NGN');
+                  @endphp
+                  <tr>
+                    <td class="text-center">
+                      <input type="checkbox" class="form-check-input itemCheckbox" name="id[]" value="{{ $list->id }}">
+                    </td>
+                    <td>
+                      <span class="badge-currency badge-currency-{{ strtolower($wCurr) }}">
+                        <i class="fa fa-circle fs-xs"></i> {{ $wCurr }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="fw-semibold text-dark">
+                        <a href="{{ url('campaign/info/' . @$list->campaign_id) }}" class="text-dark text-hover-primary" target="_blank">
+                          {{ @$list->campaign->post_title ?? 'Campaign #' . $list->campaign_id }}
+                        </a>
+                      </div>
+                      <div class="fs-xs text-muted">Job ID: #{{ @$list->campaign->job_id }}</div>
+                    </td>
+                    <td>
+                      <div class="fw-medium">
+                        <a href="{{ url('user/' . @$list->user->id . '/info') }}" class="text-muted" target="_blank">
+                          {{ @$list->user->name ?? 'User #' . $list->user_id }}
+                        </a>
+                      </div>
+                      <div class="fs-xs text-muted">{{ @$list->user->email }}</div>
+                    </td>
+                    <td class="text-end">
+                      <span class="fs-sm fw-bold text-success">
+                        {{ formatCurrency(@$list->amount, $wCurr) }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge rounded-pill bg-warning-light text-warning border border-warning px-2 py-1">
+                        <i class="fa fa-clock me-1"></i> {{ ucfirst($list->status) }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="fs-sm">{{ \Carbon\Carbon::parse($list->created_at)->format('M d, Y') }}</div>
+                      <div class="fs-xs text-muted">{{ \Carbon\Carbon::parse($list->created_at)->diffForHumans() }}</div>
+                    </td>
+                    <td class="text-center">
+                      <a href="{{ url('campaign/info/' . @$list->campaign_id) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                        Inspect
+                      </a>
+                    </td>
+                  </tr>
+                @empty
+                  <tr>
+                    <td colspan="8" class="text-center py-5 text-muted">
+                      <i class="fa fa-check-circle fa-3x text-success mb-3 d-block opacity-25"></i>
+                      No pending task proofs require approval.
+                    </td>
+                  </tr>
+                @endforelse
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block-content border-top py-3">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <button class="btn btn-sm btn-success" type="submit" onclick="return confirm('Approve all selected task proofs and disburse rewards?')">
+              <i class="fa fa-check-double me-1"></i> Approve Selected Tasks
+            </button>
+            <div>
+              {!! $campaigns->appends(request()->query())->links('pagination::bootstrap-4') !!}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
 
   </div>
-@endsection
 
-@section('script')
-
-{{-- <!-- jQuery (required for DataTables plugin) -->
-<script src="{{asset('src/assets/js/lib/jquery.min.js')}}"></script>
-
-<!-- Page JS Plugins -->
-<script src="{{asset('src/assets/js/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-jszip/jszip.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.print.min.js')}}"></script>
-<script src="{{asset('src/assets/js/plugins/datatables-buttons/buttons.html5.min.js')}}"></script>
-
-<!-- Page JS Code -->
-<script src="{{asset('src/assets/js/pages/be_tables_datatables.min.js')}}"></script> --}}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkAll = document.getElementById('checkAll');
+      if (checkAll) {
+        checkAll.addEventListener('change', function() {
+          const checkboxes = document.querySelectorAll('.itemCheckbox');
+          checkboxes.forEach(cb => cb.checked = checkAll.checked);
+        });
+      }
+    });
+  </script>
 @endsection
