@@ -19,7 +19,9 @@ class Wallet extends Model
         'base_currency',
         'usd_balance',
         'base_currency_balance',
-        'base_currency_set'
+        'base_currency_set',
+        'temp_balance',
+        'temp_balance_calculated_at'
     ];
 
     public function user()

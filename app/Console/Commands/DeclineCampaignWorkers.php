@@ -75,16 +75,16 @@ class DeclineCampaignWorkers extends Command
         $wallet = Wallet::where('user_id', $worker->user_id)->firstOrFail();
 
         // Debit the worker's wallet based on currency
-        if ($baseCurrency === 'NGN') {
+        if (in_array(strtoupper($baseCurrency), ['NGN', 'NAIRA'])) {
             $currency = 'NGN';
             $channel = 'paystack';
             $wallet->balance -= $amountToDebit;
-        } elseif ($campaign->currency === 'USD') {
+        } elseif (in_array(strtoupper($baseCurrency), ['USD', 'DOLLAR'])) {
             $currency = 'USD';
             $channel = 'paypal';
             $wallet->usd_balance -= $amountToDebit;
         } else {
-            $currency = $baseCurrency;
+            $currency = strtoupper($baseCurrency);
             $channel = 'flutterwave';
             $wallet->base_currency_balance -= $amountToDebit;
         }

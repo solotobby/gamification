@@ -462,23 +462,21 @@ class WalletController extends Controller
         $session = $stripe->checkout->sessions->retrieve($request->session_id);
 
         if ($session['payment_status'] == 'paid' && $session['status'] == 'complete') {
-
-            // $amount = $session['amount_total']/10;
-            // $percent = 2.90/100 * $amount;
-            // $formatedAm = $percent;
-            // $newamount = $amount - $formatedAm; //verify transaction
-            // $creditAmount = $newamount / 100;
-
             $trx = PaymentTransaction::where('reference', $session['client_reference_id'])->first();
             if ($trx) {
+                if ($trx->status === 'successful') {
+                    return redirect()->route('fund')->with('info', 'Transaction already processed.');
+                }
+
                 $wallet = Wallet::where('user_id', auth()->user()->id)->first();
                 $wallet->usd_balance += $trx->amount;
                 $wallet->save();
 
                 $trx->status = 'successful';
+                $trx->balance = walletBalance(auth()->user()->id);
                 $trx->save();
             }
-            return redirect()->route('fund')->with('success', 'Payment successful and you wallet credited.');
+            return redirect()->route('fund')->with('success', 'Payment successful and your wallet credited.');
         } else {
             return redirect('wallet/fund');
         }
@@ -504,37 +502,29 @@ class WalletController extends Controller
 
         $user = Auth::user();
         if ($response['status'] == 'COMPLETED') {
-
-            //$ref = $response['purchase_units'][0]['reference_id'];
-
-            // $sellerReceivableBreakdown = $response['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
-
-            // Access individual values
-            // $grossAmount = $sellerReceivableBreakdown['gross_amount']['value'];
-            // $paypalFee = $sellerReceivableBreakdown['paypal_fee']['value'];
-            // $netAmount = $sellerReceivableBreakdown['net_amount']['value'];
-
-            // $currency = $response['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
-
-            // $data['ref'] = $ref;
-            // $data['currency'] = $currency;
-            // $data['net'] = $netAmount;
-            // $data['amount'] = $grossAmount;
-            // $data['fee'] = $paypalFee;
-
             $update = PaymentTransaction::where('reference', $response['id'])->first();
-            $update->status = 'successful';
-            $update->reference = $response['purchase_units'][0]['reference_id'];
-            $update->save();
+            if ($update) {
+                if ($update->status === 'successful') {
+                    return redirect('success')->with('info', 'Transaction already processed.');
+                }
 
-            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            $wallet->usd_balance += $update->amount;
-            $wallet->save();
+                $update->status = 'successful';
+                $update->reference = $response['purchase_units'][0]['reference_id'];
+                $update->save();
 
-            activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
+                $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+                $wallet->usd_balance += $update->amount;
+                $wallet->save();
 
-            systemNotification($user, 'success', 'Wallet Topup', '$' . $update->amount . ' Wallet Topup Successful');
+                $update->balance = walletBalance(auth()->user()->id);
+                $update->save();
 
+                activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
+
+                systemNotification($user, 'success', 'Wallet Topup', '$' . $update->amount . ' Wallet Topup Successful');
+
+                return redirect('success');
+            }
             return redirect('success');
         } else {
             return redirect('error');
@@ -558,6 +548,9 @@ class WalletController extends Controller
         $verifyPayment = PaymentTransaction::where('reference', $res['data']['reference'])->first();
 
         if ($verifyPayment) {
+            if ($verifyPayment->status === 'successful') {
+                return back()->with('info', 'Transaction already processed.');
+            }
 
             //check if user has a virtual account
             if (!auth()->user()->virtualAccount) {
@@ -568,44 +561,10 @@ class WalletController extends Controller
             $verifyPayment->status = 'successful';
             $verifyPayment->save();
 
-
             activityLog(auth()->user(), 'wallet_topup', auth()->user()->name . ' topped up wallet ', 'regular');
 
             return back()->with('success', 'Payment Completed. Your wallet will be credited!');
         }
-
-
-
-
-
-
-
-        //     $amount = $res['data']['amount'];
-
-        //     $percent = 2.90/100 * $amount;
-        //     $formatedAm = $percent;
-        //     $newamount = $amount - $formatedAm; //verify transaction
-        //     $creditAmount = $newamount / 100;
-
-        //     $user = Auth::user();
-
-        //    if($res['data']['status'] == 'success') //success - paystack
-        //    {
-        //         //update transaction
-
-        //         $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-        //         $wallet->balance += $creditAmount;
-        //         $wallet->save();
-
-        //         $name = auth()->user()->name;
-        //         activityLog(auth()->user(), 'wallet_topup', $name .' topped up wallet ', 'regular');
-
-        //         systemNotification($user, 'success', 'Wallet Topup', 'NGN'.$creditAmount.' Wallet Topup Successful');
-
-        //         return back()->with('success', 'Wallet Topup Successful'); //redirect('success');
-        //    }else{
-        //     return redirect('error');
-        //    }
     }
 
     public function flutterwaveWalletTopUp()
@@ -623,21 +582,25 @@ class WalletController extends Controller
         $res = flutterwaveVeryTransaction($tx_id);
 
         if ($res['status'] == 'success') {
-            $ver = paymentUpdate($ref, 'successful', $res['data']['amount_settled']);
+            $checkTrx = PaymentTransaction::where('reference', $ref)->first();
+            if ($checkTrx && $checkTrx->status === 'successful') {
+                return back()->with('info', 'Transaction already processed.');
+            }
 
-            // $wallet = Wallet::where('user_id', auth()->user()->id)->first();
-            // $wallet->balance += $res['data']['amount_settled'];//->amount;
-            // $wallet->save();
+            $ver = paymentUpdate($ref, 'successful', $res['data']['amount_settled']);
 
             if ($ver) {
                 $currency = auth()->user()->wallet->base_currency;
 
                 creditWallet(auth()->user(), $currency, $res['data']['amount_settled']);
 
+                $ver->balance = walletBalance(auth()->user()->id);
+                $ver->save();
+
                 $name = auth()->user()->name;
                 activityLog(auth()->user(), 'wallet_topup', $name . ' topped up wallet ', 'regular');
 
-                systemNotification(auth()->user(), 'success', 'Wallet Topup', 'NGN' . $ver->amount . ' Wallet Topup Successful');
+                systemNotification(auth()->user(), 'success', 'Wallet Topup', $currency . ' ' . $ver->amount . ' Wallet Topup Successful');
 
                 return back()->with('success', 'Wallet Topup Successful');
             }

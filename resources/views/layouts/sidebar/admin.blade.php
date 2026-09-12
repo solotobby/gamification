@@ -44,7 +44,7 @@
         </li>
 
         <!-- 3. Financials & Wallets -->
-        <li class="nav-main-item {{ request()->is('admin/withdrawal*') || request()->is('admin/manual/fundings*') || request()->is('admin/transaction*') || request()->is('user/transaction*') || request()->is('currencies*') || request()->is('conversion-rates*') ? 'open' : '' }}">
+        <li class="nav-main-item {{ request()->is('admin/withdrawal*') || request()->is('admin/manual/fundings*') || request()->is('admin/transaction*') || request()->is('admin/wallet/discrepancies*') || request()->is('user/transaction*') || request()->is('currencies*') || request()->is('conversion-rates*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                 <i class="nav-main-link-icon fa fa-wallet"></i>
                 <span class="nav-main-link-name">Financials</span>
@@ -56,6 +56,11 @@
                 @endif
             </a>
             <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->routeIs('admin.wallet.discrepancies') ? 'active' : '' }}" href="{{ route('admin.wallet.discrepancies') }}">
+                        <span class="nav-main-link-name">Balance Discrepancies</span>
+                    </a>
+                </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->routeIs('admin.withdrawal.queued') || request()->routeIs('admin.withdrawal.queued.current') ? 'active' : '' }}" href="{{ route('admin.withdrawal.queued') }}">
                         <span class="nav-main-link-name">Queued Payouts</span>

@@ -156,6 +156,11 @@ class WebhookController extends Controller
 
                     $transaction = PaymentTransaction::where('reference', $reference)->first();
 
+                    if ($transaction && $transaction->status === 'successful') {
+                        $webhook->update(['status' => 'processed', 'message' => 'Already processed']);
+                        return response()->json(['status' => 'already processed'], 200);
+                    }
+
                     // If not found, create transaction for virtual pay-in
                     if (!$transaction) {
                         $userId = $this->getUserFromVirtualAccount($payload);
@@ -172,10 +177,10 @@ class WebhookController extends Controller
                         $transaction = PaymentTransaction::create([
                             'user_id' => $userId,
                             'campaign_id' => '1',
-                            'reference' => time(),
+                            'reference' => $reference,
                             'amount' => $payload['amount'] ?? 0,
                             'balance' => walletBalance($userId),
-                            'status' => 'successful',
+                            'status' => 'unsuccessful',
                             'currency' => $payload['currency'] ?? 'NGN',
                             'channel' => 'kora',
                             'type' => 'wallet_topup',

@@ -40,9 +40,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('campaigns:auto-approve')->everyThirtyMinutes();
 
-        $schedule->command('campaigns:auto-approve-business')->hourly();
+        // $schedule->command('campaigns:auto-approve-business')->hourly();
 
-        $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
+        // $schedule->command('campaigns:auto-approve-7days')->weeklyOn(4, '04:00');
 
         $schedule->command('questions:cleanup-invalid')->dailyAt('03:00');
 
