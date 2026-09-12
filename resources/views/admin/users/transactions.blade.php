@@ -203,15 +203,26 @@
                     'cash_withdrawal',
                     'databundle',
                     'edit_campaign_payment',
+                    'job_listing',
+                    'job_point_purchase',
                     'point_purchase',
                     'safelock_created',
                     'upgrade_payment',
                     'upgrade_payment_naira_dollar',
+                    'upgrade_payment_usd',
+                    'upgrade_payment_wallet',
                     'wallet_debit'
                 ];
-                // const rowClass = transaction.tx_type === 'Credit' ? 'credit' : 'debit';
                 const type = (transaction.type || '').trim().toLowerCase();
-                const rowClass = debitTypes.includes(type) ? 'debit' : 'credit';
+                const desc = (transaction.description || '').toLowerCase();
+                let rowClass = 'credit';
+                if (debitTypes.includes(type)) {
+                    rowClass = 'debit';
+                } else if (['naira_dollar_exchange', 'currency_conversion', 'balance_reconciliation'].includes(type)) {
+                    rowClass = (desc.includes('debit') || (transaction.tx_type || '').toLowerCase() === 'debit') ? 'debit' : 'credit';
+                } else if ((transaction.tx_type || '').toLowerCase() === 'debit') {
+                    rowClass = 'debit';
+                }
 
                 const actionHtml = (transaction.type === 'wallet_topup' || transaction.type === 'transfer_topup')
                     ? `<button class="btn btn-sm btn-primary verify-btn" data-id="${transaction.id}">Verify</button>

@@ -61,12 +61,15 @@ class RecalculateWalletBalances extends Command
     }
 
     /**
-     * Batch calculation using SQL JOIN
+     * Batch calculation using SQL JOIN with accurate type classification
      */
     protected function recalculateBatch(int $startId, int $endId): void
     {
         $wCurrency  = str_replace('currency_col', 'w2.base_currency', $this->currencyMapSql);
         $ptCurrency = str_replace('currency_col', 'pt.currency', $this->currencyMapSql);
+
+        $debitTypesSql  = "'" . implode("', '", \App\Models\PaymentTransaction::DEBIT_TYPES) . "'";
+        $creditTypesSql = "'" . implode("', '", \App\Models\PaymentTransaction::CREDIT_TYPES) . "'";
 
         DB::statement("
             UPDATE wallets w
@@ -75,8 +78,12 @@ class RecalculateWalletBalances extends Command
                     pt.user_id,
                     SUM(
                         CASE
-                            WHEN LOWER(pt.tx_type) = 'credit' THEN pt.amount
-                            WHEN LOWER(pt.tx_type) = 'debit'  THEN -pt.amount
+                            WHEN LOWER(TRIM(pt.type)) IN ({$debitTypesSql}) THEN -pt.amount
+                            WHEN LOWER(TRIM(pt.type)) IN ({$creditTypesSql}) THEN pt.amount
+                            WHEN LOWER(TRIM(pt.type)) IN ('naira_dollar_exchange', 'currency_conversion', 'balance_reconciliation') AND (LOWER(pt.description) LIKE '%debit%' OR LOWER(pt.tx_type) = 'debit') THEN -pt.amount
+                            WHEN LOWER(TRIM(pt.type)) IN ('naira_dollar_exchange', 'currency_conversion', 'balance_reconciliation') AND (LOWER(pt.description) LIKE '%credit%' OR LOWER(pt.tx_type) = 'credit') THEN pt.amount
+                            WHEN LOWER(TRIM(pt.tx_type)) = 'debit' THEN -pt.amount
+                            WHEN LOWER(TRIM(pt.tx_type)) = 'credit' THEN pt.amount
                             ELSE 0
                         END
                     ) AS computed_balance
@@ -113,8 +120,10 @@ class RecalculateWalletBalances extends Command
             ->where('status', 'successful')
             ->get()
             ->filter(fn($tx) => $this->mapCurrency($tx->currency ?: 'NGN') === $mappedWalletCurrency)
-            ->sum(fn($tx) => strtolower($tx->tx_type) === 'credit' ? (float) $tx->amount
-                : (strtolower($tx->tx_type) === 'debit' ? -(float) $tx->amount : 0));
+            ->sum(function ($tx) {
+                $dir = \App\Models\PaymentTransaction::determineTxType($tx->type, $tx->description, $tx->tx_type);
+                return $dir === 'credit' ? (float) $tx->amount : ($dir === 'debit' ? -(float) $tx->amount : 0.0);
+            });
 
         DB::table('wallets')->where('user_id', $userId)->update([
             'temp_balance' => $computed,
