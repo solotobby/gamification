@@ -336,8 +336,8 @@
         </div>
       </div>
       @if($wallets->hasPages())
-        <div class="block-content block-content-full border-top py-3">
-          {{ $wallets->links('pagination::bootstrap-5') }}
+        <div class="block-content block-content-full border-top py-3 d-flex justify-content-center">
+          {!! $wallets->appends(request()->query())->links('pagination::bootstrap-4') !!}
         </div>
       @endif
     </div>
