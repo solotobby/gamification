@@ -99,12 +99,17 @@ class FeedbackRepliesController extends Controller
     {
         $query = Feedback::query()
             ->when($request->query('tab') === 'unread', fn($q) => $q->where('status', '0'))
-            ->when($request->query('tab') === 'unreplied', fn($q) => $q->whereRaw('(
-            select fr.user_id from feedback_replies fr
-            where fr.feedback_id = feedback.id
-            order by fr.id desc
-            limit 1
-        ) = feedback.user_id'))
+            ->when($request->query('tab') === 'unreplied', function ($q) {
+                $q->where(function ($sub) {
+                    $sub->whereRaw('(
+                        select fr.user_id from feedback_replies fr
+                        where fr.feedback_id = feedback.id
+                        order by fr.id desc
+                        limit 1
+                    ) = feedback.user_id')
+                    ->orWhereRaw('(select count(*) from feedback_replies fr where fr.feedback_id = feedback.id) = 0');
+                });
+            })
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($sub) use ($request) {
                     $sub
@@ -113,7 +118,7 @@ class FeedbackRepliesController extends Controller
                         ->orWhereHas('user', fn($uq) => $uq->where('name', 'like', "%{$request->search}%"));
                 });
             })
-            ->with('user:id,name,email')
+            ->with(['user:id,name,email', 'replies.user:id,name,role'])
             ->withCount(['replies as unread_count' => function ($q) {
                 $q->where('user_id', '!=', auth()->id())->whereNull('read_at');
             }])
@@ -122,7 +127,9 @@ class FeedbackRepliesController extends Controller
         $feedbacks = $query->paginate(20)->appends($request->query());
 
         $rows = $feedbacks->map(function ($f) {
-            $lastReply = $f->replies()->latest()->first();
+            $lastReply = $f->replies->last();
+            $lastReplyRole = strtolower($lastReply->user->role ?? '');
+            $isLastReplyStaff = in_array($lastReplyRole, ['admin', 'super_admin', 'staff']) || ($lastReply && ($lastReply->user->is_admin ?? false));
 
             return [
                 'id' => $f->id,
@@ -132,8 +139,8 @@ class FeedbackRepliesController extends Controller
                 'category' => $f->category,
                 'message' => strip_tags($f->message),
                 'unread_count' => $f->unread_count,
-                'has_replies' => $f->replies()->count() > 0,
-                'awaiting_reply' => $lastReply ? $lastReply->user_id === $f->user_id : false,  // FIXED — was is_null($f->respondent_id)
+                'has_replies' => $f->replies->count() > 0,
+                'awaiting_reply' => $lastReply ? !$isLastReplyStaff : true,
                 'last_activity' => ($lastReply ?? $f)->created_at->diffForHumans(),
                 'created_at' => $f->created_at->format('d M, Y \a\t h:i A'),
             ];
@@ -280,11 +287,24 @@ class FeedbackRepliesController extends Controller
                 elseif ($reply->image_url)
                     $type = 'image';
 
+                $user = $reply->user;
+                $userRole = strtolower($user->role ?? '');
+                $isStaffOrAdmin = in_array($userRole, ['admin', 'super_admin', 'staff']) || ($user && ($user->is_admin ?? false));
+
+                if ($isStaffOrAdmin) {
+                    $fullName = trim($user->name ?? 'Staff');
+                    $firstName = explode(' ', $fullName)[0] ?: 'Staff';
+                    $displayName = $firstName . '- FS';
+                } else {
+                    $displayName = $user->name ?? 'User';
+                }
+
                 return [
                     'id' => $reply->id,
                     'sender_id' => $reply->user_id,
-                    'sender_name' => in_array($reply->user->role ?? '', ['admin', 'super_admin']) ? 'Freebyz Support' : ($reply->user->name ?? 'User'),
-                    'sender_role' => $reply->user->role ?? null,
+                    'sender_name' => $displayName,
+                    'sender_role' => $user->role ?? null,
+                    'is_staff' => $isStaffOrAdmin,
                     'type' => $type,
                     'message' => strip_tags($reply->text_message ?? $reply->message),
                     'image_url' => $reply->image_url,

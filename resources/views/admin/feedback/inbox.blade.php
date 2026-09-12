@@ -635,7 +635,13 @@
 
             // ── List rendering ──
             function initials(name) {
-                return (name || 'U').trim().split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+                if (!name) return 'FS';
+                const clean = name.replace(/[-_]/g, ' ').trim();
+                const parts = clean.split(/\s+/).filter(Boolean);
+                if (parts.length >= 2) {
+                    return (parts[0][0] + parts[1][0]).toUpperCase();
+                }
+                return (clean.slice(0, 2)).toUpperCase();
             }
 
             function escapeHtml(str) {
@@ -778,8 +784,8 @@
                     </div>
                     <div class="fb-thread-footer">
                         <div class="fb-input-row">
-                            <textarea class="fb-textarea" id="fb-reply-input" placeholder="Type a reply…" rows="1" onkeydown="window.__fbHandleKey(event)" oninput="window.__fbAutoResize(this)"></textarea>
-                            <button class="fb-send-btn" id="fb-send-btn" onclick="window.__fbSendReply(${ticket.id})">
+                            <textarea class="fb-textarea" id="fb-reply-input" placeholder="Type a reply… (Enter for new line, Ctrl+Enter to send)" rows="1" onkeydown="window.__fbHandleKey(event)" oninput="window.__fbAutoResize(this)"></textarea>
+                            <button class="fb-send-btn" id="fb-send-btn" onclick="window.__fbSendReply(${ticket.id})" title="Send Reply (Ctrl+Enter)">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                             </button>
                         </div>
@@ -829,14 +835,17 @@
                     if ((r.type === 'text' || r.type === 'mixed') && r.message) {
                         bubble += escapeHtml(r.message).replace(/\n/g, '<br>');
                     }
-                    const readLabel = r.is_mine ? ` · ${r.is_read ? 'Seen' : 'Sent'}` : '';
+
+                    // Any message from a staff member or current admin is on the outgoing (right) side
+                    const isOutgoing = Boolean(r.is_staff || r.is_mine);
+                    const readLabel = isOutgoing ? ` · ${r.is_read ? 'Seen' : 'Sent'}` : '';
 
                     html += `
-                        <div class="fb-msg-wrap ${r.is_mine ? 'mine' : ''}">
-                            <div class="fb-msg-avatar">${initials(r.sender_name)}</div>
+                        <div class="fb-msg-wrap ${isOutgoing ? 'mine' : ''}">
+                            <div class="fb-msg-avatar" title="${escapeHtml(r.sender_name)}">${initials(r.sender_name)}</div>
                             <div class="fb-msg-content">
-                                <div class="fb-msg-bubble ${r.is_mine ? 'mine' : 'other'}">${bubble}</div>
-                                <div class="fb-msg-meta">${escapeHtml(r.created_at)}${readLabel}</div>
+                                <div class="fb-msg-bubble ${isOutgoing ? 'mine' : 'other'}">${bubble}</div>
+                                <div class="fb-msg-meta">${escapeHtml(r.sender_name)} · ${escapeHtml(r.created_at)}${readLabel}</div>
                             </div>
                         </div>
                     `;
@@ -859,9 +868,16 @@
                 // synthetic Enter mid-word. Must ignore both or messages get split.
                 if (window.__fbComposing || e.isComposing || e.keyCode === 229) return;
 
-                if (e.key === 'Enter' && !e.shiftKey) {
+                // Ctrl+Enter or Cmd+Enter sends the reply
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault();
                     if (!isSending) window.__fbSendReply(activeTicketId);
+                    return;
+                }
+
+                // Plain Enter: inserts a new line (default behavior). Auto-resize textarea:
+                if (e.key === 'Enter') {
+                    setTimeout(() => window.__fbAutoResize(e.target), 10);
                 }
             };
 
