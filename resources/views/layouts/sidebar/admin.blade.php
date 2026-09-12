@@ -43,24 +43,19 @@
             </ul>
         </li>
 
-        <!-- 3. Financials & Wallets -->
-        <li class="nav-main-item {{ request()->is('admin/withdrawal*') || request()->is('admin/manual/fundings*') || request()->is('admin/transaction*') || request()->is('admin/wallet/discrepancies*') || request()->is('user/transaction*') || request()->is('currencies*') || request()->is('conversion-rates*') ? 'open' : '' }}">
+        <!-- 3. Payouts -->
+        @php
+            $pendingWithdrawals = \App\Models\Withrawal::where('status', false)->count();
+        @endphp
+        <li class="nav-main-item {{ request()->is('admin/withdrawal*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                <i class="nav-main-link-icon fa fa-wallet"></i>
-                <span class="nav-main-link-name">Financials</span>
-                @php
-                    $pendingWithdrawals = \App\Models\Withrawal::where('status', false)->count();
-                @endphp
+                <i class="nav-main-link-icon fa fa-money-bill-transfer"></i>
+                <span class="nav-main-link-name">Payouts</span>
                 @if($pendingWithdrawals > 0)
                     <span class="nav-main-link-badge badge rounded-pill bg-danger">{{ $pendingWithdrawals }}</span>
                 @endif
             </a>
             <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->routeIs('admin.wallet.discrepancies') ? 'active' : '' }}" href="{{ route('admin.wallet.discrepancies') }}">
-                        <span class="nav-main-link-name">Balance Discrepancies</span>
-                    </a>
-                </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->routeIs('admin.withdrawal.queued') || request()->routeIs('admin.withdrawal.queued.current') ? 'active' : '' }}" href="{{ route('admin.withdrawal.queued') }}">
                         <span class="nav-main-link-name">Queued Payouts</span>
@@ -72,6 +67,21 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->routeIs('admin.withdrawal') ? 'active' : '' }}" href="{{ route('admin.withdrawal') }}">
                         <span class="nav-main-link-name">Disbursed Payouts</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- 4. Transactions & Funding -->
+        <li class="nav-main-item {{ request()->is('admin/manual/fundings*') || request()->is('admin/transaction*') || request()->is('admin/wallet/discrepancies*') || request()->is('user/transaction*') ? 'open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                <i class="nav-main-link-icon fa fa-receipt"></i>
+                <span class="nav-main-link-name">Transactions & Funding</span>
+            </a>
+            <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->routeIs('admin.wallet.discrepancies') ? 'active' : '' }}" href="{{ route('admin.wallet.discrepancies') }}">
+                        <span class="nav-main-link-name">Balance Discrepancies</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
@@ -89,6 +99,16 @@
                         <span class="nav-main-link-name">Manual Fundings</span>
                     </a>
                 </li>
+            </ul>
+        </li>
+
+        <!-- 5. Currencies & Conversion Rates -->
+        <li class="nav-main-item {{ request()->is('currencies*') || request()->is('conversion-rates*') ? 'open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                <i class="nav-main-link-icon fa fa-coins"></i>
+                <span class="nav-main-link-name">Currencies & Rates</span>
+            </a>
+            <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->is('currencies*') ? 'active' : '' }}" href="{{ url('currencies') }}">
                         <span class="nav-main-link-name">Currencies</span>
@@ -102,7 +122,7 @@
             </ul>
         </li>
 
-        <!-- 4. Campaigns & Tasks -->
+        <!-- 6. Campaigns & Tasks -->
         <li class="nav-main-item {{ request()->is('campaign*') || request()->is('admin/campaign*') || request()->is('unapproved*') || request()->is('approved*') || request()->is('admin/task*') || request()->routeIs('create.category') || request()->is('create/category*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                 <i class="nav-main-link-icon fa fa-tasks"></i>
@@ -171,16 +191,22 @@
             </ul>
         </li>
 
-        <!-- 5. Job & Career Hub -->
-        <li class="nav-main-item {{ request()->is('admin/career*') || request()->is('admin/professional*') || request()->is('jobs*') ? 'open' : '' }}">
+        <!-- 7. Job Vacancy -->
+        @php
+            $pendingJobsCount = \App\Models\JobListing::where('user_posted', true)->where('is_active', false)->whereNull('decision_reason')->count();
+        @endphp
+        <li class="nav-main-item {{ request()->is('admin/career-hub*') || request()->is('career-hub*') || request()->is('jobs*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                 <i class="nav-main-link-icon fa fa-briefcase"></i>
-                <span class="nav-main-link-name">Jobs & Career</span>
+                <span class="nav-main-link-name">Job Vacancy</span>
+                @if($pendingJobsCount > 0)
+                    <span class="nav-main-link-badge badge rounded-pill bg-warning text-dark">{{ $pendingJobsCount }}</span>
+                @endif
             </a>
             <ul class="nav-main-submenu">
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->routeIs('admin.career-hub.index') || request()->routeIs('admin.career-hub.pending') ? 'active' : '' }}" href="{{ route('admin.career-hub.index') }}">
-                        <span class="nav-main-link-name">Job Vacancies</span>
+                    <a class="nav-main-link {{ request()->routeIs('admin.career-hub.index') ? 'active' : '' }}" href="{{ route('admin.career-hub.index') }}">
+                        <span class="nav-main-link-name">All Vacancies</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
@@ -189,37 +215,93 @@
                     </a>
                 </li>
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->routeIs('admin.career-profiles*') ? 'active' : '' }}" href="{{ route('admin.career-profiles.index') }}">
-                        <span class="nav-main-link-name">Career Profiles</span>
+                    <a class="nav-main-link {{ request()->routeIs('admin.career-hub.pending') ? 'active' : '' }}" href="{{ route('admin.career-hub.pending') }}">
+                        <span class="nav-main-link-name">Pending Review</span>
+                        @if($pendingJobsCount > 0)
+                            <span class="badge rounded-pill bg-warning text-dark ms-auto">{{ $pendingJobsCount }}</span>
+                        @endif
                     </a>
                 </li>
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->is('admin/professional*') ? 'active' : '' }}" href="{{ url('admin/professional') }}">
-                        <span class="nav-main-link-name">Professional Jobs</span>
+                    <a class="nav-main-link {{ request()->routeIs('admin.career-hub.expired') ? 'active' : '' }}" href="{{ route('admin.career-hub.expired') }}">
+                        <span class="nav-main-link-name">Expired Vacancies</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->routeIs('admin.career-hub.declined') ? 'active' : '' }}" href="{{ route('admin.career-hub.declined') }}">
+                        <span class="nav-main-link-name">Declined Vacancies</span>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <!-- 6. Operations & Features -->
-        <li class="nav-main-item {{ request()->is('admin/business*') || request()->is('admin/safelock*') || request()->is('admin/spin*') || request()->is('admin/finger*') || request()->is('admin/partner*') || request()->is('admin/banner*') || request()->is('admin/blogs*') ? 'open' : '' }}">
+        <!-- 8. Career Profiles & Professional -->
+        <li class="nav-main-item {{ request()->is('admin/career-profiles*') || request()->is('admin/professional*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                <i class="nav-main-link-icon fa fa-layer-group"></i>
-                <span class="nav-main-link-name">Operations</span>
+                <i class="nav-main-link-icon fa fa-user-tie"></i>
+                <span class="nav-main-link-name">Career Profiles</span>
             </a>
             <ul class="nav-main-submenu">
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->is('admin/business*') ? 'active' : '' }}" href="{{ url('admin/business') }}">
-                        <span class="nav-main-link-name">Business Accounts</span>
+                    <a class="nav-main-link {{ request()->routeIs('admin.career-profiles*') ? 'active' : '' }}" href="{{ route('admin.career-profiles.index') }}">
+                        <span class="nav-main-link-name">Career Profiles</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/professional') ? 'active' : '' }}" href="{{ url('admin/professional') }}">
+                        <span class="nav-main-link-name">Professional Hub</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/professional/category*') ? 'active' : '' }}" href="{{ url('admin/professional/category') }}">
+                        <span class="nav-main-link-name">Skill Categories</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/professional/list/approved*') ? 'active' : '' }}" href="{{ url('admin/professional/list/approved') }}">
+                        <span class="nav-main-link-name">Approved Profiles</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/professional/list/pending*') ? 'active' : '' }}" href="{{ url('admin/professional/list/pending') }}">
+                        <span class="nav-main-link-name">Pending Approvals</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/professional/list/denied*') ? 'active' : '' }}" href="{{ url('admin/professional/list/denied') }}">
+                        <span class="nav-main-link-name">Denied Profiles</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- 9. Operations -->
+        <li class="nav-main-item {{ request()->is('admin/banner*') || request()->is('admin/blogs*') || request()->is('admin/business*') || request()->is('admin/safelock*') || request()->is('admin/spin*') || request()->is('admin/finger*') || request()->is('admin/partner*') ? 'open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                <i class="nav-main-link-icon fa fa-layer-group"></i>
+                <span class="nav-main-link-name">Operations</span>
+                @php $bannerCount = \App\Models\Banner::where('status', false)->count(); @endphp
+                @if($bannerCount > 0)
+                    <span class="nav-main-link-badge badge rounded-pill bg-info">{{ $bannerCount }}</span>
+                @endif
+            </a>
+            <ul class="nav-main-submenu">
+                <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->is('admin/banner/list') ? 'active' : '' }}" href="{{ url('admin/banner/list') }}">
                         <span class="nav-main-link-name">Banner Ads</span>
-                        @php $bannerCount = \App\Models\Banner::where('status', false)->count(); @endphp
                         @if($bannerCount > 0)
                             <span class="badge rounded-pill bg-info ms-auto">{{ $bannerCount }}</span>
                         @endif
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->routeIs('admin.blogs*') ? 'active' : '' }}" href="{{ route('admin.blogs.index') }}">
+                        <span class="nav-main-link-name">Blogs</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/business*') ? 'active' : '' }}" href="{{ url('admin/business') }}">
+                        <span class="nav-main-link-name">Business Accounts</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
@@ -232,15 +314,10 @@
                         <span class="nav-main-link-name">Interactive Games</span>
                     </a>
                 </li>
-                <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->routeIs('admin.blogs*') ? 'active' : '' }}" href="{{ route('admin.blogs.index') }}">
-                        <span class="nav-main-link-name">Blogs</span>
-                    </a>
-                </li>
             </ul>
         </li>
 
-        <!-- 7. Support & Messages -->
+        <!-- 10. Support & Messages -->
         <li class="nav-main-item {{ request()->is('admin/feedback*') || request()->is('mass/mail*') || request()->is('admin/notifications*') || request()->is('admin/knowledgebase*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                 <i class="nav-main-link-icon fa fa-comments"></i>
@@ -270,7 +347,7 @@
             </ul>
         </li>
 
-        <!-- 8. Settings & Staff -->
+        <!-- 11. Settings & Staff -->
         <li class="nav-main-item {{ request()->is('staff*') || request()->is('preferences*') || request()->is('audit/trail*') ? 'open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                 <i class="nav-main-link-icon fa fa-cog"></i>

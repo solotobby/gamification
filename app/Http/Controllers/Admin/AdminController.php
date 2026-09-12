@@ -3891,9 +3891,10 @@ class AdminController extends Controller
             };
 
             if ($txCurr === $mappedCurrency) {
-                if (strtolower($tx->tx_type) === 'credit') {
+                $dir = PaymentTransaction::determineTxType($tx->type, $tx->description, $tx->tx_type);
+                if ($dir === 'credit') {
                     $computed += (float) $tx->amount;
-                } elseif (strtolower($tx->tx_type) === 'debit') {
+                } elseif ($dir === 'debit') {
                     $computed -= (float) $tx->amount;
                 }
             }
