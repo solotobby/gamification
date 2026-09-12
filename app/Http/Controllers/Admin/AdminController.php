@@ -298,12 +298,11 @@ class AdminController extends Controller
 
             setIsComplete($workDone->campaign_id);
             $user = User::where('id', $workDone->user_id)->first();
+            $userCurrency = baseCurrency($user);
+            creditWallet($user, $userCurrency, $workDone->amount);
+            $channel = $userCurrency === 'USD' ? 'paypal' : ($userCurrency === 'NGN' ? 'paystack' : 'flutterwave');
 
-            $currency = $campaign->currency ?: 'NGN';
-            creditWallet($user, $currency, $workDone->amount);
-            $channel = $currency === 'USD' ? 'paypal' : ($currency === 'NGN' ? 'paystack' : 'system');
-
-            $ref = time();
+            $ref = 'DISPUTE_' . time() . '_' . $workDone->id;
 
             PaymentTransaction::create([
                 'user_id' =>  $workDone->user_id,
@@ -312,10 +311,10 @@ class AdminController extends Controller
                 'amount' =>  $workDone->amount,
                 'balance' => walletBalance($workDone->user_id),
                 'status' => 'successful',
-                'currency' => $currency,
+                'currency' => $userCurrency,
                 'channel' => $channel,
                 'type' => 'campaign_payment_dispute_resolved',
-                'description' => 'Campaign Dispute Resolution for ' . $workDone->campaign->post_title,
+                'description' => 'Campaign Dispute Resolution for ' . ($workDone->campaign->post_title ?? 'Task'),
                 'tx_type' => 'Credit',
                 'user_type' => 'regular'
             ]);
@@ -2103,20 +2102,20 @@ class AdminController extends Controller
                     return;
                 }
 
-                if ($baseCurrency == 'NGN') {
+                if (in_array(strtoupper($baseCurrency), ['NGN', 'NAIRA'])) {
                     $currency = 'NGN';
                     $channel = 'paystack';
-                    $wallet->balance += $amountCredited;
+                    $wallet->balance += (float) $amountCredited;
                     $wallet->save();
-                } elseif ($camp && $camp->currency == 'USD') {
+                } elseif (in_array(strtoupper($baseCurrency), ['USD', 'DOLLAR'])) {
                     $currency = 'USD';
                     $channel = 'paypal';
-                    $wallet->usd_balance += $amountCredited;
+                    $wallet->usd_balance += (float) $amountCredited;
                     $wallet->save();
                 } else {
-                    $currency = $baseCurrency;
+                    $currency = strtoupper($baseCurrency);
                     $channel = 'flutterwave';
-                    $wallet->base_currency_balance += $amountCredited;
+                    $wallet->base_currency_balance += (float) $amountCredited;
                     $wallet->save();
                 }
 
@@ -3692,8 +3691,231 @@ class AdminController extends Controller
 
         //return getCountriesSupported();
         // return listWellaHealthScriptions();
+    }
 
+    public function walletDiscrepancies(Request $request)
+    {
+        $search = $request->input('search');
+        $currency = $request->input('currency', 'ALL');
+        $filter = $request->input('filter', 'discrepancy'); // 'all', 'discrepancy', 'overcredited', 'undercredited', 'synced'
+        $tolerance = 0.01;
 
-        // return view('welcome', ['html' => $html]);
+        $currencyExpr = "CASE 
+            WHEN LOWER(COALESCE(wallets.base_currency, 'NGN')) IN ('naira', 'ngn') THEN 'NGN'
+            WHEN LOWER(COALESCE(wallets.base_currency, 'NGN')) IN ('dollar', 'usd') THEN 'USD'
+            ELSE UPPER(COALESCE(wallets.base_currency, 'NGN'))
+        END";
+
+        $liveBalanceExpr = "CASE 
+            WHEN LOWER(COALESCE(wallets.base_currency, 'NGN')) IN ('naira', 'ngn') THEN wallets.balance
+            WHEN LOWER(COALESCE(wallets.base_currency, 'NGN')) IN ('dollar', 'usd') THEN wallets.usd_balance
+            ELSE wallets.base_currency_balance
+        END";
+
+        // Query wallets joined with users
+        $query = Wallet::join('users', 'users.id', '=', 'wallets.user_id')
+            ->select(
+                'wallets.*',
+                'users.name as user_name',
+                'users.email as user_email',
+                'users.phone as user_phone',
+                'users.is_verified',
+                DB::raw("({$liveBalanceExpr}) as live_balance"),
+                DB::raw("COALESCE(wallets.temp_balance, 0) as calculated_balance"),
+                DB::raw("(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) as diff"),
+                DB::raw("ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) as abs_diff")
+            );
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('users.name', 'LIKE', "%{$search}%")
+                  ->orWhere('users.email', 'LIKE', "%{$search}%")
+                  ->orWhere('users.phone', 'LIKE', "%{$search}%")
+                  ->orWhere('users.id', $search);
+            });
+        }
+
+        if ($currency !== 'ALL' && !empty($currency)) {
+            $query->whereRaw("{$currencyExpr} = ?", [strtoupper($currency)]);
+        }
+
+        if ($filter === 'discrepancy') {
+            $query->whereRaw("ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > ?", [$tolerance]);
+        } elseif ($filter === 'overcredited') {
+            $query->whereRaw("(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > ?", [$tolerance]);
+        } elseif ($filter === 'undercredited') {
+            $query->whereRaw("(COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > ?", [$tolerance]);
+        } elseif ($filter === 'synced') {
+            $query->whereRaw("ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) <= ?", [$tolerance]);
+        }
+
+        $wallets = $query->orderByDesc('abs_diff')->paginate(50)->appends($request->all());
+
+        // Multi-currency stats for summary cards
+        $statsRaw = Wallet::select(
+            DB::raw("{$currencyExpr} as curr"),
+            DB::raw("COUNT(*) as total_wallets"),
+            DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN 1 ELSE 0 END) as overcredited_count"),
+            DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) ELSE 0 END) as overcredited_amount"),
+            DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN 1 ELSE 0 END) as undercredited_count"),
+            DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) ELSE 0 END) as undercredited_amount"),
+            DB::raw("SUM(CASE WHEN ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) <= {$tolerance} THEN 1 ELSE 0 END) as synced_count")
+        )->groupBy('curr')->get();
+
+        $activeCurrencies = Currency::where('is_active', '1')->get();
+
+        return view('admin.wallets.discrepancies', compact('wallets', 'statsRaw', 'activeCurrencies', 'search', 'currency', 'filter'));
+    }
+
+    public function reconcileUserBalance(Request $request, $id)
+    {
+        $request->validate([
+            'action' => 'required|in:sync_to_calculated,credit,debit',
+            'amount' => 'nullable|numeric|min:0.01',
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        return DB::transaction(function () use ($request, $user) {
+            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->firstOrFail();
+            $userCurrency = baseCurrency($user);
+            $reason = $request->input('reason');
+            $action = $request->input('action');
+            $adminUser = Auth::user();
+
+            $liveBalance = match (strtoupper($userCurrency)) {
+                'NGN'   => (float) $wallet->balance,
+                'USD'   => (float) $wallet->usd_balance,
+                default => (float) $wallet->base_currency_balance,
+            };
+
+            $calculatedBalance = (float) ($wallet->temp_balance ?? 0);
+            $adjustmentAmount = 0;
+            $txType = 'Credit';
+
+            if ($action === 'sync_to_calculated') {
+                $diff = $calculatedBalance - $liveBalance;
+                if (abs($diff) < 0.0001) {
+                    return back()->with('info', 'Wallet balance is already aligned with calculated ledger balance.');
+                }
+
+                if ($diff > 0) {
+                    // Undercredited -> Credit difference
+                    $adjustmentAmount = $diff;
+                    $txType = 'Credit';
+                    creditWallet($user, $userCurrency, $adjustmentAmount);
+                } else {
+                    // Overcredited -> Debit excess
+                    $adjustmentAmount = abs($diff);
+                    $txType = 'Debit';
+                    debitWallet($user, $userCurrency, $adjustmentAmount);
+                }
+            } elseif ($action === 'credit') {
+                $adjustmentAmount = (float) $request->input('amount');
+                $txType = 'Credit';
+                creditWallet($user, $userCurrency, $adjustmentAmount);
+            } elseif ($action === 'debit') {
+                $adjustmentAmount = (float) $request->input('amount');
+                $txType = 'Debit';
+                debitWallet($user, $userCurrency, $adjustmentAmount);
+            }
+
+            // Create ledger entry
+            $reference = 'REC_' . time() . '_' . Str::upper(Str::random(6));
+            $newLiveBalance = walletBalance($user->id);
+
+            PaymentTransaction::create([
+                'user_id' => $user->id,
+                'campaign_id' => 1,
+                'reference' => $reference,
+                'amount' => $adjustmentAmount,
+                'balance' => $newLiveBalance,
+                'status' => 'successful',
+                'currency' => $userCurrency,
+                'channel' => 'admin_reconciliation',
+                'type' => 'balance_reconciliation',
+                'description' => "Admin ({$adminUser->name}) reconciliation [{$action}]: {$reason}",
+                'tx_type' => $txType,
+                'user_type' => 'admin',
+            ]);
+
+            activityLog($user, 'wallet_reconciliation', "Admin {$adminUser->name} performed balance reconciliation ({$txType} {$userCurrency} {$adjustmentAmount}). Reason: {$reason}", 'admin');
+
+            // Re-sync temp_balance after reconciliation
+            $wallet->fresh();
+            $this->recomputeUserLedger($user->id);
+
+            return back()->with('success', "Wallet balance for {$user->name} successfully reconciled ({$txType} {$userCurrency} " . number_format($adjustmentAmount, 2) . ").");
+        });
+    }
+
+    public function recalculateSingleWallet(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $result = $this->recomputeUserLedger($user->id);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Wallet balance recalculation complete.',
+                'data' => $result,
+            ]);
+        }
+
+        return back()->with('success', "Recalculation complete for {$user->name}. Ledger Balance: {$result['currency']} " . number_format($result['computed_balance'], 2) . ", Live Balance: {$result['currency']} " . number_format($result['live_balance'], 2) . ", Difference: " . number_format($result['diff'], 2));
+    }
+
+    private function recomputeUserLedger(int $userId): array
+    {
+        $wallet = Wallet::where('user_id', $userId)->firstOrFail();
+        $user = User::findOrFail($userId);
+        $userCurrency = baseCurrency($user);
+
+        $mappedCurrency = match (strtoupper($userCurrency)) {
+            'NAIRA', 'NGN' => 'NGN',
+            'DOLLAR', 'USD' => 'USD',
+            default => strtoupper($userCurrency),
+        };
+
+        $transactions = PaymentTransaction::where('user_id', $userId)
+            ->where('status', 'successful')
+            ->get();
+
+        $computed = 0.0;
+        foreach ($transactions as $tx) {
+            $txCurr = match (strtoupper($tx->currency ?: 'NGN')) {
+                'NAIRA', 'NGN' => 'NGN',
+                'DOLLAR', 'USD' => 'USD',
+                default => strtoupper($tx->currency ?: 'NGN'),
+            };
+
+            if ($txCurr === $mappedCurrency) {
+                if (strtolower($tx->tx_type) === 'credit') {
+                    $computed += (float) $tx->amount;
+                } elseif (strtolower($tx->tx_type) === 'debit') {
+                    $computed -= (float) $tx->amount;
+                }
+            }
+        }
+
+        $wallet->temp_balance = $computed;
+        $wallet->temp_balance_calculated_at = now();
+        $wallet->save();
+
+        $liveBalance = match ($mappedCurrency) {
+            'NGN'   => (float) $wallet->balance,
+            'USD'   => (float) $wallet->usd_balance,
+            default => (float) $wallet->base_currency_balance,
+        };
+
+        return [
+            'user_id' => $userId,
+            'currency' => $mappedCurrency,
+            'live_balance' => $liveBalance,
+            'computed_balance' => $computed,
+            'diff' => abs($liveBalance - $computed),
+        ];
     }
 }
+

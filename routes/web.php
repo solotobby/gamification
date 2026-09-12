@@ -684,3 +684,9 @@ Route::post('professional/skillset/store', [\App\Http\Controllers\Admin\Professi
 Route::get('remove/duplicate/account', [\App\Http\Controllers\Admin\FraudController::class, 'removeDuplicateAccount']);
 Route::post('/admin/fraud/blacklist/{user}', [\App\Http\Controllers\Admin\FraudController::class, 'blacklist'])->name('admin.fraud.blacklist');
 Route::post('/admin/fraud/unblacklist/{user}', [\App\Http\Controllers\Admin\FraudController::class, 'unblacklist'])->name('admin.fraud.unblacklist');
+
+// Wallet Discrepancies & Ledger Reconciliation
+Route::get('admin/wallet/discrepancies', [\App\Http\Controllers\Admin\AdminController::class, 'walletDiscrepancies'])->name('admin.wallet.discrepancies');
+Route::post('admin/wallet/reconcile/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'reconcileUserBalance'])->name('admin.wallet.reconcile');
+Route::post('admin/wallet/recalculate/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'recalculateSingleWallet'])->name('admin.wallet.recalculate');
+
