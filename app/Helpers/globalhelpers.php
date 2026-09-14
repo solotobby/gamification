@@ -529,19 +529,13 @@ if (!function_exists('createInterswitchVirtualAccount')) {
             $baseUrl = config('services.interswitch.base_url', 'https://api.interswitchng.com');
             $url = "{$baseUrl}/paymentgateway/api/v1/payable/virtualaccount";
             $merchantCode = config('services.interswitch.merchant_code');
-            $payableCode = config('services.interswitch.payable_code');
             $providerCode = $provider ?? config('services.interswitch.provider_code', 'WEMA');
 
             $payload = [
                 'accountName' => 'Freebyz Technologies/' . $accountName,
                 'merchantCode' => (string) $merchantCode,
+                'provider' => $providerCode,
             ];
-            if ($payableCode) {
-                $payload['payableCode'] = (string) $payableCode;
-            }
-            if ($providerCode) {
-                $payload['provider'] = $providerCode;
-            }
 
             $res = Http::withHeaders(interswitchOauthHeaders())
                 ->timeout(20)
