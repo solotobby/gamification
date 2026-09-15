@@ -26,8 +26,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('task')->everyMinute();//->dailyAt('00:00');
 
-        // $schedule->command('users:delete-unverified')->dailyAt('02:00');
-
+        $schedule->command('users:purge-deleted')->dailyAt('02:30');
 
         $schedule->command('campaign:release-expired-slots')
             ->everyThirtyMinutes()

@@ -415,7 +415,13 @@ class AdminController extends Controller
 
     public function userList(Request $request)
     {
-        $query = User::where('role', 'regular')->with(['wallet', 'profile']);
+        if ($request->status === 'deleted' || $request->status === 'scheduled_deletion') {
+            $query = User::onlyTrashed()->where('role', 'regular')->with(['wallet', 'profile']);
+        } elseif ($request->status === 'all') {
+            $query = User::withTrashed()->where('role', 'regular')->with(['wallet', 'profile']);
+        } else {
+            $query = User::where('role', 'regular')->with(['wallet', 'profile']);
+        }
 
         // Date filtering
         if ($request->filled('start_date')) {
@@ -987,7 +993,8 @@ class AdminController extends Controller
 
     public function userInfo($id)
     {
-        $info = User::withCount(['myCampaigns', 'referees', 'myJobs'])
+        $info = User::withTrashed()
+            ->withCount(['myCampaigns', 'referees', 'myJobs'])
             ->with(['wallet', 'accountDetails', 'virtualAccount', 'profile', 'USD_verified'])
             ->where('id', $id)
             ->firstOrFail();
@@ -3358,6 +3365,32 @@ class AdminController extends Controller
     {
         User::where('id', $id)->update(['is_blacklisted' => 1]);
         return back()->with('success', 'User Blacklisted');
+    }
+
+    public function deleteUser($id)
+    {
+        $admin = auth()->user();
+        if (!$admin || (!$admin->hasRole('admin') && !$admin->hasRole('super_admin') && $admin->role !== 'admin' && $admin->role !== 'super_admin')) {
+            return back()->with('error', 'Unauthorized action');
+        }
+
+        $user = User::findOrFail($id);
+        $user->delete(); // sets deleted_at = now() and triggers AccountDeletionScheduledMail
+
+        return back()->with('success', "User account for {$user->name} ({$user->email}) has been soft-deleted, scheduled for permanent deletion in 60 days, and a notification email has been sent.");
+    }
+
+    public function restoreUser($id)
+    {
+        $admin = auth()->user();
+        if (!$admin || (!$admin->hasRole('admin') && !$admin->hasRole('super_admin') && $admin->role !== 'admin' && $admin->role !== 'super_admin')) {
+            return back()->with('error', 'Unauthorized action');
+        }
+
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore(); // sets deleted_at = null
+
+        return back()->with('success', "User account for {$user->name} ({$user->email}) has been restored and reactivated successfully.");
     }
 
     public function switch(Request $request)
