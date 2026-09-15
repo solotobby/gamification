@@ -51,6 +51,30 @@
                 <div class="text-muted fs-xs">
                     Member since {{ \Carbon\Carbon::parse($info->created_at)->format('M d, Y') }} ({{ \Carbon\Carbon::parse($info->created_at)->diffForHumans() }})
                 </div>
+
+                @if($info->trashed())
+                    <div class="alert alert-warning d-flex flex-wrap align-items-center justify-content-between p-3 mt-3 mb-0 mx-auto rounded-3 border border-warning text-start" style="max-width: 700px;" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-exclamation-triangle fs-3 text-warning me-3"></i>
+                            <div>
+                                <h6 class="alert-heading fw-bold mb-0 text-dark">Scheduled for Deletion (Soft-Deleted)</h6>
+                                @php
+                                    $daysPassed = (int) $info->deleted_at->diffInDays(now());
+                                    $daysLeft = max(0, 60 - $daysPassed);
+                                @endphp
+                                <div class="fs-xs text-muted">
+                                    Deleted {{ $info->deleted_at->diffForHumans() }} &#8226; <strong class="text-danger">{{ $daysLeft }} day(s)</strong> remaining before final purge.
+                                </div>
+                            </div>
+                        </div>
+                        <form action="{{ route('admin.user.restore', $info->id) }}" method="POST" class="mt-2 mt-sm-0">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Reactivate / restore this user account?')">
+                                <i class="fa fa-undo me-1"></i> Reactivate
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
 
             <!-- Stats Bar -->
@@ -727,7 +751,7 @@
                             </div>
 
                             <!-- Blacklist / Ban -->
-                            <div class="card border border-danger-subtle p-3 rounded-3 bg-danger-light">
+                            <div class="card border border-danger-subtle p-3 mb-4 rounded-3 bg-danger-light">
                                 <h5 class="fw-bold text-danger mb-1">Account Suspension</h5>
                                 <p class="text-muted fs-sm mb-3">Suspending an account revokes access to payouts, tasks, and referrals.</p>
                                 @if(!$info->is_blacklisted)
@@ -737,6 +761,46 @@
                                     </a>
                                 @else
                                     <span class="badge bg-danger py-2 px-3 fs-sm"><i class="fa fa-ban me-1"></i> Account is Currently Blacklisted</span>
+                                @endif
+                            </div>
+
+                            <!-- Account Deletion (60-Day Soft Delete) -->
+                            <div class="card border border-danger p-3 rounded-3 bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="fw-bold text-danger mb-0">Account Deletion (60-Day Grace Period)</h5>
+                                    @if($info->trashed())
+                                        <span class="badge bg-danger fs-xs">Scheduled for Deletion</span>
+                                    @else
+                                        <span class="badge bg-success fs-xs">Active</span>
+                                    @endif
+                                </div>
+                                <p class="text-muted fs-sm mb-3">
+                                    Deleting an account soft-deletes it immediately and queues it for permanent purge 60 days later. While scheduled, user login is blocked with a notice showing the days left and support contact instructions.
+                                </p>
+
+                                @if($info->trashed())
+                                    @php
+                                        $daysPassed = (int) $info->deleted_at->diffInDays(now());
+                                        $daysLeft = max(0, 60 - $daysPassed);
+                                    @endphp
+                                    <div class="alert alert-warning fs-sm mb-3">
+                                        <strong><i class="fa fa-info-circle me-1"></i> Deletion Status:</strong>
+                                        Soft-deleted on {{ $info->deleted_at->format('M d, Y H:i') }} ({{ $info->deleted_at->diffForHumans() }}).
+                                        <strong class="text-danger">{{ $daysLeft }} day(s)</strong> remaining before final permanent removal.
+                                    </div>
+                                    <form action="{{ route('admin.user.restore', $info->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to reactivate and restore this user account?')">
+                                            <i class="fa fa-undo me-1"></i> Reactivate / Restore User Account
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('admin.user.delete', $info->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to DELETE this user account? It will be soft-deleted immediately and permanently deleted after 60 days.')">
+                                            <i class="fa fa-trash me-1"></i> Delete User Account (60-Day Soft Delete)
+                                        </button>
+                                    </form>
                                 @endif
                             </div>
                         </div>

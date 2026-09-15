@@ -55,7 +55,7 @@
                         </div>
 
                         <!-- Currency Dropdown -->
-                        <div class="col-lg-2 col-md-4 col-6">
+                        <div class="col-lg-2 col-md-3 col-6">
                             <label class="form-label fw-semibold fs-sm">Currency</label>
                             <select name="currency" class="form-select" onchange="this.form.submit()">
                                 <option value="ALL" {{ request('currency') == 'ALL' || !request('currency') ? 'selected' : '' }}>All Currencies</option>
@@ -69,8 +69,18 @@
                             </select>
                         </div>
 
+                        <!-- Status Dropdown -->
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <label class="form-label fw-semibold fs-sm">Account Status</label>
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                <option value="" {{ !request('status') || request('status') === 'active' ? 'selected' : '' }}>Active Only</option>
+                                <option value="deleted" {{ request('status') === 'deleted' ? 'selected' : '' }}>Scheduled Deletions</option>
+                                <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>All Accounts</option>
+                            </select>
+                        </div>
+
                         <!-- Buttons -->
-                        <div class="col-lg-2 col-md-8 col-12 d-flex gap-2">
+                        <div class="col-lg-2 col-md-6 col-12 d-flex gap-2">
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-filter me-1"></i> Filter
                             </button>
@@ -153,6 +163,9 @@
                                                     Ref: <span class="font-monospace">{{ $user->referral_code ?? 'N/A' }}</span>
                                                     @if($user->is_celebrity)
                                                         <span class="badge bg-warning text-dark ms-1">Celebrity</span>
+                                                    @endif
+                                                    @if($user->trashed())
+                                                        <span class="badge bg-danger ms-1" title="Scheduled for permanent deletion">Scheduled Deletion</span>
                                                     @endif
                                                 </div>
                                             </div>

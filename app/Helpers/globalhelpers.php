@@ -760,13 +760,14 @@ if (!function_exists('createFlutterwaveVirtualAccount')) {
             $payload = array_filter([
                 'email' => $data['email'],
                 'currency' => $data['currency'] ?? 'GHS',
-                'amount' => $data['amount'] ?? 1,
+                'amount' => $data['amount'] ?? null,
                 'tx_ref' => $data['tx_ref'] ?? ('VA-' . time() . '-' . rand(100, 999)),
                 'is_permanent' => true,
-                'firstname' => $data['firstname'] ?? null,
+                'firstname' => 'Freebyz Technologies/ ' .$data['firstname'],
                 'lastname' => $data['lastname'] ?? null,
+                'phonenumber' => $data['phone'] ?? $data['phonenumber'] ?? null,
                 'narration' => $data['narration'] ?? 'Freebyz Wallet Funding',
-            ]);
+            ], fn($v) => !is_null($v));
 
             $res = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $secretKey,
@@ -776,7 +777,16 @@ if (!function_exists('createFlutterwaveVirtualAccount')) {
 
             Log::info('Flutterwave Create Virtual Account Response: ' . $res->body());
 
-            return $res->successful() ? ($res->json('data') ?? $res->json()) : null;
+            if ($res->successful()) {
+                return $res->json('data') ?? $res->json();
+            }
+
+            Log::error('Flutterwave Create Virtual Account Failed: ' . $res->body(), [
+                'status' => $res->status(),
+                'payload' => $payload,
+            ]);
+
+            return null;
         } catch (\Throwable $e) {
             Log::error('Flutterwave Create Virtual Account Error: ' . $e->getMessage());
             return null;
@@ -1430,6 +1440,7 @@ if (!function_exists('reGenerateVirtualAccount')) {
                     'tx_ref' => 'VA-' . $user->id . '-' . time(),
                     'firstname' => $nameParts[0] ?? $user->name,
                     'lastname' => $nameParts[1] ?? 'User',
+                    'phone' => $user->phone ?? null,
                     'narration' => 'Freebyz Wallet Funding',
                 ]);
 
