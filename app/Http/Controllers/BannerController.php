@@ -51,6 +51,7 @@ class BannerController extends Controller
 
         $request->validate([
             'banner_url' => 'required|image|mimes:png,jpeg,gif,jpg',
+            'banner_url_mobile' => 'nullable|image|mimes:png,jpeg,gif,jpg',
             // 'count' => 'required|array|min:5',
             'external_link' => 'required|string',
             'budget' => 'required|numeric',
@@ -92,6 +93,11 @@ class BannerController extends Controller
             // $bannerUrl = Storage::disk('s3')->url($filePathBanner);
             $bannerUrl = uploadImageToCloudinary($fileBanner);
 
+            $bannerUrlMobile = null;
+            if ($request->hasFile('banner_url_mobile')) {
+                $bannerUrlMobile = uploadImageToCloudinary($request->file('banner_url_mobile'));
+            }
+
             // $imageName = time() . '.' . $request->banner_url->extension();
             // $request->banner_url->move(public_path('images'), $imageName);
 
@@ -115,6 +121,7 @@ class BannerController extends Controller
             $banner['amount'] = $request->budget; //$finalTotal;
             // $banner['banner_url'] = $imageName == '' ? 'no image' : 'images/' . $imageName; //$bannerUrl;
             $banner['banner_url'] =  $bannerUrl;
+            $banner['banner_url_mobile'] = $bannerUrlMobile;
             $banner['impression'] = 0;
             $banner['impression_count'] = 0;
             $banner['clicks'] = $request->budget / 40.5;

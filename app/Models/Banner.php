@@ -13,6 +13,7 @@ class Banner extends Model
         'user_id',
         'banner_id',
         'banner_url',
+        'banner_url_mobile',
         'external_link',
         'age_bracket',
         'ad_placement_point',

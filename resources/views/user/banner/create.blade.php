@@ -56,9 +56,15 @@
 
                 <div class="col-lg-9">
                 <div class="mb-4">
-                    <label class="form-label" for="post-title">Upload Image of your banner</label>
+                    <label class="form-label" for="banner-url">Upload Desktop Banner Image <span class="text-danger">*</span></label>
                     <input type="file" class="form-control" id="banner-url" name="banner_url" required>
-                    <small><i>Upload an image. Must be of high quality with a dimension width: 1024, height: 250 </i></small>
+                    <small><i>Upload high quality desktop image (recommended width: 1024px, height: 250px)</i></small>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="banner-url-mobile">Upload Mobile Banner Image <span class="text-muted">(Optional - prevents mobile distortion)</span></label>
+                    <input type="file" class="form-control" id="banner-url-mobile" name="banner_url_mobile">
+                    <small><i>Optimized for mobile smartphones (recommended 300 × 250 px or 320 × 100 px)</i></small>
                 </div>
 
                 <div class="mb-4">

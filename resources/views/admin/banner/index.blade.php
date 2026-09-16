@@ -141,7 +141,15 @@
                                                         <h3 class="block-title">{{ $banner->banner_id }}</h3>
                                                     </div>
                                                     <div class="block-content">
-                                                        <img src="{{ displayImage($banner->banner_url) }}" width="100%" height="300" class="img-responsive mb-4">
+                                                        <label class="fw-bold">Desktop Banner (1024x250):</label>
+                                                        <img src="{{ displayImage($banner->banner_url) }}" width="100%" height="auto" class="img-responsive mb-3 rounded" style="max-height:200px;object-fit:cover">
+
+                                                        @if(!empty($banner->banner_url_mobile))
+                                                            <label class="fw-bold">Mobile Banner (Responsive):</label>
+                                                            <div class="mb-3 text-center p-2 bg-light rounded">
+                                                                <img src="{{ displayImage($banner->banner_url_mobile) }}" style="max-width:320px;max-height:160px;object-fit:cover" class="img-fluid rounded">
+                                                            </div>
+                                                        @endif
 
                                                         <ul class="list-group push">
                                                             <li class="list-group-item d-flex justify-content-between align-items-center">
