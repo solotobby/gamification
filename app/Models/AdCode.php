@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class AdCode extends Model
+{
+    use HasFactory;
+
+    protected $table = 'ad_codes';
+
+    protected $fillable = [
+        'provider',
+        'ad_format',
+        'device',
+        'code',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+}

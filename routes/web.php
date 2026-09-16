@@ -620,6 +620,16 @@ Route::get('admin/dashboard/api', [\App\Http\Controllers\HomeController::class, 
 Route::get('admin/dashboard/api/default', [\App\Http\Controllers\HomeController::class, 'adminApiDefault']);
 Route::get('test', [\App\Http\Controllers\Admin\AdminController::class, 'test']);
 
+// Advertising (Adsterra & Centralized Monetization Engine)
+Route::middleware('auth')->prefix('admin/advertising')->name('admin.advertising.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\AdvertisingController::class, 'index'])->name('index');
+    Route::post('/config', [\App\Http\Controllers\Admin\AdvertisingController::class, 'updateConfig'])->name('config.update');
+    Route::get('/placements', [\App\Http\Controllers\Admin\AdvertisingController::class, 'placements'])->name('placements');
+    Route::post('/placements/{id}', [\App\Http\Controllers\Admin\AdvertisingController::class, 'updatePlacement'])->name('placement.update');
+    Route::get('/codes', [\App\Http\Controllers\Admin\AdvertisingController::class, 'codes'])->name('codes');
+    Route::post('/codes', [\App\Http\Controllers\Admin\AdvertisingController::class, 'updateCodes'])->name('codes.update');
+});
+
 // Banner Ad
 Route::get('admin/banner/list', [\App\Http\Controllers\Admin\BannerController::class, 'index'])->name('admin.banner.index');
 Route::post('admin/banner/activate/{id}', [\App\Http\Controllers\Admin\BannerController::class, 'activateBanner'])->name('admin.banner.activate');

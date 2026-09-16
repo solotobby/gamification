@@ -287,6 +287,12 @@
             </a>
             <ul class="nav-main-submenu">
                 <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('admin/advertising*') ? 'active' : '' }}" href="{{ route('admin.advertising.index') }}">
+                        <span class="nav-main-link-name">Advertising (Adsterra)</span>
+                        <span class="badge rounded-pill bg-success ms-auto">Ads</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
                     <a class="nav-main-link {{ request()->is('admin/banner/list') ? 'active' : '' }}" href="{{ url('admin/banner/list') }}">
                         <span class="nav-main-link-name">Banner Ads</span>
                         @if($bannerCount > 0)
