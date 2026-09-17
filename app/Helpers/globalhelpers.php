@@ -2962,6 +2962,22 @@ if (!function_exists('resolveBankName')) {
             ];
         }
 
+        // 3. Fallback to Paystack resolve for NGN
+        if ($currency === 'NGN' && function_exists('resolvePaystackAccount')) {
+            $resolved = resolvePaystackAccount((string) $account_number, (string) $bank_code);
+            if ($resolved && !empty($resolved['account_name'])) {
+                return [
+                    'status' => 'true',
+                    'data' => [
+                        'account_name'   => $resolved['account_name'],
+                        'account_number' => $account_number,
+                        'bank_code'      => $bank_code,
+                        'bank_name'      => null,
+                    ],
+                ];
+            }
+        }
+
         return ['status' => 'false', 'message' => 'Could not resolve bank account details. Please verify your account number and bank.'];
     }
 }

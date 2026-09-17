@@ -352,7 +352,7 @@
                                         <input type="text" class="form-control form-control-sm" name="account_name" id="quickAccountNameInput"
                                             placeholder="Auto-resolved via API if left empty">
                                         <div id="quickAccountNameStatus" class="form-text fs-xs mt-1">
-                                            <span class="text-muted">Will auto-resolve with {{ $userCurr === 'NGN' ? 'Paystack' : 'Flutterwave' }} as you type.</span>
+                                            <span class="text-muted">Will auto-resolve with Korapay as you type.</span>
                                         </div>
                                     </div>
 
@@ -633,11 +633,7 @@
                             <div class="text-center mb-4">
                                 <h4 class="fw-bold mb-1">Update Payout Account ({{ $userCurr }})</h4>
                                 <p class="text-muted fs-sm">
-                                    @if($userCurr === 'NGN')
-                                        Resolves Nigerian account names with <strong>Paystack</strong> banking network.
-                                    @else
-                                        Supports Bank Accounts and Mobile Money networks via <strong>Flutterwave</strong>.
-                                    @endif
+                                    Resolves bank accounts and Mobile Money networks via <strong>Korapay</strong> (with Flutterwave fallback).
                                 </p>
                             </div>
 
@@ -700,7 +696,7 @@
                                     <input type="text" class="form-control" name="account_name" id="accountNameInput"
                                         placeholder="Full Name as registered on bank or Mobile Money" value="{{ @$info->accountDetails->name }}">
                                     <div id="accountNameStatus" class="form-text fs-xs mt-1">
-                                        <span class="text-muted">Will auto-resolve with {{ $userCurr === 'NGN' ? 'Paystack' : 'Flutterwave' }} when account number is entered.</span>
+                                        <span class="text-muted">Will auto-resolve with Korapay when account number is entered.</span>
                                     </div>
                                 </div>
 
@@ -912,7 +908,7 @@ function attachAutoResolver(bankSelectId, accountNumberId, accountNameId, status
         }
 
         if (statusEl) {
-            statusEl.innerHTML = '<span class="text-primary"><i class="fa fa-spinner fa-spin me-1"></i> Resolving account name with Flutterwave...</span>';
+            statusEl.innerHTML = '<span class="text-primary"><i class="fa fa-spinner fa-spin me-1"></i> Resolving account name...</span>';
         }
 
         fetch('{{ route("validate.bank") }}', {

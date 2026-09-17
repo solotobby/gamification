@@ -3499,12 +3499,16 @@ class AdminController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'bank_code' => 'required|string',
             'account_number' => 'required|string',
         ]);
 
+        $bankCode = $request->input('bank_code') ?: $request->input('momo_network');
+        if (empty($bankCode)) {
+            return back()->with('error', 'Please select a bank or mobile money network.');
+        }
+
         $user = User::findOrFail($request->user_id);
-        $currency = baseCurrency($user);
+        $currency = strtoupper(baseCurrency($user));
         $method = strtolower($request->input('method', 'bank'));
 
         $resolvedName = null;
@@ -3514,38 +3518,52 @@ class AdminController extends Controller
         $countryCode = $countryMap[$currency] ?? 'NG';
 
         if ($method === 'mobile_money') {
-            if (!$request->filled('account_name')) {
-                return back()->with('error', 'Account holder name is required for Mobile Money payout accounts.');
+            if ($request->filled('account_name')) {
+                $resolvedName = trim($request->input('account_name'));
+            } else {
+                $resolvedName = $user->name;
             }
-            $resolvedName = $request->input('account_name');
 
             if (!$bankName) {
                 $momoNetworks = getFlutterwaveMobileMoneyNetworks($countryCode);
                 foreach ($momoNetworks as $m) {
-                    if ($m['code'] === $request->bank_code) {
+                    if (($m['code'] ?? '') === $bankCode) {
                         $bankName = $m['name'];
                         break;
                     }
                 }
             }
         } else {
-            $resolved = resolveBankName($request->account_number, $request->bank_code, $currency, 'bank');
-            if ($resolved && $resolved['status'] === 'true') {
-                $resolvedName = $resolved['data']['account_name'] ?? null;
+            // 1. Try resolveBankName helper
+            $resolved = resolveBankName($request->account_number, $bankCode, $currency, 'bank');
+            if ($resolved && !empty($resolved['data']['account_name'])) {
+                $resolvedName = $resolved['data']['account_name'];
+                if (!$bankName && !empty($resolved['data']['bank_name'])) {
+                    $bankName = $resolved['data']['bank_name'];
+                }
             }
 
+            // 2. Allow admin manual override if entered
             if (!$resolvedName && $request->filled('account_name')) {
-                $resolvedName = $request->input('account_name');
+                $resolvedName = trim($request->input('account_name'));
+            }
+
+            // 3. Fallback to Paystack for NGN if needed
+            if (!$resolvedName && $currency === 'NGN' && function_exists('resolvePaystackAccount')) {
+                $paystackResolved = resolvePaystackAccount((string)$request->account_number, (string)$bankCode);
+                if ($paystackResolved && !empty($paystackResolved['account_name'])) {
+                    $resolvedName = $paystackResolved['account_name'];
+                }
             }
 
             if (!$resolvedName) {
-                return back()->with('error', "Unable to resolve {$currency} bank account details via Flutterwave. Please check account number and bank.");
+                return back()->with('error', "Unable to automatically resolve {$currency} account name. Please enter the Account Holder Name manually in the field provided.");
             }
 
             if (!$bankName) {
                 $banks = bankList($currency);
                 foreach ($banks as $b) {
-                    if (($b['code'] ?? '') == $request->bank_code) {
+                    if (($b['code'] ?? '') == $bankCode) {
                         $bankName = $b['name'];
                         break;
                     }
@@ -3553,15 +3571,20 @@ class AdminController extends Controller
             }
         }
 
+        if (!$bankName) {
+            $bankName = $method === 'mobile_money' ? 'Mobile Money' : 'Bank Account';
+        }
+
         BankInformation::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'name' => $resolvedName,
-                'bank_name' => $bankName ?? ($method === 'mobile_money' ? 'Mobile Money' : 'Bank Account'),
+                'bank_name' => $bankName,
                 'account_number' => $request->account_number,
-                'bank_code' => $request->bank_code,
+                'bank_code' => $bankCode,
                 'recipient_code' => null,
                 'currency' => $currency,
+                'status' => 'active',
             ]
         );
 
@@ -3569,17 +3592,19 @@ class AdminController extends Controller
             $subject = 'Payout Account Details Updated';
             $content = "Your payout account details ({$currency}) have been updated on Freebyz by administration.";
             Mail::to($user->email)->send(new GeneralMail($user, $content, $subject, ''));
-            app(NotificationHelpers::class)->createNotification(
-                $user,
-                'Payout Account Details Updated',
-                $content,
-                'account'
-            );
+            if (class_exists(NotificationHelpers::class)) {
+                app(NotificationHelpers::class)->createNotification(
+                    $user,
+                    'Payout Account Details Updated',
+                    $content,
+                    'account'
+                );
+            }
         } catch (\Throwable $ne) {
             Log::warning('Email/Notification delivery failed: ' . $ne->getMessage());
         }
 
-        return back()->with('success', "Payout account details saved successfully ({$currency} - {$resolvedName}).");
+        return back()->with('success', "Payout account details saved successfully ({$currency} - {$bankName}: {$resolvedName}).");
     }
 
     public function virtualAccountList()
