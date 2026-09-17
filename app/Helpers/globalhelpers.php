@@ -805,6 +805,8 @@ if (!function_exists('getFlutterwaveBanks')) {
                     'Content-Type' => 'application/json',
                 ])->timeout(10)->get("https://api.flutterwave.com/v3/banks/{$countryCode}");
 
+                Log::info("Flutterwave Get Banks Response for {$countryCode}: " . $res->body());
+
                 if ($res->successful()) {
                     $banks = $res->json('data') ?? [];
                     $mapped = array_map(fn($b) => [
@@ -817,6 +819,8 @@ if (!function_exists('getFlutterwaveBanks')) {
                         ->sortBy(fn($b) => strtoupper(trim($b['name'] ?? '')))
                         ->values()
                         ->all();
+                } else {
+                    Log::error("Flutterwave Get Banks failed for {$countryCode}: " . $res->body());
                 }
             } catch (\Throwable $e) {
                 Log::warning("Flutterwave getBanks for {$countryCode} failed: " . $e->getMessage());
@@ -2903,14 +2907,7 @@ if (!function_exists('bankList')) {
 
         if (isset($countryMap[$currency])) {
             $countryCode = $countryMap[$currency];
-
-            // 1. Try Korapay first
-            $korapayBanks = getKorapayBanks($countryCode, $currency);
-            if (!empty($korapayBanks)) {
-                return $korapayBanks;
-            }
-
-            // 2. Fallback to Flutterwave
+            // Use Flutterwave alone for bank list
             return getFlutterwaveBanks($countryCode);
         }
 
@@ -2934,21 +2931,7 @@ if (!function_exists('resolveBankName')) {
             ];
         }
 
-        // 1. Try Korapay resolve first
-        $resolved = resolveKorapayAccount((string) $account_number, (string) $bank_code, $currency);
-        if ($resolved && !empty($resolved['account_name'])) {
-            return [
-                'status' => 'true',
-                'data' => [
-                    'account_name'   => $resolved['account_name'],
-                    'account_number' => $resolved['account_number'] ?? $account_number,
-                    'bank_code'      => $resolved['bank_code'] ?? $bank_code,
-                    'bank_name'      => $resolved['bank_name'] ?? null,
-                ],
-            ];
-        }
-
-        // 2. Fallback to Flutterwave resolve
+        // Use Flutterwave alone
         $resolved = resolveFlutterwaveAccount((string) $account_number, (string) $bank_code);
         if ($resolved && !empty($resolved['account_name'])) {
             return [
@@ -2962,23 +2945,7 @@ if (!function_exists('resolveBankName')) {
             ];
         }
 
-        // 3. Fallback to Paystack resolve for NGN
-        if ($currency === 'NGN' && function_exists('resolvePaystackAccount')) {
-            $resolved = resolvePaystackAccount((string) $account_number, (string) $bank_code);
-            if ($resolved && !empty($resolved['account_name'])) {
-                return [
-                    'status' => 'true',
-                    'data' => [
-                        'account_name'   => $resolved['account_name'],
-                        'account_number' => $account_number,
-                        'bank_code'      => $bank_code,
-                        'bank_name'      => null,
-                    ],
-                ];
-            }
-        }
-
-        return ['status' => 'false', 'message' => 'Could not resolve bank account details. Please verify your account number and bank.'];
+        return ['status' => 'false', 'message' => 'Could not resolve bank account details via Flutterwave. Please verify your account number and bank.'];
     }
 }
 
