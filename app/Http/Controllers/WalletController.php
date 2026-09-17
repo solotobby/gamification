@@ -120,11 +120,19 @@ class WalletController extends Controller
 
     public function koraPayRedirect()
     {
+        if (request()->isMethod('head')) {
+            return response()->noContent();
+        }
 
         $url = request()->fullUrl();
         $url_components = parse_url($url);
-        parse_str($url_components['query'], $params);
-        $ref = $params['reference'];
+        parse_str($url_components['query'] ?? '', $params);
+        $ref = trim($params['reference'] ?? '', "\\ \t\n\r\0\x0B");
+
+        if (!$ref) {
+            return redirect('wallet/fund')->with('error', 'No reference found!');
+        }
+
         $res = verifyKorayPay($ref);
 
         if ($res['data']['status'] == 'success') {

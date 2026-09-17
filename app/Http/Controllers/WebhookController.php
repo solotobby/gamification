@@ -20,6 +20,9 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
+        if ($request->isMethod('head')) {
+            return response()->noContent();
+        }
 
         $event = $request['event'];
 
@@ -115,6 +118,10 @@ class WebhookController extends Controller
 
     public function korayPayWebhook(Request $request)
     {
+        if ($request->isMethod('head')) {
+            return response()->noContent();
+        }
+
         ini_set('serialize_precision', '-1');
 
         // Verify HMAC signature
@@ -347,6 +354,10 @@ class WebhookController extends Controller
 
     public function zeptoWebhook(Request $request)
     {
+        if ($request->isMethod('head')) {
+            return response()->noContent();
+        }
+
         // Validate signature first
         // $signature = $request->header('producer-signature');
         // $authKey = config('services.zeptomail.webhook_auth_key');
