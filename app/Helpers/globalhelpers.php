@@ -805,7 +805,7 @@ if (!function_exists('getFlutterwaveBanks')) {
                     'Content-Type' => 'application/json',
                 ])->timeout(10)->get("https://api.flutterwave.com/v3/banks/{$countryCode}");
 
-                Log::info("Flutterwave Get Banks Response for {$countryCode}: " . $res->body());
+                // Log::info("Flutterwave Get Banks Response for {$countryCode}: " . $res->body());
 
                 if ($res->successful()) {
                     $banks = $res->json('data') ?? [];
