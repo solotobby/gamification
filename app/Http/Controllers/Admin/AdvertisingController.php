@@ -125,7 +125,7 @@ class AdvertisingController extends Controller
         $config->max_ads_per_session = (int) $request->input('max_ads_per_session', 10);
 
         $config->save();
-        Cache::flush();
+        $this->purgePublicCaches();
 
         return back()->with('success', 'Advertising settings updated successfully.');
     }
@@ -149,7 +149,7 @@ class AdvertisingController extends Controller
         if ($request->has('toggle_only')) {
             $placement->enabled = !$placement->enabled;
             $placement->save();
-            Cache::flush();
+            $this->purgePublicCaches();
             return back()->with('success', "Placement {$placement->placement_key} is now " . ($placement->enabled ? 'ENABLED' : 'DISABLED') . '.');
         }
 
@@ -168,7 +168,7 @@ class AdvertisingController extends Controller
         }
 
         $placement->save();
-        Cache::flush();
+        $this->purgePublicCaches();
 
         return back()->with('success', "Placement {$placement->placement_key} updated successfully.");
     }
@@ -217,8 +217,25 @@ class AdvertisingController extends Controller
             );
         }
 
-        Cache::flush();
+        $this->purgePublicCaches();
 
         return back()->with('success', 'Adsterra code snippets updated successfully.');
+    }
+
+    /**
+     * Purge local and remote public caches.
+     */
+    protected function purgePublicCaches(): void
+    {
+        Cache::flush();
+
+        try {
+            $frontendUrl = env('FREEBYZ_FRONTEND_URL', env('FRONTEND_URL', 'http://127.0.0.1:8001'));
+            if ($frontendUrl) {
+                \Illuminate\Support\Facades\Http::timeout(1)->get(rtrim($frontendUrl, '/') . '/api/internal/advertising/clear-cache');
+            }
+        } catch (\Exception $e) {
+            // Non-critical fallback
+        }
     }
 }
