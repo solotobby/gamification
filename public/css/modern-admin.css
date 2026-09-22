@@ -287,3 +287,68 @@
   border-color: var(--admin-primary);
   font-weight: 600;
 }
+
+/* Pagination Standardization */
+.pagination {
+  margin-bottom: 0;
+  gap: 4px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-left: 0;
+  list-style: none;
+}
+
+.pagination .page-item {
+  display: inline-block;
+}
+
+.pagination .page-item .page-link {
+  border-radius: 6px !important;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.825rem;
+  color: #4b5563;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  transition: all 0.15s ease;
+}
+
+.pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #0665d0 !important;
+  border-color: #0665d0 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #9ca3af !important;
+  background-color: #f8fafc !important;
+  border-color: #e5e7eb !important;
+  cursor: not-allowed;
+}
+
+/* Guard against unstyled SVG icons in pagination */
+.pagination svg,
+.pagination-container svg,
+nav svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  max-width: 1.25rem !important;
+  max-height: 1.25rem !important;
+  display: inline-block !important;
+  vertical-align: middle;
+}
+

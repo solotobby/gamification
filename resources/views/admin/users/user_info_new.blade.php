@@ -1,5 +1,40 @@
 @extends('layouts.main.master')
 
+@section('style')
+<style>
+.pagination {
+    margin-bottom: 0;
+    gap: 3px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.pagination .page-item .page-link {
+    border-radius: 6px !important;
+    padding: 5px 11px;
+    font-size: 0.8rem;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+    text-decoration: none;
+}
+.pagination .page-item.active .page-link {
+    background-color: #0665d0 !important;
+    border-color: #0665d0 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+.pagination .page-item.disabled .page-link {
+    color: #9ca3af;
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
+}
+.pagination svg {
+    width: 1rem !important;
+    height: 1rem !important;
+}
+</style>
+@endsection
+
 @section('content')
     <div class="content">
 
@@ -434,6 +469,14 @@
                     </button>
                 </li>
                 <li class="nav-item">
+                    <button class="nav-link" id="tab-activity-btn" data-bs-toggle="tab" data-bs-target="#tab-activity" role="tab">
+                        <i class="fa fa-history me-1 text-info"></i> Activities & Devices
+                        @if(!empty($activityStats['total']))
+                            <span class="badge rounded-pill bg-primary ms-1 fs-xs">{{ number_format($activityStats['total']) }}</span>
+                        @endif
+                    </button>
+                </li>
+                <li class="nav-item">
                     <button class="nav-link" id="tab-more-btn" data-bs-toggle="tab" data-bs-target="#tab-more" role="tab">
                         <i class="fa fa-cog me-1 text-muted"></i> Account Controls
                     </button>
@@ -803,6 +846,175 @@
                     </div>
                 </div>
 
+                <!-- 6. ACTIVITY & DEVICE HISTORY TAB -->
+                <div class="tab-pane fade" id="tab-activity" role="tabpanel">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 pb-2 border-bottom">
+                        <div>
+                            <h4 class="fw-bold mb-1"><i class="fa fa-shield-alt text-primary me-2"></i>Activity & Device Telemetry</h4>
+                            <p class="text-muted fs-sm mb-0">Track user actions, logins, financial events, and device details across Web and Mobile App</p>
+                        </div>
+                        <div class="mt-2 mt-sm-0">
+                            <a href="{{ url('audit/trail?search=' . urlencode($info->email)) }}" target="_blank" class="btn btn-sm btn-alt-primary">
+                                <i class="fa fa-external-link-alt me-1"></i> View in General Audit Trail
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry KPI Summary Cards -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-light rounded-3 border text-center h-100">
+                                <div class="fs-xs fw-semibold text-uppercase text-muted mb-1">Total Activities</div>
+                                <div class="fs-3 fw-bold text-dark">{{ number_format($activityStats['total'] ?? 0) }}</div>
+                                <div class="fs-xs text-muted">All recorded events</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-light rounded-3 border text-center h-100">
+                                <div class="fs-xs fw-semibold text-uppercase text-primary mb-1"><i class="fa fa-globe me-1"></i> Web Platform</div>
+                                <div class="fs-3 fw-bold text-primary">{{ number_format($activityStats['web'] ?? 0) }}</div>
+                                <div class="fs-xs text-muted">{{ number_format($activityStats['desktop'] ?? 0) }} Desktop / {{ number_format(($activityStats['total'] ?? 0) - ($activityStats['desktop'] ?? 0)) }} Mobile</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-light rounded-3 border text-center h-100">
+                                <div class="fs-xs fw-semibold text-uppercase text-success mb-1"><i class="fa fa-mobile-screen me-1"></i> Mobile App</div>
+                                <div class="fs-3 fw-bold text-success">{{ number_format($activityStats['app'] ?? 0) }}</div>
+                                <div class="fs-xs text-muted">Flutter / iOS / Android</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-light rounded-3 border text-center h-100">
+                                <div class="fs-xs fw-semibold text-uppercase text-muted mb-1">Last Active Device</div>
+                                <div class="fs-sm fw-bold text-dark text-truncate" title="{{ $activityStats['recent_ip'] ?? 'None' }}">
+                                    {{ $activityStats['recent_ip'] ?? 'No IP recorded' }}
+                                </div>
+                                <div class="fs-xs text-muted">
+                                    {{ $activityStats['last_active'] ? \Carbon\Carbon::parse($activityStats['last_active'])->diffForHumans() : 'No recent activity' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Log Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-vcenter fs-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 160px;">Date & Time</th>
+                                    <th>Activity Type</th>
+                                    <th>Description / Event</th>
+                                    <th>Source</th>
+                                    <th>Device & Browser</th>
+                                    <th>IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($userActivities as $activity)
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">{{ $activity->created_at ? $activity->created_at->format('M d, Y') : 'N/A' }}</div>
+                                            <div class="fs-xs text-muted">
+                                                {{ $activity->created_at ? $activity->created_at->format('H:i:s') : '' }} 
+                                                ({{ $activity->created_at ? $activity->created_at->diffForHumans() : '' }})
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $badgeClass = match(strtolower($activity->activity_type ?? '')) {
+                                                    'login', 'user_login', 'admin_login' => 'bg-info-light text-info',
+                                                    'account_creation', 'google_account_creation' => 'bg-success-light text-success',
+                                                    'wallet_topup', 'deposit', 'wallet_reconciliation' => 'bg-primary-light text-primary',
+                                                    'withdrawal_request', 'withdrawal_sent', 'payout' => 'bg-warning-light text-warning',
+                                                    'account_verification', 'dollar_account_verification' => 'bg-success-light text-success',
+                                                    'dispute', 'blacklist', 'ban' => 'bg-danger-light text-danger',
+                                                    default => 'bg-secondary-light text-secondary',
+                                                };
+                                            @endphp
+                                            <span class="badge {{ $badgeClass }} text-uppercase fs-xs">
+                                                {{ str_replace('_', ' ', $activity->activity_type ?? 'General') }}
+                                            </span>
+                                            @if($activity->user_type === 'admin')
+                                                <span class="badge bg-danger text-white fs-xs ms-1">Admin Action</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="fw-medium text-dark">{{ $activity->description }}</div>
+                                            @if(!empty($activity->action))
+                                                <div class="fs-xs text-muted font-monospace mt-1"><i class="fa fa-terminal me-1"></i>{{ $activity->action }}</div>
+                                            @endif
+                                            @if(!empty($activity->properties) && is_array($activity->properties))
+                                                <details class="fs-xs text-muted mt-1">
+                                                    <summary class="cursor-pointer text-primary">View Metadata</summary>
+                                                    <pre class="bg-light p-2 rounded mt-1 mb-0 fs-xs" style="max-height: 120px; overflow-y: auto;">{{ json_encode($activity->properties, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                                                </details>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($activity->client_type === 'app' || $activity->is_app)
+                                                <span class="badge bg-success-light text-success">
+                                                    <i class="fa fa-mobile-screen me-1"></i> Mobile App
+                                                </span>
+                                            @elseif($activity->client_type === 'api')
+                                                <span class="badge bg-dark-light text-dark">
+                                                    <i class="fa fa-code me-1"></i> API
+                                                </span>
+                                            @else
+                                                <span class="badge bg-primary-light text-primary">
+                                                    <i class="fa fa-globe me-1"></i> Web Browser
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold text-dark">
+                                                @if(stripos($activity->platform ?? '', 'Windows') !== false)
+                                                    <i class="fab fa-windows text-primary me-1"></i>
+                                                @elseif(stripos($activity->platform ?? '', 'Mac') !== false || stripos($activity->platform ?? '', 'iOS') !== false)
+                                                    <i class="fab fa-apple text-dark me-1"></i>
+                                                @elseif(stripos($activity->platform ?? '', 'Android') !== false)
+                                                    <i class="fab fa-android text-success me-1"></i>
+                                                @elseif(stripos($activity->platform ?? '', 'Linux') !== false)
+                                                    <i class="fab fa-linux text-warning me-1"></i>
+                                                @else
+                                                    <i class="fa fa-desktop text-muted me-1"></i>
+                                                @endif
+                                                {{ $activity->platform ?: ($activity->device ? ucfirst($activity->device) : 'Web') }}
+                                            </div>
+                                            <div class="fs-xs text-muted">
+                                                {{ $activity->browser ?: 'Standard Browser' }}
+                                                @if($activity->device_model && $activity->device_model !== $activity->platform)
+                                                    &#8226; {{ $activity->device_model }}
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="font-monospace fs-xs bg-light px-2 py-1 rounded border">{{ $activity->ip_address ?: 'Unknown IP' }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="fa fa-history fa-2x mb-2 text-muted opacity-50 d-block"></i>
+                                            No recorded activities found for this user yet.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if($userActivities->hasPages())
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-3 pt-3 border-top gap-2">
+                            <div class="fs-xs text-muted">
+                                Showing <strong>{{ $userActivities->firstItem() }}</strong> to <strong>{{ $userActivities->lastItem() }}</strong> of <strong>{{ $userActivities->total() }}</strong> activities
+                            </div>
+                            <div class="pagination-container">
+                                {!! $userActivities->fragment('tab-activity')->appends(request()->except('activity_page'))->links('pagination::bootstrap-4') !!}
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
             </div>
         </div>
 
@@ -995,6 +1207,17 @@ document.addEventListener('DOMContentLoaded', function () {
             return el ? el.value : 'bank';
         }
     );
+
+    // Auto-switch to activity tab if query param or hash present
+    if (window.location.search.includes('activity_page') || window.location.hash === '#tab-activity' || window.location.hash === '#activity') {
+        const actBtn = document.getElementById('tab-activity-btn');
+        if (actBtn && window.bootstrap) {
+            const tabObj = new bootstrap.Tab(actBtn);
+            tabObj.show();
+        } else if (actBtn) {
+            actBtn.click();
+        }
+    }
 });
 </script>
 @endsection

@@ -40,6 +40,11 @@
                         <span class="nav-main-link-name">Duplicate Accounts</span>
                     </a>
                 </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('audit/trail*') ? 'active' : '' }}" href="{{ url('audit/trail') }}">
+                        <span class="nav-main-link-name">Activity & Audit Logs</span>
+                    </a>
+                </li>
             </ul>
         </li>
 
@@ -371,8 +376,13 @@
                     </a>
                 </li>
                 <li class="nav-main-item">
-                    <a class="nav-main-link {{ request()->is('preferences') || request()->is('audit/trail') ? 'active' : '' }}" href="{{ url('preferences') }}">
-                        <span class="nav-main-link-name">Preferences & Audit</span>
+                    <a class="nav-main-link {{ request()->is('preferences*') ? 'active' : '' }}" href="{{ url('preferences') }}">
+                        <span class="nav-main-link-name">Preferences</span>
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link {{ request()->is('audit/trail*') ? 'active' : '' }}" href="{{ url('audit/trail') }}">
+                        <span class="nav-main-link-name">Audit Trail</span>
                     </a>
                 </li>
             </ul>

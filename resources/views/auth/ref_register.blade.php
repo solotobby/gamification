@@ -214,7 +214,7 @@
     <!-- Page JS Code -->
     <script src="{{ asset('src/assets/js/pages/op_auth_signin.min.js')}}"></script>
 
-    <div id="appPopupOverlay"
+    {{-- <div id="appPopupOverlay"
         style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
         <div
             style="background:#1558D6;border-radius:24px;width:100%;max-width:360px;padding:32px 24px 28px;position:relative;color:#fff;text-align:center;font-family:'Inter',sans-serif;">
@@ -254,7 +254,7 @@
                 <i class="fa fa-android" style="margin-right:6px;"></i> Get Started — Download App
             </a>
         </div>
-    </div>
+    </div> --}}
 </body>
 
 </html>
