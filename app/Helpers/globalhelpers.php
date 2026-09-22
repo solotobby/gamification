@@ -2200,14 +2200,15 @@ if (!function_exists('getInitials')) {
 }
 
 if (!function_exists('activityLog')) {
-    function activityLog($user, $activity_type, $description, $user_type)
+    function activityLog($user, $activity_type, $description, $user_type = 'regular', $properties = [])
     {
-        return ActivityLog::create([
-            'user_id' => $user->id,
-            'activity_type' => $activity_type,
-            'description' => $description,
-            'user_type' => $user_type
-        ]);
+        return \App\Services\Logging\ActivityLoggerService::log(
+            $user,
+            $activity_type,
+            $description,
+            $user_type ?: 'regular',
+            is_array($properties) ? $properties : []
+        );
     }
 }
 

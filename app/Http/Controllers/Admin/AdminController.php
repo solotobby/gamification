@@ -15,6 +15,7 @@ use App\Mail\ApproveCampaign;
 use App\Mail\GeneralMail;
 use App\Mail\MassMail;
 use App\Mail\UpgradeUser;
+use App\Models\ActivityLog;
 use App\Models\BankInformation;
 use App\Models\Campaign;
 use App\Models\CampaignWorker;
@@ -1007,6 +1008,21 @@ class AdminController extends Controller
         $mobileMoneyNetworks = isset($countryMap[$userCurr]) ? getFlutterwaveMobileMoneyNetworks($countryMap[$userCurr]) : [];
         $activeCurrencies = Currency::where('is_active', true)->orderBy('code')->get();
 
+        // Activity and Device telemetry for this user
+        $userActivities = ActivityLog::where('user_id', $id)
+            ->orderByDesc('created_at')
+            ->paginate(25, ['*'], 'activity_page');
+
+        $activityStats = [
+            'total' => ActivityLog::where('user_id', $id)->count(),
+            'web' => ActivityLog::where('user_id', $id)->where('client_type', 'web')->count(),
+            'app' => ActivityLog::where('user_id', $id)->whereIn('client_type', ['app', 'mobile_app', 'ios', 'android'])->count(),
+            'mobile' => ActivityLog::where('user_id', $id)->where('device', 'mobile')->count(),
+            'desktop' => ActivityLog::where('user_id', $id)->where('device', 'desktop')->count(),
+            'recent_ip' => ActivityLog::where('user_id', $id)->whereNotNull('ip_address')->latest('created_at')->value('ip_address'),
+            'last_active' => ActivityLog::where('user_id', $id)->latest('created_at')->value('created_at'),
+        ];
+
         return view('admin.users.user_info_new', [
             'info' => $info,
             'referredBy' => $referredBy,
@@ -1014,6 +1030,8 @@ class AdminController extends Controller
             'bankList' => $bankList,
             'mobileMoneyNetworks' => $mobileMoneyNetworks,
             'activeCurrencies' => $activeCurrencies,
+            'userActivities' => $userActivities,
+            'activityStats' => $activityStats,
         ]);
     }
 
@@ -3770,13 +3788,18 @@ class AdminController extends Controller
             ELSE wallets.base_currency_balance
         END";
 
-        // Query wallets joined with users
+        // Query wallets joined with users (ignoring admin and staff accounts)
         $query = Wallet::join('users', 'users.id', '=', 'wallets.user_id')
+            ->where(function ($q) {
+                $q->whereNull('users.role')
+                  ->orWhereNotIn('users.role', ['admin', 'super_admin', 'staff']);
+            })
             ->select(
                 'wallets.*',
                 'users.name as user_name',
                 'users.email as user_email',
                 'users.phone as user_phone',
+                'users.role as user_role',
                 'users.is_verified',
                 DB::raw("({$liveBalanceExpr}) as live_balance"),
                 DB::raw("COALESCE(wallets.temp_balance, 0) as calculated_balance"),
@@ -3809,16 +3832,21 @@ class AdminController extends Controller
 
         $wallets = $query->orderByDesc('abs_diff')->paginate(50)->appends($request->all());
 
-        // Multi-currency stats for summary cards
-        $statsRaw = Wallet::select(
-            DB::raw("{$currencyExpr} as curr"),
-            DB::raw("COUNT(*) as total_wallets"),
-            DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN 1 ELSE 0 END) as overcredited_count"),
-            DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) ELSE 0 END) as overcredited_amount"),
-            DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN 1 ELSE 0 END) as undercredited_count"),
-            DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) ELSE 0 END) as undercredited_amount"),
-            DB::raw("SUM(CASE WHEN ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) <= {$tolerance} THEN 1 ELSE 0 END) as synced_count")
-        )->groupBy('curr')->get();
+        // Multi-currency stats for summary cards (excluding admin and staff)
+        $statsRaw = Wallet::join('users', 'users.id', '=', 'wallets.user_id')
+            ->where(function ($q) {
+                $q->whereNull('users.role')
+                  ->orWhereNotIn('users.role', ['admin', 'super_admin', 'staff']);
+            })
+            ->select(
+                DB::raw("{$currencyExpr} as curr"),
+                DB::raw("COUNT(*) as total_wallets"),
+                DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN 1 ELSE 0 END) as overcredited_count"),
+                DB::raw("SUM(CASE WHEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) > {$tolerance} THEN (({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) ELSE 0 END) as overcredited_amount"),
+                DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN 1 ELSE 0 END) as undercredited_count"),
+                DB::raw("SUM(CASE WHEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) > {$tolerance} THEN (COALESCE(wallets.temp_balance, 0) - ({$liveBalanceExpr})) ELSE 0 END) as undercredited_amount"),
+                DB::raw("SUM(CASE WHEN ABS(({$liveBalanceExpr}) - COALESCE(wallets.temp_balance, 0)) <= {$tolerance} THEN 1 ELSE 0 END) as synced_count")
+            )->groupBy('curr')->get();
 
         $activeCurrencies = Currency::where('is_active', '1')->get();
 
